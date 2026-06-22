@@ -29,6 +29,16 @@ Start each session with:
 
     source .venv/bin/activate && source env.sh
 
+Note that `/scratch` is node-local on this cluster, so the virtual environment
+exists only on the node where `setup.sh` was run. After connecting, confirm you
+are on that node and that the environment is intact:
+
+    bash check_env.sh
+
+It reports the host, Python, torch and CUDA, and exits with a clear message if
+the venv is missing (in which case re-run `bash setup.sh` on the current node)
+or if any package is absent.
+
 ## Running the stages
 
 The numbered scripts are the project stages and run in order:

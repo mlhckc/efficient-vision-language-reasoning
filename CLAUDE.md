@@ -45,9 +45,17 @@ accuracy and efficiency.
 - The home directory has almost no free storage; scratch has space. All caches
   are redirected into the project-local .cache folder by env.sh so downloads do
   not fill the home quota.
+- /scratch is node-local, not shared like the home filesystem, so the venv
+  exists only on the node where setup.sh was run. On a different node, `import
+  torch` fails even though activation appears to succeed. Re-run `bash setup.sh`
+  on that node to rebuild the venv there.
 - Per-session startup, after the one-time `bash setup.sh`:
 
       source .venv/bin/activate && source env.sh
+
+  Then `bash check_env.sh` confirms the node has the venv and that torch and
+  CUDA are visible, failing with a clear message rather than a bare
+  ModuleNotFoundError.
 
 ## Stage workflow
 
