@@ -1,0 +1,26 @@
+# Deep learning framework. The default Linux wheel from PyPI is the CUDA build,
+# which matches the RTX 4000 Ada (Ada Lovelace, compute capability 8.9).
+torch
+torchvision          # image transforms and pretrained-model utilities
+
+# Frozen CLIP image and text encoders (ViT-B-32, laion2b weights).
+open_clip_torch
+
+# Numerics and tabular handling for questions, answers and metrics.
+numpy
+pandas
+
+# Image loading.
+Pillow
+
+# On-disk storage for the cached embedding matrices.
+h5py
+
+# Train/validation splitting, metrics and simple linear baselines.
+scikit-learn
+
+# Progress bars.
+tqdm
+
+# Plots, including the accuracy/efficiency trade-off figure.
+matplotlib

@@ -1,0 +1,24 @@
+# Virtual environment and redirected caches
+.venv/
+.cache/
+
+# Large data and generated artefacts. The directories themselves are kept in
+# the repository through their .gitkeep files; only their contents are ignored,
+# because the stage scripts regenerate everything here.
+data/*
+!data/.gitkeep
+embeddings/*
+!embeddings/.gitkeep
+results/*
+!results/.gitkeep
+
+# Python bytecode
+__pycache__/
+*.pyc
+
+# Editor and OS files
+.vscode/
+.DS_Store
+
+# Logs
+*.log
