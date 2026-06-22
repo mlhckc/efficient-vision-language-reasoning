@@ -57,12 +57,31 @@ All fixed settings live in `config.py` (dataset, answer-set size, subset sizes,
 seed, CLIP model, training hyperparameters and paths). Edit values there rather
 than passing command-line flags.
 
+## Reproducibility
+
+A run is fixed by `config.py` plus a single seed (`config.RANDOM_SEED`). Each
+stage calls `utils.set_seed()` first, which seeds Python, NumPy and PyTorch and,
+with `config.DETERMINISTIC`, turns on deterministic cuDNN/cuBLAS. DataLoaders
+are seeded through `utils.make_generator()` and `utils.seed_worker()`, the
+encoders are frozen, and `utils.run_metadata()` records the git commit, seed,
+library versions, GPU and config values to save with every result.
+
+`requirements.txt` is the portable dependency list; `requirements.lock.txt`
+records the exact resolved versions for reproducing the environment on a
+compatible Linux/CUDA machine:
+
+    python -m pip install -r requirements.lock.txt
+
+See `docs/REPRODUCIBILITY.md` for the full account and its caveats.
+
 ## Repository layout
 
     config.py                 central settings, imported everywhere
     env.sh                    redirect caches into .cache (source each session)
     setup.sh                  one-time venv creation and dependency install
-    requirements.txt          dependencies
+    requirements.txt          dependencies (portable list)
+    requirements.lock.txt     exact resolved versions for reproduction
+    check_env.sh              per-session environment check
     1_..5_*.py                the five ordered stage scripts
     src/                      reusable code: data, models, utils
     docs/                     report template and per-stage reports

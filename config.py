@@ -22,6 +22,7 @@ N_VAL = 8000             # number of validation examples in the working subset
 
 # --- Reproducibility ---------------------------------------------------------
 RANDOM_SEED = 42         # single seed used for every source of randomness
+DETERMINISTIC = True     # force deterministic cuDNN/cuBLAS (see utils.set_seed)
 
 # --- Encoder (frozen) --------------------------------------------------------
 # One CLIP model encodes both the image and the question, so the two vectors

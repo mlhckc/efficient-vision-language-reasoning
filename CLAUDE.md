@@ -78,8 +78,17 @@ vectors), models.py (the MLP head, the baselines and the fusion model), utils.py
 ## Coding conventions
 
 - Read every setting from config.py. Do not hard-code values that belong there.
-- Seed all randomness from config.RANDOM_SEED for reproducibility.
-- Select the device through config.DEVICE.
+- Call utils.set_seed() as the first line of every stage's main(), before any
+  data loading or model creation, so randomness is fixed from
+  config.RANDOM_SEED.
+- Save utils.run_metadata() with every result (via utils.save_json) so each
+  number is traceable to the code, settings and environment that produced it.
+- For reproducible data loading use utils.make_generator() and
+  utils.seed_worker() on the DataLoader.
+- Select the device through config.DEVICE (or utils.get_device()).
+- See docs/REPRODUCIBILITY.md for the full reproducibility contract; keep
+  requirements.lock.txt current after any dependency change (python -m pip
+  freeze > requirements.lock.txt).
 - Keep functions small and focused; put shared logic in src/ rather than copying
   it between stages.
 - Use clear type hints where they aid reading.
