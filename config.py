@@ -48,5 +48,18 @@ EMBEDDINGS_DIR = PROJECT_ROOT / "embeddings"
 RESULTS_DIR = PROJECT_ROOT / "results"
 CACHE_DIR = PROJECT_ROOT / ".cache"
 
+# --- GQA raw data ------------------------------------------------------------
+# The balanced GQA question files are downloaded once into data/gqa/raw. Only
+# the question and answer JSON is needed here; images are handled in Stage 2.
+GQA_QUESTIONS_URL = "https://downloads.cs.stanford.edu/nlp/data/gqa/questions1.2.zip"
+GQA_RAW_DIR = DATA_DIR / "gqa" / "raw"
+GQA_TRAIN_QUESTIONS = "train_balanced_questions.json"
+GQA_VAL_QUESTIONS = "val_balanced_questions.json"
+
+# --- Stage 1 outputs ---------------------------------------------------------
+ANSWER_VOCAB_PATH = DATA_DIR / "answer_vocab.json"
+TRAIN_SPLIT_PATH = DATA_DIR / "train.csv"
+VAL_SPLIT_PATH = DATA_DIR / "val.csv"
+
 # --- Device ------------------------------------------------------------------
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
