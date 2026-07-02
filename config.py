@@ -61,5 +61,19 @@ ANSWER_VOCAB_PATH = DATA_DIR / "answer_vocab.json"
 TRAIN_SPLIT_PATH = DATA_DIR / "train.csv"
 VAL_SPLIT_PATH = DATA_DIR / "val.csv"
 
+# --- GQA images (Stage 2) ----------------------------------------------------
+# The full GQA image archive (~20 GB) is downloaded once and extracted into
+# data/gqa/images. Only the images referenced by the Stage 1 subset are encoded.
+GQA_IMAGES_URL = "https://downloads.cs.stanford.edu/nlp/data/gqa/images.zip"
+GQA_IMAGES_DIR = DATA_DIR / "gqa" / "images"
+
+# --- Embeddings (Stage 2 outputs) --------------------------------------------
+# L2-normalise the CLIP image and question vectors before caching, so both lie
+# on the unit sphere of the shared CLIP space (the space the model is trained
+# in). The frozen encoder is run once and these vectors are reused everywhere.
+NORMALIZE_EMBEDDINGS = True
+TRAIN_EMB_PATH = EMBEDDINGS_DIR / "train.h5"
+VAL_EMB_PATH = EMBEDDINGS_DIR / "val.h5"
+
 # --- Device ------------------------------------------------------------------
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
