@@ -61,6 +61,24 @@ class ConcatModel(nn.Module):
         return self.head(torch.cat([image, question], dim=-1))
 
 
-# The Stage 4 fusion model will follow the same forward(image, question)
-# interface, building [image, question, image * question, |image - question|]
-# and feeding an MLPHead with in_dim = 4 * config.EMBED_DIM.
+class FusionModel(nn.Module):
+    """Classify from a fused image-question vector.
+
+    The input concatenates four parts, in this order: the image vector, the
+    question vector, their elementwise product and their absolute difference.
+    The product captures agreement between the two vectors and the absolute
+    difference captures disagreement. The result has size 4 * config.EMBED_DIM.
+    This input is the only difference from the concat baseline; the head and
+    every hyperparameter are identical.
+    """
+
+    def __init__(self):
+        super().__init__()
+        self.head = MLPHead(4 * config.EMBED_DIM)
+
+    def forward(self, image, question):
+        fused = torch.cat(
+            [image, question, image * question, torch.abs(image - question)],
+            dim=-1,
+        )
+        return self.head(fused)
