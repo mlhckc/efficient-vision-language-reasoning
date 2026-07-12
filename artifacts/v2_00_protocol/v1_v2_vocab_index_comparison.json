@@ -1,0 +1,67 @@
+{
+  "answer_sets_identical": true,
+  "answer_to_index_identical": false,
+  "changed_mappings": [
+    {
+      "answer": "cell phone",
+      "v1_index": 56,
+      "v2_index": 58
+    },
+    {
+      "answer": "coat",
+      "v1_index": 82,
+      "v2_index": 81
+    },
+    {
+      "answer": "ground",
+      "v1_index": 79,
+      "v2_index": 78
+    },
+    {
+      "answer": "hat",
+      "v1_index": 50,
+      "v2_index": 51
+    },
+    {
+      "answer": "ocean",
+      "v1_index": 90,
+      "v2_index": 89
+    },
+    {
+      "answer": "phone",
+      "v1_index": 57,
+      "v2_index": 56
+    },
+    {
+      "answer": "pizza",
+      "v1_index": 58,
+      "v2_index": 57
+    },
+    {
+      "answer": "pole",
+      "v1_index": 81,
+      "v2_index": 82
+    },
+    {
+      "answer": "surfboard",
+      "v1_index": 89,
+      "v2_index": 90
+    },
+    {
+      "answer": "tomato",
+      "v1_index": 78,
+      "v2_index": 79
+    },
+    {
+      "answer": "zebra",
+      "v1_index": 51,
+      "v2_index": 50
+    }
+  ],
+  "n_answers_with_changed_index": 11,
+  "note": "Read-only comparison of the two vocabulary files; no clean-test answer was used or inspected.",
+  "v1_file": "data/answer_vocab.json",
+  "v1_vocabulary_size": 100,
+  "v2_file": "data/v2/answer_vocab_v2.json",
+  "v2_vocabulary_size": 100
+}

@@ -1,0 +1,16 @@
+{
+  "cuda_available": true,
+  "experiment": "v2_00_protocol",
+  "git_commit_at_build": "f8bd07e",
+  "gpu_model": "NVIDIA RTX 4000 Ada Generation",
+  "note": "Sanitised from the build run metadata; numpy and pandas versions read from the pinned project environment (requirements.lock.txt) that executed the run.",
+  "numpy_version": "2.5.0",
+  "pandas_version": "3.0.3",
+  "protocol_seeds": {
+    "DEV_IMAGE_SEED": 42,
+    "TEST_IMAGE_SEED": 44,
+    "TRAIN_QUESTION_SEED": 43
+  },
+  "python_version": "3.12.3",
+  "pytorch_version": "2.12.1+cu130"
+}

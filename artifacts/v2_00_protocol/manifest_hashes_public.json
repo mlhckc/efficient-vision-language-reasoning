@@ -1,0 +1,27 @@
+{
+  "generated": {
+    "data/v2/answer_vocab_v2.json": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680",
+    "data/v2/dev.csv": "95d1b504dcc4deb7d69ba0c9e293d1c00bae93df4b6907174a1dd615cb93cdc9",
+    "data/v2/dev_image_ids.json": "730d400da7a99aad3c1155e391ca94c280f7710c4ca7a778ae127c671582694d",
+    "data/v2/dev_raw_question_ids.json": "deaa0e621e066d872054280c846947ad0cd0e68748d041e624560e30c09f95b7",
+    "data/v2/protocol_build_summary.json": "cfe82a17f0353a9bb6f107f770e59b6b7321ff69ab8d31eda2f49f16d5976e62",
+    "data/v2/test_clean_image_ids.json": "1a0b24f29de83de0fb57ebc02a0cba4313a1d8892048b32c51bc59a4dd69d824",
+    "data/v2/test_clean_inputs.csv": "67d4d32162fd25819176347fba61a255b4223888ad07252ca9f17c18ac828e79",
+    "data/v2/test_clean_raw_question_ids.json": "cbaeed46608b102a1de0165da5981b809817f126d95d77fae5b62f81b4b74952",
+    "data/v2/test_clean_targets.csv": "b78480c254bb535303fa500d68438cfcb33928c194ae68a070e20b028bf8445f",
+    "data/v2/train_100k.csv": "5fa02a71fe6786abf591c354ce07334281b527a0d41115c0f7d9164970054e15",
+    "data/v2/train_250k.csv": "be7d867afd2757a631145bc1c56c3b1a4dcf43784c1a6abf1c3b75452b865074",
+    "data/v2/train_40k.csv": "cda03c133e581d486c1e29f6d99376ee59f9841564b3fb890bc401f4da5c90d2",
+    "data/v2/train_pool_image_ids.json": "791629a5694ba3dc057882353433bb809b3a573d09bbcac4d6a5c632f8a302f3"
+  },
+  "legacy_v1": {
+    "data/answer_vocab.json": "68214220f8509476d4cb856776b979183d9fe8c707dbaf0b7f089e42823f2cff",
+    "data/train.csv": "4b1e78afc088d87be12c9ae81fb689f295346129e0c9c032f5559e198c23c56e",
+    "data/val.csv": "bcd2c2e927304de07e9b71bc2e95cf60f47faaf9aa5f42e1691ceba4865e5b9f"
+  },
+  "note": "sha256 hashes of the deterministic V2 protocol outputs, the raw GQA source files and the legacy V1 manifests. File identifiers are repository-relative. The listed files themselves remain local and untracked; a byte-identical rebuild must reproduce the generated hashes exactly (proven by the Day-1 idempotence check).",
+  "raw_sources": {
+    "data/gqa/raw/train_balanced_questions.json": "c600b8301c67ee3eac1b4b9af8a35f776589f045f245fd5b15c50c97fa244d6b",
+    "data/gqa/raw/val_balanced_questions.json": "2f675643c0cfffe0485dbae0c0c0dfc16b547443309a98544502bc1ae87c0779"
+  }
+}

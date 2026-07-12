@@ -1,0 +1,676 @@
+{
+  "checks": [
+    {
+      "actual": "0 missing []",
+      "expected": "0 missing",
+      "name": "all build artefacts exist",
+      "status": "PASS"
+    },
+    {
+      "actual": "{'DEV_IMAGE_SEED': 42, 'TEST_IMAGE_SEED': 44, 'TRAIN_QUESTION_SEED': 43}",
+      "expected": "42/43/44",
+      "name": "summary seeds match config-derived seeds",
+      "status": "PASS"
+    },
+    {
+      "actual": "943000",
+      "expected": "943000",
+      "name": "raw train_balanced question count matches summary",
+      "status": "PASS"
+    },
+    {
+      "actual": "132062",
+      "expected": "132062",
+      "name": "raw val_balanced question count matches summary",
+      "status": "PASS"
+    },
+    {
+      "actual": "72140",
+      "expected": "72140",
+      "name": "unique train image count matches summary",
+      "status": "PASS"
+    },
+    {
+      "actual": "10234",
+      "expected": "10234",
+      "name": "unique val image count matches summary",
+      "status": "PASS"
+    },
+    {
+      "actual": "0",
+      "expected": "0",
+      "name": "raw train/val image overlap matches summary",
+      "status": "PASS"
+    },
+    {
+      "actual": "777 ids, |recomputed_only|=0, |stored_only|=0",
+      "expected": "sorted list of 777 recomputed ids",
+      "name": "dev image set matches dev_image_ids.json",
+      "status": "PASS"
+    },
+    {
+      "actual": "union 72140 of 72140, intersection 0",
+      "expected": "union = all train images, intersection = 0",
+      "name": "dev and pool partition the unique train images",
+      "status": "PASS"
+    },
+    {
+      "actual": "71363 ids, |recomputed_only|=0, |stored_only|=0",
+      "expected": "sorted list of 71363 recomputed ids",
+      "name": "pool image set matches train_pool_image_ids.json",
+      "status": "PASS"
+    },
+    {
+      "actual": "972 ids, |recomputed_only|=0, |stored_only|=0",
+      "expected": "sorted list of 972 recomputed ids",
+      "name": "clean-test image set matches test_clean_image_ids.json",
+      "status": "PASS"
+    },
+    {
+      "actual": "exact match",
+      "expected": "top 100 pool answers, frequency then alphabetical",
+      "name": "V2 vocabulary answers and indices match answer_vocab_v2.json",
+      "status": "PASS"
+    },
+    {
+      "actual": "summary lists v1_only=0, v2_only=0, common=100",
+      "expected": "v1_only=0, v2_only=0, common=100",
+      "name": "V1/V2 vocabulary symmetric difference matches summary",
+      "status": "PASS"
+    },
+    {
+      "actual": "10004",
+      "expected": "10004",
+      "name": "dev raw question count matches summary",
+      "status": "PASS"
+    },
+    {
+      "actual": "777",
+      "expected": "777",
+      "name": "dev image count matches summary",
+      "status": "PASS"
+    },
+    {
+      "actual": "7714",
+      "expected": "7714",
+      "name": "dev in-vocab question count matches summary",
+      "status": "PASS"
+    },
+    {
+      "actual": "0.771092",
+      "expected": "0.771092",
+      "name": "dev v2 coverage matches summary",
+      "status": "PASS"
+    },
+    {
+      "actual": "71363",
+      "expected": "71363",
+      "name": "pool image count matches summary",
+      "status": "PASS"
+    },
+    {
+      "actual": "932996",
+      "expected": "932996",
+      "name": "pool raw question count matches summary",
+      "status": "PASS"
+    },
+    {
+      "actual": "724074",
+      "expected": "724074",
+      "name": "eligible question count matches summary",
+      "status": "PASS"
+    },
+    {
+      "actual": "474074",
+      "expected": "474074",
+      "name": "margin over 250k matches summary",
+      "status": "PASS"
+    },
+    {
+      "actual": "0.776074",
+      "expected": "0.776074",
+      "name": "pool v2 coverage matches summary",
+      "status": "PASS"
+    },
+    {
+      "actual": "10004 ids, |recomputed_only|=0, |stored_only|=0",
+      "expected": "sorted list of 10004 ids",
+      "name": "dev_raw_question_ids.json matches recomputation",
+      "status": "PASS"
+    },
+    {
+      "actual": "8013 ids, |recomputed_only|=0, |stored_only|=0",
+      "expected": "sorted list of 8013 ids",
+      "name": "test_clean_raw_question_ids.json matches recomputation",
+      "status": "PASS"
+    },
+    {
+      "actual": "questionId,imageId,question,answer,label",
+      "expected": "questionId,imageId,question,answer,label",
+      "name": "dev.csv columns",
+      "status": "PASS"
+    },
+    {
+      "actual": "questionId,imageId,question,answer,label",
+      "expected": "questionId,imageId,question,answer,label",
+      "name": "train_40k.csv columns",
+      "status": "PASS"
+    },
+    {
+      "actual": "questionId,imageId,question,answer,label",
+      "expected": "questionId,imageId,question,answer,label",
+      "name": "train_100k.csv columns",
+      "status": "PASS"
+    },
+    {
+      "actual": "questionId,imageId,question,answer,label",
+      "expected": "questionId,imageId,question,answer,label",
+      "name": "train_250k.csv columns",
+      "status": "PASS"
+    },
+    {
+      "actual": "questionId,imageId,question",
+      "expected": "questionId,imageId,question",
+      "name": "test_clean_inputs.csv columns",
+      "status": "PASS"
+    },
+    {
+      "actual": "questionId,answer,label",
+      "expected": "questionId,answer,label",
+      "name": "test_clean_targets.csv columns",
+      "status": "PASS"
+    },
+    {
+      "actual": "7714 rows, equal: True",
+      "expected": "7714 in-vocab dev questionIds in sorted order",
+      "name": "dev.csv sorted by questionId and complete for in-vocab dev questions",
+      "status": "PASS"
+    },
+    {
+      "actual": "0 images outside",
+      "expected": "subset of dev image set",
+      "name": "dev.csv rows on dev images",
+      "status": "PASS"
+    },
+    {
+      "actual": "all equal: True",
+      "expected": "all rows equal raw records",
+      "name": "dev.csv rows match raw imageId/question/answer",
+      "status": "PASS"
+    },
+    {
+      "actual": "all correct: True",
+      "expected": "label == vocab index for every row",
+      "name": "dev.csv labels are the V2 indices and in-vocab",
+      "status": "PASS"
+    },
+    {
+      "actual": "equal: True",
+      "expected": "first 250000 of the seeded permutation over sorted eligible ids",
+      "name": "train_250k questionId sequence matches recomputed permuted prefix",
+      "status": "PASS"
+    },
+    {
+      "actual": "40000",
+      "expected": "40000",
+      "name": "train_40k row count",
+      "status": "PASS"
+    },
+    {
+      "actual": "0 images outside",
+      "expected": "subset of pool image set",
+      "name": "train_40k rows on pool images",
+      "status": "PASS"
+    },
+    {
+      "actual": "all correct: True",
+      "expected": "label == vocab index for every row",
+      "name": "train_40k labels are the V2 indices and in-vocab",
+      "status": "PASS"
+    },
+    {
+      "actual": "100000",
+      "expected": "100000",
+      "name": "train_100k row count",
+      "status": "PASS"
+    },
+    {
+      "actual": "0 images outside",
+      "expected": "subset of pool image set",
+      "name": "train_100k rows on pool images",
+      "status": "PASS"
+    },
+    {
+      "actual": "all correct: True",
+      "expected": "label == vocab index for every row",
+      "name": "train_100k labels are the V2 indices and in-vocab",
+      "status": "PASS"
+    },
+    {
+      "actual": "250000",
+      "expected": "250000",
+      "name": "train_250k row count",
+      "status": "PASS"
+    },
+    {
+      "actual": "0 images outside",
+      "expected": "subset of pool image set",
+      "name": "train_250k rows on pool images",
+      "status": "PASS"
+    },
+    {
+      "actual": "all correct: True",
+      "expected": "label == vocab index for every row",
+      "name": "train_250k labels are the V2 indices and in-vocab",
+      "status": "PASS"
+    },
+    {
+      "actual": "all equal: True",
+      "expected": "all rows equal raw records",
+      "name": "train_250k rows match raw imageId/question/answer (covers the nested prefixes)",
+      "status": "PASS"
+    },
+    {
+      "actual": "8013 rows, equal: True",
+      "expected": "8013 raw clean-test questionIds in sorted order",
+      "name": "test_clean_inputs sorted by questionId and complete for raw clean-test questions",
+      "status": "PASS"
+    },
+    {
+      "actual": "|recomputed_only|=0, |stored_only|=0",
+      "expected": "set equality",
+      "name": "test_clean_inputs image set equals clean-test image set",
+      "status": "PASS"
+    },
+    {
+      "actual": "all equal: True",
+      "expected": "all rows equal raw records",
+      "name": "test_clean_inputs rows match raw imageId/question",
+      "status": "PASS"
+    },
+    {
+      "actual": "equal: True",
+      "expected": "identical order and membership",
+      "name": "inputs and targets carry identical questionId sequences",
+      "status": "PASS"
+    },
+    {
+      "actual": "all equal: True",
+      "expected": "all rows equal raw records",
+      "name": "test_clean_targets answers match raw answers",
+      "status": "PASS"
+    },
+    {
+      "actual": "all consistent: True",
+      "expected": "row-level consistency for every row",
+      "name": "test_clean_targets labels consistent per row (V2 index or -1)",
+      "status": "PASS"
+    },
+    {
+      "actual": "{'n_questions': 7714, 'n_unique_images': 768}",
+      "expected": "7714 questions / 768 images",
+      "name": "summary manifest counts for dev",
+      "status": "PASS"
+    },
+    {
+      "actual": "{'n_questions': 40000, 'n_unique_images': 27622}",
+      "expected": "40000 questions / 27622 images",
+      "name": "summary manifest counts for train_40k",
+      "status": "PASS"
+    },
+    {
+      "actual": "{'n_questions': 100000, 'n_unique_images': 46158}",
+      "expected": "100000 questions / 46158 images",
+      "name": "summary manifest counts for train_100k",
+      "status": "PASS"
+    },
+    {
+      "actual": "{'n_questions': 250000, 'n_unique_images': 61859}",
+      "expected": "250000 questions / 61859 images",
+      "name": "summary manifest counts for train_250k",
+      "status": "PASS"
+    },
+    {
+      "actual": "{'n_questions': 8013, 'n_unique_images': 972}",
+      "expected": "8013 questions / 972 images, no other keys",
+      "name": "summary manifest counts for test_clean (structural only)",
+      "status": "PASS"
+    },
+    {
+      "actual": "dev,train_100k,train_250k,train_40k",
+      "expected": "dev, train_40k, train_100k, train_250k",
+      "name": "summary answer_distributions cover dev and train manifests only",
+      "status": "PASS"
+    },
+    {
+      "actual": "exact match",
+      "expected": "top-20 with shares and yes/no share recomputed from the file",
+      "name": "summary answer distribution for dev matches recomputation",
+      "status": "PASS"
+    },
+    {
+      "actual": "exact match",
+      "expected": "top-20 with shares and yes/no share recomputed from the file",
+      "name": "summary answer distribution for train_40k matches recomputation",
+      "status": "PASS"
+    },
+    {
+      "actual": "exact match",
+      "expected": "top-20 with shares and yes/no share recomputed from the file",
+      "name": "summary answer distribution for train_100k matches recomputation",
+      "status": "PASS"
+    },
+    {
+      "actual": "exact match",
+      "expected": "top-20 with shares and yes/no share recomputed from the file",
+      "name": "summary answer distribution for train_250k matches recomputation",
+      "status": "PASS"
+    },
+    {
+      "actual": "0",
+      "expected": "0",
+      "name": "train_40k vs dev questionId overlap",
+      "status": "PASS"
+    },
+    {
+      "actual": "0",
+      "expected": "0",
+      "name": "train_40k vs dev imageId overlap",
+      "status": "PASS"
+    },
+    {
+      "actual": "0",
+      "expected": "0",
+      "name": "train_40k vs test_clean questionId overlap",
+      "status": "PASS"
+    },
+    {
+      "actual": "0",
+      "expected": "0",
+      "name": "train_40k vs test_clean imageId overlap",
+      "status": "PASS"
+    },
+    {
+      "actual": "0",
+      "expected": "0",
+      "name": "train_100k vs dev questionId overlap",
+      "status": "PASS"
+    },
+    {
+      "actual": "0",
+      "expected": "0",
+      "name": "train_100k vs dev imageId overlap",
+      "status": "PASS"
+    },
+    {
+      "actual": "0",
+      "expected": "0",
+      "name": "train_100k vs test_clean questionId overlap",
+      "status": "PASS"
+    },
+    {
+      "actual": "0",
+      "expected": "0",
+      "name": "train_100k vs test_clean imageId overlap",
+      "status": "PASS"
+    },
+    {
+      "actual": "0",
+      "expected": "0",
+      "name": "train_250k vs dev questionId overlap",
+      "status": "PASS"
+    },
+    {
+      "actual": "0",
+      "expected": "0",
+      "name": "train_250k vs dev imageId overlap",
+      "status": "PASS"
+    },
+    {
+      "actual": "0",
+      "expected": "0",
+      "name": "train_250k vs test_clean questionId overlap",
+      "status": "PASS"
+    },
+    {
+      "actual": "0",
+      "expected": "0",
+      "name": "train_250k vs test_clean imageId overlap",
+      "status": "PASS"
+    },
+    {
+      "actual": "0",
+      "expected": "0",
+      "name": "dev vs test_clean questionId overlap",
+      "status": "PASS"
+    },
+    {
+      "actual": "0",
+      "expected": "0",
+      "name": "dev vs test_clean imageId overlap",
+      "status": "PASS"
+    },
+    {
+      "actual": "0",
+      "expected": "0",
+      "name": "legacy_v1_validation imageIds vs clean-test imageIds overlap",
+      "status": "PASS"
+    },
+    {
+      "actual": "40000",
+      "expected": "40000",
+      "name": "nested intersection train_40k within train_100k",
+      "status": "PASS"
+    },
+    {
+      "actual": "100000",
+      "expected": "100000",
+      "name": "nested intersection train_100k within train_250k",
+      "status": "PASS"
+    },
+    {
+      "actual": "40000",
+      "expected": "40000",
+      "name": "nested intersection train_40k within train_250k",
+      "status": "PASS"
+    },
+    {
+      "actual": "equal",
+      "expected": "byte-equal rows in prefix order",
+      "name": "row-for-row prefix equality: train_100k[:40000] == train_40k",
+      "status": "PASS"
+    },
+    {
+      "actual": "equal",
+      "expected": "byte-equal rows in prefix order",
+      "name": "row-for-row prefix equality: train_250k[:100000] == train_100k",
+      "status": "PASS"
+    },
+    {
+      "actual": "0",
+      "expected": "0",
+      "name": "no duplicate questionId within dev",
+      "status": "PASS"
+    },
+    {
+      "actual": "0",
+      "expected": "0",
+      "name": "no duplicate questionId within train_40k",
+      "status": "PASS"
+    },
+    {
+      "actual": "0",
+      "expected": "0",
+      "name": "no duplicate questionId within train_100k",
+      "status": "PASS"
+    },
+    {
+      "actual": "0",
+      "expected": "0",
+      "name": "no duplicate questionId within train_250k",
+      "status": "PASS"
+    },
+    {
+      "actual": "0",
+      "expected": "0",
+      "name": "no duplicate questionId within test_clean_inputs",
+      "status": "PASS"
+    },
+    {
+      "actual": "0",
+      "expected": "0",
+      "name": "no duplicate questionId within test_clean_targets",
+      "status": "PASS"
+    },
+    {
+      "actual": "0 missing of 768",
+      "expected": "0 missing of 768",
+      "name": "image files available for dev",
+      "status": "PASS"
+    },
+    {
+      "actual": "0 missing of 27622",
+      "expected": "0 missing of 27622",
+      "name": "image files available for train_40k",
+      "status": "PASS"
+    },
+    {
+      "actual": "0 missing of 46158",
+      "expected": "0 missing of 46158",
+      "name": "image files available for train_100k",
+      "status": "PASS"
+    },
+    {
+      "actual": "0 missing of 61859",
+      "expected": "0 missing of 61859",
+      "name": "image files available for train_250k",
+      "status": "PASS"
+    },
+    {
+      "actual": "0 missing of 972",
+      "expected": "0 missing of 972",
+      "name": "image files available for test_clean",
+      "status": "PASS"
+    },
+    {
+      "actual": "0 mismatches []",
+      "expected": "0 mismatches",
+      "name": "hash group generated matches on disk (13 files)",
+      "status": "PASS"
+    },
+    {
+      "actual": "0 mismatches []",
+      "expected": "0 mismatches",
+      "name": "hash group raw_sources matches on disk (2 files)",
+      "status": "PASS"
+    },
+    {
+      "actual": "0 mismatches []",
+      "expected": "0 mismatches",
+      "name": "hash group legacy_v1 matches on disk (3 files)",
+      "status": "PASS"
+    },
+    {
+      "actual": "13/2/3",
+      "expected": "13 generated, 2 raw sources, 3 legacy files",
+      "name": "hash group path sets are exactly as specified",
+      "status": "PASS"
+    },
+    {
+      "actual": "0 []",
+      "expected": "0",
+      "name": "preservation: no non-allowlisted file changed",
+      "status": "PASS"
+    },
+    {
+      "actual": "0 []",
+      "expected": "0",
+      "name": "preservation: no non-allowlisted file deleted",
+      "status": "PASS"
+    },
+    {
+      "actual": "0 []",
+      "expected": "0",
+      "name": "preservation: no new file outside the output allowlist",
+      "status": "PASS"
+    }
+  ],
+  "duplicate_diagnostics": {
+    "across": {
+      "dev__test_clean": {
+        "shared_image_question_answer_triples": 0,
+        "shared_image_question_pairs": 0
+      },
+      "dev__train_250k": {
+        "shared_image_question_answer_triples": 0,
+        "shared_image_question_pairs": 0
+      },
+      "train_250k__test_clean": {
+        "shared_image_question_answer_triples": 0,
+        "shared_image_question_pairs": 0
+      }
+    },
+    "within": {
+      "dev": {
+        "image_question_answer_duplicate_rows": 5,
+        "image_question_duplicate_rows": 6
+      },
+      "test_clean": {
+        "image_question_answer_duplicate_rows": 4,
+        "image_question_duplicate_rows": 5
+      },
+      "train_250k": {
+        "image_question_answer_duplicate_rows": 47,
+        "image_question_duplicate_rows": 51
+      }
+    }
+  },
+  "embargo": "Clean-test reporting in this file is structural only: question count, unique image count, overlaps, duplicates, hashes and image availability. No clean-test vocabulary coverage, OOV count, answer distribution, yes/no share or question-type statistic is stated.",
+  "failed_checks": [],
+  "idempotence": {
+    "differing_files": [],
+    "manifest_hashes_json_byte_identical": true,
+    "n_generated_files_compared": 13,
+    "note": "build_manifests.py was run a second time with python -B on the same data and seeds; every generated-group file was re-hashed and compared byte-for-byte. build_run_metadata.json is volatile and excluded from the comparison.",
+    "status": "PASS"
+  },
+  "image_availability": {
+    "dev": {
+      "n_found": 768,
+      "n_missing": 0,
+      "n_unique_images": 768
+    },
+    "test_clean": {
+      "n_found": 972,
+      "n_missing": 0,
+      "n_unique_images": 972
+    },
+    "train_100k": {
+      "n_found": 46158,
+      "n_missing": 0,
+      "n_unique_images": 46158
+    },
+    "train_250k": {
+      "n_found": 61859,
+      "n_missing": 0,
+      "n_unique_images": 61859
+    },
+    "train_40k": {
+      "n_found": 27622,
+      "n_missing": 0,
+      "n_unique_images": 27622
+    }
+  },
+  "n_checks": 99,
+  "n_failed": 0,
+  "preservation": {
+    "changed_non_allowlisted": [],
+    "deleted_non_allowlisted": [],
+    "n_files_after": 185502,
+    "n_files_before": 185483,
+    "new_non_allowlisted": [],
+    "note": "The preservation claim covers exactly the inventoried scope described above; the comparison excludes exactly the output allowlist of this experiment.",
+    "scope": "Inventory scope: every regular file under the project root, walked with directory symlinks not followed, excluding only the .git directory. Files whose repository-relative path starts with data/gqa/images/ and files larger than 100 MiB (104857600 bytes) are recorded by size and mtime_ns only; every other file is recorded by sha256. The preservation comparison excludes exactly the files on the output allowlist of experiment v2_00_protocol."
+  },
+  "status": "PASS"
+}

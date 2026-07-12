@@ -17,6 +17,51 @@ small head classifies the answer from a fixed set of the most frequent answers.
 Three baselines are compared against a proposed fusion model, measuring both
 accuracy and efficiency.
 
+## Current status
+
+- V1 (the five numbered stage scripts) is a completed legacy prototype
+  pipeline: 40,000 training questions, 8,000 legacy validation questions
+  (data/val.csv, referred to as legacy_v1_validation) and a top-100 answer
+  vocabulary. V1 results are prototype results from a single seed, with the
+  validation set reused for checkpoint selection; they must not be presented
+  as final confirmatory results.
+- V2 Day 1 is complete and verified: an image-disjoint development partition
+  drawn from the GQA training data, a vocabulary computed from the training
+  pool only, strict nested question-level training subsets, and a clean test
+  set built from validation images never touched by legacy_v1_validation.
+  See docs/experiments/v2_00_protocol.md and artifacts/v2_00_protocol/.
+- Verified Day-1 counts: dev 777 images with 10,004 raw and 7,714
+  in-vocabulary questions; training pool 71,363 images with 724,074 eligible
+  questions (margin 474,074 over the required 250,000); train_40k /
+  train_100k / train_250k cover 27,622 / 46,158 / 61,859 unique images and
+  nest row-for-row; clean test 8,013 questions on 972 images (structural
+  counts only); verifier 99 checks with 0 failures, 0 missing images, 0
+  duplicate questionIds; idempotence proven (13 generated files
+  byte-identical across rebuilds).
+- The V1 and V2 vocabularies contain the same 100 answers but 11 answers have
+  different indices, so V1 label indices must never be mixed with V2
+  manifests. All V2 work uses data/v2/answer_vocab_v2.json.
+
+## V2 protocol rules (binding)
+
+- Clean-test targets (data/v2/test_clean_targets.csv) are embargoed until the
+  final model list and all development decisions are frozen. No development or
+  training code may read that file.
+- Do not calculate or expose clean-test label statistics before final
+  evaluation: no vocabulary coverage, OOV counts, answer distribution, yes/no
+  share or question-type statistics. Clean-test reporting is structural only.
+- All development decisions use data/v2/dev.csv only. The clean test must not
+  be used for early stopping, hyperparameter tuning, architecture selection,
+  fusion selection, latent-query-count selection or depth selection.
+- The next stage is V2 global CLIP embedding extraction for the new manifests.
+  Model training does not start until embedding extraction and its integrity
+  verification are complete.
+- V3's intended central contribution is a lightweight question-conditioned
+  latent-query reasoner over token-level visual features, evaluated against
+  controlled global-embedding baselines.
+- No large architectural change without a research question and a controlled
+  comparison.
+
 ## Locked scope (do not change without asking)
 
 - Task: discriminative VQA as answer classification. No text generation.
@@ -57,9 +102,11 @@ accuracy and efficiency.
   CUDA are visible, failing with a clear message rather than a bare
   ModuleNotFoundError.
 
-## Stage workflow
+## Stage workflow (legacy V1 pipeline)
 
-The numbered scripts are the project stages and run in order:
+The numbered scripts are the completed V1 stages and run in order; they remain
+runnable but produce prototype results only (see Current status). V2 work
+lives under experiments/ and uses the data/v2 manifests.
 
 1. `1_prepare_gqa.py` — prepare the GQA subset and the answer vocabulary.
 2. `2_extract_embeddings.py` — run frozen CLIP once and cache vectors to disk.
