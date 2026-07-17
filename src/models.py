@@ -13,15 +13,21 @@ import config
 
 
 class MLPHead(nn.Module):
-    """A small classifier: Linear -> ReLU -> Dropout -> Linear over the answers."""
+    """A small classifier: Linear -> ReLU -> Dropout -> Linear over the answers.
 
-    def __init__(self, in_dim: int):
+    hidden_dim None means config.HIDDEN_DIM, so existing callers are unchanged;
+    parameter-matched controls pass an explicit width.
+    """
+
+    def __init__(self, in_dim: int, hidden_dim: int | None = None):
         super().__init__()
+        if hidden_dim is None:
+            hidden_dim = config.HIDDEN_DIM
         self.net = nn.Sequential(
-            nn.Linear(in_dim, config.HIDDEN_DIM),
+            nn.Linear(in_dim, hidden_dim),
             nn.ReLU(),
             nn.Dropout(config.DROPOUT),
-            nn.Linear(config.HIDDEN_DIM, config.TOP_K_ANSWERS),
+            nn.Linear(hidden_dim, config.TOP_K_ANSWERS),
         )
 
     def forward(self, x):
@@ -31,9 +37,9 @@ class MLPHead(nn.Module):
 class QuestionOnlyModel(nn.Module):
     """Classify from the question vector alone."""
 
-    def __init__(self):
+    def __init__(self, hidden_dim: int | None = None):
         super().__init__()
-        self.head = MLPHead(config.EMBED_DIM)
+        self.head = MLPHead(config.EMBED_DIM, hidden_dim)
 
     def forward(self, image, question):
         return self.head(question)
@@ -42,9 +48,9 @@ class QuestionOnlyModel(nn.Module):
 class ImageOnlyModel(nn.Module):
     """Classify from the image vector alone."""
 
-    def __init__(self):
+    def __init__(self, hidden_dim: int | None = None):
         super().__init__()
-        self.head = MLPHead(config.EMBED_DIM)
+        self.head = MLPHead(config.EMBED_DIM, hidden_dim)
 
     def forward(self, image, question):
         return self.head(image)
@@ -53,9 +59,9 @@ class ImageOnlyModel(nn.Module):
 class ConcatModel(nn.Module):
     """Classify from the image and question vectors concatenated."""
 
-    def __init__(self):
+    def __init__(self, hidden_dim: int | None = None):
         super().__init__()
-        self.head = MLPHead(2 * config.EMBED_DIM)
+        self.head = MLPHead(2 * config.EMBED_DIM, hidden_dim)
 
     def forward(self, image, question):
         return self.head(torch.cat([image, question], dim=-1))
@@ -72,9 +78,9 @@ class FusionModel(nn.Module):
     every hyperparameter are identical.
     """
 
-    def __init__(self):
+    def __init__(self, hidden_dim: int | None = None):
         super().__init__()
-        self.head = MLPHead(4 * config.EMBED_DIM)
+        self.head = MLPHead(4 * config.EMBED_DIM, hidden_dim)
 
     def forward(self, image, question):
         fused = torch.cat(
