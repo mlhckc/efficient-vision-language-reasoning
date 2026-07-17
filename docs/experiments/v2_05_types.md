@@ -124,3 +124,47 @@ exactly, so the per-type slices decompose exactly the numbers already
 reported. These are dev-set analyses under the V2 protocol at the 40k scale;
 they guide model selection and question-type expectations and are not
 confirmatory test results.
+
+## Addendum (v2_05b): confidence intervals, multi-seed gaps and lift
+
+The addendum (experiments/v2_05_types/addendum.py; tables
+addendum_gap_ci.csv, addendum_multiseed_gaps.csv, addendum_lift.csv and
+addendum.json) tightens the statistics of this analysis. It also corrects a
+phrasing carried from v2_01: question-conditioned zero-shot scoring was not
+implemented, rather than not possible; the v2_01 report has been amended
+accordingly.
+
+Confidence intervals (seed 42). With normal-approximation 95% intervals on
+the paired per-row differences, the positive fusion-concat gaps on verify
+(+0.041, CI [+0.020, +0.062]), logical (+0.040, [+0.014, +0.066]), obj
+(+0.039, [+0.013, +0.066]) and rel (+0.026, [+0.010, +0.041]) all exclude
+zero. None of the three negative gaps does: choose -0.016 [-0.044, +0.011],
+compare -0.043 [-0.098, +0.012], global -0.018 [-0.068, +0.031]. At seed 42
+alone, no per-type loss is statistically established.
+
+Multi-seed gaps (all five seeds, evaluation only). The positive conclusions
+survive: verify (+0.046 +/- 0.009), logical (+0.038 +/- 0.008), obj
+(+0.043 +/- 0.009) and rel (+0.018 +/- 0.005) are positive in every seed,
+as are the <=2, 4 and >=5 step buckets. Of the negatives, choose is the one
+that survives: -0.023 +/- 0.011, negative in all five seeds, so the fusion
+features do carry a real small cost on choose questions despite the wide
+single-seed interval. compare (-0.025 +/- 0.022, sign flips across seeds),
+global, cat, attr and query all straddle zero and support no per-type claim.
+
+Lift analysis (accuracy minus the per-slice prior accuracy, seed 42, with
+step-bucket priors computed from train_40k). Redoing analysis (d) on lift
+reverses one of its conclusions and confirms the other. A multi-step
+weakness does appear: the mean lift on the >=4-step buckets is well below
+each model's mean step-bucket lift (question_only 0.115 against 0.191,
+concat 0.150 against 0.244, fusion 0.183 against 0.264), so once the small
+answer spaces of deep-program questions are floored out, every model is
+relatively weak there. A relational weakness still does not appear: rel lift
+is at the semantic-family mean for all three models (fusion 0.362 against a
+mean of 0.367). Two further lift observations: on verify, concat's lift over
+"always no" is only +0.012 while fusion's is +0.053, so essentially all of
+fusion's verify advantage is genuine signal above the prior; and on query
+and cat the models' large lifts confirm those types are where the image
+embedding earns most of its keep. The step-bucket confound noted in (d)
+remains for raw accuracy, but the lift view now provides the format-adjusted
+reading; the seed-42 caveat applies to the lift table, while the multi-seed
+gap table above is seed-robust.

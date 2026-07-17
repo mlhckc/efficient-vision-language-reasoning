@@ -72,10 +72,8 @@ anchor rather than a competitive baseline. It scores far below the majority
 reference, which is expected on GQA: a large share of dev questions are
 yes/no, and an image-to-text match against the strings "yes" and "no"
 carries almost no signal, while the majority reference exploits exactly that
-skew. A question-conditioned zero-shot variant is not possible with plain
-CLIP because the question and the answers are both text; CLIP can score text
-against an image but cannot condition an image-text score on a second text
-input. This gap between the zero-shot anchor and the trained heads is part
+skew. A question-conditioned zero-shot variant is not implemented here; joint
+question-answer text scoring is possible and left as an optional baseline. This gap between the zero-shot anchor and the trained heads is part
 of what V2 training will quantify.
 
 The prompt variants differ only marginally (0.0770 to 0.0795), with the
