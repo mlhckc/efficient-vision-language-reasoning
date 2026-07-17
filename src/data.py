@@ -29,15 +29,18 @@ class EmbeddingDataset(Dataset):
         return self.image[index], self.question[index], self.label[index]
 
 
-def make_loaders():
+def make_loaders(train_path=None, val_path=None):
     """Build the train and validation DataLoaders over the cached vectors.
 
     Only the training loader shuffles; it does so through a seeded generator and
     seed_worker so the order is reproducible. Batches are pinned when running on
-    CUDA.
+    CUDA. The paths default to the V1 embedding files from config, so V1 stages
+    run unchanged; V2 experiments pass their own aligned view files.
     """
-    train_dataset = EmbeddingDataset(config.TRAIN_EMB_PATH)
-    val_dataset = EmbeddingDataset(config.VAL_EMB_PATH)
+    train_path = config.TRAIN_EMB_PATH if train_path is None else train_path
+    val_path = config.VAL_EMB_PATH if val_path is None else val_path
+    train_dataset = EmbeddingDataset(train_path)
+    val_dataset = EmbeddingDataset(val_path)
     pin_memory = config.DEVICE == "cuda"
 
     train_loader = DataLoader(

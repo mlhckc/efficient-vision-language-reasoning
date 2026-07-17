@@ -29,13 +29,15 @@ def evaluate(model, loader, device):
     return correct / total
 
 
-def train_model(model, train_loader, val_loader, name, device):
+def train_model(model, train_loader, val_loader, name, device,
+                checkpoint_dir=None):
     """Train one model and return its metrics.
 
     Uses AdamW (config.LEARNING_RATE, config.WEIGHT_DECAY) and cross-entropy for
     config.N_EPOCHS. After each epoch it records the mean train loss and the
     validation accuracy, keeps the best validation accuracy and its epoch, and
-    saves that best checkpoint to results/checkpoints/{name}.pt.
+    saves that best checkpoint to {checkpoint_dir}/{name}.pt. checkpoint_dir is
+    a Path; None keeps the V1 default, results/checkpoints.
     """
     model = model.to(device)
     optimizer = torch.optim.AdamW(
@@ -45,7 +47,8 @@ def train_model(model, train_loader, val_loader, name, device):
     )
     criterion = nn.CrossEntropyLoss()
 
-    checkpoint_dir = config.RESULTS_DIR / "checkpoints"
+    if checkpoint_dir is None:
+        checkpoint_dir = config.RESULTS_DIR / "checkpoints"
     checkpoint_dir.mkdir(parents=True, exist_ok=True)
     checkpoint_path = checkpoint_dir / f"{name}.pt"
 
