@@ -1,9 +1,9 @@
 """Model definitions: the MLP head, the baselines and the proposed fusion model.
 
 Every model exposes the same forward(image, question) interface so the training
-loop can be shared. They differ only in what vector they build and the input
-dimension of their head; the head itself is identical, so any accuracy
-difference comes from the input, not from a larger model.
+loop can be shared. The head template and training settings are identical;
+input width and therefore trainable parameter count differ, so fusion-vs-concat
+comparisons are capacity-confounded until the parameter-matched controls of V2.
 """
 
 import torch
