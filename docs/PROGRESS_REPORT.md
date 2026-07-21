@@ -51,7 +51,8 @@ head only (the frozen encoder is shared by all models and excluded):
 | fusion (proposed)  | 0.541        | 1,100,388        | 0.042 ms        |
 
 The heads train in about eight seconds each on the RTX 4000 Ada and use tens of
-megabytes of memory. The majority reference always predicts the most frequent
+megabytes of memory, per head on cached embeddings; this excludes the one-time
+frozen-CLIP extraction (378 s for the V2 union). The majority reference always predicts the most frequent
 training answer.
 
 ## What the results mean

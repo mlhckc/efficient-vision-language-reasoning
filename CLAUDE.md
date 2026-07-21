@@ -53,9 +53,18 @@ accuracy and efficiency.
 - All development decisions use data/v2/dev.csv only. The clean test must not
   be used for early stopping, hyperparameter tuning, architecture selection,
   fusion selection, latent-query-count selection or depth selection.
-- The next stage is V2 global CLIP embedding extraction for the new manifests.
-  Model training does not start until embedding extraction and its integrity
-  verification are complete.
+- Status: v2_01 (embedding extraction and zero-shot floor 0.080), v2_02
+  (five-seed baselines: fusion 0.5384 beats concat 0.5240 in every seed),
+  v2_03 (parameter matching halves the fusion gain), v2_04 (either
+  interaction term alone carries it; the terms are redundant), v2_05/v2_05b
+  (gains concentrate in verify/logical/obj/rel; choose cost seed-robust;
+  multi-step lift deficit about 0.08), v2_06 (fusion relies most on the
+  image; excess reliance in verify/logical) and v2_07 (at 250k the feature
+  advantage decays to noise, the multimodal margin grows, the multi-step
+  deficit persists) are complete, as is v3_00 (token stores extracted,
+  consistency-checked against the V2 globals, loaders benchmarked). The
+  next stage is v3_01: the question-conditioned latent-query reasoner over
+  the cached token stores.
 - V3's intended central contribution is a lightweight question-conditioned
   latent-query reasoner over token-level visual features, evaluated against
   controlled global-embedding baselines.
@@ -68,8 +77,11 @@ accuracy and efficiency.
 - Main dataset: a subset of GQA. VQA v2 is optional and only after GQA works.
 - Encoders: frozen CLIP for both the image and the question, never trained. One
   model is used for both, so the two vectors share the same space.
-- Trainable part: a lightweight MLP head only. A small transformer head is a
-  later stretch goal, not the start.
+- Trainable part: lightweight heads over frozen CLIP features. V1/V2 use the
+  MLP heads; the approved V3 central contribution is the lightweight
+  question-conditioned latent-query reasoner over cached token-level
+  features, with cached-token training as the primary pipeline and raw-path
+  equivalence and efficiency measured separately. The encoders stay frozen.
 - Answer set: top 100 answers first, scaling to 1000 later as an experiment.
 - All fixed settings live in config.py and are read from there, never
   hard-coded.
