@@ -94,7 +94,7 @@ hash no longer matches the worktree.
   image; excess reliance in verify/logical) and v2_07 (at 250k the feature
   advantage decays to noise, the multimodal margin grows, the multi-step
   deficit persists) are complete. V3_00, v3_01 and v3_02a are also complete;
-  see Current status and their reports for the present hold point.
+  see Current status and their reports for the current gate.
 - V3's central contribution is the lightweight question-conditioned
   latent-query reasoner over token-level visual features and its controlled
   comparison with global-embedding baselines, including the negative 40k
