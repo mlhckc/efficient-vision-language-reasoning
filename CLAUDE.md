@@ -64,10 +64,15 @@ hash no longer matches the worktree.
   attention diagnostics, CLS removal and a patches-only training probe. At
   40k, the 21.1M-parameter reasoner did not materially outperform the 1.1M
   fusion head or reduce the repaired compositional deficit.
-- Current gate, 29 July 2026: V3 reasoner scaling to 100k/250k is on hold
-  pending supervisor design feedback. Do not launch it or make a large
-  architectural change before that feedback is recorded. No final clean-test
-  evaluation has occurred; all model findings remain development-set results.
+- Current gate, updated 30 July 2026: the user authorized the strengthening
+  programme on 30 July 2026: V3 reasoner scaling to 100k/250k (E1), a
+  SigLIP-B/16 frozen-encoder-swap experiment on the global-embedding path (E2)
+  and a 1000-answer vocabulary experiment (E3), to run in that order after the
+  S1-S3 correction and P0-P3 preparation packets. Supervisor design feedback
+  is still to be obtained and recorded when available, and the final venue
+  decision will be discussed with Prof. Bober. No final clean-test evaluation
+  has occurred; the clean-test embargo is unchanged until the final model list
+  is frozen; all model findings remain development-set results.
 
 ## V2 protocol rules (binding)
 
@@ -103,12 +108,16 @@ hash no longer matches the worktree.
 - Main dataset: a subset of GQA. VQA v2 is optional and only after GQA works.
 - Encoders: frozen CLIP for both the image and the question, never trained. One
   model is used for both, so the two vectors share the same space.
+  A single frozen SigLIP-B-16 encoder-swap experiment on the global-embedding
+  path was approved by the user on 30 July 2026 (E2); all encoders remain
+  frozen.
 - Trainable part: lightweight heads over frozen CLIP features. V1/V2 use the
   MLP heads; the approved V3 central contribution is the lightweight
   question-conditioned latent-query reasoner over cached token-level
   features, with cached-token training as the primary pipeline and raw-path
   equivalence and efficiency measured separately. The encoders stay frozen.
-- Answer set: top 100 answers first, scaling to 1000 later as an experiment.
+- Answer set: top 100 answers first; the 1000-answer vocabulary experiment
+  (E3) was approved by the user on 30 July 2026.
 - Shared and V1 settings live in config.py. Experiment-specific constants,
   such as V3 search grids, gates and bootstrap counts, must be named near the
   experiment entry point and recorded in its report and result metadata.
