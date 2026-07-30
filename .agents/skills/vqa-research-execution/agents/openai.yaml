@@ -1,0 +1,4 @@
+interface:
+  display_name: "VQA Research Execution"
+  short_description: "Execute and verify blinded VQA experiments"
+  default_prompt: "Use $vqa-research-execution to implement and verify the current approved research task."

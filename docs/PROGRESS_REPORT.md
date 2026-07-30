@@ -1,5 +1,10 @@
 # Progress report
 
+Historical status note: this is the progress snapshot dated 3 July 2026 and
+describes the legacy V1 stage. It is not the current project status. V2 is now
+complete through v2_07 and V3 through v3_02a; see CLAUDE.md,
+collab/PROJECT_CONTEXT.md and the reports under docs/experiments/.
+
 Project: Efficient Vision-Language Reasoning with Small Language Models
 Institution: University of Surrey, MSc Artificial Intelligence
 Supervisor: Prof. Miroslaw Bober

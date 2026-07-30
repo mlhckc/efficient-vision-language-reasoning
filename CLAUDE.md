@@ -17,6 +17,20 @@ small head classifies the answer from a fixed set of the most frequent answers.
 Three baselines are compared against a proposed fusion model, measuring both
 accuracy and efficiency.
 
+## Agent collaboration
+
+Claude is the primary planner and primary reviewer. Codex is the executor and
+performs a secondary self-review. The user is the final authority on scope and
+scientific decisions. Read AGENTS.md, collab/PROJECT_CONTEXT.md and
+collab/PROTOCOL.md before planning or reviewing a task.
+
+When acting as planner or reviewer, Claude must not edit source files, launch
+training, change permissions or inspect the embargoed clean-test targets. Use
+the read-only research-planner and research-reviewer agents under
+.claude/agents/. Runtime handoffs use .agent-bridge/ and the state machine in
+collab/PROTOCOL.md. A review is invalid if its recorded base commit or patch
+hash no longer matches the worktree.
+
 ## Current status
 
 - V1 (the five numbered stage scripts) is a completed legacy prototype
@@ -41,6 +55,19 @@ accuracy and efficiency.
 - The V1 and V2 vocabularies contain the same 100 answers but 11 answers have
   different indices, so V1 label indices must never be mixed with V2
   manifests. All V2 work uses data/v2/answer_vocab_v2.json.
+- V2 is complete through v2_07: global embedding extraction, five-seed
+  baselines, parameter matching, interaction ablations, type and reliance
+  analyses, and 40k/100k/250k global-head scaling.
+- V3 is complete through v3_02a. v3_00 built the token stores; v3_01 trained
+  the 40k latent-query reasoner; v3_02a added direct-linear and mean-patch
+  references, repaired pooled step statistics, image-clustered uncertainty,
+  attention diagnostics, CLS removal and a patches-only training probe. At
+  40k, the 21.1M-parameter reasoner did not materially outperform the 1.1M
+  fusion head or reduce the repaired compositional deficit.
+- Current gate, 29 July 2026: V3 reasoner scaling to 100k/250k is on hold
+  pending supervisor design feedback. Do not launch it or make a large
+  architectural change before that feedback is recorded. No final clean-test
+  evaluation has occurred; all model findings remain development-set results.
 
 ## V2 protocol rules (binding)
 
@@ -61,13 +88,12 @@ accuracy and efficiency.
   multi-step lift deficit about 0.08), v2_06 (fusion relies most on the
   image; excess reliance in verify/logical) and v2_07 (at 250k the feature
   advantage decays to noise, the multimodal margin grows, the multi-step
-  deficit persists) are complete, as is v3_00 (token stores extracted,
-  consistency-checked against the V2 globals, loaders benchmarked). The
-  next stage is v3_01: the question-conditioned latent-query reasoner over
-  the cached token stores.
-- V3's intended central contribution is a lightweight question-conditioned
-  latent-query reasoner over token-level visual features, evaluated against
-  controlled global-embedding baselines.
+  deficit persists) are complete. V3_00, v3_01 and v3_02a are also complete;
+  see Current status and their reports for the present hold point.
+- V3's central contribution is the lightweight question-conditioned
+  latent-query reasoner over token-level visual features and its controlled
+  comparison with global-embedding baselines, including the negative 40k
+  result.
 - No large architectural change without a research question and a controlled
   comparison.
 
@@ -83,8 +109,9 @@ accuracy and efficiency.
   features, with cached-token training as the primary pipeline and raw-path
   equivalence and efficiency measured separately. The encoders stay frozen.
 - Answer set: top 100 answers first, scaling to 1000 later as an experiment.
-- All fixed settings live in config.py and are read from there, never
-  hard-coded.
+- Shared and V1 settings live in config.py. Experiment-specific constants,
+  such as V3 search grids, gates and bootstrap counts, must be named near the
+  experiment entry point and recorded in its report and result metadata.
 
 ## Hard rules
 

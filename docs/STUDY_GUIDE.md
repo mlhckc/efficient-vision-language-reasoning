@@ -1,5 +1,10 @@
 # Study guide: Efficient Vision-Language Reasoning with Small Language Models
 
+Historical scope note: this guide explains the V1 global-embedding prototype.
+Its statements about incomplete stages and next steps are superseded by
+CLAUDE.md, collab/PROJECT_CONTEXT.md and docs/experiments/. It remains useful
+for the background concepts and V1 architecture only.
+
 This document explains the project from the ground up so you can understand and
 defend it. It covers the idea, the background concepts, the models, the
 pipeline, what has been built so far, and a set of self-test questions. It uses

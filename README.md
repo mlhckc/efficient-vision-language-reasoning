@@ -10,9 +10,15 @@ classifies the answer from a fixed set of the most frequent answers, on a
 subset of GQA. No large vision-language model is trained, and the encoders are
 never unfrozen.
 
-Status: the V1 prototype pipeline is complete, and the V2 evaluation protocol
-(Day 1) is built and verified. The next step is V2 embedding extraction for
-the new manifests, followed later by multi-seed training.
+Status: V1 is a completed legacy prototype. V2 is complete through global-head
+scaling at 40k/100k/250k, and V3 is complete through the 40k latent-query
+reasoner and v3_02a reference/statistical/CLS diagnostics. The reasoner did not
+materially improve on the much smaller fusion head at 40k. V3 100k/250k
+scaling is on hold pending supervisor design feedback. The clean test remains
+blinded and no confirmatory result has been reported.
+
+The current project map and audit findings are in collab/PROJECT_CONTEXT.md.
+Claude-Codex planning, execution and review follow collab/PROTOCOL.md.
 
 ## V1 prototype (legacy)
 
