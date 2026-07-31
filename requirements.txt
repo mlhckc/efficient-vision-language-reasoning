@@ -6,6 +6,12 @@ torchvision          # image transforms and pretrained-model utilities
 # Frozen CLIP image and text encoders (ViT-B-32, laion2b weights).
 open_clip_torch
 
+# SigLIP tokenization for the E2 frozen-encoder-swap experiment
+# (ViT-B-16-SigLIP uses a HuggingFace sentencepiece tokenizer). The
+# encoders themselves remain frozen open_clip weights.
+transformers
+sentencepiece
+
 # Numerics and tabular handling for questions, answers and metrics.
 numpy
 pandas
