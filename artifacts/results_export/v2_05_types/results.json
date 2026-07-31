@@ -1,0 +1,274 @@
+{
+  "batch_size": 256,
+  "clip_model": "ViT-B-32",
+  "clip_pretrained": "laion2b_s34b_b79k",
+  "cuda": "13.0",
+  "dataset": "gqa",
+  "deterministic": true,
+  "device": "cuda",
+  "dropout": 0.3,
+  "embed_dim": 512,
+  "git_commit": "c0da3b3",
+  "gpu": "NVIDIA RTX 4000 Ada Generation",
+  "hidden_dim": 512,
+  "learning_rate": 0.001,
+  "n_epochs": 30,
+  "n_train": 40000,
+  "n_val": 8000,
+  "python": "3.12.3",
+  "seed": 42,
+  "timestamp": "2026-07-17T17:19:48",
+  "top_k_answers": 100,
+  "torch": "2.12.1+cu130",
+  "v2_05_analysis": {
+    "fusion_minus_concat_per_type": {
+      "semantic:attr": -0.00438,
+      "semantic:cat": 0.00456,
+      "semantic:global": -0.0184,
+      "semantic:obj": 0.03932,
+      "semantic:rel": 0.02552,
+      "steps:3": 0.0048,
+      "steps:4": 0.02643,
+      "steps:<=2": 0.01041,
+      "steps:>=5": 0.0395,
+      "structural:choose": -0.01632,
+      "structural:compare": -0.04304,
+      "structural:logical": 0.04045,
+      "structural:query": 0.00128,
+      "structural:verify": 0.04138
+    },
+    "limitation_test": {
+      "concat": {
+        "semantic:rel": {
+          "accuracy": 0.52888,
+          "shortfall_vs_overall": 0.00645
+        },
+        "steps>=4": {
+          "accuracy": 0.5494,
+          "shortfall_vs_overall": 0.02697
+        }
+      },
+      "difference_576k": {
+        "semantic:rel": {
+          "accuracy": 0.54835,
+          "shortfall_vs_overall": 0.01477
+        },
+        "steps>=4": {
+          "accuracy": 0.56905,
+          "shortfall_vs_overall": 0.03547
+        }
+      },
+      "fusion": {
+        "semantic:rel": {
+          "accuracy": 0.5544,
+          "shortfall_vs_overall": 0.01797
+        },
+        "steps>=4": {
+          "accuracy": 0.58317,
+          "shortfall_vs_overall": 0.04674
+        }
+      },
+      "fusion_narrow": {
+        "semantic:rel": {
+          "accuracy": 0.54701,
+          "shortfall_vs_overall": 0.01343
+        },
+        "steps>=4": {
+          "accuracy": 0.57308,
+          "shortfall_vs_overall": 0.0395
+        }
+      },
+      "image_only": {
+        "semantic:rel": {
+          "accuracy": 0.21961,
+          "shortfall_vs_overall": -0.01477
+        },
+        "steps>=4": {
+          "accuracy": 0.39315,
+          "shortfall_vs_overall": 0.15877
+        }
+      },
+      "product_576k": {
+        "semantic:rel": {
+          "accuracy": 0.5413,
+          "shortfall_vs_overall": 0.01071
+        },
+        "steps>=4": {
+          "accuracy": 0.56603,
+          "shortfall_vs_overall": 0.03544
+        }
+      },
+      "question_only": {
+        "semantic:rel": {
+          "accuracy": 0.42848,
+          "shortfall_vs_overall": -0.03043
+        },
+        "steps>=4": {
+          "accuracy": 0.52167,
+          "shortfall_vs_overall": 0.06276
+        }
+      },
+      "zero_shot_photo": {
+        "semantic:rel": {
+          "accuracy": 0.13499,
+          "shortfall_vs_overall": 0.05552
+        },
+        "steps>=4": {
+          "accuracy": 0.05897,
+          "shortfall_vs_overall": -0.0205
+        }
+      }
+    },
+    "note": "Dev only; no test_clean_* file was read.",
+    "overall": {
+      "concat": 0.52243,
+      "difference_576k": 0.53358,
+      "fusion": 0.53643,
+      "fusion_narrow": 0.53358,
+      "image_only": 0.23438,
+      "product_576k": 0.53059,
+      "question_only": 0.45891,
+      "zero_shot_photo": 0.07947
+    },
+    "per_type": {
+      "concat": {
+        "semantic:attr": 0.46356,
+        "semantic:cat": 0.56492,
+        "semantic:global": 0.80368,
+        "semantic:obj": 0.6,
+        "semantic:rel": 0.52888,
+        "steps:3": 0.4979,
+        "steps:4": 0.50575,
+        "steps:<=2": 0.53417,
+        "steps:>=5": 0.58348,
+        "structural:choose": 0.57774,
+        "structural:compare": 0.5894,
+        "structural:logical": 0.57848,
+        "structural:query": 0.47552,
+        "structural:verify": 0.52167
+      },
+      "difference_576k": {
+        "semantic:attr": 0.46525,
+        "semantic:cat": 0.54442,
+        "semantic:global": 0.82209,
+        "semantic:obj": 0.62479,
+        "semantic:rel": 0.54835,
+        "steps:3": 0.51081,
+        "steps:4": 0.51609,
+        "steps:<=2": 0.53583,
+        "steps:>=5": 0.61041,
+        "structural:choose": 0.54894,
+        "structural:compare": 0.58609,
+        "structural:logical": 0.60518,
+        "structural:query": 0.48293,
+        "structural:verify": 0.55172
+      },
+      "fusion": {
+        "semantic:attr": 0.45918,
+        "semantic:cat": 0.56948,
+        "semantic:global": 0.78528,
+        "semantic:obj": 0.63932,
+        "semantic:rel": 0.5544,
+        "steps:3": 0.5027,
+        "steps:4": 0.53218,
+        "steps:<=2": 0.54458,
+        "steps:>=5": 0.62298,
+        "structural:choose": 0.56142,
+        "structural:compare": 0.54636,
+        "structural:logical": 0.61893,
+        "structural:query": 0.4768,
+        "structural:verify": 0.56305
+      },
+      "fusion_narrow": {
+        "semantic:attr": 0.45951,
+        "semantic:cat": 0.58542,
+        "semantic:global": 0.78528,
+        "semantic:obj": 0.63248,
+        "semantic:rel": 0.54701,
+        "steps:3": 0.50661,
+        "steps:4": 0.52069,
+        "steps:<=2": 0.53833,
+        "steps:>=5": 0.614,
+        "structural:choose": 0.54031,
+        "structural:compare": 0.56291,
+        "structural:logical": 0.60761,
+        "structural:query": 0.47938,
+        "structural:verify": 0.56355
+      },
+      "image_only": {
+        "semantic:attr": 0.17206,
+        "semantic:cat": 0.12073,
+        "semantic:global": 0.20245,
+        "semantic:obj": 0.47692,
+        "semantic:rel": 0.21961,
+        "steps:3": 0.16877,
+        "steps:4": 0.3,
+        "steps:<=2": 0.19417,
+        "steps:>=5": 0.46589,
+        "structural:choose": 0.01344,
+        "structural:compare": 0.41722,
+        "structural:logical": 0.47492,
+        "structural:query": 0.05348,
+        "structural:verify": 0.45074
+      },
+      "product_576k": {
+        "semantic:attr": 0.46727,
+        "semantic:cat": 0.55581,
+        "semantic:global": 0.77301,
+        "semantic:obj": 0.62051,
+        "semantic:rel": 0.5413,
+        "steps:3": 0.5039,
+        "steps:4": 0.5092,
+        "steps:<=2": 0.53833,
+        "steps:>=5": 0.61041,
+        "structural:choose": 0.5691,
+        "structural:compare": 0.57616,
+        "structural:logical": 0.59951,
+        "structural:query": 0.48099,
+        "structural:verify": 0.53793
+      },
+      "question_only": {
+        "semantic:attr": 0.45445,
+        "semantic:cat": 0.25513,
+        "semantic:global": 0.53374,
+        "semantic:obj": 0.61368,
+        "semantic:rel": 0.42848,
+        "steps:3": 0.3991,
+        "steps:4": 0.41034,
+        "steps:<=2": 0.49,
+        "steps:>=5": 0.60862,
+        "structural:choose": 0.53071,
+        "structural:compare": 0.61589,
+        "structural:logical": 0.60922,
+        "structural:query": 0.31765,
+        "structural:verify": 0.52315
+      },
+      "zero_shot_photo": {
+        "semantic:attr": 0.01282,
+        "semantic:cat": 0.32118,
+        "semantic:global": 0.09816,
+        "semantic:obj": 0.01368,
+        "semantic:rel": 0.13499,
+        "steps:3": 0.11652,
+        "steps:4": 0.11494,
+        "steps:<=2": 0.045,
+        "steps:>=5": 0.01526,
+        "structural:choose": 0.04415,
+        "structural:compare": 0.01987,
+        "structural:logical": 0.01133,
+        "structural:query": 0.16688,
+        "structural:verify": 0.01429
+      }
+    },
+    "seed": 42,
+    "seed_note": "Per-type slicing uses the seed-42 checkpoints only; per-type deltas across seeds are second-order but untested here, a stated limitation.",
+    "single_term_gain_correlation": {
+      "n_slices": 14,
+      "pearson_p": 0.03052,
+      "pearson_r": 0.5776,
+      "spearman_p": 0.00137,
+      "spearman_rho": 0.767
+    }
+  },
+  "weight_decay": 0.0001
+}

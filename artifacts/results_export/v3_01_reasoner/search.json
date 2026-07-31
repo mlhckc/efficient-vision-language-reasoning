@@ -1,0 +1,149 @@
+{
+  "grid": [
+    {
+      "dropout": 0.1,
+      "lr": 0.0003,
+      "warmup_frac": 0.0
+    },
+    {
+      "dropout": 0.3,
+      "lr": 0.0003,
+      "warmup_frac": 0.0
+    },
+    {
+      "dropout": 0.1,
+      "lr": 0.0003,
+      "warmup_frac": 0.03
+    },
+    {
+      "dropout": 0.3,
+      "lr": 0.0003,
+      "warmup_frac": 0.03
+    },
+    {
+      "dropout": 0.1,
+      "lr": 0.001,
+      "warmup_frac": 0.0
+    },
+    {
+      "dropout": 0.3,
+      "lr": 0.001,
+      "warmup_frac": 0.0
+    },
+    {
+      "dropout": 0.1,
+      "lr": 0.001,
+      "warmup_frac": 0.03
+    },
+    {
+      "dropout": 0.3,
+      "lr": 0.001,
+      "warmup_frac": 0.03
+    }
+  ],
+  "max_epochs": 60,
+  "results": [
+    {
+      "best_dev_accuracy": 0.54654,
+      "best_epoch": 27,
+      "epochs_run": 37,
+      "hyper": {
+        "dropout": 0.1,
+        "lr": 0.0003,
+        "warmup_frac": 0.0
+      },
+      "name": "search0_lr0.0003_w0.0_d0.1"
+    },
+    {
+      "best_dev_accuracy": 0.54382,
+      "best_epoch": 5,
+      "epochs_run": 15,
+      "hyper": {
+        "dropout": 0.3,
+        "lr": 0.0003,
+        "warmup_frac": 0.0
+      },
+      "name": "search1_lr0.0003_w0.0_d0.3"
+    },
+    {
+      "best_dev_accuracy": 0.54213,
+      "best_epoch": 6,
+      "epochs_run": 16,
+      "hyper": {
+        "dropout": 0.1,
+        "lr": 0.0003,
+        "warmup_frac": 0.03
+      },
+      "name": "search2_lr0.0003_w0.03_d0.1"
+    },
+    {
+      "best_dev_accuracy": 0.54187,
+      "best_epoch": 16,
+      "epochs_run": 26,
+      "hyper": {
+        "dropout": 0.3,
+        "lr": 0.0003,
+        "warmup_frac": 0.03
+      },
+      "name": "search3_lr0.0003_w0.03_d0.3"
+    },
+    {
+      "best_dev_accuracy": 0.52191,
+      "best_epoch": 12,
+      "epochs_run": 22,
+      "hyper": {
+        "dropout": 0.1,
+        "lr": 0.001,
+        "warmup_frac": 0.0
+      },
+      "name": "search4_lr0.001_w0.0_d0.1"
+    },
+    {
+      "best_dev_accuracy": 0.52398,
+      "best_epoch": 7,
+      "epochs_run": 17,
+      "hyper": {
+        "dropout": 0.3,
+        "lr": 0.001,
+        "warmup_frac": 0.0
+      },
+      "name": "search5_lr0.001_w0.0_d0.3"
+    },
+    {
+      "best_dev_accuracy": 0.53474,
+      "best_epoch": 18,
+      "epochs_run": 28,
+      "hyper": {
+        "dropout": 0.1,
+        "lr": 0.001,
+        "warmup_frac": 0.03
+      },
+      "name": "search6_lr0.001_w0.03_d0.1"
+    },
+    {
+      "best_dev_accuracy": 0.53319,
+      "best_epoch": 9,
+      "epochs_run": 19,
+      "hyper": {
+        "dropout": 0.3,
+        "lr": 0.001,
+        "warmup_frac": 0.03
+      },
+      "name": "search7_lr0.001_w0.03_d0.3"
+    }
+  ],
+  "seed": 0,
+  "selected": {
+    "best_dev_accuracy": 0.54654,
+    "best_epoch": 27,
+    "epochs_run": 37,
+    "hyper": {
+      "dropout": 0.1,
+      "lr": 0.0003,
+      "warmup_frac": 0.0
+    },
+    "name": "search0_lr0.0003_w0.0_d0.1"
+  },
+  "selection_rule": "highest dev accuracy; ties broken by grid order",
+  "status": "complete"
+}

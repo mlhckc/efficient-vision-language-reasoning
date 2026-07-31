@@ -1,0 +1,447 @@
+{
+  "batch_size": 256,
+  "clip_model": "ViT-B-32",
+  "clip_pretrained": "laion2b_s34b_b79k",
+  "cuda": "13.0",
+  "dataset": "gqa",
+  "deterministic": true,
+  "device": "cuda",
+  "dropout": 0.3,
+  "embed_dim": 512,
+  "git_commit": "2eec239",
+  "gpu": "NVIDIA RTX 4000 Ada Generation",
+  "hidden_dim": 512,
+  "learning_rate": 0.001,
+  "n_epochs": 30,
+  "n_train": 40000,
+  "n_val": 8000,
+  "python": "3.12.3",
+  "seed": 42,
+  "timestamp": "2026-07-17T17:52:00",
+  "top_k_answers": 100,
+  "torch": "2.12.1+cu130",
+  "v2_05b_addendum": {
+    "analysis_d_on_lift": {
+      "concat": {
+        "mean_semantic_lift": 0.35756,
+        "mean_step_lift": 0.24404,
+        "rel_lift": 0.33647,
+        "steps_ge4_lift_mean_of_buckets": 0.14975
+      },
+      "fusion": {
+        "mean_semantic_lift": 0.36689,
+        "mean_step_lift": 0.26432,
+        "rel_lift": 0.36199,
+        "steps_ge4_lift_mean_of_buckets": 0.18272
+      },
+      "question_only": {
+        "mean_semantic_lift": 0.22245,
+        "mean_step_lift": 0.19073,
+        "rel_lift": 0.23607,
+        "steps_ge4_lift_mean_of_buckets": 0.11462
+      }
+    },
+    "ci_method": "normal approximation on paired per-row differences: gap +/- 1.96 * sd(d)/sqrt(n), seed 42",
+    "gap_ci": [
+      {
+        "ci_high": 0.06237,
+        "ci_low": 0.02039,
+        "excludes_zero": true,
+        "gap": 0.04138,
+        "kind": "structural",
+        "n": 2030,
+        "slice": "verify"
+      },
+      {
+        "ci_high": 0.01457,
+        "ci_low": -0.01199,
+        "excludes_zero": false,
+        "gap": 0.00129,
+        "kind": "structural",
+        "n": 3104,
+        "slice": "query"
+      },
+      {
+        "ci_high": 0.01087,
+        "ci_low": -0.0435,
+        "excludes_zero": false,
+        "gap": -0.01631,
+        "kind": "structural",
+        "n": 1042,
+        "slice": "choose"
+      },
+      {
+        "ci_high": 0.06642,
+        "ci_low": 0.01448,
+        "excludes_zero": true,
+        "gap": 0.04045,
+        "kind": "structural",
+        "n": 1236,
+        "slice": "logical"
+      },
+      {
+        "ci_high": 0.01228,
+        "ci_low": -0.09838,
+        "excludes_zero": false,
+        "gap": -0.04305,
+        "kind": "structural",
+        "n": 302,
+        "slice": "compare"
+      },
+      {
+        "ci_high": 0.06593,
+        "ci_low": 0.0127,
+        "excludes_zero": true,
+        "gap": 0.03932,
+        "kind": "semantic",
+        "n": 1170,
+        "slice": "obj"
+      },
+      {
+        "ci_high": 0.01204,
+        "ci_low": -0.02081,
+        "excludes_zero": false,
+        "gap": -0.00439,
+        "kind": "semantic",
+        "n": 2964,
+        "slice": "attr"
+      },
+      {
+        "ci_high": 0.03616,
+        "ci_low": -0.02705,
+        "excludes_zero": false,
+        "gap": 0.00456,
+        "kind": "semantic",
+        "n": 439,
+        "slice": "cat"
+      },
+      {
+        "ci_high": 0.04068,
+        "ci_low": 0.01037,
+        "excludes_zero": true,
+        "gap": 0.02552,
+        "kind": "semantic",
+        "n": 2978,
+        "slice": "rel"
+      },
+      {
+        "ci_high": 0.03125,
+        "ci_low": -0.06806,
+        "excludes_zero": false,
+        "gap": -0.0184,
+        "kind": "semantic",
+        "n": 163,
+        "slice": "global"
+      }
+    ],
+    "lift": [
+      {
+        "concat_lift": 0.01182,
+        "fusion_lift": 0.0532,
+        "kind": "structural",
+        "n": 2030,
+        "prior_accuracy": 0.50985,
+        "question_only_lift": 0.0133,
+        "slice": "verify"
+      },
+      {
+        "concat_lift": 0.39659,
+        "fusion_lift": 0.39787,
+        "kind": "structural",
+        "n": 3104,
+        "prior_accuracy": 0.07893,
+        "question_only_lift": 0.23872,
+        "slice": "query"
+      },
+      {
+        "concat_lift": 0.29943,
+        "fusion_lift": 0.28311,
+        "kind": "structural",
+        "n": 1042,
+        "prior_accuracy": 0.27831,
+        "question_only_lift": 0.2524,
+        "slice": "choose"
+      },
+      {
+        "concat_lift": 0.05097,
+        "fusion_lift": 0.09142,
+        "kind": "structural",
+        "n": 1236,
+        "prior_accuracy": 0.52751,
+        "question_only_lift": 0.08171,
+        "slice": "logical"
+      },
+      {
+        "concat_lift": 0.149,
+        "fusion_lift": 0.10596,
+        "kind": "structural",
+        "n": 302,
+        "prior_accuracy": 0.4404,
+        "question_only_lift": 0.17549,
+        "slice": "compare"
+      },
+      {
+        "concat_lift": 0.08291,
+        "fusion_lift": 0.12223,
+        "kind": "semantic",
+        "n": 1170,
+        "prior_accuracy": 0.51709,
+        "question_only_lift": 0.09659,
+        "slice": "obj"
+      },
+      {
+        "concat_lift": 0.26923,
+        "fusion_lift": 0.26485,
+        "kind": "semantic",
+        "n": 2964,
+        "prior_accuracy": 0.19433,
+        "question_only_lift": 0.26012,
+        "slice": "attr"
+      },
+      {
+        "concat_lift": 0.51025,
+        "fusion_lift": 0.51481,
+        "kind": "semantic",
+        "n": 439,
+        "prior_accuracy": 0.05467,
+        "question_only_lift": 0.20046,
+        "slice": "cat"
+      },
+      {
+        "concat_lift": 0.33647,
+        "fusion_lift": 0.36199,
+        "kind": "semantic",
+        "n": 2978,
+        "prior_accuracy": 0.19241,
+        "question_only_lift": 0.23607,
+        "slice": "rel"
+      },
+      {
+        "concat_lift": 0.58896,
+        "fusion_lift": 0.57056,
+        "kind": "semantic",
+        "n": 163,
+        "prior_accuracy": 0.21472,
+        "question_only_lift": 0.31902,
+        "slice": "global"
+      },
+      {
+        "concat_lift": 0.325,
+        "fusion_lift": 0.33541,
+        "kind": "steps",
+        "n": 2400,
+        "prior_accuracy": 0.20917,
+        "question_only_lift": 0.28083,
+        "slice": "<=2"
+      },
+      {
+        "concat_lift": 0.35165,
+        "fusion_lift": 0.35645,
+        "kind": "steps",
+        "n": 3330,
+        "prior_accuracy": 0.14625,
+        "question_only_lift": 0.25285,
+        "slice": "3"
+      },
+      {
+        "concat_lift": 0.23219,
+        "fusion_lift": 0.25862,
+        "kind": "steps",
+        "n": 870,
+        "prior_accuracy": 0.27356,
+        "question_only_lift": 0.13678,
+        "slice": "4"
+      },
+      {
+        "concat_lift": 0.06732,
+        "fusion_lift": 0.10682,
+        "kind": "steps",
+        "n": 1114,
+        "prior_accuracy": 0.51616,
+        "question_only_lift": 0.09246,
+        "slice": ">=5"
+      }
+    ],
+    "multiseed_gaps": [
+      {
+        "gap_max": 0.05961,
+        "gap_mean": 0.04621,
+        "gap_min": 0.03744,
+        "gap_std": 0.00854,
+        "kind": "structural",
+        "n": 2030,
+        "negative_in_all_seeds": false,
+        "positive_in_all_seeds": true,
+        "slice": "verify"
+      },
+      {
+        "gap_max": 0.00612,
+        "gap_mean": 0.00064,
+        "gap_min": -0.00419,
+        "gap_std": 0.00446,
+        "kind": "structural",
+        "n": 3104,
+        "negative_in_all_seeds": false,
+        "positive_in_all_seeds": false,
+        "slice": "query"
+      },
+      {
+        "gap_max": -0.0144,
+        "gap_mean": -0.02303,
+        "gap_min": -0.03551,
+        "gap_std": 0.01056,
+        "kind": "structural",
+        "n": 1042,
+        "negative_in_all_seeds": true,
+        "positive_in_all_seeds": false,
+        "slice": "choose"
+      },
+      {
+        "gap_max": 0.04531,
+        "gap_mean": 0.03802,
+        "gap_min": 0.02508,
+        "gap_std": 0.00763,
+        "kind": "structural",
+        "n": 1236,
+        "negative_in_all_seeds": false,
+        "positive_in_all_seeds": true,
+        "slice": "logical"
+      },
+      {
+        "gap_max": 0.00331,
+        "gap_mean": -0.02517,
+        "gap_min": -0.04636,
+        "gap_std": 0.02229,
+        "kind": "structural",
+        "n": 302,
+        "negative_in_all_seeds": false,
+        "positive_in_all_seeds": false,
+        "slice": "compare"
+      },
+      {
+        "gap_max": 0.05556,
+        "gap_mean": 0.04257,
+        "gap_min": 0.03077,
+        "gap_std": 0.00945,
+        "kind": "semantic",
+        "n": 1170,
+        "negative_in_all_seeds": false,
+        "positive_in_all_seeds": true,
+        "slice": "obj"
+      },
+      {
+        "gap_max": 0.00709,
+        "gap_mean": 0.00324,
+        "gap_min": -0.00439,
+        "gap_std": 0.00452,
+        "kind": "semantic",
+        "n": 2964,
+        "negative_in_all_seeds": false,
+        "positive_in_all_seeds": false,
+        "slice": "attr"
+      },
+      {
+        "gap_max": 0.00456,
+        "gap_mean": -0.00228,
+        "gap_min": -0.00683,
+        "gap_std": 0.00483,
+        "kind": "semantic",
+        "n": 439,
+        "negative_in_all_seeds": false,
+        "positive_in_all_seeds": false,
+        "slice": "cat"
+      },
+      {
+        "gap_max": 0.02552,
+        "gap_mean": 0.01806,
+        "gap_min": 0.01007,
+        "gap_std": 0.00548,
+        "kind": "semantic",
+        "n": 2978,
+        "negative_in_all_seeds": false,
+        "positive_in_all_seeds": true,
+        "slice": "rel"
+      },
+      {
+        "gap_max": 0.0184,
+        "gap_mean": -0.00613,
+        "gap_min": -0.03067,
+        "gap_std": 0.01891,
+        "kind": "semantic",
+        "n": 163,
+        "negative_in_all_seeds": false,
+        "positive_in_all_seeds": false,
+        "slice": "global"
+      },
+      {
+        "gap_max": 0.02833,
+        "gap_mean": 0.02075,
+        "gap_min": 0.01042,
+        "gap_std": 0.00669,
+        "kind": "steps",
+        "n": 2400,
+        "negative_in_all_seeds": false,
+        "positive_in_all_seeds": true,
+        "slice": "<=2"
+      },
+      {
+        "gap_max": 0.0048,
+        "gap_mean": -0.00246,
+        "gap_min": -0.00721,
+        "gap_std": 0.00461,
+        "kind": "steps",
+        "n": 3330,
+        "negative_in_all_seeds": false,
+        "positive_in_all_seeds": false,
+        "slice": "3"
+      },
+      {
+        "gap_max": 0.04023,
+        "gap_mean": 0.02966,
+        "gap_min": 0.01609,
+        "gap_std": 0.00946,
+        "kind": "steps",
+        "n": 870,
+        "negative_in_all_seeds": false,
+        "positive_in_all_seeds": true,
+        "slice": "4"
+      },
+      {
+        "gap_max": 0.04488,
+        "gap_mean": 0.03932,
+        "gap_min": 0.02962,
+        "gap_std": 0.0063,
+        "kind": "steps",
+        "n": 1114,
+        "negative_in_all_seeds": false,
+        "positive_in_all_seeds": true,
+        "slice": ">=5"
+      }
+    ],
+    "note": "Dev and train_40k only; no test_clean_* file was read.",
+    "prior_accuracy_by_slice": {
+      "semantic:attr": 0.19433,
+      "semantic:cat": 0.05467,
+      "semantic:global": 0.21472,
+      "semantic:obj": 0.51709,
+      "semantic:rel": 0.19241,
+      "steps:3": 0.14625,
+      "steps:4": 0.27356,
+      "steps:<=2": 0.20917,
+      "steps:>=5": 0.51616,
+      "structural:choose": 0.27831,
+      "structural:compare": 0.4404,
+      "structural:logical": 0.52751,
+      "structural:query": 0.07893,
+      "structural:verify": 0.50985
+    },
+    "seeds_for_multiseed_gaps": [
+      0,
+      1,
+      2,
+      3,
+      42
+    ]
+  },
+  "weight_decay": 0.0001
+}

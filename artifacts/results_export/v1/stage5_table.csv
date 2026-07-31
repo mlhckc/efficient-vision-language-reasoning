@@ -1,0 +1,5 @@
+model,val_accuracy,trainable_parameters,latency_ms_mean,latency_ms_std,peak_memory_mb,checkpoint_size_mb,train_seconds,best_epoch
+question_only,0.45825,313956,0.0238,0.0007,33.206,1.2,7.8,19
+image_only,0.24263,313956,0.0237,0.0005,33.206,1.2,8.0,9
+concat,0.52538,576100,0.0283,0.0077,34.209,2.2,7.8,26
+fusion,0.54138,1100388,0.0422,0.0017,36.213,4.2,8.1,18

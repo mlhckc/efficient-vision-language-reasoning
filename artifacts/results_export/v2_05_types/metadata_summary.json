@@ -1,0 +1,151 @@
+{
+  "batch_size": 256,
+  "clip_model": "ViT-B-32",
+  "clip_pretrained": "laion2b_s34b_b79k",
+  "cuda": "13.0",
+  "dataset": "gqa",
+  "deterministic": true,
+  "device": "cuda",
+  "dropout": 0.3,
+  "embed_dim": 512,
+  "git_commit": "c0da3b3",
+  "gpu": "NVIDIA RTX 4000 Ada Generation",
+  "hidden_dim": 512,
+  "learning_rate": 0.001,
+  "n_epochs": 30,
+  "n_train": 40000,
+  "n_val": 8000,
+  "python": "3.12.3",
+  "seed": 42,
+  "timestamp": "2026-07-17T17:17:38",
+  "top_k_answers": 100,
+  "torch": "2.12.1+cu130",
+  "v2_05_metadata": {
+    "distributions": {
+      "dev": {
+        "n_steps_histogram": {
+          "2": 2400,
+          "3": 3330,
+          "4": 870,
+          "5": 824,
+          "6": 6,
+          "7": 284
+        },
+        "semantic_counts": {
+          "attr": 2964,
+          "cat": 439,
+          "global": 163,
+          "obj": 1170,
+          "rel": 2978
+        },
+        "structural_counts": {
+          "choose": 1042,
+          "compare": 302,
+          "logical": 1236,
+          "query": 3104,
+          "verify": 2030
+        }
+      },
+      "train_40k": {
+        "n_steps_histogram": {
+          "2": 12605,
+          "3": 17192,
+          "4": 4619,
+          "5": 4139,
+          "6": 33,
+          "7": 1410,
+          "8": 1,
+          "9": 1
+        },
+        "semantic_counts": {
+          "attr": 14957,
+          "cat": 2199,
+          "global": 797,
+          "obj": 6153,
+          "rel": 15894
+        },
+        "structural_counts": {
+          "choose": 5340,
+          "compare": 1548,
+          "logical": 6151,
+          "query": 16202,
+          "verify": 10759
+        }
+      }
+    },
+    "join": {
+      "dev_match_rate": 1.0,
+      "dev_matched": 7714,
+      "train_40k_match_rate": 1.0,
+      "train_40k_matched": 40000
+    },
+    "note": "Dev and train_40k only; no clean-test metadata was built and no clean-test statistic was computed.",
+    "per_type_priors": {
+      "global_majority": {
+        "answer": "no",
+        "dev_accuracy": 0.22466
+      },
+      "semantic_prior": {
+        "overall_dev_accuracy": 0.23503,
+        "per_type": {
+          "attr": {
+            "dev_accuracy": 0.19433,
+            "n_dev": 2964,
+            "prior_answer": "yes"
+          },
+          "cat": {
+            "dev_accuracy": 0.05467,
+            "n_dev": 439,
+            "prior_answer": "table"
+          },
+          "global": {
+            "dev_accuracy": 0.21472,
+            "n_dev": 163,
+            "prior_answer": "yes"
+          },
+          "obj": {
+            "dev_accuracy": 0.51709,
+            "n_dev": 1170,
+            "prior_answer": "yes"
+          },
+          "rel": {
+            "dev_accuracy": 0.19241,
+            "n_dev": 2978,
+            "prior_answer": "no"
+          }
+        }
+      },
+      "structural_prior": {
+        "overall_dev_accuracy": 0.30529,
+        "per_type": {
+          "choose": {
+            "dev_accuracy": 0.27831,
+            "n_dev": 1042,
+            "prior_answer": "right"
+          },
+          "compare": {
+            "dev_accuracy": 0.4404,
+            "n_dev": 302,
+            "prior_answer": "yes"
+          },
+          "logical": {
+            "dev_accuracy": 0.52751,
+            "n_dev": 1236,
+            "prior_answer": "yes"
+          },
+          "query": {
+            "dev_accuracy": 0.07893,
+            "n_dev": 3104,
+            "prior_answer": "left"
+          },
+          "verify": {
+            "dev_accuracy": 0.50985,
+            "n_dev": 2030,
+            "prior_answer": "no"
+          }
+        }
+      }
+    }
+  },
+  "weight_decay": 0.0001
+}

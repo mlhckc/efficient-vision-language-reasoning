@@ -1,0 +1,536 @@
+{
+  "batch_size": 256,
+  "clip_model": "ViT-B-32",
+  "clip_pretrained": "laion2b_s34b_b79k",
+  "cuda": "13.0",
+  "dataset": "gqa",
+  "deterministic": true,
+  "device": "cuda",
+  "dropout": 0.3,
+  "embed_dim": 512,
+  "git_commit": "986c477",
+  "gpu": "NVIDIA RTX 4000 Ada Generation",
+  "hidden_dim": 512,
+  "learning_rate": 0.001,
+  "n_epochs": 30,
+  "n_train": 40000,
+  "n_val": 8000,
+  "python": "3.12.3",
+  "seed": 42,
+  "timestamp": "2026-07-26T15:37:42",
+  "top_k_answers": 100,
+  "torch": "2.12.1+cu130",
+  "v3_02a_step_statistics": {
+    "bootstrap": {
+      "cluster_unit": "represented dev imageId",
+      "n_clusters": 768,
+      "n_draws": 2000,
+      "rng_seed": 0
+    },
+    "bucket_table": [
+      {
+        "bucket": "<=2",
+        "concat_lift": 0.3195,
+        "concat_raw": 0.52867,
+        "direct_linear_lift": 0.26725,
+        "direct_linear_raw": 0.47642,
+        "fusion_lift": 0.34025,
+        "fusion_raw": 0.54942,
+        "meanpatch_concat_lift": 0.32175,
+        "meanpatch_concat_raw": 0.53092,
+        "n_questions": 2400,
+        "n_unique_images": 674,
+        "prior_accuracy": 0.20917,
+        "product_576k_lift": 0.33008,
+        "product_576k_raw": 0.53925,
+        "question_only_lift": 0.28508,
+        "question_only_raw": 0.49425,
+        "reasoner_lift": 0.35027,
+        "reasoner_raw": 0.55944
+      },
+      {
+        "bucket": "3",
+        "concat_lift": 0.35934,
+        "concat_raw": 0.50559,
+        "direct_linear_lift": 0.32,
+        "direct_linear_raw": 0.46625,
+        "fusion_lift": 0.35687,
+        "fusion_raw": 0.50312,
+        "meanpatch_concat_lift": 0.34126,
+        "meanpatch_concat_raw": 0.48751,
+        "n_questions": 3330,
+        "n_unique_images": 658,
+        "prior_accuracy": 0.14625,
+        "product_576k_lift": 0.36198,
+        "product_576k_raw": 0.50823,
+        "question_only_lift": 0.24967,
+        "question_only_raw": 0.39592,
+        "reasoner_lift": 0.36166,
+        "reasoner_raw": 0.50791
+      },
+      {
+        "bucket": "4",
+        "concat_lift": 0.23104,
+        "concat_raw": 0.5046,
+        "direct_linear_lift": 0.18828,
+        "direct_linear_raw": 0.46184,
+        "fusion_lift": 0.26069,
+        "fusion_raw": 0.53425,
+        "meanpatch_concat_lift": 0.21885,
+        "meanpatch_concat_raw": 0.49241,
+        "n_questions": 870,
+        "n_unique_images": 396,
+        "prior_accuracy": 0.27356,
+        "product_576k_lift": 0.24184,
+        "product_576k_raw": 0.5154,
+        "question_only_lift": 0.13495,
+        "question_only_raw": 0.40851,
+        "reasoner_lift": 0.25249,
+        "reasoner_raw": 0.52605
+      },
+      {
+        "bucket": ">=5",
+        "concat_lift": 0.06786,
+        "concat_raw": 0.58402,
+        "direct_linear_lift": 0.03555,
+        "direct_linear_raw": 0.55171,
+        "fusion_lift": 0.10718,
+        "fusion_raw": 0.62334,
+        "meanpatch_concat_lift": 0.06086,
+        "meanpatch_concat_raw": 0.57702,
+        "n_questions": 1114,
+        "n_unique_images": 531,
+        "prior_accuracy": 0.51616,
+        "product_576k_lift": 0.09497,
+        "product_576k_raw": 0.61113,
+        "question_only_lift": 0.08779,
+        "question_only_raw": 0.60395,
+        "reasoner_lift": 0.10413,
+        "reasoner_raw": 0.62029
+      },
+      {
+        "bucket": ">=4_combined",
+        "concat_lift": 0.13941,
+        "concat_raw": 0.54919,
+        "direct_linear_lift": 0.10252,
+        "direct_linear_raw": 0.5123,
+        "fusion_lift": 0.17449,
+        "fusion_raw": 0.58427,
+        "meanpatch_concat_lift": 0.13014,
+        "meanpatch_concat_raw": 0.53992,
+        "n_questions": 1984,
+        "n_unique_images": 620,
+        "prior_accuracy": 0.40978,
+        "product_576k_lift": 0.15937,
+        "product_576k_raw": 0.56915,
+        "question_only_lift": 0.10847,
+        "question_only_raw": 0.51825,
+        "reasoner_lift": 0.16919,
+        "reasoner_raw": 0.57897
+      }
+    ],
+    "confidence_intervals": {
+      "concat": {
+        "bucket_lift_ci": {
+          "3": [
+            0.3384,
+            0.37898
+          ],
+          "4": [
+            0.17729,
+            0.2809
+          ],
+          "<=2": [
+            0.29424,
+            0.34575
+          ],
+          ">=5": [
+            0.03623,
+            0.10044
+          ]
+        },
+        "bucket_raw_ci": {
+          "3": [
+            0.48758,
+            0.52263
+          ],
+          "4": [
+            0.47113,
+            0.53689
+          ],
+          "<=2": [
+            0.51115,
+            0.54615
+          ],
+          ">=5": [
+            0.55744,
+            0.60933
+          ]
+        },
+        "deficit_ci": [
+          0.08915,
+          0.12065
+        ],
+        "ge4_lift_ci": [
+          0.10955,
+          0.16735
+        ]
+      },
+      "direct_linear": {
+        "bucket_lift_ci": {
+          "3": [
+            0.29583,
+            0.34274
+          ],
+          "4": [
+            0.13703,
+            0.23791
+          ],
+          "<=2": [
+            0.24108,
+            0.29401
+          ],
+          ">=5": [
+            -0.00442,
+            0.0752
+          ]
+        },
+        "bucket_raw_ci": {
+          "3": [
+            0.44511,
+            0.4861
+          ],
+          "4": [
+            0.42448,
+            0.49805
+          ],
+          "<=2": [
+            0.45657,
+            0.49737
+          ],
+          ">=5": [
+            0.52055,
+            0.582
+          ]
+        },
+        "deficit_ci": [
+          0.08254,
+          0.11827
+        ],
+        "ge4_lift_ci": [
+          0.07007,
+          0.13582
+        ]
+      },
+      "fusion": {
+        "bucket_lift_ci": {
+          "3": [
+            0.33494,
+            0.37753
+          ],
+          "4": [
+            0.21366,
+            0.30371
+          ],
+          "<=2": [
+            0.3165,
+            0.3649
+          ],
+          ">=5": [
+            0.0674,
+            0.14527
+          ]
+        },
+        "bucket_raw_ci": {
+          "3": [
+            0.48522,
+            0.52139
+          ],
+          "4": [
+            0.50177,
+            0.56433
+          ],
+          "<=2": [
+            0.53147,
+            0.56744
+          ],
+          ">=5": [
+            0.59772,
+            0.6496
+          ]
+        },
+        "deficit_ci": [
+          0.07548,
+          0.10771
+        ],
+        "ge4_lift_ci": [
+          0.14402,
+          0.20372
+        ]
+      },
+      "meanpatch_concat": {
+        "bucket_lift_ci": {
+          "3": [
+            0.31992,
+            0.36147
+          ],
+          "4": [
+            0.17194,
+            0.26231
+          ],
+          "<=2": [
+            0.29945,
+            0.34609
+          ],
+          ">=5": [
+            0.02075,
+            0.09964
+          ]
+        },
+        "bucket_raw_ci": {
+          "3": [
+            0.4704,
+            0.5045
+          ],
+          "4": [
+            0.45956,
+            0.52534
+          ],
+          "<=2": [
+            0.51484,
+            0.54732
+          ],
+          ">=5": [
+            0.55113,
+            0.6024
+          ]
+        },
+        "deficit_ci": [
+          0.08901,
+          0.12247
+        ],
+        "ge4_lift_ci": [
+          0.10081,
+          0.15827
+        ]
+      },
+      "product_576k": {
+        "bucket_lift_ci": {
+          "3": [
+            0.341,
+            0.38208
+          ],
+          "4": [
+            0.1903,
+            0.29246
+          ],
+          "<=2": [
+            0.30488,
+            0.35651
+          ],
+          ">=5": [
+            0.05946,
+            0.12903
+          ]
+        },
+        "bucket_raw_ci": {
+          "3": [
+            0.48935,
+            0.52559
+          ],
+          "4": [
+            0.48182,
+            0.54868
+          ],
+          "<=2": [
+            0.52139,
+            0.55702
+          ],
+          ">=5": [
+            0.58418,
+            0.63618
+          ]
+        },
+        "deficit_ci": [
+          0.0823,
+          0.11449
+        ],
+        "ge4_lift_ci": [
+          0.12923,
+          0.18854
+        ]
+      },
+      "question_only": {
+        "bucket_lift_ci": {
+          "3": [
+            0.23158,
+            0.26765
+          ],
+          "4": [
+            0.08745,
+            0.17921
+          ],
+          "<=2": [
+            0.26085,
+            0.31053
+          ],
+          ">=5": [
+            0.05808,
+            0.11794
+          ]
+        },
+        "bucket_raw_ci": {
+          "3": [
+            0.3797,
+            0.41225
+          ],
+          "4": [
+            0.37775,
+            0.43747
+          ],
+          "<=2": [
+            0.47688,
+            0.51065
+          ],
+          ">=5": [
+            0.57851,
+            0.62886
+          ]
+        },
+        "deficit_ci": [
+          0.0671,
+          0.09561
+        ],
+        "ge4_lift_ci": [
+          0.08187,
+          0.13297
+        ]
+      },
+      "reasoner": {
+        "bucket_lift_ci": {
+          "3": [
+            0.34056,
+            0.3814
+          ],
+          "4": [
+            0.2075,
+            0.29389
+          ],
+          "<=2": [
+            0.3285,
+            0.37397
+          ],
+          ">=5": [
+            0.0683,
+            0.14133
+          ]
+        },
+        "bucket_raw_ci": {
+          "3": [
+            0.48967,
+            0.52502
+          ],
+          "4": [
+            0.49718,
+            0.55341
+          ],
+          "<=2": [
+            0.54307,
+            0.57576
+          ],
+          ">=5": [
+            0.59971,
+            0.63998
+          ]
+        },
+        "deficit_ci": [
+          0.08236,
+          0.11434
+        ],
+        "ge4_lift_ci": [
+          0.14046,
+          0.19768
+        ]
+      }
+    },
+    "definitions": {
+      "combined_ge4": "question-weighted pooling of the 4 and >=5 buckets under the fixed per-bucket prior",
+      "ge4_deficit": "mean of the four bucket lifts minus the combined >=4 lift",
+      "v3_01_note": "v3_01 reported the unweighted mean of the two bucket lifts; this pooled definition supersedes it here and is the single combined analysis"
+    },
+    "measured_total_seconds": 9.3,
+    "note": "No clean-test file read; no existing artefact modified.",
+    "reasoner_minus_fusion_deficit_paired": {
+      "ci95": [
+        -0.00672,
+        0.01702
+      ],
+      "mean": 0.00473,
+      "seeds": [
+        0,
+        1,
+        2
+      ]
+    },
+    "seed_mean_deficits": {
+      "concat": 0.10502,
+      "direct_linear": 0.10025,
+      "fusion": 0.09175,
+      "meanpatch_concat": 0.10554,
+      "product_576k": 0.09784,
+      "question_only": 0.0809,
+      "reasoner": 0.09795
+    },
+    "seed_sets": {
+      "concat": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ],
+      "direct_linear": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ],
+      "fusion": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ],
+      "meanpatch_concat": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ],
+      "product_576k": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ],
+      "question_only": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ],
+      "reasoner": [
+        0,
+        1,
+        2
+      ]
+    },
+    "uncertainty_note": "seed mean/std reflects training variability; the clustered bootstrap CI reflects finite development-set uncertainty; they are reported separately"
+  },
+  "weight_decay": 0.0001
+}

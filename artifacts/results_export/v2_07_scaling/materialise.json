@@ -1,0 +1,31 @@
+{
+  "batch_size": 256,
+  "clip_model": "ViT-B-32",
+  "clip_pretrained": "laion2b_s34b_b79k",
+  "cuda": "13.0",
+  "dataset": "gqa",
+  "deterministic": true,
+  "device": "cuda",
+  "dropout": 0.3,
+  "embed_dim": 512,
+  "git_commit": "5fa7ee3",
+  "gpu": "NVIDIA RTX 4000 Ada Generation",
+  "hidden_dim": 512,
+  "learning_rate": 0.001,
+  "n_epochs": 30,
+  "n_train": 40000,
+  "n_val": 8000,
+  "python": "3.12.3",
+  "seed": 42,
+  "timestamp": "2026-07-17T17:59:58",
+  "top_k_answers": 100,
+  "torch": "2.12.1+cu130",
+  "v2_07_materialise": {
+    "rows": {
+      "train_100k": 100000,
+      "train_250k": 250000
+    },
+    "verification_passed": true
+  },
+  "weight_decay": 0.0001
+}

@@ -1,0 +1,82 @@
+{
+  "batch_size": 256,
+  "clip_model": "ViT-B-32",
+  "clip_pretrained": "laion2b_s34b_b79k",
+  "cuda": "13.0",
+  "dataset": "gqa",
+  "deterministic": true,
+  "device": "cuda",
+  "dropout": 0.3,
+  "embed_dim": 512,
+  "git_commit": "a0ef77e",
+  "gpu": "NVIDIA RTX 4000 Ada Generation",
+  "hidden_dim": 512,
+  "learning_rate": 0.001,
+  "n_epochs": 30,
+  "n_train": 40000,
+  "n_val": 8000,
+  "python": "3.12.3",
+  "seed": 42,
+  "stage5": {
+    "figures": [
+      "tradeoff_accuracy_vs_params.png",
+      "tradeoff_accuracy_vs_latency.png"
+    ],
+    "literature_references": {},
+    "majority_reference": {
+      "answer": "yes",
+      "label": 1,
+      "val_accuracy": 0.23388
+    },
+    "table": [
+      {
+        "best_epoch": 19,
+        "checkpoint_size_mb": 1.2,
+        "latency_ms_mean": 0.0238,
+        "latency_ms_std": 0.0007,
+        "model": "question_only",
+        "peak_memory_mb": 33.206,
+        "train_seconds": 7.8,
+        "trainable_parameters": 313956,
+        "val_accuracy": 0.45825
+      },
+      {
+        "best_epoch": 9,
+        "checkpoint_size_mb": 1.2,
+        "latency_ms_mean": 0.0237,
+        "latency_ms_std": 0.0005,
+        "model": "image_only",
+        "peak_memory_mb": 33.206,
+        "train_seconds": 8.0,
+        "trainable_parameters": 313956,
+        "val_accuracy": 0.24263
+      },
+      {
+        "best_epoch": 26,
+        "checkpoint_size_mb": 2.2,
+        "latency_ms_mean": 0.0283,
+        "latency_ms_std": 0.0077,
+        "model": "concat",
+        "peak_memory_mb": 34.209,
+        "train_seconds": 7.8,
+        "trainable_parameters": 576100,
+        "val_accuracy": 0.52538
+      },
+      {
+        "best_epoch": 18,
+        "checkpoint_size_mb": 4.2,
+        "latency_ms_mean": 0.0422,
+        "latency_ms_std": 0.0017,
+        "model": "fusion",
+        "peak_memory_mb": 36.213,
+        "train_seconds": 8.1,
+        "trainable_parameters": 1100388,
+        "val_accuracy": 0.54138
+      }
+    ]
+  },
+  "timestamp": "2026-07-02T01:25:16",
+  "top_k_answers": 100,
+  "torch": "2.12.1+cu130",
+  "weight_decay": 0.0001
+}

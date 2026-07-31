@@ -1,0 +1,40 @@
+{
+  "batch_size": 256,
+  "clip_model": "ViT-B-32",
+  "clip_pretrained": "laion2b_s34b_b79k",
+  "cuda": "13.0",
+  "dataset": "gqa",
+  "deterministic": true,
+  "device": "cuda",
+  "dropout": 0.3,
+  "embed_dim": 512,
+  "git_commit": "3e12adf",
+  "gpu": "NVIDIA RTX 4000 Ada Generation",
+  "hidden_dim": 512,
+  "learning_rate": 0.001,
+  "n_epochs": 30,
+  "n_train": 40000,
+  "n_val": 8000,
+  "python": "3.12.3",
+  "seed": 42,
+  "timestamp": "2026-07-17T16:32:44",
+  "top_k_answers": 100,
+  "torch": "2.12.1+cu130",
+  "v2_01_zero_shot": {
+    "accuracy": {
+      "ensembled": 0.07856,
+      "photo": 0.07947,
+      "raw": 0.077
+    },
+    "majority_reference": {
+      "answer": "no",
+      "dev_accuracy": 0.22466,
+      "label": 0,
+      "source": "most frequent train_40k label"
+    },
+    "n_dev": 7714,
+    "note": "Image-only zero-shot per the CLIP protocol; a training-free lower anchor. A question-conditioned zero-shot variant is not possible with plain CLIP because the question and the answers are both text. The clean test was never touched.",
+    "split": "dev"
+  },
+  "weight_decay": 0.0001
+}

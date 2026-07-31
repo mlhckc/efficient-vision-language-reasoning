@@ -1,0 +1,75 @@
+{
+  "batch_size": 256,
+  "clip_model": "ViT-B-32",
+  "clip_pretrained": "laion2b_s34b_b79k",
+  "cuda": "13.0",
+  "dataset": "gqa",
+  "deterministic": true,
+  "device": "cuda",
+  "dropout": 0.3,
+  "embed_dim": 512,
+  "git_commit": "6504c98",
+  "gpu": "NVIDIA RTX 4000 Ada Generation",
+  "hidden_dim": 512,
+  "learning_rate": 0.001,
+  "n_epochs": 30,
+  "n_train": 40000,
+  "n_val": 8000,
+  "python": "3.12.3",
+  "seed": 42,
+  "stage1": {
+    "answer_vocab_size": 100,
+    "most_common_answers": [
+      [
+        "no",
+        166217
+      ],
+      [
+        "yes",
+        165681
+      ],
+      [
+        "left",
+        49009
+      ],
+      [
+        "right",
+        48342
+      ],
+      [
+        "man",
+        11642
+      ],
+      [
+        "white",
+        11546
+      ],
+      [
+        "black",
+        10107
+      ],
+      [
+        "bottom",
+        9033
+      ],
+      [
+        "woman",
+        8604
+      ],
+      [
+        "chair",
+        8403
+      ]
+    ],
+    "n_train_final": 40000,
+    "n_train_full": 943000,
+    "n_val_final": 8000,
+    "n_val_full": 132062,
+    "train_answer_coverage": 0.776,
+    "val_answer_coverage": 0.7764
+  },
+  "timestamp": "2026-06-22T03:20:58",
+  "top_k_answers": 100,
+  "torch": "2.12.1+cu130",
+  "weight_decay": 0.0001
+}

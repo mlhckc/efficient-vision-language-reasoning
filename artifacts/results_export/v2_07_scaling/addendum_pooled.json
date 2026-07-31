@@ -1,0 +1,86 @@
+{
+  "metadata": {
+    "batch_size": 256,
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "deterministic": true,
+    "device": "cuda",
+    "dropout": 0.3,
+    "embed_dim": 512,
+    "git_commit": "c3e885e",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "hidden_dim": 512,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "n_train": 40000,
+    "n_val": 8000,
+    "python": "3.12.3",
+    "seed": 42,
+    "timestamp": "2026-07-31T02:26:49",
+    "top_k_answers": 100,
+    "torch": "2.12.1+cu130",
+    "weight_decay": 0.0001
+  },
+  "v2_07_pooled_addendum": {
+    "definitions": {
+      "pooled_ge4_deficit": "mean of the four bucket lifts minus the combined >=4 lift",
+      "pooled_ge4_lift": "question-weighted pooling of the 4 and >=5 buckets under the fixed per-bucket prior",
+      "scope": "V2 development results at 250k and seed 42 only; other seeds and scales require checkpoint re-evaluation.",
+      "superseded_definition": "v3_01 reported the unweighted mean of the two bucket lifts; this pooled definition supersedes it here and is the single combined analysis"
+    },
+    "models": {
+      "concat": {
+        "bucket_lift_4": 0.29081,
+        "bucket_lift_ge5": 0.17594,
+        "mean_step_lift": 0.31074,
+        "pooled_ge4_deficit": 0.08442857862903227,
+        "pooled_ge4_lift": 0.22631142137096774,
+        "unweighted_deficit": 0.07737000000000002,
+        "unweighted_ge4_lift": 0.23337
+      },
+      "fusion": {
+        "bucket_lift_4": 0.28621,
+        "bucket_lift_ge5": 0.18761,
+        "mean_step_lift": 0.3116,
+        "pooled_ge4_deficit": 0.08075310483870968,
+        "pooled_ge4_lift": 0.2308468951612903,
+        "unweighted_deficit": 0.07468999999999998,
+        "unweighted_ge4_lift": 0.23691
+      },
+      "product_576k": {
+        "bucket_lift_4": 0.29196,
+        "bucket_lift_ge5": 0.1903,
+        "mean_step_lift": 0.31268,
+        "pooled_ge4_deficit": 0.07780127016129032,
+        "pooled_ge4_lift": 0.2348787298387097,
+        "unweighted_deficit": 0.07155,
+        "unweighted_ge4_lift": 0.24113
+      },
+      "question_only": {
+        "bucket_lift_4": 0.16092,
+        "bucket_lift_ge5": 0.14362,
+        "mean_step_lift": 0.2261,
+        "pooled_ge4_deficit": 0.07489381048387095,
+        "pooled_ge4_lift": 0.15120618951612905,
+        "unweighted_deficit": 0.07383,
+        "unweighted_ge4_lift": 0.15227
+      }
+    },
+    "n4": 870,
+    "n5": 1114,
+    "pooled_prior": 0.4097779435483871,
+    "priors": {
+      "3": 0.14625,
+      "4": 0.27356,
+      "<=2": 0.20917,
+      ">=5": 0.51616
+    },
+    "sources": [
+      "results/experiments/v2_07_scaling/results.json",
+      "results/experiments/v2_05_types/addendum.json",
+      "results/experiments/v3_02a_refs/step_statistics.json"
+    ]
+  }
+}
