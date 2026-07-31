@@ -204,7 +204,7 @@ V3 token stores are:
 
 ### Checkpoint families
 
-The 116 `.pt` files form nine tensor-schema families:
+The 122 `.pt` files form nine tensor-schema families:
 
 - 21 standard concat heads, first layer `(512, 1024)`;
 - 16 standard fusion heads, first layer `(512, 2048)`;
@@ -213,7 +213,8 @@ The 116 `.pt` files form nine tensor-schema families:
 - 5 fusion-narrow heads, first layer `(268, 2048)`;
 - 20 matched single-interaction heads, first layer `(351, 1536)`;
 - 10 natural-width single-interaction heads, first layer `(512, 1536)`;
-- 12 latent-query reasoner checkpoints with 32 learned `(512)` latents and
+- 18 latent-query reasoner checkpoints (12 from v3_01, 6 from v3_03)
+  with 32 learned `(512)` latents and
   four complete attention/FFN blocks;
 - 5 direct-linear heads with `(100, 1024)` weights.
 

@@ -7,7 +7,7 @@ results, so that the numbers behind the dissertation's claims survive the
 node-local scratch disk.
 
 MANIFEST.json pins every copied file and every large non-exported
-artifact (the 116 model checkpoints, the HDF5 embedding and token stores,
+artifact (the 122 model checkpoints, the HDF5 embedding and token stores,
 the two v2_00 preservation inventories and the raw GQA question files) by
 size and SHA-256, together with the git commit at export time. Entries
 with "exported": false remain node-local and are identified by hash only.

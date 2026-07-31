@@ -28,7 +28,7 @@ manifests and dev (zero missing IDs); one-batch forward and padding-mask
 corruption per scale (corruption changed logits by exactly 0.0);
 1,000-example overfit (0.9970 at epoch 9); per-scale memory/throughput
 pilots (projected 36.9 s and 76.9 s per epoch; worst case 1.03 h and
-2.14 h per run against the 12 h abort gate; peak about 1.06 GiB);
+2.14 h per run against the 12 h abort gate; peak about 1,060 MiB);
 gradient hygiene. A fresh-context reviewer approved the script for
 recipe fidelity before launch; the reviewed code was pinned as commit
 cf3d948 (script SHA-256 ec4769f7...) and the run was launched detached
@@ -61,9 +61,13 @@ test_clean_targets.csv was never read.
 
 ## Outputs
 
-Under results/experiments/v3_03_scaling/ (git-ignored, exported to
-artifacts/results_export/): preflight.json, results.json, run.log and
-six checkpoints reasoner_{100k,250k}_seed{0,1,2}.pt (84.4 MB each).
+Under results/experiments/v3_03_scaling/ (git-ignored): preflight.json,
+results.json, run.log and six checkpoints
+reasoner_{100k,250k}_seed{0,1,2}.pt (84.4 MB each). preflight.json and
+results.json are exported byte-identically to
+artifacts/results_export/v3_03_scaling/; the checkpoints are hash-pinned
+but not exported in artifacts/results_export/MANIFEST.json, and
+run.log's hash is recorded in the task packet.
 
 ## Results
 
@@ -103,15 +107,15 @@ fixed priors):
 | concat | 0.0958 | 0.0842 |
 | product_576k | 0.0874 | 0.0771 |
 | fusion | 0.0864 | 0.0803 |
-| reasoner | 0.0861 | 0.0775 |
+| reasoner | 0.0860 | 0.0775 |
 
 Paired reasoner - fusion deficit difference (image-clustered bootstrap):
 100k -0.00037, 95% CI [-0.01211, +0.01057]; 250k -0.00275, 95% CI
 [-0.01323, +0.00760]. Both intervals include zero.
 
-Efficiency: 35.6 s/epoch at 100k and 86.3 s/epoch at 250k (measured);
+Efficiency: 35.6 s/epoch at 100k and 86.2 s/epoch at 250k (measured);
 total wall time 1.82 h for gates, six runs and the analysis; 21,099,620
-trainable parameters; peak allocation about 1.06 GiB; the architecture
+trainable parameters; peak allocation about 1,060 MiB; the architecture
 is unchanged from v3_01, so its stored cached-feature latency applies
 (about 30 times the fusion head).
 
@@ -124,7 +128,8 @@ the margin roughly doubles (+0.0136) while fusion's own advantage over
 concat has decayed to noise (v2_07). Token-level access plus the
 latent-query head extracts information at scale that the pooled global
 embedding path does not provide. This is consistent with the published
-low-data connector findings and sharpens the project's scoping: the
+low-data connector findings (DePALM, Vallaeys 2024, arXiv:2403.13499;
+see docs/RELATED_WORK.md) and sharpens the project's scoping: the
 v3_02a conclusion that the head "leans on CLS" described the 40k
 regime, and the representation-sufficiency framing must now be scoped
 to that regime for overall accuracy.
