@@ -57,10 +57,12 @@ SCALES = ("40k", "250k")
 IMAGE_BATCH = 128
 TEXT_BATCH = 512
 TRUNCATION_GATE_FRACTION = 0.001
-# 1e-4 rather than 1e-5: batch-1 versus batch-128 fp32 kernels may differ
-# by ~1e-6-1e-5 legitimately; misalignment produces O(0.1) differences, so
-# the gate's purpose survives (reviewer finding 3; v2_01 precedent 1e-3).
-CONSISTENCY_TOLERANCE = 1e-4
+# v2_01-precedent tolerance. The first launch aborted at 1e-4: measured
+# batch-1 versus batch-128 re-encode deviations were 4.9e-05 to 3.4e-04
+# (cosines >= 0.999998) because cuDNN conv TF32 selects batch-dependent
+# algorithms for the patch embedding. Misalignment produces O(0.1)
+# differences, so the gate's purpose survives at 1e-3.
+CONSISTENCY_TOLERANCE = 1e-3
 REPRODUCTION_TOLERANCE = 5e-6
 STEP_ORDER = ["<=2", "3", "4", ">=5"]
 MODEL_ORDER = ("question_only", "concat", "product", "fusion")
