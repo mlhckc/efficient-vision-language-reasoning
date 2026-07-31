@@ -56,7 +56,12 @@ The present state is:
   0.5706 +/- 0.0002 at 100k and 0.5958 +/- 0.0074 at 250k, beating every
   stored v2_07 head in every seed, while the pooled >=4-step deficit
   persists and remains statistically indistinguishable from fusion's at both
-  scales. E2 and E3 remain queued in that order. Supervisor design feedback
+  scales. E2 also completed on 31 July 2026: frozen SigLIP-B/16 on the
+  global path lifts every multimodal head by about +1.2 to +1.5 points
+  seed-robustly at 40k and 250k (fusion 0.5532/0.5939) while the pooled
+  >=4-step deficit stays in the CLIP range (0.063-0.102), so the
+  compositional deficit persists across two frozen dual-encoders. E3
+  remains queued. Supervisor design feedback
   is still to be obtained and recorded when available, and each
   task-specific scientific and resource gate remains binding. The clean-test
   embargo is unchanged until the final model list and evaluation protocol are

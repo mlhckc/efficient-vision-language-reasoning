@@ -1,0 +1,48 @@
+{
+  "e2_preflight": {
+    "embed_dim": 768,
+    "model": "ViT-B-16-SigLIP",
+    "pretrained": "webli",
+    "truncation": {
+      "fraction_over": 0.0,
+      "max_raw_tokens": 32,
+      "n_over_context": 0,
+      "n_unique_texts": 184432
+    },
+    "versions": {
+      "open_clip_torch": "3.3.0",
+      "sentencepiece": "0.2.2",
+      "transformers": "5.14.1"
+    }
+  },
+  "metadata": {
+    "batch_size": 256,
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "deterministic": true,
+    "device": "cuda",
+    "dropout": 0.3,
+    "embed_dim": 512,
+    "git_commit": "b2e5873",
+    "git_dirty": true,
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "h5py_version": "3.16.0",
+    "hidden_dim": 512,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "n_train": 40000,
+    "n_val": 8000,
+    "numpy_version": "2.5.0",
+    "open_clip_version": "3.3.0",
+    "pandas_version": "3.0.3",
+    "python": "3.12.3",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "timestamp": "2026-07-31T22:11:23",
+    "top_k_answers": 100,
+    "torch": "2.12.1+cu130",
+    "weight_decay": 0.0001
+  }
+}

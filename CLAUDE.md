@@ -71,12 +71,22 @@ hash no longer matches the worktree.
   every scale and remains statistically indistinguishable from fusion's
   (both clustered bootstrap intervals include zero). Development results
   only; see docs/experiments/v3_03_scaling.md.
+- E2 (completed 31 July 2026) swapped the frozen encoder to SigLIP-B/16 on
+  the global path under the identical v2_02 recipe: every multimodal head
+  gains about +1.2 to +1.5 points over its CLIP counterpart in every seed at
+  40k and 250k (fusion 0.5532/0.5939), question_only is nearly unchanged,
+  and the strongest SigLIP global heads reach the v3_03 reasoner's accuracy
+  at a fraction of the size. The pooled >=4-step deficit does not move
+  (0.063-0.102 across models and scales, the same range as CLIP): the
+  compositional deficit now persists across two frozen dual-encoders, three
+  scales and heads from 0.1M to 21.1M parameters. Development results only;
+  see docs/experiments/e2_siglip.md.
 - Current gate, updated 31 July 2026: the user authorized the strengthening
   programme on 30 July 2026: V3 reasoner scaling to 100k/250k (E1), a
   SigLIP-B/16 frozen-encoder-swap experiment on the global-embedding path (E2)
   and a 1000-answer vocabulary experiment (E3), in that order after the
   S1-S3 correction and P0-P3 preparation packets, all of which are complete.
-  E1 completed on 31 July 2026; E2 and E3 remain queued in that order.
+  E1 and E2 completed on 31 July 2026; E3 remains queued.
   Supervisor design feedback is still to be obtained and recorded when
   available, and the final venue decision will be discussed with Prof. Bober.
   No final clean-test evaluation has occurred; the clean-test embargo is

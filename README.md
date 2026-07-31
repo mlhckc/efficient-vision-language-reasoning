@@ -17,8 +17,12 @@ materially improve on the much smaller fusion head at 40k. E1 (100k/250k
 reasoner scaling under the frozen recipe) completed on 31 July 2026: at both
 scales the reasoner overtakes every global head in every seed, while the
 multi-step deficit persists and remains statistically indistinguishable from
-fusion's. E2 (a frozen SigLIP-B/16 encoder swap on the global-embedding path)
-and E3 (a 1000-answer vocabulary experiment) remain queued in that order.
+fusion's. E2 (a frozen SigLIP-B/16 encoder swap on the global-embedding
+path) also completed on 31 July 2026: every multimodal head gains about
++1.2 to +1.5 points over its CLIP counterpart while the multi-step deficit
+stays in the same range, so the compositional deficit now persists across
+two frozen encoders. E3 (a 1000-answer vocabulary experiment) remains
+queued.
 Supervisor design feedback will be recorded when available. The clean-test
 embargo remains unchanged: the clean test remains blinded and no confirmatory
 result has been reported.
