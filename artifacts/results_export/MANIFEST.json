@@ -1,5 +1,5 @@
 {
-  "exported_at_commit": "76fe6a5",
+  "exported_at_commit": "cf3d948",
   "files": [
     {
       "bytes": 812984653,
@@ -1057,6 +1057,56 @@
       "exported": true,
       "path": "results/experiments/v3_02a_refs/step_statistics.json",
       "sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3"
+    },
+    {
+      "bytes": 84441241,
+      "exported": false,
+      "path": "results/experiments/v3_03_scaling/checkpoints/reasoner_100k_seed0.pt",
+      "sha256": "d421955cfd03178897a9ed13529f40b976fda792fa1d0665524237df6215a66b"
+    },
+    {
+      "bytes": 84441241,
+      "exported": false,
+      "path": "results/experiments/v3_03_scaling/checkpoints/reasoner_100k_seed1.pt",
+      "sha256": "8808b643731bf5228b8a250fdc93cde8d4f8c135e7c6b07495d5478e2fa97527"
+    },
+    {
+      "bytes": 84441241,
+      "exported": false,
+      "path": "results/experiments/v3_03_scaling/checkpoints/reasoner_100k_seed2.pt",
+      "sha256": "3d059300fe665dbf0c50461b5b7b6e0024d3bc834e70c9ebd55b04ab9444a871"
+    },
+    {
+      "bytes": 84441241,
+      "exported": false,
+      "path": "results/experiments/v3_03_scaling/checkpoints/reasoner_250k_seed0.pt",
+      "sha256": "ccc47e1333f8947359bf87896948ef661d1edd2f8cd31a808dc40ff63b3ea4d8"
+    },
+    {
+      "bytes": 84441241,
+      "exported": false,
+      "path": "results/experiments/v3_03_scaling/checkpoints/reasoner_250k_seed1.pt",
+      "sha256": "a67d8153c75d0311a0d097387d829b26ae84deaffa7bb26067086138dfcedb8d"
+    },
+    {
+      "bytes": 84441241,
+      "exported": false,
+      "path": "results/experiments/v3_03_scaling/checkpoints/reasoner_250k_seed2.pt",
+      "sha256": "1959afb5c32af5a459e61568d823d795ce466eb1c14e524940f28d3292d9cf48"
+    },
+    {
+      "bytes": 1287,
+      "export_path": "artifacts/results_export/v3_03_scaling/preflight.json",
+      "exported": true,
+      "path": "results/experiments/v3_03_scaling/preflight.json",
+      "sha256": "7a7964cac6a15ed769ecf8d7ca03d507cf0cbb92da396ed7432dbc7d8068372b"
+    },
+    {
+      "bytes": 26595,
+      "export_path": "artifacts/results_export/v3_03_scaling/results.json",
+      "exported": true,
+      "path": "results/experiments/v3_03_scaling/results.json",
+      "sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339"
     },
     {
       "bytes": 1270,

@@ -58,21 +58,30 @@ hash no longer matches the worktree.
 - V2 is complete through v2_07: global embedding extraction, five-seed
   baselines, parameter matching, interaction ablations, type and reliance
   analyses, and 40k/100k/250k global-head scaling.
-- V3 is complete through v3_02a. v3_00 built the token stores; v3_01 trained
+- V3 is complete through v3_03. v3_00 built the token stores; v3_01 trained
   the 40k latent-query reasoner; v3_02a added direct-linear and mean-patch
   references, repaired pooled step statistics, image-clustered uncertainty,
   attention diagnostics, CLS removal and a patches-only training probe. At
   40k, the 21.1M-parameter reasoner did not materially outperform the 1.1M
   fusion head or reduce the repaired compositional deficit.
-- Current gate, updated 30 July 2026: the user authorized the strengthening
+- v3_03 (E1, completed 31 July 2026) scaled the reasoner to 100k/250k under
+  the frozen v3_01 recipe: dev accuracy 0.5706 +/- 0.0002 at 100k and
+  0.5958 +/- 0.0074 at 250k, beating every stored v2_07 head in every seed
+  (fusion gap +0.0065 and +0.0136). The pooled >=4-step deficit persists at
+  every scale and remains statistically indistinguishable from fusion's
+  (both clustered bootstrap intervals include zero). Development results
+  only; see docs/experiments/v3_03_scaling.md.
+- Current gate, updated 31 July 2026: the user authorized the strengthening
   programme on 30 July 2026: V3 reasoner scaling to 100k/250k (E1), a
   SigLIP-B/16 frozen-encoder-swap experiment on the global-embedding path (E2)
-  and a 1000-answer vocabulary experiment (E3), to run in that order after the
-  S1-S3 correction and P0-P3 preparation packets. Supervisor design feedback
-  is still to be obtained and recorded when available, and the final venue
-  decision will be discussed with Prof. Bober. No final clean-test evaluation
-  has occurred; the clean-test embargo is unchanged until the final model list
-  is frozen; all model findings remain development-set results.
+  and a 1000-answer vocabulary experiment (E3), in that order after the
+  S1-S3 correction and P0-P3 preparation packets, all of which are complete.
+  E1 completed on 31 July 2026; E2 and E3 remain queued in that order.
+  Supervisor design feedback is still to be obtained and recorded when
+  available, and the final venue decision will be discussed with Prof. Bober.
+  No final clean-test evaluation has occurred; the clean-test embargo is
+  unchanged until the final model list is frozen; all model findings remain
+  development-set results.
 
 ## V2 protocol rules (binding)
 

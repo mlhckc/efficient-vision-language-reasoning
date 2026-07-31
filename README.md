@@ -13,13 +13,15 @@ never unfrozen.
 Status: V1 is a completed legacy prototype. V2 is complete through global-head
 scaling at 40k/100k/250k, and V3 is complete through the 40k latent-query
 reasoner and v3_02a reference/statistical/CLS diagnostics. The reasoner did not
-materially improve on the much smaller fusion head at 40k. On 30 July 2026, the
-user authorised E1 V3 100k/250k scaling, E2 a frozen SigLIP-B/16 encoder swap on
-the global-embedding path, and E3 a 1000-answer vocabulary experiment, in that
-order after the current correction and preparation packets. Supervisor design
-feedback will be recorded when available. The clean-test embargo remains
-unchanged: the clean test remains blinded and no confirmatory result has been
-reported.
+materially improve on the much smaller fusion head at 40k. E1 (100k/250k
+reasoner scaling under the frozen recipe) completed on 31 July 2026: at both
+scales the reasoner overtakes every global head in every seed, while the
+multi-step deficit persists and remains statistically indistinguishable from
+fusion's. E2 (a frozen SigLIP-B/16 encoder swap on the global-embedding path)
+and E3 (a 1000-answer vocabulary experiment) remain queued in that order.
+Supervisor design feedback will be recorded when available. The clean-test
+embargo remains unchanged: the clean test remains blinded and no confirmatory
+result has been reported.
 
 The current project map and audit findings are in collab/PROJECT_CONTEXT.md.
 Claude-Codex planning, execution and review follow collab/PROTOCOL.md.

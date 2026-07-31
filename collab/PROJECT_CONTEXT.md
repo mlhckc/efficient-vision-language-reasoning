@@ -50,9 +50,14 @@ The present state is:
   result.
 - On 30 July 2026, the user authorized E1 V3 100k/250k reasoner scaling,
   followed by E2, a frozen SigLIP-B/16 encoder swap on the global-embedding
-  path, and E3, a 1000-answer vocabulary experiment. These experiments follow
-  the S1-S3 corrections and P0-P3 preparation packets. Supervisor design
-  feedback is still to be obtained and recorded when available, and each
+  path, and E3, a 1000-answer vocabulary experiment. The S1-S3 corrections
+  and P0-P3 preparation packets completed on 31 July 2026, and E1 (v3_03)
+  completed the same day: under the frozen v3_01 recipe the reasoner reaches
+  0.5706 +/- 0.0002 at 100k and 0.5958 +/- 0.0074 at 250k, beating every
+  stored v2_07 head in every seed, while the pooled >=4-step deficit
+  persists and remains statistically indistinguishable from fusion's at both
+  scales. E2 and E3 remain queued in that order. Supervisor design feedback
+  is still to be obtained and recorded when available, and each
   task-specific scientific and resource gate remains binding. The clean-test
   embargo is unchanged until the final model list and evaluation protocol are
   frozen.
