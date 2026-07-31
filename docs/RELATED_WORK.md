@@ -4,9 +4,12 @@ Consolidated from three literature surveys run on 30-31 July 2026 across
 arXiv, the ACL Anthology, CVF Open Access and Semantic Scholar, covering
 (A) frozen-CLIP VQA classification heads, (B) latent-query modules and
 token-versus-global comparisons, and (C) compositional limitations of
-CLIP-style encoders and bottleneck localization. The survey tables the
-consolidation was built from are archived in the p2-related-work task
-packet.
+CLIP-style encoders and bottleneck localization. The surveys were run
+inside the recorded collaboration session; their per-axis paper tables
+are archived in the p2-related-work task packet for local audit, and
+this tracked document is the durable consolidation. References whose
+venue is not stated in docs/references.bib carry an explicit
+venue-status note there.
 
 Conventions. Overlap is rated against this project's claims as none,
 partial or strong; every partial or strong entry carries a one-line
@@ -25,7 +28,7 @@ submission.
 global embeddings feed a 68.4M-parameter trainable fusion network whose
 fused vector concatenates the transformed features, their elementwise
 product and their absolute difference — the same feature template as our
-fusion head. VQAv2 71.4%, SNLI-VE 87.9%; no GQA; ablations are not
+fusion head [verified: arXiv:2508.04469]. VQAv2 71.4%, SNLI-VE 87.9%; no GQA; ablations are not
 parameter-matched and use a single training scale; frozen embeddings are
 reported to fail on counting (34.2%) and spatial reasoning (41.3%)
 [verified: arXiv:2508.04469]. Overlap: strong.
@@ -35,7 +38,8 @@ rather than GQA, without capacity control, seed replication, data-scale
 analysis or compositional stratification. Our contribution is exactly the
 controlled part: parameter matching halves the fusion-feature gain, the
 two interaction terms are mutually redundant, the feature advantage
-decays with training scale, and the multi-step deficit is head-invariant.
+decays with training scale, and the multi-step deficit persists across
+every head we trained.
 FrEVL must be cited and differentiated in any submission; it is recent
 and arXiv-only, so its venue status needs re-checking at submission time.
 
@@ -155,7 +159,8 @@ accuracy against LLaVA-1.5's 93.2%, and a CLS-only LLaVA ablation drops
 spatial accuracy from 84.5 to 44.2 [verified: arXiv:2411.05195].
 Overlap: strong — the same patch-versus-CLS question with the opposite
 conclusion. *Differentiation:* their extraction head is a 7B generative
-LM trained on massive data with no capacity or data control, and their
+LM [verified: arXiv:2411.05195] trained on massive data with no capacity
+or data control, and their
 encoder is ViT-L/14-336 on spatial probes rather than ViT-B/32 on
 discriminative GQA. Our controlled small-scale negative directly
 qualifies their claim: token-level information may exist, but a 21.1M
@@ -173,7 +178,8 @@ capacity matching against a fusion MLP and compositional stratification.
 Their finding that contrastively trained models gain least from
 attentive probing is consistent with our negative result.
 
-**DePALM** (Vallaeys, 2024, arXiv:2403.13499). Controlled comparison of
+**DePALM** (Vallaeys, 2024, arXiv:2403.13499, venue status unverified).
+Controlled comparison of
 seven connector families over frozen encoders and frozen LLMs; local
 resampler variants lag a simpler global query-pooling mapper (about
 17.9M parameters), especially in low-data regimes [verified:
@@ -187,7 +193,7 @@ matches our result generatively.
 (Li, 2023, ICML, arXiv:2301.12597). The canonical latent-query modules
 over frozen vision: the Perceiver Resampler (64 latents) and the Q-Former
 (188M parameters, 32 learned queries — the same query count as our
-reasoner). BLIP-2 zero-shot VQAv2 65.0 (FlanT5-XXL) [verified:
+reasoner) [verified: arXiv:2204.14198; arXiv:2301.12597]. BLIP-2 zero-shot VQAv2 65.0 (FlanT5-XXL) [verified:
 arXiv:2301.12597]; zero-shot GQA around 44, InstructBLIP (Dai, 2023,
 NeurIPS, arXiv:2305.06500) around 49 [unverified]. Overlap: strong on
 module design, none on controlled evaluation. *Differentiation:* both
@@ -198,10 +204,10 @@ the regime where it fails to beat the global head.
 **Frozen** (Tsimpoukelli, 2021, NeurIPS, arXiv:2106.13884; the vision
 encoder is trained, the LM frozen; zero-shot VQAv2 about 29
 [unverified]), **Perceiver/Perceiver IO** (Jaegle, 2021/2022, ICML/ICLR;
-architectural ancestry), **ClipCap** (Mokady, 2021, arXiv:2111.09734),
+architectural ancestry), **ClipCap** (Mokady, 2021, arXiv:2111.09734, arXiv-only),
 **EVL** (Lin, 2022, ECCV, arXiv:2208.03550; a positive
 decoder-over-frozen-CLIP-tokens result in video classification),
-**Qwen-VL** (Bai, 2023, arXiv:2308.12966) and **MQT-LLaVA** (Hu, 2024,
+**Qwen-VL** (Bai, 2023, arXiv:2308.12966, arXiv report) and **MQT-LLaVA** (Hu, 2024,
 NeurIPS, arXiv:2405.19315; dropping to 2 visual tokens costs only 3-6%
 on some benchmarks [verified: arXiv:2405.19315]). Overlap: partial —
 context and supporting evidence that few-token or pooled access often
@@ -212,7 +218,8 @@ arXiv:2403.09611) finds connector design of "comparatively negligible
 importance" next to resolution and token count; **Honeybee** (Cha, 2024,
 CVPR, arXiv:2312.06742) shows resampler-style abstractors sacrifice
 local context versus convolutional pooling; **DeCo** (Yao, 2024,
-arXiv:2405.20985) shows 2D average pooling beats the Q-Former;
+arXiv:2405.20985, venue status unverified) shows 2D average pooling
+beats the Q-Former;
 **LLaVA-1.5** (Liu, 2024, CVPR) reaches GQA 62.0 with a plain 2-layer
 MLP over frozen CLIP-L tokens [verified: arXiv:2310.03744]. Overlap:
 partial-strong, all consistent with our finding that latent-query
@@ -228,9 +235,9 @@ Registers** (Darcet, 2024, ICLR, arXiv:2309.16588) establishes that
 CLIP-family ViTs manufacture high-norm global-aggregate tokens; **See
 What You Are Told** (Kang, 2025, ICLR, arXiv:2503.03321) audits visual
 attention sinks inside LMM decoders and finds sink-token removal
-harmless — an instructive contrast with our CLS removal costing 3-5
-points, which indicates our head's CLS mass is informative rather than a
-pure sink. Related: test-time registers (arXiv:2506.08010), EDIT
+harmless — an instructive contrast with our CLS removal costing about
+2.8-5.0 points, which indicates our head's CLS mass is informative
+rather than a pure sink. Related: test-time registers (arXiv:2506.08010), EDIT
 (arXiv:2504.06738), structured-approximation analyses
 (arXiv:2507.16018). Overlap: strong on diagnostic style, none on
 VQA-head audits. *Differentiation:* no published work audits where a
@@ -240,9 +247,9 @@ representation content from attention routing, on VQA.
 
 **Probing-protocol context.** **Scaling ViTs** (Zhai, 2022, CVPR,
 arXiv:2106.04560) found CLS/GAP/MAP pooling near-equivalent for
-classification; **V-JEPA** (arXiv:2404.08471) and **AIM**
-(arXiv:2401.08541) adopt attentive probes as standard for
-non-contrastive backbones. Overlap: partial, supports the reading that
+classification; **V-JEPA** (arXiv:2404.08471, venue status unverified)
+and **AIM** (arXiv:2401.08541, venue status unverified) adopt attentive
+probes as standard for non-contrastive backbones. Overlap: partial, supports the reading that
 contrastive global embeddings already expose most linearly usable signal.
 
 **Axis summary.** No published capacity/data-controlled comparison of a
@@ -270,9 +277,10 @@ by reasoning hops; BLIP-2 accuracy falls 49.6 to 42.4 to 7.7 as hops
 increase [verified: arXiv:2402.11058]. Overlap: strong on the phenomenon.
 *Differentiation:* documents the multi-hop deficit at MLLM scale without
 localization; our contribution is holding the encoder fixed and showing
-the deficit is invariant to head capacity (0.1M to 21.1M), architecture
-and training scale (40k to 250k), with prior-adjusted, image-clustered
-statistics.
+the deficit persists across head capacity (0.1M to 21.1M), architecture
+and training scale (40k to 250k), with prior-adjusted statistics; the
+uncertainty analysis is image-clustered for the repaired 40k comparison,
+and the 250k pooled values cover seed 42 only.
 
 **MMVP / Eyes Wide Shut** (Tong, 2024, CVPR, arXiv:2401.06209). CLIP-blind
 pairs propagate into MLLM failures regardless of the language head
@@ -295,8 +303,8 @@ arXiv:2506.05439) shows large decoders compensate for degraded visual
 contextualization. Overlap: strong, opposite attribution.
 *Differentiation:* both operate with billion-parameter language heads
 that can re-extract or compensate; our tiny heads cannot, which is
-precisely why the head-invariant deficit localizes the bottleneck in the
-representation at our scale. The two attributions are compatible and
+precisely why the deficit persisting across our heads localizes the
+bottleneck in the representation at our scale. The two attributions are compatible and
 jointly argue that attribution is scale-dependent — a point the
 dissertation should make explicitly.
 
@@ -336,7 +344,7 @@ arXiv:2405.18415) supply encoder-level attribution context. Overlap as
 annotated.
 
 **Axis summary.** No published work combines a program-length-stratified
-GQA deficit over one fixed frozen encoder with invariance to head
+GQA deficit over one fixed frozen encoder that persists across head
 capacity, architecture and training scale, localized via controlled
 comparisons. The mandatory engagements are Koishigarina (phrasing), Fu
 and Takishita (scale-dependent attribution), and II-MMR/MMVP (nearest
@@ -397,9 +405,12 @@ single-modality heads; the handcrafted fusion features carry a real but
 small gain at matched capacity that decays with training scale; the two
 interaction terms are redundant; a latent-query reasoner over token-level
 features only matches the far smaller global fusion head and does not
-reduce the multi-step deficit; the deficit is invariant to head capacity
-and architecture; the trained reasoner routes most visual attention to
-the pooled CLS token, and removing CLS at test time is costly while
+reduce the multi-step deficit; the deficit persists across head capacity
+and architecture, with reasoner and fusion statistically
+indistinguishable (paired deficit difference +0.0047, 95% CI [-0.0067,
++0.0170]); the trained reasoner concentrates its visual cross-attention
+on the pooled CLS token far above the uniform share (per-seed mean mass
+0.26-0.38 against 0.02), and removing CLS at test time is costly while
 patches-only retraining recovers most accuracy without improving
 compositional lift.
 
