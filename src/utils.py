@@ -10,12 +10,14 @@ Every stage's main() should call set_seed() first, before building data or
 models, and save run_metadata() with its results.
 """
 
+import hashlib
 import json
 import os
 import platform
 import random
 import subprocess
 from datetime import datetime
+from importlib import metadata as importlib_metadata
 from pathlib import Path
 
 import numpy as np
@@ -36,6 +38,10 @@ def set_seed(seed: int = config.RANDOM_SEED,
     op has no deterministic implementation the run warns rather than crashes, so
     the code stays runnable for anyone.
     """
+    # Note: setting PYTHONHASHSEED here cannot change the hash seed of the
+    # already-running interpreter; it applies only to subprocesses (for
+    # example DataLoader workers). Nothing in this project relies on the
+    # parent interpreter's string-hash order.
     os.environ["PYTHONHASHSEED"] = str(seed)
     random.seed(seed)
     np.random.seed(seed)
@@ -99,6 +105,37 @@ def git_commit() -> str:
         return "unknown"
 
 
+def git_dirty() -> bool | None:
+    """True when the worktree has uncommitted tracked changes, None if unknown."""
+    try:
+        result = subprocess.run(
+            ["git", "status", "--porcelain"],
+            cwd=config.PROJECT_ROOT,
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+        return bool(result.stdout.strip())
+    except Exception:
+        return None
+
+
+def _package_version(name: str) -> str | None:
+    """Installed version of a package without importing it, or None."""
+    try:
+        return importlib_metadata.version(name)
+    except importlib_metadata.PackageNotFoundError:
+        return None
+
+
+def _lock_sha256() -> str | None:
+    """SHA-256 of requirements.lock.txt, or None when the file is absent."""
+    lock = Path(config.PROJECT_ROOT) / "requirements.lock.txt"
+    if not lock.exists():
+        return None
+    return hashlib.sha256(lock.read_bytes()).hexdigest()
+
+
 def run_metadata(seed: int = config.RANDOM_SEED) -> dict:
     """Capture the facts needed to reproduce or interpret a run.
 
@@ -108,6 +145,12 @@ def run_metadata(seed: int = config.RANDOM_SEED) -> dict:
     return {
         "timestamp": datetime.now().isoformat(timespec="seconds"),
         "git_commit": git_commit(),
+        "git_dirty": git_dirty(),
+        "open_clip_version": _package_version("open_clip_torch"),
+        "numpy_version": _package_version("numpy"),
+        "pandas_version": _package_version("pandas"),
+        "h5py_version": _package_version("h5py"),
+        "requirements_lock_sha256": _lock_sha256(),
         "seed": seed,
         "deterministic": config.DETERMINISTIC,
         "device": config.DEVICE,

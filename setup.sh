@@ -31,8 +31,15 @@ source env.sh
 echo "Upgrading pip"
 python -m pip install --upgrade pip
 
-echo "Installing requirements"
-python -m pip install -r requirements.txt
+if [ -f requirements.lock.txt ]; then
+    echo "Installing pinned requirements (requirements.lock.txt)"
+    python -m pip install -r requirements.lock.txt
+else
+    echo "WARNING: requirements.lock.txt not found; installing unpinned"
+    echo "         requirements.txt. Resolved versions may differ from the"
+    echo "         environment that produced the stored results."
+    python -m pip install -r requirements.txt
+fi
 
 echo
 echo "Setup complete."

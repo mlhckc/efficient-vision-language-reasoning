@@ -22,7 +22,7 @@ if [ ! -x "${_VENV_PY}" ]; then
     exit 1
 fi
 
-"${_VENV_PY}" - <<'PY'
+"${_VENV_PY}" - "${_PROJECT_ROOT}" <<'PY'
 import importlib.util
 import sys
 
@@ -38,6 +38,31 @@ import torch
 
 print("python  :", sys.version.split()[0])
 print("torch   :", torch.__version__)
+
+# Compare the two load-bearing pins against the lock file. Drift is a
+# reproducibility warning, not an execution failure, so this never exits
+# non-zero on its own.
+from importlib import metadata
+from pathlib import Path
+
+lock = Path(sys.argv[1]) / "requirements.lock.txt"
+if lock.exists():
+    pins = {}
+    for line in lock.read_text().splitlines():
+        if "==" in line and not line.startswith("#"):
+            name, _, version = line.partition("==")
+            pins[name.strip().lower()] = version.strip()
+    for package in ("torch", "open_clip_torch"):
+        pinned = pins.get(package)
+        try:
+            installed = metadata.version(package)
+        except metadata.PackageNotFoundError:
+            installed = None
+        if pinned and installed and pinned != installed:
+            print(f"WARNING: {package} {installed} installed but "
+                  f"{pinned} pinned in requirements.lock.txt")
+else:
+    print("WARNING: requirements.lock.txt not found; version pins unchecked")
 if torch.cuda.is_available():
     print("cuda    : True -", torch.cuda.get_device_name(0))
 else:
