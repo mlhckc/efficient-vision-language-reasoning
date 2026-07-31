@@ -442,6 +442,7 @@ separate planned, reviewed task before relying on the affected claim.
    250k seed-42 deficits are concat 0.08443, fusion 0.08075, product 0.07780
    and question-only 0.07489. The qualitative persistence conclusion remains,
    but the current report understates the deficit and overstates invariance.
+   Resolved in the S2 pooled step-deficit addendum (31 July 2026).
 4. v2_05 slice-correlation p-values treat 14 overlapping slices as independent.
    The correlations are descriptive; those p-values are not calibrated for the
    overlap. v2_05b row-level intervals also ignore repeated questions per image.

@@ -120,3 +120,40 @@ prior-frequency drift, which is negligible for these answer distributions.
 Dev remains a development instrument: none of these numbers is a
 confirmatory test result, and the final model list for clean-test
 evaluation is still open.
+
+## Addendum (31 July 2026): question-weighted pooled >=4 deficit
+
+### Measured correction
+
+The earlier >=4-step table used the unweighted mean of the 4-step and
+>=5-step bucket lifts. That definition is superseded. The binding definition
+in `results/experiments/v3_02a_refs/step_statistics.json` pools the two
+buckets by question count under the fixed per-bucket prior. For the stored
+250k seed-42 slice, the 4-step and >=5-step buckets contain 870 and 1,114
+questions, respectively, and their pooled prior is 0.40978.
+
+The recomputation is stored in
+`results/experiments/v2_07_scaling/addendum_pooled.json`. Values below are
+reported to five decimal places from that artifact.
+
+| model | unweighted >=4 lift | unweighted deficit | pooled >=4 lift | pooled deficit |
+|---|---:|---:|---:|---:|
+| question_only | 0.15227 | 0.07383 | 0.15121 | 0.07489 |
+| concat | 0.23337 | 0.07737 | 0.22631 | 0.08443 |
+| fusion | 0.23691 | 0.07469 | 0.23085 | 0.08075 |
+| product_576k | 0.24113 | 0.07155 | 0.23488 | 0.07780 |
+
+### Interpretation and scope
+
+The pooled deficits are approximately 0.001-0.007 larger than the stored
+unweighted deficits. The conclusion that the multi-step deficit persists at
+scale therefore stands and is slightly strengthened. The earlier
+near-invariance-across-models phrasing is too strong: the pooled deficits span
+0.0749-0.0844, compared with 0.072-0.077 under the superseded unweighted
+definition.
+
+The stored per-bucket lifts cover only the 250k scale at seed 42, so this
+addendum covers exactly the scope of the original lift section. Extending the
+pooled calculation to other seeds or scales would require checkpoint
+re-evaluation and is out of scope. These remain development-set measurements,
+not confirmatory results.
