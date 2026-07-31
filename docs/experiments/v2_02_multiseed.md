@@ -86,3 +86,20 @@ almost no answer signal at this vocabulary. Best epochs vary across runs
 (image-only as early as epoch 1, fusion as late as 28), so best-on-dev
 checkpoint selection is doing real work; dev is a development split, so this
 selection is legitimate under the protocol.
+
+## Clarification (31 July 2026): scope of the paired per-seed comparisons
+
+In this report, "paired per-seed" means that the compared models share the
+seed anchor (utils.set_seed(seed)) and a single reseed of the training
+loader's shuffle generator (train_loader.generator.manual_seed(seed)), both
+applied once before the model loop (experiments/v2_02_multiseed/run.py,
+lines 80 and 84), together with the same training manifest, the same dev
+set and the fixed model training order (question_only, image_only, concat,
+fusion). It does not mean that the models saw identical initialisation or
+shuffle streams: the models train sequentially against one shared loader,
+so each model's weight initialisation and shuffle order also depend on its
+position in the training sequence. The stored results are deterministic
+when the script is run in the recorded order; retraining a single model
+outside that order would not reproduce its stored number. The per-seed gap
+therefore remains a valid same-seed, same-data comparison, but it is not a
+variance-reduced matched-stream comparison.

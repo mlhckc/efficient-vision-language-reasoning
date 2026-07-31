@@ -157,3 +157,23 @@ addendum covers exactly the scope of the original lift section. Extending the
 pooled calculation to other seeds or scales would require checkpoint
 re-evaluation and is out of scope. These remain development-set measurements,
 not confirmatory results.
+
+## Clarification (31 July 2026): scope of the paired per-seed comparisons
+
+In this report, "paired per-seed" means that the compared models share the
+seed anchor (utils.set_seed(seed)) and a single reseed of the training
+loader's shuffle generator (train_loader.generator.manual_seed(seed)), both
+applied once per (scale, seed) before the model loop
+(experiments/v2_07_scaling/run.py, lines 145 and 148), together with the
+same training manifest, the same dev set and the fixed model training order
+(question_only, concat, product_576k, fusion within each scale and seed).
+It does not mean that the models saw identical initialisation or shuffle
+streams: the models train sequentially against one shared loader, so each
+model's weight initialisation and shuffle order also depend on its position
+in the training sequence. The stored results are deterministic when the
+script is run in the recorded order; retraining a single model outside that
+order would not reproduce its stored number. The 40k column additionally
+pairs runs reused from v2_02 and v2_04, scripts whose RNG histories differ
+from this one. The per-seed gap therefore remains a valid same-seed,
+same-data comparison, but it is not a variance-reduced matched-stream
+comparison.

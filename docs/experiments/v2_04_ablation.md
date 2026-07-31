@@ -106,3 +106,23 @@ carries a redundant term.
 These conclusions are dev-set findings under the V2 protocol at the 40k
 training scale, with n = 5 seeds; they inform model selection and are not
 confirmatory test results.
+
+## Clarification (31 July 2026): scope of the paired per-seed comparisons
+
+In this report, "paired per-seed" means that the compared models share the
+seed anchor (utils.set_seed(seed)) and a single reseed of the training
+loader's shuffle generator (train_loader.generator.manual_seed(seed)), both
+applied once before the model loop (experiments/v2_04_ablation/run.py,
+lines 133 and 136), together with the same training manifest, the same dev
+set and the fixed model training order (product_576k, difference_576k,
+product_natural, difference_natural). It does not mean that the models saw
+identical initialisation or shuffle streams: the models train sequentially
+against one shared loader, so each model's weight initialisation and
+shuffle order also depend on its position in the training sequence. The
+stored results are deterministic when the script is run in the recorded
+order; retraining a single model outside that order would not reproduce its
+stored number. Gaps computed against the v2_02 concat and fusion runs and
+the v2_03 fusion_narrow runs additionally pair runs from different scripts
+whose RNG histories differ. The per-seed gap therefore remains a valid
+same-seed, same-data comparison, but it is not a variance-reduced
+matched-stream comparison.

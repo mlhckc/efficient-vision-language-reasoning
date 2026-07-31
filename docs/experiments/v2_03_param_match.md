@@ -86,3 +86,22 @@ diminishing returns for fusion itself (+0.0050 from 576k to 1.10M).
 These numbers inform the v2_04 ablation: with the capacity question settled,
 the next question is which of the two interaction terms (elementwise product,
 absolute difference) carries the feature effect.
+
+## Clarification (31 July 2026): scope of the paired per-seed comparisons
+
+In this report, "paired per-seed" means that the compared models share the
+seed anchor (utils.set_seed(seed)) and a single reseed of the training
+loader's shuffle generator (train_loader.generator.manual_seed(seed)), both
+applied once before the model loop (experiments/v2_03_param_match/run.py,
+lines 125 and 128), together with the same training manifest, the same dev
+set and the fixed model training order (concat_wide, then fusion_narrow).
+It does not mean that the models saw identical initialisation or shuffle
+streams: the models train sequentially against one shared loader, so each
+model's weight initialisation and shuffle order also depend on its position
+in the training sequence. The stored results are deterministic when the
+script is run in the recorded order; retraining a single model outside that
+order would not reproduce its stored number. Gaps computed against the
+v2_02 concat and fusion runs additionally pair runs from different scripts
+whose RNG histories differ. The per-seed gap therefore remains a valid
+same-seed, same-data comparison, but it is not a variance-reduced
+matched-stream comparison.

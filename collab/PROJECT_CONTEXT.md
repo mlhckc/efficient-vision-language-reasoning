@@ -431,6 +431,7 @@ separate planned, reviewed task before relying on the affected claim.
    same-named seeds do not share matched shuffle/initialisation streams and a
    single-model rerun is order-dependent. This weakens the paired-gap wording in
    v2_02, v2_03, v2_04 and v2_07.
+   Resolved in the S3 seed-pairing clarification (31 July 2026).
 2. The v3_02a attention report describes seed-0 ranges as if they covered all
    seeds. Stored seed-by-block means span 0.1805-0.5346, with per-seed means
    0.3803, 0.3340 and 0.2642; per-head means span 0.0530-0.8881 and maximum
