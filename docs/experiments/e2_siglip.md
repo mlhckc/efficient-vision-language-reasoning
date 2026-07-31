@@ -76,7 +76,8 @@ results.json, run.log and 40 checkpoints {model}_{scale}_seed{seed}.pt.
 results.json and preflight.json are exported to
 artifacts/results_export/e2_siglip/; the checkpoints are hash-pinned but
 not exported in the MANIFEST. New stores under data/v2_siglip/
-(about 1.5 GB).
+(about 2.8 GB: images.h5 196 MB, questions.h5 819 MB, train_40k.h5
+about 246 MB, train_250k.h5 about 1.54 GB, dev.h5 about 47 MB).
 
 ## Results
 
@@ -91,18 +92,19 @@ parentheses):
 | 40k | product | 0.5503 | 0.0024 | 1,231,460 | +0.0136 (+0.0087) |
 | 40k | fusion | 0.5532 | 0.0025 | 1,624,676 | +0.0147 (+0.0114) |
 | 250k | question_only | 0.5024 | 0.0045 | 445,028 | +0.0047 (-0.0030) |
-| 250k | concat | 0.5918 | 0.0026 | 838,244 | +0.0132 (+0.0083) |
-| 250k | product | 0.5980 | 0.0036 | 1,231,460 | (capacity-mismatched reference; excluded from headlines) |
+| 250k | concat | 0.5918 | 0.0026 | 838,244 | +0.0131 (+0.0083) |
+| 250k | product | 0.5980 | 0.0035 | 1,231,460 | (capacity-mismatched reference; excluded from headlines) |
 | 250k | fusion | 0.5939 | 0.0032 | 1,624,676 | +0.0116 (+0.0057) |
 
 The multimodal SigLIP heads beat their CLIP counterparts in every seed
-at both scales (concat and fusion: minimum per-seed differences +0.0057
-to +0.0154). The question-only difference is small and not seed-robust
+at both scales (concat and fusion: means +0.0116 to +0.0154, per-seed
+minima +0.0057 to +0.0123). The question-only difference is small and not seed-robust
 at 250k (minimum -0.0030): the encoder swap helps through the visual
 and joint representation, not the language side. For context, the
-strongest SigLIP global heads at 250k (0.592-0.598) sit at parity with
-the 21.1M CLIP-token reasoner of v3_03 (0.5958 +/- 0.0074) while being
-about 13-18 times smaller.
+strongest SigLIP global heads at 250k — product 0.5980 and fusion
+0.5939 — sit at parity with the 21.1M CLIP-token reasoner of v3_03
+(0.5958 +/- 0.0074, three seeds) while being about 13-17 times smaller
+(concat, 0.5918, is about 25 times smaller).
 
 Question-weighted pooled >=4 deficits (five-seed means, fixed priors;
 CLIP references with their seed sets noted):
@@ -118,10 +120,14 @@ CLIP references with their seed sets noted):
 | 250k | product | 0.0793 | 0.0771 (v3_03 product_576k, 3 seeds) |
 | 250k | fusion | 0.0838 | 0.0803 (v3_03, 3 seeds) |
 
-Efficiency: extraction 63,599 images in 410 s and 184,432 unique texts
-in under 3 minutes (one-off, fp32, frozen encoder); the relaunched
-gates-to-analysis pass took 0.31 h; head training times match the
-global-head pattern (seconds at 40k, about a minute at 250k per run).
+Efficiency: the stored wall time for the relaunched gates-to-analysis
+pass is 1,120.2 s (0.31 h, results.json). The one-off extraction ran in
+the aborted first launch, whose console log was overwritten by the
+relaunch; its image-encode time (63,599 images in 410 s) survives only
+as a console observation recorded in the task packet log, and no text
+timing was recorded — both are marked here as unrecorded observations,
+not stored measurements. Head training times match the global-head
+pattern (seconds at 40k, about a minute at 250k per run).
 
 ## Decisions and problems
 
@@ -136,7 +142,7 @@ reasoning buys over the weaker one.
 
 (b) The compositional deficit does not move. Under SigLIP the pooled
 >=4 deficit spans 0.063-0.102 across models and scales, the same range
-as CLIP (0.064-0.105), with differences of at most about 0.005 in
+as CLIP (0.064-0.105), with differences of at most about 0.006 in
 either direction and no consistent sign. The multi-step deficit is now
 observed across two frozen contrastive dual-encoders, three training
 scales and heads from 0.1M to 21.1M parameters. This strengthens the

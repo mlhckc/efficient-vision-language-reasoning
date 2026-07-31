@@ -72,9 +72,11 @@ hash no longer matches the worktree.
   (both clustered bootstrap intervals include zero). Development results
   only; see docs/experiments/v3_03_scaling.md.
 - E2 (completed 31 July 2026) swapped the frozen encoder to SigLIP-B/16 on
-  the global path under the identical v2_02 recipe: every multimodal head
-  gains about +1.2 to +1.5 points over its CLIP counterpart in every seed at
-  40k and 250k (fusion 0.5532/0.5939), question_only is nearly unchanged,
+  the global path under the identical v2_02 recipe: every multimodal head at
+  40k, and concat and fusion at 250k, gain about +1.2 to +1.5 points over
+  their CLIP counterparts in every seed (fusion 0.5532/0.5939; the 250k
+  product reference is capacity-mismatched and excluded from headline
+  comparisons), question_only is nearly unchanged,
   and the strongest SigLIP global heads reach the v3_03 reasoner's accuracy
   at a fraction of the size. The pooled >=4-step deficit does not move
   (0.063-0.102 across models and scales, the same range as CLIP): the

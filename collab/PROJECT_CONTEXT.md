@@ -14,7 +14,8 @@ The workspace is about 61 GB. Most of that is not authored source:
 
 - 148,854 extracted GQA JPEG images and a 21.8 GB archive;
 - two raw GQA question JSON files and their 1.5 GB archive;
-- 13 HDF5 embedding/token stores, including 5.8 GB of V3 tokens;
+- 18 HDF5 embedding/token stores (13 at audit time, plus the five E2
+  SigLIP stores of 1 August 2026), including 5.8 GB of V3 tokens;
 - 116 model checkpoints and other generated results;
 - a 5.2 GB project virtual environment;
 - 3.3 GB of package and model caches.
@@ -57,9 +58,11 @@ The present state is:
   stored v2_07 head in every seed, while the pooled >=4-step deficit
   persists and remains statistically indistinguishable from fusion's at both
   scales. E2 also completed on 31 July 2026: frozen SigLIP-B/16 on the
-  global path lifts every multimodal head by about +1.2 to +1.5 points
-  seed-robustly at 40k and 250k (fusion 0.5532/0.5939) while the pooled
-  >=4-step deficit stays in the CLIP range (0.063-0.102), so the
+  global path lifts every multimodal head at 40k, and concat and fusion at
+  250k, by about +1.2 to +1.5 points seed-robustly (fusion 0.5532/0.5939;
+  the 250k product reference is capacity-mismatched and excluded from
+  headline comparisons), while the pooled >=4-step deficit stays in the
+  same range as CLIP (SigLIP 0.063-0.102 against CLIP 0.064-0.105), so the
   compositional deficit persists across two frozen dual-encoders. E3
   remains queued. Supervisor design feedback
   is still to be obtained and recorded when available, and each
@@ -199,6 +202,12 @@ Canonical keyed V2 stores are:
 - `answers.h5`: 100 answer strings and raw/photo/ensembled `(100, 512)`
   prompt embeddings.
 
+E2 SigLIP stores (data/v2_siglip/embeddings/, added 1 August 2026)
+mirror the canonical layout at 768 dimensions: `images.h5`
+`(63,599, 768)`, `questions.h5` `(265,727, 768)`, and aligned
+`train_40k`/`train_250k`/`dev` views with the same labels as the CLIP
+views.
+
 V3 token stores are:
 
 - `image_tokens.h5`: `ids (63,599)` and `tokens (63,599, 50, 512)` with dtype
@@ -209,7 +218,8 @@ V3 token stores are:
 
 ### Checkpoint families
 
-The 122 `.pt` files form nine tensor-schema families:
+The 162 `.pt` files form the nine CLIP-era tensor-schema families below
+plus the four E2 SigLIP head families:
 
 - 21 standard concat heads, first layer `(512, 1024)`;
 - 16 standard fusion heads, first layer `(512, 2048)`;
@@ -221,7 +231,9 @@ The 122 `.pt` files form nine tensor-schema families:
 - 18 latent-query reasoner checkpoints (11 from v3_01, 1 from the
   v3_02a patches probe, 6 from v3_03) with 32 learned `(512)` latents and
   four complete attention/FFN blocks;
-- 5 direct-linear heads with `(100, 1024)` weights.
+- 5 direct-linear heads with `(100, 1024)` weights;
+- 40 E2 SigLIP heads (10 per model at two scales and five seeds), first
+  layers `(512, 768)`, `(512, 1536)`, `(512, 2304)` and `(512, 3072)`.
 
 State dictionaries contain tensor weights only, not optimizer state or an
 embedded vocabulary/hash contract.
