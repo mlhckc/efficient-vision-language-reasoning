@@ -213,8 +213,8 @@ The 122 `.pt` files form nine tensor-schema families:
 - 5 fusion-narrow heads, first layer `(268, 2048)`;
 - 20 matched single-interaction heads, first layer `(351, 1536)`;
 - 10 natural-width single-interaction heads, first layer `(512, 1536)`;
-- 18 latent-query reasoner checkpoints (12 from v3_01, 6 from v3_03)
-  with 32 learned `(512)` latents and
+- 18 latent-query reasoner checkpoints (11 from v3_01, 1 from the
+  v3_02a patches probe, 6 from v3_03) with 32 learned `(512)` latents and
   four complete attention/FFN blocks;
 - 5 direct-linear heads with `(100, 1024)` weights.
 
