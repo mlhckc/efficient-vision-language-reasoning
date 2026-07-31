@@ -436,6 +436,7 @@ separate planned, reviewed task before relying on the affected claim.
    0.3803, 0.3340 and 0.2642; per-head means span 0.0530-0.8881 and maximum
    per-example p95 is 0.9931. The report's 0.35-0.40/0.13-0.89/0.92 summary is
    not the all-seed range.
+   Resolved in the S1 attention-summary correction (31 July 2026).
 3. v2_07 still uses the older unweighted mean of the 4-step and >=5-step lift
    buckets. Under v3_02a's superseding question-weighted definition, stored
    250k seed-42 deficits are concat 0.08443, fusion 0.08075, product 0.07780

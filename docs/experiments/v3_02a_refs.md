@@ -96,12 +96,22 @@ dev-set uncertainty) are reported separately and not mixed.
 Gate passed for every seed: instrumented path max absolute logit
 difference 5.0e-06 to 5.7e-06, 100.00% prediction agreement, identical
 accuracies. Visual cross-attention mass on CLS (uniform share would be
-1/50 = 2%): block means 0.35-0.40 across seeds, per-head means ranging
-0.13 to 0.89, per-example p95 up to 0.92, per-latent medians near the
-block means. CLS-dominant attention is consistent with the model relying
-strongly on the pooled CLS representation and may help explain the lower
-shuffled-image reliance seen in v3_01; attention weights alone are not
-causal evidence.
+1/50 = 2%) was summarized from the stored block means; the JSON stores
+block means only. The per-seed mean CLS masses, each calculated as the
+mean of the four stored block means, are 0.3803, 0.3340 and 0.2642 for
+seeds 0, 1 and 2. Across the 12 seed-block cells, block means span 0.1805
+(seed 2, block 1) to 0.5346 (seed 1, block 0). Per-head means span 0.0530
+to 0.8881, and the per-example p95 reaches 0.9931 (seed 1, block 0).
+Per-latent medians remain near the corresponding block means.
+
+These values support CLS overweighting relative to the uniform share, while
+showing substantial variability across seeds, blocks and heads. CLS-dominant
+attention is consistent with the model relying strongly on the pooled CLS
+representation and may help explain the lower shuffled-image reliance seen in
+v3_01; attention weights alone are not causal evidence.
+
+Correction (31 July 2026): an earlier version of this section reported ranges
+that described seed 0 only; the ranges above cover all three seeds.
 
 ## 9. D2: CLS-masked evaluation (test-time intervention)
 
@@ -167,8 +177,9 @@ Measured values only.
 - direct_linear vs concat gap: -0.0427
 - meanpatch_concat accuracy: 0.5145
 - meanpatch_concat vs concat gap: -0.0095
-- D1: CLS receives 35-40% mean visual cross-attention mass (uniform share
-  2%); instrumented-path gate 5.7e-06 max logit diff, 100% agreement
+- D1: mean visual cross-attention mass on CLS is 0.38/0.33/0.26 for seeds
+  0/1/2 (0.26-0.38 across seeds; uniform share 2%); instrumented-path gate
+  5.7e-06 max logit diff, 100% agreement
 - D2: test-time CLS removal changes accuracy by -0.0502/-0.0284/-0.0416
   (seeds 0/1/2)
 - D3: complete in 213.9 s; patches-only dev 0.5359, combined >=4 lift
