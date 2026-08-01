@@ -74,6 +74,18 @@ The present state is:
   tail accuracy is strongly data-dependent. The strengthening programme
   (E1-E3) is complete; F1 (freeze) and F2 (blinded clean-test
   evaluation) remain, each requiring explicit user authorization.
+  E7a (1 August 2026, authorized separately and evaluation-only)
+  measured the efficiency axis for the first time: 21 head architectures
+  and both frozen encoder towers under one protocol, all 189 comparison
+  checkpoints reproduced within 5e-6. The encoder dominates (CLIP
+  2.2510 ms image plus 1.7309 ms text on GPU and 2.295 ms CPU decode,
+  against 0.0162-0.0469 ms for the heads); caching image features across
+  about ten questions per image cuts a query from 6.35 to 2.25 ms; on
+  both end-to-end latency fronts only top-1000 global heads are
+  Pareto-optimal, and the 21.1M reasoner is dominated on all four
+  latency fronts. E7a supersedes the V1 stage-5 and
+  src/efficiency.py-derived latencies. E4 and E5 were proposed and are
+  not authorized.
   Supervisor design feedback
   is still to be obtained and recorded when available, and each
   task-specific scientific and resource gate remains binding. The clean-test
@@ -549,10 +561,12 @@ Claude agents and `collab/PROTOCOL.md`.
 
 ## Next permitted decisions
 
-Complete the S1-S3 statistical corrections and the P0-P3 preparation packets
-before the authorized strengthening experiments. Then run E1 V3 100k/250k
-reasoner scaling, E2 the frozen SigLIP-B/16 encoder swap, and E3 the 1000-answer
-vocabulary experiment in that order, each under its own approved packet and
-task-specific gates. Obtain and record supervisor design feedback when
-available. Final model freezing, a frozen evaluation protocol and a dedicated
-blinded evaluator are prerequisites to any clean-test access.
+The S1-S3 corrections, the P0-P3 preparation packets and the authorized
+strengthening experiments E1 (v3_03 reasoner scaling), E2 (SigLIP-B/16
+encoder swap) and E3 (1000-answer vocabulary) are all complete, as is the
+separately authorized evaluation-only E7a efficiency analysis. E4
+(five-seed reasoner completion) and E5 (parameter-matched CLIP versus
+SigLIP) were proposed and are NOT authorized. Obtain and record supervisor
+design feedback when available. Final model freezing (F1), a frozen
+evaluation protocol and a dedicated blinded evaluator are prerequisites to
+any clean-test access (F2); neither is authorized.

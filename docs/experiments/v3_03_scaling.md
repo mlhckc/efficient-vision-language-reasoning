@@ -155,3 +155,5 @@ final model list for the eventual blinded clean-test evaluation should
 now plausibly include the 250k reasoner alongside the global heads,
 which makes the freeze decision (F1) more consequential than it was
 under the 40k-parity picture.
+
+Supersession note (1 August 2026): the latency and memory figures in this report were produced under an earlier protocol (random inputs, 20/200 iterations, means without pre-call synchronisation) and are superseded by docs/experiments/e7a_efficiency.md, which benchmarks every stored head and both frozen encoders under one protocol. Accuracy results in this report are unaffected.

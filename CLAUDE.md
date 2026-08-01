@@ -113,9 +113,14 @@ hash no longer matches the worktree.
   and a 1000-answer vocabulary experiment (E3), in that order after the
   S1-S3 correction and P0-P3 preparation packets. All of E1-E3 are complete
   (E1 and E2 on 31 July, E3 on 1 August 2026); the strengthening programme
-  is finished. The next steps are the model-list freeze (F1) and only then
-  the blinded clean-test evaluation (F2), both requiring explicit user
-  authorization.
+  is finished. On 1 August 2026 the user additionally authorized E7a only
+  (the efficiency Pareto and end-to-end cost analysis, an evaluation-only
+  measurement over stored checkpoints, completed the same day) and
+  restated that E4 (five-seed reasoner completion), E5 (parameter-matched
+  CLIP versus SigLIP), F1 and F2 are not authorized and that clean-test
+  labels must not be accessed. The next steps are the model-list freeze
+  (F1) and only then the blinded clean-test evaluation (F2), both
+  requiring explicit user authorization.
   Supervisor design feedback is still to be obtained and recorded when
   available, and the final venue decision will be discussed with Prof. Bober.
   No final clean-test evaluation has occurred; the clean-test embargo is

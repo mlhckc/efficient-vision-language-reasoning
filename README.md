@@ -26,8 +26,15 @@ vocabulary experiment) completed on 1 August 2026: coverage of the raw dev
 distribution rises from 77.1% to 98.2%, and on that full distribution the
 1000-answer heads answer about 3.6 to 4.1 points more questions correctly,
 despite a roughly 2-point cost on the shared rows. The
-strengthening programme (E1-E3) is complete; the model-list freeze and the
-blinded clean-test evaluation are the remaining steps.
+strengthening programme (E1-E3) is complete. E7a (1 August 2026) then
+measured the efficiency axis for the first time under one protocol: the
+frozen encoder dominates every query (about 4.0 ms of GPU tower time plus
+2.3 ms of CPU image decode for CLIP, against 0.02-0.05 ms for the heads),
+caching image features across the questions about one image cuts a query
+from 6.35 to 2.25 ms, and on both end-to-end latency Pareto fronts the
+only optimal models are small global heads with the 1000-answer
+vocabulary. The model-list freeze and the blinded clean-test evaluation
+are the remaining steps.
 Supervisor design feedback will be recorded when available. The clean-test
 embargo remains unchanged: the clean test remains blinded and no confirmatory
 result has been reported.

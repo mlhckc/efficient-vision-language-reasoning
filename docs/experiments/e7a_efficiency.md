@@ -83,6 +83,15 @@ not resolved. GPU clocks fell from 2340 MHz at 44 C in pass 1 to
 reported medians are medians across passes, and head spreads remained
 at or below 0.0014 ms throughout.
 
+Hardware: one NVIDIA RTX 4000 Ada Generation, driver 580.126.09; all
+latency figures are specific to it. Item order was fixed and identical
+across all three passes. SigLIP head sizes follow mechanically from the
+768-dimensional input width and are not capacity-controlled against the
+CLIP heads, so cross-encoder parameter and head-memory comparisons carry
+that confound (disentangling it would be E5, which is not authorised).
+The plan estimated 186 comparison checkpoints; the executed count is
+189, the plan having under-counted the nine reasoner checkpoints.
+
 Blinding: dev only; test_clean_targets.csv was never read; nothing was
 trained or tuned.
 
@@ -91,8 +100,10 @@ trained or tuned.
 results/experiments/e7a_efficiency/{preflight.json,
 measurements_interim.json, results.json, run.log} and four figures:
 accuracy_vs_params.png, accuracy_vs_latency.png,
-accuracy_vs_head_latency.png, accuracy_vs_memory.png. Total wall time
-6.6 minutes.
+accuracy_vs_head_latency.png, accuracy_vs_memory.png. The fourth,
+accuracy_vs_head_latency.png, was added beyond the three the task
+requested because the head-only regime has its own Pareto front that
+the end-to-end figure cannot show. Total wall time 6.6 minutes.
 
 ## Results
 
@@ -158,9 +169,13 @@ Pareto fronts (raw-distribution accuracy against each cost axis):
 
 Front membership separated by less than one seed standard deviation in
 accuracy (about 0.002-0.003 raw) or 0.002 ms in latency is not
-resolved; the amortised front's image_only@40k has raw accuracy 0.18073,
-far below every blind floor, and is a front artefact rather than a
-usable operating point.
+resolved. Two front members are artefacts rather than usable operating
+points: the amortised front's image_only@40k has raw accuracy 0.18073,
+and direct_linear@40k, which wins the minimum-parameter, head-only
+latency and head-memory criteria below, scores 0.3711 against its own
+CLIP top-100 blind floor of 0.38377. Both are beaten by a head that
+ignores one modality entirely, so those three criterion winners should
+be read as cost extremes, not as recommendations.
 
 Best under each criterion (blind floors: 0.38377 for CLIP top-100,
 0.38737 for SigLIP top-100, 0.39890 for CLIP top-1000; the global blind
@@ -212,8 +227,9 @@ ordering is not resolved by these measurements; that decode costs about
 as much as encoding is itself new to the project record. Caching image
 features across the
 ~10 questions per image cuts a CLIP query from 6.35 ms to 2.25 ms, a
-2.8-fold reduction, and is by far the most valuable engineering choice
-available. The head-versus-head comparisons that occupied V2 and V3 are
+2.8-fold reduction, and is the largest saving among the options measured
+here (quantisation, batching and a smaller image tower were not
+measured). The head-versus-head comparisons that occupied V2 and V3 are
 real but nearly invisible at the system level.
 
 (b) Vocabulary growth is free; the encoder swap and token-level
@@ -273,7 +289,14 @@ in results.json but is not folded into any latency figure. preflight.json
 was written during the round-01 pin (7f89074, dirty tree) and predates
 the executed pin; the identical gates, including all 189 checkpoint
 reproductions, were re-run inside the f8a5580 execution and are recorded
-in run.log. The raw-distribution figure for vocab1000_product@250k is
+both in run.log (node-local) and in the tracked export
+artifacts/results_export/e7a_efficiency/results.json, whose
+checkpoints_reproduced field reads 189 at git_commit f8a5580 with a
+clean tree. One corrigendum to the artefact: the resolvability_rule
+string stored in results.json names both the across-pass spread and the
+within-pass p5-p95 range, but only per-pass medians and an across-pass
+summary of p95 are stored, so the rule as applied here uses the
+across-pass leg only, as stated in Method. The raw-distribution figure for vocab1000_product@250k is
 0.4904 here (computed from unrounded inputs) against 0.4905 in
 docs/experiments/e3_vocab1000.md (computed from four-decimal inputs);
 the E7a value is the one to quote.

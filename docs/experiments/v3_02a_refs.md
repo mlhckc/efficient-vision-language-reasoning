@@ -186,3 +186,5 @@ Measured values only.
   0.1462, shuffled drop +0.1155
 
 STATUS: 100k/250k scaling remains on hold pending V3-design feedback.
+
+Supersession note (1 August 2026): the latency and memory figures in this report were produced under an earlier protocol (random inputs, 20/200 iterations, means without pre-call synchronisation) and are superseded by docs/experiments/e7a_efficiency.md, which benchmarks every stored head and both frozen encoders under one protocol. Accuracy results in this report are unaffected.
