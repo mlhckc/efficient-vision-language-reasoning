@@ -101,8 +101,7 @@ hash no longer matches the worktree.
   (E1 and E2 on 31 July, E3 on 1 August 2026); the strengthening programme
   is finished. The next steps are the model-list freeze (F1) and only then
   the blinded clean-test evaluation (F2), both requiring explicit user
-  authorization, with supervisor design feedback still to be recorded when
-  available.
+  authorization.
   Supervisor design feedback is still to be obtained and recorded when
   available, and the final venue decision will be discussed with Prof. Bober.
   No final clean-test evaluation has occurred; the clean-test embargo is

@@ -14,8 +14,9 @@ The workspace is about 61 GB. Most of that is not authored source:
 
 - 148,854 extracted GQA JPEG images and a 21.8 GB archive;
 - two raw GQA question JSON files and their 1.5 GB archive;
-- 18 HDF5 embedding/token stores (13 at audit time, plus the five E2
-  SigLIP stores of 1 August 2026), including 5.8 GB of V3 tokens;
+- 23 HDF5 embedding/token stores (13 at audit time, plus the five E2
+  SigLIP stores and the five E3 v2_1000 stores added 31 July to
+  1 August 2026), including 5.8 GB of V3 tokens;
 - 116 model checkpoints and other generated results;
 - a 5.2 GB project virtual environment;
 - 3.3 GB of package and model caches.
@@ -216,6 +217,14 @@ mirror the canonical layout at 768 dimensions: `images.h5`
 `train_40k`/`train_250k`/`dev` views with the same labels as the CLIP
 views.
 
+E3 v2_1000 artifacts (data/v2_1000/, added 1 August 2026): the top-1000
+vocabulary (top-100 prefix gated identical to answer_vocab_v2.json),
+nested train_40k/100k/250k manifests, dev view (9,823 rows), build
+summary and hash record, plus embeddings/: delta stores
+`images_extra.h5` `(5,667, 512)` and `questions_extra.h5`
+`(183,987, 512)`, and aligned `train_40k`/`train_250k`/`dev` views with
+int64 labels in [0, 1000).
+
 V3 token stores are:
 
 - `image_tokens.h5`: `ids (63,599)` and `tokens (63,599, 50, 512)` with dtype
@@ -226,8 +235,9 @@ V3 token stores are:
 
 ### Checkpoint families
 
-The 162 `.pt` files form the nine CLIP-era tensor-schema families below
-plus the four E2 SigLIP head families:
+The 202 `.pt` files form the nine CLIP-era tensor-schema families below
+plus the four E2 SigLIP head families and the four E3 1000-way head
+families:
 
 - 21 standard concat heads, first layer `(512, 1024)`;
 - 16 standard fusion heads, first layer `(512, 2048)`;
@@ -241,7 +251,10 @@ plus the four E2 SigLIP head families:
   four complete attention/FFN blocks;
 - 5 direct-linear heads with `(100, 1024)` weights;
 - 40 E2 SigLIP heads (10 per model at two scales and five seeds), first
-  layers `(512, 768)`, `(512, 1536)`, `(512, 2304)` and `(512, 3072)`.
+  layers `(512, 768)`, `(512, 1536)`, `(512, 2304)` and `(512, 3072)`;
+- 40 E3 1000-way heads (10 per model at two scales and five seeds),
+  first layers `(512, 512)`, `(512, 1024)`, `(512, 1536)` and
+  `(512, 2048)` with output `(1000, 512)`.
 
 State dictionaries contain tensor weights only, not optimizer state or an
 embedded vocabulary/hash contract.
