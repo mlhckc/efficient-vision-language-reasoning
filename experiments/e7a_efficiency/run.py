@@ -109,7 +109,11 @@ def read_coverage():
     for vocab in (100, 1000):
         assert raw[vocab] == RAW_DEV_QUESTIONS, (vocab, raw[vocab])
         assert abs(coverage[vocab] - rows[vocab] / RAW_DEV_QUESTIONS) < 1e-6
-    return coverage, rows
+    images = {100: int(v200["manifests"]["dev"]["n_unique_images"]),
+              1000: int(e3["dev"]["n_unique_images"])}
+    per_image = {f"top{vocab}_dev": rows[vocab] / images[vocab]
+                 for vocab in (100, 1000)}
+    return coverage, rows, per_image
 
 
 def gpu_state():
@@ -352,8 +356,9 @@ def main() -> None:
     assert not state_before["foreign_compute_pids"], "GPU not exclusive"
     print(f"gpu: {state_before['gpu_query']}")
 
-    coverage, dev_rows_by_vocab = read_coverage()
-    print(f"[PASS] coverage read from build summaries: {coverage}")
+    coverage, dev_rows_by_vocab, questions_per_image = read_coverage()
+    print(f"[PASS] coverage read from build summaries: {coverage}; "
+          f"questions/image {questions_per_image}")
     specs, siglip_identity = build_specs()
     feats = load_features(device)
     dev_frame = pd.read_csv(V2_DIR / "dev.csv", dtype=str,
@@ -363,7 +368,6 @@ def main() -> None:
     v301 = load_module("v3_01_run", "experiments/v3_01_reasoner/run.py")
     stores = None
     repro_loader = None
-    token_loader = None
     accuracy = {}
     checked = 0
     for spec_item in specs:
@@ -521,16 +525,23 @@ def main() -> None:
         def image_single(m, b=bundle):
             return lambda: m.encode_image(b["pixel_single"])
 
+        # Materialised once and contiguous: expand() would force a 154 MB
+        # device copy inside every timed iteration (review N2). The
+        # resident tensor lands in the memory baseline and is therefore
+        # excluded from peak_delta.
+        bundle.setdefault("pixel_batch", bundle["pixel_single"].expand(
+            BENCH_BATCH, -1, -1, -1).contiguous())
+        bundle.setdefault("tokens_batch", bundle["tokens_single"].expand(
+            BENCH_BATCH, -1).contiguous())
+
         def image_batch(m, b=bundle):
-            return lambda: m.encode_image(
-                b["pixel_single"].expand(BENCH_BATCH, -1, -1, -1))
+            return lambda: m.encode_image(b["pixel_batch"])
 
         def text_single(m, b=bundle):
             return lambda: m.encode_text(b["tokens_single"])
 
         def text_batch(m, b=bundle):
-            return lambda: m.encode_text(
-                b["tokens_single"].expand(BENCH_BATCH, -1))
+            return lambda: m.encode_text(b["tokens_batch"])
         items.append((f"{tag}_image_tower", "encoder", make_enc,
                       image_single, image_batch))
         items.append((f"{tag}_text_tower", "encoder", make_enc,
@@ -544,7 +555,10 @@ def main() -> None:
     passes = []
     pass_state = []
     for repetition in range(REPETITIONS):
-        pass_state.append(gpu_state()["gpu_query"])
+        try:                              # never lose a pass (review N3)
+            pass_state.append(gpu_state())
+        except Exception as error:
+            pass_state.append({"error": repr(error)})
         record = {}
         for label, kind, make_model, make_single, make_batch in items:
             model = make_model()
@@ -579,27 +593,46 @@ def main() -> None:
 
     # ---- CPU-side pipeline terms (review H5) --------------------------
     print("=== E7a PHASE P: image decode/preprocess and tokenisation ===")
+    # Several distinct dev images and questions, not one (review R4).
+    sample_paths = [config.GQA_IMAGES_DIR / f"{i}.jpg"
+                    for i in dev_frame["imageId"].drop_duplicates().head(8)]
+    sample_texts = list(dev_frame["question"].head(8))
     pipeline = {}
     for tag, _, _ in encoder_specs:
         bundle = encoder_cache[tag]
         decode = []
         for _ in range(CPU_ITERS):
+            path = sample_paths[len(decode) % len(sample_paths)]
             start = time.perf_counter()
-            bundle["preprocess"](
-                Image.open(sample_image_path).convert("RGB"))
+            bundle["preprocess"](Image.open(path).convert("RGB"))
             decode.append((time.perf_counter() - start) * 1000.0)
         tokenise = []
         for _ in range(CPU_ITERS):
+            text = sample_texts[len(tokenise) % len(sample_texts)]
             start = time.perf_counter()
-            bundle["tokenizer"]([sample_text])
+            bundle["tokenizer"]([text])
             tokenise.append((time.perf_counter() - start) * 1000.0)
         pipeline[tag] = {
             "image_decode_preprocess_ms_median": float(np.median(decode)),
+            "image_decode_preprocess_ms_p5_p95": [
+                float(np.percentile(decode, 5)),
+                float(np.percentile(decode, 95))],
             "tokenise_ms_median": float(np.median(tokenise)),
-            "n": CPU_ITERS, "device": "cpu"}
+            "tokenise_ms_p5_p95": [float(np.percentile(tokenise, 5)),
+                                   float(np.percentile(tokenise, 95))],
+            "n_images_sampled": len(sample_paths),
+            "n_texts_sampled": len(sample_texts),
+            "n": CPU_ITERS, "device": "cpu",
+            "note": "files are in the OS page cache after the first "
+                    "iteration, so disk I/O is excluded"}
         print(f"  {tag}: decode+preprocess "
               f"{pipeline[tag]['image_decode_preprocess_ms_median']:.3f} ms, "
               f"tokenise {pipeline[tag]['tokenise_ms_median']:.3f} ms")
+
+    # Token stores are no longer needed once the reasoner's device
+    # tensors exist; release ~5.8 GB of host RAM (review L-b).
+    del token_loader, token_batch, stores, repro_loader
+    stores = None
 
     # ---- aggregate cost per item --------------------------------------
     def across(label, field, sub):
@@ -622,6 +655,15 @@ def main() -> None:
             cost[label]["memory"] = memory[label]
     overhead = cost["_overhead_floor"]["single_ms"]["median"]
     print(f"[measured] empty-callable overhead floor: {overhead:.5f} ms")
+    for tag, _, _ in encoder_specs:
+        weights = encoder_cache[tag]["parameters"] * 4 / 2 ** 20
+        for tower in (f"{tag}_image_tower", f"{tag}_text_tower"):
+            cost[tower]["encoder_total_parameters"] = encoder_cache[tag][
+                "parameters"]
+            cost[tower]["encoder_weights_mib"] = weights
+            cost[tower]["encoder_weights_note"] = (
+                "fp32 bytes for the whole dual-tower encoder, which is "
+                "resident when either tower runs")
 
     for spec_item in specs:
         entry = cost[spec_item["name"]]
@@ -644,6 +686,14 @@ def main() -> None:
                 entry["single_ms"]["median"] - overhead, 5)})
         del model
 
+    # Persist raw measurements before any analysis or plotting can fail
+    # (review N4; the e3 packet records the same lesson).
+    interim = {"metadata": utils.run_metadata(), "cost": cost,
+               "memory": memory, "pipeline_cpu_terms": pipeline,
+               "gpu_state_per_pass": pass_state}
+    utils.save_json(interim, OUT_DIR / "measurements_interim.json")
+    print("interim measurements persisted")
+
     # ---- cost regimes and Pareto --------------------------------------
     print("=== E7a PHASE C: cost regimes and Pareto ===")
     points = []
@@ -661,13 +711,23 @@ def main() -> None:
                     if entry["needs_text"] else 0.0)
         gpu_ms = image_ms + text_ms + head_ms
         raw = acc["in_vocab_mean"] * coverage[entry["vocab"]]
+        # Memory: weights (params x 4 bytes, fp32) plus the measured
+        # transient activation delta. peak_delta alone excludes weights,
+        # which is where the real difference lives (review R1).
+        weights_mib = entry["trainable_parameters"] * 4 / 2 ** 20
         mem_head = entry["memory"]["single"]["peak_delta_mib"]
-        mem_full = max(
-            mem_head,
-            memory[f"{tag}_image_tower"]["single"]["peak_delta_mib"]
-            if entry["needs_image"] else 0.0,
-            memory[f"{tag}_text_tower"]["single"]["peak_delta_mib"]
-            if entry["needs_text"] else 0.0)
+        footprint_head = weights_mib + mem_head
+        footprint_batch = weights_mib + entry["memory"]["batch"][
+            "peak_delta_mib"]
+        tower_footprint = 0.0
+        for tower, needed in ((f"{tag}_image_tower", entry["needs_image"]),
+                              (f"{tag}_text_tower", entry["needs_text"])):
+            if needed:
+                tower_footprint = max(
+                    tower_footprint,
+                    cost[tower]["encoder_weights_mib"]
+                    + memory[tower]["single"]["peak_delta_mib"])
+        mem_full = max(footprint_head, tower_footprint)
         points.append({
             "model": name, "scale": scale, "encoder": tag,
             "vocab": entry["vocab"], "n_seeds": acc["n_seeds"],
@@ -688,8 +748,11 @@ def main() -> None:
             "amortised_ms": round(
                 (image_ms + decode_ms) / AMORTISATION_REFERENCE
                 + text_ms + token_ms + head_ms, 5),
-            "peak_delta_mib_head": round(mem_head, 3),
-            "peak_delta_mib_full": round(mem_full, 3),
+            "weights_mib": round(weights_mib, 4),
+            "activation_delta_mib_head": round(mem_head, 3),
+            "footprint_mib_head": round(footprint_head, 3),
+            "footprint_mib_batch256": round(footprint_batch, 3),
+            "footprint_mib_full": round(mem_full, 3),
             "throughput_examples_per_s": round(
                 entry["throughput_examples_per_s"]["median"], 1)})
 
@@ -712,21 +775,35 @@ def main() -> None:
     fronts = {key: pareto(key) for key in
               ("trainable_parameters", "head_only_ms",
                "gpu_encoder_plus_head_ms", "full_pipeline_ms",
-               "amortised_ms", "peak_delta_mib_head")}
+               "amortised_ms", "footprint_mib_head", "footprint_mib_full")}
 
     def best_cost(cost_key):
         """Cheapest; ties broken by accuracy (review M5)."""
         return min(points, key=lambda p: (p[cost_key],
                                           -p["raw_distribution_accuracy"]))
 
-    blind_floor = max(p["raw_distribution_accuracy"] for p in points
-                      if not p["needs_image"])
+    # Blind floors: a single global floor spans encoders and vocabularies
+    # and would charge CLIP top-100 heads against a coverage advantage
+    # they cannot reach, so each model is also scored against the blind
+    # baseline of its OWN (encoder, vocabulary) family (review R3).
+    def family(point):
+        return f"{point['encoder']}_top{point['vocab']}"
+
+    blind_points = [p for p in points if not p["needs_image"]]
+    blind_global = max(blind_points,
+                       key=lambda p: p["raw_distribution_accuracy"])
+    blind_floor = blind_global["raw_distribution_accuracy"]
+    family_floor = {}
+    for point in blind_points:
+        key = family(point)
+        family_floor[key] = max(family_floor.get(key, 0.0),
+                                point["raw_distribution_accuracy"])
     multimodal = [p for p in points if p["needs_image"]]
     best = {
         "min_trainable_parameters": best_cost("trainable_parameters"),
         "lowest_head_only_latency": best_cost("head_only_ms"),
         "lowest_full_pipeline_latency": best_cost("full_pipeline_ms"),
-        "lowest_peak_memory": best_cost("peak_delta_mib_head"),
+        "lowest_memory_footprint": best_cost("footprint_mib_head"),
         "highest_raw_accuracy": max(
             points, key=lambda p: p["raw_distribution_accuracy"]),
         "ratio_accuracy_per_parameter_UNNORMALISED": max(
@@ -735,11 +812,15 @@ def main() -> None:
         "ratio_accuracy_per_full_pipeline_ms_UNNORMALISED": max(
             points, key=lambda p: p["raw_distribution_accuracy"]
             / p["full_pipeline_ms"]),
-        "best_tradeoff_above_blind_floor_per_parameter": max(
+        "best_tradeoff_above_family_blind_floor_per_parameter": max(
             multimodal, key=lambda p: (p["raw_distribution_accuracy"]
-                                       - blind_floor)
+                                       - family_floor[family(p)])
             / p["trainable_parameters"]),
-        "best_tradeoff_above_blind_floor_per_pipeline_ms": max(
+        "best_tradeoff_above_family_blind_floor_per_pipeline_ms": max(
+            multimodal, key=lambda p: (p["raw_distribution_accuracy"]
+                                       - family_floor[family(p)])
+            / p["full_pipeline_ms"]),
+        "best_tradeoff_above_global_blind_floor_per_pipeline_ms": max(
             multimodal, key=lambda p: (p["raw_distribution_accuracy"]
                                        - blind_floor)
             / p["full_pipeline_ms"])}
@@ -751,8 +832,11 @@ def main() -> None:
              "accuracy_vs_latency.png", True),
             ("head_only_ms", "head-only latency (ms)",
              "accuracy_vs_head_latency.png", True),
-            ("peak_delta_mib_full", "peak CUDA memory delta (MiB)",
+            ("footprint_mib_full", "peak memory footprint (MiB)",
              "accuracy_vs_memory.png", True)):
+        # The front MUST be the front of the axis being plotted; a silent
+        # fallback previously drew latency values on a memory axis (N1).
+        assert x_key in fronts, f"no Pareto front computed for {x_key}"
         figure, axis = plt.subplots(figsize=(7.6, 5.2))
         for group, marker, label in (
                 ("clip100", "o", "CLIP top-100"),
@@ -767,7 +851,7 @@ def main() -> None:
                 axis.scatter([p[x_key] for p in subset],
                              [p["raw_distribution_accuracy"] for p in subset],
                              marker=marker, label=label, alpha=0.85)
-        front = fronts[x_key if x_key in fronts else "full_pipeline_ms"]
+        front = fronts[x_key]
         axis.plot([f["cost"] for f in front], [f["accuracy"] for f in front],
                   linestyle="--", linewidth=1.2, color="black",
                   label="Pareto front")
@@ -790,6 +874,7 @@ def main() -> None:
         state_after = gpu_state()
     except Exception as error:            # never lose a completed run
         state_after = {"error": repr(error)}
+    del interim
 
     metadata = utils.run_metadata()
     metadata["e7a_efficiency"] = {
@@ -808,14 +893,37 @@ def main() -> None:
                       "real dev question; GPU tensors pre-placed",
             "overhead_floor_ms": overhead,
             "overhead_note": "batch-1 head latency is launch-latency "
-                             "bound; differences below the floor are not "
-                             "resolvable and batch-256 throughput is the "
-                             "compute-bound comparison",
-            "memory_definition": "peak_delta_mib is max_memory_allocated "
-                                 "minus the allocation baseline measured "
+                             "bound; batch-256 throughput is the "
+                             "compute-bound comparison. The empty-callable "
+                             "floor synchronises an idle queue, so "
+                             "single_ms_above_floor is conservative and "
+                             "never flatters a model",
+            "resolvability_rule": "a latency difference counts as resolved "
+                                  "only if it exceeds the across-pass "
+                                  "spread and the within-pass p5-p95 range "
+                                  "of both models compared; the overhead "
+                                  "floor is a level, not a resolution",
+            "memory_definition": "activation_delta_mib is "
+                                 "max_memory_allocated minus the "
+                                 "allocation baseline captured "
                                  "immediately before the call, in "
-                                 "isolation; absolutes and reserved are "
-                                 "also recorded",
+                                 "isolation, and therefore EXCLUDES model "
+                                 "weights and resident input tensors; "
+                                 "weights_mib is parameters x 4 bytes and "
+                                 "footprint_mib = weights + activation "
+                                 "delta is the quantity used for the "
+                                 "memory front and criterion; absolutes "
+                                 "and reserved are also recorded",
+            "memory_repetitions": "peak memory is measured once, not per "
+                                  "pass, because allocator behaviour is "
+                                  "deterministic for a fixed call "
+                                  "sequence; no memory spread is claimed",
+            "blind_floor_definition": "the headline trade-off criteria "
+                                      "score accuracy above the blind "
+                                      "question_only baseline of the "
+                                      "model's OWN (encoder, vocabulary) "
+                                      "family; the global-floor variant "
+                                      "is reported alongside",
             "determinism_flags": {
                 "config_DETERMINISTIC": config.DETERMINISTIC,
                 "cudnn_deterministic": bool(
@@ -828,8 +936,7 @@ def main() -> None:
             "reproduction_tolerance": REPRODUCTION_TOLERANCE,
             "amortisation_reference_questions_per_image":
                 AMORTISATION_REFERENCE,
-            "measured_questions_per_image": {
-                "top100_dev": 7714 / 768, "top1000_dev": 9823 / 776},
+            "measured_questions_per_image": questions_per_image,
             "coverage_used_for_raw_distribution": coverage,
             "regimes": {
                 "head_only_ms": "trained head on cached features",
@@ -859,11 +966,19 @@ def main() -> None:
         "cost": cost, "pipeline_cpu_terms": pipeline,
         "points": points, "pareto_fronts": fronts,
         "blind_floor_raw_accuracy": round(blind_floor, 5),
+        "blind_floor_point": f"{blind_global['model']}@"
+                             f"{blind_global['scale']}",
+        "blind_floor_by_family": {k: round(v, 5)
+                                  for k, v in family_floor.items()},
         "best_under_criterion": {
             key: {"point": f"{value['model']}@{value['scale']}",
                   "raw_distribution_accuracy":
                       value["raw_distribution_accuracy"],
-                  "uses_image": value["needs_image"]}
+                  "uses_image": value["needs_image"],
+                  "trainable_parameters": value["trainable_parameters"],
+                  "head_only_ms": value["head_only_ms"],
+                  "full_pipeline_ms": value["full_pipeline_ms"],
+                  "footprint_mib_head": value["footprint_mib_head"]}
             for key, value in best.items()},
         "total_wall_seconds": round(time.time() - started, 1),
         "note": "Evaluation only; nothing trained or tuned; dev only; "
