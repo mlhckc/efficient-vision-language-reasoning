@@ -690,7 +690,10 @@ def main() -> None:
     # (review N4; the e3 packet records the same lesson).
     interim = {"metadata": utils.run_metadata(), "cost": cost,
                "memory": memory, "pipeline_cpu_terms": pipeline,
-               "gpu_state_per_pass": pass_state}
+               "gpu_state_per_pass": pass_state,
+               "coverage": coverage,
+               "accuracy": {f"{name}@{scale}": value
+                            for (name, scale), value in accuracy.items()}}
     utils.save_json(interim, OUT_DIR / "measurements_interim.json")
     print("interim measurements persisted")
 
@@ -719,15 +722,20 @@ def main() -> None:
         footprint_head = weights_mib + mem_head
         footprint_batch = weights_mib + entry["memory"]["batch"][
             "peak_delta_mib"]
-        tower_footprint = 0.0
-        for tower, needed in ((f"{tag}_image_tower", entry["needs_image"]),
-                              (f"{tag}_text_tower", entry["needs_text"])):
-            if needed:
-                tower_footprint = max(
-                    tower_footprint,
-                    cost[tower]["encoder_weights_mib"]
-                    + memory[tower]["single"]["peak_delta_mib"])
-        mem_full = max(footprint_head, tower_footprint)
+        # Serial serving keeps the encoder resident while the head runs,
+        # so the end-to-end footprint SUMS the resident weights and takes
+        # the max of the transient activation deltas. Taking a max over
+        # weights would hide the head term entirely behind the ~577 MiB
+        # (CLIP) / ~775 MiB (SigLIP) encoder (review round 03).
+        towers_used = [t for t, needed in
+                       ((f"{tag}_image_tower", entry["needs_image"]),
+                        (f"{tag}_text_tower", entry["needs_text"])) if needed]
+        encoder_weights = (cost[towers_used[0]]["encoder_weights_mib"]
+                           if towers_used else 0.0)
+        activation_peak = max(
+            [mem_head] + [memory[t]["single"]["peak_delta_mib"]
+                          for t in towers_used])
+        mem_full = encoder_weights + weights_mib + activation_peak
         points.append({
             "model": name, "scale": scale, "encoder": tag,
             "vocab": entry["vocab"], "n_seeds": acc["n_seeds"],
@@ -832,8 +840,8 @@ def main() -> None:
              "accuracy_vs_latency.png", True),
             ("head_only_ms", "head-only latency (ms)",
              "accuracy_vs_head_latency.png", True),
-            ("footprint_mib_full", "peak memory footprint (MiB)",
-             "accuracy_vs_memory.png", True)):
+            ("footprint_mib_full", "end-to-end memory footprint (MiB)",
+             "accuracy_vs_memory.png", False)):
         # The front MUST be the front of the axis being plotted; a silent
         # fallback previously drew latency values on a memory axis (N1).
         assert x_key in fronts, f"no Pareto front computed for {x_key}"
@@ -918,6 +926,19 @@ def main() -> None:
                                   "pass, because allocator behaviour is "
                                   "deterministic for a fixed call "
                                   "sequence; no memory spread is claimed",
+            "footprint_full_definition": "footprint_mib_full = resident "
+                                         "encoder weights + head weights + "
+                                         "max(activation deltas), the "
+                                         "serial-serving model that "
+                                         "matches how full_pipeline_ms "
+                                         "sums the same stages. Encoder "
+                                         "weights are charged for the "
+                                         "whole dual-tower model even when "
+                                         "only one tower is used, so this "
+                                         "axis does not credit "
+                                         "question_only's structural "
+                                         "advantage the way the latency "
+                                         "axis does",
             "blind_floor_definition": "the headline trade-off criteria "
                                       "score accuracy above the blind "
                                       "question_only baseline of the "
