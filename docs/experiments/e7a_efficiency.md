@@ -66,13 +66,22 @@ decode was measured with the files in the OS page cache, so disk I/O is
 excluded.
 
 Resolvability: a latency difference counts as resolved only if it
-exceeds the across-pass spread and the within-pass dispersion of both
-models. The measured overhead floor is 0.00261 ms; the two
+exceeds the across-pass spread of both models compared (the artefact
+stores per-pass medians and p95, so the rule is applied here on the
+across-pass spread). The measured overhead floor is 0.00261 ms; the two
 duplicate-architecture controls give an empirical noise floor of
 0.0001 ms (question_only 0.0261 against image_only 0.0262; concat
-0.0303 against meanpatch_concat 0.0304), and per-item across-pass
-spreads are 0.0001-0.0014 ms except the reasoner's 0.0625 ms.
-Differences above about 0.002 ms are therefore resolved.
+0.0303 against meanpatch_concat 0.0304). Across-pass spreads are
+0.0001-0.0014 ms for the 20 heads and 0.0625 ms for the reasoner, so
+head-only differences above about 0.002 ms are resolved. The four
+encoder towers are far noisier — 0.0049 (CLIP text), 0.0184 (SigLIP
+text), 0.0574 (CLIP image) and 0.1279 ms (SigLIP image) — so any
+end-to-end comparison must add the relevant tower spreads, and
+differences of a few hundredths of a millisecond between pipelines are
+not resolved. GPU clocks fell from 2340 MHz at 44 C in pass 1 to
+1590 MHz at 77-78 C in passes 2 and 3 under sustained load; the
+reported medians are medians across passes, and head spreads remained
+at or below 0.0014 ms throughout.
 
 Blinding: dev only; test_clean_targets.csv was never read; nothing was
 trained or tuned.
@@ -140,9 +149,18 @@ Pareto fronts (raw-distribution accuracy against each cost axis):
   vocab1000_product@250k.
 - amortised: image_only@40k, vocab1000_question_only@250k,
   vocab1000_concat@250k, vocab1000_product@250k.
+- head-only memory footprint: direct_linear@40k, question_only@250k,
+  siglip_question_only@250k, product_576k@250k, siglip_concat@250k,
+  vocab1000_concat@250k, vocab1000_product@250k.
 - end-to-end memory footprint: question_only@250k,
   vocab1000_question_only@250k, product_576k@250k,
   vocab1000_concat@250k, vocab1000_product@250k.
+
+Front membership separated by less than one seed standard deviation in
+accuracy (about 0.002-0.003 raw) or 0.002 ms in latency is not
+resolved; the amortised front's image_only@40k has raw accuracy 0.18073,
+far below every blind floor, and is a front artefact rather than a
+usable operating point.
 
 Best under each criterion (blind floors: 0.38377 for CLIP top-100,
 0.38737 for SigLIP top-100, 0.39890 for CLIP top-1000; the global blind
@@ -165,14 +183,28 @@ blind vocab1000_question_only@250k, because accuracy does not tend to
 zero as cost tends to zero. The above-blind-floor criteria are the
 defensible ones.
 
+Two of these rows are ties rather than measured separations and must be
+read as such. The lowest-full-pipeline winner beats question_only@250k
+by 0.00009 ms, an order of magnitude below the 0.0001 ms noise floor;
+it is a latency tie resolved on accuracy by the recorded tie-break. The
+best-trade-off-per-parameter winner, product_576k@250k, leads
+concat@250k by 0.00012 raw accuracy against a seed standard deviation of
+about 0.0025, so that ordering — and the corresponding parameter and
+head-footprint front memberships — is not resolved.
+
 ## Decisions and problems
 
 (a) The frozen encoder dominates, and the head is nearly free. A CLIP
 query costs 2.2510 ms (image) plus 1.7309 ms (text) on the GPU and a
-further 2.295 ms of CPU decode; the global heads add 0.016-0.045 ms,
-which is 0.4 to 1.1 per cent of the full pipeline. Image decode
-(2.295 ms) costs slightly more than image encoding (2.2510 ms), which
-no earlier project artefact recorded. Caching image features across the
+further 2.295 ms of CPU decode; the global heads add 0.0162-0.0469 ms,
+which is 0.26 to 0.71 per cent of the full pipeline for image-using
+heads (up to 1.46 per cent for the blind question-only head, whose
+pipeline omits the image tower and decode entirely). CPU image decode
+(2.295 ms, p5-p95 1.94-3.06) and GPU image encoding (2.2510 ms,
+across-pass spread 0.0573) are comparable in magnitude and their
+ordering is not resolved by these measurements; that decode costs about
+as much as encoding is itself new to the project record. Caching image
+features across the
 ~10 questions per image cuts a CLIP query from 6.35 ms to 2.25 ms, a
 2.8-fold reduction, and is by far the most valuable engineering choice
 available. The head-versus-head comparisons that occupied V2 and V3 are
@@ -186,8 +218,12 @@ comparable to a 2048-wide fusion input); SigLIP-B/16 gains +0.0090 at
 1.56 times the pipeline cost, 2.4 times the image-tower latency and 4.3
 times lower batch throughput; the latent-query reasoner gains +0.0104
 at 1.21 times the pipeline cost and 1.60 times the amortised cost. On
-every latency front the only Pareto-optimal models are top-1000 global
-heads: the reasoner and every SigLIP configuration are dominated.
+both end-to-end latency fronts (GPU encoder plus head, and full
+pipeline) the only Pareto-optimal models are top-1000 global heads; the
+head-only and amortised fronts additionally admit direct_linear@40k and
+image_only@40k respectively, both far below every blind floor. The
+reasoner and every SigLIP configuration are dominated on all four
+latency fronts.
 Sharpest single statement: vocab1000_product@250k is both more accurate
 (0.4904 against 0.4594) and cheaper (6.35 against 7.71 ms) than the
 21.1M-parameter reasoner it is compared with, using 16 times fewer
@@ -204,12 +240,16 @@ times slower at cached-feature inference" is corroborated under the new
 protocol at 31.0 times (1.3968 against 0.0450 ms), even though the
 absolute numbers differ from the superseded measurement.
 
-(d) Memory: the frozen encoder sets the floor. The end-to-end footprint
-is 589-593 MiB for every CLIP configuration and 785-788 MiB for every
-SigLIP configuration; the head moves that floor by 0.4 MiB
-(direct_linear) to 81.4 MiB (the reasoner, about 14 per cent of the
-CLIP floor). Head-only footprints span 2.20 to 81.40 MiB. Reporting only
-head memory would overstate how much the head choice matters.
+(d) Memory: the frozen encoder sets the floor. End-to-end footprints are
+580.1 MiB (question_only), 581.8 (vocab1000_question_only), 587.3
+(direct_linear), 588.1 (image_only) and 589-593 MiB for the CLIP
+multimodal global heads, 667.4 MiB for the reasoner, and 778.9 MiB
+(siglip_question_only) to 785-788 MiB for the SigLIP heads. The head
+therefore moves the floor by 0.40 MiB (direct_linear) to 81.40 MiB (the
+reasoner, about 14 per cent of the CLIP floor); head-only footprints
+span 0.40 to 81.40 MiB. Reporting only head memory would overstate how
+much the head choice matters, and reporting only the floor would hide
+the reasoner's 76 MiB premium over a global head.
 
 (e) Scope and limits. Development-set results; the clean-test embargo is
 untouched; nothing was trained or tuned. Batch-1 latency is
@@ -221,14 +261,22 @@ per pass, because allocator behaviour is deterministic for a fixed call
 sequence; no memory spread is claimed. The reasoner's accuracies are
 three-seed means against five-seed means elsewhere. Cached-feature sizes
 per query differ in dtype by design (fp32 global stores, fp16 token
-stores), so the reasoner's cache entry is about 17.5 times larger than a
-global head's; this is recorded in results.json but is not folded into
-any latency figure.
+stores), so the reasoner's 64,512-byte cache entry is 15.75 times a CLIP
+global head's 4,096 bytes (10.5 times SigLIP's 6,144); this is recorded
+in results.json but is not folded into any latency figure. preflight.json
+was written during the round-01 pin (7f89074, dirty tree) and predates
+the executed pin; the identical gates, including all 189 checkpoint
+reproductions, were re-run inside the f8a5580 execution and are recorded
+in run.log. The raw-distribution figure for vocab1000_product@250k is
+0.4904 here (computed from unrounded inputs) against 0.4905 in
+docs/experiments/e3_vocab1000.md (computed from four-decimal inputs);
+the E7a value is the one to quote.
 
 (f) Consequence for the freeze (F1). On the measured evidence the
 efficiency argument of the dissertation is strongest for small global
-heads over a frozen dual encoder with a large answer vocabulary, and the
-final model list should include at least one top-1000 global head. The
+heads over a frozen dual encoder with a large answer vocabulary, which
+supports considering at least one top-1000 global head for the final
+model list. The
 reasoner remains scientifically important as the controlled negative and
 scale-reversal result, but it is not on any efficiency Pareto front. No
 freeze decision is taken here.
