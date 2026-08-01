@@ -90,7 +90,7 @@ the 7,714-question top-100 dev view):
 | scale | model | head accuracy | tail accuracy |
 |---|---|---|---|
 | 40k | fusion | 0.5215 | 0.1588 |
-| 40k | product | 0.5228 | 0.1698 |
+| 40k | product | 0.5228 | 0.1697 |
 | 250k | concat | 0.5537 | 0.2679 |
 | 250k | product | 0.5634 | 0.2660 |
 | 250k | fusion | 0.5621 | 0.2504 |
@@ -116,6 +116,11 @@ questions, so this comparison is row-fair):
 | top-1000 concat (E3) | 0.4911 x 0.9819 | 0.4822 |
 | top-1000 product (E3) | 0.4995 x 0.9819 | 0.4905 |
 
+The derived cells use the rounded factors shown; recomputing from the
+stored five-decimal values gives gains of +0.0361 (concat), +0.0375
+(fusion) and +0.0413 (product), so the honest range is about +3.6 to
++4.1 points.
+
 Efficiency: total wall time 0.34 h for the build, both idempotence
 passes, delta extraction, 40 runs and the analysis; head training
 times remain seconds (40k) to about a minute (250k) per run.
@@ -126,12 +131,14 @@ times remain seconds (40k) to about a minute (250k) per run.
 pays. Growing the closed set to 1000 answers raises dev-distribution
 coverage from 77.1% to 98.2%. On the shared head rows (the exact
 top-100 dev view), the 1000-way fusion head loses about 2.0 points at
-250k (0.5621 seed-0 against the stored 0.5823 five-seed mean) — the
-price of competing over ten times as many classes — but the recovered
-tail (2,109 dev questions, accuracy 0.25-0.27 at 250k) more than
-compensates: on the full raw distribution the top-1000 heads answer
-about 3.6 to 4.2 points more of all dev questions correctly than their
-top-100 counterparts. The dissertation's efficiency claim should be
+250k (0.5621 seed-0 against the stored 0.5823 five-seed mean) —
+consistent with competing over ten times as many classes and with the
+smaller head-answer share of the fixed training budget; the two
+mechanisms are confounded here — but the recovered tail (2,109 dev
+questions, accuracy 0.25-0.27 at 250k) more than compensates: on the
+full raw distribution the top-1000 heads answer about 3.6 to 4.1
+points more of all dev questions correctly than their top-100
+counterparts. The dissertation's efficiency claim should be
 stated on this raw-distribution basis, where the larger vocabulary
 strictly helps.
 

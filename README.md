@@ -24,8 +24,8 @@ the multi-step deficit stays in the same range, so the compositional
 deficit now persists across two frozen encoders. E3 (the 1000-answer
 vocabulary experiment) completed on 1 August 2026: coverage of the raw dev
 distribution rises from 77.1% to 98.2%, and on that full distribution the
-1000-answer heads answer about 3.6 to 4.2 points more questions correctly,
-despite a roughly 2-point class-competition cost on the shared rows. The
+1000-answer heads answer about 3.6 to 4.1 points more questions correctly,
+despite a roughly 2-point cost on the shared rows. The
 strengthening programme (E1-E3) is complete; the model-list freeze and the
 blinded clean-test evaluation are the remaining steps.
 Supervisor design feedback will be recorded when available. The clean-test

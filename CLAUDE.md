@@ -87,7 +87,8 @@ hash no longer matches the worktree.
   under the unchanged protocol (partition reused verbatim; the first 100
   vocabulary entries gated identical to answer_vocab_v2.json): dev coverage
   rises from 0.7711 to 0.9819; the 1000-way heads lose about 2 points on the
-  shared head rows to class competition but win about +3.6 to +4.2 points of
+  shared head rows (class competition and the smaller head-answer share of
+  the fixed budget are confounded) but win about +3.6 to +4.1 points of
   raw-distribution accuracy (in-vocab accuracy times coverage) at 250k; the
   tail (ranks 101-1000) is data-hungry (fusion 0.1588 at 40k to 0.2504 at
   250k, seed 0). Development results only; see

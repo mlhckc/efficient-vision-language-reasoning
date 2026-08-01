@@ -68,7 +68,7 @@ The present state is:
   reused verbatim; top-100 prefix of the new vocabulary gated identical
   to answer_vocab_v2.json), dev coverage rises 0.7711 to 0.9819, the
   1000-way heads lose about 2 points on the shared head rows but gain
-  about +3.6 to +4.2 points of raw-distribution accuracy at 250k, and
+  about +3.6 to +4.1 points of raw-distribution accuracy at 250k, and
   tail accuracy is strongly data-dependent. The strengthening programme
   (E1-E3) is complete; F1 (freeze) and F2 (blinded clean-test
   evaluation) remain, each requiring explicit user authorization.
