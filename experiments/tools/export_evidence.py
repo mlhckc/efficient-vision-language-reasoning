@@ -40,6 +40,8 @@ HASH_ONLY_NAMES = {"preservation_before.json", "preservation_after.json"}
 HASH_ONLY_SOURCES = (
     (RESULTS_DIR, "**/*.pt"),
     (PROJECT_ROOT / "data" / "v2", "**/*.h5"),
+    (PROJECT_ROOT / "data" / "v2_siglip", "**/*.h5"),
+    (PROJECT_ROOT / "data" / "v2_1000", "**/*.h5"),
     (PROJECT_ROOT / "data" / "v3", "**/*.h5"),
     (PROJECT_ROOT / "embeddings", "*.h5"),
     (PROJECT_ROOT / "data" / "gqa" / "raw", "*_questions.json"),

@@ -83,12 +83,25 @@ hash no longer matches the worktree.
   compositional deficit now persists across two frozen dual-encoders, three
   scales and heads from 0.1M to 21.1M parameters. Development results only;
   see docs/experiments/e2_siglip.md.
-- Current gate, updated 31 July 2026: the user authorized the strengthening
+- E3 (completed 1 August 2026) grew the closed answer set to the top 1000
+  under the unchanged protocol (partition reused verbatim; the first 100
+  vocabulary entries gated identical to answer_vocab_v2.json): dev coverage
+  rises from 0.7711 to 0.9819; the 1000-way heads lose about 2 points on the
+  shared head rows to class competition but win about +3.6 to +4.2 points of
+  raw-distribution accuracy (in-vocab accuracy times coverage) at 250k; the
+  tail (ranks 101-1000) is data-hungry (fusion 0.1588 at 40k to 0.2504 at
+  250k, seed 0). Development results only; see
+  docs/experiments/e3_vocab1000.md.
+- Current gate, updated 1 August 2026: the user authorized the strengthening
   programme on 30 July 2026: V3 reasoner scaling to 100k/250k (E1), a
   SigLIP-B/16 frozen-encoder-swap experiment on the global-embedding path (E2)
   and a 1000-answer vocabulary experiment (E3), in that order after the
-  S1-S3 correction and P0-P3 preparation packets, all of which are complete.
-  E1 and E2 completed on 31 July 2026; E3 remains queued.
+  S1-S3 correction and P0-P3 preparation packets. All of E1-E3 are complete
+  (E1 and E2 on 31 July, E3 on 1 August 2026); the strengthening programme
+  is finished. The next steps are the model-list freeze (F1) and only then
+  the blinded clean-test evaluation (F2), both requiring explicit user
+  authorization, with supervisor design feedback still to be recorded when
+  available.
   Supervisor design feedback is still to be obtained and recorded when
   available, and the final venue decision will be discussed with Prof. Bober.
   No final clean-test evaluation has occurred; the clean-test embargo is

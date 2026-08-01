@@ -21,8 +21,13 @@ fusion's. E2 (a frozen SigLIP-B/16 encoder swap on the global-embedding
 path) also completed on 31 July 2026: the comparable multimodal heads gain
 about +1.2 to +1.5 points over their CLIP counterparts in every seed while
 the multi-step deficit stays in the same range, so the compositional
-deficit now persists across two frozen encoders. E3 (a 1000-answer vocabulary experiment) remains
-queued.
+deficit now persists across two frozen encoders. E3 (the 1000-answer
+vocabulary experiment) completed on 1 August 2026: coverage of the raw dev
+distribution rises from 77.1% to 98.2%, and on that full distribution the
+1000-answer heads answer about 3.6 to 4.2 points more questions correctly,
+despite a roughly 2-point class-competition cost on the shared rows. The
+strengthening programme (E1-E3) is complete; the model-list freeze and the
+blinded clean-test evaluation are the remaining steps.
 Supervisor design feedback will be recorded when available. The clean-test
 embargo remains unchanged: the clean test remains blinded and no confirmatory
 result has been reported.

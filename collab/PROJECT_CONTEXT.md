@@ -64,7 +64,15 @@ The present state is:
   headline comparisons), while the pooled >=4-step deficit stays in the
   same range as CLIP (SigLIP 0.063-0.102 against CLIP 0.064-0.105), so the
   compositional deficit persists across two frozen dual-encoders. E3
-  remains queued. Supervisor design feedback
+  completed on 1 August 2026: under the unchanged protocol (partition
+  reused verbatim; top-100 prefix of the new vocabulary gated identical
+  to answer_vocab_v2.json), dev coverage rises 0.7711 to 0.9819, the
+  1000-way heads lose about 2 points on the shared head rows but gain
+  about +3.6 to +4.2 points of raw-distribution accuracy at 250k, and
+  tail accuracy is strongly data-dependent. The strengthening programme
+  (E1-E3) is complete; F1 (freeze) and F2 (blinded clean-test
+  evaluation) remain, each requiring explicit user authorization.
+  Supervisor design feedback
   is still to be obtained and recorded when available, and each
   task-specific scientific and resource gate remains binding. The clean-test
   embargo is unchanged until the final model list and evaluation protocol are
