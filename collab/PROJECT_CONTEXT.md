@@ -17,7 +17,8 @@ The workspace is about 61 GB. Most of that is not authored source:
 - 23 HDF5 embedding/token stores (13 at audit time, plus the five E2
   SigLIP stores and the five E3 v2_1000 stores added 31 July to
   1 August 2026), including 5.8 GB of V3 tokens;
-- 116 model checkpoints and other generated results;
+- 116 model checkpoints and other generated results at audit time (202
+  checkpoints as of 1 August 2026; MANIFEST.json is authoritative);
 - a 5.2 GB project virtual environment;
 - 3.3 GB of package and model caches.
 
