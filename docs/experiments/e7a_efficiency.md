@@ -75,7 +75,7 @@ duplicate-architecture controls give an empirical noise floor of
 0.0001-0.0014 ms for the 20 heads and 0.0625 ms for the reasoner, so
 head-only differences above about 0.002 ms are resolved. The four
 encoder towers are far noisier — 0.0049 (CLIP text), 0.0184 (SigLIP
-text), 0.0574 (CLIP image) and 0.1279 ms (SigLIP image) — so any
+text), 0.0573 (CLIP image) and 0.1279 ms (SigLIP image) — so any
 end-to-end comparison must add the relevant tower spreads, and
 differences of a few hundredths of a millisecond between pipelines are
 not resolved. GPU clocks fell from 2340 MHz at 44 C in pass 1 to
@@ -183,21 +183,27 @@ blind vocab1000_question_only@250k, because accuracy does not tend to
 zero as cost tends to zero. The above-blind-floor criteria are the
 defensible ones.
 
-Two of these rows are ties rather than measured separations and must be
-read as such. The lowest-full-pipeline winner beats question_only@250k
-by 0.00009 ms, an order of magnitude below the 0.0001 ms noise floor;
-it is a latency tie resolved on accuracy by the recorded tie-break. The
-best-trade-off-per-parameter winner, product_576k@250k, leads
-concat@250k by 0.00012 raw accuracy against a seed standard deviation of
-about 0.0025, so that ordering — and the corresponding parameter and
-head-footprint front memberships — is not resolved.
+Two of these rows are ties or near-ties rather than firm separations and
+must be read as such. The lowest-full-pipeline winner beats
+question_only@250k by 0.00009 ms, more than twenty times below the
+0.002 ms resolvability threshold; it is a latency tie resolved on
+accuracy by the recorded tie-break. The best-trade-off-per-parameter
+winner, product_576k@250k, leads concat@250k by 0.00294 raw accuracy,
+about 1.2 seed standard deviations (0.00245), so the per-parameter
+winner is marginal rather than firmly separated; because concat@250k
+carries both more parameters (576,100 against 574,687) and a larger
+head footprint (2.205 against 2.201 MiB), a within-noise reversal would
+place it on the parameter and head-footprint fronts alongside
+product_576k@250k rather than displace it. The same head's 0.00012 lead
+over fusion@250k is genuinely unresolved but has no front consequence,
+because fusion@250k is dominated on every axis by vocab1000_concat@250k.
 
 ## Decisions and problems
 
 (a) The frozen encoder dominates, and the head is nearly free. A CLIP
 query costs 2.2510 ms (image) plus 1.7309 ms (text) on the GPU and a
 further 2.295 ms of CPU decode; the global heads add 0.0162-0.0469 ms,
-which is 0.26 to 0.71 per cent of the full pipeline for image-using
+which is 0.26 to 0.74 per cent of the full pipeline for image-using
 heads (up to 1.46 per cent for the blind question-only head, whose
 pipeline omits the image tower and decode entirely). CPU image decode
 (2.295 ms, p5-p95 1.94-3.06) and GPU image encoding (2.2510 ms,

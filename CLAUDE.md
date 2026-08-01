@@ -96,8 +96,9 @@ hash no longer matches the worktree.
 - E7a (completed 1 August 2026) measured, under one protocol, the cost of
   every stored head plus both frozen encoders: the encoder dominates
   (CLIP 2.2510 ms image + 1.7309 ms text on GPU plus 2.295 ms CPU decode,
-  against 0.0162-0.0469 ms for the global heads, 0.26-0.71 per cent of
-  the full pipeline), caching image features across about 10 questions
+  against 0.0162-0.0469 ms for the global heads, 0.26-0.74 per cent of
+  the full pipeline for image-using heads), caching image features
+  across about 10 questions
   per image cuts a query from 6.35 to 2.25 ms, and on both end-to-end
   latency Pareto fronts the only optimal models are top-1000 global
   heads. The top-1000 product head at 250k is both more accurate
