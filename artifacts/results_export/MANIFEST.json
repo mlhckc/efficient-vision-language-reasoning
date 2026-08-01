@@ -1,5 +1,5 @@
 {
-  "exported_at_commit": "0b3b61c",
+  "exported_at_commit": "f8a5580",
   "files": [
     {
       "bytes": 812984653,
@@ -689,6 +689,55 @@
       "exported": true,
       "path": "results/experiments/e3_vocab1000/runs_interim.json",
       "sha256": "2d8138a03661f6279284f83cfc7d951446c5befe6afe19bbe101fd1cdae9a328"
+    },
+    {
+      "bytes": 77837,
+      "export_path": "artifacts/results_export/e7a_efficiency/accuracy_vs_head_latency.png",
+      "exported": true,
+      "path": "results/experiments/e7a_efficiency/accuracy_vs_head_latency.png",
+      "sha256": "6a17da75ed8e58c23942df4ab7a6ba964612f9179a9bbf19fc257264f6c9de4d"
+    },
+    {
+      "bytes": 83603,
+      "export_path": "artifacts/results_export/e7a_efficiency/accuracy_vs_latency.png",
+      "exported": true,
+      "path": "results/experiments/e7a_efficiency/accuracy_vs_latency.png",
+      "sha256": "4bb381196cb614d9f2524032bd797f1e5b9b9de38a7800210b6e16a81b0a294c"
+    },
+    {
+      "bytes": 81975,
+      "export_path": "artifacts/results_export/e7a_efficiency/accuracy_vs_memory.png",
+      "exported": true,
+      "path": "results/experiments/e7a_efficiency/accuracy_vs_memory.png",
+      "sha256": "ea175b0a9b861a9236981e5ab7320e02a8d75d59e2bb3828e51496dbdb85ae3f"
+    },
+    {
+      "bytes": 82952,
+      "export_path": "artifacts/results_export/e7a_efficiency/accuracy_vs_params.png",
+      "exported": true,
+      "path": "results/experiments/e7a_efficiency/accuracy_vs_params.png",
+      "sha256": "926042e535bdf688c06a67c8368500fbde06a9516c92b0d68c4e592ec9bb849f"
+    },
+    {
+      "bytes": 65409,
+      "export_path": "artifacts/results_export/e7a_efficiency/measurements_interim.json",
+      "exported": true,
+      "path": "results/experiments/e7a_efficiency/measurements_interim.json",
+      "sha256": "481e446d715d2172755ae201a45ecfb711d1a080905c03b51563f8cbcdb68092"
+    },
+    {
+      "bytes": 1662,
+      "export_path": "artifacts/results_export/e7a_efficiency/preflight.json",
+      "exported": true,
+      "path": "results/experiments/e7a_efficiency/preflight.json",
+      "sha256": "1fd19c5675e2b69a24740c7a5c5ce3ddd79fa9af8b568b329410061d548b67be"
+    },
+    {
+      "bytes": 99306,
+      "export_path": "artifacts/results_export/e7a_efficiency/results.json",
+      "exported": true,
+      "path": "results/experiments/e7a_efficiency/results.json",
+      "sha256": "368ba5c2a149953193cf237bdf77023c17b244540ef7b9bfac55cb5a7fdc1a85"
     },
     {
       "bytes": 537,

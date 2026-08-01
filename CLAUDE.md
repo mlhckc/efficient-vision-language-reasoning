@@ -93,6 +93,18 @@ hash no longer matches the worktree.
   tail (ranks 101-1000) is data-hungry (fusion 0.1588 at 40k to 0.2504 at
   250k, seed 0). Development results only; see
   docs/experiments/e3_vocab1000.md.
+- E7a (completed 1 August 2026) measured, under one protocol, the cost of
+  every stored head plus both frozen encoders: the encoder dominates
+  (CLIP 2.2510 ms image + 1.7309 ms text on GPU plus 2.295 ms CPU decode,
+  against 0.016-0.045 ms for the global heads), caching image features
+  across about 10 questions per image cuts a query from 6.35 to 2.25 ms,
+  and on every latency Pareto front the only optimal models are top-1000
+  global heads. The top-1000 product head at 250k is both more accurate
+  (0.4904 against 0.4594 raw-distribution) and cheaper (6.35 against
+  7.71 ms) than the 21.1M reasoner. Parameter count is a poor latency
+  proxy (fusion is 48% slower than concat_wide at equal parameters).
+  Supersedes the V1 stage-5 and src/efficiency.py-derived latencies.
+  Development results only; see docs/experiments/e7a_efficiency.md.
 - Current gate, updated 1 August 2026: the user authorized the strengthening
   programme on 30 July 2026: V3 reasoner scaling to 100k/250k (E1), a
   SigLIP-B/16 frozen-encoder-swap experiment on the global-embedding path (E2)

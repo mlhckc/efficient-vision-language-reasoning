@@ -1,0 +1,67 @@
+{
+  "e7a_preflight": {
+    "accuracy_points": 39,
+    "architectures": [
+      "question_only",
+      "image_only",
+      "concat",
+      "concat_wide",
+      "fusion",
+      "fusion_narrow",
+      "product_576k",
+      "difference_576k",
+      "product_natural",
+      "difference_natural",
+      "direct_linear",
+      "meanpatch_concat",
+      "reasoner",
+      "siglip_question_only",
+      "siglip_concat",
+      "siglip_product",
+      "siglip_fusion",
+      "vocab1000_question_only",
+      "vocab1000_concat",
+      "vocab1000_product",
+      "vocab1000_fusion"
+    ],
+    "checkpoints_reproduced": 189,
+    "coverage": {
+      "100": 0.771092,
+      "1000": 0.981907
+    },
+    "gpu_state": {
+      "foreign_compute_pids": [],
+      "gpu_query": "580.126.09, 210 MHz, 405 MHz, 32, 13.26 W, 0 %"
+    }
+  },
+  "metadata": {
+    "batch_size": 256,
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "deterministic": true,
+    "device": "cuda",
+    "dropout": 0.3,
+    "embed_dim": 512,
+    "git_commit": "7f89074",
+    "git_dirty": true,
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "h5py_version": "3.16.0",
+    "hidden_dim": 512,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "n_train": 40000,
+    "n_val": 8000,
+    "numpy_version": "2.5.0",
+    "open_clip_version": "3.3.0",
+    "pandas_version": "3.0.3",
+    "python": "3.12.3",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "timestamp": "2026-08-01T21:20:59",
+    "top_k_answers": 100,
+    "torch": "2.12.1+cu130",
+    "weight_decay": 0.0001
+  }
+}
