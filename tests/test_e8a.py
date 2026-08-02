@@ -614,10 +614,13 @@ def test_selection_and_early_stopping():
     check("early stopping keeps the best epoch", result["best_epoch"] == 1)
 
     # An improvement resets the counter, so the run continues past patience.
+    # Nine non-improving epochs, an improvement at 11, then nine more: the
+    # counter reaches 9 twice and never 10, so all 20 epochs run.
     result = drive_selection([0.5] + [0.4] * 9 + [0.6] + [0.4] * 9,
                              patience=10)
     check("an improvement resets the patience counter",
-          result["epochs_run"] == 19 and result["best_epoch"] == 11,
+          result["epochs_run"] == 20 and result["best_epoch"] == 11
+          and not result["stopped_early"],
           f"epochs_run {result['epochs_run']}, best_epoch "
           f"{result['best_epoch']}")
 
