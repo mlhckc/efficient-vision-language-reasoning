@@ -77,7 +77,10 @@ stderr) recorded per run:
 - `data/v3_slm_tokens/e8a_135m_A1r_train40k_dev.h5` — 0.4638 GiB, SHA-256
   `f42e36b7dd2c27f9c1e3e695a57764a5ac49c54bde44a4ebe702d8e8afce4476`
 - `results/experiments/e8a_question_encoder/extraction.json`, `gates.json`,
-  `pilot.json`, `stage8_projection.json`
+  `pilot.json`, `stage8_projection.json`. `extraction.json` predates the
+  user's G20 decision and was deliberately not rewritten: its wording reflects
+  the interpretation in force when the run executed, and its numbers are
+  unaffected by the decision.
 - `results/experiments/e8a_question_encoder/checkpoints/` — two selected
   checkpoints, 81.66 MiB each, hashed in `pilot.json`
 - `results/experiments/e8a_question_encoder/correctness_{A1,A1r}_seed0.npz` —
@@ -131,10 +134,30 @@ range, so every finite bfloat16 value inside float16's exponent range is
 exactly representable. The gate can still fail on overflow or non-finite
 values, which is the failure mode it genuinely detects.
 
-The other comparison section 18.1 mentions — stored values against a float32
-model forward — is **0.04462 for A1 and 0.02553 for A1r**, which would not
-meet the 1e-3 threshold. See "Decisions and problems" for how this was handled
-and why it is escalated rather than resolved.
+Measured separately over the same fixed sample and recorded as a
+**compute-precision sensitivity diagnostic** under canonical section 18.1 as
+amended: the difference between the stored values and an independently
+recomputed fp32 model forward is, as a **relative L2**, **0.04462 for A1 and
+0.02553 for A1r**; the corresponding maximum absolute deviations are 2.86133
+and 0.185956, and the per-arm percentiles are in `extraction.json`. No
+threshold binds any of them and none is a G20 pass or fail value. They are
+disclosed because they are the only recorded quantities bearing on the
+numerical fidelity of the extraction as a whole. See "Decisions and problems"
+for the user's decision of 2 August 2026 that settled which comparison G20
+gates.
+
+**What the write-and-reload leg was for these two stores.** Canonical section
+18.1 as amended states that the leg is discharged by reopening the written
+store and verifying it against the values held before the write. For A1 and
+A1r that verification was structural — dataset shape, questionId count, and a
+256-row prefix of the state block compared against memory — and it was not
+recorded in `extraction.json`. The whole-store comparison now in
+`extract_hidden.py`, covering all 426,790 state rows plus the offset and length
+indexes, binds subsequent extractions. Neither store was regenerated: the user
+directed that valid stores not be regenerated unnecessarily, extraction is
+deterministic, the A1 store already hashed byte-identically across two separate
+processes, and both stores were then consumed end to end by 14 and 13 training
+epochs and five evaluation conditions each.
 
 ### Token budget
 
@@ -284,22 +307,25 @@ store hashed byte-identically to the pre-review one, so nothing was lost and
 the incident additionally demonstrates cross-process extraction determinism.
 Reported to the user rather than absorbed.
 
-**Section 18.1 admits two readings and they disagree.** Reading A gates the
-storage cast (bfloat16 forward against its float16 round trip); reading B
-gates the stored values against a float32 model forward. Reading A passes
-trivially; reading B fails for both arms, at 0.0446 and 0.0255 against 1e-3.
-Reading A was adopted, and the reasons are recorded in `extraction.json`
-rather than asserted: section 18.1's own remedy — "if fp16 fails, bf16 or fp32
-**storage** is evaluated" — can only change the storage format and cannot
-reduce a forward-precision gap, and the only way to meet reading B's threshold
-would be to upcast the frozen language model's forward, which section 20
-forbids in terms ("held in their native bfloat16 at all times, including
-during evaluation — they are never upcast"). Reading B therefore has no
-implementable remedy inside the frozen protocol. Both numbers are recorded per
-arm, together with `would_pass_1e-3_if_gated: false`. **This is escalated to
-the user for a ruling before the full core matrix is authorised.** It does not
-affect the pilot's accuracy or resource conclusions, but the two written
-stores stand or fall with the ruling.
+**Section 18.1 admitted two readings; the user has since resolved it.** As
+written, "fp16 storage is compared against fp32 on the fixed sample" could
+mean the storage cast against the output it was cast from, or the stored
+values against an independently recomputed fp32 model forward. The first
+passes at exactly 0.0; the second is 0.0446 for A1 and 0.0255 for A1r, which
+would not meet 1e-3. The pilot adopted the first, recorded both numbers per
+arm, and escalated rather than deciding for the protocol.
+
+**The user's decision of 2 August 2026 makes G20 a storage round-trip fidelity
+gate**, comparing the frozen model's output under the authorised compute
+precision against that same output after the storage cast, write and reload,
+and explicitly not using an independently recomputed full-fp32 forward as its
+pass or fail reference. The storage round-trip deviations of 0.0 therefore
+pass G20 and both stores remain valid. The fp32-forward differences remain
+disclosed as **compute-precision sensitivity diagnostics**: not storage-cast
+errors, not G20 pass or fail values, never relabelled as zero, and not by
+themselves a reason to regenerate a store. Applied to canonical section 18.1
+by the Phase-1B narrow amendment; the decision is recorded verbatim in the
+bridge packet.
 
 **bfloat16 makes the frozen encoder's output depend on batch shape.** Found by
 a test that was meant to confirm padding invariance and instead failed at 1.25

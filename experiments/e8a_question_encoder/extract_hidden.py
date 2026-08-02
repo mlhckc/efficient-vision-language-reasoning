@@ -190,21 +190,24 @@ def preflight(arm: str, strings, token_ids, device, verbose=True) -> dict:
         "p99_abs_deviation": round(float(delta.flatten().quantile(0.99)), 8),
         "relative_l2": round(float((fp16.float() - fp32_flat).norm()
                                    / fp32_flat.norm()), 8),
+        "name": "compute-precision sensitivity diagnostic",
         "note": "Compares an fp32 model forward against the operative bf16 "
                 "forward stored as fp16. The frozen LM is held in native "
                 "bfloat16 on the operative path (canonical section 20); this "
                 "fp32 forward is a bounded measurement over the fixed sample "
-                "and produces no stored value. This is the quantity that "
-                "reading B of section 18.1 would gate at 1e-3; it does not "
-                "meet that threshold, and the g20_precision block above "
-                "records why reading A is adopted and escalated rather than "
-                "resolved silently. It is the only recorded quantity that "
+                "and produces no stored value. Per canonical section 18.1 as "
+                "amended: this is a COMPUTE-PRECISION SENSITIVITY DIAGNOSTIC. "
+                "It is NOT a storage-cast error, it is NOT a G20 pass or fail "
+                "value, and no threshold binds it. It is never hidden, "
+                "deleted or relabelled as zero, and a store is not "
+                "regenerated merely because it is non-zero. It is reported "
+                "for every arm because it is the only recorded quantity that "
                 "carries information about the numerical fidelity of the "
-                "extraction as a whole, so it is reported for every arm "
-                "whether or not a threshold binds it.",
-        "would_pass_1e-3_if_gated": bool(
+                "extraction as a whole.",
+        "is_a_g20_pass_fail_value": False,
+        "exceeds_the_g20_threshold_but_is_not_gated_by_it": bool(
             float((fp16.float() - fp32_flat).norm() / fp32_flat.norm())
-            < e8a.G20_RELATIVE_L2_MAX),
+            > e8a.G20_RELATIVE_L2_MAX),
     }
 
     # --- G20 downstream effect on the projected sequence ------------------
@@ -247,6 +250,11 @@ def preflight(arm: str, strings, token_ids, device, verbose=True) -> dict:
             "threshold_relative_l2": e8a.G20_RELATIVE_L2_MAX,
             "threshold_non_finite_after_cast": 0,
             "passed": bool(passed),
+            "write_reload_leg_recorded_at": (
+                "stores_written[arm].g20_write_reload_leg. Canonical section "
+                "18.1 counts that leg towards the gate's pass; it is asserted "
+                "before the partial store is renamed, so no store can exist "
+                "without it having passed."),
             "why_the_reconstruction_error_is_exactly_zero": (
                 "bfloat16 carries 8 mantissa bits and float16 carries 11 in "
                 "the normal range, so every finite bfloat16 value whose "
@@ -261,34 +269,18 @@ def preflight(arm: str, strings, token_ids, device, verbose=True) -> dict:
                 "the bfloat16 forward it is storing. The gate would fail if "
                 "an activation exceeded float16 range, which is the failure "
                 "mode it can genuinely detect."),
-            "interpretation_of_section_18_1": (
-                "Section 18.1 says 'fp16 storage is compared against fp32 on "
-                "the fixed sample' and then pre-registers 'relative L2 "
-                "reconstruction error below 1e-3'. Two readings exist. "
-                "READING A, implemented here as the gate: the compared "
-                "quantities are the stored float16 values against the "
-                "operative forward they were cast from, i.e. the "
-                "RECONSTRUCTION error of the storage cast, which is what the "
-                "word 'reconstruction' and the neighbouring 'non-finite "
-                "count before cast / after cast' both point at, and which is "
-                "the only quantity section 18.1's own remedy can act on: "
-                "'if fp16 fails, bf16 or fp32 storage is evaluated' changes "
-                "the storage format and cannot reduce a forward-precision "
-                "gap. READING B: the compared quantities are the stored "
-                "float16 values against a float32 model forward. That "
-                "quantity is measured and recorded below as "
-                "fp32_reference_diagnostic; on this sample it is 0.0446 (A1) "
-                "and 0.0255 (A1r), which would NOT meet 1e-3. Under reading "
-                "B the gate fails for every arm and the only remedy would be "
-                "to abandon the bfloat16 policy that section 20 pins as "
-                "operative ('the frozen language models are held in their "
-                "native bfloat16 at all times, including during evaluation; "
-                "they are never upcast'), which section 18.1 does not "
-                "authorise. Reading A is therefore adopted and BOTH numbers "
-                "are reported. This is a disclosed interpretation, not a "
-                "silent one: it is escalated to the user for a ruling before "
-                "the full core matrix is authorised. It does not change what "
-                "is stored, what is trained, or any measured value."),
+            "gate_character": (
+                "storage round-trip fidelity. RESOLVED by the user's decision "
+                "of 2 August 2026 and applied to canonical section 18.1 by "
+                "the Phase-1B narrow G20 amendment. G20 compares the frozen "
+                "model's hidden-state output under the authorised compute "
+                "precision of section 20 against that same output after the "
+                "storage cast, write and reload; the reference is that "
+                "pre-storage output itself, and G20 does NOT use an "
+                "independently recomputed full-fp32 language-model forward as "
+                "its pass or fail reference. The difference against such a "
+                "forward is measured and recorded separately as the "
+                "compute_precision_sensitivity_diagnostic below."),
         },
         "g20_downstream_projection": downstream,
         "fp32_reference_diagnostic": fp32_vs_stored,
@@ -482,12 +474,35 @@ def write_store(arm: str, strings, token_ids, frames, device,
         store.attrs["n_token_rows"] = total_tokens
         store.attrs["lm_state_dict_sha256"] = provenance["state_dict_sha256"]
 
-    # Structural verification on the reopened read-only file before renaming.
+    # G20's write-and-reload leg, verified on the reopened read-only file
+    # before the partial is renamed. The whole store is compared, not a
+    # prefix, so a defective write path cannot pass by chance.
     with h5py.File(partial, "r") as store:
         assert store["states"].shape == (total_tokens, hidden)
         assert len(store["ids"]) == len(question_ids)
-        check = store["states"][:256]
-    assert np.array_equal(check, states[:256])
+        assert store["states"].dtype == np.float16
+        reloaded = store["states"][:]
+        reloaded_offsets = store["offsets"][:]
+        reloaded_lengths = store["lengths"][:]
+    reload_identical = bool(np.array_equal(reloaded, states))
+    index_identical = bool(np.array_equal(reloaded_offsets,
+                                          string_offsets[rows])
+                           and np.array_equal(reloaded_lengths,
+                                              lengths[rows].astype("int32")))
+    if not (reload_identical and index_identical):
+        # Canonical section 18.1: a gate failure is recorded verbatim. Persist
+        # before raising, or the record dies with the process.
+        utils.save_json(
+            {"metadata": utils.run_metadata(),
+             "arm": arm, "gate": "G20 write-and-reload leg", "passed": False,
+             "states_reload_bitwise_identical": reload_identical,
+             "index_reload_bitwise_identical": index_identical,
+             "rows_expected": int(total_tokens),
+             "partial_file_retained": str(partial)},
+            e8a.OUT_DIR / f"FAILED_G20_write_reload_{arm}.json")
+        raise AssertionError(
+            f"{arm}: the written store does not reload bitwise identically; "
+            f"the partial file is retained and the failure is recorded")
     partial.replace(final)
 
     del lm
@@ -508,6 +523,16 @@ def write_store(arm: str, strings, token_ids, frames, device,
         "model_provenance": provenance,
         "preflight_relative_l2": preflight_result["g20_precision"][
             "relative_l2_reconstruction_error"],
+        "g20_write_reload_leg": {
+            "states_reload_bitwise_identical": reload_identical,
+            "index_reload_bitwise_identical": index_identical,
+            "rows_verified": int(total_tokens),
+            "prefix_only": False,
+            "note": "the whole store is reopened read-only and compared "
+                    "against the values held before the write, discharging "
+                    "the write-and-reload leg of G20 named in canonical "
+                    "section 18.1",
+        },
     }
     print(f"[WRITTEN] {record['path']}  {record['gib']} GiB  "
           f"{record['seconds']} s  sha256 {record['sha256'][:16]}...")
