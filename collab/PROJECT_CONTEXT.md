@@ -559,6 +559,89 @@ emoji-heavy output and universal coverage/E2E mandates. The repository-specific
 replacement is `.agents/skills/vqa-research-execution/` plus the two read-only
 Claude agents and `collab/PROTOCOL.md`.
 
+## E8A/E8B/E9 programme: authorisation and binding restrictions (2 August 2026)
+
+The user authorised the E8A frozen-SLM question-encoder branch, the E8B
+frozen-SLM readout and bounded-generation branch, and the E9 evaluation-only
+compact-VLM baselines. The restrictive half is recorded here as well as in
+CLAUDE.md, so it does not live only in the gitignored bridge packets.
+
+Permitted models and roles, and no others: SmolLM2-135M base and SmolLM2-360M
+base as E8A semantic encoders and E8B readouts; FLAN-T5-small as an E8A
+cross-family sensitivity point only, never an answer readout;
+SmolVLM-256M-Instruct and SmolVLM-500M-Instruct as E9 evaluation-only
+baselines, never trained or fine-tuned; deterministic random-initialised
+SmolLM2-135M and SmolLM2-360M as non-pretrained causal controls in both
+branches, pinned by seed and configuration rather than by a model-card
+revision.
+
+Every vision encoder, language model and compact VLM stays frozen. No LM or
+VLM fine-tuning, no LoRA or other adaptation, no unfreezing, no new dataset.
+Generation is bounded to E8B R2 (trie-constrained), E8B R3 (free, fixed token
+cap) and E9 greedy evaluation; no sampling, temperature search, prompt search
+or long-form generation.
+
+E8A is an explicit, experiment-specific exception to the shared-space property
+recorded elsewhere in this document: in E8A the image tokens come from frozen
+CLIP and the question tokens from a frozen small language model, their
+original representation spaces differ, and the common 512-dimensional reasoner
+interface is a learned projection, not a naturally shared pretrained embedding
+space.
+
+A5 (SmolLM2-360M question-only) and A8c (frozen CLIP image embedding
+concatenated with the projected pooled 360M question embedding) are
+unconditional core controls at 40k and at 250k with seeds 0/1/2, decided by the
+user on 2 August 2026. No result-dependent trigger governs them. The
+random-initialised SmolLM2-135M and SmolLM2-360M controls are likewise
+unconditional and authorised in both E8A and E8B at the same scales and seeds.
+
+Scoring and comparison restrictions. No direct comparison is drawn between
+published official-GQA scores and this project's custom development split, in
+either direction: the split, the answer support and the scorer all differ, so
+such a comparison would not be like for like. No semantic matching, synonym
+list, embedding similarity or language-model judging enters any primary score.
+The two reported primary scores are strict raw exact match and one pinned
+VQA-style normalised exact match, both applied identically to predictions and
+to gold answers, and to classifiers and generative systems alike.
+
+Stopping is condition-based with no calendar cutoff. Numeric compute gates halt
+execution and return to the user if a pilot projects any of: one principal run
+above 8 GPU-hours, a hard operational wall-clock halt with a recorded failure
+status; one model aggregate above 35 GPU-hours, raised from 30 by the user on
+2 August 2026; the worst-case remaining-core projection above min(180
+GPU-hours, three times the
+revised expected projection); peak memory above 80 per cent of usable GPU
+memory; or storage above the project allocation. The core ceiling was raised
+from 150 to 180 GPU-hours by the user on 2 August 2026; the per-run, per-arm,
+memory and storage ceilings and the condition-based stopping policy are
+unchanged. Beyond those numeric gates,
+work continues only while it is directly relevant to the P2607 questions, the
+core programme is progressing under the reviewed protocol, F1/F2 and
+dissertation writing are not at material risk, no unresolved blocker remains,
+no uncontrolled search has been introduced, and each experiment has a clear
+hypothesis and control. Priority 1 is the core E8A/E8B/E9 programme; priority 2
+the confirmatory seeds, scales, random and interface-matched controls,
+shuffled-image reliance, compositional-deficit analysis and E7a-compatible
+efficiency measurements; priority 3 optional extensions, only once the core is
+closed. Work stops when the core questions are answered with adequate controls,
+when a further experiment would add breadth without changing the conclusion,
+when the remaining work would threaten F1/F2 or the dissertation, when a new
+model, dependency, dataset or architectural direction would be required, when
+reviewers judge the evidence sufficient, or when expected scientific value
+falls below the cost and schedule risk. Each phase ends with a closure report.
+
+Pair preservation, binding. A1 with A1r, A2 with A2r, B3 with B2 and B4 with
+B4r are inseparable pairs; no pretrained arm runs at a scale where its
+within-size random control does not. No core arm is ever descoped
+automatically: if a compute gate fires, execution stops and returns to the
+user with pair-preserving alternatives.
+
+The clean test stays embargoed and no experiment code may resolve its path. F1
+and F2 remain unauthorised and unstarted. The post-core research backlog is
+recorded but NOT authorised. Any new model, dependency or architectural
+direction requires fresh explicit approval. Phase 1 has not begun and requires
+the user's explicit authorisation.
+
 ## Next permitted decisions
 
 The S1-S3 corrections, the P0-P3 preparation packets and the authorized

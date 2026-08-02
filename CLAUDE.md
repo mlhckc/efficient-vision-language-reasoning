@@ -107,6 +107,68 @@ hash no longer matches the worktree.
   proxy (fusion is 48% slower than concat_wide at equal parameters).
   Supersedes the V1 stage-5 and src/efficiency.py-derived latencies.
   Development results only; see docs/experiments/e7a_efficiency.md.
+- Current gate, updated 2 August 2026 (E8A/E8B/E9 programme). The user
+  authorized the E8A frozen-SLM question-encoder branch, the E8B frozen-SLM
+  readout and bounded-generation branch, and the E9 evaluation-only compact-VLM
+  baselines. Binding restrictions, recorded here and not only in the
+  gitignored bridge packets:
+  Permitted models and roles: SmolLM2-135M base and SmolLM2-360M base as E8A
+  semantic encoders and E8B readouts; FLAN-T5-small as an E8A cross-family
+  sensitivity point only, never as an answer readout; SmolVLM-256M-Instruct
+  and SmolVLM-500M-Instruct as E9 evaluation-only baselines, never trained or
+  fine-tuned; deterministic random-initialised SmolLM2-135M and SmolLM2-360M
+  as non-pretrained causal controls in both branches. No other model.
+  Every vision encoder, language model and compact VLM stays frozen. No LM or
+  VLM fine-tuning, no LoRA or other adaptation, no unfreezing. No new dataset.
+  Generation is bounded to E8B R2 (trie-constrained), E8B R3 (free, fixed
+  token cap) and E9 greedy evaluation; no sampling, temperature search, prompt
+  search or long-form generation.
+  Stopping is condition-based, with no calendar cutoff. Numeric compute gates
+  halt execution and return to the user if a pilot projects any of: one
+  principal run above 8 GPU-hours (a hard operational wall-clock halt with a
+  recorded failure status); one model aggregate above 35 GPU-hours, raised from
+  30 by the user on 2 August 2026; the worst-case remaining-core projection
+  above min(180 GPU-hours, three times
+  the revised expected projection); peak memory above 80 per cent of usable
+  GPU memory; or storage above the project allocation. The core ceiling was
+  raised from 150 to 180 GPU-hours by the user on 2 August 2026; the per-run,
+  per-arm, memory and storage ceilings are unchanged.
+  The clean test stays embargoed and no experiment code may resolve its path.
+  F1 and F2 remain unauthorized and unstarted. The post-core research backlog
+  is recorded but NOT authorized. Any new model, dependency or architectural
+  direction requires fresh explicit approval.
+  A5 (SmolLM2-360M question-only) and A8c (CLIP image concatenated with pooled
+  360M question features) are unconditional core controls at 40k and 250k with
+  seeds 0/1/2. Random-initialised SmolLM2-135M and SmolLM2-360M are authorized
+  in both E8A and E8B, unconditionally, at the same scales and seeds.
+  Scoring and comparison restrictions: no direct comparison between published
+  official-GQA scores and this project's custom development split, in either
+  direction, because the split, the answer support and the scorer all differ;
+  and no semantic matching, synonym list, embedding similarity or
+  language-model judging in any primary score. The two reported primary scores
+  are strict raw exact match and one pinned VQA-style normalised exact match.
+  Condition-based stopping, no calendar cutoff. Work continues while it is
+  directly relevant to the P2607 questions, the core E8A/E8B/E9 programme is
+  progressing under the reviewed protocol, F1/F2 and dissertation writing are
+  not put at material risk, no unresolved scientific or protocol blocker
+  remains, no uncontrolled architecture or hyperparameter search has been
+  introduced, and each experiment has a clear hypothesis, control and expected
+  contribution. Priority 1 is the core programme; priority 2 the confirmatory
+  seeds, scales, controls, reliance, deficit and efficiency measurements;
+  priority 3 optional extensions, only once the core is closed and only after
+  presenting the question, the runtime and what it would delay. Work stops when
+  the core questions are answered with adequate controls, when a further
+  experiment would add breadth without changing the conclusion, when remaining
+  GPU or engineering work would threaten F1/F2 or the dissertation, when a new
+  model, dependency, dataset or architectural direction would be required, when
+  reviewers judge the evidence sufficient, or when expected scientific value
+  falls below the cost and schedule risk. Each phase ends with a closure report.
+  Pair preservation, binding: A1 with A1r, A2 with A2r, B3 with B2 and B4
+  with B4r are inseparable pairs. No pretrained arm runs at a scale where its
+  within-size random control does not. No core arm is ever descoped
+  automatically: if a compute gate fires, execution stops and returns to the
+  user with pair-preserving alternatives.
+  Phase 1 has not begun and requires the user's explicit authorisation.
 - Current gate, updated 1 August 2026: the user authorized the strengthening
   programme on 30 July 2026: V3 reasoner scaling to 100k/250k (E1), a
   SigLIP-B/16 frozen-encoder-swap experiment on the global-embedding path (E2)
@@ -158,17 +220,65 @@ hash no longer matches the worktree.
 ## Locked scope (do not change without asking)
 
 - Task: discriminative VQA as answer classification. No text generation.
+  Narrow exception, approved by the user on 2 August 2026 for the E8A/E8B/E9
+  programme only: greedy short-answer generation is permitted in the E8B R2
+  readout (constrained to the closed answer vocabulary by a prefix trie), the
+  E8B R3 readout (free but bounded by a fixed maximum token count) and the E9
+  compact-VLM evaluation. Sampling, temperature search, prompt search,
+  long-form generation and generation on the clean test before F1/F2
+  authorisation all remain forbidden. Classification remains the primary task.
 - Main dataset: a subset of GQA. VQA v2 is optional and only after GQA works.
 - Encoders: frozen CLIP for both the image and the question, never trained. One
   model is used for both, so the two vectors share the same space.
   A single frozen SigLIP-B-16 encoder-swap experiment on the global-embedding
   path was approved by the user on 30 July 2026 (E2); all encoders remain
   frozen.
+  Narrow exception, approved by the user on 2 August 2026 for the E8A
+  experiment only: E8A creates an explicit, experiment-specific exception to
+  the rule that the image and question representations originate from the same
+  CLIP model and share a pretrained space by construction. In E8A the image
+  tokens come from frozen CLIP ViT-B/32, the question tokens come from a frozen
+  small language model (SmolLM2-135M base, SmolLM2-360M base, or FLAN-T5-small),
+  their original representation spaces are different, and a trainable linear
+  projection maps the language-model states into the common 512-dimensional
+  reasoner interface. That projected interface is a learned common width and is
+  not claimed to be a naturally shared pretrained embedding space. Every
+  disclosure of an E8A result must state this. The freezing guarantee is
+  unchanged: every encoder and every language model stays frozen and is never
+  trained or fine-tuned.
 - Trainable part: lightweight heads over frozen CLIP features. V1/V2 use the
   MLP heads; the approved V3 central contribution is the lightweight
   question-conditioned latent-query reasoner over cached token-level
   features, with cached-token training as the primary pipeline and raw-path
   equivalence and efficiency measured separately. The encoders stay frozen.
+  Narrow exception, approved by the user on 2 August 2026 for the E8A/E8B/E9
+  programme only. What stays trainable: the existing latent-query reasoner
+  under the reviewed recipe, and the existing classifier or readout head where
+  applicable. What is newly trainable: one experiment-specific linear
+  projection per configuration, mapping frozen language-model hidden states
+  into the 512-dimensional reasoner width (E8A) or the 32 reasoner latents into
+  the language model's embedding width (E8B). The projection is the only newly
+  introduced trainable component in the language-model paths; it is not the
+  only trainable component in the pipeline. Also authorised as lightweight,
+  experiment-local heads over frozen features: question-only classifiers over
+  frozen SmolLM2 or FLAN-T5-small question features (arms A4 at 135M and A5 at
+  360M), and global-fusion heads over frozen CLIP image features concatenated
+  with pooled frozen SmolLM2 question features (arms A7c at 135M and A8c at
+  360M). The user decided on 2 August 2026 that A5 and A8c are unconditional
+  core controls, run at 40k and at 250k with seeds 0/1/2; no result-dependent
+  trigger governs them, and the earlier "conditionally authorised 360M" and
+  result-dependent wordings no longer govern. Also authorised in both branches:
+  deterministic random-initialised SmolLM2-135M and SmolLM2-360M, each with
+  architecture and tokenizer configuration identical to its pretrained
+  counterpart, weights created from a pinned seed, fully frozen, used as the
+  non-pretrained causal controls and never tuned separately from the pretrained
+  models; and one lightweight
+  language-model-free readout that consumes all 32 reasoner latents through a
+  pre-registered attention-pooling or lightweight nonlinear readout into the
+  same fixed-vocabulary classifier, parameter-counted and efficiency-measured,
+  existing to isolate the wider latent interface from pretrained-language-model
+  effects. Neither clause authorises unrestricted readout architecture search.
+  E9 compact VLMs are inference-only and have no trainable component.
 - Answer set: top 100 answers first; the 1000-answer vocabulary experiment
   (E3) was approved by the user on 30 July 2026.
 - Shared and V1 settings live in config.py. Experiment-specific constants,
@@ -182,6 +292,32 @@ hash no longer matches the worktree.
 - Do not invent or estimate results. Every number must come from a real run.
 - Do not add datasets, models or dependencies outside this scope without
   asking.
+- Approved by the user on 2 August 2026 for the E8A/E8B/E9 programme only:
+  five pretrained checkpoints plus TWO deterministic random-initialised model
+  controls, each bound to the roles listed below and no others.
+  SmolLM2-135M base: E8A semantic encoder and E8B readout.
+  SmolLM2-360M base: E8A semantic encoder and E8B readout.
+  FLAN-T5-small: E8A cross-family semantic-encoder sensitivity only; FLAN-T5
+  answer-readout experiments are NOT authorised.
+  SmolVLM-256M-Instruct: E9 evaluation-only compact-VLM baseline.
+  SmolVLM-500M-Instruct: E9 evaluation-only compact-VLM baseline. SmolVLM
+  training or fine-tuning is NOT authorised.
+  Random-initialised SmolLM2-135M and random-initialised SmolLM2-360M,
+  extended by the user on 2 August 2026: authorised as non-pretrained causal
+  controls in BOTH branches, as E8A question encoders and as E8B answer
+  readouts, unconditionally at 40k and 250k with seeds 0/1/2. Each uses the
+  identical architecture and tokenizer configuration as its pretrained
+  counterpart, deterministic weights from a pinned seed, no downloaded
+  pretrained weights, all parameters frozen, and no independent hyperparameter
+  tuning. Neither is a downloaded checkpoint and neither has a model-card
+  revision; each is pinned by its seed and by the configuration it is built
+  from. The primary within-size causal comparisons are pretrained minus random
+  at the SAME size; a random 135M model is never the causal control for a
+  pretrained 360M model.
+  Exact official model IDs, pinned revision SHAs, licences, tokenizer hashes
+  and configuration hashes must be verified and recorded in the task packets
+  before any model is downloaded. All are frozen; none is trained or
+  fine-tuned.
 
 ## Environment
 
