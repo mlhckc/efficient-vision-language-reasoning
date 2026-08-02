@@ -859,11 +859,106 @@ def test_a0p_arm(frame, images, device, sample_manifest):
     must_fail("the A0 checkpoint cannot be loaded into an A0p model",
               lambda: e8a.build_e8a_model(512, 0.1, 0).load_state_dict(
                   a0_state))
-    for name in ("e8a_A1_train_40k_seed0.pt", "e8a_A1r_train_40k_seed0.pt"):
-        candidate = e8a.OUT_DIR / "checkpoints" / name
-        if candidate.exists():
-            check(f"A0p does not write over {name}",
-                  not name.startswith(f"e8a_{e8a.A0P_ARM}_"))
+    # Assert against the paths the production code actually constructs, not
+    # against string literals, so the check can fail if a name ever collides.
+    from experiments.e8a_question_encoder import run_a0p
+    a0p_outputs = {
+        e8a.OUT_DIR / "checkpoints"
+        / f"e8a_{run_a0p.ARM}_{run_a0p.SCALE}_seed{run_a0p.SEED}.pt",
+        e8a.OUT_DIR / f"gates_{run_a0p.ARM}.json",
+        e8a.OUT_DIR / f"pilot_{run_a0p.ARM}.json",
+        e8a.OUT_DIR / f"correctness_{run_a0p.ARM}_seed{run_a0p.SEED}.npz",
+    }
+    existing = {p for p in e8a.OUT_DIR.rglob("*")
+                if p.is_file() and ("A1" in p.name or "reasoner_seed" in p.name)}
+    check("no A0p output path collides with an existing A1 or A1r artefact",
+          not (a0p_outputs & existing),
+          f"{len(a0p_outputs)} A0p paths against {len(existing)} A1/A1r files")
+    check("the A0p checkpoint path is arm-specific",
+          all(f"_{run_a0p.ARM}_" in p.name or run_a0p.ARM in p.name
+              for p in a0p_outputs))
+
+
+def test_a0p_production_components(device):
+    """The two components only A0p uses, exercised through the real code.
+
+    `build_a0p_sample_store` in this module is a miniature that re-packs a few
+    rows; it cannot detect a defect in the production adapter. These checks
+    call the production functions themselves.
+    """
+    import h5py
+
+    # The real adapter, against the file's own index. Loading the full store
+    # costs about 2.5 GB, so read the file's index separately and compare.
+    path = e8a.CLIP_TOKEN_DIR / "question_tokens.h5"
+    with h5py.File(path, "r") as raw:
+        ids = [i.decode("utf-8") if isinstance(i, bytes) else str(i)
+               for i in raw["ids"][:]]
+        file_offsets = raw["offsets"][:]
+        file_lengths = raw["lengths"][:]
+        n_rows = raw["tokens"].shape[0]
+    store = e8a.open_clip_question_store()
+    check("the adapter preserves every questionId",
+          len(store.row_of) == len(ids), f"{len(store.row_of):,}")
+    check("the adapter preserves the packed row count",
+          store.states.shape[0] == n_rows, f"{n_rows:,}")
+    sample_ids = [ids[i] for i in (0, 1, 7, 999, len(ids) // 2, len(ids) - 1)]
+    check("the adapter preserves each span exactly",
+          all(store.span(q) == (int(file_offsets[ids.index(q)]),
+                                int(file_lengths[ids.index(q)]))
+              for q in sample_ids))
+    check("the adapter reports no question longer than the token budget",
+          int(store.lengths.max()) <= e8a.TOKEN_BUDGET_L,
+          f"max {int(store.lengths.max())}")
+    check("the adapter labels the store as A0p's and keeps the file attrs",
+          store.attrs["arm"] == e8a.A0P_ARM
+          and store.attrs["ln_final_applied"]
+          and store.attrs["text_projection_applied"]
+          and not store.attrs["normalized"])
+    del store
+
+    # The pinned neutral CLIP question, built by the production function and
+    # compared against an independently recomputed v3_00 text path.
+    padded, mask, provenance = e8a.build_neutral_question_states_clip(device)
+    check("the CLIP neutral question is padded to L and 512-wide",
+          padded.shape == (e8a.TOKEN_BUDGET_L, e8a.CLIP_QUESTION_WIDTH),
+          str(padded.shape))
+    check("its valid positions are SOT, the word and EOT",
+          provenance["valid_positions"] == 3,
+          f"{provenance['valid_positions']} positions, "
+          f"ids {provenance['token_ids']}")
+    check("its mask marks exactly the padding",
+          int((~mask).sum()) == provenance["valid_positions"]
+          and bool(mask[provenance["valid_positions"]:].all()))
+    check("its padded rows are zero",
+          float(np.abs(padded[provenance["valid_positions"]:]).max()) == 0)
+
+    import open_clip
+    model, _, _ = open_clip.create_model_and_transforms(
+        config.CLIP_MODEL_NAME, pretrained=config.CLIP_PRETRAINED)
+    tokenizer = open_clip.get_tokenizer(config.CLIP_MODEL_NAME)
+    model = model.to(device).eval()
+    token_ids = tokenizer([e8a.NEUTRAL_QUESTION_STRING])
+    valid = int(token_ids.argmax(dim=-1)) + 1
+    with torch.no_grad():
+        cast = model.transformer.get_cast_dtype()
+        x = model.token_embedding(token_ids.to(device)).to(cast)
+        x = x + model.positional_embedding.to(cast)
+        x = model.transformer(x, attn_mask=model.attn_mask)
+        reference = ((model.ln_final(x) @ model.text_projection)[0, :valid]
+                     .float().cpu().numpy().astype(np.float16))
+    check("the neutral question reproduces the v3_00 text path exactly",
+          np.array_equal(padded[:valid], reference),
+          "token embedding + positional, transformer under attn_mask, "
+          "ln_final, text_projection, unnormalised")
+    check("the frozen CLIP text tower parameter count is measured, not assumed",
+          e8a.frozen_encoder_parameters("A0p")["parameters"] > 0
+          and e8a.frozen_encoder_parameters("A0p")["parameters"]
+          != e8a.MODEL_PARAMETERS,
+          f"{e8a.frozen_encoder_parameters('A0p')['parameters']:,} against "
+          f"SmolLM2's {e8a.MODEL_PARAMETERS:,}")
+    del model
+    torch.cuda.empty_cache()
 
 
 def test_metadata_completeness():
@@ -967,6 +1062,7 @@ def run() -> None:
         test_interventions_on_sample(frame, stores, images, lms, device,
                                      sample_manifest)
         test_a0p_arm(frame, images, device, sample_manifest)
+        test_a0p_production_components(device)
         test_selection_and_early_stopping()
         test_metadata_completeness()
         test_embargo_and_vocabulary()

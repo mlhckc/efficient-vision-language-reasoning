@@ -190,6 +190,66 @@ def bind_store_to_encoder(arm: str, store, provenance: dict) -> str:
     return str(store.attrs["length_convention"])
 
 
+def rows_used_by(store, manifests) -> np.ndarray:
+    """The packed state rows this run actually reads, deduplicated and sorted.
+
+    A store may cover more rows than a run consumes — the CLIP question store
+    spans the union including the clean-test INPUT rows, which are excluded
+    from every development quantity. Diagnostics must therefore be computed
+    over the rows the run uses, not over the whole file.
+    """
+    wanted = set()
+    for manifest in manifests:
+        frame = pd.read_csv(manifest, dtype={"questionId": str},
+                            keep_default_na=False)
+        for qid in frame["questionId"]:
+            offset, length = store.span(qid)
+            wanted.update(range(offset, offset + length))
+    return np.array(sorted(wanted), dtype="int64")
+
+
+def rms_over_rows(states: np.ndarray, rows: np.ndarray,
+                  chunk: int = 65536) -> float:
+    """Root mean square over selected rows, in chunks and in float64."""
+    total, count = 0.0, 0
+    for start in range(0, len(rows), chunk):
+        block = states[rows[start:start + chunk]].astype(np.float64)
+        total += float((block ** 2).sum())
+        count += block.size
+    return round(float(np.sqrt(total / count)), 5)
+
+
+def frozen_encoder_parameters(arm: str) -> dict:
+    """The frozen encoder's parameter count for this arm, measured.
+
+    Hard-coding the SmolLM2 count for every arm would attribute 134.5M frozen
+    parameters to A0p, which loads no language model at all.
+    """
+    if ARM_SPECS[arm]["encoder"] == "slm_135m":
+        return {"encoder": "SmolLM2-135M, frozen",
+                "parameters": MODEL_PARAMETERS,
+                "basis": "asserted against the canonical table at load time"}
+    import open_clip
+
+    model, _, _ = open_clip.create_model_and_transforms(
+        config.CLIP_MODEL_NAME, pretrained=config.CLIP_PRETRAINED)
+    text_path = [model.token_embedding.weight, model.positional_embedding,
+                 model.text_projection, *model.ln_final.parameters(),
+                 *model.transformer.parameters()]
+    if getattr(model, "attn_mask", None) is not None:
+        pass  # a buffer, not a parameter
+    count = int(sum(p.numel() for p in text_path))
+    trainable = int(sum(p.numel() for p in model.parameters()
+                        if p.requires_grad))
+    del model
+    return {"encoder": f"CLIP {config.CLIP_MODEL_NAME} text tower, frozen",
+            "parameters": count,
+            "trainable_in_the_loaded_clip_model": trainable,
+            "basis": "measured over token_embedding, positional_embedding, "
+                     "transformer, ln_final and text_projection, which is the "
+                     "path v3_00 ran to build the question-token store"}
+
+
 def open_clip_question_store() -> "SLMQuestionStore":
     """The cached frozen-CLIP question tokens, in the same packed layout.
 

@@ -84,8 +84,9 @@ def assert_namespace_isolation() -> dict:
                             for k, v in ours.items()},
             "a0_checkpoints_present": a0_checkpoints,
             "a0_checkpoint_sha256_before": a0_hashes,
-            "a1_a1r_artefacts_untouched": sorted(
-                p.name for p in e8a.OUT_DIR.glob("*A1*")),
+            "a1_a1r_sha256_before": {
+                p.name: e8a.sha256_file(p)
+                for p in sorted(e8a.OUT_DIR.rglob("*A1*")) if p.is_file()},
             "passed": True}
 
 
@@ -101,83 +102,101 @@ def main() -> int:
     device = utils.get_device()
     e8a.OUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    recipe = e8a.gate_g0_recipe()
-    gate_record = {
+    gate_record: dict = {}
+
+    def persist_and_reraise(error):
+        """Canonical section 18: a gate failure is recorded verbatim."""
+        gate_record["failed_with"] = f"{type(error).__name__}: {error}"
+        utils.save_json({"metadata": utils.run_metadata(),
+                         "e8a_a0p_gates_partial": gate_record},
+                        e8a.OUT_DIR / f"FAILED_gates_{ARM}.json")
+        print(f"\nGATE FAILURE recorded to results/experiments/"
+              f"e8a_question_encoder/FAILED_gates_{ARM}.json")
+        raise error
+
+    try:
+        recipe = e8a.gate_g0_recipe()
+        gate_record.update({
         "arm": ARM,
         "recipe": recipe,
         "g17_embargo": run_pilot.gate_g17_embargo(),
         "g12_read_only": run_pilot.gate_g12_read_only(),
         "namespace_isolation": assert_namespace_isolation(),
-    }
-    gate_record["g1_g18_vocabulary"] = run_pilot.gate_g1_g18_vocabulary(
-        [e8a.V2_DIR / f"{SCALE}.csv", e8a.V2_DIR / "dev.csv"])
-    gate_record["g15_manifests"] = run_pilot.gate_g15_manifests(
-        [e8a.V2_DIR / f"{SCALE}.csv", e8a.V2_DIR / "dev.csv",
-         e8a.V2_DIR / "answer_vocab_v2.json",
-         e8a.CLIP_TOKEN_DIR / "image_tokens.h5",
-         e8a.CLIP_TOKEN_DIR / "question_tokens.h5",
-         config.RESULTS_DIR / "experiments" / "v3_01_reasoner"
-         / "results.json"])
+        })
+        gate_record["g1_g18_vocabulary"] = run_pilot.gate_g1_g18_vocabulary(
+            [e8a.V2_DIR / f"{SCALE}.csv", e8a.V2_DIR / "dev.csv"])
+        gate_record["g15_manifests"] = run_pilot.gate_g15_manifests(
+            [e8a.V2_DIR / f"{SCALE}.csv", e8a.V2_DIR / "dev.csv",
+             e8a.V2_DIR / "answer_vocab_v2.json",
+             e8a.CLIP_TOKEN_DIR / "image_tokens.h5",
+             e8a.CLIP_TOKEN_DIR / "question_tokens.h5",
+             config.RESULTS_DIR / "experiments" / "v3_01_reasoner"
+             / "results.json"])
 
-    print("loading stores")
-    images = e8a.ImageTokenStore()
-    questions = {ARM: e8a.open_clip_question_store()}
-    store = questions[ARM]
-    assert store.attrs["arm"] == ARM
-    assert store.states.shape[1] == e8a.CLIP_QUESTION_WIDTH
-    gate_record["store_attributes"] = {ARM: dict(store.attrs)}
-    print(f"  CLIP question store: {store.states.shape[0]:,} packed token "
-          f"rows at width {store.states.shape[1]}, "
-          f"{len(store.row_of):,} questionIds")
+        print("loading stores")
+        images = e8a.ImageTokenStore()
+        questions = {ARM: e8a.open_clip_question_store()}
+        store = questions[ARM]
+        assert store.states.shape[1] == e8a.CLIP_QUESTION_WIDTH
+        assert "EOT position + 1" in store.attrs["length_convention"]
+        assert int(store.lengths.max()) <= e8a.TOKEN_BUDGET_L, \
+            int(store.lengths.max())
+        gate_record["store_attributes"] = {ARM: dict(store.attrs)}
+        print(f"  CLIP question store: {store.states.shape[0]:,} packed token "
+              f"rows at width {store.states.shape[1]}, "
+              f"{len(store.row_of):,} questionIds")
 
-    # G13 over all three arms at once, so the trunk identity that makes the
-    # three-way comparison meaningful is asserted rather than assumed.
-    gate_record["g13_construction"] = run_pilot.gate_g13_construction(
-        recipe["dropout"], SEED, arms=("A0p", "A1", "A1r"))
+        # G13 over all three arms at once, so the trunk identity that makes the
+        # three-way comparison meaningful is asserted rather than assumed.
+        gate_record["g13_construction"] = run_pilot.gate_g13_construction(
+            recipe["dropout"], SEED, arms=("A0p", "A1", "A1r"))
 
-    dataset = e8a.E8ATokenDataset(e8a.V2_DIR / f"{SCALE}.csv", images, store)
-    probe_loader = DataLoader(dataset, batch_size=recipe["batch_size"],
-                              shuffle=False, collate_fn=e8a.collate_e8a)
-    e8a.prepare_encoder_for_build(ARM)
-    probe_model = e8a.build_e8a_model(e8a.arm_d_question(ARM),
-                                      recipe["dropout"], SEED)
-    gate_record["g4_g5_forward_and_mask"] = run_pilot.gate_g4_g5(
-        probe_model, probe_loader, device)
-    parameters = e8a.parameter_report(probe_model.to("cpu"))
-    assert parameters["trainable_projection"] == e8a.A0P_PROJECTION_PARAMETERS
-    assert parameters["trainable_total"] == 21_362_276, parameters
-    print(f"[PASS] A0p trainable parameters {parameters['trainable_total']:,} "
-          f"= {parameters['trainable_reasoner_trunk']:,} trunk + "
-          f"{parameters['trainable_projection']:,} projection, matching the "
-          f"canonical Linear(512, 512) figure of "
-          f"{e8a.A0P_PROJECTION_PARAMETERS:,}")
-    gate_record["parameters"] = parameters
-    del probe_model
-    torch.cuda.empty_cache()
+        dataset = e8a.E8ATokenDataset(e8a.V2_DIR / f"{SCALE}.csv", images, store)
+        probe_loader = DataLoader(dataset, batch_size=recipe["batch_size"],
+                                  shuffle=False, collate_fn=e8a.collate_e8a)
+        e8a.prepare_encoder_for_build(ARM)
+        probe_model = e8a.build_e8a_model(e8a.arm_d_question(ARM),
+                                          recipe["dropout"], SEED)
+        gate_record["g4_g5_forward_and_mask"] = run_pilot.gate_g4_g5(
+            probe_model, probe_loader, device)
+        parameters = e8a.parameter_report(probe_model.to("cpu"))
+        assert parameters["trainable_projection"] == e8a.A0P_PROJECTION_PARAMETERS
+        assert parameters["trainable_total"] == 21_362_276, parameters
+        print(f"[PASS] A0p trainable parameters {parameters['trainable_total']:,} "
+              f"= {parameters['trainable_reasoner_trunk']:,} trunk + "
+              f"{parameters['trainable_projection']:,} projection, matching the "
+              f"canonical Linear(512, 512) figure of "
+              f"{e8a.A0P_PROJECTION_PARAMETERS:,}")
+        gate_record["parameters"] = parameters
+        del probe_model
+        torch.cuda.empty_cache()
 
-    gate_record["scheduler_formula"] = run_pilot.gate_scheduler_formula(
-        math.ceil(len(dataset) / recipe["batch_size"]),
-        recipe["final_max_epochs"], recipe["warmup_frac"],
-        recipe["learning_rate"])
+        gate_record["scheduler_formula"] = run_pilot.gate_scheduler_formula(
+            math.ceil(len(dataset) / recipe["batch_size"]),
+            recipe["final_max_epochs"], recipe["warmup_frac"],
+            recipe["learning_rate"])
 
-    gate_record["g8_tiny_overfit"] = {
-        ARM: run_pilot.gate_g8_tiny_overfit(ARM, recipe["dropout"], SEED,
-                                            dataset, device)}
+        gate_record["g8_tiny_overfit"] = {
+            ARM: run_pilot.gate_g8_tiny_overfit(ARM, recipe["dropout"], SEED,
+                                                dataset, device)}
 
-    print("\n=== pinned intervention tensors ===")
-    neutral_image, neutral_image_provenance = e8a.build_neutral_image_tokens(
-        images)
-    gate_record["pinned_neutral_image"] = neutral_image_provenance
-    print(f"  neutral image tokens {neutral_image.shape} over "
-          f"{neutral_image_provenance['n_training_images']} training images, "
-          f"sha256 {neutral_image_provenance['sha256'][:16]}...")
-    neutral_question = {ARM: e8a.build_neutral_question_states_clip(device)}
-    provenance = neutral_question[ARM][2]
-    gate_record["pinned_neutral_question"] = {ARM: provenance}
-    print(f"  neutral question states, arm {ARM}: "
-          f"{provenance['valid_positions']} valid of L={provenance['L']} "
-          f"({provenance['length_convention']}), sha256 "
-          f"{provenance['sha256'][:16]}...")
+        print("\n=== pinned intervention tensors ===")
+        neutral_image, neutral_image_provenance = e8a.build_neutral_image_tokens(
+            images)
+        gate_record["pinned_neutral_image"] = neutral_image_provenance
+        print(f"  neutral image tokens {neutral_image.shape} over "
+              f"{neutral_image_provenance['n_training_images']} training images, "
+              f"sha256 {neutral_image_provenance['sha256'][:16]}...")
+        neutral_question = {ARM: e8a.build_neutral_question_states_clip(device)}
+        provenance = neutral_question[ARM][2]
+        gate_record["pinned_neutral_question"] = {ARM: provenance}
+        print(f"  neutral question states, arm {ARM}: "
+              f"{provenance['valid_positions']} valid of L={provenance['L']} "
+              f"({provenance['length_convention']}), sha256 "
+              f"{provenance['sha256'][:16]}...")
+
+    except Exception as error:                       # noqa: BLE001
+        persist_and_reraise(error)
 
     utils.save_json({"metadata": utils.run_metadata(),
                      "e8a_a0p_gates": gate_record},
@@ -199,7 +218,12 @@ def main() -> int:
          / "checkpoints").glob("reasoner_*.pt"))}
     assert after == gate_record["namespace_isolation"][
         "a0_checkpoint_sha256_before"], "an A0 checkpoint changed"
-    print("[PASS] every stored A0 checkpoint is byte-identical after the run")
+    a1_after = {p.name: e8a.sha256_file(p)
+                for p in sorted(e8a.OUT_DIR.rglob("*A1*")) if p.is_file()}
+    assert a1_after == gate_record["namespace_isolation"][
+        "a1_a1r_sha256_before"], "an A1 or A1r artefact changed"
+    print(f"[PASS] every stored A0 checkpoint and all {len(a1_after)} A1/A1r "
+          f"artefacts are byte-identical after the run")
 
     record = {
         "metadata": utils.run_metadata(seed=SEED),
@@ -230,10 +254,31 @@ def main() -> int:
                                       "projection's input width, 512 against "
                                       "576.",
             },
+            "fixed_question_caveat":
+                "the pinned neutral question is the CLIP token states of the "
+                "string \"question\", which is 3 valid positions (SOT, the "
+                "word, EOT) against a mean of about 12.2 CLIP tokens for real "
+                "questions. normal minus fixed-question therefore confounds "
+                "question content with a sequence-length change, and it is "
+                "NOT a pure semantic contribution. The asymmetry across arms "
+                "is larger still: A0p has 3 valid positions where A1 and A1r "
+                "have 1, because each arm's neutral sequence comes from its "
+                "own tokenizer, exactly as canonical section 11.1 specifies.",
+            "system_comparison_label":
+                "Matched system comparisons under a recipe historically "
+                "selected on the CLIP-question-token reasoner. This selection "
+                "asymmetry favours A0p and makes the comparison conservative "
+                "with respect to the SLM arm.",
+            "claim_scope":
+                "a result about the frozen model under the pre-registered "
+                "post-final-norm token-sequence interface at L = 32. Never "
+                "generalised to 'small language models do not help', nor to "
+                "'small language models help'.",
             "gates": gate_record,
             "run": run,
             "evaluation": evaluation,
             "a0_artefacts_unchanged": after,
+            "a1_a1r_artefacts_unchanged": a1_after,
             "clean_test_accessed": False,
         },
     }

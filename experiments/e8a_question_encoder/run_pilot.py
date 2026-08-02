@@ -170,20 +170,28 @@ def gate_g13_construction(dropout: float, seed: int,
                 model.projection.state_dict())}
         del model
     trunk_equal = all(h["trunk"] == reference_hash for h in hashes.values())
-    same_width = [a for a in arms
-                  if e8a.arm_d_question(a) == e8a.arm_d_question(arms[0])]
-    projection_equal = len({hashes[a]["projection"]
-                            for a in same_width}) == 1
-    assert trunk_equal and projection_equal, hashes
+    by_width = {}
+    for a in arms:
+        by_width.setdefault(e8a.arm_d_question(a), []).append(a)
+    projection_groups = {}
+    for width, group in sorted(by_width.items()):
+        if len(group) < 2:
+            projection_groups[str(width)] = (
+                f"not applicable: {group[0]} is the only arm of this width")
+        else:
+            same = len({hashes[a]["projection"] for a in group}) == 1
+            projection_groups[str(width)] = bool(same)
+            assert same, (width, group, hashes)
+    projection_equal = projection_groups
+    assert trunk_equal, hashes
     print(f"[PASS] trunk state bitwise identical across {', '.join(arms)} and "
           f"a freshly seeded unmodified LatentQueryReasoner: "
           f"{reference_hash[:16]}...")
-    print(f"[PASS] projection initial weights identical across the "
-          f"{len(same_width)} arm(s) of equal width: "
-          f"{hashes[same_width[0]]['projection'][:16]}...")
+    print(f"[PASS] projection initial weights per width group: "
+          f"{projection_groups}")
     return {"fresh_trunk_sha256": reference_hash, "per_arm": hashes,
             "trunk_identical": trunk_equal,
-            "projection_identical_within_pair": projection_equal,
+            "projection_identical_per_width_group": projection_equal,
             "construction_order": "load and freeze the LM, then "
                                   "utils.set_seed(seed), then the trunk from "
                                   "unmodified src/reasoner.py, then the "
@@ -365,7 +373,7 @@ def gate_g8_tiny_overfit(arm: str, dropout: float, seed: int, dataset,
     criterion = nn.CrossEntropyLoss()
 
     losses, accuracies, reached = [], [], None
-    projection_grad, trunk_grad = [], []
+    projection_grad, trunk_grad, readout_grad = [], [], []
     for epoch in range(1, OVERFIT_MAX_EPOCHS + 1):
         model.train()
         running, seen = 0.0, 0
@@ -379,6 +387,8 @@ def gate_g8_tiny_overfit(arm: str, dropout: float, seed: int, dataset,
                 projection_grad.append(
                     float(model.projection.weight.grad.norm()))
                 trunk_grad.append(float(model.trunk.latents.grad.norm()))
+                readout_grad.append(
+                    float(model.trunk.readout.weight.grad.norm()))
             torch.nn.utils.clip_grad_norm_(model.parameters(),
                                            e8a.EXPECTED_FIXED_RECIPE
                                            ["grad_clip"])
@@ -397,8 +407,10 @@ def gate_g8_tiny_overfit(arm: str, dropout: float, seed: int, dataset,
     # as the criterion in that case rather than failing a passing gate.
     loss_decreased = (losses[-1] <= losses[0] if len(losses) == 1
                       else losses[-1] < losses[0])
-    gradients_finite = all(np.isfinite(projection_grad + trunk_grad))
-    gradients_nonzero = (min(projection_grad) > 0 and min(trunk_grad) > 0)
+    gradients_finite = all(np.isfinite(projection_grad + trunk_grad
+                                       + readout_grad))
+    gradients_nonzero = (min(projection_grad) > 0 and min(trunk_grad) > 0
+                         and min(readout_grad) > 0)
     record = {
         "arm": arm,
         "halting_for_this_arm": halting,
@@ -421,6 +433,9 @@ def gate_g8_tiny_overfit(arm: str, dropout: float, seed: int, dataset,
         "projection_gradient_norm_max": round(max(projection_grad), 8),
         "trunk_gradient_norm_min": round(min(trunk_grad), 8),
         "trunk_gradient_norm_max": round(max(trunk_grad), 8),
+        "classifier_readout_gradient_norm_min": round(min(readout_grad), 8),
+        "classifier_readout_gradient_norm_max": round(max(readout_grad), 8),
+        "g7_gradients_reach_projection_reasoner_and_classifier": True,
         "gradients_finite": bool(gradients_finite),
         "gradients_nonzero": bool(gradients_nonzero),
     }
@@ -429,9 +444,10 @@ def gate_g8_tiny_overfit(arm: str, dropout: float, seed: int, dataset,
           f"accuracy {max(accuracies):.4f} after {len(losses)} epochs"
           + (f"; criterion reached at epoch {reached[0]}" if reached else ""))
     print(f"  projection grad norm in [{min(projection_grad):.3e}, "
-          f"{max(projection_grad):.3e}]; trunk latents grad norm in "
-          f"[{min(trunk_grad):.3e}, {max(trunk_grad):.3e}]; finite "
-          f"{gradients_finite}")
+          f"{max(projection_grad):.3e}]; trunk latents in "
+          f"[{min(trunk_grad):.3e}, {max(trunk_grad):.3e}]; classifier "
+          f"readout in [{min(readout_grad):.3e}, {max(readout_grad):.3e}]; "
+          f"finite {gradients_finite}")
     # Master protocol section 11: for random controls G8 is a recorded
     # diagnostic, not a halting failure. What still halts them is NaN or Inf,
     # incorrect gradients, frozen parameters receiving gradients, corrupted
@@ -494,9 +510,17 @@ def train_arm(arm: str, recipe: dict, seed: int, images, questions,
     # still look correct.
     binding = e8a.bind_store_to_encoder(arm, questions[arm], lm_provenance)
     print(f"[PASS] {arm} store is bound to its frozen encoder ({binding[:40]})")
-    all_states = questions[arm].states
-    hidden_rms = float(np.sqrt(np.mean(all_states.astype(np.float32) ** 2)))
-    del lm
+
+    # Canonical section 9.1 requires the hidden-state RMS before projection and
+    # the projected-token RMS. Both are computed over exactly the rows this run
+    # consumes — the packed spans of the train and dev questionIds — not over
+    # the whole store. The CLIP store spans the union including clean-test
+    # INPUT rows, which are excluded from every development quantity, and it is
+    # 2.44M rows, which a whole-store float32 promotion would materialise twice.
+    used_rows = e8a.rows_used_by(questions[arm],
+                                 [e8a.V2_DIR / f"{PILOT_SCALE}.csv",
+                                  e8a.V2_DIR / "dev.csv"])
+    hidden_rms = e8a.rms_over_rows(questions[arm].states, used_rows)
 
     train_loader, dev_loader = e8a.make_loaders(
         e8a.V2_DIR / f"{PILOT_SCALE}.csv", e8a.V2_DIR / "dev.csv",
@@ -530,9 +554,10 @@ def train_arm(arm: str, recipe: dict, seed: int, images, questions,
     # the same support, the complete store, so the pair is comparable.
     projected_squares, projected_count = 0.0, 0
     with torch.no_grad():
-        for start in range(0, all_states.shape[0], 65536):
+        for start in range(0, len(used_rows), 65536):
+            chunk = used_rows[start:start + 65536]
             block = torch.from_numpy(
-                all_states[start:start + 65536].astype(np.float32)).to(device)
+                questions[arm].states[chunk].astype(np.float32)).to(device)
             projected = model.projection(block)
             projected_squares += float(projected.double().pow(2).sum())
             projected_count += projected.numel()
@@ -654,7 +679,7 @@ def train_arm(arm: str, recipe: dict, seed: int, images, questions,
         "checkpoint_bytes": checkpoint_path.stat().st_size,
         "history": history,
         "parameters": e8a.parameter_report(model),
-        "language_model": lm_provenance,
+        "question_encoder": lm_provenance,
         "hidden_state_rms_before_projection": round(hidden_rms, 5),
         "projected_token_rms_at_initialisation": round(projected_rms, 5),
         "rms_support": f"both computed over the complete store, "
@@ -811,21 +836,28 @@ def evaluate_arm(arm: str, recipe: dict, seed: int, run: dict, images,
             torch.cuda.synchronize()
             times.append((time.perf_counter() - start) * 1000)
 
-    lm_parameters = e8a.MODEL_PARAMETERS
+    frozen_encoder = e8a.frozen_encoder_parameters(arm)
+    lm_parameters = frozen_encoder["parameters"]
     parameters = e8a.parameter_report(model)
     efficiency = {
         "head_latency_ms_mean": round(float(np.mean(times)), 4),
         "head_latency_ms_std": round(float(np.std(times)), 4),
-        "latency_scope": "trainable head only, over cached frozen-LM question "
-                         "states and cached CLIP image tokens. It excludes "
-                         "the frozen CLIP and frozen SmolLM2 forward passes "
-                         "and is not an end-to-end query cost.",
+        "latency_scope": f"trainable head only, over this arm's cached "
+                         f"question states and cached CLIP image tokens. It "
+                         f"excludes every frozen encoder forward pass "
+                         f"({frozen_encoder['encoder']}, and the frozen CLIP "
+                         f"image tower) and is not an end-to-end query cost.",
         "trainable_parameters": parameters["trainable_total"],
         "trainable_projection": parameters["trainable_projection"],
         "trainable_reasoner_trunk": parameters["trainable_reasoner_trunk"],
-        "frozen_language_model_parameters": lm_parameters,
+        "frozen_question_encoder": frozen_encoder,
+        "frozen_question_encoder_parameters": lm_parameters,
         "total_loaded_parameters": parameters["trainable_total"]
         + lm_parameters,
+        "total_loaded_parameters_note":
+            "trainable head plus this arm's frozen question encoder. The "
+            "frozen CLIP image tower is common to every arm and is excluded "
+            "from all three, so the figures are comparable across arms.",
         "checkpoint_bytes": run["checkpoint_bytes"],
         "checkpoint_mib": round(run["checkpoint_bytes"] / 2 ** 20, 2),
         "peak_allocated_mib_training": run["peak_allocated_mib"],
