@@ -349,6 +349,11 @@ def gate_g8_tiny_overfit(arm: str, dropout: float, seed: int, dataset,
     loader = DataLoader(subset, batch_size=128, shuffle=True,
                         generator=utils.make_generator(seed),
                         collate_fn=e8a.collate_e8a)
+    # A separate non-shuffling loader over the same subset. The training
+    # loader shuffles, so two passes over it visit different rows and cannot
+    # be compared element-wise; the save/load check below needs a fixed order.
+    eval_loader = DataLoader(subset, batch_size=128, shuffle=False,
+                             collate_fn=e8a.collate_e8a)
     lm, _ = e8a.load_frozen_lm(e8a.ARMS[arm]["pretrained"], verbose=False)
     model = e8a.build_e8a_model(e8a.MODEL_HIDDEN_SIZE, 0.0, seed).to(device)
     del lm
@@ -447,8 +452,8 @@ def gate_g8_tiny_overfit(arm: str, dropout: float, seed: int, dataset,
     reloaded = e8a.build_e8a_model(e8a.MODEL_HIDDEN_SIZE, 0.0, seed).to(device)
     del lm
     reloaded.load_state_dict(torch.load(path, map_location=device))
-    before, _ = e8a.predict_logits(model, loader, device)
-    after, _ = e8a.predict_logits(reloaded, loader, device)
+    before, _ = e8a.predict_logits(model, eval_loader, device)
+    after, _ = e8a.predict_logits(reloaded, eval_loader, device)
     identical = bool(torch.equal(before, after))
     deviation = float((before - after).abs().max())
     predictions_identical = bool(torch.equal(before.argmax(dim=-1),
