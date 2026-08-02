@@ -34,10 +34,8 @@ clean test, F1 and F2 are all outside this script. A1 and A1r are NOT retrained.
 from __future__ import annotations
 
 import argparse
-import json
 import math
 import sys
-import time
 from pathlib import Path
 
 import torch
@@ -176,6 +174,24 @@ def main() -> int:
             recipe["final_max_epochs"], recipe["warmup_frac"],
             recipe["learning_rate"])
 
+        # Measured here rather than quoted, so the caveat below cites a real
+        # number over the rows this run consumes.
+        dev_dataset = e8a.E8ATokenDataset(e8a.V2_DIR / "dev.csv", images,
+                                          store)
+        question_length = {
+            "mean_clip_tokens_train_40k": round(
+                float(dataset.question_lengths.mean()), 4),
+            "mean_clip_tokens_dev": round(
+                float(dev_dataset.question_lengths.mean()), 4),
+            "convention": "EOT position + 1, including SOT and EOT",
+            "support": "the rows of train_40k.csv and dev.csv this run reads",
+        }
+        gate_record["question_length"] = question_length
+        print(f"  CLIP question length: mean "
+              f"{question_length['mean_clip_tokens_train_40k']} tokens on "
+              f"train_40k, {question_length['mean_clip_tokens_dev']} on dev")
+        del dev_dataset
+
         gate_record["g8_tiny_overfit"] = {
             ARM: run_pilot.gate_g8_tiny_overfit(ARM, recipe["dropout"], SEED,
                                                 dataset, device)}
@@ -210,11 +226,11 @@ def main() -> int:
         utils.save_json({"metadata": utils.run_metadata(seed=SEED),
                          "e8a_a0p_run": run},
                         e8a.OUT_DIR / f"run_partial_{ARM}.json")
-        gate_record["run_completed_before_failure"] = run
         evaluation = run_pilot.evaluate_arm(ARM, recipe, SEED, run, images,
                                             questions, neutral_image,
                                             neutral_question, device)
     except Exception as error:                       # noqa: BLE001
+        gate_record["run_completed_before_failure"] = locals().get("run")
         persist_and_reraise(error)
 
     after = {p.name: e8a.sha256_file(p) for p in sorted(
@@ -246,23 +262,52 @@ def main() -> int:
                                "one trainable token-wise Linear(512, 512) -> "
                                "[B, L, 512] -> unmodified latent-query "
                                "reasoner -> 100-way classifier",
+                "token_budget_L": e8a.TOKEN_BUDGET_L,
                 "pooled": False,
                 "reasoner_source_file_modified": False,
-                "differs_from_A0_in": "exactly one respect: the presence of "
-                                      "the trainable Linear(512, 512), "
-                                      "262,656 parameters. A0 has no "
-                                      "projection and 21,099,620 trainable "
-                                      "parameters.",
-                "differs_from_A1_in": "exactly one respect: the question "
-                                      "representation source, and hence the "
-                                      "projection's input width, 512 against "
-                                      "576.",
+                "shared_space_disclosure":
+                    "A0p's question tokens and image tokens both come from "
+                    "the SAME frozen CLIP ViT-B/32 and therefore share its "
+                    "pretrained space by construction. A1 and A1r's do not: "
+                    "their question tokens come from a frozen small language "
+                    "model whose space differs from CLIP's, and their common "
+                    "512-dimensional reasoner interface is a learned common "
+                    "width, not a naturally shared pretrained embedding "
+                    "space (master protocol section 5). This asymmetry is a "
+                    "property of the comparison, not a defect in it, and it "
+                    "must be stated wherever A1 - A0p is reported.",
+                "differs_from_A0_in":
+                    "ARCHITECTURALLY, exactly one respect: the presence of "
+                    "the trainable Linear(512, 512), 262,656 parameters. A0 "
+                    "has no projection and 21,099,620 trainable parameters. "
+                    "The two RUNS additionally differ in their training "
+                    "harness: the stored A0 was trained through "
+                    "src/tokens_data.make_token_loaders, whose shuffle "
+                    "generator is utils.make_generator() with the default "
+                    "seed 42 regardless of the run seed, while A0p trains "
+                    "through e8a_common.make_loaders with "
+                    "utils.make_generator(seed). The stored A0 accuracy is "
+                    "therefore NOT a drop-in matched comparator for A0p, and "
+                    "is cited only as context.",
+                "differs_from_A1_in":
+                    "architecturally, the question representation source and "
+                    "hence the projection's input width, 512 against 576. "
+                    "INTERPRETIVELY that single architectural difference "
+                    "carries two things at once, and A1 - A0p cannot separate "
+                    "them: the change of question semantics (frozen CLIP text "
+                    "versus a frozen small language model), and the loss of a "
+                    "naturally shared pretrained space between the question "
+                    "and image tokens. Both move together by construction.",
             },
             "fixed_question_caveat":
-                "the pinned neutral question is the CLIP token states of the "
-                "string \"question\", which is 3 valid positions (SOT, the "
-                "word, EOT) against a mean of about 12.2 CLIP tokens for real "
-                "questions. normal minus fixed-question therefore confounds "
+                f"the pinned neutral question is the CLIP token states of "
+                f"the string \"question\", which is 3 valid positions (SOT, "
+                f"the word, EOT) against a measured mean of "
+                f"{gate_record['question_length']['mean_clip_tokens_train_40k']}"
+                f" CLIP tokens on train_40k and "
+                f"{gate_record['question_length']['mean_clip_tokens_dev']} on "
+                f"dev, same convention. normal minus fixed-question therefore "
+                f"confounds "
                 "question content with a sequence-length change, and it is "
                 "NOT a pure semantic contribution. The asymmetry across arms "
                 "is larger still: A0p has 3 valid positions where A1 and A1r "

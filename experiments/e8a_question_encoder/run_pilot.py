@@ -192,10 +192,13 @@ def gate_g13_construction(dropout: float, seed: int,
     return {"fresh_trunk_sha256": reference_hash, "per_arm": hashes,
             "trunk_identical": trunk_equal,
             "projection_identical_per_width_group": projection_equal,
-            "construction_order": "load and freeze the LM, then "
-                                  "utils.set_seed(seed), then the trunk from "
-                                  "unmodified src/reasoner.py, then the "
-                                  "projection"}
+            "construction_order": "load and freeze the question encoder, "
+                                  "then utils.set_seed(seed), then the trunk "
+                                  "from unmodified src/reasoner.py, then the "
+                                  "projection. For A0p the encoder is the "
+                                  "frozen CLIP that produced the cached "
+                                  "store, so that step loads nothing and is "
+                                  "discharged by construction."}
 
 
 def gate_g4_g5(model, loader, device) -> dict:
@@ -244,6 +247,11 @@ def gate_g7_gradients(arm: str, dropout: float, seed: int, loader,
     code path the pilot runs, rather than restating the flag.
     """
     print(f"=== GATE G7: gradient hygiene, arm {arm} (live LM in the graph) ===")
+    assert e8a.ARM_SPECS[arm]["encoder"] == "slm_135m", (
+        f"G7's frozen-LM leg applies only to the language-model arms; {arm} "
+        f"has no encoder in the autograd graph. Its gradient-reach leg is "
+        f"discharged by G8, which records the projection, trunk and "
+        f"classifier gradient norms for every arm.")
     lm, _ = e8a.load_frozen_lm(e8a.ARM_SPECS[arm]["pretrained"], device,
                                verbose=False)
     model = e8a.build_e8a_model(e8a.MODEL_HIDDEN_SIZE, dropout, seed).to(device)
@@ -551,8 +559,8 @@ def train_arm(arm: str, recipe: dict, seed: int, images, questions,
 
     model = e8a.build_e8a_model(e8a.arm_d_question(arm), recipe["dropout"],
                                 seed).to(device)
-    # Canonical section 9.1 requires both RMS figures. They are computed over
-    # the same support, the complete store, so the pair is comparable.
+    # Canonical section 9.1 requires both RMS figures, on the same support:
+    # the rows this run actually reads, recorded in rms_support below.
     projected_squares, projected_count = 0.0, 0
     with torch.no_grad():
         for start in range(0, len(used_rows), 65536):

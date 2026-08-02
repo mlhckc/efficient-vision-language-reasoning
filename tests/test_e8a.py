@@ -976,78 +976,96 @@ def test_no_unbound_local_names():
     import ast
     import builtins
 
-    def bound_names(node):
-        """Every name a function body can bind, by any mechanism."""
-        names = set()
-        for argument in getattr(node, "args", ast.arguments(
-                posonlyargs=[], args=[], kwonlyargs=[], kw_defaults=[],
-                defaults=[])).posonlyargs \
-                + node.args.args + node.args.kwonlyargs:
-            names.add(argument.arg)
-        for optional in (node.args.vararg, node.args.kwarg):
-            if optional is not None:
-                names.add(optional.arg)
-        for child in ast.walk(node):
-            if child is node:
-                continue
-            if isinstance(child, ast.Name) and isinstance(child.ctx,
-                                                          ast.Store):
-                # `del x` deliberately does NOT count as a binding: it makes
-                # x local, so deleting a name that was never assigned is an
-                # UnboundLocalError. Treating it as a binding is exactly what
-                # would hide the defect this check exists to catch.
-                names.add(child.id)
-            elif isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef,
-                                    ast.ClassDef)):
-                names.add(child.name)
-            elif isinstance(child, (ast.Import, ast.ImportFrom)):
-                for alias in child.names:
-                    names.add((alias.asname or alias.name).split(".")[0])
-            elif isinstance(child, ast.ExceptHandler) and child.name:
-                names.add(child.name)
-            elif isinstance(child, (ast.Global, ast.Nonlocal)):
-                names.update(child.names)
-        return names
-
-    def used_names(node):
-        """Names read or deleted directly in this function's own body,
-        excluding nested function bodies, which have their own scope."""
-        nested = {n for child in ast.iter_child_nodes(node)
-                  for n in ast.walk(child)
-                  if isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef,
-                                        ast.Lambda, ast.ClassDef))}
-        return {child.id for child in ast.walk(node)
-                if isinstance(child, ast.Name)
-                and isinstance(child.ctx, (ast.Load, ast.Del))
-                and child not in nested}
-
-    # Module dunders exist at run time but are bound by the import machinery,
-    # not by any statement the parser can see.
+    SCOPES = (ast.FunctionDef, ast.AsyncFunctionDef, ast.Lambda, ast.ClassDef,
+              ast.ListComp, ast.SetComp, ast.DictComp, ast.GeneratorExp)
     MODULE_DUNDERS = {"__file__", "__name__", "__doc__", "__package__",
                       "__spec__", "__loader__", "__builtins__", "__debug__"}
 
+    def own_nodes(node):
+        """Every node in this scope's body, NOT descending into nested scopes.
+
+        Descending is what made the first version unsound: it treated a name
+        bound in any other function as visible everywhere, so `del lm` in one
+        function was excused by an `lm = ...` in another.
+        """
+        out = []
+        stack = list(ast.iter_child_nodes(node))
+        while stack:
+            child = stack.pop()
+            out.append(child)
+            if not isinstance(child, SCOPES):
+                stack.extend(ast.iter_child_nodes(child))
+        return out
+
+    def parameters(node):
+        if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef,
+                                 ast.Lambda)):
+            return set()
+        a = node.args
+        names = {x.arg for x in a.posonlyargs + a.args + a.kwonlyargs}
+        for optional in (a.vararg, a.kwarg):
+            if optional is not None:
+                names.add(optional.arg)
+        return names
+
+    def bound_and_used(node):
+        bound, used, augmented = parameters(node), set(), set()
+        nodes = own_nodes(node)
+        # An AugAssign target is a Name in Store context, so it must be
+        # excluded from `bound` explicitly or `x += 1` would look like a
+        # binding when it is really a read followed by a write.
+        aug_targets = {id(child.target) for child in nodes
+                       if isinstance(child, ast.AugAssign)
+                       and isinstance(child.target, ast.Name)}
+        for child in nodes:
+            if isinstance(child, ast.Name) and id(child) not in aug_targets:
+                if isinstance(child.ctx, ast.Store):
+                    bound.add(child.id)
+                else:
+                    used.add(child.id)
+            elif isinstance(child, ast.AugAssign) and isinstance(
+                    child.target, ast.Name):
+                # `x += 1` reads x before writing it, so it is a use unless a
+                # plain assignment also binds x somewhere in the same scope.
+                augmented.add(child.target.id)
+            elif isinstance(child, SCOPES):
+                bound.add(getattr(child, "name", ""))
+                # a nested scope's defaults and decorators evaluate here
+                for sub in (getattr(child, "decorator_list", [])
+                            + getattr(getattr(child, "args", None),
+                                      "defaults", [])):
+                    used.update(n.id for n in ast.walk(sub)
+                                if isinstance(n, ast.Name)
+                                and isinstance(n.ctx, ast.Load))
+            elif isinstance(child, (ast.Import, ast.ImportFrom)):
+                for alias in child.names:
+                    bound.add((alias.asname or alias.name).split(".")[0])
+            elif isinstance(child, ast.ExceptHandler) and child.name:
+                bound.add(child.name)
+            elif isinstance(child, (ast.Global, ast.Nonlocal)):
+                bound.update(child.names)
+        used |= (augmented - bound)
+        bound.discard("")
+        return bound, used
+
     def scan(text, filename):
         tree = ast.parse(text, filename=filename)
-        module_level = bound_names(ast.FunctionDef(
-            name="_module", args=ast.arguments(
-                posonlyargs=[], args=[], kwonlyargs=[], kw_defaults=[],
-                defaults=[]), body=tree.body, decorator_list=[]))
+        module_bound, _ = bound_and_used(tree)
         found, count = [], 0
         stack = [(tree, set())]
         while stack:
             node, enclosing = stack.pop()
-            for child in ast.iter_child_nodes(node):
+            for child in own_nodes(node):
+                if not isinstance(child, SCOPES):
+                    continue
+                bound, used = bound_and_used(child)
+                visible = (bound | enclosing | module_bound | MODULE_DUNDERS)
                 if isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef)):
                     count += 1
-                    bound = bound_names(child)
-                    visible = (bound | enclosing | module_level
-                               | MODULE_DUNDERS)
-                    for name in sorted(used_names(child) - visible):
+                    for name in sorted(used - visible):
                         if not hasattr(builtins, name):
                             found.append(f"{filename}:{child.name}:{name}")
-                    stack.append((child, visible))
-                else:
-                    stack.append((child, enclosing))
+                stack.append((child, visible))
         return found, count
 
     directory = PROJECT_ROOT / "experiments" / "e8a_question_encoder"
@@ -1059,30 +1077,47 @@ def test_no_unbound_local_names():
     check("no function in the E8A package uses a name it never binds",
           not offenders, f"{scanned} functions scanned; {offenders}")
 
-    # Known-negatives: the checker must flag both historical BLOCKERs. If it
-    # does not, a clean result above proves nothing.
-    probe_del, _ = scan("def f(a):\n    b = a\n    del lm\n    return b\n",
-                        "<probe-del>")
-    check("the checker flags a deleted-but-never-bound name",
-          probe_del == ["<probe-del>:f:lm"], str(probe_del))
-    probe_read, _ = scan(
-        "def f(a):\n    return {'n': all_states.shape[0], 'a': a}\n",
-        "<probe-read>")
-    check("the checker flags a read-but-never-bound name",
-          probe_read == ["<probe-read>:f:all_states"], str(probe_read))
+    # Known-negatives. Each reproduces a historical defect IN ITS REAL SETTING,
+    # i.e. in a module that also binds the same name in another function. The
+    # first version of this check passed all three of these while being unable
+    # to catch the first blocker, which is why they are written this way.
+    probes = {
+        "del of a name bound only in ANOTHER function":
+            ("def other():\n    lm = 1\n    return lm\n"
+             "def f(a):\n    b = a\n    del lm\n    return b\n",
+             ["<p>:f:lm"]),
+        "read of a name bound only in ANOTHER function":
+            ("def other():\n    all_states = 1\n    return all_states\n"
+             "def f(a):\n    return {'n': all_states.shape[0], 'a': a}\n",
+             ["<p>:f:all_states"]),
+        "augmented assignment with no prior binding":
+            ("def other():\n    total = 0\n    return total\n"
+             "def f(xs):\n    for x in xs:\n        total += x\n"
+             "    return total\n",
+             ["<p>:f:total"]),
+        "comprehension target leaking out of its scope":
+            ("def f(items):\n    ys = [y for y in items]\n"
+             "    return ys, y\n", ["<p>:f:y"]),
+    }
+    for name, (source, expected) in probes.items():
+        found, _ = scan(source, "<p>")
+        check(f"the checker flags: {name}", found == expected, str(found))
+
     clean, _ = scan(
         "import os\n"
         "TOP = 1\n"
+        "def helper():\n    return 2\n"
         "def f(a, *rest, **kw):\n"
-        "    b = a + TOP\n"
-        "    for c in rest:\n"
-        "        b += c\n"
+        "    b = a + TOP + helper()\n"
+        "    b += 1\n"
+        "    for c in rest:\n        b += c\n"
         "    with open('x') as h:\n"
         "        b += len(h.name) + len(kw) + len(os.sep)\n"
         "    try:\n        pass\n    except ValueError as e:\n"
         "        b += len(str(e))\n"
-        "    def inner():\n        return b\n"
-        "    del b\n    return inner\n", "<probe-clean>")
+        "    d = [q for q in rest if q]\n"
+        "    def inner():\n        return b + len(d)\n"
+        "    del b\n    return inner\n", "<clean>")
     check("the checker does not flag legitimate bindings", clean == [],
           str(clean))
 
