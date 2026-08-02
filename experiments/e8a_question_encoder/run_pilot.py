@@ -148,7 +148,8 @@ def gate_g15_manifests(paths) -> dict:
     return record
 
 
-def gate_g13_construction(dropout: float, seed: int) -> dict:
+def gate_g13_construction(dropout: float, seed: int,
+                          arms=tuple(e8a.ARMS)) -> dict:
     """G13: trunk bitwise identity across arms and against a fresh trunk.
 
     Also verifies canonical section 9.1: identical projection initial weights
@@ -160,22 +161,26 @@ def gate_g13_construction(dropout: float, seed: int) -> dict:
     reference_hash = e8a.sha256_state_dict(reference.state_dict())
 
     hashes = {}
-    for arm in e8a.ARMS:
-        lm, _ = e8a.load_frozen_lm(e8a.ARMS[arm]["pretrained"], verbose=False)
-        model = e8a.build_e8a_model(e8a.MODEL_HIDDEN_SIZE, dropout, seed)
+    for arm in arms:
+        e8a.prepare_encoder_for_build(arm)
+        model = e8a.build_e8a_model(e8a.arm_d_question(arm), dropout, seed)
         hashes[arm] = {
             "trunk": e8a.sha256_state_dict(model.trunk.state_dict()),
             "projection": e8a.sha256_state_dict(
                 model.projection.state_dict())}
-        del lm, model
-    trunk_equal = (hashes["A1"]["trunk"] == hashes["A1r"]["trunk"]
-                   == reference_hash)
-    projection_equal = hashes["A1"]["projection"] == hashes["A1r"]["projection"]
+        del model
+    trunk_equal = all(h["trunk"] == reference_hash for h in hashes.values())
+    same_width = [a for a in arms
+                  if e8a.arm_d_question(a) == e8a.arm_d_question(arms[0])]
+    projection_equal = len({hashes[a]["projection"]
+                            for a in same_width}) == 1
     assert trunk_equal and projection_equal, hashes
-    print(f"[PASS] trunk state bitwise identical across A1, A1r and a freshly "
-          f"seeded unmodified LatentQueryReasoner: {reference_hash[:16]}...")
-    print(f"[PASS] projection initial weights identical within the pair: "
-          f"{hashes['A1']['projection'][:16]}...")
+    print(f"[PASS] trunk state bitwise identical across {', '.join(arms)} and "
+          f"a freshly seeded unmodified LatentQueryReasoner: "
+          f"{reference_hash[:16]}...")
+    print(f"[PASS] projection initial weights identical across the "
+          f"{len(same_width)} arm(s) of equal width: "
+          f"{hashes[same_width[0]]['projection'][:16]}...")
     return {"fresh_trunk_sha256": reference_hash, "per_arm": hashes,
             "trunk_identical": trunk_equal,
             "projection_identical_within_pair": projection_equal,
@@ -231,7 +236,7 @@ def gate_g7_gradients(arm: str, dropout: float, seed: int, loader,
     code path the pilot runs, rather than restating the flag.
     """
     print(f"=== GATE G7: gradient hygiene, arm {arm} (live LM in the graph) ===")
-    lm, _ = e8a.load_frozen_lm(e8a.ARMS[arm]["pretrained"], device,
+    lm, _ = e8a.load_frozen_lm(e8a.ARM_SPECS[arm]["pretrained"], device,
                                verbose=False)
     model = e8a.build_e8a_model(e8a.MODEL_HIDDEN_SIZE, dropout, seed).to(device)
     tokenizer = e8a.load_tokenizer()
@@ -341,7 +346,7 @@ def gate_g8_tiny_overfit(arm: str, dropout: float, seed: int, dataset,
     Halting for the principal arm A1; a recorded diagnostic, not a halting
     failure, for the random control A1r (master protocol section 11).
     """
-    halting = e8a.ARMS[arm]["pretrained"]
+    halting = e8a.arm_is_principal(arm)
     print(f"=== GATE G8: tiny-subset overfit, arm {arm} "
           f"({'halting' if halting else 'recorded diagnostic'}) ===")
     utils.set_seed(seed)
@@ -354,9 +359,8 @@ def gate_g8_tiny_overfit(arm: str, dropout: float, seed: int, dataset,
     # be compared element-wise; the save/load check below needs a fixed order.
     eval_loader = DataLoader(subset, batch_size=128, shuffle=False,
                              collate_fn=e8a.collate_e8a)
-    lm, _ = e8a.load_frozen_lm(e8a.ARMS[arm]["pretrained"], verbose=False)
-    model = e8a.build_e8a_model(e8a.MODEL_HIDDEN_SIZE, 0.0, seed).to(device)
-    del lm
+    e8a.prepare_encoder_for_build(arm)
+    model = e8a.build_e8a_model(e8a.arm_d_question(arm), 0.0, seed).to(device)
     optimizer = e8a.make_optimizer(model, OVERFIT_LR, 1e-2)
     criterion = nn.CrossEntropyLoss()
 
@@ -448,9 +452,9 @@ def gate_g8_tiny_overfit(arm: str, dropout: float, seed: int, dataset,
     path = e8a.OUT_DIR / "checkpoints" / f"overfit_{arm}.pt"
     path.parent.mkdir(parents=True, exist_ok=True)
     torch.save(model.state_dict(), path)
-    lm, _ = e8a.load_frozen_lm(e8a.ARMS[arm]["pretrained"], verbose=False)
-    reloaded = e8a.build_e8a_model(e8a.MODEL_HIDDEN_SIZE, 0.0, seed).to(device)
-    del lm
+    e8a.prepare_encoder_for_build(arm)
+    reloaded = e8a.build_e8a_model(e8a.arm_d_question(arm), 0.0,
+                                   seed).to(device)
     reloaded.load_state_dict(torch.load(path, map_location=device))
     before, _ = e8a.predict_logits(model, eval_loader, device)
     after, _ = e8a.predict_logits(reloaded, eval_loader, device)
@@ -483,18 +487,13 @@ def train_arm(arm: str, recipe: dict, seed: int, images, questions,
               device) -> dict:
     """One bounded pilot run under the fixed inherited 7.1 recipe."""
     print(f"\n=== PILOT: arm {arm}, {PILOT_SCALE}, seed {seed} ===")
-    lm, lm_provenance = e8a.load_frozen_lm(e8a.ARMS[arm]["pretrained"],
-                                           verbose=False)
-    # Bind the store to the model that produced it. Without this a store built
-    # from a different checkpoint, a different random seed, or with the arms
-    # swapped would be consumed silently and every provenance field would
+    lm_provenance = e8a.prepare_encoder_for_build(arm)
+    # Bind the store to the encoder that produced it. Without this a store
+    # built from a different checkpoint, a different random seed, or with the
+    # arms swapped would be consumed silently and every provenance field would
     # still look correct.
-    assert questions[arm].attrs["lm_state_dict_sha256"] == \
-        lm_provenance["state_dict_sha256"], (
-            f"{arm}: the hidden-state store was not produced by the language "
-            f"model loaded here")
-    print(f"[PASS] {arm} store is bound to the loaded language model, "
-          f"state_dict sha256 {lm_provenance['state_dict_sha256'][:16]}...")
+    binding = e8a.bind_store_to_encoder(arm, questions[arm], lm_provenance)
+    print(f"[PASS] {arm} store is bound to its frozen encoder ({binding[:40]})")
     all_states = questions[arm].states
     hidden_rms = float(np.sqrt(np.mean(all_states.astype(np.float32) ** 2)))
     del lm
@@ -525,7 +524,7 @@ def train_arm(arm: str, recipe: dict, seed: int, images, questions,
     print(f"  loader: {loader_throughput['samples_per_second']} samples/s "
           f"over {loader_batches} batches")
 
-    model = e8a.build_e8a_model(e8a.MODEL_HIDDEN_SIZE, recipe["dropout"],
+    model = e8a.build_e8a_model(e8a.arm_d_question(arm), recipe["dropout"],
                                 seed).to(device)
     # Canonical section 9.1 requires both RMS figures. They are computed over
     # the same support, the complete store, so the pair is comparable.
@@ -674,10 +673,9 @@ def evaluate_arm(arm: str, recipe: dict, seed: int, run: dict, images,
                  questions, neutral_image, neutral_question, device) -> dict:
     """Same-checkpoint evaluation under normal and the pinned interventions."""
     print(f"\n=== EVALUATION: arm {arm}, selected checkpoint ===")
-    lm, _ = e8a.load_frozen_lm(e8a.ARMS[arm]["pretrained"], verbose=False)
-    model = e8a.build_e8a_model(e8a.MODEL_HIDDEN_SIZE, recipe["dropout"],
+    e8a.prepare_encoder_for_build(arm)
+    model = e8a.build_e8a_model(e8a.arm_d_question(arm), recipe["dropout"],
                                 seed).to(device)
-    del lm
     model.load_state_dict(torch.load(PROJECT_ROOT / run["checkpoint"],
                                      map_location=device))
     model.eval()
@@ -782,7 +780,7 @@ def evaluate_arm(arm: str, recipe: dict, seed: int, run: dict, images,
         "mean_prediction_entropy_nats":
             conditions["normal"]["prediction_entropy_nats"],
         "collapse_fires": degeneracy["collapse_fires"],
-        "halting_for_this_arm": e8a.ARMS[arm]["pretrained"],
+        "halting_for_this_arm": e8a.arm_is_principal(arm),
     }
     print(f"  G10: {g10['distinct_answers_predicted']} distinct answers, "
           f"top-1 share {g10['top_1_share']:.5f}, entropy "

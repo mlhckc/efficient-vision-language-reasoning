@@ -638,6 +638,234 @@ def test_selection_and_early_stopping():
           "the training loop records this as a failure")
 
 
+def build_a0p_sample_store(frame):
+    """The CLIP question states for the sample rows, in the packed layout.
+
+    Read span by span straight from the store rather than materialising the
+    whole 2.5 GB array, which a test has no business doing.
+    """
+    import h5py
+
+    path = e8a.CLIP_TOKEN_DIR / "question_tokens.h5"
+    wanted = list(frame["questionId"])
+    with h5py.File(path, "r") as store:
+        ids = [i.decode("utf-8") if isinstance(i, bytes) else str(i)
+               for i in store["ids"][:]]
+        index = {q: i for i, q in enumerate(ids)}
+        offsets = store["offsets"][:]
+        lengths = store["lengths"][:]
+        attrs = {k: (v.item() if hasattr(v, "item") else v)
+                 for k, v in store.attrs.items()}
+        blocks, new_offsets, new_lengths, cursor = [], [], [], 0
+        for qid in wanted:
+            row = index[qid]
+            start, n = int(offsets[row]), int(lengths[row])
+            blocks.append(store["tokens"][start:start + n])
+            new_offsets.append(cursor)
+            new_lengths.append(n)
+            cursor += n
+    attrs["arm"] = e8a.A0P_ARM
+    attrs["layer_rule"] = "CLIP ln_final then text_projection, per-token"
+    return e8a.SLMQuestionStore(
+        states=np.concatenate(blocks),
+        offsets=np.array(new_offsets, dtype="int64"),
+        lengths=np.array(new_lengths, dtype="int32"),
+        row_of={q: i for i, q in enumerate(wanted)},
+        attrs=attrs), path
+
+
+def test_a0p_arm(frame, images, device, sample_manifest):
+    """Arm A0p: the interface-matched CLIP question-token control."""
+    import h5py
+
+    store, store_path = build_a0p_sample_store(frame)
+
+    # --- store identity and the canonical convention --------------------
+    with h5py.File(store_path, "r") as raw:
+        raw_attrs = {k: (v.item() if hasattr(v, "item") else v)
+                     for k, v in raw.attrs.items()}
+        width = raw["tokens"].shape[1]
+    check("the CLIP question store is 512-wide",
+          width == e8a.CLIP_QUESTION_WIDTH, str(width))
+    check("the CLIP question store carries the v3_00 convention",
+          raw_attrs["ln_final_applied"] and raw_attrs["text_projection_applied"]
+          and not raw_attrs["normalized"]
+          and "EOT position + 1" in raw_attrs["length_convention"],
+          raw_attrs["length_convention"])
+
+    # --- alignment ------------------------------------------------------
+    check("every sample questionId resolves in the CLIP store",
+          all(q in store.row_of for q in frame["questionId"]))
+    check("every sample imageId resolves in the image store",
+          all(i in images.row_of for i in frame["imageId"]))
+    check("A0p spans lie inside the packed block",
+          all(sum(store.span(q)) <= store.states.shape[0]
+              for q in frame["questionId"]))
+    must_fail("A0p rejects an unknown questionId",
+              lambda: store.span("no-such-question-id"))
+
+    # --- store-to-encoder binding, positive and negative ----------------
+    provenance = e8a.prepare_encoder_for_build(e8a.A0P_ARM)
+    check("A0p's encoder step reports a frozen cached CLIP encoder",
+          provenance["all_parameters_frozen"]
+          and provenance["encoder"] == "clip_question_tokens")
+    check("A0p binds its store to that encoder",
+          isinstance(e8a.bind_store_to_encoder(e8a.A0P_ARM, store,
+                                               provenance), str))
+    broken = e8a.SLMQuestionStore(
+        states=store.states, offsets=store.offsets, lengths=store.lengths,
+        row_of=store.row_of, attrs={**store.attrs, "normalized": True})
+    must_fail("A0p rejects a store that is not the v3_00 convention",
+              lambda: e8a.bind_store_to_encoder(e8a.A0P_ARM, broken,
+                                                provenance))
+
+    # --- shapes, mask, projection ---------------------------------------
+    dataset = e8a.E8ATokenDataset(sample_manifest, images, store)
+    loader = DataLoader(dataset, batch_size=len(frame), shuffle=False,
+                        collate_fn=e8a.collate_e8a)
+    batch_images, questions, lengths, mask, labels = next(iter(loader))
+    check("A0p pre-projection tensor is [B, L, 512]",
+          questions.shape == (len(frame), int(lengths.max()),
+                              e8a.CLIP_QUESTION_WIDTH),
+          str(tuple(questions.shape)))
+    check("A0p mask marks exactly the padded positions",
+          all(bool(mask[r, int(lengths[r]):].all())
+              and not bool(mask[r, :int(lengths[r])].any())
+              for r in range(len(frame))))
+    check("no A0p attention row is fully masked",
+          bool((~mask).any(dim=1).all()))
+
+    model = e8a.build_e8a_model(e8a.arm_d_question(e8a.A0P_ARM), 0.1,
+                                SAMPLE_SEED).to(device).eval()
+    with torch.no_grad():
+        projected = model.projection(questions.to(device))
+        logits = model(batch_images.to(device), questions.to(device),
+                       mask.to(device))
+    check("A0p post-projection tensor is [B, L, 512]",
+          projected.shape == (len(frame), int(lengths.max()), e8a.D_MODEL),
+          str(tuple(projected.shape)))
+    check("A0p projection is Linear(512, 512) and trainable",
+          isinstance(model.projection, nn.Linear)
+          and model.projection.in_features == 512
+          and model.projection.out_features == 512
+          and all(p.requires_grad for p in model.projection.parameters()))
+    parameters = e8a.parameter_report(model)
+    check("A0p projection has the canonical 262,656 parameters",
+          parameters["trainable_projection"]
+          == e8a.A0P_PROJECTION_PARAMETERS,
+          f"{parameters['trainable_projection']:,}")
+    check("A0p trainable total is 21,362,276",
+          parameters["trainable_total"] == 21_362_276,
+          f"{parameters['trainable_total']:,}")
+    check("A0p differs from A0 by exactly the projection",
+          parameters["trainable_total"] - 21_099_620
+          == e8a.A0P_PROJECTION_PARAMETERS)
+    check("A0p differs from A1 in trainable count",
+          parameters["trainable_total"] != 21_395_044)
+    check("A0p reasoner and classifier are trainable",
+          all(p.requires_grad for p in model.trunk.parameters()))
+    check("A0p logits are [B, 100] and finite",
+          logits.shape == (len(frame), config.TOP_K_ANSWERS)
+          and bool(torch.isfinite(logits).all()))
+
+    # --- padding invariance, with its non-vacuity control ---------------
+    corrupted = questions.clone()
+    corrupted[mask] = 1e4
+    cleared = torch.zeros_like(mask)
+    with torch.no_grad():
+        masked = model(batch_images.to(device), corrupted.to(device),
+                       mask.to(device))
+        unmasked_clean = model(batch_images.to(device), questions.to(device),
+                               cleared.to(device))
+        unmasked_dirty = model(batch_images.to(device), corrupted.to(device),
+                               cleared.to(device))
+    deviation = float((logits - masked).abs().max())
+    check("A0p padding invariance under the canonical G5 tolerance",
+          deviation < e8a.G5_MASK_TOLERANCE, f"{deviation:.3e}")
+    check("the A0p padding check is not vacuous",
+          float((unmasked_clean - unmasked_dirty).abs().max())
+          > e8a.G5_MASK_TOLERANCE)
+
+    # --- G13: trunk identity across all three arms ----------------------
+    utils.set_seed(SAMPLE_SEED)
+    reference = e8a.sha256_state_dict(
+        LatentQueryReasoner(dropout=0.1).state_dict())
+    trunks, projections = {}, {}
+    for arm in ("A0p", "A1", "A1r"):
+        e8a.prepare_encoder_for_build(arm)
+        built = e8a.build_e8a_model(e8a.arm_d_question(arm), 0.1, SAMPLE_SEED)
+        trunks[arm] = e8a.sha256_state_dict(built.trunk.state_dict())
+        projections[arm] = e8a.sha256_state_dict(
+            built.projection.state_dict())
+    check("the trunk is bitwise identical across A0p, A1 and A1r",
+          len(set(trunks.values())) == 1 and trunks["A0p"] == reference,
+          reference[:16] + "...")
+    check("A1 and A1r still share a projection initialisation",
+          projections["A1"] == projections["A1r"])
+    check("A0p's projection differs from A1's, as the widths require",
+          projections["A0p"] != projections["A1"])
+
+    # --- checkpoint round trip ------------------------------------------
+    with torch.no_grad():
+        before = model(batch_images.to(device), questions.to(device),
+                       mask.to(device)).float().cpu()
+    path = Path(sample_manifest).parent / "a0p_round_trip.pt"
+    torch.save(model.state_dict(), path)
+    reloaded = e8a.build_e8a_model(e8a.arm_d_question(e8a.A0P_ARM), 0.1,
+                                   SAMPLE_SEED + 7).to(device)
+    with torch.no_grad():
+        untrained = reloaded(batch_images.to(device), questions.to(device),
+                             mask.to(device)).float().cpu()
+    check("the A0p reload check is not vacuous",
+          not torch.equal(before, untrained))
+    reloaded.load_state_dict(torch.load(path, map_location=device))
+    reloaded.eval()
+    with torch.no_grad():
+        after = reloaded(batch_images.to(device), questions.to(device),
+                         mask.to(device)).float().cpu()
+    check("A0p save and reload reproduces identical logits",
+          bool(torch.equal(before, after)))
+    path.unlink()
+
+    # --- interventions ---------------------------------------------------
+    neutral = images.tokens[[images.row_of[i]
+                             for i in sorted(set(frame["imageId"]))]] \
+        .astype(np.float64).mean(axis=0).astype(np.float16)
+    baseline = dataset[0][0].clone()
+    dataset.set_fixed_image(neutral)
+    check("A0p supports the fixed-image intervention",
+          bool(torch.equal(dataset[0][0], dataset[1][0]))
+          and not bool(torch.equal(dataset[0][0], baseline)))
+    dataset.set_normal()
+    check("A0p set_normal restores the paired image",
+          bool(torch.equal(dataset[0][0], baseline)))
+
+    mapping, derangement = e8a.imageid_level_derangement(dataset.image_ids)
+    check("A0p imageId derangement has zero self-pairs",
+          e8a.assert_derangement(mapping) == 0,
+          f"{derangement['n_images']} images")
+    dataset.set_shuffled_images_by_imageid(mapping)
+    check("no A0p row keeps its own image under the derangement",
+          dataset.self_pair_count() == 0)
+    dataset.set_normal()
+
+    # --- artefact isolation ----------------------------------------------
+    a0 = (config.RESULTS_DIR / "experiments" / "v3_01_reasoner"
+          / "checkpoints" / "reasoner_seed0.pt")
+    a0_state = torch.load(a0, map_location="cpu")
+    check("the stored A0 checkpoint has no projection, so it is not A0p",
+          "projection.weight" not in a0_state
+          and sum(v.numel() for v in a0_state.values()) == 21_099_620)
+    must_fail("the A0 checkpoint cannot be loaded into an A0p model",
+              lambda: e8a.build_e8a_model(512, 0.1, 0).load_state_dict(
+                  a0_state))
+    for name in ("e8a_A1_train_40k_seed0.pt", "e8a_A1r_train_40k_seed0.pt"):
+        candidate = e8a.OUT_DIR / "checkpoints" / name
+        if candidate.exists():
+            check(f"A0p does not write over {name}",
+                  not name.startswith(f"e8a_{e8a.A0P_ARM}_"))
+
+
 def test_metadata_completeness():
     metadata = utils.run_metadata()
     required = {"timestamp", "git_commit", "git_dirty", "seed", "device",
@@ -738,6 +966,7 @@ def run() -> None:
         test_checkpoint_round_trip(model, batch, device, scratch)
         test_interventions_on_sample(frame, stores, images, lms, device,
                                      sample_manifest)
+        test_a0p_arm(frame, images, device, sample_manifest)
         test_selection_and_early_stopping()
         test_metadata_completeness()
         test_embargo_and_vocabulary()

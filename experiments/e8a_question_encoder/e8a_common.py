@@ -108,6 +108,178 @@ ARMS = {
             "description": "architecture-matched random SmolLM2-135M, frozen"},
 }
 
+# A0p is the interface-matched CLIP question-token control of E8A plan section
+# 2 and master protocol section 8.0: the same token-level CLIP question
+# sequence the stored A0 reasoner consumes, plus one trainable Linear(512, 512)
+# so that A1 - A0p differs in the question representation source and nothing
+# else. A0p is NOT the stored A0 artefact and never reuses its checkpoint.
+A0P_ARM = "A0p"
+CLIP_QUESTION_WIDTH = 512
+A0P_PROJECTION_PARAMETERS = 262_656
+
+ARM_SPECS = {
+    "A0p": {"encoder": "clip_question_tokens", "d_question": 512,
+            "principal": True,
+            "description": "interface-matched CLIP question-token control"},
+    "A1": {"encoder": "slm_135m", "d_question": MODEL_HIDDEN_SIZE,
+           "pretrained": True, "principal": True,
+           "description": "pretrained frozen SmolLM2-135M question encoder"},
+    "A1r": {"encoder": "slm_135m", "d_question": MODEL_HIDDEN_SIZE,
+            "pretrained": False, "principal": False,
+            "description": "architecture-matched random SmolLM2-135M, frozen"},
+}
+
+
+def arm_d_question(arm: str) -> int:
+    return ARM_SPECS[arm]["d_question"]
+
+
+def arm_is_principal(arm: str) -> bool:
+    """G8 and G10 are halting for principal arms and recorded diagnostics for
+    the random controls (master protocol section 11, E8A plan section 7)."""
+    return ARM_SPECS[arm]["principal"]
+
+
+def prepare_encoder_for_build(arm: str):
+    """Discharge the G13 construction step 'load and freeze the encoder' for
+    any arm, before `utils.set_seed(seed)` and the trunk are built.
+
+    For the SLM arms this loads and freezes the language model. For A0p the
+    frozen encoder is CLIP, which was run once by `v3_00` and whose states are
+    read from the cached store, so there is nothing to load; the step is
+    discharged by construction and recorded as such.
+    """
+    if ARM_SPECS[arm]["encoder"] == "slm_135m":
+        model, provenance = load_frozen_lm(ARM_SPECS[arm]["pretrained"],
+                                           verbose=False)
+        del model
+        return provenance
+    return {
+        "arm_model": "frozen CLIP ViT-B/32 question tokens, cached",
+        "encoder": "clip_question_tokens",
+        "clip_model": config.CLIP_MODEL_NAME,
+        "clip_pretrained": config.CLIP_PRETRAINED,
+        "store": str((CLIP_TOKEN_DIR / "question_tokens.h5")
+                     .relative_to(PROJECT_ROOT)),
+        "construction": (
+            "no encoder is loaded at training time: the frozen CLIP question "
+            "states were produced once by experiments/v3_00_tokens and are "
+            "read from the cached store, exactly as arm A0 consumes them"),
+        "all_parameters_frozen": True,
+        "recipe_identifier": "7.1 fixed inherited v3_01 reasoner recipe",
+        "projection_scale_applied": "none",
+    }
+
+
+def bind_store_to_encoder(arm: str, store, provenance: dict) -> str:
+    """Assert that the question store was produced by this arm's encoder.
+
+    Without this a store built from a different checkpoint, a different random
+    seed, or with the arms swapped would be consumed silently.
+    """
+    if ARM_SPECS[arm]["encoder"] == "slm_135m":
+        assert store.attrs["lm_state_dict_sha256"] == \
+            provenance["state_dict_sha256"], (
+                f"{arm}: the hidden-state store was not produced by the "
+                f"language model loaded here")
+        return provenance["state_dict_sha256"]
+    assert store.attrs["ln_final_applied"] and \
+        store.attrs["text_projection_applied"] and \
+        not store.attrs["normalized"], store.attrs
+    assert store.states.shape[1] == CLIP_QUESTION_WIDTH, store.states.shape
+    return str(store.attrs["length_convention"])
+
+
+def open_clip_question_store() -> "SLMQuestionStore":
+    """The cached frozen-CLIP question tokens, in the same packed layout.
+
+    `data/v3/tokens/question_tokens.h5` stores `ids` / `offsets` / `lengths` /
+    `tokens`, which is structurally identical to the SLM stores' `ids` /
+    `offsets` / `lengths` / `states`. Adapting it here rather than writing a
+    second dataset class means A0p runs the same dataset, collate,
+    intervention and evaluation code as A1, which is the strongest available
+    form of interface matching. The store is opened read-only (gate G12).
+    """
+    path = CLIP_TOKEN_DIR / "question_tokens.h5"
+    with h5py.File(path, "r") as store:
+        ids = [i.decode("utf-8") if isinstance(i, bytes) else str(i)
+               for i in store["ids"][:]]
+        states = store["tokens"][:]
+        offsets = store["offsets"][:]
+        lengths = store["lengths"][:]
+        attrs = {k: (v.item() if hasattr(v, "item") else v)
+                 for k, v in store.attrs.items()}
+    attrs["arm"] = A0P_ARM
+    attrs["layer_rule"] = (
+        "CLIP ln_final then text_projection, per-token; the v3_00 approach-A "
+        "token states, unnormalised")
+    attrs["source_path"] = str(path.relative_to(PROJECT_ROOT))
+    attrs["source_sha256"] = "not hashed here; pinned by G15 at run time"
+    return SLMQuestionStore(states=states, offsets=offsets, lengths=lengths,
+                            row_of={q: i for i, q in enumerate(ids)},
+                            attrs=attrs)
+
+
+def build_neutral_question_states_clip(device) -> tuple:
+    """The pinned neutral question sequence for A0p, shape (L, 512), fp16.
+
+    Master protocol section 11.1 defines it as the CLIP or SLM token states of
+    the fixed string "question". For A0p that is the CLIP states, reproduced
+    through exactly the frozen text path `v3_00` used to build the store:
+    token embedding, positional embedding, the transformer under its causal
+    attention mask, `ln_final`, then `text_projection`, stored unnormalised,
+    with the true length taken as the EOT position plus one and therefore
+    including SOT and EOT.
+    """
+    import open_clip
+
+    model, _, _ = open_clip.create_model_and_transforms(
+        config.CLIP_MODEL_NAME, pretrained=config.CLIP_PRETRAINED)
+    tokenizer = open_clip.get_tokenizer(config.CLIP_MODEL_NAME)
+    model = model.to(device).eval()
+    for parameter in model.parameters():
+        parameter.requires_grad_(False)
+    assert model.text_pool_type == "argmax"
+    assert tuple(model.text_projection.shape) == (512, 512)
+
+    token_ids = tokenizer([NEUTRAL_QUESTION_STRING])
+    eot = int(token_ids.argmax(dim=-1))
+    valid = eot + 1
+    assert 0 < valid <= TOKEN_BUDGET_L, valid
+    with torch.no_grad():
+        cast_dtype = model.transformer.get_cast_dtype()
+        x = model.token_embedding(token_ids.to(device)).to(cast_dtype)
+        x = x + model.positional_embedding.to(cast_dtype)
+        x = model.transformer(x, attn_mask=model.attn_mask)
+        x = model.ln_final(x)
+        states = (x @ model.text_projection)[0, :valid]
+
+    padded = np.zeros((TOKEN_BUDGET_L, CLIP_QUESTION_WIDTH), dtype=np.float16)
+    padded[:valid] = states.float().cpu().numpy().astype(np.float16)
+    mask = np.ones(TOKEN_BUDGET_L, dtype=bool)
+    mask[:valid] = False
+    provenance = {
+        "definition": 'frozen-CLIP per-token states of the fixed string '
+                      f'"{NEUTRAL_QUESTION_STRING}", padded to L',
+        "string": NEUTRAL_QUESTION_STRING,
+        "token_ids": token_ids[0, :valid].tolist(),
+        "valid_positions": valid,
+        "length_convention": "EOT position + 1, including SOT and EOT",
+        "L": TOKEN_BUDGET_L,
+        "shape": list(padded.shape),
+        "dtype": "float16",
+        "sha256": sha256_array(padded),
+        "mask_sha256": sha256_array(mask),
+        "no_fully_masked_row": bool((~mask).any()),
+        "path": "token embedding + positional, transformer under the causal "
+                "attn_mask, ln_final, text_projection; unnormalised; "
+                "identical to experiments/v3_00_tokens/extract_tokens.py "
+                "text_tokens_batch",
+    }
+    del model
+    torch.cuda.empty_cache()
+    return padded, mask, provenance
+
 STRING_DTYPE = h5py.special_dtype(vlen=str)
 
 
