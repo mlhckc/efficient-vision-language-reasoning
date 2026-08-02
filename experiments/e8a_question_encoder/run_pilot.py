@@ -115,13 +115,18 @@ def gate_g1_g18_vocabulary(manifests) -> dict:
 
 
 def gate_g12_read_only() -> dict:
-    """G12: every h5py.File call in the E8A package opens a store read-only,
-    except the deliberate write of a .partial extraction file."""
+    """G12: every store-opening call in the E8A package opens read-only,
+    except the deliberate write of a .partial extraction file.
+
+    The pattern is assembled at run time so this scanner cannot match its own
+    source, the same technique the embargo scan uses.
+    """
+    pattern = "h5py" + ".File("
     directory = Path(__file__).resolve().parent
     calls, writes = [], []
     for source in sorted(directory.glob("*.py")):
         for number, line in enumerate(source.read_text().splitlines(), 1):
-            if "h5py.File(" in line:
+            if pattern in line:
                 calls.append(f"{source.name}:{number}")
                 if '"r"' not in line:
                     writes.append(f"{source.name}:{number}: {line.strip()}")
