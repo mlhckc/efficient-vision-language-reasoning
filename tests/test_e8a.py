@@ -888,8 +888,9 @@ def test_a0p_production_components(device):
     """
     import h5py
 
-    # The real adapter, against the file's own index. Loading the full store
-    # costs about 2.5 GB, so read the file's index separately and compare.
+    # The real adapter, against the file's own index read independently.
+    # This deliberately loads the full 2.5 GB store, because the point is to
+    # exercise the production path rather than a miniature of it.
     path = e8a.CLIP_TOKEN_DIR / "question_tokens.h5"
     with h5py.File(path, "r") as raw:
         ids = [i.decode("utf-8") if isinstance(i, bytes) else str(i)
@@ -959,6 +960,131 @@ def test_a0p_production_components(device):
           f"SmolLM2's {e8a.MODEL_PARAMETERS:,}")
     del model
     torch.cuda.empty_cache()
+
+
+def test_no_unbound_local_names():
+    """Static gate: no function may read or delete a name it never binds.
+
+    Two BLOCKERs in this experiment were exactly this defect — a `del lm` and
+    an `all_states.shape` left behind when the binding above them was removed.
+    Both sat in `train_arm`, which no test executes, so both reached a review
+    rather than a test. Python compiles such code happily and fails only at
+    run time, after the GPU work is done. This check reads the symbol table of
+    every function in the package and flags any name that is used locally but
+    bound nowhere in that function and resolvable nowhere else.
+    """
+    import ast
+    import builtins
+
+    def bound_names(node):
+        """Every name a function body can bind, by any mechanism."""
+        names = set()
+        for argument in getattr(node, "args", ast.arguments(
+                posonlyargs=[], args=[], kwonlyargs=[], kw_defaults=[],
+                defaults=[])).posonlyargs \
+                + node.args.args + node.args.kwonlyargs:
+            names.add(argument.arg)
+        for optional in (node.args.vararg, node.args.kwarg):
+            if optional is not None:
+                names.add(optional.arg)
+        for child in ast.walk(node):
+            if child is node:
+                continue
+            if isinstance(child, ast.Name) and isinstance(child.ctx,
+                                                          ast.Store):
+                # `del x` deliberately does NOT count as a binding: it makes
+                # x local, so deleting a name that was never assigned is an
+                # UnboundLocalError. Treating it as a binding is exactly what
+                # would hide the defect this check exists to catch.
+                names.add(child.id)
+            elif isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef,
+                                    ast.ClassDef)):
+                names.add(child.name)
+            elif isinstance(child, (ast.Import, ast.ImportFrom)):
+                for alias in child.names:
+                    names.add((alias.asname or alias.name).split(".")[0])
+            elif isinstance(child, ast.ExceptHandler) and child.name:
+                names.add(child.name)
+            elif isinstance(child, (ast.Global, ast.Nonlocal)):
+                names.update(child.names)
+        return names
+
+    def used_names(node):
+        """Names read or deleted directly in this function's own body,
+        excluding nested function bodies, which have their own scope."""
+        nested = {n for child in ast.iter_child_nodes(node)
+                  for n in ast.walk(child)
+                  if isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef,
+                                        ast.Lambda, ast.ClassDef))}
+        return {child.id for child in ast.walk(node)
+                if isinstance(child, ast.Name)
+                and isinstance(child.ctx, (ast.Load, ast.Del))
+                and child not in nested}
+
+    # Module dunders exist at run time but are bound by the import machinery,
+    # not by any statement the parser can see.
+    MODULE_DUNDERS = {"__file__", "__name__", "__doc__", "__package__",
+                      "__spec__", "__loader__", "__builtins__", "__debug__"}
+
+    def scan(text, filename):
+        tree = ast.parse(text, filename=filename)
+        module_level = bound_names(ast.FunctionDef(
+            name="_module", args=ast.arguments(
+                posonlyargs=[], args=[], kwonlyargs=[], kw_defaults=[],
+                defaults=[]), body=tree.body, decorator_list=[]))
+        found, count = [], 0
+        stack = [(tree, set())]
+        while stack:
+            node, enclosing = stack.pop()
+            for child in ast.iter_child_nodes(node):
+                if isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                    count += 1
+                    bound = bound_names(child)
+                    visible = (bound | enclosing | module_level
+                               | MODULE_DUNDERS)
+                    for name in sorted(used_names(child) - visible):
+                        if not hasattr(builtins, name):
+                            found.append(f"{filename}:{child.name}:{name}")
+                    stack.append((child, visible))
+                else:
+                    stack.append((child, enclosing))
+        return found, count
+
+    directory = PROJECT_ROOT / "experiments" / "e8a_question_encoder"
+    offenders, scanned = [], 0
+    for source in sorted(directory.glob("*.py")):
+        found, count = scan(source.read_text(), source.name)
+        offenders.extend(found)
+        scanned += count
+    check("no function in the E8A package uses a name it never binds",
+          not offenders, f"{scanned} functions scanned; {offenders}")
+
+    # Known-negatives: the checker must flag both historical BLOCKERs. If it
+    # does not, a clean result above proves nothing.
+    probe_del, _ = scan("def f(a):\n    b = a\n    del lm\n    return b\n",
+                        "<probe-del>")
+    check("the checker flags a deleted-but-never-bound name",
+          probe_del == ["<probe-del>:f:lm"], str(probe_del))
+    probe_read, _ = scan(
+        "def f(a):\n    return {'n': all_states.shape[0], 'a': a}\n",
+        "<probe-read>")
+    check("the checker flags a read-but-never-bound name",
+          probe_read == ["<probe-read>:f:all_states"], str(probe_read))
+    clean, _ = scan(
+        "import os\n"
+        "TOP = 1\n"
+        "def f(a, *rest, **kw):\n"
+        "    b = a + TOP\n"
+        "    for c in rest:\n"
+        "        b += c\n"
+        "    with open('x') as h:\n"
+        "        b += len(h.name) + len(kw) + len(os.sep)\n"
+        "    try:\n        pass\n    except ValueError as e:\n"
+        "        b += len(str(e))\n"
+        "    def inner():\n        return b\n"
+        "    del b\n    return inner\n", "<probe-clean>")
+    check("the checker does not flag legitimate bindings", clean == [],
+          str(clean))
 
 
 def test_metadata_completeness():
@@ -1063,6 +1189,7 @@ def run() -> None:
                                      sample_manifest)
         test_a0p_arm(frame, images, device, sample_manifest)
         test_a0p_production_components(device)
+        test_no_unbound_local_names()
         test_selection_and_early_stopping()
         test_metadata_completeness()
         test_embargo_and_vocabulary()

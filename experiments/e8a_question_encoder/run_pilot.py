@@ -435,7 +435,8 @@ def gate_g8_tiny_overfit(arm: str, dropout: float, seed: int, dataset,
         "trunk_gradient_norm_max": round(max(trunk_grad), 8),
         "classifier_readout_gradient_norm_min": round(min(readout_grad), 8),
         "classifier_readout_gradient_norm_max": round(max(readout_grad), 8),
-        "g7_gradients_reach_projection_reasoner_and_classifier": True,
+        "g7_gradients_reach_projection_reasoner_and_classifier":
+            bool(gradients_nonzero and gradients_finite),
         "gradients_finite": bool(gradients_finite),
         "gradients_nonzero": bool(gradients_nonzero),
     }
@@ -682,8 +683,14 @@ def train_arm(arm: str, recipe: dict, seed: int, images, questions,
         "question_encoder": lm_provenance,
         "hidden_state_rms_before_projection": round(hidden_rms, 5),
         "projected_token_rms_at_initialisation": round(projected_rms, 5),
-        "rms_support": f"both computed over the complete store, "
-                       f"{all_states.shape[0]} token rows",
+        "rms_support": f"both computed over the same support: the "
+                       f"{len(used_rows)} deduplicated packed state rows of "
+                       f"the {PILOT_SCALE} + dev questionIds this run "
+                       f"consumes. Rows the store holds but this run does not "
+                       f"read are excluded, which for the shared CLIP "
+                       f"question store means the clean-test INPUT rows are "
+                       f"not part of any development diagnostic.",
+        "rms_support_rows": int(len(used_rows)),
         "rms_note": "recorded, not normalised away. No model-specific RMS "
                     "rescaling is applied in E8A: ReasonerBlock LayerNorms "
                     "the question source at src/reasoner.py:31, applied :52, "

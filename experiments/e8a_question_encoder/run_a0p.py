@@ -205,13 +205,17 @@ def main() -> int:
         print("\ngates complete; no training run (--gates)")
         return 0
 
-    run = run_pilot.train_arm(ARM, recipe, SEED, images, questions, device)
-    utils.save_json({"metadata": utils.run_metadata(seed=SEED),
-                     "e8a_a0p_run": run},
-                    e8a.OUT_DIR / f"run_partial_{ARM}.json")
-    evaluation = run_pilot.evaluate_arm(ARM, recipe, SEED, run, images,
-                                        questions, neutral_image,
-                                        neutral_question, device)
+    try:
+        run = run_pilot.train_arm(ARM, recipe, SEED, images, questions, device)
+        utils.save_json({"metadata": utils.run_metadata(seed=SEED),
+                         "e8a_a0p_run": run},
+                        e8a.OUT_DIR / f"run_partial_{ARM}.json")
+        gate_record["run_completed_before_failure"] = run
+        evaluation = run_pilot.evaluate_arm(ARM, recipe, SEED, run, images,
+                                            questions, neutral_image,
+                                            neutral_question, device)
+    except Exception as error:                       # noqa: BLE001
+        persist_and_reraise(error)
 
     after = {p.name: e8a.sha256_file(p) for p in sorted(
         (config.RESULTS_DIR / "experiments" / "v3_01_reasoner"

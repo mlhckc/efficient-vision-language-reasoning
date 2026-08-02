@@ -165,7 +165,11 @@ def prepare_encoder_for_build(arm: str):
             "no encoder is loaded at training time: the frozen CLIP question "
             "states were produced once by experiments/v3_00_tokens and are "
             "read from the cached store, exactly as arm A0 consumes them"),
-        "all_parameters_frozen": True,
+        "all_parameters_frozen": (
+            "by construction: no encoder is instantiated on this path, and "
+            "the states were produced once by a frozen CLIP in v3_00. The "
+            "frozen parameter count is measured separately by "
+            "frozen_encoder_parameters, which asserts zero trainable."),
         "recipe_identifier": "7.1 fixed inherited v3_01 reasoner recipe",
         "projection_scale_applied": "none",
     }
@@ -233,18 +237,24 @@ def frozen_encoder_parameters(arm: str) -> dict:
 
     model, _, _ = open_clip.create_model_and_transforms(
         config.CLIP_MODEL_NAME, pretrained=config.CLIP_PRETRAINED)
+    # open_clip returns the model unfrozen; freeze before counting, exactly as
+    # experiments/v3_00_tokens/extract_tokens.py does, so the recorded
+    # trainable figure is the honest zero rather than the whole model.
+    for parameter in model.parameters():
+        parameter.requires_grad_(False)
+    assert isinstance(model.text_projection, torch.nn.Parameter), \
+        type(model.text_projection)
     text_path = [model.token_embedding.weight, model.positional_embedding,
                  model.text_projection, *model.ln_final.parameters(),
                  *model.transformer.parameters()]
-    if getattr(model, "attn_mask", None) is not None:
-        pass  # a buffer, not a parameter
     count = int(sum(p.numel() for p in text_path))
     trainable = int(sum(p.numel() for p in model.parameters()
                         if p.requires_grad))
+    assert trainable == 0, trainable
     del model
     return {"encoder": f"CLIP {config.CLIP_MODEL_NAME} text tower, frozen",
             "parameters": count,
-            "trainable_in_the_loaded_clip_model": trainable,
+            "trainable_after_freezing": trainable,
             "basis": "measured over token_embedding, positional_embedding, "
                      "transformer, ln_final and text_projection, which is the "
                      "path v3_00 ran to build the question-token store"}
