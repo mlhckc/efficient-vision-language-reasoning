@@ -572,6 +572,69 @@ def test_interventions_on_sample(frame, stores, images, lms, device,
     dataset.set_normal()
 
 
+def drive_selection(accuracies, patience):
+    """Replay the real selection state machine over a stubbed sequence."""
+    best_accuracy, best_epoch, without_improvement = 0.0, -1, 0
+    saved_at, epochs_run, stopped_early = [], 0, False
+    for epoch, accuracy in enumerate(accuracies, 1):
+        epochs_run = epoch
+        best_accuracy, best_epoch, without_improvement, improved, stop = \
+            e8a.selection_step(accuracy, best_accuracy, best_epoch, epoch,
+                               without_improvement, patience)
+        if improved:
+            saved_at.append(epoch)
+        if stop:
+            stopped_early = True
+            break
+    return {"best_accuracy": best_accuracy, "best_epoch": best_epoch,
+            "saved_at": saved_at, "epochs_run": epochs_run,
+            "stopped_early": stopped_early}
+
+
+def test_selection_and_early_stopping():
+    """The checkpoint-selection, tie-break and patience logic.
+
+    This drives the same `selection_step` the training loop calls, so it
+    cannot pass while the loop behaves differently.
+    """
+    # Earliest epoch wins the tie: 0.2 at epoch 2 must not be displaced by an
+    # equal 0.2 at epoch 3.
+    result = drive_selection([0.1, 0.2, 0.2, 0.2, 0.2], patience=10)
+    check("the earliest epoch attaining the best value wins the tie-break",
+          result["best_epoch"] == 2 and result["best_accuracy"] == 0.2,
+          f"best_epoch {result['best_epoch']}")
+    check("a checkpoint is written only on a strict improvement",
+          result["saved_at"] == [1, 2], str(result["saved_at"]))
+
+    # Patience counts consecutive non-improving epochs and stops on the 10th.
+    result = drive_selection([0.5] + [0.4] * 20, patience=10)
+    check("early stopping fires exactly at patience",
+          result["stopped_early"] and result["epochs_run"] == 11,
+          f"stopped after {result['epochs_run']} epochs")
+    check("early stopping keeps the best epoch", result["best_epoch"] == 1)
+
+    # An improvement resets the counter, so the run continues past patience.
+    result = drive_selection([0.5] + [0.4] * 9 + [0.6] + [0.4] * 9,
+                             patience=10)
+    check("an improvement resets the patience counter",
+          result["epochs_run"] == 19 and result["best_epoch"] == 11,
+          f"epochs_run {result['epochs_run']}, best_epoch "
+          f"{result['best_epoch']}")
+
+    # A monotonically improving run never stops early.
+    result = drive_selection([0.1 * i for i in range(1, 9)], patience=10)
+    check("a monotonically improving run does not stop early",
+          not result["stopped_early"] and result["best_epoch"] == 8)
+
+    # Known-negative: a run whose accuracy never exceeds the 0.0 initial best
+    # must leave best_epoch at -1, which the training loop treats as a failure
+    # rather than hashing a checkpoint that was never written.
+    result = drive_selection([0.0] * 12, patience=10)
+    check("a run that never improves leaves best_epoch unset",
+          result["best_epoch"] == -1 and result["saved_at"] == [],
+          "the training loop records this as a failure")
+
+
 def test_metadata_completeness():
     metadata = utils.run_metadata()
     required = {"timestamp", "git_commit", "git_dirty", "seed", "device",
@@ -672,6 +735,7 @@ def run() -> None:
         test_checkpoint_round_trip(model, batch, device, scratch)
         test_interventions_on_sample(frame, stores, images, lms, device,
                                      sample_manifest)
+        test_selection_and_early_stopping()
         test_metadata_completeness()
         test_embargo_and_vocabulary()
         test_reasoner_untouched()

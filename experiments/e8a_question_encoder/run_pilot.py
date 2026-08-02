@@ -485,6 +485,16 @@ def train_arm(arm: str, recipe: dict, seed: int, images, questions,
     print(f"\n=== PILOT: arm {arm}, {PILOT_SCALE}, seed {seed} ===")
     lm, lm_provenance = e8a.load_frozen_lm(e8a.ARMS[arm]["pretrained"],
                                            verbose=False)
+    # Bind the store to the model that produced it. Without this a store built
+    # from a different checkpoint, a different random seed, or with the arms
+    # swapped would be consumed silently and every provenance field would
+    # still look correct.
+    assert questions[arm].attrs["lm_state_dict_sha256"] == \
+        lm_provenance["state_dict_sha256"], (
+            f"{arm}: the hidden-state store was not produced by the language "
+            f"model loaded here")
+    print(f"[PASS] {arm} store is bound to the loaded language model, "
+          f"state_dict sha256 {lm_provenance['state_dict_sha256'][:16]}...")
     all_states = questions[arm].states
     hidden_rms = float(np.sqrt(np.mean(all_states.astype(np.float32) ** 2)))
     del lm
@@ -492,6 +502,28 @@ def train_arm(arm: str, recipe: dict, seed: int, images, questions,
     train_loader, dev_loader = e8a.make_loaders(
         e8a.V2_DIR / f"{PILOT_SCALE}.csv", e8a.V2_DIR / "dev.csv",
         images, questions[arm], recipe["batch_size"], seed)
+
+    # Loader throughput, measured before training so the Stage-8 projection can
+    # separate data-feed cost from GPU compute.
+    loader_started = time.time()
+    loader_batches, loader_samples = 0, 0
+    for batch in train_loader:
+        loader_batches += 1
+        loader_samples += int(batch[4].shape[0])
+        if loader_batches >= 50:
+            break
+    loader_seconds = time.time() - loader_started
+    loader_throughput = {
+        "batches_timed": loader_batches,
+        "samples_timed": loader_samples,
+        "seconds": round(loader_seconds, 4),
+        "batches_per_second": round(loader_batches / loader_seconds, 2),
+        "samples_per_second": round(loader_samples / loader_seconds, 1),
+        "scope": "collate and host-side assembly only, no forward or backward "
+                 "pass; num_workers=0 as the v2/v3 convention requires",
+    }
+    print(f"  loader: {loader_throughput['samples_per_second']} samples/s "
+          f"over {loader_batches} batches")
 
     model = e8a.build_e8a_model(e8a.MODEL_HIDDEN_SIZE, recipe["dropout"],
                                 seed).to(device)
@@ -565,25 +597,32 @@ def train_arm(arm: str, recipe: dict, seed: int, images, questions,
                               f"operative ceiling")
             break
 
-        if accuracy > best_accuracy:
-            best_accuracy, best_epoch = accuracy, epoch
-            without_improvement = 0
+        best_accuracy, best_epoch, without_improvement, improved, stop = \
+            e8a.selection_step(accuracy, best_accuracy, best_epoch, epoch,
+                               without_improvement, recipe["patience"])
+        if improved:
             time_to_best = time.time() - started
             torch.save(model.state_dict(), checkpoint_path)
-        else:
-            without_improvement += 1
-            if without_improvement >= recipe["patience"]:
-                print(f"[{arm}] early stop at epoch {epoch} "
-                      f"(patience {recipe['patience']})")
-                break
+        if stop:
+            print(f"[{arm}] early stop at epoch {epoch} "
+                  f"(patience {recipe['patience']})")
+            break
 
     wall_seconds = time.time() - started
     peak_allocated = torch.cuda.max_memory_allocated(device) / 2 ** 20
     peak_reserved = torch.cuda.max_memory_reserved(device) / 2 ** 20
 
+    if best_epoch < 0:
+        failure_status = ("no epoch improved on the initial best accuracy of "
+                          "0.0, so no checkpoint was ever written")
     if failure_status is not None:
-        record = {"arm": arm, "status": "FAILED", "failure": failure_status,
-                  "history": history,
+        record = {"metadata": utils.run_metadata(seed=seed),
+                  "arm": arm, "status": "FAILED", "failure": failure_status,
+                  "history": history, "epochs_run": len(history),
+                  "peak_allocated_mib": round(peak_allocated, 1),
+                  "peak_reserved_mib": round(peak_reserved, 1),
+                  "memory_ceiling_mib": round(ceiling_mib, 1),
+                  "wall_clock_halt_hours": e8a.WALL_CLOCK_HALT_HOURS,
                   "wall_clock_hours": round(wall_seconds / 3600, 5)}
         utils.save_json(record, e8a.OUT_DIR / f"FAILED_{arm}.json")
         sys.exit(f"PILOT {arm} TERMINATED: {failure_status}")
@@ -603,6 +642,7 @@ def train_arm(arm: str, recipe: dict, seed: int, images, questions,
         "wall_clock_hours": round(wall_seconds / 3600, 6),
         "time_to_best_seconds": round(time_to_best, 1),
         "steps_per_epoch": steps_per_epoch,
+        "loader_throughput": loader_throughput,
         "peak_allocated_mib": round(peak_allocated, 1),
         "peak_reserved_mib": round(peak_reserved, 1),
         "memory_ceiling_mib": round(ceiling_mib, 1),
@@ -793,10 +833,34 @@ def evaluate_arm(arm: str, recipe: dict, seed: int, run: dict, images,
         "peak_allocated_mib_training": run["peak_allocated_mib"],
     }
 
+    # Per-question correctness vectors, so later contrasts against A0p or the
+    # remaining arms need no re-inference (E8A plan section 8).
+    correctness = {
+        "normal": (logits.argmax(dim=-1) == labels).numpy(),
+        "fixed_image": (fixed_image_logits.argmax(dim=-1) == labels).numpy(),
+        "fixed_question": (fixed_question_logits.argmax(dim=-1)
+                           == labels).numpy(),
+        "shuffled_image_derangement": (shuffled_logits.argmax(dim=-1)
+                                       == labels).numpy(),
+        "shuffled_image_row_v3_01_comparable": (
+            row_shuffled_logits.argmax(dim=-1) == labels).numpy(),
+    }
+    correctness_path = e8a.OUT_DIR / f"correctness_{arm}_seed{seed}.npz"
+    np.savez_compressed(
+        correctness_path,
+        question_ids=np.array(dataset.question_ids),
+        labels=labels.numpy(),
+        **correctness)
+
     del model
     torch.cuda.empty_cache()
     return {
         "arm": arm,
+        "correctness_vectors": {
+            "path": str(correctness_path.relative_to(PROJECT_ROOT)),
+            "sha256": e8a.sha256_file(correctness_path),
+            "conditions": sorted(correctness),
+            "n_rows": int(len(labels))},
         "conditions": conditions,
         "differences_from_normal": differences,
         "degeneracy_rule": degeneracy,
@@ -932,10 +996,14 @@ def main() -> int:
     except Exception as error:                       # noqa: BLE001
         persist_and_reraise(error)
 
+    # Written unconditionally, and before training, so a run that halts at a
+    # later gate still leaves a record of the gates it passed. A sys.exit
+    # raises SystemExit, which is a BaseException and is deliberately not
+    # caught by the handlers above, so this is the only point at which the
+    # record is guaranteed to reach disk.
+    utils.save_json({"metadata": utils.run_metadata(),
+                     "e8a_gates": gate_record}, e8a.OUT_DIR / "gates.json")
     if args.gates:
-        utils.save_json({"metadata": utils.run_metadata(),
-                         "e8a_gates": gate_record},
-                        e8a.OUT_DIR / "gates.json")
         print("\ngates complete; no training run (--gates)")
         return 0
 
@@ -961,6 +1029,40 @@ def main() -> int:
         "A1_minus_A1r_dev_accuracy": round(
             runs["A1"]["best_dev_accuracy"] - runs["A1r"]["best_dev_accuracy"],
             5),
+        "A1r_degeneracy_rule_fires":
+            evaluations["A1r"]["degeneracy_rule"]["rule_fires"],
+        "A1r_normal_minus_fixed_question": evaluations["A1r"][
+            "differences_from_normal"]["normal_minus_fixed_question"],
+        "fixed_question_valid_positions": {
+            arm: gate_record["pinned_neutral_question"][arm][
+                "valid_positions"] for arm in e8a.ARMS},
+        "fixed_question_caveat":
+            "the pinned neutral question string tokenises to a single token "
+            "against a measured mean of 10.93 tokens for real questions, so "
+            "normal minus fixed-question confounds question content with a "
+            "sequence-length change. The construction is exactly the one "
+            "master protocol section 11.1 pins; the confound is a property of "
+            "that pinned construction and is stated wherever the degeneracy "
+            "rule is discussed.",
+        "extraction_precision_per_arm": {
+            **{arm: json.loads(
+                (e8a.OUT_DIR / "extraction.json").read_text())
+                ["e8a_extraction"]["preflight"][arm]
+                ["fp32_reference_diagnostic"]["relative_l2"]
+                for arm in e8a.ARMS},
+            "note": "relative L2 of the stored bfloat16-derived states against "
+                    "an fp32 forward, per arm. The two members of the pair are "
+                    "stored at different numerical fidelity because their "
+                    "activation ranges differ. Both use their own operative "
+                    "bfloat16 representation under the pre-registered "
+                    "precision policy of canonical section 20; this is a "
+                    "property of that policy, not a confound introduced here.",
+        },
+        "claim_scope":
+            "a result about the frozen model under the pre-registered "
+            "post-final-norm token-sequence interface at L = 32. Never "
+            "generalised to 'small language models do not help', nor to "
+            "'small language models help'.",
         "scope": "ONE seed at ONE scale. This is a bounded pilot difference, "
                  "not the HA3 causal estimate, which requires seeds 0/1/2 at "
                  "40k and 250k with the fixed-seed-set image-clustered "

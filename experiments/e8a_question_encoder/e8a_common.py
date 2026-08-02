@@ -605,6 +605,25 @@ def make_optimizer(model, lr, weight_decay):
          {"params": no_decay, "weight_decay": 0.0}], lr=lr)
 
 
+def selection_step(accuracy, best_accuracy, best_epoch, epoch,
+                   without_improvement, patience):
+    """One epoch of the checkpoint-selection and early-stopping decision.
+
+    Extracted as a pure function so it can be driven by a test over a stubbed
+    accuracy sequence. The behaviour is that of
+    experiments/v3_01_reasoner/run.py:152-162: a strict `>` comparison, so the
+    EARLIEST epoch attaining the best value wins the tie-break, and patience
+    counts consecutive epochs without an improvement.
+
+    Returns (best_accuracy, best_epoch, without_improvement, improved, stop).
+    """
+    if accuracy > best_accuracy:
+        return accuracy, epoch, 0, True, False
+    without_improvement += 1
+    return (best_accuracy, best_epoch, without_improvement, False,
+            without_improvement >= patience)
+
+
 def make_scheduler(optimizer, total_steps, warmup_frac):
     import math
     warmup_steps = int(round(warmup_frac * total_steps))
