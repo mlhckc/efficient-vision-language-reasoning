@@ -379,7 +379,7 @@ def gate_g8_tiny_overfit(arm: str, dropout: float, seed: int, dataset,
                                            e8a.EXPECTED_FIXED_RECIPE
                                            ["grad_clip"])
             optimizer.step()
-            running += float(loss) * labels.shape[0]
+            running += loss.item() * labels.shape[0]
             seen += labels.shape[0]
         losses.append(running / seen)
         logits, labels_all = e8a.predict_logits(model, loader, device)
@@ -543,7 +543,7 @@ def train_arm(arm: str, recipe: dict, seed: int, images, questions,
                                            recipe["grad_clip"])
             optimizer.step()
             scheduler.step()
-            running += float(loss) * labels.shape[0]
+            running += loss.item() * labels.shape[0]
             seen += labels.shape[0]
         logits, labels_all = e8a.predict_logits(model, dev_loader, device)
         accuracy = float((logits.argmax(dim=-1) == labels_all).double().mean())
