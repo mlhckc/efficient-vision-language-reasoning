@@ -36,7 +36,6 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-import config  # noqa: E402
 from src import utils  # noqa: E402
 from experiments.e8a_question_encoder import e8a_common as e8a  # noqa: E402
 from experiments.e8a_question_encoder import run_pilot  # noqa: E402
@@ -82,7 +81,7 @@ def store_path(arm: str, scale: str) -> Path:
     return e8a.SLM_TOKEN_DIR / e8a.store_name(arm, scale)
 
 
-def assert_stores_agree(arm: str, device=None) -> dict:
+def assert_stores_agree(arm: str, large_store=None) -> dict:
     """The 40k and 250k stores of one arm must agree on every shared string.
 
     Extraction encodes one string per forward pass and is deterministic, so a
@@ -95,7 +94,10 @@ def assert_stores_agree(arm: str, device=None) -> dict:
     small = e8a.SLM_TOKEN_DIR / e8a.store_name(arm, "train_40k")
     large = e8a.SLM_TOKEN_DIR / e8a.store_name(arm, "train_250k")
     a = e8a.SLMQuestionStore.open(small)
-    b = e8a.SLMQuestionStore.open(large)
+    # Reuse the already-open 250k store when the caller has one: opening a
+    # second copy would add 2.18 GiB of resident host memory for nothing.
+    b = large_store if large_store is not None else \
+        e8a.SLMQuestionStore.open(large)
     assert a.attrs["lm_state_dict_sha256"] == b.attrs["lm_state_dict_sha256"], (
         f"{arm}: the two stores were produced by different encoders")
     shared = sorted(set(a.row_of) & set(b.row_of))
@@ -120,7 +122,10 @@ def assert_stores_agree(arm: str, device=None) -> dict:
               "small_store_sha256": e8a.sha256_file(small),
               "large_store_sha256": e8a.sha256_file(large),
               "encoder_state_dict_sha256": a.attrs["lm_state_dict_sha256"]}
-    del a, b
+    record["large_store_reused_from_caller"] = large_store is not None
+    del a
+    if large_store is None:
+        del b
     assert record["bitwise_identical"], (
         f"{arm}: the train_40k and train_250k stores disagree on "
         f"{mismatched} of {len(shared)} shared questionIds, max deviation "
@@ -316,7 +321,14 @@ def main() -> int:
              for p in measured_hashes
              if manifest["data_hashes"][p] != measured_hashes[p]}
     assert not drift, f"input data changed since the manifest was frozen: {drift}"
-    print(f"[PASS] {len(measured_hashes)} input hashes re-measured and "
+    frozen_stores = {k: v for k, v in manifest["store_hashes"].items()
+                     if v is not None}
+    store_drift = {k: (v, e8a.sha256_file(PROJECT_ROOT / k))
+                   for k, v in frozen_stores.items()
+                   if e8a.sha256_file(PROJECT_ROOT / k) != v}
+    assert not store_drift, f"a pinned store changed since freezing: {store_drift}"
+    print(f"[PASS] {len(measured_hashes)} input hashes and "
+          f"{len(frozen_stores)} pinned store hashes re-measured and "
           f"identical to the frozen manifest")
 
     run_pilot.gate_g17_embargo()
@@ -341,7 +353,8 @@ def main() -> int:
     store_agreement = {}
     if args.scale == "train_250k":
         for arm in sorted({r["arm"] for r in wanted} - {"A0p"}):
-            store_agreement[arm] = assert_stores_agree(arm)
+            store_agreement[arm] = assert_stores_agree(
+                arm, large_store=questions[arm])
 
     neutral_image, neutral_image_provenance = e8a.build_neutral_image_tokens(
         images)
@@ -373,17 +386,25 @@ def main() -> int:
         construction[str(seed)] = run_pilot.gate_g13_construction(
             recipe["dropout"], seed, arms=gate_arms)
 
-    probe_arm = gate_arms[0]
-    probe_dataset = e8a.E8ATokenDataset(e8a.V2_DIR / f"{args.scale}.csv",
-                                        images, questions[probe_arm])
-    probe_loader = DataLoader(probe_dataset, batch_size=recipe["batch_size"],
-                              shuffle=False, collate_fn=e8a.collate_e8a)
-    e8a.prepare_encoder_for_build(probe_arm)
-    probe_model = e8a.build_e8a_model(e8a.arm_d_question(probe_arm),
-                                      recipe["dropout"], 0)
-    forward_gate = run_pilot.gate_g4_g5(probe_model, probe_loader, device)
-    del probe_model, probe_loader, probe_dataset
-    torch.cuda.empty_cache()
+    # G4/G5 per ARM, on that arm's own store, so the recorded gate belongs to
+    # the run it is filed under rather than to whichever arm sorted first.
+    forward_gates = {}
+    for probe_arm in gate_arms:
+        probe_dataset = e8a.E8ATokenDataset(e8a.V2_DIR / f"{args.scale}.csv",
+                                            images, questions[probe_arm])
+        probe_loader = DataLoader(probe_dataset,
+                                  batch_size=recipe["batch_size"],
+                                  shuffle=False, collate_fn=e8a.collate_e8a)
+        e8a.prepare_encoder_for_build(probe_arm)
+        probe_model = e8a.build_e8a_model(e8a.arm_d_question(probe_arm),
+                                          recipe["dropout"], 0)
+        gate = run_pilot.gate_g4_g5(probe_model, probe_loader, device)
+        gate.update({"arm": probe_arm, "scale": args.scale,
+                     "question_store": store_path(probe_arm, args.scale)
+                     .relative_to(PROJECT_ROOT).as_posix()})
+        forward_gates[probe_arm] = gate
+        del probe_model, probe_loader, probe_dataset
+        torch.cuda.empty_cache()
 
     completed = []
     for spec in wanted:
@@ -432,7 +453,7 @@ def main() -> int:
                 "pinned_neutral_question": neutral_question[arm][2],
                 "recipe": recipe,
                 "gates": {"g13_construction": construction[str(seed)],
-                          "g4_g5_forward_and_mask": forward_gate,
+                          "g4_g5_forward_and_mask": forward_gates[arm],
                           "store_agreement_40k_vs_250k":
                               store_agreement.get(arm)},
                 "clean_test_accessed": False,

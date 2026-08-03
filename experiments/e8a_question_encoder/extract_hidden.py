@@ -691,7 +691,7 @@ def main() -> int:
         if not all(gates.values()):
             utils.save_json(record, e8a.OUT_DIR / record_name)
             sys.exit("EXTRACTION GATE FAILED: no store written; evidence in "
-                     "results/experiments/e8a_question_encoder/extraction.json")
+                     f"results/experiments/e8a_question_encoder/{record_name}")
         written = {arm: write_store(arm, strings, token_ids, frames, device,
                                     preflights[arm], args.scope)
                    for arm in e8a.ARMS}
