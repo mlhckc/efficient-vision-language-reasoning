@@ -1,0 +1,327 @@
+{
+  "e8a_a0p_gates": {
+    "arm": "A0p",
+    "g12_read_only": {
+      "h5py_file_calls": [
+        "e8a_common.py:274",
+        "e8a_common.py:615",
+        "e8a_common.py:640",
+        "extract_hidden.py:450",
+        "extract_hidden.py:480"
+      ],
+      "non_read_only": [
+        "extract_hidden.py:450: with h5py.File(partial, \"w\") as store:"
+      ],
+      "passed": true
+    },
+    "g13_construction": {
+      "construction_order": "load and freeze the question encoder, then utils.set_seed(seed), then the trunk from unmodified src/reasoner.py, then the projection. For A0p the encoder is the frozen CLIP that produced the cached store, so that step loads nothing and is discharged by construction.",
+      "fresh_trunk_sha256": "10a34fa2ec649f894146c7eec6d2ea7e8926ce4bd960a3c3fc251b4ba530800a",
+      "per_arm": {
+        "A0p": {
+          "projection": "316a370033d3364df90591964fb738057dc430538200ca886e00bd811fad0dd7",
+          "trunk": "10a34fa2ec649f894146c7eec6d2ea7e8926ce4bd960a3c3fc251b4ba530800a"
+        },
+        "A1": {
+          "projection": "7d8661e0bc563ca7ea6a6aeeb13fdc668f94b03d0418846649bd3aef5363b86c",
+          "trunk": "10a34fa2ec649f894146c7eec6d2ea7e8926ce4bd960a3c3fc251b4ba530800a"
+        },
+        "A1r": {
+          "projection": "7d8661e0bc563ca7ea6a6aeeb13fdc668f94b03d0418846649bd3aef5363b86c",
+          "trunk": "10a34fa2ec649f894146c7eec6d2ea7e8926ce4bd960a3c3fc251b4ba530800a"
+        }
+      },
+      "projection_identical_per_width_group": {
+        "512": "not applicable: A0p is the only arm of this width",
+        "576": true
+      },
+      "trunk_identical": true
+    },
+    "g15_manifests": {
+      "data/v2/answer_vocab_v2.json": {
+        "bytes": 3083,
+        "sha256": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680"
+      },
+      "data/v2/dev.csv": {
+        "bytes": 522496,
+        "sha256": "95d1b504dcc4deb7d69ba0c9e293d1c00bae93df4b6907174a1dd615cb93cdc9"
+      },
+      "data/v2/train_40k.csv": {
+        "bytes": 2704679,
+        "sha256": "cda03c133e581d486c1e29f6d99376ee59f9841564b3fb890bc401f4da5c90d2"
+      },
+      "data/v3/tokens/image_tokens.h5": {
+        "bytes": 3262394248,
+        "sha256": "c852811a4e3393387012a099d3ad8d494fe4be0f3d95f70b4a1328db4ad59588"
+      },
+      "data/v3/tokens/question_tokens.h5": {
+        "bytes": 2508622372,
+        "sha256": "503f33827f25202b979076333a4a5258b31808f674b31d521b4b43e098732037"
+      },
+      "results/experiments/v3_01_reasoner/results.json": {
+        "bytes": 19655,
+        "sha256": "472fe626775d755e1a24ae3da814466773b3e067537201cb88351ea27d8abfd9"
+      }
+    },
+    "g17_embargo": {
+      "files_checked": [
+        "e8a_common.py",
+        "extract_hidden.py",
+        "run_a0p.py",
+        "run_pilot.py",
+        "stage8_projection.py"
+      ],
+      "passed": true
+    },
+    "g1_g18_vocabulary": {
+      "label_binding": {
+        "dev.csv": {
+          "mismatches": 0,
+          "rows_checked": 7714
+        },
+        "train_40k.csv": {
+          "mismatches": 0,
+          "rows_checked": 40000
+        }
+      },
+      "n_answers": 100,
+      "passed": true,
+      "path": "data/v2/answer_vocab_v2.json",
+      "sha256": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680"
+    },
+    "g4_g5_forward_and_mask": {
+      "finite": true,
+      "logits_shape": [
+        128,
+        100
+      ],
+      "max_logit_change": 0.0,
+      "padded_positions_corrupted": 1553,
+      "passed": true,
+      "tolerance": 0.0001
+    },
+    "g8_tiny_overfit": {
+      "A0p": {
+        "arm": "A0p",
+        "best_train_accuracy": 0.994,
+        "classifier_readout_gradient_norm_max": 13.27787399,
+        "classifier_readout_gradient_norm_min": 1.75488591,
+        "criterion_reached": true,
+        "criterion_reached_at_epoch": 12,
+        "epochs_run": 12,
+        "final_loss": 0.08368,
+        "first_loss": 4.02675,
+        "g7_gradients_reach_projection_reasoner_and_classifier": true,
+        "g9_save_load": {
+          "checkpoint": "results/experiments/e8a_question_encoder/checkpoints/overfit_A0p.pt",
+          "logits_bitwise_identical": true,
+          "max_logit_deviation": 0.0,
+          "predictions_identical": true,
+          "sha256": "883a435acf28516d96b69d44007b5a9bd36b0c06d182659b70cc13e2eb6106b0",
+          "tolerance": "G9 requires identical predictions; bitwise logit identity is the stronger property and is what was observed"
+        },
+        "gradients_finite": true,
+        "gradients_nonzero": true,
+        "halting_for_this_arm": true,
+        "loss_decreased": true,
+        "projection_gradient_norm_max": 5.70170736,
+        "projection_gradient_norm_min": 0.10853369,
+        "settings": {
+          "criterion_train_accuracy": 0.99,
+          "dropout": 0.0,
+          "lr": 0.001,
+          "max_epochs": 200,
+          "n_examples": 1000,
+          "source": "inherited unchanged from experiments/v3_01_reasoner/run.py:202-236 GATE 3; gate settings, not tuned hyperparameters",
+          "warmup": 0.0
+        },
+        "trunk_gradient_norm_max": 0.13436893,
+        "trunk_gradient_norm_min": 0.00242805
+      }
+    },
+    "namespace_isolation": {
+      "a0_checkpoint_sha256_before": {
+        "reasoner_seed0.pt": "d78d16f50fc249aa2273adec46c87c83ee5fc64dd92929eae0ce075298c0ced9",
+        "reasoner_seed1.pt": "980b67de6a1550c853249c2f7a871573940896de2c573323db6241d06e085c2b",
+        "reasoner_seed2.pt": "05fb35574347bd5d63ebd47e63a3f92bfc69574c0034354630e6b1aebd6a887a"
+      },
+      "a0_checkpoints_present": [
+        "reasoner_seed0.pt",
+        "reasoner_seed1.pt",
+        "reasoner_seed2.pt",
+        "search0_lr0.0003_w0.0_d0.1.pt",
+        "search1_lr0.0003_w0.0_d0.3.pt",
+        "search2_lr0.0003_w0.03_d0.1.pt",
+        "search3_lr0.0003_w0.03_d0.3.pt",
+        "search4_lr0.001_w0.0_d0.1.pt",
+        "search5_lr0.001_w0.0_d0.3.pt",
+        "search6_lr0.001_w0.03_d0.1.pt",
+        "search7_lr0.001_w0.03_d0.3.pt"
+      ],
+      "a0p_outputs": {
+        "checkpoint": "results/experiments/e8a_question_encoder/checkpoints/e8a_A0p_train_40k_seed0.pt",
+        "correctness": "results/experiments/e8a_question_encoder/correctness_A0p_seed0.npz",
+        "gates": "results/experiments/e8a_question_encoder/gates_A0p.json",
+        "pilot": "results/experiments/e8a_question_encoder/pilot_A0p.json"
+      },
+      "a1_a1r_sha256_before": {
+        "correctness_A1_seed0.npz": "1148f386dee5e716a0e43637904b9a98e563260a6fbd2d02c10c53a7168b1043",
+        "correctness_A1r_seed0.npz": "6aef72ae0a784737b7ed1e448005a077e0ce413c3339ff38084941f2d085112c",
+        "e8a_A1_train_40k_seed0.pt": "640a2e5b3281921c9f088b17220b3b2972d785e1a394eb4fd1ea52aa5acc15f4",
+        "e8a_A1r_train_40k_seed0.pt": "a3e8441c00d42bc9b1b03aabe9e9f0ca6049d39fbe57532c5814ead2ca788e38"
+      },
+      "passed": true
+    },
+    "parameters": {
+      "non_trainable_inside_trained_module": 0,
+      "trainable_projection": 262656,
+      "trainable_reasoner_trunk": 21099620,
+      "trainable_total": 21362276
+    },
+    "pinned_neutral_image": {
+      "definition": "element-wise mean of the cached CLIP image-token store over the unique training imageIds of data/v2/train_250k.csv",
+      "dtype": "float16",
+      "manifest": "data/v2/train_250k.csv",
+      "manifest_sha256": "be7d867afd2757a631145bc1c56c3b1a4dcf43784c1a6abf1c3b75452b865074",
+      "n_rows_in_store": 63599,
+      "n_training_images": 61859,
+      "sha256": "8cb31f37bde17768238ff7fd5ba716c795e238091cbc94a0a5c6242297e414b3",
+      "shape": [
+        50,
+        512
+      ]
+    },
+    "pinned_neutral_question": {
+      "A0p": {
+        "L": 32,
+        "definition": "frozen-CLIP per-token states of the fixed string \"question\", padded to L",
+        "dtype": "float16",
+        "length_convention": "EOT position + 1, including SOT and EOT",
+        "mask_sha256": "5ec7c06906f44442b34b1165dba53459af7794d74ff01d3f0d70e2a20f40dcf9",
+        "no_fully_masked_row": true,
+        "path": "token embedding + positional, transformer under the causal attn_mask, ln_final, text_projection; unnormalised; identical to experiments/v3_00_tokens/extract_tokens.py text_tokens_batch",
+        "sha256": "64589b2efcf8c6024e10656cfe68cbc4d24c6a72545678af22ecec9fc7dd116e",
+        "shape": [
+          32,
+          512
+        ],
+        "string": "question",
+        "token_ids": [
+          49406,
+          4382,
+          49407
+        ],
+        "valid_positions": 3
+      }
+    },
+    "question_length": {
+      "convention": "EOT position + 1, including SOT and EOT",
+      "mean_clip_tokens_dev": 12.1816,
+      "mean_clip_tokens_train_40k": 12.1871,
+      "support": "the rows of train_40k.csv and dev.csv this run reads"
+    },
+    "recipe": {
+      "batch_size": 128,
+      "checkpoint_selection": "best development accuracy",
+      "dropout": 0.1,
+      "final_max_epochs": 100,
+      "grad_clip": 1.0,
+      "learning_rate": 0.0003,
+      "optimizer": "AdamW, two parameter groups",
+      "patience": 10,
+      "precision": "bf16 autocast on the training path only; fp32 evaluation",
+      "recipe_identifier": "7.1 fixed inherited v3_01 reasoner recipe",
+      "schedule": "cosine after warmup, LambdaLR",
+      "schedule_horizon": "final_max_epochs x steps_per_epoch",
+      "schedule_step_frequency": "per optimizer step",
+      "source": "experiments/v3_01_reasoner/run.py (live constants) and its stored results.json selected_config",
+      "stored_results_sha256": "472fe626775d755e1a24ae3da814466773b3e067537201cb88351ea27d8abfd9",
+      "tie_break": "earliest epoch attaining the best value",
+      "wall_clock_gate_hours_v3_01_historical_non_operative": 12.0,
+      "wall_clock_halt_hours_operative": 8.0,
+      "warmup_frac": 0.0,
+      "weight_decay": 0.01,
+      "weight_decay_applies_to": "ndim >= 2 only; 0.0 on ndim < 2"
+    },
+    "scheduler_formula": {
+      "expected_lr": [
+        0.0003,
+        0.000299999999,
+        0.000299999924,
+        0.000299925984,
+        0.000298153251,
+        0.00015,
+        1e-12
+      ],
+      "max_absolute_error": 0.0,
+      "max_epochs": 100,
+      "observed_lr": [
+        0.0003,
+        0.000299999999,
+        0.000299999924,
+        0.000299925984,
+        0.000298153251,
+        0.00015,
+        1e-12
+      ],
+      "passed": true,
+      "probe_steps": [
+        0,
+        1,
+        10,
+        313,
+        1565,
+        15650,
+        31299
+      ],
+      "step_frequency": "per optimizer step",
+      "steps_per_epoch": 313,
+      "total_steps": 31300,
+      "warmup_steps": 0
+    },
+    "store_attributes": {
+      "A0p": {
+        "arm": "A0p",
+        "layer_rule": "CLIP ln_final then text_projection, per-token; the v3_00 approach-A token states, unnormalised",
+        "length_convention": "EOT position + 1, including SOT and EOT (text.argmax convention)",
+        "ln_final_applied": true,
+        "n_texts_written": 184432,
+        "normalized": false,
+        "scheme": "ids[i] owns tokens[offsets[i]:offsets[i]+lengths[i]]; identical question texts share one packed block",
+        "source_path": "data/v3/tokens/question_tokens.h5",
+        "source_sha256": "not hashed here; pinned by G15 at run time",
+        "text_projection_applied": true
+      }
+    }
+  },
+  "metadata": {
+    "batch_size": 256,
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "deterministic": true,
+    "device": "cuda",
+    "dropout": 0.3,
+    "embed_dim": 512,
+    "git_commit": "077af56",
+    "git_dirty": false,
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "h5py_version": "3.16.0",
+    "hidden_dim": 512,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "n_train": 40000,
+    "n_val": 8000,
+    "numpy_version": "2.5.0",
+    "open_clip_version": "3.3.0",
+    "pandas_version": "3.0.3",
+    "python": "3.12.3",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "timestamp": "2026-08-02T21:41:28",
+    "top_k_answers": 100,
+    "torch": "2.12.1+cu130",
+    "weight_decay": 0.0001
+  }
+}

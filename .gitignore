@@ -12,6 +12,17 @@ embeddings/*
 results/*
 !results/.gitkeep
 
+# E8A SmolLM2-135M core: the small auditable JSON records are tracked so every
+# reported number can be checked from a clone. The binaries are not: see
+# results/experiments/e8a_question_encoder/README.md and ARTEFACT_MANIFEST.json.
+# Each directory level has to be re-included before git will descend into it.
+!results/experiments/
+results/experiments/*
+!results/experiments/e8a_question_encoder/
+results/experiments/e8a_question_encoder/*
+!results/experiments/e8a_question_encoder/*.json
+!results/experiments/e8a_question_encoder/README.md
+
 # Python bytecode
 __pycache__/
 *.pyc

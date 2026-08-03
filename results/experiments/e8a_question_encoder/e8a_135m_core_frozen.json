@@ -1,0 +1,714 @@
+{
+  "e8a_135m_core_frozen": {
+    "analysis_inputs": {
+      "canonical_evaluation_rows": {
+        "dev_sha256": "95d1b504dcc4deb7d69ba0c9e293d1c00bae93df4b6907174a1dd615cb93cdc9",
+        "labels_sha256": "5643b716403e664cd01b32e1724acb28d8ef677d21b03382526a85046429e228",
+        "n_rows": 7714,
+        "row_order_sha256": "ba12180a7c0bcaef1fa2d9f0fd69c2404e14cc9cf50bbcec86ebe600d0d1c5b7",
+        "vocabulary_sha256": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680"
+      },
+      "files": [
+        {
+          "bytes": 522496,
+          "path": "data/v2/dev.csv",
+          "sha256": "95d1b504dcc4deb7d69ba0c9e293d1c00bae93df4b6907174a1dd615cb93cdc9"
+        },
+        {
+          "bytes": 2704679,
+          "path": "data/v2/train_40k.csv",
+          "sha256": "cda03c133e581d486c1e29f6d99376ee59f9841564b3fb890bc401f4da5c90d2"
+        },
+        {
+          "bytes": 16911084,
+          "path": "data/v2/train_250k.csv",
+          "sha256": "be7d867afd2757a631145bc1c56c3b1a4dcf43784c1a6abf1c3b75452b865074"
+        },
+        {
+          "bytes": 3083,
+          "path": "data/v2/answer_vocab_v2.json",
+          "sha256": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680"
+        },
+        {
+          "bytes": 171156,
+          "path": "data/v2/metadata/dev_types.csv",
+          "sha256": "2f2308728e3ed499104a5df5b206bc96e26b88f08e84ca72aa6a50c02a46a25f"
+        },
+        {
+          "bytes": 886946,
+          "path": "data/v2/metadata/train_40k_types.csv",
+          "sha256": "ad970e078609df021bab34795c0ea131de686604992bb1dd1db596bd373e42f6"
+        },
+        {
+          "bytes": 3262394248,
+          "path": "data/v3/tokens/image_tokens.h5",
+          "sha256": "c852811a4e3393387012a099d3ad8d494fe4be0f3d95f70b4a1328db4ad59588"
+        },
+        {
+          "bytes": 2508622372,
+          "path": "data/v3/tokens/question_tokens.h5",
+          "sha256": "503f33827f25202b979076333a4a5258b31808f674b31d521b4b43e098732037"
+        },
+        {
+          "bytes": 497979128,
+          "path": "data/v3_slm_tokens/e8a_135m_A1_train40k_dev.h5",
+          "sha256": "0572b9a8b7db5ba7da06eb9f39e5c87dbe7c66be805050ca7d2daf24902a24a6"
+        },
+        {
+          "bytes": 2358693696,
+          "path": "data/v3_slm_tokens/e8a_135m_A1_train250k_dev.h5",
+          "sha256": "4bb5fadd021cf1c41e2a0ee6a6c25a9bf4b92ff4653e9e2fd053ceca71a3f3bc"
+        },
+        {
+          "bytes": 497979128,
+          "path": "data/v3_slm_tokens/e8a_135m_A1r_train40k_dev.h5",
+          "sha256": "f42e36b7dd2c27f9c1e3e695a57764a5ac49c54bde44a4ebe702d8e8afce4476"
+        },
+        {
+          "bytes": 2358693696,
+          "path": "data/v3_slm_tokens/e8a_135m_A1r_train250k_dev.h5",
+          "sha256": "699f2191e3bbb8775235a3d9eaa953847db1ce00827ffb7d62149605b9b1c031"
+        }
+      ]
+    },
+    "analysis_outputs": {
+      "core_analysis.json": {
+        "bytes": 92453,
+        "path": "results/experiments/e8a_question_encoder/core_analysis.json",
+        "sha256": "7545b66b9ad0bc1be8a0c4b8b67572dc15f8f234a5eb893ade7a4a5f611c7b46"
+      },
+      "core_analysis_train_40k.json": {
+        "bytes": 54383,
+        "path": "results/experiments/e8a_question_encoder/core_analysis_train_40k.json",
+        "sha256": "4f0dbbbe47a7851aed1bcc18f6024ef8a34c9853e1117cbf3e96ae777e0700b4"
+      },
+      "efficiency_resources.json": {
+        "bytes": 11932,
+        "path": "results/experiments/e8a_question_encoder/efficiency_resources.json",
+        "sha256": "bcabe43e7cddc3e95a4b830086ff80710c84ae91bc57c4c20c892e9e0c60284c"
+      }
+    },
+    "cells_frozen": 18,
+    "cells_missing": [],
+    "complete": true,
+    "execution_manifest": {
+      "bytes": 23810,
+      "path": "results/experiments/e8a_question_encoder/execution_manifest.json",
+      "sha256": "315672247b0edd756d30a9c457375d0f39661c00b8e01ed35f3e0f56dfaeb5bc"
+    },
+    "matrix": "E8A SmolLM2-135M dissertation core",
+    "runs": {
+      "A0p/train_250k/seed0": {
+        "arm": "A0p",
+        "best_epoch": 9,
+        "checkpoint": {
+          "bytes": 85494430,
+          "path": "results/experiments/e8a_question_encoder/checkpoints/e8a_A0p_train_250k_seed0.pt",
+          "sha256": "9ab8cc1e27dfddd9a3dbad4f8db991bbca2d528795333862adef5c51178e9281"
+        },
+        "code_head": "472aa38",
+        "code_head_dirty": false,
+        "dev_accuracy": 0.59463,
+        "epochs_run": 19,
+        "prediction_vectors": {
+          "bytes": 43368,
+          "path": "results/experiments/e8a_question_encoder/correctness_A0p_train_250k_seed0.npz",
+          "sha256": "cd80d4d8c2f5e3577ae82d1fd1b7c30a5f4a6169d5cbf5fe828b649cf90ae1d8"
+        },
+        "record": {
+          "bytes": 18095,
+          "path": "results/experiments/e8a_question_encoder/run_A0p_train_250k_seed0.json",
+          "sha256": "a98c7e2ca56f9c2d294acf57ca2dd5e154b5abb3f4d13e8173d7746987698a45"
+        },
+        "reused_phase_1b_pilot": false,
+        "scale": "train_250k",
+        "seed": 0,
+        "store_agreement_40k_vs_250k": null,
+        "wall_clock_hours": 0.469918
+      },
+      "A0p/train_250k/seed1": {
+        "arm": "A0p",
+        "best_epoch": 8,
+        "checkpoint": {
+          "bytes": 85494430,
+          "path": "results/experiments/e8a_question_encoder/checkpoints/e8a_A0p_train_250k_seed1.pt",
+          "sha256": "91b2257ca0c9766b124aea1258c85eb17f3d3116d0fbfdc3213fe91f60c6e6e2"
+        },
+        "code_head": "472aa38",
+        "code_head_dirty": false,
+        "dev_accuracy": 0.59411,
+        "epochs_run": 18,
+        "prediction_vectors": {
+          "bytes": 43339,
+          "path": "results/experiments/e8a_question_encoder/correctness_A0p_train_250k_seed1.npz",
+          "sha256": "5b869ad952f2060e049b4147677958fff678b05e86733758ce4ffe31d6a0fdb8"
+        },
+        "record": {
+          "bytes": 17981,
+          "path": "results/experiments/e8a_question_encoder/run_A0p_train_250k_seed1.json",
+          "sha256": "7aadf6df5fe94881d183993a70d1ff309dfc71b4ee6993233e4e5579fec0bdb7"
+        },
+        "reused_phase_1b_pilot": false,
+        "scale": "train_250k",
+        "seed": 1,
+        "store_agreement_40k_vs_250k": null,
+        "wall_clock_hours": 0.444964
+      },
+      "A0p/train_250k/seed2": {
+        "arm": "A0p",
+        "best_epoch": 7,
+        "checkpoint": {
+          "bytes": 85494430,
+          "path": "results/experiments/e8a_question_encoder/checkpoints/e8a_A0p_train_250k_seed2.pt",
+          "sha256": "8061d4ad2722304652c7d35a536eecf087dee94d25dde8efb7908ff4215f4e16"
+        },
+        "code_head": "472aa38",
+        "code_head_dirty": false,
+        "dev_accuracy": 0.59463,
+        "epochs_run": 17,
+        "prediction_vectors": {
+          "bytes": 43365,
+          "path": "results/experiments/e8a_question_encoder/correctness_A0p_train_250k_seed2.npz",
+          "sha256": "9310cd306e6b999ecbc6c7483e988ac60ff8a3d58959edfc2181e073b0db7fd1"
+        },
+        "record": {
+          "bytes": 17871,
+          "path": "results/experiments/e8a_question_encoder/run_A0p_train_250k_seed2.json",
+          "sha256": "94e4e280f328c74c8b04cdd3ba7c7d6e9943e785e985e8a5fa6b15576fae2e47"
+        },
+        "reused_phase_1b_pilot": false,
+        "scale": "train_250k",
+        "seed": 2,
+        "store_agreement_40k_vs_250k": null,
+        "wall_clock_hours": 0.420577
+      },
+      "A0p/train_40k/seed0": {
+        "arm": "A0p",
+        "best_epoch": 5,
+        "checkpoint": {
+          "bytes": 85494305,
+          "path": "results/experiments/e8a_question_encoder/checkpoints/e8a_A0p_train_40k_seed0.pt",
+          "sha256": "ae76485bd023cafddf1dfc7e8a53e2af031c6b9a2301954d2b97a60a9240867f"
+        },
+        "code_head": "077af56",
+        "code_head_dirty": false,
+        "dev_accuracy": 0.53578,
+        "epochs_run": 15,
+        "prediction_vectors": {
+          "bytes": 43352,
+          "path": "results/experiments/e8a_question_encoder/correctness_A0p_seed0.npz",
+          "sha256": "3c4da43847f4dea27162012c39d1007476a868732151d69fa335ef901e3b8d8a"
+        },
+        "record": {
+          "bytes": 29093,
+          "path": "results/experiments/e8a_question_encoder/pilot_A0p.json",
+          "sha256": "d947697f1b0d883f7278aa0fefd3ba3bc3ad6f1e45ce7053b0fa18b0eb64f935"
+        },
+        "reused_phase_1b_pilot": true,
+        "scale": "train_40k",
+        "seed": 0,
+        "store_agreement_40k_vs_250k": null,
+        "wall_clock_hours": 0.065584
+      },
+      "A0p/train_40k/seed1": {
+        "arm": "A0p",
+        "best_epoch": 5,
+        "checkpoint": {
+          "bytes": 85494305,
+          "path": "results/experiments/e8a_question_encoder/checkpoints/e8a_A0p_train_40k_seed1.pt",
+          "sha256": "738ccc353d31746b38364ae806dfb63afb3d54371fd0fe09fefa1f7e04a6802a"
+        },
+        "code_head": "2708219",
+        "code_head_dirty": false,
+        "dev_accuracy": 0.54446,
+        "epochs_run": 15,
+        "prediction_vectors": {
+          "bytes": 43449,
+          "path": "results/experiments/e8a_question_encoder/correctness_A0p_train_40k_seed1.npz",
+          "sha256": "32febcd21d5a34b3a2e954c4dc8a9748c338b02cb37b16c8c43f0062853967f7"
+        },
+        "record": {
+          "bytes": 18082,
+          "path": "results/experiments/e8a_question_encoder/run_A0p_train_40k_seed1.json",
+          "sha256": "2da2e79ad9a3dafbf7bc7efd18cf7b5b3b2a38bdeebc83d2295185d45f71c4aa"
+        },
+        "reused_phase_1b_pilot": false,
+        "scale": "train_40k",
+        "seed": 1,
+        "store_agreement_40k_vs_250k": null,
+        "wall_clock_hours": 0.067125
+      },
+      "A0p/train_40k/seed2": {
+        "arm": "A0p",
+        "best_epoch": 6,
+        "checkpoint": {
+          "bytes": 85494305,
+          "path": "results/experiments/e8a_question_encoder/checkpoints/e8a_A0p_train_40k_seed2.pt",
+          "sha256": "f23479d28ea45472046578c0674e1a8332617c091dbdb342006e5fc3a2a27346"
+        },
+        "code_head": "2708219",
+        "code_head_dirty": false,
+        "dev_accuracy": 0.54109,
+        "epochs_run": 16,
+        "prediction_vectors": {
+          "bytes": 43514,
+          "path": "results/experiments/e8a_question_encoder/correctness_A0p_train_40k_seed2.npz",
+          "sha256": "498582c4fc77d2a4da4355582ecaec377f0c1b38e0c4eb5f28b8ed914b3d1115"
+        },
+        "record": {
+          "bytes": 18195,
+          "path": "results/experiments/e8a_question_encoder/run_A0p_train_40k_seed2.json",
+          "sha256": "b840fa57426f201ee7f1bf9e4c4612b47fd70d80598994f1d45df0e8e6c01b9c"
+        },
+        "reused_phase_1b_pilot": false,
+        "scale": "train_40k",
+        "seed": 2,
+        "store_agreement_40k_vs_250k": null,
+        "wall_clock_hours": 0.070769
+      },
+      "A1/train_250k/seed0": {
+        "arm": "A1",
+        "best_epoch": 5,
+        "checkpoint": {
+          "bytes": 85625377,
+          "path": "results/experiments/e8a_question_encoder/checkpoints/e8a_A1_train_250k_seed0.pt",
+          "sha256": "51597f307559bdbae81d87e343cbaaa243693e13391688153e1812f401750d89"
+        },
+        "code_head": "472aa38",
+        "code_head_dirty": false,
+        "dev_accuracy": 0.57493,
+        "epochs_run": 15,
+        "prediction_vectors": {
+          "bytes": 44054,
+          "path": "results/experiments/e8a_question_encoder/correctness_A1_train_250k_seed0.npz",
+          "sha256": "7c9a2d663fc808a60f2b4d372f7d0eac66e71659a074875e33f85231c9771de5"
+        },
+        "record": {
+          "bytes": 19044,
+          "path": "results/experiments/e8a_question_encoder/run_A1_train_250k_seed0.json",
+          "sha256": "11a7c532140c29da6a19f2084e82d1a2475e4aa22febec39e7dc00ba5976051f"
+        },
+        "reused_phase_1b_pilot": false,
+        "scale": "train_250k",
+        "seed": 0,
+        "store_agreement_40k_vs_250k": {
+          "arm": "A1",
+          "bitwise_identical": true,
+          "encoder_state_dict_sha256": "193e814295ee4e1aa578440b9049bae2263a9b8da89744e8f63c3dab218ea859",
+          "large_store_reused_from_caller": true,
+          "large_store_sha256": "4bb5fadd021cf1c41e2a0ee6a6c25a9bf4b92ff4653e9e2fd053ceca71a3f3bc",
+          "max_abs_deviation": 0.0,
+          "mismatched_ids": 0,
+          "n_ids_compared": 47714,
+          "small_store_sha256": "0572b9a8b7db5ba7da06eb9f39e5c87dbe7c66be805050ca7d2daf24902a24a6"
+        },
+        "wall_clock_hours": 0.37338
+      },
+      "A1/train_250k/seed1": {
+        "arm": "A1",
+        "best_epoch": 6,
+        "checkpoint": {
+          "bytes": 85625377,
+          "path": "results/experiments/e8a_question_encoder/checkpoints/e8a_A1_train_250k_seed1.pt",
+          "sha256": "be4f1b342f99cff4f1c77c5ac86b6a572a60f84373bda0329b0d478f51a33066"
+        },
+        "code_head": "472aa38",
+        "code_head_dirty": false,
+        "dev_accuracy": 0.57221,
+        "epochs_run": 16,
+        "prediction_vectors": {
+          "bytes": 44046,
+          "path": "results/experiments/e8a_question_encoder/correctness_A1_train_250k_seed1.npz",
+          "sha256": "0b29718c103e5d61f1075f2e5d534e506aed536c2023f4275c79030416491349"
+        },
+        "record": {
+          "bytes": 19155,
+          "path": "results/experiments/e8a_question_encoder/run_A1_train_250k_seed1.json",
+          "sha256": "25179236cfcaadf32b5e1cd3fec3bdaf71656ab7f8441369d090713586372592"
+        },
+        "reused_phase_1b_pilot": false,
+        "scale": "train_250k",
+        "seed": 1,
+        "store_agreement_40k_vs_250k": {
+          "arm": "A1",
+          "bitwise_identical": true,
+          "encoder_state_dict_sha256": "193e814295ee4e1aa578440b9049bae2263a9b8da89744e8f63c3dab218ea859",
+          "large_store_reused_from_caller": true,
+          "large_store_sha256": "4bb5fadd021cf1c41e2a0ee6a6c25a9bf4b92ff4653e9e2fd053ceca71a3f3bc",
+          "max_abs_deviation": 0.0,
+          "mismatched_ids": 0,
+          "n_ids_compared": 47714,
+          "small_store_sha256": "0572b9a8b7db5ba7da06eb9f39e5c87dbe7c66be805050ca7d2daf24902a24a6"
+        },
+        "wall_clock_hours": 0.394741
+      },
+      "A1/train_250k/seed2": {
+        "arm": "A1",
+        "best_epoch": 14,
+        "checkpoint": {
+          "bytes": 85625377,
+          "path": "results/experiments/e8a_question_encoder/checkpoints/e8a_A1_train_250k_seed2.pt",
+          "sha256": "8fd2118ccd904c7a530659319ff4558a9931c7207785323af2196369f20fb905"
+        },
+        "code_head": "472aa38",
+        "code_head_dirty": false,
+        "dev_accuracy": 0.57234,
+        "epochs_run": 24,
+        "prediction_vectors": {
+          "bytes": 44046,
+          "path": "results/experiments/e8a_question_encoder/correctness_A1_train_250k_seed2.npz",
+          "sha256": "37af05e3b96a62e63a13046a6abf8eb4e3d515e52c2237d7f57ad76f8b0b97f6"
+        },
+        "record": {
+          "bytes": 20056,
+          "path": "results/experiments/e8a_question_encoder/run_A1_train_250k_seed2.json",
+          "sha256": "9ed61d9d46d381fc85c6193abf9e2d2d549435409805982e5c137cc2f84fa95a"
+        },
+        "reused_phase_1b_pilot": false,
+        "scale": "train_250k",
+        "seed": 2,
+        "store_agreement_40k_vs_250k": {
+          "arm": "A1",
+          "bitwise_identical": true,
+          "encoder_state_dict_sha256": "193e814295ee4e1aa578440b9049bae2263a9b8da89744e8f63c3dab218ea859",
+          "large_store_reused_from_caller": true,
+          "large_store_sha256": "4bb5fadd021cf1c41e2a0ee6a6c25a9bf4b92ff4653e9e2fd053ceca71a3f3bc",
+          "max_abs_deviation": 0.0,
+          "mismatched_ids": 0,
+          "n_ids_compared": 47714,
+          "small_store_sha256": "0572b9a8b7db5ba7da06eb9f39e5c87dbe7c66be805050ca7d2daf24902a24a6"
+        },
+        "wall_clock_hours": 0.591827
+      },
+      "A1/train_40k/seed0": {
+        "arm": "A1",
+        "best_epoch": 4,
+        "checkpoint": {
+          "bytes": 85625252,
+          "path": "results/experiments/e8a_question_encoder/checkpoints/e8a_A1_train_40k_seed0.pt",
+          "sha256": "640a2e5b3281921c9f088b17220b3b2972d785e1a394eb4fd1ea52aa5acc15f4"
+        },
+        "code_head": "8274966",
+        "code_head_dirty": false,
+        "dev_accuracy": 0.52541,
+        "epochs_run": 14,
+        "prediction_vectors": {
+          "bytes": 44056,
+          "path": "results/experiments/e8a_question_encoder/correctness_A1_seed0.npz",
+          "sha256": "1148f386dee5e716a0e43637904b9a98e563260a6fbd2d02c10c53a7168b1043"
+        },
+        "record": {
+          "bytes": 42505,
+          "path": "results/experiments/e8a_question_encoder/pilot.json",
+          "sha256": "fb9927d8093d827efcee74e4e35309879cfd18e4b410c621654c8da4d4f670f6"
+        },
+        "reused_phase_1b_pilot": true,
+        "scale": "train_40k",
+        "seed": 0,
+        "store_agreement_40k_vs_250k": null,
+        "wall_clock_hours": 0.061139
+      },
+      "A1/train_40k/seed1": {
+        "arm": "A1",
+        "best_epoch": 6,
+        "checkpoint": {
+          "bytes": 85625252,
+          "path": "results/experiments/e8a_question_encoder/checkpoints/e8a_A1_train_40k_seed1.pt",
+          "sha256": "0113cec51faeaf563ca4870f85fa3bb60a4f0751095e39af842403cd2f4639cf"
+        },
+        "code_head": "2708219",
+        "code_head_dirty": false,
+        "dev_accuracy": 0.53124,
+        "epochs_run": 16,
+        "prediction_vectors": {
+          "bytes": 44033,
+          "path": "results/experiments/e8a_question_encoder/correctness_A1_train_40k_seed1.npz",
+          "sha256": "2c9bb4d4f159487ff16f2e8260f9afef532e3a6007463b9f075daee48379a86f"
+        },
+        "record": {
+          "bytes": 18923,
+          "path": "results/experiments/e8a_question_encoder/run_A1_train_40k_seed1.json",
+          "sha256": "8ed061ef0ddcb74e21b0a1421d5bc9781c515121ae6219544cc38f2ebe789da1"
+        },
+        "reused_phase_1b_pilot": false,
+        "scale": "train_40k",
+        "seed": 1,
+        "store_agreement_40k_vs_250k": null,
+        "wall_clock_hours": 0.07083
+      },
+      "A1/train_40k/seed2": {
+        "arm": "A1",
+        "best_epoch": 6,
+        "checkpoint": {
+          "bytes": 85625252,
+          "path": "results/experiments/e8a_question_encoder/checkpoints/e8a_A1_train_40k_seed2.pt",
+          "sha256": "dac5af7f6853071699d114310be4c0696521880dd416fa023540f991c398855c"
+        },
+        "code_head": "2708219",
+        "code_head_dirty": false,
+        "dev_accuracy": 0.52917,
+        "epochs_run": 16,
+        "prediction_vectors": {
+          "bytes": 44018,
+          "path": "results/experiments/e8a_question_encoder/correctness_A1_train_40k_seed2.npz",
+          "sha256": "fd561b3ef45743ba7fff6a20913e8d09f7bfe6db2347e98bc4a0819e7f507646"
+        },
+        "record": {
+          "bytes": 18921,
+          "path": "results/experiments/e8a_question_encoder/run_A1_train_40k_seed2.json",
+          "sha256": "ecd0d379c286f7adf1ccc1e4d909b0a535cf5cd09744ec5538f4efaa5ccc2f01"
+        },
+        "reused_phase_1b_pilot": false,
+        "scale": "train_40k",
+        "seed": 2,
+        "store_agreement_40k_vs_250k": null,
+        "wall_clock_hours": 0.070705
+      },
+      "A1r/train_250k/seed0": {
+        "arm": "A1r",
+        "best_epoch": 4,
+        "checkpoint": {
+          "bytes": 85625502,
+          "path": "results/experiments/e8a_question_encoder/checkpoints/e8a_A1r_train_250k_seed0.pt",
+          "sha256": "4a231f330d75eaf17ce659f88c124bbea14d9109a70f62cc4600a5acd7598cd0"
+        },
+        "code_head": "472aa38",
+        "code_head_dirty": false,
+        "dev_accuracy": 0.5302,
+        "epochs_run": 14,
+        "prediction_vectors": {
+          "bytes": 43428,
+          "path": "results/experiments/e8a_question_encoder/correctness_A1r_train_250k_seed0.npz",
+          "sha256": "e3bab42902fde2583e398978803706cfe1eaab2767713b7acebcf1a5648b65da"
+        },
+        "record": {
+          "bytes": 19108,
+          "path": "results/experiments/e8a_question_encoder/run_A1r_train_250k_seed0.json",
+          "sha256": "4f353f1d906e3f7b70ebf844d8611a03523e36d0afe62f548028d10e37b8e8de"
+        },
+        "reused_phase_1b_pilot": false,
+        "scale": "train_250k",
+        "seed": 0,
+        "store_agreement_40k_vs_250k": {
+          "arm": "A1r",
+          "bitwise_identical": true,
+          "encoder_state_dict_sha256": "8beb47a6c2596907986a14c0f690c4d0803c0e91cf9522ff38c8737c4de11599",
+          "large_store_reused_from_caller": true,
+          "large_store_sha256": "699f2191e3bbb8775235a3d9eaa953847db1ce00827ffb7d62149605b9b1c031",
+          "max_abs_deviation": 0.0,
+          "mismatched_ids": 0,
+          "n_ids_compared": 47714,
+          "small_store_sha256": "f42e36b7dd2c27f9c1e3e695a57764a5ac49c54bde44a4ebe702d8e8afce4476"
+        },
+        "wall_clock_hours": 0.345305
+      },
+      "A1r/train_250k/seed1": {
+        "arm": "A1r",
+        "best_epoch": 3,
+        "checkpoint": {
+          "bytes": 85625502,
+          "path": "results/experiments/e8a_question_encoder/checkpoints/e8a_A1r_train_250k_seed1.pt",
+          "sha256": "88e347d807d7f72c81a9be850dd66827ff4e3195039c0a5d1cda52e7f6518f6e"
+        },
+        "code_head": "472aa38",
+        "code_head_dirty": false,
+        "dev_accuracy": 0.52346,
+        "epochs_run": 13,
+        "prediction_vectors": {
+          "bytes": 43343,
+          "path": "results/experiments/e8a_question_encoder/correctness_A1r_train_250k_seed1.npz",
+          "sha256": "9b074a1dad12daaf72cd073a8dc756e610e6439dbab92a235c77330efd033623"
+        },
+        "record": {
+          "bytes": 18999,
+          "path": "results/experiments/e8a_question_encoder/run_A1r_train_250k_seed1.json",
+          "sha256": "3f9ace29b2e05695f5b45dd6bf59b792525de8112b4ef83326afdea11d5d7cff"
+        },
+        "reused_phase_1b_pilot": false,
+        "scale": "train_250k",
+        "seed": 1,
+        "store_agreement_40k_vs_250k": {
+          "arm": "A1r",
+          "bitwise_identical": true,
+          "encoder_state_dict_sha256": "8beb47a6c2596907986a14c0f690c4d0803c0e91cf9522ff38c8737c4de11599",
+          "large_store_reused_from_caller": true,
+          "large_store_sha256": "699f2191e3bbb8775235a3d9eaa953847db1ce00827ffb7d62149605b9b1c031",
+          "max_abs_deviation": 0.0,
+          "mismatched_ids": 0,
+          "n_ids_compared": 47714,
+          "small_store_sha256": "f42e36b7dd2c27f9c1e3e695a57764a5ac49c54bde44a4ebe702d8e8afce4476"
+        },
+        "wall_clock_hours": 0.320937
+      },
+      "A1r/train_250k/seed2": {
+        "arm": "A1r",
+        "best_epoch": 5,
+        "checkpoint": {
+          "bytes": 85625502,
+          "path": "results/experiments/e8a_question_encoder/checkpoints/e8a_A1r_train_250k_seed2.pt",
+          "sha256": "e367f552ff52b5c77f53d800e45f146193a0804c1338b2c3b1b4c2c2f4cc72a8"
+        },
+        "code_head": "472aa38",
+        "code_head_dirty": false,
+        "dev_accuracy": 0.52074,
+        "epochs_run": 15,
+        "prediction_vectors": {
+          "bytes": 43415,
+          "path": "results/experiments/e8a_question_encoder/correctness_A1r_train_250k_seed2.npz",
+          "sha256": "0d46bc7f837eb12dc447fd515e3c33aba1b3ffcaf3b494cde29359b38d1c8d5b"
+        },
+        "record": {
+          "bytes": 19220,
+          "path": "results/experiments/e8a_question_encoder/run_A1r_train_250k_seed2.json",
+          "sha256": "29e76a809d5b8b9a0b4d2dc0fa708453066d022afb51c1a1e4d349a4fbd66fcc"
+        },
+        "reused_phase_1b_pilot": false,
+        "scale": "train_250k",
+        "seed": 2,
+        "store_agreement_40k_vs_250k": {
+          "arm": "A1r",
+          "bitwise_identical": true,
+          "encoder_state_dict_sha256": "8beb47a6c2596907986a14c0f690c4d0803c0e91cf9522ff38c8737c4de11599",
+          "large_store_reused_from_caller": true,
+          "large_store_sha256": "699f2191e3bbb8775235a3d9eaa953847db1ce00827ffb7d62149605b9b1c031",
+          "max_abs_deviation": 0.0,
+          "mismatched_ids": 0,
+          "n_ids_compared": 47714,
+          "small_store_sha256": "f42e36b7dd2c27f9c1e3e695a57764a5ac49c54bde44a4ebe702d8e8afce4476"
+        },
+        "wall_clock_hours": 0.370105
+      },
+      "A1r/train_40k/seed0": {
+        "arm": "A1r",
+        "best_epoch": 3,
+        "checkpoint": {
+          "bytes": 85625377,
+          "path": "results/experiments/e8a_question_encoder/checkpoints/e8a_A1r_train_40k_seed0.pt",
+          "sha256": "a3e8441c00d42bc9b1b03aabe9e9f0ca6049d39fbe57532c5814ead2ca788e38"
+        },
+        "code_head": "8274966",
+        "code_head_dirty": false,
+        "dev_accuracy": 0.48976,
+        "epochs_run": 13,
+        "prediction_vectors": {
+          "bytes": 44002,
+          "path": "results/experiments/e8a_question_encoder/correctness_A1r_seed0.npz",
+          "sha256": "6aef72ae0a784737b7ed1e448005a077e0ce413c3339ff38084941f2d085112c"
+        },
+        "record": {
+          "bytes": 42505,
+          "path": "results/experiments/e8a_question_encoder/pilot.json",
+          "sha256": "fb9927d8093d827efcee74e4e35309879cfd18e4b410c621654c8da4d4f670f6"
+        },
+        "reused_phase_1b_pilot": true,
+        "scale": "train_40k",
+        "seed": 0,
+        "store_agreement_40k_vs_250k": null,
+        "wall_clock_hours": 0.056772
+      },
+      "A1r/train_40k/seed1": {
+        "arm": "A1r",
+        "best_epoch": 7,
+        "checkpoint": {
+          "bytes": 85625377,
+          "path": "results/experiments/e8a_question_encoder/checkpoints/e8a_A1r_train_40k_seed1.pt",
+          "sha256": "eb8b7a4adc763f57a4e2b4e7dd59f7dba49410f191f76eb030e3089367544db2"
+        },
+        "code_head": "2708219",
+        "code_head_dirty": false,
+        "dev_accuracy": 0.4882,
+        "epochs_run": 17,
+        "prediction_vectors": {
+          "bytes": 44006,
+          "path": "results/experiments/e8a_question_encoder/correctness_A1r_train_40k_seed1.npz",
+          "sha256": "06c424dab7f67c724d35c86a6ee5b61317ed5824c4100a0632b00bc371945505"
+        },
+        "record": {
+          "bytes": 19207,
+          "path": "results/experiments/e8a_question_encoder/run_A1r_train_40k_seed1.json",
+          "sha256": "68964a6fa4449bd9984c2d33cff5bc6758f97ac6ccc2dc1f38ea3332e34c3232"
+        },
+        "reused_phase_1b_pilot": false,
+        "scale": "train_40k",
+        "seed": 1,
+        "store_agreement_40k_vs_250k": null,
+        "wall_clock_hours": 0.074669
+      },
+      "A1r/train_40k/seed2": {
+        "arm": "A1r",
+        "best_epoch": 5,
+        "checkpoint": {
+          "bytes": 85625377,
+          "path": "results/experiments/e8a_question_encoder/checkpoints/e8a_A1r_train_40k_seed2.pt",
+          "sha256": "cb86ddb7f395ffee4e655ba64154709197ba4f90cae0bbaa3e8c7e547a0710df"
+        },
+        "code_head": "2708219",
+        "code_head_dirty": false,
+        "dev_accuracy": 0.49326,
+        "epochs_run": 15,
+        "prediction_vectors": {
+          "bytes": 43909,
+          "path": "results/experiments/e8a_question_encoder/correctness_A1r_train_40k_seed2.npz",
+          "sha256": "df7579958dfa2aa220969ec16ae455d619c9cff2de2660bd8dc9a908ce34d4b6"
+        },
+        "record": {
+          "bytes": 18979,
+          "path": "results/experiments/e8a_question_encoder/run_A1r_train_40k_seed2.json",
+          "sha256": "dc697bf12a2e9a0108f1df08e9e73afb6ae2327d917435739f7cf556991507da"
+        },
+        "reused_phase_1b_pilot": false,
+        "scale": "train_40k",
+        "seed": 2,
+        "store_agreement_40k_vs_250k": null,
+        "wall_clock_hours": 0.066165
+      }
+    },
+    "scope": {
+      "authorised": "E8A SmolLM2-135M question-encoder arms A0p, A1 and A1r at train_40k and train_250k with seeds 0, 1 and 2",
+      "clean_test_accessed": false,
+      "not_authorised": [
+        "SmolLM2-360M",
+        "E8B",
+        "E9",
+        "any further comparator",
+        "hyperparameter search",
+        "clean-test access",
+        "F1",
+        "F2",
+        "changing the canonical protocol",
+        "retraining a valid completed pilot"
+      ],
+      "results_are_development_only": true
+    }
+  },
+  "metadata": {
+    "batch_size": 256,
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "deterministic": true,
+    "device": "cuda",
+    "dropout": 0.3,
+    "embed_dim": 512,
+    "git_commit": "bdf5218",
+    "git_dirty": false,
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "h5py_version": "3.16.0",
+    "hidden_dim": 512,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "n_train": 40000,
+    "n_val": 8000,
+    "numpy_version": "2.5.0",
+    "open_clip_version": "3.3.0",
+    "pandas_version": "3.0.3",
+    "python": "3.12.3",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "timestamp": "2026-08-03T08:57:51",
+    "top_k_answers": 100,
+    "torch": "2.12.1+cu130",
+    "weight_decay": 0.0001
+  }
+}

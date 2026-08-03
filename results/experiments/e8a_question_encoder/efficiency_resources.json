@@ -1,0 +1,324 @@
+{
+  "e8a_efficiency_and_resources": {
+    "boundaries": {
+      "cached_head": "the trained head on cached question states and cached CLIP image tokens; no encoder forward pass",
+      "encoder_inclusive": "NOT reported. No online SmolLM2-135M forward pass has been timed in this project and E7a measured no SmolLM2 tower, so no end-to-end per-query cost exists for A1 or A1r and none is estimated",
+      "offline_extraction": "the measured cost of writing one arm's cached question states once, amortised over every run that reads them",
+      "protocol": "E8A head latency is 20 warm-up and 200 timed repeats of a single example under torch.no_grad, mean over repeats, one pass. E7a supersedes this protocol and its numbers must not be mixed with these"
+    },
+    "clean_test_accessed": false,
+    "context_not_on_the_front": {
+      "e7a_reasoner_arm_a0": {
+        "across_pass_spread_ms": 0.06250549631658942,
+        "head_only_ms_median": 1.396830499288626,
+        "label": "arm A0, the same trunk WITHOUT the interface-matching projection, measured under the E7a protocol. E7a supersedes the 20/200 mean protocol the E8A latencies use, so this is context only and is NOT a point on the E8A front",
+        "trainable_parameters": 21099620
+      }
+    },
+    "pareto_fronts": {
+      "cached_head_latency_ms_mean": [
+        "A0p/train_250k"
+      ],
+      "checkpoint_mib": [
+        "A0p/train_250k"
+      ],
+      "total_loaded_parameters": [
+        "A0p/train_250k"
+      ],
+      "trainable_parameters": [
+        "A0p/train_250k"
+      ],
+      "training_gpu_hours_mean": [
+        "A0p/train_250k",
+        "A0p/train_40k",
+        "A1/train_40k",
+        "A1r/train_40k"
+      ]
+    },
+    "pareto_note": "accuracy is the three-seed mean development accuracy and every cost is an E8A measurement, so the front is bounded to E8A-135M and contains no cross-experiment point",
+    "resource_audit": {
+      "cells_completed": 18,
+      "cells_failed_or_interrupted": [],
+      "evaluation_gpu_hours": {
+        "note": "evaluation runs inside each training invocation and is included in that run's wall clock; it was never timed separately, so it is not double-counted and cannot be reported on its own",
+        "value": null
+      },
+      "extraction_gpu_hours_by_arm": {
+        "A0p": 0.0,
+        "A1": 0.729599,
+        "A1r": 0.724156
+      },
+      "extraction_gpu_hours_total": 1.453755,
+      "gates": {
+        "memory_80_per_cent": {
+          "ceiling_mib": 16014.0,
+          "fires": false,
+          "fraction": 0.8,
+          "headroom_mib": 14739.9,
+          "peak_allocated_mib": 1274.1
+        },
+        "per_model_35_gpu_hours": {
+          "ceiling": 35.0,
+          "fires": false,
+          "margin_hours": 29.21073,
+          "measured_135m_aggregate": 5.78927,
+          "scope_caveat": "this aggregates only the E8A question-encoder arms of SmolLM2-135M. The canonical per-model aggregate also counts the E8B readout arms, which are neither authorised nor run, so the model total is a lower bound and the gate is not finally discharged"
+        },
+        "per_run_8_gpu_hours": {
+          "ceiling": 8.0,
+          "fires": false,
+          "largest_measured": 0.59183,
+          "largest_measured_cell": "A1/train_250k/seed2",
+          "margin_hours": 7.40817
+        },
+        "storage_allocation": {
+          "fires": false,
+          "free_gib": 331.2,
+          "written_gib": 6.757
+        }
+      },
+      "non_cell_failure_files_present": {
+        "files": [
+          "FAILED_gates.json"
+        ],
+        "note": "aborted gate passes from an earlier phase, not matrix cells; recorded so their presence is visible rather than counted as failed runs"
+      },
+      "retried_cells": [],
+      "retried_cells_note": "no cell was rerun: a cell with a record is skipped, and no FAILED_<arm>_ file exists",
+      "scope": "the completed E8A SmolLM2-135M core tranche: arms A0p, A1 and A1r at train_40k and train_250k with seeds 0, 1 and 2",
+      "storage_bytes": {
+        "checkpoints": 1540470729,
+        "predictions": 786743,
+        "question_stores": 5713345648,
+        "records": 687878,
+        "total": 7255290998
+      },
+      "storage_gib": 6.757,
+      "total_gpu_hours": 5.78927,
+      "training_gpu_hours_by_arm": {
+        "A0p": 1.53894,
+        "A1": 1.56262,
+        "A1r": 1.23395
+      },
+      "training_gpu_hours_total": 4.33551,
+      "unresolved": {
+        "426_versus_420": "presentational only. Canonical section 13.1 counts 426 evaluation passes and section 13.2 itemises 420; the six unprinted rows are the B1 classification evaluations and the stated totals already include them. No GPU-hour total is wrong and none is changed here",
+        "core_programme_ceiling": "min(180.0, three times the revised expected projection) cannot be evaluated: the expected projection spans branches that have not run",
+        "cross_e8_aggregate": "not computable. Any complete SmolLM2-135M aggregate needs the E8B arms",
+        "e8b_runtime_multiplier": "unmeasured. E8B is not authorised and has not run, so the readout-branch cost per run is unknown"
+      }
+    },
+    "table": {
+      "A0p/train_250k": {
+        "arm": "A0p",
+        "boundary": "cached_head",
+        "cached_head_latency_ms_mean": 1.3347,
+        "cached_head_latency_ms_spread": 0.0091,
+        "cached_head_latency_per_seed": [
+          1.3353,
+          1.339,
+          1.3299
+        ],
+        "checkpoint_mib": 81.53,
+        "dev_accuracy_mean": 0.59446,
+        "dev_accuracy_per_seed": [
+          0.59463,
+          0.59411,
+          0.59463
+        ],
+        "dev_accuracy_std": 0.0003,
+        "frozen_question_encoder_parameters": 63428096,
+        "peak_allocated_mib_max": 1168.6,
+        "question_store_extraction_gpu_hours": 0.0,
+        "question_store_gib": null,
+        "scale": "train_250k",
+        "total_loaded_parameters": 84790372,
+        "trainable_parameters": 21362276,
+        "trainable_projection": 262656,
+        "trainable_reasoner_trunk": 21099620,
+        "training_gpu_hours_mean": 0.44515,
+        "training_gpu_hours_total": 1.33546
+      },
+      "A0p/train_40k": {
+        "arm": "A0p",
+        "boundary": "cached_head",
+        "cached_head_latency_ms_mean": 1.3848,
+        "cached_head_latency_ms_spread": 0.0072,
+        "cached_head_latency_per_seed": [
+          1.3816,
+          1.3839,
+          1.3888
+        ],
+        "checkpoint_mib": 81.53,
+        "dev_accuracy_mean": 0.54044,
+        "dev_accuracy_per_seed": [
+          0.53578,
+          0.54446,
+          0.54109
+        ],
+        "dev_accuracy_std": 0.00438,
+        "frozen_question_encoder_parameters": 63428096,
+        "peak_allocated_mib_max": 1274.1,
+        "question_store_extraction_gpu_hours": 0.0,
+        "question_store_gib": null,
+        "scale": "train_40k",
+        "total_loaded_parameters": 84790372,
+        "trainable_parameters": 21362276,
+        "trainable_projection": 262656,
+        "trainable_reasoner_trunk": 21099620,
+        "training_gpu_hours_mean": 0.06783,
+        "training_gpu_hours_total": 0.20348
+      },
+      "A1/train_250k": {
+        "arm": "A1",
+        "boundary": "cached_head",
+        "cached_head_latency_ms_mean": 1.3418,
+        "cached_head_latency_ms_spread": 0.0033,
+        "cached_head_latency_per_seed": [
+          1.3433,
+          1.34,
+          1.3422
+        ],
+        "checkpoint_mib": 81.66,
+        "dev_accuracy_mean": 0.57316,
+        "dev_accuracy_per_seed": [
+          0.57493,
+          0.57221,
+          0.57234
+        ],
+        "dev_accuracy_std": 0.00153,
+        "frozen_question_encoder_parameters": 134515008,
+        "peak_allocated_mib_max": 1123.4,
+        "question_store_extraction_gpu_hours": 0.602786,
+        "question_store_gib": 2.1967,
+        "scale": "train_250k",
+        "total_loaded_parameters": 155910052,
+        "trainable_parameters": 21395044,
+        "trainable_projection": 295424,
+        "trainable_reasoner_trunk": 21099620,
+        "training_gpu_hours_mean": 0.45332,
+        "training_gpu_hours_total": 1.35995
+      },
+      "A1/train_40k": {
+        "arm": "A1",
+        "boundary": "cached_head",
+        "cached_head_latency_ms_mean": 1.3844,
+        "cached_head_latency_ms_spread": 0.0733,
+        "cached_head_latency_per_seed": [
+          1.3502,
+          1.4235,
+          1.3794
+        ],
+        "checkpoint_mib": 81.66,
+        "dev_accuracy_mean": 0.52861,
+        "dev_accuracy_per_seed": [
+          0.52541,
+          0.53124,
+          0.52917
+        ],
+        "dev_accuracy_std": 0.00296,
+        "frozen_question_encoder_parameters": 134515008,
+        "peak_allocated_mib_max": 1249.2,
+        "question_store_extraction_gpu_hours": 0.126813,
+        "question_store_gib": 0.4638,
+        "scale": "train_40k",
+        "total_loaded_parameters": 155910052,
+        "trainable_parameters": 21395044,
+        "trainable_projection": 295424,
+        "trainable_reasoner_trunk": 21099620,
+        "training_gpu_hours_mean": 0.06756,
+        "training_gpu_hours_total": 0.20267
+      },
+      "A1r/train_250k": {
+        "arm": "A1r",
+        "boundary": "cached_head",
+        "cached_head_latency_ms_mean": 1.3422,
+        "cached_head_latency_ms_spread": 0.0105,
+        "cached_head_latency_per_seed": [
+          1.3454,
+          1.3459,
+          1.3354
+        ],
+        "checkpoint_mib": 81.66,
+        "dev_accuracy_mean": 0.5248,
+        "dev_accuracy_per_seed": [
+          0.5302,
+          0.52346,
+          0.52074
+        ],
+        "dev_accuracy_std": 0.00487,
+        "frozen_question_encoder_parameters": 134515008,
+        "peak_allocated_mib_max": 1124.6,
+        "question_store_extraction_gpu_hours": 0.597567,
+        "question_store_gib": 2.1967,
+        "scale": "train_250k",
+        "total_loaded_parameters": 155910052,
+        "trainable_parameters": 21395044,
+        "trainable_projection": 295424,
+        "trainable_reasoner_trunk": 21099620,
+        "training_gpu_hours_mean": 0.34545,
+        "training_gpu_hours_total": 1.03635
+      },
+      "A1r/train_40k": {
+        "arm": "A1r",
+        "boundary": "cached_head",
+        "cached_head_latency_ms_mean": 1.3468,
+        "cached_head_latency_ms_spread": 0.0408,
+        "cached_head_latency_per_seed": [
+          1.3368,
+          1.3722,
+          1.3314
+        ],
+        "checkpoint_mib": 81.66,
+        "dev_accuracy_mean": 0.49041,
+        "dev_accuracy_per_seed": [
+          0.48976,
+          0.4882,
+          0.49326
+        ],
+        "dev_accuracy_std": 0.00259,
+        "frozen_question_encoder_parameters": 134515008,
+        "peak_allocated_mib_max": 1249.2,
+        "question_store_extraction_gpu_hours": 0.126589,
+        "question_store_gib": 0.4638,
+        "scale": "train_40k",
+        "total_loaded_parameters": 155910052,
+        "trainable_parameters": 21395044,
+        "trainable_projection": 295424,
+        "trainable_reasoner_trunk": 21099620,
+        "training_gpu_hours_mean": 0.06587,
+        "training_gpu_hours_total": 0.19761
+      }
+    }
+  },
+  "metadata": {
+    "batch_size": 256,
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "deterministic": true,
+    "device": "cuda",
+    "dropout": 0.3,
+    "embed_dim": 512,
+    "git_commit": "225fa22",
+    "git_dirty": false,
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "h5py_version": "3.16.0",
+    "hidden_dim": 512,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "n_train": 40000,
+    "n_val": 8000,
+    "numpy_version": "2.5.0",
+    "open_clip_version": "3.3.0",
+    "pandas_version": "3.0.3",
+    "python": "3.12.3",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "timestamp": "2026-08-03T08:56:01",
+    "top_k_answers": 100,
+    "torch": "2.12.1+cu130",
+    "weight_decay": 0.0001
+  }
+}

@@ -1,0 +1,473 @@
+{
+  "e8a_core_run": {
+    "arm": "A1",
+    "clean_test_accessed": false,
+    "data_hashes": {
+      "data/v2/answer_vocab_v2.json": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680",
+      "data/v2/dev.csv": "95d1b504dcc4deb7d69ba0c9e293d1c00bae93df4b6907174a1dd615cb93cdc9",
+      "data/v2/train_250k.csv": "be7d867afd2757a631145bc1c56c3b1a4dcf43784c1a6abf1c3b75452b865074",
+      "data/v2/train_40k.csv": "cda03c133e581d486c1e29f6d99376ee59f9841564b3fb890bc401f4da5c90d2",
+      "data/v3/tokens/image_tokens.h5": "c852811a4e3393387012a099d3ad8d494fe4be0f3d95f70b4a1328db4ad59588"
+    },
+    "evaluation": {
+      "arm": "A1",
+      "conditions": {
+        "fixed_image": {
+          "accuracy": 0.4685,
+          "constant_answer_rate": 0.24319,
+          "constant_answer_rate_definition": "the fraction of development rows on which the model emits its single most frequent answer. The canonical set requires this quantity but defines it nowhere (round-10 finding SL10-1); the round-10 scientific reviewer's own suggested clause is adopted and disclosed. Under it the value equals maximum_class_share by construction, so both are reported and the redundancy is visible. No decision rule consumes it.",
+          "distinct_answers_predicted": 69,
+          "majority_reference": 0.22466,
+          "maximum_class_share": 0.24319,
+          "n_rows": 7714,
+          "prediction_entropy_nats": 0.48289
+        },
+        "fixed_question": {
+          "accuracy": 0.22751,
+          "constant_answer_rate": 0.51348,
+          "constant_answer_rate_definition": "the fraction of development rows on which the model emits its single most frequent answer. The canonical set requires this quantity but defines it nowhere (round-10 finding SL10-1); the round-10 scientific reviewer's own suggested clause is adopted and disclosed. Under it the value equals maximum_class_share by construction, so both are reported and the redundancy is visible. No decision rule consumes it.",
+          "distinct_answers_predicted": 2,
+          "majority_reference": 0.22466,
+          "maximum_class_share": 0.51348,
+          "n_rows": 7714,
+          "prediction_entropy_nats": 0.39647
+        },
+        "normal": {
+          "accuracy": 0.57234,
+          "constant_answer_rate": 0.29349,
+          "constant_answer_rate_definition": "the fraction of development rows on which the model emits its single most frequent answer. The canonical set requires this quantity but defines it nowhere (round-10 finding SL10-1); the round-10 scientific reviewer's own suggested clause is adopted and disclosed. Under it the value equals maximum_class_share by construction, so both are reported and the redundancy is visible. No decision rule consumes it.",
+          "distinct_answers_predicted": 100,
+          "majority_reference": 0.22466,
+          "maximum_class_share": 0.29349,
+          "n_rows": 7714,
+          "prediction_entropy_nats": 0.43362
+        },
+        "shuffled_image_derangement": {
+          "accuracy": 0.42546,
+          "constant_answer_rate": 0.22829,
+          "constant_answer_rate_definition": "the fraction of development rows on which the model emits its single most frequent answer. The canonical set requires this quantity but defines it nowhere (round-10 finding SL10-1); the round-10 scientific reviewer's own suggested clause is adopted and disclosed. Under it the value equals maximum_class_share by construction, so both are reported and the redundancy is visible. No decision rule consumes it.",
+          "distinct_answers_predicted": 100,
+          "majority_reference": 0.22466,
+          "maximum_class_share": 0.22829,
+          "n_rows": 7714,
+          "prediction_entropy_nats": 0.48948
+        },
+        "shuffled_image_row_v3_01_comparable": {
+          "accuracy": 0.43272,
+          "constant_answer_rate": 0.23969,
+          "constant_answer_rate_definition": "the fraction of development rows on which the model emits its single most frequent answer. The canonical set requires this quantity but defines it nowhere (round-10 finding SL10-1); the round-10 scientific reviewer's own suggested clause is adopted and disclosed. Under it the value equals maximum_class_share by construction, so both are reported and the redundancy is visible. No decision rule consumes it.",
+          "distinct_answers_predicted": 100,
+          "majority_reference": 0.22466,
+          "maximum_class_share": 0.23969,
+          "n_rows": 7714,
+          "prediction_entropy_nats": 0.49366
+        }
+      },
+      "correctness_vectors": {
+        "conditions": [
+          "fixed_image",
+          "fixed_question",
+          "normal",
+          "shuffled_image_derangement",
+          "shuffled_image_row_v3_01_comparable"
+        ],
+        "n_rows": 7714,
+        "path": "results/experiments/e8a_question_encoder/correctness_A1_train_250k_seed2.npz",
+        "sha256": "37af05e3b96a62e63a13046a6abf8eb4e3d515e52c2237d7f57ad76f8b0b97f6"
+      },
+      "degeneracy_rule": {
+        "collapse_class_share_threshold": 0.6,
+        "collapse_entropy_threshold_nats": 0.3,
+        "collapse_fires": false,
+        "question_insensitivity_fires": false,
+        "question_insensitivity_threshold": 0.01,
+        "rule_fires": false
+      },
+      "differences_from_normal": {
+        "normal_minus_fixed_image": 0.10384,
+        "normal_minus_fixed_question": 0.34483,
+        "normal_minus_shuffled_image_derangement": 0.14688,
+        "normal_minus_shuffled_image_row_rule": 0.13962
+      },
+      "efficiency": {
+        "checkpoint_bytes": 85625377,
+        "checkpoint_mib": 81.66,
+        "frozen_question_encoder": {
+          "basis": "asserted against the canonical table at load time",
+          "encoder": "SmolLM2-135M, frozen",
+          "parameters": 134515008
+        },
+        "frozen_question_encoder_parameters": 134515008,
+        "head_latency_ms_mean": 1.3422,
+        "head_latency_ms_std": 0.0227,
+        "latency_scope": "trainable head only, over this arm's cached question states and cached CLIP image tokens. It excludes every frozen encoder forward pass (SmolLM2-135M, frozen, and the frozen CLIP image tower) and is not an end-to-end query cost.",
+        "peak_allocated_mib_training": 1123.4,
+        "total_loaded_parameters": 155910052,
+        "total_loaded_parameters_note": "trainable head plus this arm's frozen question encoder. The frozen CLIP image tower is common to every arm and is excluded from all three, so the figures are comparable across arms.",
+        "trainable_parameters": 21395044,
+        "trainable_projection": 295424,
+        "trainable_reasoner_trunk": 21099620
+      },
+      "g10": {
+        "collapse_fires": false,
+        "distinct_answers_predicted": 100,
+        "halting_for_this_arm": true,
+        "mean_prediction_entropy_nats": 0.43362,
+        "top_1_share": 0.29349
+      },
+      "g11_repeated_evaluation_identical": true,
+      "shuffled_image_derangement_provenance": {
+        "construction": "rejection-sampled permutation of the sorted unique imageIds until it has no fixed point",
+        "draws_until_derangement": 1,
+        "n_images": 768,
+        "observed_self_pairs_in_dev_rows": 0,
+        "rng": "np.random.default_rng(42)",
+        "seed": 42,
+        "self_pairs": 0,
+        "sha256": "8de10e8020327258f4ad188d2a2a195a297ac6558cbb3caeec4ef047cf2e7658"
+      },
+      "shuffled_image_row_permutation_provenance": {
+        "construction": "np.random.default_rng(config.RANDOM_SEED).permutation(n_rows), identical to experiments/v3_01_reasoner/run.py:487",
+        "n_rows": 7714,
+        "observed_self_pairs_in_dev_rows": 11,
+        "seed": 42,
+        "sha256": "d491436e3bdfa0c8561d8ba52154409ac946cad99d5cfa83ef52aa671dca2c05"
+      }
+    },
+    "execution_manifest_sha256": "315672247b0edd756d30a9c457375d0f39661c00b8e01ed35f3e0f56dfaeb5bc",
+    "gates": {
+      "g13_construction": {
+        "construction_order": "load and freeze the question encoder, then utils.set_seed(seed), then the trunk from unmodified src/reasoner.py, then the projection. For A0p the encoder is the frozen CLIP that produced the cached store, so that step loads nothing and is discharged by construction.",
+        "fresh_trunk_sha256": "926f13c2bf09fbe7695a5666c62ca736274811ddd8a3f33a115d3039842fbcee",
+        "per_arm": {
+          "A1": {
+            "projection": "cc8aee04e9e300e641c1d2064e8eef458784af3a4fa7db53246d4b4aef784a87",
+            "trunk": "926f13c2bf09fbe7695a5666c62ca736274811ddd8a3f33a115d3039842fbcee"
+          },
+          "A1r": {
+            "projection": "cc8aee04e9e300e641c1d2064e8eef458784af3a4fa7db53246d4b4aef784a87",
+            "trunk": "926f13c2bf09fbe7695a5666c62ca736274811ddd8a3f33a115d3039842fbcee"
+          }
+        },
+        "projection_identical_per_width_group": {
+          "576": true
+        },
+        "trunk_identical": true
+      },
+      "g4_g5_forward_and_mask": {
+        "arm": "A1",
+        "finite": true,
+        "logits_shape": [
+          128,
+          100
+        ],
+        "max_logit_change": 0.0,
+        "padded_positions_corrupted": 1552,
+        "passed": true,
+        "question_store": "data/v3_slm_tokens/e8a_135m_A1_train250k_dev.h5",
+        "scale": "train_250k",
+        "tolerance": 0.0001
+      },
+      "store_agreement_40k_vs_250k": {
+        "arm": "A1",
+        "bitwise_identical": true,
+        "encoder_state_dict_sha256": "193e814295ee4e1aa578440b9049bae2263a9b8da89744e8f63c3dab218ea859",
+        "large_store_reused_from_caller": true,
+        "large_store_sha256": "4bb5fadd021cf1c41e2a0ee6a6c25a9bf4b92ff4653e9e2fd053ceca71a3f3bc",
+        "max_abs_deviation": 0.0,
+        "mismatched_ids": 0,
+        "n_ids_compared": 47714,
+        "small_store_sha256": "0572b9a8b7db5ba7da06eb9f39e5c87dbe7c66be805050ca7d2daf24902a24a6"
+      }
+    },
+    "matrix_cell": "A1/train_250k/seed2",
+    "pinned_neutral_image": {
+      "definition": "element-wise mean of the cached CLIP image-token store over the unique training imageIds of data/v2/train_250k.csv",
+      "dtype": "float16",
+      "manifest": "data/v2/train_250k.csv",
+      "manifest_sha256": "be7d867afd2757a631145bc1c56c3b1a4dcf43784c1a6abf1c3b75452b865074",
+      "n_rows_in_store": 63599,
+      "n_training_images": 61859,
+      "sha256": "8cb31f37bde17768238ff7fd5ba716c795e238091cbc94a0a5c6242297e414b3",
+      "shape": [
+        50,
+        512
+      ]
+    },
+    "pinned_neutral_question": {
+      "L": 32,
+      "definition": "frozen-LM last_hidden_state of the fixed string \"question\", padded to L",
+      "dtype": "float16",
+      "mask_sha256": "915c75942a26bb3a433a8ce2cb0427c29ec6c1775cfc78328b57f6ba7bfeaa9c",
+      "no_fully_masked_row": true,
+      "sha256": "96fc8f6dc43d9e155469008aab4d1c53ed91bcca8757571d0ea50816e448387d",
+      "shape": [
+        32,
+        576
+      ],
+      "string": "question",
+      "token_ids": [
+        19945
+      ],
+      "valid_positions": 1
+    },
+    "question_store": "data/v3_slm_tokens/e8a_135m_A1_train250k_dev.h5",
+    "question_store_sha256": "4bb5fadd021cf1c41e2a0ee6a6c25a9bf4b92ff4653e9e2fd053ceca71a3f3bc",
+    "recipe": {
+      "batch_size": 128,
+      "checkpoint_selection": "best development accuracy",
+      "dropout": 0.1,
+      "final_max_epochs": 100,
+      "grad_clip": 1.0,
+      "learning_rate": 0.0003,
+      "optimizer": "AdamW, two parameter groups",
+      "patience": 10,
+      "precision": "bf16 autocast on the training path only; fp32 evaluation",
+      "recipe_identifier": "7.1 fixed inherited v3_01 reasoner recipe",
+      "schedule": "cosine after warmup, LambdaLR",
+      "schedule_horizon": "final_max_epochs x steps_per_epoch",
+      "schedule_step_frequency": "per optimizer step",
+      "source": "experiments/v3_01_reasoner/run.py (live constants) and its stored results.json selected_config",
+      "stored_results_sha256": "472fe626775d755e1a24ae3da814466773b3e067537201cb88351ea27d8abfd9",
+      "tie_break": "earliest epoch attaining the best value",
+      "wall_clock_gate_hours_v3_01_historical_non_operative": 12.0,
+      "wall_clock_halt_hours_operative": 8.0,
+      "warmup_frac": 0.0,
+      "weight_decay": 0.01,
+      "weight_decay_applies_to": "ndim >= 2 only; 0.0 on ndim < 2"
+    },
+    "run": {
+      "arm": "A1",
+      "best_dev_accuracy": 0.57234,
+      "best_epoch": 14,
+      "checkpoint": "results/experiments/e8a_question_encoder/checkpoints/e8a_A1_train_250k_seed2.pt",
+      "checkpoint_bytes": 85625377,
+      "checkpoint_sha256": "8fd2118ccd904c7a530659319ff4558a9931c7207785323af2196369f20fb905",
+      "epochs_run": 24,
+      "hidden_state_rms_before_projection": 1.87865,
+      "history": [
+        {
+          "dev_accuracy": 0.53915,
+          "epoch": 1,
+          "train_loss": 1.05267
+        },
+        {
+          "dev_accuracy": 0.55587,
+          "epoch": 2,
+          "train_loss": 0.88857
+        },
+        {
+          "dev_accuracy": 0.55859,
+          "epoch": 3,
+          "train_loss": 0.83053
+        },
+        {
+          "dev_accuracy": 0.56287,
+          "epoch": 4,
+          "train_loss": 0.78067
+        },
+        {
+          "dev_accuracy": 0.57208,
+          "epoch": 5,
+          "train_loss": 0.73076
+        },
+        {
+          "dev_accuracy": 0.55847,
+          "epoch": 6,
+          "train_loss": 0.67488
+        },
+        {
+          "dev_accuracy": 0.56508,
+          "epoch": 7,
+          "train_loss": 0.62264
+        },
+        {
+          "dev_accuracy": 0.56987,
+          "epoch": 8,
+          "train_loss": 0.56895
+        },
+        {
+          "dev_accuracy": 0.56508,
+          "epoch": 9,
+          "train_loss": 0.51795
+        },
+        {
+          "dev_accuracy": 0.57182,
+          "epoch": 10,
+          "train_loss": 0.47058
+        },
+        {
+          "dev_accuracy": 0.56313,
+          "epoch": 11,
+          "train_loss": 0.42862
+        },
+        {
+          "dev_accuracy": 0.56352,
+          "epoch": 12,
+          "train_loss": 0.39289
+        },
+        {
+          "dev_accuracy": 0.56417,
+          "epoch": 13,
+          "train_loss": 0.35772
+        },
+        {
+          "dev_accuracy": 0.57234,
+          "epoch": 14,
+          "train_loss": 0.32819
+        },
+        {
+          "dev_accuracy": 0.56417,
+          "epoch": 15,
+          "train_loss": 0.30099
+        },
+        {
+          "dev_accuracy": 0.56598,
+          "epoch": 16,
+          "train_loss": 0.27833
+        },
+        {
+          "dev_accuracy": 0.56171,
+          "epoch": 17,
+          "train_loss": 0.25643
+        },
+        {
+          "dev_accuracy": 0.56002,
+          "epoch": 18,
+          "train_loss": 0.23204
+        },
+        {
+          "dev_accuracy": 0.56404,
+          "epoch": 19,
+          "train_loss": 0.20983
+        },
+        {
+          "dev_accuracy": 0.57156,
+          "epoch": 20,
+          "train_loss": 0.19516
+        },
+        {
+          "dev_accuracy": 0.56689,
+          "epoch": 21,
+          "train_loss": 0.17771
+        },
+        {
+          "dev_accuracy": 0.56171,
+          "epoch": 22,
+          "train_loss": 0.16343
+        },
+        {
+          "dev_accuracy": 0.56054,
+          "epoch": 23,
+          "train_loss": 0.14623
+        },
+        {
+          "dev_accuracy": 0.57013,
+          "epoch": 24,
+          "train_loss": 0.13692
+        }
+      ],
+      "loader_throughput": {
+        "batches_per_second": 174.02,
+        "batches_timed": 50,
+        "samples_per_second": 22274.4,
+        "samples_timed": 6400,
+        "scope": "collate and host-side assembly only, no forward or backward pass; num_workers=0 as the v2/v3 convention requires",
+        "seconds": 0.2873
+      },
+      "memory_ceiling_mib": 16014.0,
+      "memory_within_ceiling": true,
+      "parameters": {
+        "non_trainable_inside_trained_module": 0,
+        "trainable_projection": 295424,
+        "trainable_reasoner_trunk": 21099620,
+        "trainable_total": 21395044
+      },
+      "peak_allocated_mib": 1123.4,
+      "peak_reserved_mib": 1304.0,
+      "projected_token_rms_at_initialisation": 1.10579,
+      "question_encoder": {
+        "all_parameters_frozen": true,
+        "arm_model": "pretrained",
+        "config_fields": {
+          "hidden_size": 576,
+          "initializer_range": 0.041666666666666664,
+          "intermediate_size": 1536,
+          "num_attention_heads": 9,
+          "num_hidden_layers": 30,
+          "num_key_value_heads": 3,
+          "rms_norm_eps": 1e-05,
+          "tie_word_embeddings": true,
+          "vocab_size": 49152
+        },
+        "config_sha256": "1d556eab73b69c7f11f64c557a2f9c6f440bd4c6b89bb2584a6b498c92603843",
+        "construction": "AutoModel.from_pretrained at the pinned revision",
+        "extraction_layer_rule": "last_hidden_state, the post-final-norm output; never hidden_states[-1] used interchangeably",
+        "hidden_size": 576,
+        "loaded_dtype": "torch.bfloat16",
+        "module_in_eval": true,
+        "num_hidden_layers": 30,
+        "parameter_count": 134515008,
+        "pinned_revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+        "projection_scale_applied": "none. Canonical section 9.1: no model-specific RMS rescaling is applied in E8A, because ReasonerBlock LayerNorms the question source and a constant rescale would be a no-op.",
+        "recipe_identifier": "7.1 fixed inherited v3_01 reasoner recipe",
+        "repo_id": "HuggingFaceTB/SmolLM2-135M",
+        "resolved_revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+        "resolved_snapshot_path": "/scratch/Efficient Vision-Language Reasoning with Small Language Models/.cache/huggingface/hub/models--HuggingFaceTB--SmolLM2-135M/snapshots/93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+        "state_dict_sha256": "193e814295ee4e1aa578440b9049bae2263a9b8da89744e8f63c3dab218ea859",
+        "tokenizer_config_sha256": "4bb9af56a342753d39374f4016a16574cab299fe088e896f425ce3c433f61424",
+        "tokenizer_file_sha256": "9ca9acddb6525a194ec8ac7a87f24fbba7232a9a15ffa1af0c1224fcd888e47c",
+        "tokenizers_version": "0.22.2",
+        "transformers_version": "5.14.1",
+        "vocab_size": 49152
+      },
+      "rms_note": "recorded, not normalised away. No model-specific RMS rescaling is applied in E8A: ReasonerBlock LayerNorms the question source at src/reasoner.py:31, applied :52, so a constant rescale of the projection output would be a no-op.",
+      "rms_support": "both computed over the same support: the 2035051 deduplicated packed state rows of the train_250k + dev questionIds this run consumes. Rows the store holds but this run does not read are excluded, which for the shared CLIP question store means the clean-test INPUT rows are not part of any development diagnostic.",
+      "rms_support_rows": 2035051,
+      "scale": "train_250k",
+      "seconds_per_epoch": 88.758,
+      "seconds_per_epoch_max": 88.875,
+      "seed": 2,
+      "status": "completed",
+      "steps_per_epoch": 1954,
+      "stopped_by": "early stopping, patience 10",
+      "time_to_best_seconds": 1242.4,
+      "wall_clock_halt_hours": 8.0,
+      "wall_clock_hours": 0.591827,
+      "wall_clock_seconds": 2130.6,
+      "wall_clock_within_halt": true
+    },
+    "scale": "train_250k",
+    "seed": 2
+  },
+  "metadata": {
+    "batch_size": 256,
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "deterministic": true,
+    "device": "cuda",
+    "dropout": 0.3,
+    "embed_dim": 512,
+    "git_commit": "472aa38",
+    "git_dirty": false,
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "h5py_version": "3.16.0",
+    "hidden_dim": 512,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "n_train": 40000,
+    "n_val": 8000,
+    "numpy_version": "2.5.0",
+    "open_clip_version": "3.3.0",
+    "pandas_version": "3.0.3",
+    "python": "3.12.3",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 2,
+    "timestamp": "2026-08-03T07:05:35",
+    "top_k_answers": 100,
+    "torch": "2.12.1+cu130",
+    "weight_decay": 0.0001
+  }
+}

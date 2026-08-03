@@ -1,0 +1,473 @@
+{
+  "e8a_extraction": {
+    "alignment": {
+      "combined": {
+        "duplicate_question_ids_across_manifests": 0,
+        "rows": 47714,
+        "unique_question_ids": 47714
+      },
+      "dev.csv": {
+        "duplicate_question_ids": 0,
+        "image_ids_missing_from_clip_store": 0,
+        "rows": 7714,
+        "sha256": "95d1b504dcc4deb7d69ba0c9e293d1c00bae93df4b6907174a1dd615cb93cdc9",
+        "unique_image_ids": 768,
+        "unique_question_ids": 7714
+      },
+      "train_40k.csv": {
+        "duplicate_question_ids": 0,
+        "image_ids_missing_from_clip_store": 0,
+        "rows": 40000,
+        "sha256": "cda03c133e581d486c1e29f6d99376ee59f9841564b3fb890bc401f4da5c90d2",
+        "unique_image_ids": 27622,
+        "unique_question_ids": 40000
+      }
+    },
+    "clean_test_accessed": false,
+    "gates": {
+      "alignment": true,
+      "determinism": true,
+      "memory": true,
+      "precision_g20": true,
+      "storage": true,
+      "throughput": true
+    },
+    "length_statistics": {
+      "train_250k + dev": {
+        "max": 31,
+        "mean": 11.3305,
+        "median": 11,
+        "min": 4,
+        "over_L": 0,
+        "p95": 18,
+        "p99": 22,
+        "p99_9": 24,
+        "truncation_rate_at_L32": 0.0,
+        "unique_strings": 179608
+      },
+      "train_40k + dev": {
+        "max": 31,
+        "mean": 10.9321,
+        "median": 10,
+        "min": 4,
+        "over_L": 0,
+        "p95": 18,
+        "p99": 21,
+        "p99_9": 24,
+        "truncation_rate_at_L32": 0.0,
+        "unique_strings": 39040
+      }
+    },
+    "memory_ceiling_mib": 16014.0,
+    "note": "train_250k is tokenised for the L decision only. No train_250k store is written and no train_250k run is performed in Phase 1A.",
+    "phase": "Phase 1A bounded pilot",
+    "preflight": {
+      "A1": {
+        "activations": {
+          "max": 46.25,
+          "max_abs": 46.25,
+          "min": -27.0,
+          "rms": 1.87529
+        },
+        "arm": "A1",
+        "batch_shape_sensitivity": {
+          "batch_size_1_is_the_harness_self_check": "batch_size_1 compares the one-per-forward path against itself and is therefore structurally 0.0; it is retained as a check that the comparison harness is wired correctly, not as evidence about batch shape",
+          "bfloat16_equal_length_batch_max_abs_deviation": {
+            "batch_size_1": 0.0,
+            "batch_size_64": 0.902344
+          },
+          "bfloat16_ragged_padded_batch_max_abs_deviation": 1.0,
+          "equal_length_batch_sizes_measured": [
+            1,
+            64
+          ],
+          "equal_length_batch_sizes_requested": [
+            1,
+            64,
+            256
+          ],
+          "float32_activation_scale_max_abs": 46.1607,
+          "float32_ragged_padded_batch_max_abs_deviation": 0.00014949,
+          "float32_relative_deviation": 3.2384e-06,
+          "interpretation": "In float32 the same model is padding-invariant to about 2e-6 relative, which establishes that the attention masking is correct. In bfloat16 the same comparison disagrees by a few per cent relative, because an 8-bit mantissa makes the reduction order chosen by the kernel visible. Production extraction therefore encodes one string per forward pass, which removes the dependence entirely and is bitwise reproducible. Reported, not gated: the canonical protocol pre-registers no batch-shape tolerance, and inventing one here is not permitted."
+        },
+        "determinism": {
+          "extraction_policy": "one string per forward pass, so each stored state is a pure function of that string's own tokens",
+          "repeated_extraction_bitwise_identical": true
+        },
+        "fp32_reference_diagnostic": {
+          "max_abs_deviation": 2.86133,
+          "mean_abs_deviation": 0.03405726,
+          "note": "Compares an fp32 model forward against the operative bf16 forward stored as fp16. The frozen LM is held in native bfloat16 on the operative path (canonical section 20); this fp32 forward is a bounded measurement over the fixed sample and produces no stored value. This is the quantity that reading B of section 18.1 would gate at 1e-3; it does not meet that threshold, and the g20_precision block above records why reading A is adopted and escalated rather than resolved silently. It is the only recorded quantity that carries information about the numerical fidelity of the extraction as a whole, so it is reported for every arm whether or not a threshold binds it.",
+          "p50_abs_deviation": 0.01958454,
+          "p95_abs_deviation": 0.10164759,
+          "p99_abs_deviation": 0.25350201,
+          "relative_l2": 0.04461936,
+          "would_pass_1e-3_if_gated": false
+        },
+        "g20_downstream_projection": {
+          "max_abs_deviation": 0.0,
+          "probe": "Linear(H, 512) seeded with utils.set_seed(0); measures the effect of fp16 storage on the projected sequence",
+          "relative_l2": 0.0
+        },
+        "g20_precision": {
+          "interpretation_of_section_18_1": "Section 18.1 says 'fp16 storage is compared against fp32 on the fixed sample' and then pre-registers 'relative L2 reconstruction error below 1e-3'. Two readings exist. READING A, implemented here as the gate: the compared quantities are the stored float16 values against the operative forward they were cast from, i.e. the RECONSTRUCTION error of the storage cast, which is what the word 'reconstruction' and the neighbouring 'non-finite count before cast / after cast' both point at, and which is the only quantity section 18.1's own remedy can act on: 'if fp16 fails, bf16 or fp32 storage is evaluated' changes the storage format and cannot reduce a forward-precision gap. READING B: the compared quantities are the stored float16 values against a float32 model forward. That quantity is measured and recorded below as fp32_reference_diagnostic; on this sample it is 0.0446 (A1) and 0.0255 (A1r), which would NOT meet 1e-3. Under reading B the gate fails for every arm and the only remedy would be to abandon the bfloat16 policy that section 20 pins as operative ('the frozen language models are held in their native bfloat16 at all times, including during evaluation; they are never upcast'), which section 18.1 does not authorise. Reading A is therefore adopted and BOTH numbers are reported. This is a disclosed interpretation, not a silent one: it is escalated to the user for a ruling before the full core matrix is authorised. It does not change what is stored, what is trained, or any measured value.",
+          "max_abs_reconstruction_error": 0.0,
+          "non_finite_after_cast": 0,
+          "non_finite_before_cast": 0,
+          "operative_forward_dtype": "bfloat16",
+          "passed": true,
+          "relative_l2_reconstruction_error": 0.0,
+          "stored_dtype": "float16",
+          "threshold_non_finite_after_cast": 0,
+          "threshold_relative_l2": 0.001,
+          "why_the_reconstruction_error_is_exactly_zero": "bfloat16 carries 8 mantissa bits and float16 carries 11 in the normal range, so every finite bfloat16 value whose magnitude lies inside float16's exponent range is exactly representable in float16. The operative forward is bfloat16 and the maximum absolute activation on this sample is far below float16's 65504 limit, so the storage cast is lossless and the error is 0 by construction, not by accident. IMPORTANT: this pass is therefore NOT evidence that float16 storage is numerically adequate in general. It establishes only that the cast loses nothing relative to the bfloat16 forward it is storing. The gate would fail if an activation exceeded float16 range, which is the failure mode it can genuinely detect."
+        },
+        "model_provenance": {
+          "all_parameters_frozen": true,
+          "arm_model": "pretrained",
+          "config_fields": {
+            "hidden_size": 576,
+            "initializer_range": 0.041666666666666664,
+            "intermediate_size": 1536,
+            "num_attention_heads": 9,
+            "num_hidden_layers": 30,
+            "num_key_value_heads": 3,
+            "rms_norm_eps": 1e-05,
+            "tie_word_embeddings": true,
+            "vocab_size": 49152
+          },
+          "config_sha256": "1d556eab73b69c7f11f64c557a2f9c6f440bd4c6b89bb2584a6b498c92603843",
+          "construction": "AutoModel.from_pretrained at the pinned revision",
+          "extraction_layer_rule": "last_hidden_state, the post-final-norm output; never hidden_states[-1] used interchangeably",
+          "hidden_size": 576,
+          "loaded_dtype": "torch.bfloat16",
+          "module_in_eval": true,
+          "num_hidden_layers": 30,
+          "parameter_count": 134515008,
+          "pinned_revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+          "projection_scale_applied": "none. Canonical section 9.1: no model-specific RMS rescaling is applied in E8A, because ReasonerBlock LayerNorms the question source and a constant rescale would be a no-op.",
+          "recipe_identifier": "7.1 fixed inherited v3_01 reasoner recipe",
+          "repo_id": "HuggingFaceTB/SmolLM2-135M",
+          "resolved_revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+          "resolved_snapshot_path": "/scratch/Efficient Vision-Language Reasoning with Small Language Models/.cache/huggingface/hub/models--HuggingFaceTB--SmolLM2-135M/snapshots/93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+          "state_dict_sha256": "193e814295ee4e1aa578440b9049bae2263a9b8da89744e8f63c3dab218ea859",
+          "tokenizer_config_sha256": "4bb9af56a342753d39374f4016a16574cab299fe088e896f425ce3c433f61424",
+          "tokenizer_file_sha256": "9ca9acddb6525a194ec8ac7a87f24fbba7232a9a15ffa1af0c1224fcd888e47c",
+          "tokenizers_version": "0.22.2",
+          "transformers_version": "5.14.1",
+          "vocab_size": 49152
+        },
+        "sample": {
+          "n_strings": 1024,
+          "n_token_rows": 11387,
+          "selection": "the first N strings of the sorted unique question-string list; fixed and deterministic"
+        },
+        "throughput": {
+          "peak_allocated_mib": 289.7,
+          "peak_reserved_mib": 320.0,
+          "seconds": 12.083,
+          "strings_per_second": 84.7,
+          "tokens_per_second": 942.4
+        }
+      },
+      "A1r": {
+        "activations": {
+          "max": 4.78125,
+          "max_abs": 4.78125,
+          "min": -4.6875,
+          "rms": 1.0
+        },
+        "arm": "A1r",
+        "batch_shape_sensitivity": {
+          "batch_size_1_is_the_harness_self_check": "batch_size_1 compares the one-per-forward path against itself and is therefore structurally 0.0; it is retained as a check that the comparison harness is wired correctly, not as evidence about batch shape",
+          "bfloat16_equal_length_batch_max_abs_deviation": {
+            "batch_size_1": 0.0,
+            "batch_size_64": 0.164062
+          },
+          "bfloat16_ragged_padded_batch_max_abs_deviation": 0.15625,
+          "equal_length_batch_sizes_measured": [
+            1,
+            64
+          ],
+          "equal_length_batch_sizes_requested": [
+            1,
+            64,
+            256
+          ],
+          "float32_activation_scale_max_abs": 4.7843,
+          "float32_ragged_padded_batch_max_abs_deviation": 1.439e-05,
+          "float32_relative_deviation": 3.0087e-06,
+          "interpretation": "In float32 the same model is padding-invariant to about 2e-6 relative, which establishes that the attention masking is correct. In bfloat16 the same comparison disagrees by a few per cent relative, because an 8-bit mantissa makes the reduction order chosen by the kernel visible. Production extraction therefore encodes one string per forward pass, which removes the dependence entirely and is bitwise reproducible. Reported, not gated: the canonical protocol pre-registers no batch-shape tolerance, and inventing one here is not permitted."
+        },
+        "determinism": {
+          "extraction_policy": "one string per forward pass, so each stored state is a pure function of that string's own tokens",
+          "repeated_extraction_bitwise_identical": true
+        },
+        "fp32_reference_diagnostic": {
+          "max_abs_deviation": 0.185956,
+          "mean_abs_deviation": 0.02026821,
+          "note": "Compares an fp32 model forward against the operative bf16 forward stored as fp16. The frozen LM is held in native bfloat16 on the operative path (canonical section 20); this fp32 forward is a bounded measurement over the fixed sample and produces no stored value. This is the quantity that reading B of section 18.1 would gate at 1e-3; it does not meet that threshold, and the g20_precision block above records why reading A is adopted and escalated rather than resolved silently. It is the only recorded quantity that carries information about the numerical fidelity of the extraction as a whole, so it is reported for every arm whether or not a threshold binds it.",
+          "p50_abs_deviation": 0.01695597,
+          "p95_abs_deviation": 0.05033132,
+          "p99_abs_deviation": 0.06715035,
+          "relative_l2": 0.02552745,
+          "would_pass_1e-3_if_gated": false
+        },
+        "g20_downstream_projection": {
+          "max_abs_deviation": 0.0,
+          "probe": "Linear(H, 512) seeded with utils.set_seed(0); measures the effect of fp16 storage on the projected sequence",
+          "relative_l2": 0.0
+        },
+        "g20_precision": {
+          "interpretation_of_section_18_1": "Section 18.1 says 'fp16 storage is compared against fp32 on the fixed sample' and then pre-registers 'relative L2 reconstruction error below 1e-3'. Two readings exist. READING A, implemented here as the gate: the compared quantities are the stored float16 values against the operative forward they were cast from, i.e. the RECONSTRUCTION error of the storage cast, which is what the word 'reconstruction' and the neighbouring 'non-finite count before cast / after cast' both point at, and which is the only quantity section 18.1's own remedy can act on: 'if fp16 fails, bf16 or fp32 storage is evaluated' changes the storage format and cannot reduce a forward-precision gap. READING B: the compared quantities are the stored float16 values against a float32 model forward. That quantity is measured and recorded below as fp32_reference_diagnostic; on this sample it is 0.0446 (A1) and 0.0255 (A1r), which would NOT meet 1e-3. Under reading B the gate fails for every arm and the only remedy would be to abandon the bfloat16 policy that section 20 pins as operative ('the frozen language models are held in their native bfloat16 at all times, including during evaluation; they are never upcast'), which section 18.1 does not authorise. Reading A is therefore adopted and BOTH numbers are reported. This is a disclosed interpretation, not a silent one: it is escalated to the user for a ruling before the full core matrix is authorised. It does not change what is stored, what is trained, or any measured value.",
+          "max_abs_reconstruction_error": 0.0,
+          "non_finite_after_cast": 0,
+          "non_finite_before_cast": 0,
+          "operative_forward_dtype": "bfloat16",
+          "passed": true,
+          "relative_l2_reconstruction_error": 0.0,
+          "stored_dtype": "float16",
+          "threshold_non_finite_after_cast": 0,
+          "threshold_relative_l2": 0.001,
+          "why_the_reconstruction_error_is_exactly_zero": "bfloat16 carries 8 mantissa bits and float16 carries 11 in the normal range, so every finite bfloat16 value whose magnitude lies inside float16's exponent range is exactly representable in float16. The operative forward is bfloat16 and the maximum absolute activation on this sample is far below float16's 65504 limit, so the storage cast is lossless and the error is 0 by construction, not by accident. IMPORTANT: this pass is therefore NOT evidence that float16 storage is numerically adequate in general. It establishes only that the cast loses nothing relative to the bfloat16 forward it is storing. The gate would fail if an activation exceeded float16 range, which is the failure mode it can genuinely detect."
+        },
+        "model_provenance": {
+          "all_parameters_frozen": true,
+          "arm_model": "random",
+          "config_fields": {
+            "hidden_size": 576,
+            "initializer_range": 0.041666666666666664,
+            "intermediate_size": 1536,
+            "num_attention_heads": 9,
+            "num_hidden_layers": 30,
+            "num_key_value_heads": 3,
+            "rms_norm_eps": 1e-05,
+            "tie_word_embeddings": true,
+            "vocab_size": 49152
+          },
+          "config_from_revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+          "config_sha256": "1d556eab73b69c7f11f64c557a2f9c6f440bd4c6b89bb2584a6b498c92603843",
+          "construction": "utils.set_seed(20260802); AutoModel.from_config(cfg, dtype=torch.float32); .to(torch.bfloat16). No pretrained weight is loaded. Pinned by this seed plus the config SHA-256.",
+          "extraction_layer_rule": "last_hidden_state, the post-final-norm output; never hidden_states[-1] used interchangeably",
+          "hidden_size": 576,
+          "loaded_dtype": "torch.bfloat16",
+          "module_in_eval": true,
+          "num_hidden_layers": 30,
+          "parameter_count": 134515008,
+          "projection_scale_applied": "none. Canonical section 9.1: no model-specific RMS rescaling is applied in E8A, because ReasonerBlock LayerNorms the question source and a constant rescale would be a no-op.",
+          "random_init_seed": 20260802,
+          "recipe_identifier": "7.1 fixed inherited v3_01 reasoner recipe",
+          "repo_id": "HuggingFaceTB/SmolLM2-135M",
+          "resolved_revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+          "resolved_snapshot_path": "/scratch/Efficient Vision-Language Reasoning with Small Language Models/.cache/huggingface/hub/models--HuggingFaceTB--SmolLM2-135M/snapshots/93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+          "state_dict_sha256": "8beb47a6c2596907986a14c0f690c4d0803c0e91cf9522ff38c8737c4de11599",
+          "tokenizer_config_sha256": "4bb9af56a342753d39374f4016a16574cab299fe088e896f425ce3c433f61424",
+          "tokenizer_file_sha256": "9ca9acddb6525a194ec8ac7a87f24fbba7232a9a15ffa1af0c1224fcd888e47c",
+          "tokenizers_version": "0.22.2",
+          "transformers_version": "5.14.1",
+          "vocab_size": 49152
+        },
+        "sample": {
+          "n_strings": 1024,
+          "n_token_rows": 11387,
+          "selection": "the first N strings of the sorted unique question-string list; fixed and deterministic"
+        },
+        "throughput": {
+          "peak_allocated_mib": 289.7,
+          "peak_reserved_mib": 380.0,
+          "seconds": 11.96,
+          "strings_per_second": 85.6,
+          "tokens_per_second": 952.1
+        }
+      }
+    },
+    "recipe": {
+      "batch_size": 128,
+      "checkpoint_selection": "best development accuracy",
+      "dropout": 0.1,
+      "final_max_epochs": 100,
+      "grad_clip": 1.0,
+      "learning_rate": 0.0003,
+      "optimizer": "AdamW, two parameter groups",
+      "patience": 10,
+      "precision": "bf16 autocast on the training path only; fp32 evaluation",
+      "recipe_identifier": "7.1 fixed inherited v3_01 reasoner recipe",
+      "schedule": "cosine after warmup, LambdaLR",
+      "schedule_horizon": "final_max_epochs x steps_per_epoch",
+      "schedule_step_frequency": "per optimizer step",
+      "source": "experiments/v3_01_reasoner/run.py (live constants) and its stored results.json selected_config",
+      "stored_results_sha256": "472fe626775d755e1a24ae3da814466773b3e067537201cb88351ea27d8abfd9",
+      "tie_break": "earliest epoch attaining the best value",
+      "wall_clock_gate_hours_v3_01_historical_non_operative": 12.0,
+      "wall_clock_halt_hours_operative": 8.0,
+      "warmup_frac": 0.0,
+      "weight_decay": 0.01,
+      "weight_decay_applies_to": "ndim >= 2 only; 0.0 on ndim < 2"
+    },
+    "storage_projection": {
+      "free_disk_gib": 337.5,
+      "full_programme_sequence_stores_if_authorised": {
+        "canonical_padded_gib": 41.05,
+        "note": "not written in Phase 1A; shown for the Stage-8 re-projection. Five full stores over train_250k + dev (135M pretrained and random at H=576, 360M pretrained and random at H=960, FLAN-T5-small at H=512) plus two middle-layer stores over train_40k + dev at H=576.",
+        "packed_gib": 14.501
+      },
+      "layout": "packed: identical question strings share one block, so a store holds sum(length) rows, not n_strings x L rows",
+      "phase_1a_fits": true,
+      "phase_1a_written": {
+        "gib": 0.9158,
+        "scope": "train_40k + dev only, arms A1 and A1r",
+        "stores": 2
+      },
+      "train_250k_plus_dev": {
+        "bytes": 2344378752,
+        "canonical_padded_estimate_gib": 6.1664,
+        "gib": 2.1834,
+        "token_rows": 2035051,
+        "unique_strings": 179608
+      },
+      "train_40k_plus_dev": {
+        "bytes": 491662080,
+        "canonical_padded_estimate_gib": 1.3403,
+        "gib": 0.4579,
+        "token_rows": 426790,
+        "unique_strings": 39040
+      }
+    },
+    "stores_written": {
+      "A1": {
+        "arm": "A1",
+        "bytes": 497979128,
+        "gib": 0.4638,
+        "gpu_hours": 0.126813,
+        "model_provenance": {
+          "all_parameters_frozen": true,
+          "arm_model": "pretrained",
+          "config_fields": {
+            "hidden_size": 576,
+            "initializer_range": 0.041666666666666664,
+            "intermediate_size": 1536,
+            "num_attention_heads": 9,
+            "num_hidden_layers": 30,
+            "num_key_value_heads": 3,
+            "rms_norm_eps": 1e-05,
+            "tie_word_embeddings": true,
+            "vocab_size": 49152
+          },
+          "config_sha256": "1d556eab73b69c7f11f64c557a2f9c6f440bd4c6b89bb2584a6b498c92603843",
+          "construction": "AutoModel.from_pretrained at the pinned revision",
+          "extraction_layer_rule": "last_hidden_state, the post-final-norm output; never hidden_states[-1] used interchangeably",
+          "hidden_size": 576,
+          "loaded_dtype": "torch.bfloat16",
+          "module_in_eval": true,
+          "num_hidden_layers": 30,
+          "parameter_count": 134515008,
+          "pinned_revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+          "projection_scale_applied": "none. Canonical section 9.1: no model-specific RMS rescaling is applied in E8A, because ReasonerBlock LayerNorms the question source and a constant rescale would be a no-op.",
+          "recipe_identifier": "7.1 fixed inherited v3_01 reasoner recipe",
+          "repo_id": "HuggingFaceTB/SmolLM2-135M",
+          "resolved_revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+          "resolved_snapshot_path": "/scratch/Efficient Vision-Language Reasoning with Small Language Models/.cache/huggingface/hub/models--HuggingFaceTB--SmolLM2-135M/snapshots/93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+          "state_dict_sha256": "193e814295ee4e1aa578440b9049bae2263a9b8da89744e8f63c3dab218ea859",
+          "tokenizer_config_sha256": "4bb9af56a342753d39374f4016a16574cab299fe088e896f425ce3c433f61424",
+          "tokenizer_file_sha256": "9ca9acddb6525a194ec8ac7a87f24fbba7232a9a15ffa1af0c1224fcd888e47c",
+          "tokenizers_version": "0.22.2",
+          "transformers_version": "5.14.1",
+          "vocab_size": 49152
+        },
+        "n_question_ids": 47714,
+        "n_token_rows": 426790,
+        "n_unique_strings": 39040,
+        "path": "data/v3_slm_tokens/e8a_135m_A1_train40k_dev.h5",
+        "peak_allocated_mib": 289.7,
+        "preflight_relative_l2": 0.0,
+        "seconds": 456.5,
+        "sha256": "0572b9a8b7db5ba7da06eb9f39e5c87dbe7c66be805050ca7d2daf24902a24a6",
+        "strings_per_second": 85.5
+      },
+      "A1r": {
+        "arm": "A1r",
+        "bytes": 497979128,
+        "gib": 0.4638,
+        "gpu_hours": 0.126589,
+        "model_provenance": {
+          "all_parameters_frozen": true,
+          "arm_model": "random",
+          "config_fields": {
+            "hidden_size": 576,
+            "initializer_range": 0.041666666666666664,
+            "intermediate_size": 1536,
+            "num_attention_heads": 9,
+            "num_hidden_layers": 30,
+            "num_key_value_heads": 3,
+            "rms_norm_eps": 1e-05,
+            "tie_word_embeddings": true,
+            "vocab_size": 49152
+          },
+          "config_from_revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+          "config_sha256": "1d556eab73b69c7f11f64c557a2f9c6f440bd4c6b89bb2584a6b498c92603843",
+          "construction": "utils.set_seed(20260802); AutoModel.from_config(cfg, dtype=torch.float32); .to(torch.bfloat16). No pretrained weight is loaded. Pinned by this seed plus the config SHA-256.",
+          "extraction_layer_rule": "last_hidden_state, the post-final-norm output; never hidden_states[-1] used interchangeably",
+          "hidden_size": 576,
+          "loaded_dtype": "torch.bfloat16",
+          "module_in_eval": true,
+          "num_hidden_layers": 30,
+          "parameter_count": 134515008,
+          "projection_scale_applied": "none. Canonical section 9.1: no model-specific RMS rescaling is applied in E8A, because ReasonerBlock LayerNorms the question source and a constant rescale would be a no-op.",
+          "random_init_seed": 20260802,
+          "recipe_identifier": "7.1 fixed inherited v3_01 reasoner recipe",
+          "repo_id": "HuggingFaceTB/SmolLM2-135M",
+          "resolved_revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+          "resolved_snapshot_path": "/scratch/Efficient Vision-Language Reasoning with Small Language Models/.cache/huggingface/hub/models--HuggingFaceTB--SmolLM2-135M/snapshots/93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+          "state_dict_sha256": "8beb47a6c2596907986a14c0f690c4d0803c0e91cf9522ff38c8737c4de11599",
+          "tokenizer_config_sha256": "4bb9af56a342753d39374f4016a16574cab299fe088e896f425ce3c433f61424",
+          "tokenizer_file_sha256": "9ca9acddb6525a194ec8ac7a87f24fbba7232a9a15ffa1af0c1224fcd888e47c",
+          "tokenizers_version": "0.22.2",
+          "transformers_version": "5.14.1",
+          "vocab_size": 49152
+        },
+        "n_question_ids": 47714,
+        "n_token_rows": 426790,
+        "n_unique_strings": 39040,
+        "path": "data/v3_slm_tokens/e8a_135m_A1r_train40k_dev.h5",
+        "peak_allocated_mib": 289.7,
+        "preflight_relative_l2": 0.0,
+        "seconds": 455.7,
+        "sha256": "f42e36b7dd2c27f9c1e3e695a57764a5ac49c54bde44a4ebe702d8e8afce4476",
+        "strings_per_second": 85.7
+      }
+    },
+    "token_budget_L": 32,
+    "worst_peak_allocated_mib": 289.7
+  },
+  "metadata": {
+    "batch_size": 256,
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "deterministic": true,
+    "device": "cuda",
+    "dropout": 0.3,
+    "embed_dim": 512,
+    "git_commit": "8a620d3",
+    "git_dirty": false,
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "h5py_version": "3.16.0",
+    "hidden_dim": 512,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "n_train": 40000,
+    "n_val": 8000,
+    "numpy_version": "2.5.0",
+    "open_clip_version": "3.3.0",
+    "pandas_version": "3.0.3",
+    "python": "3.12.3",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "timestamp": "2026-08-02T18:49:29",
+    "top_k_answers": 100,
+    "torch": "2.12.1+cu130",
+    "weight_decay": 0.0001
+  }
+}

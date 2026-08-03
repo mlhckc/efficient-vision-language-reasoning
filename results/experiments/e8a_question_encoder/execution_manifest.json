@@ -1,0 +1,542 @@
+{
+  "e8a_execution_manifest": {
+    "a0_is_not_a0p": "The stored v3_01 reasoner is arm A0: the same trunk WITHOUT the interface-matching Linear(512, 512), 21,099,620 trainable parameters. It is not A0p, never enters the comparison table, and appears only as clearly labelled context.",
+    "arms": [
+      "A0p",
+      "A1",
+      "A1r"
+    ],
+    "checkpoint_selection": "best development accuracy; tie-break earliest epoch attaining the best value",
+    "data_hashes": {
+      "data/v2/answer_vocab_v2.json": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680",
+      "data/v2/dev.csv": "95d1b504dcc4deb7d69ba0c9e293d1c00bae93df4b6907174a1dd615cb93cdc9",
+      "data/v2/train_250k.csv": "be7d867afd2757a631145bc1c56c3b1a4dcf43784c1a6abf1c3b75452b865074",
+      "data/v2/train_40k.csv": "cda03c133e581d486c1e29f6d99376ee59f9841564b3fb890bc401f4da5c90d2",
+      "data/v3/tokens/image_tokens.h5": "c852811a4e3393387012a099d3ad8d494fe4be0f3d95f70b4a1328db4ad59588"
+    },
+    "early_stopping": "patience 10 epochs without a development improvement",
+    "matrix": "E8A SmolLM2-135M dissertation core",
+    "maximum_epochs": 100,
+    "memory_ceiling_fraction": 0.8,
+    "not_authorised": [
+      "SmolLM2-360M",
+      "E8B",
+      "E9",
+      "any further comparator",
+      "hyperparameter search",
+      "clean-test access",
+      "F1",
+      "F2",
+      "changing the canonical protocol",
+      "retraining a valid completed pilot"
+    ],
+    "recipe": {
+      "batch_size": 128,
+      "checkpoint_selection": "best development accuracy",
+      "dropout": 0.1,
+      "final_max_epochs": 100,
+      "grad_clip": 1.0,
+      "learning_rate": 0.0003,
+      "optimizer": "AdamW, two parameter groups",
+      "patience": 10,
+      "precision": "bf16 autocast on the training path only; fp32 evaluation",
+      "recipe_identifier": "7.1 fixed inherited v3_01 reasoner recipe",
+      "schedule": "cosine after warmup, LambdaLR",
+      "schedule_horizon": "final_max_epochs x steps_per_epoch",
+      "schedule_step_frequency": "per optimizer step",
+      "source": "experiments/v3_01_reasoner/run.py (live constants) and its stored results.json selected_config",
+      "stored_results_sha256": "472fe626775d755e1a24ae3da814466773b3e067537201cb88351ea27d8abfd9",
+      "tie_break": "earliest epoch attaining the best value",
+      "wall_clock_gate_hours_v3_01_historical_non_operative": 12.0,
+      "wall_clock_halt_hours_operative": 8.0,
+      "warmup_frac": 0.0,
+      "weight_decay": 0.01,
+      "weight_decay_applies_to": "ndim >= 2 only; 0.0 on ndim < 2"
+    },
+    "reused": 3,
+    "runs": [
+      {
+        "answer_vocabulary": "data/v2/answer_vocab_v2.json",
+        "architecture": "unmodified LatentQueryReasoner (32 latents, d_model 512, 4 blocks, 8 heads) plus one trainable token-wise Linear(512, 512)",
+        "arm": "A0p",
+        "dev_manifest": "data/v2/dev.csv",
+        "expected_artefacts": {
+          "checkpoint": "checkpoints/e8a_A0p_train_40k_seed0.pt",
+          "correctness": "correctness_A0p_seed0.npz",
+          "record": "pilot_A0p.json",
+          "record_pointer": "e8a_a0p_pilot.run / .evaluation"
+        },
+        "image_store": "data/v3/tokens/image_tokens.h5",
+        "output_directory": "results/experiments/e8a_question_encoder",
+        "question_store": "data/v3/tokens/question_tokens.h5",
+        "question_store_exists": true,
+        "reuse_artefacts": {
+          "checkpoint": {
+            "exists": true,
+            "path": "checkpoints/e8a_A0p_train_40k_seed0.pt",
+            "sha256": "ae76485bd023cafddf1dfc7e8a53e2af031c6b9a2301954d2b97a60a9240867f"
+          },
+          "correctness": {
+            "exists": true,
+            "path": "correctness_A0p_seed0.npz",
+            "sha256": "3c4da43847f4dea27162012c39d1007476a868732151d69fa335ef901e3b8d8a"
+          },
+          "record": {
+            "exists": true,
+            "path": "pilot_A0p.json",
+            "sha256": "d947697f1b0d883f7278aa0fefd3ba3bc3ad6f1e45ce7053b0fa18b0eb64f935"
+          },
+          "record_pointer": "e8a_a0p_pilot.run / .evaluation"
+        },
+        "scale": "train_40k",
+        "seed": 0,
+        "status": "completed_in_phase_1b, reuse",
+        "train_manifest": "data/v2/train_40k.csv",
+        "trainable_parameters": 21362276
+      },
+      {
+        "answer_vocabulary": "data/v2/answer_vocab_v2.json",
+        "architecture": "unmodified LatentQueryReasoner (32 latents, d_model 512, 4 blocks, 8 heads) plus one trainable token-wise Linear(512, 512)",
+        "arm": "A0p",
+        "dev_manifest": "data/v2/dev.csv",
+        "expected_artefacts": {
+          "checkpoint": "checkpoints/e8a_A0p_train_40k_seed1.pt",
+          "correctness": "correctness_A0p_train_40k_seed1.npz",
+          "record": "run_A0p_train_40k_seed1.json"
+        },
+        "image_store": "data/v3/tokens/image_tokens.h5",
+        "output_directory": "results/experiments/e8a_question_encoder",
+        "question_store": "data/v3/tokens/question_tokens.h5",
+        "question_store_exists": true,
+        "reuse_artefacts": null,
+        "scale": "train_40k",
+        "seed": 1,
+        "status": "to_run",
+        "train_manifest": "data/v2/train_40k.csv",
+        "trainable_parameters": 21362276
+      },
+      {
+        "answer_vocabulary": "data/v2/answer_vocab_v2.json",
+        "architecture": "unmodified LatentQueryReasoner (32 latents, d_model 512, 4 blocks, 8 heads) plus one trainable token-wise Linear(512, 512)",
+        "arm": "A0p",
+        "dev_manifest": "data/v2/dev.csv",
+        "expected_artefacts": {
+          "checkpoint": "checkpoints/e8a_A0p_train_40k_seed2.pt",
+          "correctness": "correctness_A0p_train_40k_seed2.npz",
+          "record": "run_A0p_train_40k_seed2.json"
+        },
+        "image_store": "data/v3/tokens/image_tokens.h5",
+        "output_directory": "results/experiments/e8a_question_encoder",
+        "question_store": "data/v3/tokens/question_tokens.h5",
+        "question_store_exists": true,
+        "reuse_artefacts": null,
+        "scale": "train_40k",
+        "seed": 2,
+        "status": "to_run",
+        "train_manifest": "data/v2/train_40k.csv",
+        "trainable_parameters": 21362276
+      },
+      {
+        "answer_vocabulary": "data/v2/answer_vocab_v2.json",
+        "architecture": "unmodified LatentQueryReasoner (32 latents, d_model 512, 4 blocks, 8 heads) plus one trainable token-wise Linear(576, 512)",
+        "arm": "A1",
+        "dev_manifest": "data/v2/dev.csv",
+        "expected_artefacts": {
+          "checkpoint": "checkpoints/e8a_A1_train_40k_seed0.pt",
+          "correctness": "correctness_A1_seed0.npz",
+          "record": "pilot.json",
+          "record_pointer": "e8a_pilot.runs.A1 / .evaluations.A1"
+        },
+        "image_store": "data/v3/tokens/image_tokens.h5",
+        "output_directory": "results/experiments/e8a_question_encoder",
+        "question_store": "data/v3_slm_tokens/e8a_135m_A1_train40k_dev.h5",
+        "question_store_exists": true,
+        "reuse_artefacts": {
+          "checkpoint": {
+            "exists": true,
+            "path": "checkpoints/e8a_A1_train_40k_seed0.pt",
+            "sha256": "640a2e5b3281921c9f088b17220b3b2972d785e1a394eb4fd1ea52aa5acc15f4"
+          },
+          "correctness": {
+            "exists": true,
+            "path": "correctness_A1_seed0.npz",
+            "sha256": "1148f386dee5e716a0e43637904b9a98e563260a6fbd2d02c10c53a7168b1043"
+          },
+          "record": {
+            "exists": true,
+            "path": "pilot.json",
+            "sha256": "fb9927d8093d827efcee74e4e35309879cfd18e4b410c621654c8da4d4f670f6"
+          },
+          "record_pointer": "e8a_pilot.runs.A1 / .evaluations.A1"
+        },
+        "scale": "train_40k",
+        "seed": 0,
+        "status": "completed_in_phase_1b, reuse",
+        "train_manifest": "data/v2/train_40k.csv",
+        "trainable_parameters": 21395044
+      },
+      {
+        "answer_vocabulary": "data/v2/answer_vocab_v2.json",
+        "architecture": "unmodified LatentQueryReasoner (32 latents, d_model 512, 4 blocks, 8 heads) plus one trainable token-wise Linear(576, 512)",
+        "arm": "A1",
+        "dev_manifest": "data/v2/dev.csv",
+        "expected_artefacts": {
+          "checkpoint": "checkpoints/e8a_A1_train_40k_seed1.pt",
+          "correctness": "correctness_A1_train_40k_seed1.npz",
+          "record": "run_A1_train_40k_seed1.json"
+        },
+        "image_store": "data/v3/tokens/image_tokens.h5",
+        "output_directory": "results/experiments/e8a_question_encoder",
+        "question_store": "data/v3_slm_tokens/e8a_135m_A1_train40k_dev.h5",
+        "question_store_exists": true,
+        "reuse_artefacts": null,
+        "scale": "train_40k",
+        "seed": 1,
+        "status": "to_run",
+        "train_manifest": "data/v2/train_40k.csv",
+        "trainable_parameters": 21395044
+      },
+      {
+        "answer_vocabulary": "data/v2/answer_vocab_v2.json",
+        "architecture": "unmodified LatentQueryReasoner (32 latents, d_model 512, 4 blocks, 8 heads) plus one trainable token-wise Linear(576, 512)",
+        "arm": "A1",
+        "dev_manifest": "data/v2/dev.csv",
+        "expected_artefacts": {
+          "checkpoint": "checkpoints/e8a_A1_train_40k_seed2.pt",
+          "correctness": "correctness_A1_train_40k_seed2.npz",
+          "record": "run_A1_train_40k_seed2.json"
+        },
+        "image_store": "data/v3/tokens/image_tokens.h5",
+        "output_directory": "results/experiments/e8a_question_encoder",
+        "question_store": "data/v3_slm_tokens/e8a_135m_A1_train40k_dev.h5",
+        "question_store_exists": true,
+        "reuse_artefacts": null,
+        "scale": "train_40k",
+        "seed": 2,
+        "status": "to_run",
+        "train_manifest": "data/v2/train_40k.csv",
+        "trainable_parameters": 21395044
+      },
+      {
+        "answer_vocabulary": "data/v2/answer_vocab_v2.json",
+        "architecture": "unmodified LatentQueryReasoner (32 latents, d_model 512, 4 blocks, 8 heads) plus one trainable token-wise Linear(576, 512)",
+        "arm": "A1r",
+        "dev_manifest": "data/v2/dev.csv",
+        "expected_artefacts": {
+          "checkpoint": "checkpoints/e8a_A1r_train_40k_seed0.pt",
+          "correctness": "correctness_A1r_seed0.npz",
+          "record": "pilot.json",
+          "record_pointer": "e8a_pilot.runs.A1r / .evaluations.A1r"
+        },
+        "image_store": "data/v3/tokens/image_tokens.h5",
+        "output_directory": "results/experiments/e8a_question_encoder",
+        "question_store": "data/v3_slm_tokens/e8a_135m_A1r_train40k_dev.h5",
+        "question_store_exists": true,
+        "reuse_artefacts": {
+          "checkpoint": {
+            "exists": true,
+            "path": "checkpoints/e8a_A1r_train_40k_seed0.pt",
+            "sha256": "a3e8441c00d42bc9b1b03aabe9e9f0ca6049d39fbe57532c5814ead2ca788e38"
+          },
+          "correctness": {
+            "exists": true,
+            "path": "correctness_A1r_seed0.npz",
+            "sha256": "6aef72ae0a784737b7ed1e448005a077e0ce413c3339ff38084941f2d085112c"
+          },
+          "record": {
+            "exists": true,
+            "path": "pilot.json",
+            "sha256": "fb9927d8093d827efcee74e4e35309879cfd18e4b410c621654c8da4d4f670f6"
+          },
+          "record_pointer": "e8a_pilot.runs.A1r / .evaluations.A1r"
+        },
+        "scale": "train_40k",
+        "seed": 0,
+        "status": "completed_in_phase_1b, reuse",
+        "train_manifest": "data/v2/train_40k.csv",
+        "trainable_parameters": 21395044
+      },
+      {
+        "answer_vocabulary": "data/v2/answer_vocab_v2.json",
+        "architecture": "unmodified LatentQueryReasoner (32 latents, d_model 512, 4 blocks, 8 heads) plus one trainable token-wise Linear(576, 512)",
+        "arm": "A1r",
+        "dev_manifest": "data/v2/dev.csv",
+        "expected_artefacts": {
+          "checkpoint": "checkpoints/e8a_A1r_train_40k_seed1.pt",
+          "correctness": "correctness_A1r_train_40k_seed1.npz",
+          "record": "run_A1r_train_40k_seed1.json"
+        },
+        "image_store": "data/v3/tokens/image_tokens.h5",
+        "output_directory": "results/experiments/e8a_question_encoder",
+        "question_store": "data/v3_slm_tokens/e8a_135m_A1r_train40k_dev.h5",
+        "question_store_exists": true,
+        "reuse_artefacts": null,
+        "scale": "train_40k",
+        "seed": 1,
+        "status": "to_run",
+        "train_manifest": "data/v2/train_40k.csv",
+        "trainable_parameters": 21395044
+      },
+      {
+        "answer_vocabulary": "data/v2/answer_vocab_v2.json",
+        "architecture": "unmodified LatentQueryReasoner (32 latents, d_model 512, 4 blocks, 8 heads) plus one trainable token-wise Linear(576, 512)",
+        "arm": "A1r",
+        "dev_manifest": "data/v2/dev.csv",
+        "expected_artefacts": {
+          "checkpoint": "checkpoints/e8a_A1r_train_40k_seed2.pt",
+          "correctness": "correctness_A1r_train_40k_seed2.npz",
+          "record": "run_A1r_train_40k_seed2.json"
+        },
+        "image_store": "data/v3/tokens/image_tokens.h5",
+        "output_directory": "results/experiments/e8a_question_encoder",
+        "question_store": "data/v3_slm_tokens/e8a_135m_A1r_train40k_dev.h5",
+        "question_store_exists": true,
+        "reuse_artefacts": null,
+        "scale": "train_40k",
+        "seed": 2,
+        "status": "to_run",
+        "train_manifest": "data/v2/train_40k.csv",
+        "trainable_parameters": 21395044
+      },
+      {
+        "answer_vocabulary": "data/v2/answer_vocab_v2.json",
+        "architecture": "unmodified LatentQueryReasoner (32 latents, d_model 512, 4 blocks, 8 heads) plus one trainable token-wise Linear(512, 512)",
+        "arm": "A0p",
+        "dev_manifest": "data/v2/dev.csv",
+        "expected_artefacts": {
+          "checkpoint": "checkpoints/e8a_A0p_train_250k_seed0.pt",
+          "correctness": "correctness_A0p_train_250k_seed0.npz",
+          "record": "run_A0p_train_250k_seed0.json"
+        },
+        "image_store": "data/v3/tokens/image_tokens.h5",
+        "output_directory": "results/experiments/e8a_question_encoder",
+        "question_store": "data/v3/tokens/question_tokens.h5",
+        "question_store_exists": true,
+        "reuse_artefacts": null,
+        "scale": "train_250k",
+        "seed": 0,
+        "status": "to_run",
+        "train_manifest": "data/v2/train_250k.csv",
+        "trainable_parameters": 21362276
+      },
+      {
+        "answer_vocabulary": "data/v2/answer_vocab_v2.json",
+        "architecture": "unmodified LatentQueryReasoner (32 latents, d_model 512, 4 blocks, 8 heads) plus one trainable token-wise Linear(512, 512)",
+        "arm": "A0p",
+        "dev_manifest": "data/v2/dev.csv",
+        "expected_artefacts": {
+          "checkpoint": "checkpoints/e8a_A0p_train_250k_seed1.pt",
+          "correctness": "correctness_A0p_train_250k_seed1.npz",
+          "record": "run_A0p_train_250k_seed1.json"
+        },
+        "image_store": "data/v3/tokens/image_tokens.h5",
+        "output_directory": "results/experiments/e8a_question_encoder",
+        "question_store": "data/v3/tokens/question_tokens.h5",
+        "question_store_exists": true,
+        "reuse_artefacts": null,
+        "scale": "train_250k",
+        "seed": 1,
+        "status": "to_run",
+        "train_manifest": "data/v2/train_250k.csv",
+        "trainable_parameters": 21362276
+      },
+      {
+        "answer_vocabulary": "data/v2/answer_vocab_v2.json",
+        "architecture": "unmodified LatentQueryReasoner (32 latents, d_model 512, 4 blocks, 8 heads) plus one trainable token-wise Linear(512, 512)",
+        "arm": "A0p",
+        "dev_manifest": "data/v2/dev.csv",
+        "expected_artefacts": {
+          "checkpoint": "checkpoints/e8a_A0p_train_250k_seed2.pt",
+          "correctness": "correctness_A0p_train_250k_seed2.npz",
+          "record": "run_A0p_train_250k_seed2.json"
+        },
+        "image_store": "data/v3/tokens/image_tokens.h5",
+        "output_directory": "results/experiments/e8a_question_encoder",
+        "question_store": "data/v3/tokens/question_tokens.h5",
+        "question_store_exists": true,
+        "reuse_artefacts": null,
+        "scale": "train_250k",
+        "seed": 2,
+        "status": "to_run",
+        "train_manifest": "data/v2/train_250k.csv",
+        "trainable_parameters": 21362276
+      },
+      {
+        "answer_vocabulary": "data/v2/answer_vocab_v2.json",
+        "architecture": "unmodified LatentQueryReasoner (32 latents, d_model 512, 4 blocks, 8 heads) plus one trainable token-wise Linear(576, 512)",
+        "arm": "A1",
+        "dev_manifest": "data/v2/dev.csv",
+        "expected_artefacts": {
+          "checkpoint": "checkpoints/e8a_A1_train_250k_seed0.pt",
+          "correctness": "correctness_A1_train_250k_seed0.npz",
+          "record": "run_A1_train_250k_seed0.json"
+        },
+        "image_store": "data/v3/tokens/image_tokens.h5",
+        "output_directory": "results/experiments/e8a_question_encoder",
+        "question_store": "data/v3_slm_tokens/e8a_135m_A1_train250k_dev.h5",
+        "question_store_exists": false,
+        "reuse_artefacts": null,
+        "scale": "train_250k",
+        "seed": 0,
+        "status": "to_run",
+        "train_manifest": "data/v2/train_250k.csv",
+        "trainable_parameters": 21395044
+      },
+      {
+        "answer_vocabulary": "data/v2/answer_vocab_v2.json",
+        "architecture": "unmodified LatentQueryReasoner (32 latents, d_model 512, 4 blocks, 8 heads) plus one trainable token-wise Linear(576, 512)",
+        "arm": "A1",
+        "dev_manifest": "data/v2/dev.csv",
+        "expected_artefacts": {
+          "checkpoint": "checkpoints/e8a_A1_train_250k_seed1.pt",
+          "correctness": "correctness_A1_train_250k_seed1.npz",
+          "record": "run_A1_train_250k_seed1.json"
+        },
+        "image_store": "data/v3/tokens/image_tokens.h5",
+        "output_directory": "results/experiments/e8a_question_encoder",
+        "question_store": "data/v3_slm_tokens/e8a_135m_A1_train250k_dev.h5",
+        "question_store_exists": false,
+        "reuse_artefacts": null,
+        "scale": "train_250k",
+        "seed": 1,
+        "status": "to_run",
+        "train_manifest": "data/v2/train_250k.csv",
+        "trainable_parameters": 21395044
+      },
+      {
+        "answer_vocabulary": "data/v2/answer_vocab_v2.json",
+        "architecture": "unmodified LatentQueryReasoner (32 latents, d_model 512, 4 blocks, 8 heads) plus one trainable token-wise Linear(576, 512)",
+        "arm": "A1",
+        "dev_manifest": "data/v2/dev.csv",
+        "expected_artefacts": {
+          "checkpoint": "checkpoints/e8a_A1_train_250k_seed2.pt",
+          "correctness": "correctness_A1_train_250k_seed2.npz",
+          "record": "run_A1_train_250k_seed2.json"
+        },
+        "image_store": "data/v3/tokens/image_tokens.h5",
+        "output_directory": "results/experiments/e8a_question_encoder",
+        "question_store": "data/v3_slm_tokens/e8a_135m_A1_train250k_dev.h5",
+        "question_store_exists": false,
+        "reuse_artefacts": null,
+        "scale": "train_250k",
+        "seed": 2,
+        "status": "to_run",
+        "train_manifest": "data/v2/train_250k.csv",
+        "trainable_parameters": 21395044
+      },
+      {
+        "answer_vocabulary": "data/v2/answer_vocab_v2.json",
+        "architecture": "unmodified LatentQueryReasoner (32 latents, d_model 512, 4 blocks, 8 heads) plus one trainable token-wise Linear(576, 512)",
+        "arm": "A1r",
+        "dev_manifest": "data/v2/dev.csv",
+        "expected_artefacts": {
+          "checkpoint": "checkpoints/e8a_A1r_train_250k_seed0.pt",
+          "correctness": "correctness_A1r_train_250k_seed0.npz",
+          "record": "run_A1r_train_250k_seed0.json"
+        },
+        "image_store": "data/v3/tokens/image_tokens.h5",
+        "output_directory": "results/experiments/e8a_question_encoder",
+        "question_store": "data/v3_slm_tokens/e8a_135m_A1r_train250k_dev.h5",
+        "question_store_exists": false,
+        "reuse_artefacts": null,
+        "scale": "train_250k",
+        "seed": 0,
+        "status": "to_run",
+        "train_manifest": "data/v2/train_250k.csv",
+        "trainable_parameters": 21395044
+      },
+      {
+        "answer_vocabulary": "data/v2/answer_vocab_v2.json",
+        "architecture": "unmodified LatentQueryReasoner (32 latents, d_model 512, 4 blocks, 8 heads) plus one trainable token-wise Linear(576, 512)",
+        "arm": "A1r",
+        "dev_manifest": "data/v2/dev.csv",
+        "expected_artefacts": {
+          "checkpoint": "checkpoints/e8a_A1r_train_250k_seed1.pt",
+          "correctness": "correctness_A1r_train_250k_seed1.npz",
+          "record": "run_A1r_train_250k_seed1.json"
+        },
+        "image_store": "data/v3/tokens/image_tokens.h5",
+        "output_directory": "results/experiments/e8a_question_encoder",
+        "question_store": "data/v3_slm_tokens/e8a_135m_A1r_train250k_dev.h5",
+        "question_store_exists": false,
+        "reuse_artefacts": null,
+        "scale": "train_250k",
+        "seed": 1,
+        "status": "to_run",
+        "train_manifest": "data/v2/train_250k.csv",
+        "trainable_parameters": 21395044
+      },
+      {
+        "answer_vocabulary": "data/v2/answer_vocab_v2.json",
+        "architecture": "unmodified LatentQueryReasoner (32 latents, d_model 512, 4 blocks, 8 heads) plus one trainable token-wise Linear(576, 512)",
+        "arm": "A1r",
+        "dev_manifest": "data/v2/dev.csv",
+        "expected_artefacts": {
+          "checkpoint": "checkpoints/e8a_A1r_train_250k_seed2.pt",
+          "correctness": "correctness_A1r_train_250k_seed2.npz",
+          "record": "run_A1r_train_250k_seed2.json"
+        },
+        "image_store": "data/v3/tokens/image_tokens.h5",
+        "output_directory": "results/experiments/e8a_question_encoder",
+        "question_store": "data/v3_slm_tokens/e8a_135m_A1r_train250k_dev.h5",
+        "question_store_exists": false,
+        "reuse_artefacts": null,
+        "scale": "train_250k",
+        "seed": 2,
+        "status": "to_run",
+        "train_manifest": "data/v2/train_250k.csv",
+        "trainable_parameters": 21395044
+      }
+    ],
+    "scales": [
+      "train_40k",
+      "train_250k"
+    ],
+    "scheduler": "cosine after warmup, LambdaLR, final_max_epochs x steps_per_epoch, per optimizer step",
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "store_hashes": {
+      "data/v3/tokens/question_tokens.h5": "503f33827f25202b979076333a4a5258b31808f674b31d521b4b43e098732037",
+      "data/v3_slm_tokens/e8a_135m_A1_train250k_dev.h5": null,
+      "data/v3_slm_tokens/e8a_135m_A1_train40k_dev.h5": "0572b9a8b7db5ba7da06eb9f39e5c87dbe7c66be805050ca7d2daf24902a24a6",
+      "data/v3_slm_tokens/e8a_135m_A1r_train250k_dev.h5": null,
+      "data/v3_slm_tokens/e8a_135m_A1r_train40k_dev.h5": "f42e36b7dd2c27f9c1e3e695a57764a5ac49c54bde44a4ebe702d8e8afce4476"
+    },
+    "to_run": 15,
+    "total_arm_scale_seed_cells": 18,
+    "wall_clock_halt_hours": 8.0
+  },
+  "metadata": {
+    "batch_size": 256,
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "deterministic": true,
+    "device": "cuda",
+    "dropout": 0.3,
+    "embed_dim": 512,
+    "git_commit": "f3fa052",
+    "git_dirty": true,
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "h5py_version": "3.16.0",
+    "hidden_dim": 512,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "n_train": 40000,
+    "n_val": 8000,
+    "numpy_version": "2.5.0",
+    "open_clip_version": "3.3.0",
+    "pandas_version": "3.0.3",
+    "python": "3.12.3",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "timestamp": "2026-08-03T02:22:25",
+    "top_k_answers": 100,
+    "torch": "2.12.1+cu130",
+    "weight_decay": 0.0001
+  }
+}

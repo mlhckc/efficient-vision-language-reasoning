@@ -1,0 +1,164 @@
+{
+  "e8a_a0p_run": {
+    "arm": "A0p",
+    "best_dev_accuracy": 0.53578,
+    "best_epoch": 5,
+    "checkpoint": "results/experiments/e8a_question_encoder/checkpoints/e8a_A0p_train_40k_seed0.pt",
+    "checkpoint_bytes": 85494305,
+    "checkpoint_sha256": "ae76485bd023cafddf1dfc7e8a53e2af031c6b9a2301954d2b97a60a9240867f",
+    "epochs_run": 15,
+    "hidden_state_rms_before_projection": 0.3003,
+    "history": [
+      {
+        "dev_accuracy": 0.50856,
+        "epoch": 1,
+        "train_loss": 1.37789
+      },
+      {
+        "dev_accuracy": 0.5232,
+        "epoch": 2,
+        "train_loss": 0.95822
+      },
+      {
+        "dev_accuracy": 0.52398,
+        "epoch": 3,
+        "train_loss": 0.85937
+      },
+      {
+        "dev_accuracy": 0.52891,
+        "epoch": 4,
+        "train_loss": 0.75923
+      },
+      {
+        "dev_accuracy": 0.53578,
+        "epoch": 5,
+        "train_loss": 0.6499
+      },
+      {
+        "dev_accuracy": 0.53565,
+        "epoch": 6,
+        "train_loss": 0.52585
+      },
+      {
+        "dev_accuracy": 0.53176,
+        "epoch": 7,
+        "train_loss": 0.39383
+      },
+      {
+        "dev_accuracy": 0.52943,
+        "epoch": 8,
+        "train_loss": 0.27951
+      },
+      {
+        "dev_accuracy": 0.52982,
+        "epoch": 9,
+        "train_loss": 0.20067
+      },
+      {
+        "dev_accuracy": 0.53059,
+        "epoch": 10,
+        "train_loss": 0.15025
+      },
+      {
+        "dev_accuracy": 0.52748,
+        "epoch": 11,
+        "train_loss": 0.11596
+      },
+      {
+        "dev_accuracy": 0.52891,
+        "epoch": 12,
+        "train_loss": 0.09429
+      },
+      {
+        "dev_accuracy": 0.52865,
+        "epoch": 13,
+        "train_loss": 0.08191
+      },
+      {
+        "dev_accuracy": 0.53046,
+        "epoch": 14,
+        "train_loss": 0.07336
+      },
+      {
+        "dev_accuracy": 0.53059,
+        "epoch": 15,
+        "train_loss": 0.06585
+      }
+    ],
+    "loader_throughput": {
+      "batches_per_second": 168.89,
+      "batches_timed": 50,
+      "samples_per_second": 21618.0,
+      "samples_timed": 6400,
+      "scope": "collate and host-side assembly only, no forward or backward pass; num_workers=0 as the v2/v3 convention requires",
+      "seconds": 0.296
+    },
+    "memory_ceiling_mib": 16014.0,
+    "memory_within_ceiling": true,
+    "parameters": {
+      "non_trainable_inside_trained_module": 0,
+      "trainable_projection": 262656,
+      "trainable_reasoner_trunk": 21099620,
+      "trainable_total": 21362276
+    },
+    "peak_allocated_mib": 1272.5,
+    "peak_reserved_mib": 1330.0,
+    "projected_token_rms_at_initialisation": 0.17372,
+    "question_encoder": {
+      "all_parameters_frozen": "by construction: no encoder is instantiated on this path, and the states were produced once by a frozen CLIP in v3_00. The frozen parameter count is measured separately by frozen_encoder_parameters, which asserts zero trainable.",
+      "arm_model": "frozen CLIP ViT-B/32 question tokens, cached",
+      "clip_model": "ViT-B-32",
+      "clip_pretrained": "laion2b_s34b_b79k",
+      "construction": "no encoder is loaded at training time: the frozen CLIP question states were produced once by experiments/v3_00_tokens and are read from the cached store, exactly as arm A0 consumes them",
+      "encoder": "clip_question_tokens",
+      "projection_scale_applied": "none",
+      "recipe_identifier": "7.1 fixed inherited v3_01 reasoner recipe",
+      "store": "data/v3/tokens/question_tokens.h5"
+    },
+    "rms_note": "recorded, not normalised away. No model-specific RMS rescaling is applied in E8A: ReasonerBlock LayerNorms the question source at src/reasoner.py:31, applied :52, so a constant rescale of the projection output would be a no-op.",
+    "rms_support": "both computed over the same support: the 500680 deduplicated packed state rows of the train_40k + dev questionIds this run consumes. Rows the store holds but this run does not read are excluded, which for the shared CLIP question store means the clean-test INPUT rows are not part of any development diagnostic.",
+    "rms_support_rows": 500680,
+    "scale": "train_40k",
+    "seconds_per_epoch": 15.72,
+    "seconds_per_epoch_max": 15.765,
+    "seed": 0,
+    "status": "completed",
+    "steps_per_epoch": 313,
+    "stopped_by": "early stopping, patience 10",
+    "time_to_best_seconds": 78.7,
+    "wall_clock_halt_hours": 8.0,
+    "wall_clock_hours": 0.065584,
+    "wall_clock_seconds": 236.1,
+    "wall_clock_within_halt": true
+  },
+  "metadata": {
+    "batch_size": 256,
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "deterministic": true,
+    "device": "cuda",
+    "dropout": 0.3,
+    "embed_dim": 512,
+    "git_commit": "077af56",
+    "git_dirty": false,
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "h5py_version": "3.16.0",
+    "hidden_dim": 512,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "n_train": 40000,
+    "n_val": 8000,
+    "numpy_version": "2.5.0",
+    "open_clip_version": "3.3.0",
+    "pandas_version": "3.0.3",
+    "python": "3.12.3",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 0,
+    "timestamp": "2026-08-02T21:45:27",
+    "top_k_answers": 100,
+    "torch": "2.12.1+cu130",
+    "weight_decay": 0.0001
+  }
+}

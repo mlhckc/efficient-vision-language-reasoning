@@ -1,0 +1,330 @@
+{
+  "e8a_runs_so_far": {
+    "A1": {
+      "arm": "A1",
+      "best_dev_accuracy": 0.52541,
+      "best_epoch": 4,
+      "checkpoint": "results/experiments/e8a_question_encoder/checkpoints/e8a_A1_train_40k_seed0.pt",
+      "checkpoint_bytes": 85625252,
+      "checkpoint_sha256": "640a2e5b3281921c9f088b17220b3b2972d785e1a394eb4fd1ea52aa5acc15f4",
+      "epochs_run": 14,
+      "hidden_state_rms_before_projection": 1.8771,
+      "history": [
+        {
+          "dev_accuracy": 0.4978,
+          "epoch": 1,
+          "train_loss": 1.41752
+        },
+        {
+          "dev_accuracy": 0.51115,
+          "epoch": 2,
+          "train_loss": 0.99782
+        },
+        {
+          "dev_accuracy": 0.51543,
+          "epoch": 3,
+          "train_loss": 0.90969
+        },
+        {
+          "dev_accuracy": 0.52541,
+          "epoch": 4,
+          "train_loss": 0.82046
+        },
+        {
+          "dev_accuracy": 0.52139,
+          "epoch": 5,
+          "train_loss": 0.71573
+        },
+        {
+          "dev_accuracy": 0.51724,
+          "epoch": 6,
+          "train_loss": 0.59071
+        },
+        {
+          "dev_accuracy": 0.50402,
+          "epoch": 7,
+          "train_loss": 0.44805
+        },
+        {
+          "dev_accuracy": 0.50791,
+          "epoch": 8,
+          "train_loss": 0.33426
+        },
+        {
+          "dev_accuracy": 0.51633,
+          "epoch": 9,
+          "train_loss": 0.23767
+        },
+        {
+          "dev_accuracy": 0.50104,
+          "epoch": 10,
+          "train_loss": 0.1851
+        },
+        {
+          "dev_accuracy": 0.51517,
+          "epoch": 11,
+          "train_loss": 0.14385
+        },
+        {
+          "dev_accuracy": 0.50959,
+          "epoch": 12,
+          "train_loss": 0.11953
+        },
+        {
+          "dev_accuracy": 0.5127,
+          "epoch": 13,
+          "train_loss": 0.10364
+        },
+        {
+          "dev_accuracy": 0.50713,
+          "epoch": 14,
+          "train_loss": 0.09081
+        }
+      ],
+      "language_model": {
+        "all_parameters_frozen": true,
+        "arm_model": "pretrained",
+        "config_fields": {
+          "hidden_size": 576,
+          "initializer_range": 0.041666666666666664,
+          "intermediate_size": 1536,
+          "num_attention_heads": 9,
+          "num_hidden_layers": 30,
+          "num_key_value_heads": 3,
+          "rms_norm_eps": 1e-05,
+          "tie_word_embeddings": true,
+          "vocab_size": 49152
+        },
+        "config_sha256": "1d556eab73b69c7f11f64c557a2f9c6f440bd4c6b89bb2584a6b498c92603843",
+        "construction": "AutoModel.from_pretrained at the pinned revision",
+        "extraction_layer_rule": "last_hidden_state, the post-final-norm output; never hidden_states[-1] used interchangeably",
+        "hidden_size": 576,
+        "loaded_dtype": "torch.bfloat16",
+        "module_in_eval": true,
+        "num_hidden_layers": 30,
+        "parameter_count": 134515008,
+        "pinned_revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+        "projection_scale_applied": "none. Canonical section 9.1: no model-specific RMS rescaling is applied in E8A, because ReasonerBlock LayerNorms the question source and a constant rescale would be a no-op.",
+        "recipe_identifier": "7.1 fixed inherited v3_01 reasoner recipe",
+        "repo_id": "HuggingFaceTB/SmolLM2-135M",
+        "resolved_revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+        "resolved_snapshot_path": "/scratch/Efficient Vision-Language Reasoning with Small Language Models/.cache/huggingface/hub/models--HuggingFaceTB--SmolLM2-135M/snapshots/93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+        "state_dict_sha256": "193e814295ee4e1aa578440b9049bae2263a9b8da89744e8f63c3dab218ea859",
+        "tokenizer_config_sha256": "4bb9af56a342753d39374f4016a16574cab299fe088e896f425ce3c433f61424",
+        "tokenizer_file_sha256": "9ca9acddb6525a194ec8ac7a87f24fbba7232a9a15ffa1af0c1224fcd888e47c",
+        "tokenizers_version": "0.22.2",
+        "transformers_version": "5.14.1",
+        "vocab_size": 49152
+      },
+      "loader_throughput": {
+        "batches_per_second": 170.73,
+        "batches_timed": 50,
+        "samples_per_second": 21853.6,
+        "samples_timed": 6400,
+        "scope": "collate and host-side assembly only, no forward or backward pass; num_workers=0 as the v2/v3 convention requires",
+        "seconds": 0.2929
+      },
+      "memory_ceiling_mib": 16014.0,
+      "memory_within_ceiling": true,
+      "parameters": {
+        "non_trainable_inside_trained_module": 0,
+        "trainable_projection": 295424,
+        "trainable_reasoner_trunk": 21099620,
+        "trainable_total": 21395044
+      },
+      "peak_allocated_mib": 1249.2,
+      "peak_reserved_mib": 1316.0,
+      "projected_token_rms_at_initialisation": 1.10566,
+      "rms_note": "recorded, not normalised away. No model-specific RMS rescaling is applied in E8A: ReasonerBlock LayerNorms the question source at src/reasoner.py:31, applied :52, so a constant rescale of the projection output would be a no-op.",
+      "rms_support": "both computed over the complete store, 426790 token rows",
+      "scale": "train_40k",
+      "seconds_per_epoch": 15.705,
+      "seconds_per_epoch_max": 15.752,
+      "seed": 0,
+      "status": "completed",
+      "steps_per_epoch": 313,
+      "stopped_by": "early stopping, patience 10",
+      "time_to_best_seconds": 62.7,
+      "wall_clock_halt_hours": 8.0,
+      "wall_clock_hours": 0.061139,
+      "wall_clock_seconds": 220.1,
+      "wall_clock_within_halt": true
+    },
+    "A1r": {
+      "arm": "A1r",
+      "best_dev_accuracy": 0.48976,
+      "best_epoch": 3,
+      "checkpoint": "results/experiments/e8a_question_encoder/checkpoints/e8a_A1r_train_40k_seed0.pt",
+      "checkpoint_bytes": 85625377,
+      "checkpoint_sha256": "a3e8441c00d42bc9b1b03aabe9e9f0ca6049d39fbe57532c5814ead2ca788e38",
+      "epochs_run": 13,
+      "hidden_state_rms_before_projection": 0.99999,
+      "history": [
+        {
+          "dev_accuracy": 0.45618,
+          "epoch": 1,
+          "train_loss": 1.52583
+        },
+        {
+          "dev_accuracy": 0.48535,
+          "epoch": 2,
+          "train_loss": 1.10177
+        },
+        {
+          "dev_accuracy": 0.48976,
+          "epoch": 3,
+          "train_loss": 0.95884
+        },
+        {
+          "dev_accuracy": 0.48315,
+          "epoch": 4,
+          "train_loss": 0.80758
+        },
+        {
+          "dev_accuracy": 0.48743,
+          "epoch": 5,
+          "train_loss": 0.64387
+        },
+        {
+          "dev_accuracy": 0.47861,
+          "epoch": 6,
+          "train_loss": 0.47369
+        },
+        {
+          "dev_accuracy": 0.48587,
+          "epoch": 7,
+          "train_loss": 0.31733
+        },
+        {
+          "dev_accuracy": 0.48341,
+          "epoch": 8,
+          "train_loss": 0.22824
+        },
+        {
+          "dev_accuracy": 0.47576,
+          "epoch": 9,
+          "train_loss": 0.16147
+        },
+        {
+          "dev_accuracy": 0.4825,
+          "epoch": 10,
+          "train_loss": 0.13381
+        },
+        {
+          "dev_accuracy": 0.48004,
+          "epoch": 11,
+          "train_loss": 0.10692
+        },
+        {
+          "dev_accuracy": 0.47576,
+          "epoch": 12,
+          "train_loss": 0.09724
+        },
+        {
+          "dev_accuracy": 0.4838,
+          "epoch": 13,
+          "train_loss": 0.08544
+        }
+      ],
+      "language_model": {
+        "all_parameters_frozen": true,
+        "arm_model": "random",
+        "config_fields": {
+          "hidden_size": 576,
+          "initializer_range": 0.041666666666666664,
+          "intermediate_size": 1536,
+          "num_attention_heads": 9,
+          "num_hidden_layers": 30,
+          "num_key_value_heads": 3,
+          "rms_norm_eps": 1e-05,
+          "tie_word_embeddings": true,
+          "vocab_size": 49152
+        },
+        "config_from_revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+        "config_sha256": "1d556eab73b69c7f11f64c557a2f9c6f440bd4c6b89bb2584a6b498c92603843",
+        "construction": "utils.set_seed(20260802); AutoModel.from_config(cfg, dtype=torch.float32); .to(torch.bfloat16). No pretrained weight is loaded. Pinned by this seed plus the config SHA-256.",
+        "extraction_layer_rule": "last_hidden_state, the post-final-norm output; never hidden_states[-1] used interchangeably",
+        "hidden_size": 576,
+        "loaded_dtype": "torch.bfloat16",
+        "module_in_eval": true,
+        "num_hidden_layers": 30,
+        "parameter_count": 134515008,
+        "projection_scale_applied": "none. Canonical section 9.1: no model-specific RMS rescaling is applied in E8A, because ReasonerBlock LayerNorms the question source and a constant rescale would be a no-op.",
+        "random_init_seed": 20260802,
+        "recipe_identifier": "7.1 fixed inherited v3_01 reasoner recipe",
+        "repo_id": "HuggingFaceTB/SmolLM2-135M",
+        "resolved_revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+        "resolved_snapshot_path": "/scratch/Efficient Vision-Language Reasoning with Small Language Models/.cache/huggingface/hub/models--HuggingFaceTB--SmolLM2-135M/snapshots/93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+        "state_dict_sha256": "8beb47a6c2596907986a14c0f690c4d0803c0e91cf9522ff38c8737c4de11599",
+        "tokenizer_config_sha256": "4bb9af56a342753d39374f4016a16574cab299fe088e896f425ce3c433f61424",
+        "tokenizer_file_sha256": "9ca9acddb6525a194ec8ac7a87f24fbba7232a9a15ffa1af0c1224fcd888e47c",
+        "tokenizers_version": "0.22.2",
+        "transformers_version": "5.14.1",
+        "vocab_size": 49152
+      },
+      "loader_throughput": {
+        "batches_per_second": 179.01,
+        "batches_timed": 50,
+        "samples_per_second": 22913.7,
+        "samples_timed": 6400,
+        "scope": "collate and host-side assembly only, no forward or backward pass; num_workers=0 as the v2/v3 convention requires",
+        "seconds": 0.2793
+      },
+      "memory_ceiling_mib": 16014.0,
+      "memory_within_ceiling": true,
+      "parameters": {
+        "non_trainable_inside_trained_module": 0,
+        "trainable_projection": 295424,
+        "trainable_reasoner_trunk": 21099620,
+        "trainable_total": 21395044
+      },
+      "peak_allocated_mib": 1249.2,
+      "peak_reserved_mib": 1316.0,
+      "projected_token_rms_at_initialisation": 0.57715,
+      "rms_note": "recorded, not normalised away. No model-specific RMS rescaling is applied in E8A: ReasonerBlock LayerNorms the question source at src/reasoner.py:31, applied :52, so a constant rescale of the projection output would be a no-op.",
+      "rms_support": "both computed over the complete store, 426790 token rows",
+      "scale": "train_40k",
+      "seconds_per_epoch": 15.709,
+      "seconds_per_epoch_max": 15.738,
+      "seed": 0,
+      "status": "completed",
+      "steps_per_epoch": 313,
+      "stopped_by": "early stopping, patience 10",
+      "time_to_best_seconds": 47.1,
+      "wall_clock_halt_hours": 8.0,
+      "wall_clock_hours": 0.056772,
+      "wall_clock_seconds": 204.4,
+      "wall_clock_within_halt": true
+    }
+  },
+  "metadata": {
+    "batch_size": 256,
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "deterministic": true,
+    "device": "cuda",
+    "dropout": 0.3,
+    "embed_dim": 512,
+    "git_commit": "8274966",
+    "git_dirty": false,
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "h5py_version": "3.16.0",
+    "hidden_dim": 512,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "n_train": 40000,
+    "n_val": 8000,
+    "numpy_version": "2.5.0",
+    "open_clip_version": "3.3.0",
+    "pandas_version": "3.0.3",
+    "python": "3.12.3",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 0,
+    "timestamp": "2026-08-02T19:50:31",
+    "top_k_answers": 100,
+    "torch": "2.12.1+cu130",
+    "weight_decay": 0.0001
+  }
+}

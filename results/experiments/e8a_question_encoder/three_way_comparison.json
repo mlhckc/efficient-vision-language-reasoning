@@ -1,0 +1,312 @@
+{
+  "e8a_three_way_pilot_comparison": {
+    "clean_test_accessed": false,
+    "comparability": {
+      "answer_vocabulary_sha256": {
+        "identical": true,
+        "values": {
+          "A0p": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680",
+          "A1": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680",
+          "A1r": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680"
+        }
+      },
+      "checkpoint_selection_rule": {
+        "identical": true,
+        "values": {
+          "rule": "best development accuracy, earliest epoch on ties, patience 10, configured maximum 100 epochs",
+          "stopped_by": {
+            "A0p": "early stopping, patience 10",
+            "A1": "early stopping, patience 10",
+            "A1r": "early stopping, patience 10"
+          }
+        }
+      },
+      "evaluation_rows": {
+        "identical": true,
+        "values": {
+          "A0p": 7714,
+          "A1": 7714,
+          "A1r": 7714
+        }
+      },
+      "metric_definition": {
+        "identical": true,
+        "values": "argmax over 100 classes equals the V2 label; strict raw exact match, which for a closed-set classifier coincides with the normalised metric absent an intra-vocabulary collision"
+      },
+      "reasoner_trunk_initialisation": {
+        "identical": true,
+        "values": {
+          "A0p": "10a34fa2ec649f894146c7eec6d2ea7e8926ce4bd960a3c3fc251b4ba530800a",
+          "A1": "10a34fa2ec649f894146c7eec6d2ea7e8926ce4bd960a3c3fc251b4ba530800a",
+          "A1r": "10a34fa2ec649f894146c7eec6d2ea7e8926ce4bd960a3c3fc251b4ba530800a"
+        }
+      },
+      "scoring_code": {
+        "identical": true,
+        "values": "e8a_common.classification_diagnostics, one implementation, called by run_pilot.evaluate_arm for all three arms"
+      },
+      "seed": {
+        "identical": true,
+        "values": {
+          "A0p": 0,
+          "A1": 0,
+          "A1r": 0
+        }
+      },
+      "train_manifest": {
+        "identical": true,
+        "values": {
+          "A0p": "train_40k",
+          "A1": "train_40k",
+          "A1r": "train_40k"
+        }
+      },
+      "training_recipe": {
+        "identical": true,
+        "values": {
+          "A0p": "7.1 fixed inherited v3_01 reasoner recipe",
+          "A1": "7.1 fixed inherited v3_01 reasoner recipe",
+          "A1r": "7.1 fixed inherited v3_01 reasoner recipe"
+        }
+      }
+    },
+    "comparison": {
+      "contrasts": {
+        "A0p_minus_A1r": {
+          "kind": "descriptive; the two arms differ in question representation source AND in shared-space status, and A1r is a random control rather than a matched encoder",
+          "requires_for_a_directional_claim": "seeds 1 and 2, and a stated hypothesis; this contrast is not one of the canonical pre-registered claims.",
+          "value": 0.04602
+        },
+        "A1_minus_A0p": {
+          "kind": "system comparison, NOT a causal estimate of pretraining",
+          "mandatory_label": "Matched system comparisons under a recipe historically selected on the CLIP-question-token reasoner. This selection asymmetry favours A0p and makes the comparison conservative with respect to the SLM arm.",
+          "requires_for_a_directional_claim": "seeds 1 and 2 at 40k, and the same three seeds at 250k. NOT authorised in Phase 1B.",
+          "second_confound": "A0p's question and image tokens share CLIP's pretrained space by construction; A1's do not. The contrast therefore moves question semantics and shared-space status together and cannot separate them.",
+          "value": -0.01037
+        },
+        "A1_minus_A1r": {
+          "kind": "within-size pretrained minus random, the HA3 primary causal contrast",
+          "requires_for_a_directional_claim": "seeds 1 and 2 at 40k, and the same three seeds at 250k, plus the 95 per cent fixed-seed-set image-clustered interval and the three per-seed differences. NOT authorised in Phase 1B.",
+          "value": 0.03565
+        },
+        "interventions_normal_minus_fixed_image": {
+          "A0p": 0.08491,
+          "A1": 0.07597,
+          "A1r": 0.10319
+        },
+        "interventions_normal_minus_fixed_question": {
+          "A0p": 0.48782,
+          "A1": 0.29803,
+          "A1r": 0.2607
+        },
+        "interventions_normal_minus_shuffled_image_derangement": {
+          "A0p": 0.10721,
+          "A1": 0.10293,
+          "A1r": 0.11006
+        }
+      },
+      "per_arm": {
+        "A0p": {
+          "best_epoch": 5,
+          "checkpoint_mib": 81.53,
+          "degeneracy_rule_fires": false,
+          "dev_accuracy": 0.53578,
+          "distinct_answers": 99,
+          "epochs_run": 15,
+          "frozen_question_encoder_parameters": 63428096,
+          "head_latency_ms_mean": 1.3816,
+          "maximum_class_share": 0.22855,
+          "normal_minus_fixed_image": 0.08491,
+          "normal_minus_fixed_question": 0.48782,
+          "normal_minus_shuffled_image_derangement": 0.10721,
+          "peak_allocated_mib_training": 1272.5,
+          "prediction_entropy_nats": 0.79681,
+          "seconds_per_epoch": 15.72,
+          "stopped_by": "early stopping, patience 10",
+          "total_loaded_parameters": 84790372,
+          "trainable_parameters": 21362276,
+          "trainable_projection": 262656,
+          "wall_clock_hours": 0.065584,
+          "wall_clock_seconds": 236.1
+        },
+        "A1": {
+          "best_epoch": 4,
+          "checkpoint_mib": 81.66,
+          "degeneracy_rule_fires": false,
+          "dev_accuracy": 0.52541,
+          "distinct_answers": 97,
+          "epochs_run": 14,
+          "frozen_question_encoder_parameters": 134515008,
+          "head_latency_ms_mean": 1.3502,
+          "maximum_class_share": 0.2288,
+          "normal_minus_fixed_image": 0.07597,
+          "normal_minus_fixed_question": 0.29803,
+          "normal_minus_shuffled_image_derangement": 0.10293,
+          "peak_allocated_mib_training": 1249.2,
+          "prediction_entropy_nats": 0.90797,
+          "seconds_per_epoch": 15.705,
+          "stopped_by": "early stopping, patience 10",
+          "total_loaded_parameters": 155910052,
+          "trainable_parameters": 21395044,
+          "trainable_projection": 295424,
+          "wall_clock_hours": 0.061139,
+          "wall_clock_seconds": 220.1
+        },
+        "A1r": {
+          "best_epoch": 3,
+          "checkpoint_mib": 81.66,
+          "degeneracy_rule_fires": false,
+          "dev_accuracy": 0.48976,
+          "distinct_answers": 89,
+          "epochs_run": 13,
+          "frozen_question_encoder_parameters": 134515008,
+          "head_latency_ms_mean": 1.3368,
+          "maximum_class_share": 0.30646,
+          "normal_minus_fixed_image": 0.10319,
+          "normal_minus_fixed_question": 0.2607,
+          "normal_minus_shuffled_image_derangement": 0.11006,
+          "peak_allocated_mib_training": 1249.2,
+          "prediction_entropy_nats": 1.02259,
+          "seconds_per_epoch": 15.709,
+          "stopped_by": "early stopping, patience 10",
+          "total_loaded_parameters": 155910052,
+          "trainable_parameters": 21395044,
+          "trainable_projection": 295424,
+          "wall_clock_hours": 0.056772,
+          "wall_clock_seconds": 204.4
+        }
+      }
+    },
+    "interpretation_limits": [
+      "ONE seed at ONE scale. The canonical three-seed directional rule is not applied and cannot be.",
+      "No claim is made that pretraining is beneficial.",
+      "No claim is made that SLM representations outperform CLIP.",
+      "No one-seed difference is statistically established.",
+      "The measured across-seed standard deviation at 40k in the stored v3_01 runs is 0.0037, which is comparable to two of the three contrasts below."
+    ],
+    "phase": "Phase 1B",
+    "resource_update": {
+      "426_versus_420": {
+        "canonical_not_modified": "the frozen resource table is not edited for presentation; that would need its own reviewed amendment.",
+        "evidence": "the thirteen printed rows sum to 60.822 / 122.875 against stated totals of 61.072 / 123.375; the difference is exactly 6 x 0.041667 and 6 x 0.083333, the six B1 passes at the stated per-pass rate. The stated expected value 92.224 is likewise the sum of fourteen midpoints, not the thirteen the text says.",
+        "no_stated_gpu_hour_total_changes": true,
+        "resolution": "the six B1 classification evaluations are counted in canonical section 13.1's total of 426 but have no printed itemised cost row in section 13.2, which itemises 420.",
+        "stated_totals_already_include_them": true
+      },
+      "gates": {
+        "memory_80_per_cent": {
+          "ceiling_mib": 16014.0,
+          "fires": false,
+          "peak_allocated_mib": 1272.5
+        },
+        "not_resolved_by_this_phase": [
+          "the E8B per-epoch multiplier, still the back-solved assumption 2.931 to 8.004; no E8B code has ever run",
+          "the 35 GPU-hour cross-E8 per-model aggregate, which for pretrained SmolLM2-135M sums A1 + A4 + A7c + B3 and needs B3",
+          "the min(180, 3 x expected) publication-programme gate, which is dominated by the same E8B unknown"
+        ],
+        "per_run_8_hours": {
+          "ceiling": 8.0,
+          "fires": false,
+          "largest_measured": 0.065584,
+          "largest_projected": 2.737,
+          "margin_hours": 5.263
+        },
+        "storage": {
+          "fires": false,
+          "note": "A0p writes no hidden-state store: it reads the CLIP question tokens v3_00 already produced.",
+          "phase_1a_and_1b_written_gib": 0.9276
+        }
+      },
+      "measured": {
+        "canonical_extraction_assumption": [
+          0.2,
+          0.4
+        ],
+        "epochs_run": {
+          "A0p": 15,
+          "A1": 14,
+          "A1r": 13
+        },
+        "extraction_hours_per_complete_135m_pass_measured": 0.5835,
+        "loader_samples_per_second": {
+          "A0p": 21618.0,
+          "A1": 21853.6,
+          "A1r": 22913.7
+        },
+        "memory_ceiling_mib": 16014.0,
+        "packed_store_gib_each": 0.4638,
+        "peak_allocated_mib": 1272.5,
+        "seconds_per_epoch_40k_max_over_three_arms": 15.765,
+        "selected_epoch": {
+          "A0p": 5,
+          "A1": 4,
+          "A1r": 3
+        },
+        "wall_clock_hours": {
+          "A0p": 0.065584,
+          "A1": 0.061139,
+          "A1r": 0.056772
+        }
+      },
+      "projections": {
+        "250k_tranche_A0p_A1_A1r": {
+          "cap_hours": 24.6328,
+          "count": 9,
+          "description": "three arms x three seeds at train_250k",
+          "expected_hours": 5.4192
+        },
+        "basis": "250k carried from the measured 40k rate by the row ratio 6.25, the conservative choice; v3_03's measured ratio 5.656 would give smaller figures. No E8A 250k run exists and Phase 1B forbids one.",
+        "complete_135m_dissertation_core_tranche": {
+          "description": "A0p, A1 and A1r at 40k and 250k with seeds 0/1/2 (18 runs, of which 3 are done), plus the two 135M full extraction passes at 250k scope",
+          "excludes": "the 360M arms, AF, the global-head arms A4/A5/A7c/A8c, the secondary optimisation study, the representation ablation and every matched intervention pass",
+          "extraction_hours": 1.167,
+          "total_expected_hours": 7.1774,
+          "total_with_20_per_cent_contingency": 8.6129,
+          "training_cap_hours": 28.5741,
+          "training_expected_hours": 6.0104
+        },
+        "one_250k_run_configured_cap_hours": 2.736979,
+        "one_250k_run_expected_hours": 0.602135,
+        "one_40k_run_configured_cap_hours": 0.437917,
+        "one_40k_run_expected_hours": 0.065688,
+        "remaining_40k_seed_runs": {
+          "cap_hours": 2.6275,
+          "count": 6,
+          "description": "seeds 1 and 2 for A0p, A1 and A1r",
+          "expected_hours": 0.3941
+        }
+      }
+    },
+    "scope": "seed 0, train_40k, arms A0p, A1 and A1r only"
+  },
+  "metadata": {
+    "batch_size": 256,
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "deterministic": true,
+    "device": "cuda",
+    "dropout": 0.3,
+    "embed_dim": 512,
+    "git_commit": "077af56",
+    "git_dirty": true,
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "h5py_version": "3.16.0",
+    "hidden_dim": 512,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "n_train": 40000,
+    "n_val": 8000,
+    "numpy_version": "2.5.0",
+    "open_clip_version": "3.3.0",
+    "pandas_version": "3.0.3",
+    "python": "3.12.3",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 0,
+    "timestamp": "2026-08-02T21:51:34",
+    "top_k_answers": 100,
+    "torch": "2.12.1+cu130",
+    "weight_decay": 0.0001
+  }
+}

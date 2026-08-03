@@ -1,0 +1,149 @@
+{
+  "metadata": {
+    "batch_size": 256,
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "deterministic": true,
+    "device": "cuda",
+    "dropout": 0.3,
+    "embed_dim": 512,
+    "git_commit": "8274966",
+    "git_dirty": true,
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "h5py_version": "3.16.0",
+    "hidden_dim": 512,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "n_train": 40000,
+    "n_val": 8000,
+    "numpy_version": "2.5.0",
+    "open_clip_version": "3.3.0",
+    "pandas_version": "3.0.3",
+    "python": "3.12.3",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "timestamp": "2026-08-02T19:53:33",
+    "top_k_answers": 100,
+    "torch": "2.12.1+cu130",
+    "weight_decay": 0.0001
+  },
+  "stage8_projection": {
+    "basis": "measured Phase-1A evidence only. Components with no measurement are listed separately and are NOT folded into a single headline number.",
+    "e8a_branch_total": {
+      "canonical_cap": [
+        94.176,
+        95.73
+      ],
+      "canonical_expected": [
+        20.413,
+        21.968
+      ],
+      "configured_cap_basis_hours": 107.09,
+      "excludes": "the 156 matched-intervention passes, which the pilot did not time separately",
+      "expected_basis_hours": 24.283,
+      "with_20_per_cent_contingency": {
+        "cap": 128.508,
+        "expected": 29.139
+      }
+    },
+    "e8a_component_projection": {
+      "ablation_4_runs_cap": 1.75,
+      "ablation_4_runs_expected": 0.245,
+      "canonical_extraction_assumption": [
+        0.2,
+        0.4
+      ],
+      "core_training_60_runs_cap": 95.168,
+      "core_training_60_runs_expected": 19.887,
+      "extraction_5_full_plus_2_partial_at_the_135M_rate": 3.171,
+      "extraction_caveat": "only the 135M rate is measured. SmolLM2-360M has 2.7 times the parameters and will be slower per string; FLAN-T5-small is smaller and will be faster. The three unmeasured stores are costed here at the 135M rate, which UNDERSTATES the 360M pair.",
+      "extraction_exceeds_canonical_upper_assumption": true,
+      "measured_full_pass_hours_135M": 0.5834,
+      "secondary_study_16_runs_cap": 7.001,
+      "secondary_study_16_runs_expected": 0.98
+    },
+    "gates": {
+      "memory_80_per_cent": {
+        "ceiling_mib": 16014.0,
+        "fires": false,
+        "headroom_mib": 14764.8,
+        "peak_allocated_mib": 1249.2
+      },
+      "per_model_35_hours": "NOT recomputable from Phase-1A evidence: the SmolLM2-135M aggregate is A1 + A4 + A7c + B3, and B3 is an E8B arm with no measurement. The E8A limb is revised below; the B3 limb is not.",
+      "per_run_8_hours": {
+        "ceiling": 8.0,
+        "fires": false,
+        "largest_measured_e8a_run_hours": 0.061139,
+        "largest_projected_e8a_run_hours": 2.734722,
+        "margin_hours": 5.2653
+      },
+      "storage": {
+        "canonical_padded_estimate_gib": 54.6,
+        "fires": false,
+        "free_disk_gib": 337.5,
+        "full_programme_sequence_stores_packed_gib": 14.501,
+        "note": "the packed layout stores sum(length) rows rather than n_strings x 32, so the measured stores are about a third of the canonical padded estimate. The canonical figure is conservative and no storage gate is at risk.",
+        "phase_1a_written_gib": 0.9276
+      },
+      "total_programme": "NOT recomputable: dominated by the unmeasured E8B multiplier."
+    },
+    "measured": {
+      "canonical_planning_value": 15.27,
+      "e8a_seconds_per_epoch_40k_max": 15.752,
+      "e8a_seconds_per_epoch_40k_mean": 15.709,
+      "epochs_run": {
+        "A1": 14,
+        "A1r": 13
+      },
+      "extraction_hours_40k_store": 0.126806,
+      "extraction_seconds_40k_store": 456.5,
+      "extraction_strings_per_second": 85.52,
+      "loader_samples_per_second": {
+        "A1": 21853.6,
+        "A1r": 22913.7
+      },
+      "memory_ceiling_mib": 16014.0,
+      "memory_fraction_of_ceiling": 0.078,
+      "peak_allocated_mib": 1249.2,
+      "ratio_measured_to_canonical": 1.0316,
+      "selected_epoch": {
+        "A1": 4,
+        "A1r": 3
+      },
+      "stopping_behaviour": {
+        "A1": "early stopping, patience 10",
+        "A1r": "early stopping, patience 10"
+      },
+      "store_gib_40k": 0.4638,
+      "wall_clock_hours": {
+        "A1": 0.061139,
+        "A1r": 0.056772
+      }
+    },
+    "per_run_projection": {
+      "basis_note": "the 250k figures use the ROW ratio 6.25, the more conservative of the two, because no E8A 250k run exists and Phase 1A forbids one. The v3_03 measured ratio 5.655 would give smaller figures.",
+      "canonical_e8a_250k_cap": 2.398889,
+      "canonical_e8a_250k_expected": 0.527756,
+      "canonical_e8a_40k_cap": 0.424167,
+      "canonical_e8a_40k_expected": 0.063625,
+      "direct_per_run_maximum_hours": 2.734722,
+      "e8a_250k_configured_cap_hours": 2.734722,
+      "e8a_250k_expected_hours": 0.601639,
+      "e8a_250k_seconds_per_epoch_row_ratio_basis": 98.45,
+      "e8a_250k_seconds_per_epoch_v3_ratio_basis": 89.086,
+      "e8a_40k_configured_cap_hours": 0.437556,
+      "e8a_40k_expected_hours": 0.061258,
+      "per_run_ceiling_hours": 8.0,
+      "per_run_gate_fires": false
+    },
+    "unmeasured_components": {
+      "e8a_250k_training": "unmeasured; carried from the 40k measurement by the row ratio",
+      "e8a_360M_and_flan_t5_extraction": "unmeasured",
+      "e8b_entirely": "no E8B run has ever been performed in this repository. The per-epoch multiplier m remains the back-solved assumption 2.931 to 8.004 and is the single dominant unknown in the programme total. Phase 1A does not reduce that uncertainty at all.",
+      "e9_entirely": "evaluation-only, unmeasured",
+      "matched_intervention_pass_cost": "the pilot ran 5 conditions per arm inside a single evaluation phase and did not time them separately"
+    }
+  }
+}
