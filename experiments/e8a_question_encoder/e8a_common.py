@@ -194,6 +194,12 @@ def bind_store_to_encoder(arm: str, store, provenance: dict) -> str:
     return str(store.attrs["length_convention"])
 
 
+def store_name(arm: str, scope: str = "train_40k") -> str:
+    """The hidden-state store filename for an arm at a training scope."""
+    tag = {"train_40k": "train40k", "train_250k": "train250k"}[scope]
+    return f"e8a_135m_{arm}_{tag}_dev.h5"
+
+
 def rows_used_by(store, manifests) -> np.ndarray:
     """The packed state rows this run actually reads, deduplicated and sorted.
 

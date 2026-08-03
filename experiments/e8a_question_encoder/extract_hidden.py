@@ -401,10 +401,10 @@ def storage_projection(lengths_all, hidden_size) -> dict:
 
 
 def write_store(arm: str, strings, token_ids, frames, device,
-                preflight_result: dict) -> dict:
-    """Write the packed train_40k + dev hidden-state store for one arm."""
+                preflight_result: dict, scope: str = "train_40k") -> dict:
+    """Write the packed <scope> + dev hidden-state store for one arm."""
     e8a.SLM_TOKEN_DIR.mkdir(parents=True, exist_ok=True)
-    final = e8a.SLM_TOKEN_DIR / f"e8a_135m_{arm}_train40k_dev.h5"
+    final = e8a.SLM_TOKEN_DIR / e8a.store_name(arm, scope)
     partial = final.with_suffix(".h5.partial")
 
     lengths = np.array([len(t) for t in token_ids])
@@ -468,7 +468,7 @@ def write_store(arm: str, strings, token_ids, frames, device,
         store.attrs["forward_dtype"] = "bfloat16"
         store.attrs["token_budget_L"] = e8a.TOKEN_BUDGET_L
         store.attrs["special_tokens_added"] = 0
-        store.attrs["coverage"] = "train_40k + dev"
+        store.attrs["coverage"] = f"{scope} + dev"
         store.attrs["n_unique_strings"] = len(strings)
         store.attrs["n_question_ids"] = len(question_ids)
         store.attrs["n_token_rows"] = total_tokens
@@ -542,6 +542,10 @@ def write_store(arm: str, strings, token_ids, frames, device,
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--preflight", action="store_true")
+    parser.add_argument("--scope", default="train_40k",
+                        choices=["train_40k", "train_250k"],
+                        help="training manifest the store covers;"
+                             " dev is always included")
     parser.add_argument("--write", action="store_true")
     args = parser.parse_args()
     if not (args.preflight or args.write):
@@ -553,7 +557,7 @@ def main() -> int:
 
     recipe = e8a.gate_g0_recipe()
 
-    manifests = [e8a.V2_DIR / "train_40k.csv", e8a.V2_DIR / "dev.csv"]
+    manifests = [e8a.V2_DIR / f"{args.scope}.csv", e8a.V2_DIR / "dev.csv"]
     frames, strings = unique_question_strings(manifests)
     tokenizer = e8a.load_tokenizer()
     token_ids = e8a.tokenize_questions(tokenizer, strings)
@@ -674,9 +678,7 @@ def main() -> int:
             "gates": gates,
             "stores_written": None,
             "clean_test_accessed": False,
-            "note": "train_250k is tokenised for the L decision only. No "
-                    "train_250k store is written and no train_250k run is "
-                    "performed in Phase 1A.",
+            "scope": args.scope,
         },
     }
 
@@ -686,7 +688,8 @@ def main() -> int:
             sys.exit("EXTRACTION GATE FAILED: no store written; evidence in "
                      "results/experiments/e8a_question_encoder/extraction.json")
         written = {arm: write_store(arm, strings, token_ids, frames, device,
-                                    preflights[arm]) for arm in e8a.ARMS}
+                                    preflights[arm], args.scope)
+                   for arm in e8a.ARMS}
         record["e8a_extraction"]["stores_written"] = written
 
     utils.save_json(record, e8a.OUT_DIR / "extraction.json")

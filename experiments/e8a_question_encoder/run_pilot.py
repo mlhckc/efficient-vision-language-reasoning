@@ -509,9 +509,9 @@ def gate_g8_tiny_overfit(arm: str, dropout: float, seed: int, dataset,
 # --- Training ----------------------------------------------------------------
 
 def train_arm(arm: str, recipe: dict, seed: int, images, questions,
-              device) -> dict:
-    """One bounded pilot run under the fixed inherited 7.1 recipe."""
-    print(f"\n=== PILOT: arm {arm}, {PILOT_SCALE}, seed {seed} ===")
+              device, scale: str = PILOT_SCALE) -> dict:
+    """One run under the fixed inherited 7.1 recipe."""
+    print(f"\n=== RUN: arm {arm}, {scale}, seed {seed} ===")
     lm_provenance = e8a.prepare_encoder_for_build(arm)
     # Bind the store to the encoder that produced it. Without this a store
     # built from a different checkpoint, a different random seed, or with the
@@ -527,12 +527,12 @@ def train_arm(arm: str, recipe: dict, seed: int, images, questions,
     # INPUT rows, which are excluded from every development quantity, and it is
     # 2.44M rows, which a whole-store float32 promotion would materialise twice.
     used_rows = e8a.rows_used_by(questions[arm],
-                                 [e8a.V2_DIR / f"{PILOT_SCALE}.csv",
+                                 [e8a.V2_DIR / f"{scale}.csv",
                                   e8a.V2_DIR / "dev.csv"])
     hidden_rms = e8a.rms_over_rows(questions[arm].states, used_rows)
 
     train_loader, dev_loader = e8a.make_loaders(
-        e8a.V2_DIR / f"{PILOT_SCALE}.csv", e8a.V2_DIR / "dev.csv",
+        e8a.V2_DIR / f"{scale}.csv", e8a.V2_DIR / "dev.csv",
         images, questions[arm], recipe["batch_size"], seed)
 
     # Loader throughput, measured before training so the Stage-8 projection can
@@ -581,7 +581,7 @@ def train_arm(arm: str, recipe: dict, seed: int, images, questions,
 
     checkpoint_dir = e8a.OUT_DIR / "checkpoints"
     checkpoint_dir.mkdir(parents=True, exist_ok=True)
-    checkpoint_path = checkpoint_dir / f"e8a_{arm}_{PILOT_SCALE}_seed{seed}.pt"
+    checkpoint_path = checkpoint_dir / f"e8a_{arm}_{scale}_seed{seed}.pt"
 
     torch.cuda.reset_peak_memory_stats(device)
     total_memory = torch.cuda.get_device_properties(device).total_memory
@@ -661,7 +661,7 @@ def train_arm(arm: str, recipe: dict, seed: int, images, questions,
         sys.exit(f"PILOT {arm} TERMINATED: {failure_status}")
 
     return {
-        "arm": arm, "status": "completed", "scale": PILOT_SCALE, "seed": seed,
+        "arm": arm, "status": "completed", "scale": scale, "seed": seed,
         "best_dev_accuracy": round(best_accuracy, 5),
         "best_epoch": best_epoch,
         "epochs_run": len(history),
@@ -693,7 +693,7 @@ def train_arm(arm: str, recipe: dict, seed: int, images, questions,
         "projected_token_rms_at_initialisation": round(projected_rms, 5),
         "rms_support": f"both computed over the same support: the "
                        f"{len(used_rows)} deduplicated packed state rows of "
-                       f"the {PILOT_SCALE} + dev questionIds this run "
+                       f"the {scale} + dev questionIds this run "
                        f"consumes. Rows the store holds but this run does not "
                        f"read are excluded, which for the shared CLIP "
                        f"question store means the clean-test INPUT rows are "
@@ -710,7 +710,8 @@ def train_arm(arm: str, recipe: dict, seed: int, images, questions,
 # --- Evaluation under the four matched conditions ----------------------------
 
 def evaluate_arm(arm: str, recipe: dict, seed: int, run: dict, images,
-                 questions, neutral_image, neutral_question, device) -> dict:
+                 questions, neutral_image, neutral_question, device,
+                 scale: str = PILOT_SCALE) -> dict:
     """Same-checkpoint evaluation under normal and the pinned interventions."""
     print(f"\n=== EVALUATION: arm {arm}, selected checkpoint ===")
     e8a.prepare_encoder_for_build(arm)
@@ -890,7 +891,8 @@ def evaluate_arm(arm: str, recipe: dict, seed: int, run: dict, images,
         "shuffled_image_row_v3_01_comparable": (
             row_shuffled_logits.argmax(dim=-1) == labels).numpy(),
     }
-    correctness_path = e8a.OUT_DIR / f"correctness_{arm}_seed{seed}.npz"
+    correctness_path = (e8a.OUT_DIR
+                        / f"correctness_{arm}_{scale}_seed{seed}.npz")
     np.savez_compressed(
         correctness_path,
         question_ids=np.array(dataset.question_ids),
