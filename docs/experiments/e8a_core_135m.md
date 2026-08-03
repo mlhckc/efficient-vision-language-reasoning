@@ -26,8 +26,9 @@ other did not.
 ## Method
 
 Eighteen cells: three arms at train_40k and train_250k with seeds 0, 1 and 2.
-Three are the reused Phase-1B pilots and were not rerun; the other fifteen ran
-under the frozen execution manifest. The recipe is the inherited v3_01
+Three seed-0 cells at train_40k are reused pilots and were not rerun: A1 and
+A1r come from the Phase-1A pilot and A0p from the Phase-1B pilot. The other
+fifteen ran under the frozen execution manifest. The recipe is the inherited v3_01
 reasoner recipe, unchanged and not searched: AdamW at 3e-4, batch 128, dropout
 0.1, weight decay 0.01 on parameters of two or more dimensions, gradient clip
 1.0, cosine after warmup stepped per optimizer step over 100 x steps_per_epoch,
@@ -71,13 +72,17 @@ independently recomputed from train_40k; they reproduce it exactly
 
 results/experiments/e8a_question_encoder/: eighteen run records, eighteen
 prediction-vector files, eighteen checkpoints, core_analysis.json,
-core_analysis_train_40k.json, efficiency_resources.json,
-invocation_status_train_250k.json and e8a_135m_core_frozen.json, which
-collects all of it with every artefact hashed at freeze time.
+core_analysis_train_40k.json, efficiency_resources.json and
+e8a_135m_core_frozen.json, which collects all of it with every artefact hashed
+at freeze time. The runner's invocation_status_<scale>.json is written by
+invocations made after the exit-status correction was committed; the eighteen
+cells all predate it, so no such file exists for this tranche.
 
-tests/test_e8a.py now runs 187 checks, up from 149, the addition being the
-four invocation-outcome cases and their two non-vacuity controls. All test
-modules pass.
+tests/test_e8a.py now runs 187 checks, up from 171 at the base commit of
+this work; test_invocation_status contributes exactly 16 of them, being the
+four invocation-outcome cases and their non-vacuity controls. The 149 quoted
+in the Phase-1B report predates the pre-run review commits and is not the
+baseline for this tranche. All test modules pass.
 
 ## Results
 
@@ -87,8 +92,8 @@ Development set only. No result here is a test result.
 
 | arm | train_40k | train_250k |
 | --- | --- | --- |
-| A0p | 0.54044 +/- 0.00438 | 0.59446 +/- 0.00030 |
-| A1  | 0.52861 +/- 0.00296 | 0.57316 +/- 0.00153 |
+| A0p | 0.54045 +/- 0.00438 | 0.59446 +/- 0.00030 |
+| A1  | 0.52861 +/- 0.00296 | 0.57316 +/- 0.00154 |
 | A1r | 0.49041 +/- 0.00259 | 0.52480 +/- 0.00487 |
 
 ### The three contrasts
@@ -118,8 +123,16 @@ scales and becomes more negative with scale. No equivalence language is used
 anywhere; a negative result is reported as a negative result.
 
 The interval conditions on the fixed set of three trained seeds and does not
-fully propagate training-seed uncertainty. The measured across-seed standard
-deviation in the stored v3_01 runs is 0.0037 at 40k and 0.0074 at 250k.
+fully propagate training-seed uncertainty. For scale, the measured across-seed
+standard deviation of the stored reasoner runs is 0.0037 at 40k in v3_01,
+which has no 250k runs, and 0.0074 at 250k in v3_03.
+
+Every interval reported here is nominal 95 per cent and none is corrected for
+multiplicity; twenty-one are reported in total. An interval whose bound sits
+close to zero should be read as weaker than its nominal level. The
+pre-registered primary contrast is A1 minus A1r; the rest are secondary or
+descriptive. Two intervals are marginal in that sense: the A1r deficit change,
+lower bound 0.00075, and the A0p deficit change, upper bound -0.00160.
 
 ### Scale
 
@@ -130,7 +143,7 @@ deviation in the stored v3_01 runs is 0.0037 at 40k and 0.0074 at 250k.
 | A1r | +0.03440 | [0.02458, 0.04400] | positive |
 
 Every arm improves with more data and the ordering of the arms is unchanged.
-Convergence is early throughout: best epochs are 3 to 7 except A1 at 250k
+Convergence is early throughout: best epochs are 3 to 9 except A1 at 250k
 seed 2, which peaked at 14. Time per epoch is 15.7-16.1 s at 40k and
 88.8-89.6 s at 250k; peak allocated memory is 1122-1274 MiB against a
 16,014 MiB ceiling.
@@ -163,9 +176,9 @@ Three-seed means of normal minus each intervention.
 | A0p | 40k | +0.08975 | +0.47744 | +0.11347 |
 | A1  | 40k | +0.08880 | +0.30149 | +0.11002 |
 | A1r | 40k | +0.09805 | +0.27945 | +0.10954 |
-| A0p | 250k | +0.12911 | +0.54230 | +0.15093 |
+| A0p | 250k | +0.12912 | +0.54230 | +0.15094 |
 | A1  | 250k | +0.10894 | +0.34435 | +0.13888 |
-| A1r | 250k | +0.10396 | +0.47044 | +0.12397 |
+| A1r | 250k | +0.10397 | +0.47044 | +0.12397 |
 
 Image reliance rises with scale in every arm. The largest single change is
 A1r's question reliance, +0.19099 from 40k to 250k, far above A0p's +0.06486
@@ -194,8 +207,11 @@ CLIP image tokens, no encoder forward pass.
 A0p at 250k is the only point on the latency, trainable-parameter,
 total-loaded-parameter and checkpoint-size fronts: it is both the most
 accurate and the cheapest on every one of those axes. On training GPU-hours
-the front is A1r/40k, A1/40k, A0p/40k and A0p/250k. The SLM arms carry
-134,515,008 frozen encoder parameters that A0p does not, for lower accuracy.
+the front is A1r/40k, A1/40k, A0p/40k and A0p/250k. Each arm carries one frozen question
+encoder: 63,428,096 parameters for A0p's CLIP text tower and 134,515,008 for
+the SLM arms' SmolLM2-135M, so the SLM arms carry 71,086,912 more frozen
+parameters, for lower accuracy. The frozen CLIP image tower is common to all
+three and is excluded from every figure.
 
 Two boundaries are kept apart and a third is not reported. Offline extraction
 cost 0.126813 and 0.126589 GPU-hours per 40k store and 0.602786 and 0.597567
@@ -223,7 +239,10 @@ double-counted and cannot be reported separately.
 | memory | 80 per cent, 16,014 MiB | 1274.1 MiB | no |
 | storage | project allocation | 6.757 GiB written, 331.2 GiB free | no |
 
-No cell failed, was interrupted or was retried. The per-model gate is a
+No matrix cell failed, was interrupted or was retried. One unrelated
+FAILED_gates.json remains in the output directory from an aborted Phase-1A
+gate pass; it is not a matrix cell and is recorded separately in the resource
+artefact rather than counted as a failed run. The per-model gate is a
 **lower bound**: the canonical aggregate also counts the E8B readout arms,
 which are not authorised and have not run, so it is not finally discharged.
 The E8B runtime multiplier, any complete cross-E8 aggregate and the
@@ -252,9 +271,32 @@ three per-arm summaries, all three contrasts including their intervals and
 directional outcomes, the degeneracy block and every shared per-cell field.
 The only differences are the added fields and the clean provenance.
 
+The execution manifest itself was written from a dirty worktree at f3fa052,
+79 seconds before that work was committed as d7c229d, and it is the only
+frozen artefact with dirty provenance: every run record and every analysis
+output is clean. The dirtiness was material rather than incidental, because
+the manifest on disk carries fields the committed f3fa052 code did not yet
+produce. It was not rewritten, because the manifest is the pre-registration
+and rewriting it after results were observed would destroy what it is for.
+The guard that matters still holds: --run rebuilds the matrix from the live
+code and refuses to proceed unless it matches the stored manifest field for
+field, and that check passes at HEAD.
+
 analyse_core.py's docstring promised the scale, reliance and >=4-step
 analyses; none was implemented and STEP_ORDER was an unused constant. All
 three are now implemented from the frozen definitions.
+
+Three independent fresh-context reviews — implementation and artefact
+integrity, statistics and scientific interpretation, and protocol and scope
+regression — all returned ACCEPT with no blocker and no high finding. Each
+re-measured every artefact hash independently (65 to 66 files, no mismatch)
+and recomputed headline values from the raw prediction vectors rather than
+reading them back. One reviewer additionally reloaded four checkpoints and
+re-ran evaluation, reproducing the stored correctness vectors row for row.
+Twenty-two findings were raised and adversarially adjudicated: twenty-one
+confirmed at low severity and one refuted. Those touching code are closed in
+this report's commits; the remainder were report-text corrections, applied
+here.
 
 extraction_train_250k.json's storage_projection.train_40k_plus_dev block
 repeats its own 250k figures rather than the 40k ones. The 40k storage numbers
