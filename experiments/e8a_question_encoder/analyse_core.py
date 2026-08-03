@@ -12,11 +12,22 @@ runs from their own records — and produces, per scale:
     and standard deviation, a 95 per cent fixed-seed-set image-clustered
     bootstrap interval, and the canonical universal directional-rule outcome;
   * the A1r degeneracy classification per seed;
-  * where both scales exist, the scale, reliance and >=4-step analyses.
 
-The bootstrap is the one implemented at experiments/v3_03_scaling/run.py:397-427
-and reused unchanged: 2,000 draws, RNG seed 0, alpha 0.05, clustering by
-development imageId, seeds combined by the within-draw seed mean.
+and, where both scales exist, the scale, reliance and >=4-step analyses.
+
+Before any number is computed, every cell passes the integrity assertions in
+analysis_integrity.py: the evaluation rows are the canonical dev.csv rows in
+canonical order, the result belongs to the arm, scale and seed it is filed
+under, and every artefact hash is re-measured now rather than trusted from the
+run that wrote it.
+
+The accuracy bootstrap is the one implemented at
+experiments/v3_03_scaling/run.py:397-427 and reused unchanged: 2,000 draws,
+RNG seed 0, alpha 0.05, clustering by development imageId, seeds combined by
+the within-draw seed mean. The >=4-step deficit is the repaired v3_02a
+definition at experiments/v3_02a_refs/stats_repair.py:241-247 under the fixed
+train_40k per-bucket priors of v2_05b, which are reloaded and re-derived here
+rather than assumed.
 
 Artefact names are read from the manifest, never derived: the three reused
 correctness files predate the scale-qualified naming.
@@ -27,6 +38,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from collections import Counter
 from pathlib import Path
 
 import numpy as np
@@ -39,13 +51,25 @@ if str(PROJECT_ROOT) not in sys.path:
 import config  # noqa: E402
 from src import utils  # noqa: E402
 from experiments.e8a_question_encoder import e8a_common as e8a  # noqa: E402
+from experiments.e8a_question_encoder import (  # noqa: E402
+    analysis_integrity as integrity)
 
 ARMS = ("A0p", "A1", "A1r")
+SCALES = ("train_40k", "train_250k")
 SEEDS = (0, 1, 2)
 BOOTSTRAP_DRAWS = 2000
 BOOTSTRAP_SEED = 0
 ALPHA = 0.05
 STEP_ORDER = ["<=2", "3", "4", ">=5"]
+
+# The v2_05b per-bucket prior accuracies, held fixed at every scale exactly as
+# v2_07, v3_03 and E2 hold them, and re-derived below rather than trusted.
+PRIOR_SOURCE = (config.RESULTS_DIR / "experiments" / "v2_05_types"
+                / "addendum.json")
+
+RELIANCE_COLUMNS = ("normal_minus_fixed_image",
+                    "normal_minus_fixed_question",
+                    "normal_minus_shuffled_image")
 
 CONTRASTS = {
     "A1_minus_A1r": ("A1", "A1r"),
@@ -54,16 +78,16 @@ CONTRASTS = {
 }
 
 
-def load_cells(manifest: dict) -> dict:
-    """Every completed cell, keyed by (arm, scale, seed)."""
+def load_cells(manifest: dict, view: integrity.DevView) -> dict:
+    """Every completed cell, keyed by (arm, scale, seed), integrity-checked."""
     cells = {}
     for spec in manifest["runs"]:
         key = (spec["arm"], spec["scale"], spec["seed"])
         artefacts = spec["expected_artefacts"]
         if spec["reuse_artefacts"]:
             reuse = spec["reuse_artefacts"]
-            record = json.loads(
-                (e8a.OUT_DIR / reuse["record"]["path"]).read_text())
+            path = e8a.OUT_DIR / reuse["record"]["path"]
+            record = json.loads(path.read_text())
             block = (record["e8a_a0p_pilot"] if spec["arm"] == "A0p"
                      else record["e8a_pilot"])
             run = (block["run"] if spec["arm"] == "A0p"
@@ -76,12 +100,17 @@ def load_cells(manifest: dict) -> dict:
             path = e8a.OUT_DIR / artefacts["record"]
             if not path.exists():
                 continue
-            record = json.loads(path.read_text())["e8a_core_run"]
-            run, evaluation = record["run"], record["evaluation"]
+            record = json.loads(path.read_text())
+            block = record["e8a_core_run"]
+            run, evaluation = block["run"], block["evaluation"]
             correctness = e8a.OUT_DIR / artefacts["correctness"]
             source = artefacts["record"]
+        evidence = integrity.cell_evidence(
+            f"{key[0]}/{key[1]}/seed{key[2]}", key[0], key[1], key[2], path,
+            record, block, run, evaluation, correctness, view)
         cells[key] = {"run": run, "evaluation": evaluation,
-                      "correctness_path": correctness, "source": source}
+                      "correctness_path": correctness, "source": source,
+                      "integrity": evidence}
     return cells
 
 
@@ -90,6 +119,7 @@ def per_arm_row(cell: dict) -> dict:
     normal = ev["conditions"]["normal"]
     diffs = ev["differences_from_normal"]
     eff = ev["efficiency"]
+    evidence = cell["integrity"]
     return {
         "dev_accuracy": normal["accuracy"],
         "best_epoch": run["best_epoch"],
@@ -113,18 +143,25 @@ def per_arm_row(cell: dict) -> dict:
             eff.get("frozen_language_model_parameters")),
         "total_loaded_parameters": eff["total_loaded_parameters"],
         "checkpoint_mib": eff["checkpoint_mib"],
-        "checkpoint_sha256": run["checkpoint_sha256"],
-        "correctness_sha256": ev["correctness_vectors"]["sha256"],
+        "checkpoint_sha256": evidence["checkpoint_sha256"],
+        "correctness_sha256": evidence["prediction_sha256"],
+        "code_head": evidence["code_head"],
+        "code_head_dirty": evidence["code_head_dirty"],
         "source_record": cell["source"],
     }
 
 
-def clustered_bootstrap(correct_a, correct_b, image_index, n_images):
-    """Paired image-clustered bootstrap over the fixed seed set.
+# --- Clustered bootstrap --------------------------------------------------
 
-    Mirrors experiments/v3_03_scaling/run.py:397-427: draw images with
-    replacement, take the rows of the drawn images, average the per-seed
-    difference within the draw, and read the 2.5/97.5 percentiles.
+def clustered_draws(statistic, image_index, n_images) -> np.ndarray:
+    """Image-clustered resampling shared by every interval reported here.
+
+    The draw stream is the one at experiments/v3_03_scaling/run.py:397-427:
+    2,000 draws from a fresh default_rng(0), each drawing as many images as
+    the development set has, with replacement, and taking every row of every
+    drawn image. `statistic` receives the drawn row indices and returns the
+    scalar for that draw, so the accuracy and deficit intervals differ only in
+    that scalar and not in the resampling.
     """
     rng = np.random.default_rng(BOOTSTRAP_SEED)
     rows_by_image = [np.nonzero(image_index == i)[0] for i in range(n_images)]
@@ -132,12 +169,31 @@ def clustered_bootstrap(correct_a, correct_b, image_index, n_images):
     for _ in range(BOOTSTRAP_DRAWS):
         sampled = rng.integers(0, n_images, size=n_images)
         rows = np.concatenate([rows_by_image[i] for i in sampled])
-        per_seed = [float(correct_a[s][rows].mean() - correct_b[s][rows].mean())
-                    for s in range(len(correct_a))]
-        draws.append(float(np.mean(per_seed)))
+        draws.append(float(statistic(rows)))
     draws = np.asarray(draws)
+    # A resampled draw that emptied a step bucket would produce a silent NaN
+    # and a meaningless percentile rather than an error.
+    if not np.all(np.isfinite(draws)):
+        raise AssertionError(
+            f"{int((~np.isfinite(draws)).sum())} of {BOOTSTRAP_DRAWS} "
+            f"bootstrap draws are not finite; a resampled draw left a "
+            f"required subset empty")
+    return draws
+
+
+def percentile_interval(draws: np.ndarray):
     return (round(float(np.percentile(draws, 100 * ALPHA / 2)), 5),
             round(float(np.percentile(draws, 100 * (1 - ALPHA / 2))), 5))
+
+
+def clustered_bootstrap(correct_a, correct_b, image_index, n_images):
+    """Paired image-clustered interval for an accuracy difference."""
+    def statistic(rows):
+        return np.mean([float(correct_a[s][rows].mean()
+                              - correct_b[s][rows].mean())
+                        for s in range(len(correct_a))])
+    return percentile_interval(clustered_draws(statistic, image_index,
+                                               n_images))
 
 
 def directional_rule(per_seed, lower, upper) -> str:
@@ -154,7 +210,164 @@ def directional_rule(per_seed, lower, upper) -> str:
     return "uncertain or mixed evidence"
 
 
-def analyse_scale(scale: str, cells: dict, dev) -> dict:
+# --- Step buckets and the repaired >=4-step deficit -----------------------
+
+def bucketize(steps: np.ndarray) -> np.ndarray:
+    """The canonical bucket edges of experiments/v2_05_types/addendum.py."""
+    return np.where(steps <= 2, "<=2",
+                    np.where(steps == 3, "3",
+                             np.where(steps == 4, "4", ">=5")))
+
+
+def step_view(view: integrity.DevView) -> dict:
+    """Step buckets, the >=4 mask and the fixed per-bucket prior, gated.
+
+    The priors are the v2_05b train_40k majority answers. They are reloaded
+    from the stored addendum and independently recomputed from train_40k here;
+    a disagreement means the deficit would be measured against a different
+    reference than every earlier experiment, so it stops the analysis.
+    """
+    types = pd.read_csv(e8a.V2_DIR / "metadata" / "dev_types.csv",
+                        dtype={"questionId": str}, keep_default_na=False)
+    if not np.array_equal(types["questionId"].to_numpy().astype(str),
+                          view.question_ids):
+        raise AssertionError(
+            "data/v2/metadata/dev_types.csv is not row-aligned with "
+            "data/v2/dev.csv; the step buckets would be attached to the "
+            "wrong questions")
+    bucket = bucketize(types["n_steps"].to_numpy())
+    ge4_mask = (bucket == "4") | (bucket == ">=5")
+
+    stored = json.loads(PRIOR_SOURCE.read_text())["v2_05b_addendum"][
+        "prior_accuracy_by_slice"]
+    train = pd.read_csv(e8a.V2_DIR / "train_40k.csv",
+                        dtype={"questionId": str, "imageId": str},
+                        keep_default_na=False)
+    train_types = pd.read_csv(e8a.V2_DIR / "metadata" / "train_40k_types.csv",
+                              dtype={"questionId": str},
+                              keep_default_na=False)
+    if not np.array_equal(train_types["questionId"].to_numpy().astype(str),
+                          train["questionId"].to_numpy().astype(str)):
+        raise AssertionError("train_40k_types.csv is not row-aligned with "
+                             "train_40k.csv")
+    train_bucket = bucketize(train_types["n_steps"].to_numpy())
+    dev_answers = pd.read_csv(
+        e8a.V2_DIR / "dev.csv", dtype={"questionId": str, "imageId": str},
+        keep_default_na=False)["answer"].to_numpy()
+    train_answers = train["answer"].to_numpy()
+
+    recomputed, majority = {}, {}
+    for value in STEP_ORDER:
+        counts = Counter(train_answers[train_bucket == value])
+        top = sorted(counts.items(), key=lambda kv: (-kv[1], kv[0]))[0][0]
+        majority[f"steps:{value}"] = top
+        recomputed[f"steps:{value}"] = round(
+            float((dev_answers[bucket == value] == top).mean()), 5)
+    disagreeing = {k: (stored.get(k), recomputed[k]) for k in recomputed
+                   if stored.get(k) != recomputed[k]}
+    if disagreeing:
+        raise AssertionError(
+            f"the fixed per-bucket priors no longer reproduce the stored "
+            f"v2_05b values {disagreeing}; the deficit would be measured "
+            f"against a different reference than every earlier experiment")
+
+    prior_correct = np.zeros(len(bucket), dtype=np.float64)
+    for value in STEP_ORDER:
+        prior_correct[bucket == value] = recomputed[f"steps:{value}"]
+    return {"bucket": bucket, "ge4_mask": ge4_mask,
+            "prior_correct": prior_correct,
+            "prior_accuracy_by_slice": recomputed,
+            "majority_answer_by_slice": majority,
+            "bucket_counts": {v: int((bucket == v).sum())
+                              for v in STEP_ORDER},
+            "ge4_rows": int(ge4_mask.sum()),
+            "prior_source": str(PRIOR_SOURCE.relative_to(PROJECT_ROOT)),
+            "definition": (
+                "the repaired v3_02a pooled deficit: the unweighted mean of "
+                "the four per-bucket lifts over the fixed train_40k prior, "
+                "minus the question-weighted combined >=4 lift "
+                "(experiments/v3_02a_refs/stats_repair.py:241-247)")}
+
+
+def pooled_deficit(correct, bucket, ge4_mask, prior_correct):
+    """experiments/v3_02a_refs/stats_repair.py:241-247, unchanged."""
+    lifts = [float(correct[bucket == v].mean())
+             - float(prior_correct[bucket == v].mean())
+             for v in STEP_ORDER]
+    combined = float(correct[ge4_mask].mean()) \
+        - float(prior_correct[ge4_mask].mean())
+    return float(np.mean(lifts)) - combined, combined
+
+
+def deficit_block(correct_by_seed, steps) -> dict:
+    """Per-seed pooled deficit, its >=4 lift and the per-bucket lifts."""
+    per_seed = []
+    for seed_index, correct in enumerate(correct_by_seed):
+        deficit, combined = pooled_deficit(
+            correct, steps["bucket"], steps["ge4_mask"],
+            steps["prior_correct"])
+        per_seed.append({
+            "seed": SEEDS[seed_index],
+            "pooled_ge4_deficit": round(deficit, 5),
+            "combined_ge4_lift": round(combined, 5),
+            "bucket_accuracy": {
+                v: round(float(correct[steps["bucket"] == v].mean()), 5)
+                for v in STEP_ORDER},
+            "bucket_lift": {
+                v: round(float(correct[steps["bucket"] == v].mean())
+                         - float(steps["prior_correct"][
+                             steps["bucket"] == v].mean()), 5)
+                for v in STEP_ORDER}})
+    values = [row["pooled_ge4_deficit"] for row in per_seed]
+    return {"per_seed": per_seed,
+            "mean_pooled_ge4_deficit": round(float(np.mean(values)), 5),
+            "std_pooled_ge4_deficit": round(float(np.std(values, ddof=1)), 5)}
+
+
+def deficit_contrast(correct_a, correct_b, steps, image_index, n_images):
+    """Paired interval for one arm's pooled deficit minus another's."""
+    def statistic(rows):
+        bucket, mask = steps["bucket"][rows], steps["ge4_mask"][rows]
+        prior = steps["prior_correct"][rows]
+        values = []
+        for s in range(len(correct_a)):
+            first, _ = pooled_deficit(correct_a[s][rows], bucket, mask, prior)
+            second, _ = pooled_deficit(correct_b[s][rows], bucket, mask, prior)
+            values.append(first - second)
+        return np.mean(values)
+    per_seed = []
+    for s in range(len(correct_a)):
+        first, _ = pooled_deficit(correct_a[s], steps["bucket"],
+                                  steps["ge4_mask"], steps["prior_correct"])
+        second, _ = pooled_deficit(correct_b[s], steps["bucket"],
+                                   steps["ge4_mask"], steps["prior_correct"])
+        per_seed.append(round(first - second, 5))
+    lower, upper = percentile_interval(
+        clustered_draws(statistic, image_index, n_images))
+    return {"per_seed_differences": {f"seed{SEEDS[i]}": per_seed[i]
+                                     for i in range(len(per_seed))},
+            "mean": round(float(np.mean(per_seed)), 5),
+            "std": round(float(np.std(per_seed, ddof=1)), 5),
+            "ci95_image_clustered": [lower, upper],
+            "directional_rule_outcome": directional_rule(per_seed, lower,
+                                                         upper)}
+
+
+# --- Per-scale analysis ---------------------------------------------------
+
+def load_correctness(cells, scale) -> dict:
+    correct = {}
+    for arm in ARMS:
+        correct[arm] = []
+        for seed in SEEDS:
+            data = np.load(cells[(arm, scale, seed)]["correctness_path"],
+                           allow_pickle=True)
+            correct[arm].append(data["normal"].astype(np.float64))
+    return correct
+
+
+def analyse_scale(scale: str, cells: dict, steps, image_index,
+                  n_images) -> dict:
     present = {(a, s) for (a, sc, s) in cells if sc == scale}
     arms_ready = [a for a in ARMS
                   if all((a, s) in present for s in SEEDS)]
@@ -164,31 +377,20 @@ def analyse_scale(scale: str, cells: dict, dev) -> dict:
         return {"scale": scale, "complete": False,
                 "arms_with_three_seeds": arms_ready, "per_arm_seed": table}
 
-    image_ids = dev["imageId"].to_numpy()
-    unique = sorted(set(image_ids))
-    image_index = np.array([unique.index(i) for i in image_ids])
-    correct = {}
-    for arm in ARMS:
-        correct[arm] = []
-        for seed in SEEDS:
-            data = np.load(cells[(arm, scale, seed)]["correctness_path"],
-                           allow_pickle=True)
-            correct[arm].append(data["normal"].astype(np.float64))
-        assert all(len(v) == len(image_ids) for v in correct[arm])
-
+    correct = load_correctness(cells, scale)
     contrasts = {}
     for name, (a, b) in CONTRASTS.items():
         per_seed = [round(float(correct[a][i].mean() - correct[b][i].mean()), 5)
                     for i in range(len(SEEDS))]
         lower, upper = clustered_bootstrap(correct[a], correct[b],
-                                           image_index, len(unique))
+                                           image_index, n_images)
         contrasts[name] = {
             "per_seed_differences": {f"seed{SEEDS[i]}": per_seed[i]
                                      for i in range(len(SEEDS))},
             "mean": round(float(np.mean(per_seed)), 5),
             "std": round(float(np.std(per_seed, ddof=1)), 5),
             "ci95_image_clustered": [lower, upper],
-            "n_clusters": len(unique),
+            "n_clusters": n_images,
             "n_draws": BOOTSTRAP_DRAWS,
             "rng_seed": BOOTSTRAP_SEED,
             "directional_rule_outcome": directional_rule(per_seed, lower,
@@ -231,6 +433,20 @@ def analyse_scale(scale: str, cells: dict, dev) -> dict:
                 "degeneracy_rule"]["rule_fires"],
         } for s in SEEDS}
 
+    deficits = {a: deficit_block(correct[a], steps) for a in ARMS}
+    deficit_contrasts = {
+        name: deficit_contrast(correct[a], correct[b], steps, image_index,
+                               n_images)
+        for name, (a, b) in CONTRASTS.items()}
+
+    reliance = {a: {column: {
+        "per_seed": [table[f"{a}/seed{s}"][column] for s in SEEDS],
+        "mean": round(float(np.mean(
+            [table[f"{a}/seed{s}"][column] for s in SEEDS])), 5),
+        "std": round(float(np.std(
+            [table[f"{a}/seed{s}"][column] for s in SEEDS], ddof=1)), 5)}
+        for column in RELIANCE_COLUMNS} for a in ARMS}
+
     return {
         "scale": scale, "complete": True, "per_arm_seed": table,
         "per_arm_summary": {
@@ -243,6 +459,13 @@ def analyse_scale(scale: str, cells: dict, dev) -> dict:
                              for s in SEEDS]} for a in ARMS},
         "contrasts": contrasts,
         "a1r_degeneracy_per_seed": degeneracy,
+        "reliance": reliance,
+        "step_deficits": {"definition": steps["definition"],
+                          "prior_accuracy_by_slice":
+                              steps["prior_accuracy_by_slice"],
+                          "bucket_counts": steps["bucket_counts"],
+                          "per_arm": deficits,
+                          "contrasts": deficit_contrasts},
         "disclosure": (
             "The image-clustered interval conditions on the FIXED set of "
             "trained seeds and does not fully propagate training-seed "
@@ -256,28 +479,160 @@ def analyse_scale(scale: str, cells: dict, dev) -> dict:
     }
 
 
+# --- Cross-scale analysis -------------------------------------------------
+
+def analyse_across_scales(cells, analyses, steps, image_index,
+                          n_images) -> dict:
+    """40k against 250k for each arm, paired within seed.
+
+    Every quantity here is a difference of a quantity already defined and
+    already reported per scale. Nothing new is defined: the same rows, the
+    same seeds, the same bootstrap and the same directional rule.
+    """
+    small, large = SCALES
+    if not all(analyses.get(s, {}).get("complete") for s in SCALES):
+        return {"complete": False,
+                "reason": "both scales need all three seeds"}
+    correct = {s: load_correctness(cells, s) for s in SCALES}
+    out = {"complete": True, "scales": list(SCALES),
+           "pairing": "same seed, same development rows, same bootstrap"}
+
+    accuracy = {}
+    for arm in ARMS:
+        per_seed = [round(float(correct[large][arm][i].mean()
+                                - correct[small][arm][i].mean()), 5)
+                    for i in range(len(SEEDS))]
+        lower, upper = clustered_bootstrap(correct[large][arm],
+                                           correct[small][arm], image_index,
+                                           n_images)
+        accuracy[arm] = {
+            "per_seed_differences": {f"seed{SEEDS[i]}": per_seed[i]
+                                     for i in range(len(SEEDS))},
+            "mean": round(float(np.mean(per_seed)), 5),
+            "std": round(float(np.std(per_seed, ddof=1)), 5),
+            "ci95_image_clustered": [lower, upper],
+            "directional_rule_outcome": directional_rule(per_seed, lower,
+                                                         upper)}
+    out["accuracy_scale_gain_250k_minus_40k"] = accuracy
+
+    out["contrast_at_each_scale"] = {
+        name: {s: {"mean": analyses[s]["contrasts"][name]["mean"],
+                   "ci95_image_clustered":
+                       analyses[s]["contrasts"][name]["ci95_image_clustered"],
+                   "directional_rule_outcome":
+                       analyses[s]["contrasts"][name][
+                           "directional_rule_outcome"]}
+               for s in SCALES} for name in CONTRASTS}
+
+    out["convergence"] = {
+        arm: {s: {"best_epoch": [analyses[s]["per_arm_seed"][
+                      f"{arm}/seed{seed}"]["best_epoch"] for seed in SEEDS],
+                  "epochs_run": [analyses[s]["per_arm_seed"][
+                      f"{arm}/seed{seed}"]["epochs_run"] for seed in SEEDS],
+                  "seconds_per_epoch": [analyses[s]["per_arm_seed"][
+                      f"{arm}/seed{seed}"]["seconds_per_epoch"]
+                      for seed in SEEDS],
+                  "wall_clock_hours": [analyses[s]["per_arm_seed"][
+                      f"{arm}/seed{seed}"]["wall_clock_hours"]
+                      for seed in SEEDS],
+                  "peak_allocated_mib": [analyses[s]["per_arm_seed"][
+                      f"{arm}/seed{seed}"]["peak_allocated_mib"]
+                      for seed in SEEDS]}
+              for s in SCALES} for arm in ARMS}
+
+    out["reliance_change"] = {
+        arm: {column: {
+            s: analyses[s]["reliance"][arm][column]["mean"] for s in SCALES}
+            | {"change_250k_minus_40k": round(
+                analyses[large]["reliance"][arm][column]["mean"]
+                - analyses[small]["reliance"][arm][column]["mean"], 5)}
+            for column in RELIANCE_COLUMNS} for arm in ARMS}
+
+    out["entropy_and_class_share_change"] = {
+        arm: {field: {
+            s: round(float(np.mean([analyses[s]["per_arm_seed"][
+                f"{arm}/seed{seed}"][field] for seed in SEEDS])), 5)
+            for s in SCALES}
+            | {"change_250k_minus_40k": round(
+                float(np.mean([analyses[large]["per_arm_seed"][
+                    f"{arm}/seed{seed}"][field] for seed in SEEDS]))
+                - float(np.mean([analyses[small]["per_arm_seed"][
+                    f"{arm}/seed{seed}"][field] for seed in SEEDS])), 5)}
+            for field in ("prediction_entropy_nats", "maximum_class_share",
+                          "distinct_answers")} for arm in ARMS}
+
+    deficit_by_scale = {}
+    for arm in ARMS:
+        per_seed = []
+        for i in range(len(SEEDS)):
+            large_deficit, _ = pooled_deficit(
+                correct[large][arm][i], steps["bucket"], steps["ge4_mask"],
+                steps["prior_correct"])
+            small_deficit, _ = pooled_deficit(
+                correct[small][arm][i], steps["bucket"], steps["ge4_mask"],
+                steps["prior_correct"])
+            per_seed.append(round(large_deficit - small_deficit, 5))
+        contrast = deficit_contrast(correct[large][arm], correct[small][arm],
+                                    steps, image_index, n_images)
+        deficit_by_scale[arm] = {
+            "pooled_ge4_deficit_by_scale": {
+                s: analyses[s]["step_deficits"]["per_arm"][arm][
+                    "mean_pooled_ge4_deficit"] for s in SCALES},
+            "change_250k_minus_40k": contrast}
+    out["step_deficit_change"] = deficit_by_scale
+    out["interpretation"] = (
+        "A higher overall accuracy at 250k is not by itself evidence of "
+        "improved multi-step reasoning. The pooled >=4-step deficit is "
+        "reported separately at each scale and as a paired change, against "
+        "the same fixed train_40k per-bucket priors, so an accuracy gain and "
+        "a deficit change are read independently.")
+    return out
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--scale", choices=["train_40k", "train_250k"])
+    parser.add_argument("--scale", choices=list(SCALES))
     args = parser.parse_args()
     utils.set_seed()
 
     manifest = json.loads(
         (e8a.OUT_DIR / "execution_manifest.json").read_text())[
             "e8a_execution_manifest"]
-    cells = load_cells(manifest)
-    dev = pd.read_csv(e8a.V2_DIR / "dev.csv",
-                      dtype={"questionId": str, "imageId": str},
-                      keep_default_na=False)
+    view = integrity.canonical_dev_view()
+    cells = load_cells(manifest, view)
+    steps = step_view(view)
 
-    scales = [args.scale] if args.scale else ["train_40k", "train_250k"]
-    analyses = {s: analyse_scale(s, cells, dev) for s in scales}
+    unique = sorted(set(view.image_ids))
+    index_of = {value: position for position, value in enumerate(unique)}
+    image_index = np.array([index_of[value] for value in view.image_ids])
+
+    scales = [args.scale] if args.scale else list(SCALES)
+    analyses = {s: analyse_scale(s, cells, steps, image_index, len(unique))
+                for s in scales}
+    across = (analyse_across_scales(cells, analyses, steps, image_index,
+                                    len(unique))
+              if len(scales) == 2 else
+              {"complete": False,
+               "reason": "one scale was requested; run without --scale"})
 
     record = {"metadata": utils.run_metadata(),
               "e8a_core_analysis": {
                   "cells_available": sorted(f"{a}/{sc}/seed{s}"
                                             for (a, sc, s) in cells),
+                  "integrity": {
+                      "row_order_sha256": view.row_order_sha256,
+                      "labels_sha256": view.labels_sha256,
+                      "vocabulary_sha256": view.vocabulary_sha256,
+                      "dev_sha256": view.dev_sha256,
+                      "n_rows": view.n_rows,
+                      "n_clusters": len(unique),
+                      "per_cell": {f"{a}/{sc}/seed{s}": cells[(a, sc, s)][
+                          "integrity"] for (a, sc, s) in cells},
+                      "note": (
+                          "every artefact hash above was re-measured at "
+                          "analysis time, not copied from the run record")},
                   "analyses": analyses,
+                  "across_scales": across,
                   "a0_note": (
                       "The stored v3_01 result is arm A0, not A0p, and does "
                       "not appear in any table above. It is context only."),
@@ -305,8 +660,26 @@ def main() -> int:
                   f"sd {contrast['std']:.5f} "
                   f"CI {contrast['ci95_image_clustered']} -> "
                   f"{contrast['directional_rule_outcome']}")
+        for arm in ARMS:
+            block = analysis["step_deficits"]["per_arm"][arm]
+            print(f"  {arm:4s} pooled >=4-step deficit "
+                  f"{block['mean_pooled_ge4_deficit']:+.5f} "
+                  f"sd {block['std_pooled_ge4_deficit']:.5f}")
         print(f"  A1r degeneracy fires: "
               f"{[analysis['a1r_degeneracy_per_seed'][f'seed{s}']['rule_fires'] for s in SEEDS]}")
+
+    if across.get("complete"):
+        print("\n=== across scales (250k minus 40k) ===")
+        for arm in ARMS:
+            gain = across["accuracy_scale_gain_250k_minus_40k"][arm]
+            change = across["step_deficit_change"][arm]["change_250k_minus_40k"]
+            print(f"  {arm:4s} accuracy {gain['mean']:+.5f} "
+                  f"CI {gain['ci95_image_clustered']} -> "
+                  f"{gain['directional_rule_outcome']}")
+            print(f"       pooled >=4-step deficit change "
+                  f"{change['mean']:+.5f} CI "
+                  f"{change['ci95_image_clustered']} -> "
+                  f"{change['directional_rule_outcome']}")
     print(f"\nwritten to results/experiments/e8a_question_encoder/{name}")
     return 0
 
