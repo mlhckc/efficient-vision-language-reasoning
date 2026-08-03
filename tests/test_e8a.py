@@ -1197,6 +1197,108 @@ def test_execution_matrix():
               run_matrix.assert_manifest_unchanged(recipe) is not None)
 
 
+def test_invocation_status():
+    """The four outcomes of one invocation of the core matrix runner.
+
+    This drives the same `classify_invocation` that `main` calls, so it cannot
+    pass while the runner classifies differently. The record-existence probe is
+    injected rather than read from disk: the live output directory changes
+    while the matrix runs, so a disk-backed test would silently change branch.
+    """
+    from experiments.e8a_question_encoder import run_matrix
+
+    def cell(arm, scale, seed):
+        return {"arm": arm, "scale": scale, "seed": seed, "status": "to_run",
+                "expected_artefacts": {
+                    "record": f"run_{arm}_{scale}_seed{seed}.json"}}
+
+    scale = "train_250k"
+    manifest = {"runs": [cell(a, scale, s) for a in ("A0p", "A1", "A1r")
+                         for s in (0, 1, 2)]}
+    requested = [c for c in manifest["runs"] if c["arm"] in ("A1", "A1r")]
+    every_record = {c["expected_artefacts"]["record"] for c in manifest["runs"]}
+
+    def recorded(names):
+        return lambda spec: spec["expected_artefacts"]["record"] in names
+
+    # 1. A healthy, deliberately partial invocation: every requested cell has a
+    #    record and the three A0p cells were left for a later invocation. The
+    #    superseded whole-matrix rule returned 2 here, which `set -e` read as a
+    #    failed run.
+    partial = run_matrix.classify_invocation(
+        manifest, scale, requested,
+        recorded({c["expected_artefacts"]["record"] for c in requested}))
+    check("a deliberately partial invocation reports "
+          "authorised_matrix_incomplete",
+          partial["status"] == run_matrix.AUTHORISED_MATRIX_INCOMPLETE,
+          partial["status"])
+    check("a deliberately partial invocation exits successfully",
+          partial["exit_code"] == 0, str(partial["exit_code"]))
+    check("the deferred cells are exactly the ones not requested",
+          partial["deferred_authorised_cells"]
+          == [f"A0p/{scale}/seed{s}" for s in (0, 1, 2)],
+          str(partial["deferred_authorised_cells"]))
+    check("a deliberately partial invocation reports nothing failed or "
+          "missing",
+          not partial["failed_requested_cells"]
+          and not partial["missing_requested_cells"])
+
+    # 2. A requested cell that genuinely failed.
+    failed = run_matrix.classify_invocation(
+        manifest, scale, requested,
+        recorded({c["expected_artefacts"]["record"] for c in requested[1:]}),
+        failed=[requested[0]])
+    check("a failed requested cell reports actual_failure",
+          failed["status"] == run_matrix.ACTUAL_FAILURE, failed["status"])
+    check("a failed requested cell exits non-zero",
+          failed["exit_code"] != 0, str(failed["exit_code"]))
+    check("the failed cell is named and is not also counted as missing",
+          failed["failed_requested_cells"] == [run_matrix.cell_name(
+              requested[0])] and not failed["missing_requested_cells"],
+          str(failed))
+
+    # 3. A requested cell that is unaccountably absent: nothing raised, but no
+    #    record was written.
+    missing = run_matrix.classify_invocation(
+        manifest, scale, requested,
+        recorded({c["expected_artefacts"]["record"] for c in requested[1:]}))
+    check("an unexpectedly missing requested cell reports actual_failure",
+          missing["status"] == run_matrix.ACTUAL_FAILURE, missing["status"])
+    check("an unexpectedly missing requested cell exits non-zero",
+          missing["exit_code"] != 0, str(missing["exit_code"]))
+    check("the missing cell is named and is not counted as failed",
+          missing["missing_requested_cells"] == [run_matrix.cell_name(
+              requested[0])] and not missing["failed_requested_cells"],
+          str(missing))
+
+    # 4. The whole authorised matrix at this scale is finished.
+    every = run_matrix.classify_invocation(
+        manifest, scale, manifest["runs"], recorded(every_record))
+    check("a complete matrix reports invocation_complete",
+          every["status"] == run_matrix.INVOCATION_COMPLETE, every["status"])
+    check("a complete matrix exits successfully", every["exit_code"] == 0,
+          str(every["exit_code"]))
+    check("a complete matrix defers nothing",
+          not every["deferred_authorised_cells"])
+
+    # The fix is only worth anything if the three statuses are distinguishable.
+    # A status shared between cases 1 and 2 would let a failure pass as a
+    # deferral, which is the defect in the opposite direction.
+    check("the three statuses are distinct",
+          len({partial["status"], failed["status"], every["status"]}) == 3,
+          f"{partial['status']}, {failed['status']}, {every['status']}")
+    check("only the failure statuses are non-zero",
+          {partial["exit_code"], every["exit_code"]} == {0}
+          and 0 not in {failed["exit_code"], missing["exit_code"]},
+          f"{partial['exit_code']}, {every['exit_code']}, "
+          f"{failed['exit_code']}, {missing['exit_code']}")
+    check("an invocation that requested nothing is complete when nothing is "
+          "deferred",
+          run_matrix.classify_invocation(
+              manifest, scale, [], recorded(every_record))["status"]
+          == run_matrix.INVOCATION_COMPLETE)
+
+
 def test_metadata_completeness():
     metadata = utils.run_metadata()
     required = {"timestamp", "git_commit", "git_dirty", "seed", "device",
@@ -1301,6 +1403,7 @@ def run() -> None:
         test_a0p_production_components(device)
         test_no_unbound_local_names()
         test_execution_matrix()
+        test_invocation_status()
         test_selection_and_early_stopping()
         test_metadata_completeness()
         test_embargo_and_vocabulary()

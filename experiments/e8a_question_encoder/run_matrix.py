@@ -69,6 +69,19 @@ COMPLETED = {
 
 MANIFEST = e8a.OUT_DIR / "execution_manifest.json"
 
+# What one invocation achieved, which is not the same question as whether the
+# authorised matrix is finished. An invocation may deliberately request part of
+# the matrix — the arms are run in pairs, and the two scales are run
+# separately — so cells left for a later invocation are a plan, not a fault,
+# and must not produce a failing exit code. Only a requested cell that failed
+# or is unaccountably absent is a failure.
+INVOCATION_COMPLETE = "invocation_complete"
+AUTHORISED_MATRIX_INCOMPLETE = "authorised_matrix_incomplete"
+ACTUAL_FAILURE = "actual_failure"
+EXIT_CODES = {INVOCATION_COMPLETE: 0,
+              AUTHORISED_MATRIX_INCOMPLETE: 0,
+              ACTUAL_FAILURE: 2}
+
 
 def store_path(arm: str, scale: str) -> Path:
     """The question store an arm reads at a scale.
@@ -268,6 +281,71 @@ def assert_manifest_unchanged(recipe: dict) -> dict:
     return stored
 
 
+def cell_name(spec: dict) -> str:
+    return f"{spec['arm']}/{spec['scale']}/seed{spec['seed']}"
+
+
+def classify_invocation(manifest: dict, scale: str, requested: list,
+                        record_exists, failed=()) -> dict:
+    """Decide what this invocation achieved, separately from the whole matrix.
+
+    `requested` is what this invocation selected. The authorised matrix at the
+    same scale may be larger, because cells are deliberately deferred to a
+    later invocation. Deferring is reported under its own status rather than
+    as an error, so a wrapper running under `set -e` does not read a healthy
+    chunked run as a failed one, while a genuinely failed, invalid or
+    unaccountably absent requested cell still exits non-zero.
+
+    `record_exists` is injected so the classification can be exercised without
+    artefacts on disk; the live output directory changes while the matrix runs.
+    """
+    requested_keys = {(r["arm"], r["scale"], r["seed"]) for r in requested}
+    failed_keys = {(r["arm"], r["scale"], r["seed"]) for r in failed}
+    missing = [r for r in requested
+               if (r["arm"], r["scale"], r["seed"]) not in failed_keys
+               and not record_exists(r)]
+    deferred = [r for r in manifest["runs"]
+                if r["scale"] == scale and r["status"] == "to_run"
+                and (r["arm"], r["scale"], r["seed"]) not in requested_keys
+                and not record_exists(r)]
+    if failed or missing:
+        status = ACTUAL_FAILURE
+    elif deferred:
+        status = AUTHORISED_MATRIX_INCOMPLETE
+    else:
+        status = INVOCATION_COMPLETE
+    return {
+        "status": status,
+        "exit_code": EXIT_CODES[status],
+        "scale": scale,
+        "requested_cells": [cell_name(r) for r in requested],
+        "completed_cells": [cell_name(r) for r in requested
+                            if (r["arm"], r["scale"], r["seed"])
+                            not in failed_keys and record_exists(r)],
+        "failed_requested_cells": [cell_name(r) for r in failed],
+        "missing_requested_cells": [cell_name(r) for r in missing],
+        "deferred_authorised_cells": [cell_name(r) for r in deferred],
+    }
+
+
+def report_invocation(outcome: dict) -> int:
+    """Print the outcome, record it machine-readably, return the exit code."""
+    utils.save_json({"metadata": utils.run_metadata(),
+                     "e8a_invocation_status": outcome},
+                    e8a.OUT_DIR / f"invocation_status_{outcome['scale']}.json")
+    print(f"\n[STATUS] {outcome['status']} (exit {outcome['exit_code']}) at "
+          f"{outcome['scale']}: {len(outcome['completed_cells'])} of "
+          f"{len(outcome['requested_cells'])} requested cell(s) complete")
+    if outcome["failed_requested_cells"]:
+        print("  FAILED: " + ", ".join(outcome["failed_requested_cells"]))
+    if outcome["missing_requested_cells"]:
+        print("  MISSING: " + ", ".join(outcome["missing_requested_cells"]))
+    if outcome["deferred_authorised_cells"]:
+        print("  deferred to a later invocation, not a failure: "
+              + ", ".join(outcome["deferred_authorised_cells"]))
+    return outcome["exit_code"]
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--freeze", action="store_true")
@@ -305,12 +383,16 @@ def main() -> int:
         parser.error("pair preservation: A1 cannot run without A1r. Add A1r, "
                      "or run neither.")
 
+    def has_record(spec: dict) -> bool:
+        return (e8a.OUT_DIR / spec["expected_artefacts"]["record"]).exists()
+
     wanted = [r for r in manifest["runs"]
               if r["scale"] == args.scale and r["arm"] in arms
               and r["seed"] in seeds and r["status"] == "to_run"]
     if not wanted:
         print("nothing to run for this selection")
-        return 0
+        return report_invocation(classify_invocation(
+            manifest, args.scale, [], has_record))
     print(f"\n{len(wanted)} run(s) selected at {args.scale}: "
           + ", ".join(f"{r['arm']}/seed{r['seed']}" for r in wanted))
 
@@ -436,6 +518,8 @@ def main() -> int:
                  "failure": f"{type(error).__name__}: {error}",
                  "seconds_before_failure": round(time.time() - started, 1)},
                 e8a.OUT_DIR / f"FAILED_{arm}_{args.scale}_seed{seed}.json")
+            report_invocation(classify_invocation(
+                manifest, args.scale, wanted, has_record, failed=[spec]))
             raise
 
         record = {
@@ -477,18 +561,11 @@ def main() -> int:
               f"checkpoint {run['checkpoint_sha256'][:16]}...")
         del reloaded
 
-    outstanding = [r for r in manifest["runs"]
-                   if r["scale"] == args.scale and r["status"] == "to_run"
-                   and not (e8a.OUT_DIR
-                            / r["expected_artefacts"]["record"]).exists()]
     print(f"\n{len(completed)} run(s) complete at {args.scale}")
-    if outstanding:
-        print(f"INCOMPLETE: {len(outstanding)} cell(s) at {args.scale} still "
-              f"have no record: "
-              + ", ".join(f"{r['arm']}/seed{r['seed']}" for r in outstanding))
-        return 2
-    print(f"[PASS] every to_run cell at {args.scale} now has a record")
-    return 0
+    outcome = classify_invocation(manifest, args.scale, wanted, has_record)
+    if outcome["status"] == INVOCATION_COMPLETE:
+        print(f"[PASS] every to_run cell at {args.scale} now has a record")
+    return report_invocation(outcome)
 
 
 if __name__ == "__main__":
