@@ -355,6 +355,11 @@ def deficit_contrast(correct_a, correct_b, steps, image_index, n_images):
 
 # --- Per-scale analysis ---------------------------------------------------
 
+CONDITION_OF = {"normal_minus_fixed_image": "fixed_image",
+                "normal_minus_fixed_question": "fixed_question",
+                "normal_minus_shuffled_image": "shuffled_image_derangement"}
+
+
 def load_correctness(cells, scale) -> dict:
     correct = {}
     for arm in ARMS:
@@ -364,6 +369,24 @@ def load_correctness(cells, scale) -> dict:
                            allow_pickle=True)
             correct[arm].append(data["normal"].astype(np.float64))
     return correct
+
+
+def load_conditions(cells, scale) -> dict:
+    """Every intervention vector, so reliance is differenced before rounding.
+
+    Taking the difference from the records' stored five-decimal fields would
+    round twice, which moves the last published digit.
+    """
+    conditions = {}
+    for arm in ARMS:
+        conditions[arm] = []
+        for seed in SEEDS:
+            data = np.load(cells[(arm, scale, seed)]["correctness_path"],
+                           allow_pickle=True)
+            conditions[arm].append({
+                name: data[name].astype(np.float64)
+                for name in ("normal", *CONDITION_OF.values())})
+    return conditions
 
 
 def analyse_scale(scale: str, cells: dict, steps, image_index,
@@ -439,22 +462,28 @@ def analyse_scale(scale: str, cells: dict, steps, image_index,
                                n_images)
         for name, (a, b) in CONTRASTS.items()}
 
-    reliance = {a: {column: {
-        "per_seed": [table[f"{a}/seed{s}"][column] for s in SEEDS],
-        "mean": round(float(np.mean(
-            [table[f"{a}/seed{s}"][column] for s in SEEDS])), 5),
-        "std": round(float(np.std(
-            [table[f"{a}/seed{s}"][column] for s in SEEDS], ddof=1)), 5)}
-        for column in RELIANCE_COLUMNS} for a in ARMS}
+    conditions = load_conditions(cells, scale)
+    reliance = {}
+    for arm in ARMS:
+        reliance[arm] = {}
+        for column in RELIANCE_COLUMNS:
+            drops = [float(block["normal"].mean()
+                           - block[CONDITION_OF[column]].mean())
+                     for block in conditions[arm]]
+            reliance[arm][column] = {
+                "per_seed": [round(d, 5) for d in drops],
+                "mean": round(float(np.mean(drops)), 5),
+                "std": round(float(np.std(drops, ddof=1)), 5)}
 
     return {
         "scale": scale, "complete": True, "per_arm_seed": table,
+        # Summarised from the per-row vectors, not from the records' already
+        # rounded five-decimal fields, which would round twice.
         "per_arm_summary": {
             a: {"mean_dev_accuracy": round(float(np.mean(
-                    [table[f"{a}/seed{s}"]["dev_accuracy"] for s in SEEDS])), 5),
+                    [v.mean() for v in correct[a]])), 5),
                 "std_dev_accuracy": round(float(np.std(
-                    [table[f"{a}/seed{s}"]["dev_accuracy"] for s in SEEDS],
-                    ddof=1)), 5),
+                    [v.mean() for v in correct[a]], ddof=1)), 5),
                 "per_seed": [table[f"{a}/seed{s}"]["dev_accuracy"]
                              for s in SEEDS]} for a in ARMS},
         "contrasts": contrasts,
@@ -469,9 +498,17 @@ def analyse_scale(scale: str, cells: dict, steps, image_index,
         "disclosure": (
             "The image-clustered interval conditions on the FIXED set of "
             "trained seeds and does not fully propagate training-seed "
-            "uncertainty. The measured across-seed standard deviation in the "
-            "stored v3_01 runs is 0.0037 at 40k and 0.0074 at 250k. No "
+            "uncertainty. For scale, the measured across-seed standard "
+            "deviation of the stored reasoner runs is 0.0037 at 40k in v3_01, "
+            "which has no 250k runs, and 0.0074 at 250k in v3_03. No "
             "equivalence language and no equivalence margin is used anywhere."),
+        "multiplicity_disclosure": (
+            "Every interval here is reported at a nominal 95 per cent and "
+            "none is corrected for multiplicity. This analysis reports "
+            "twenty-one intervals in total, so an interval whose bound sits "
+            "close to zero should be read as weaker than its nominal level. "
+            "The pre-registered primary contrast is A1 minus A1r; the rest "
+            "are secondary or descriptive."),
         "fixed_question_caveat": (
             "The pinned neutral question changes both question content and "
             "sequence length, and by different amounts across arms, so "

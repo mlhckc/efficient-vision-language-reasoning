@@ -234,7 +234,14 @@ def resource_audit(cells: dict, stores: dict) -> dict:
     extraction_total = round(sum(extraction.values()), 6)
     total = round(training_total + extraction_total, 5)
 
-    failed = sorted(p.name for p in e8a.OUT_DIR.glob("FAILED_*"))
+    # Only per-cell failure files count as failed cells. FAILED_gates.json and
+    # the like are aborted gate passes from earlier phases, not matrix cells,
+    # and a bare FAILED_* glob would report them as failed runs.
+    failed = sorted(p.name for p in e8a.OUT_DIR.glob("FAILED_*")
+                    if any(p.name.startswith(f"FAILED_{arm}_")
+                           for arm in ARMS))
+    other_failure_files = sorted(
+        p.name for p in e8a.OUT_DIR.glob("FAILED_*") if p.name not in failed)
     return {
         "scope": ("the completed E8A SmolLM2-135M core tranche: arms A0p, A1 "
                   "and A1r at train_40k and train_250k with seeds 0, 1 and 2"),
@@ -251,7 +258,14 @@ def resource_audit(cells: dict, stores: dict) -> dict:
         "total_gpu_hours": total,
         "cells_completed": len(per_run),
         "cells_failed_or_interrupted": failed,
+        "non_cell_failure_files_present": {
+            "files": other_failure_files,
+            "note": ("aborted gate passes from an earlier phase, not matrix "
+                     "cells; recorded so their presence is visible rather "
+                     "than counted as failed runs")},
         "retried_cells": [],
+        "retried_cells_note": ("no cell was rerun: a cell with a record is "
+                               "skipped, and no FAILED_<arm>_ file exists"),
         "storage_bytes": {
             "question_stores": store_bytes,
             "checkpoints": checkpoints,

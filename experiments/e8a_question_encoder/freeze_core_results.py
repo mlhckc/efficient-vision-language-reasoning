@@ -36,7 +36,11 @@ INPUT_FILES = ("data/v2/dev.csv", "data/v2/train_40k.csv",
                "data/v2/metadata/dev_types.csv",
                "data/v2/metadata/train_40k_types.csv",
                "data/v3/tokens/image_tokens.h5",
-               "data/v3/tokens/question_tokens.h5")
+               "data/v3/tokens/question_tokens.h5",
+               "data/v3_slm_tokens/e8a_135m_A1_train40k_dev.h5",
+               "data/v3_slm_tokens/e8a_135m_A1_train250k_dev.h5",
+               "data/v3_slm_tokens/e8a_135m_A1r_train40k_dev.h5",
+               "data/v3_slm_tokens/e8a_135m_A1r_train250k_dev.h5")
 
 
 def hashed(path: Path) -> dict:

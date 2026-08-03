@@ -26,6 +26,7 @@ import argparse
 import json
 import sys
 import time
+import traceback
 from pathlib import Path
 
 import numpy as np
@@ -511,6 +512,11 @@ def main() -> int:
                 arm, recipe, seed, run, images, questions, neutral_image,
                 neutral_question, device, scale=args.scale)
         except Exception as error:                   # noqa: BLE001
+            # The traceback is the evidence, so it is printed, but the process
+            # then exits through the recorded status rather than through the
+            # uncaught exception. Raising here would exit 1 while the status
+            # file recorded 2, and the two must not disagree.
+            traceback.print_exc()
             utils.save_json(
                 {"metadata": utils.run_metadata(seed=seed),
                  "arm": arm, "scale": args.scale, "seed": seed,
@@ -518,9 +524,8 @@ def main() -> int:
                  "failure": f"{type(error).__name__}: {error}",
                  "seconds_before_failure": round(time.time() - started, 1)},
                 e8a.OUT_DIR / f"FAILED_{arm}_{args.scale}_seed{seed}.json")
-            report_invocation(classify_invocation(
+            return report_invocation(classify_invocation(
                 manifest, args.scale, wanted, has_record, failed=[spec]))
-            raise
 
         record = {
             "metadata": utils.run_metadata(seed=seed),
