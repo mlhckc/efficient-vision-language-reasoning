@@ -657,8 +657,10 @@ def train_arm(arm: str, recipe: dict, seed: int, images, questions,
                   "memory_ceiling_mib": round(ceiling_mib, 1),
                   "wall_clock_halt_hours": e8a.WALL_CLOCK_HALT_HOURS,
                   "wall_clock_hours": round(wall_seconds / 3600, 5)}
-        utils.save_json(record, e8a.OUT_DIR / f"FAILED_{arm}.json")
-        sys.exit(f"PILOT {arm} TERMINATED: {failure_status}")
+        utils.save_json(record,
+                        e8a.OUT_DIR
+                        / f"FAILED_{arm}_{scale}_seed{seed}.json")
+        sys.exit(f"RUN {arm}/{scale}/seed{seed} TERMINATED: {failure_status}")
 
     return {
         "arm": arm, "status": "completed", "scale": scale, "seed": seed,
@@ -832,10 +834,13 @@ def evaluate_arm(arm: str, recipe: dict, seed: int, run: dict, images,
                   "failure": "prediction collapse on a principal arm",
                   "g10": g10, "conditions": conditions,
                   "degeneracy_rule": degeneracy}
-        utils.save_json(record, e8a.OUT_DIR / f"FAILED_G10_{arm}.json")
+        utils.save_json(record,
+                        e8a.OUT_DIR
+                        / f"FAILED_G10_{arm}_{scale}_seed{seed}.json")
         sys.exit(f"GATE G10 FAILED for principal arm {arm}: entropy "
                  f"{g10['mean_prediction_entropy_nats']} nats, top-1 share "
-                 f"{g10['top_1_share']}; recorded in FAILED_G10_{arm}.json")
+                 f"{g10['top_1_share']}; recorded in "
+                 f"FAILED_G10_{arm}_{scale}_seed{seed}.json")
 
     # Efficiency: single-example latency on cached states, mirroring v3_01.
     dataset.set_normal()
@@ -1055,6 +1060,12 @@ def main() -> int:
         return 0
 
     runs, evaluations = {}, {}
+    for arm in e8a.ARMS:
+        existing = (e8a.OUT_DIR / "checkpoints"
+                    / f"e8a_{arm}_{PILOT_SCALE}_seed{PILOT_SEED}.pt")
+        assert not existing.exists(), (
+            f"{existing} already exists. Retraining a completed valid pilot "
+            f"is not authorised; use run_matrix.py for the core matrix.")
     try:
         for arm in e8a.ARMS:
             runs[arm] = train_arm(arm, recipe, PILOT_SEED, images, questions,

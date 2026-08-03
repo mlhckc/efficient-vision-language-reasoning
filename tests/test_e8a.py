@@ -1122,6 +1122,81 @@ def test_no_unbound_local_names():
           str(clean))
 
 
+def test_execution_matrix():
+    """The frozen dissertation-core matrix and its guards."""
+    from experiments.e8a_question_encoder import run_matrix
+
+    check("store_name maps both scopes exactly",
+          e8a.store_name("A1", "train_40k") == "e8a_135m_A1_train40k_dev.h5"
+          and e8a.store_name("A1r", "train_250k")
+          == "e8a_135m_A1r_train250k_dev.h5")
+    must_fail("store_name rejects an unknown scope",
+              lambda: e8a.store_name("A1", "train_100k"))
+
+    recipe = e8a.gate_g0_recipe(verbose=False)
+    matrix = run_matrix.build_matrix(recipe)
+    check("the matrix has 18 cells, 15 to run and 3 reused",
+          matrix["total_arm_scale_seed_cells"] == 18
+          and matrix["to_run"] == 15 and matrix["reused"] == 3,
+          f"{matrix['total_arm_scale_seed_cells']}/{matrix['to_run']}/"
+          f"{matrix['reused']}")
+    cells = {(r["arm"], r["scale"], r["seed"]) for r in matrix["runs"]}
+    check("the cells are exactly arms x scales x seeds",
+          cells == {(a, s, d) for a in ("A0p", "A1", "A1r")
+                    for s in ("train_40k", "train_250k") for d in (0, 1, 2)})
+    reused = {(r["arm"], r["scale"], r["seed"]) for r in matrix["runs"]
+              if r["status"].startswith("completed")}
+    check("exactly the three train_40k seed-0 cells are reused",
+          reused == {(a, "train_40k", 0) for a in ("A0p", "A1", "A1r")})
+
+    for run in matrix["runs"]:
+        expected = 21_362_276 if run["arm"] == "A0p" else 21_395_044
+        check(f"{run['arm']} pins {expected:,} trainable parameters",
+              run["trainable_parameters"] == expected) if run["seed"] == 0 \
+            and run["scale"] == "train_40k" else None
+    a0p = [r for r in matrix["runs"] if r["arm"] == "A0p"]
+    check("A0p reads the CLIP question store at both scales",
+          {r["question_store"] for r in a0p}
+          == {"data/v3/tokens/question_tokens.h5"})
+    slm = [r for r in matrix["runs"] if r["arm"] != "A0p"]
+    check("each SLM cell reads its own arm's store at its own scale",
+          all(r["arm"] in r["question_store"]
+              and ("train250k" if r["scale"] == "train_250k" else "train40k")
+              in r["question_store"] for r in slm))
+
+    # The reused cells must name artefacts that actually exist.
+    for run in matrix["runs"]:
+        if not run["reuse_artefacts"]:
+            continue
+        for key, value in run["reuse_artefacts"].items():
+            if key == "record_pointer":
+                continue
+            path = e8a.OUT_DIR / value
+            check(f"reused {run['arm']} {key} exists: {value}", path.exists(),
+                  str(path))
+
+    # Known-negative: perturbing the matrix must make the guard raise.
+    stored = json.loads(run_matrix.MANIFEST.read_text())[
+        "e8a_execution_manifest"] if run_matrix.MANIFEST.exists() else None
+    if stored is not None:
+        original = run_matrix.SEEDS
+        try:
+            run_matrix.SEEDS = (0, 1)
+            must_fail("the manifest guard rejects a changed seed set",
+                      lambda: run_matrix.assert_manifest_unchanged(recipe))
+        finally:
+            run_matrix.SEEDS = original
+        original_arms = run_matrix.ARMS
+        try:
+            run_matrix.ARMS = ("A0p", "A1")
+            must_fail("the manifest guard rejects a changed arm set",
+                      lambda: run_matrix.assert_manifest_unchanged(recipe))
+        finally:
+            run_matrix.ARMS = original_arms
+        check("the manifest guard accepts the unmodified matrix",
+              run_matrix.assert_manifest_unchanged(recipe) is not None)
+
+
 def test_metadata_completeness():
     metadata = utils.run_metadata()
     required = {"timestamp", "git_commit", "git_dirty", "seed", "device",
@@ -1225,6 +1300,7 @@ def run() -> None:
         test_a0p_arm(frame, images, device, sample_manifest)
         test_a0p_production_components(device)
         test_no_unbound_local_names()
+        test_execution_matrix()
         test_selection_and_early_stopping()
         test_metadata_completeness()
         test_embargo_and_vocabulary()

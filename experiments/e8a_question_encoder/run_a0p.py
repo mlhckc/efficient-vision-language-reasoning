@@ -71,7 +71,8 @@ def assert_namespace_isolation() -> dict:
         / f"e8a_{ARM}_{SCALE}_seed{SEED}.pt",
         "gates": e8a.OUT_DIR / f"gates_{ARM}.json",
         "pilot": e8a.OUT_DIR / f"pilot_{ARM}.json",
-        "correctness": e8a.OUT_DIR / f"correctness_{ARM}_seed{SEED}.npz",
+        "correctness": e8a.OUT_DIR
+        / f"correctness_{ARM}_{SCALE}_seed{SEED}.npz",
     }
     for name, path in ours.items():
         assert not any(str(path.name).startswith(p)
@@ -221,6 +222,11 @@ def main() -> int:
         print("\ngates complete; no training run (--gates)")
         return 0
 
+    existing = (e8a.OUT_DIR / "checkpoints"
+                / f"e8a_{ARM}_{SCALE}_seed{SEED}.pt")
+    assert not existing.exists(), (
+        f"{existing} already exists. Retraining a completed valid pilot is "
+        f"not authorised; use run_matrix.py for the core matrix.")
     try:
         run = run_pilot.train_arm(ARM, recipe, SEED, images, questions, device)
         utils.save_json({"metadata": utils.run_metadata(seed=SEED),

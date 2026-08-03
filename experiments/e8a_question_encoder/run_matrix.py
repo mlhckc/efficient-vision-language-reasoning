@@ -28,7 +28,9 @@ import sys
 import time
 from pathlib import Path
 
+import numpy as np
 import torch
+from torch.utils.data import DataLoader
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 if str(PROJECT_ROOT) not in sys.path:
@@ -44,9 +46,27 @@ SCALES = ("train_40k", "train_250k")
 SEEDS = (0, 1, 2)
 
 # The three valid Phase-1B pilots. Reused, never rerun.
-COMPLETED = {("A0p", "train_40k", 0): "pilot_A0p.json",
-             ("A1", "train_40k", 0): "pilot.json",
-             ("A1r", "train_40k", 0): "pilot.json"}
+# The three valid Phase-1B pilots, with the artefacts they actually wrote.
+# Their correctness files predate the scale-qualified naming, so the real
+# names are recorded here rather than derived, or an aggregator would look
+# for files that do not exist and silently drop the three seed-0 cells.
+COMPLETED = {
+    ("A0p", "train_40k", 0): {
+        "record": "pilot_A0p.json",
+        "record_pointer": "e8a_a0p_pilot.run / .evaluation",
+        "correctness": "correctness_A0p_seed0.npz",
+        "checkpoint": "checkpoints/e8a_A0p_train_40k_seed0.pt"},
+    ("A1", "train_40k", 0): {
+        "record": "pilot.json",
+        "record_pointer": "e8a_pilot.runs.A1 / .evaluations.A1",
+        "correctness": "correctness_A1_seed0.npz",
+        "checkpoint": "checkpoints/e8a_A1_train_40k_seed0.pt"},
+    ("A1r", "train_40k", 0): {
+        "record": "pilot.json",
+        "record_pointer": "e8a_pilot.runs.A1r / .evaluations.A1r",
+        "correctness": "correctness_A1r_seed0.npz",
+        "checkpoint": "checkpoints/e8a_A1r_train_40k_seed0.pt"},
+}
 
 MANIFEST = e8a.OUT_DIR / "execution_manifest.json"
 
@@ -60,6 +80,55 @@ def store_path(arm: str, scale: str) -> Path:
     if arm == "A0p":
         return e8a.CLIP_TOKEN_DIR / "question_tokens.h5"
     return e8a.SLM_TOKEN_DIR / e8a.store_name(arm, scale)
+
+
+def assert_stores_agree(arm: str, device=None) -> dict:
+    """The 40k and 250k stores of one arm must agree on every shared string.
+
+    Extraction encodes one string per forward pass and is deterministic, so a
+    question should receive byte-identical states in both stores. That is an
+    assumption until measured, and if it were false the 40k-versus-250k
+    comparison would confound more training data with different frozen
+    question features, with nothing to catch it: the encoder really is the
+    same, so the store-to-encoder binding would still pass.
+    """
+    small = e8a.SLM_TOKEN_DIR / e8a.store_name(arm, "train_40k")
+    large = e8a.SLM_TOKEN_DIR / e8a.store_name(arm, "train_250k")
+    a = e8a.SLMQuestionStore.open(small)
+    b = e8a.SLMQuestionStore.open(large)
+    assert a.attrs["lm_state_dict_sha256"] == b.attrs["lm_state_dict_sha256"], (
+        f"{arm}: the two stores were produced by different encoders")
+    shared = sorted(set(a.row_of) & set(b.row_of))
+    assert shared, f"{arm}: the two stores share no questionId"
+    deviation, mismatched = 0.0, 0
+    for qid in shared:
+        oa, la = a.span(qid)
+        ob, lb = b.span(qid)
+        if la != lb:
+            mismatched += 1
+            continue
+        block_a = a.states[oa:oa + la]
+        block_b = b.states[ob:ob + lb]
+        if not np.array_equal(block_a, block_b):
+            mismatched += 1
+            deviation = max(deviation, float(np.abs(
+                block_a.astype(np.float32) - block_b.astype(np.float32)).max()))
+    record = {"arm": arm, "n_ids_compared": len(shared),
+              "mismatched_ids": mismatched,
+              "max_abs_deviation": deviation,
+              "bitwise_identical": mismatched == 0,
+              "small_store_sha256": e8a.sha256_file(small),
+              "large_store_sha256": e8a.sha256_file(large),
+              "encoder_state_dict_sha256": a.attrs["lm_state_dict_sha256"]}
+    del a, b
+    assert record["bitwise_identical"], (
+        f"{arm}: the train_40k and train_250k stores disagree on "
+        f"{mismatched} of {len(shared)} shared questionIds, max deviation "
+        f"{deviation}. STOP: the cross-scale comparison would confound more "
+        f"training data with different frozen question features.")
+    print(f"[PASS] {arm}: the 40k and 250k stores agree bitwise on all "
+          f"{len(shared):,} shared questionIds")
+    return record
 
 
 def build_matrix(recipe: dict) -> dict:
@@ -76,7 +145,9 @@ def build_matrix(recipe: dict) -> dict:
                     "seed": seed,
                     "status": ("completed_in_phase_1b, reuse"
                                if key in COMPLETED else "to_run"),
-                    "reuse_source": COMPLETED.get(key),
+                    "reuse_artefacts": (dict(COMPLETED[key])
+                                        if key in COMPLETED
+                                        else None),
                     "architecture": (
                         "unmodified LatentQueryReasoner (32 latents, d_model "
                         "512, 4 blocks, 8 heads) plus one trainable token-wise "
@@ -91,13 +162,14 @@ def build_matrix(recipe: dict) -> dict:
                     "answer_vocabulary": "data/v2/answer_vocab_v2.json",
                     "output_directory": str(
                         e8a.OUT_DIR.relative_to(PROJECT_ROOT)),
-                    "expected_artefacts": {
+                    "expected_artefacts": (dict(COMPLETED[key])
+                                           if key in COMPLETED else {
                         "checkpoint": f"checkpoints/e8a_{arm}_{scale}_"
                                       f"seed{seed}.pt",
                         "record": f"run_{arm}_{scale}_seed{seed}.json",
                         "correctness": f"correctness_{arm}_{scale}_"
                                        f"seed{seed}.npz",
-                    },
+                    }),
                 })
     return {
         "matrix": "E8A SmolLM2-135M dissertation core",
@@ -129,13 +201,23 @@ def build_matrix(recipe: dict) -> dict:
     }
 
 
-def freeze(recipe: dict) -> dict:
+def freeze(recipe: dict, force: bool = False) -> dict:
+    if MANIFEST.exists() and not force:
+        sys.exit("the execution manifest is already frozen; refusing to "
+                 "overwrite it. Pass --force-refreeze only with a recorded "
+                 "reason, and never after a result has been observed.")
     matrix = build_matrix(recipe)
     matrix["data_hashes"] = {
         p: e8a.sha256_file(PROJECT_ROOT / p) for p in sorted({
             r["train_manifest"] for r in matrix["runs"]}
             | {"data/v2/dev.csv", "data/v2/answer_vocab_v2.json",
                "data/v3/tokens/image_tokens.h5"})}
+    for run in matrix["runs"]:
+        if run["reuse_artefacts"]:
+            run["reuse_artefacts"] = {
+                k: {"path": v, "sha256": e8a.sha256_file(e8a.OUT_DIR / v),
+                    "exists": True} if k != "record_pointer" else v
+                for k, v in run["reuse_artefacts"].items()}
     matrix["store_hashes"] = {
         r["question_store"]: (e8a.sha256_file(PROJECT_ROOT
                                              / r["question_store"])
@@ -163,11 +245,17 @@ def assert_manifest_unchanged(recipe: dict) -> dict:
     live = build_matrix(recipe)
 
     def strip(matrix):
-        return [{k: v for k, v in run.items()
-                 if k not in ("question_store_exists",)}
-                for run in matrix["runs"]]
+        out = {k: v for k, v in matrix.items()
+               if k not in ("data_hashes", "store_hashes", "runs")}
+        out["runs"] = [{k: v for k, v in run.items()
+                        if k not in ("question_store_exists",
+                                     "reuse_artefacts")}
+                       for run in matrix["runs"]]
+        return out
 
-    assert strip(stored) == strip(live), "the execution matrix has changed"
+    assert strip(stored) == strip(live), (
+        "the frozen execution manifest no longer matches the matrix this code "
+        "produces: a run, a ceiling or a recipe field has changed")
     assert stored["to_run"] == 15, stored["to_run"]
     assert stored["reused"] == 3, stored["reused"]
     print(f"[PASS] frozen execution manifest still matches the matrix: "
@@ -178,10 +266,11 @@ def assert_manifest_unchanged(recipe: dict) -> dict:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--freeze", action="store_true")
+    parser.add_argument("--force-refreeze", action="store_true")
     parser.add_argument("--run", action="store_true")
     parser.add_argument("--scale", choices=list(SCALES))
     parser.add_argument("--arms", default=",".join(ARMS))
-    parser.add_argument("--seeds", default="1,2")
+    parser.add_argument("--seeds", default="0,1,2")
     args = parser.parse_args()
     if not (args.freeze or args.run):
         parser.error("pass --freeze or --run")
@@ -192,7 +281,7 @@ def main() -> int:
     recipe = e8a.gate_g0_recipe()
 
     if args.freeze:
-        freeze(recipe)
+        freeze(recipe, args.force_refreeze)
         return 0
 
     if not args.scale:
@@ -200,6 +289,16 @@ def main() -> int:
     manifest = assert_manifest_unchanged(recipe)
     arms = [a for a in args.arms.split(",") if a]
     seeds = [int(s) for s in args.seeds.split(",") if s != ""]
+    unknown = [a for a in arms if a not in ARMS] + [
+        str(s) for s in seeds if s not in SEEDS]
+    if unknown:
+        parser.error(f"unknown arm or seed: {unknown}; arms are {ARMS} and "
+                     f"seeds are {SEEDS}")
+    # Pair preservation is binding: a pretrained arm never runs at a scale
+    # where its within-size random control does not.
+    if "A1" in arms and "A1r" not in arms:
+        parser.error("pair preservation: A1 cannot run without A1r. Add A1r, "
+                     "or run neither.")
 
     wanted = [r for r in manifest["runs"]
               if r["scale"] == args.scale and r["arm"] in arms
@@ -209,6 +308,16 @@ def main() -> int:
         return 0
     print(f"\n{len(wanted)} run(s) selected at {args.scale}: "
           + ", ".join(f"{r['arm']}/seed{r['seed']}" for r in wanted))
+
+    # M2: re-measure rather than copying the frozen values forward.
+    measured_hashes = {p: e8a.sha256_file(PROJECT_ROOT / p)
+                       for p in manifest["data_hashes"]}
+    drift = {p: (manifest["data_hashes"][p], measured_hashes[p])
+             for p in measured_hashes
+             if manifest["data_hashes"][p] != measured_hashes[p]}
+    assert not drift, f"input data changed since the manifest was frozen: {drift}"
+    print(f"[PASS] {len(measured_hashes)} input hashes re-measured and "
+          f"identical to the frozen manifest")
 
     run_pilot.gate_g17_embargo()
     run_pilot.gate_g12_read_only()
@@ -229,6 +338,11 @@ def main() -> int:
         print(f"  {arm}: {questions[arm].states.shape[0]:,} packed rows, "
               f"sha256 {store_hashes[arm][:16]}...")
 
+    store_agreement = {}
+    if args.scale == "train_250k":
+        for arm in sorted({r["arm"] for r in wanted} - {"A0p"}):
+            store_agreement[arm] = assert_stores_agree(arm)
+
     neutral_image, neutral_image_provenance = e8a.build_neutral_image_tokens(
         images)
     neutral_question = {}
@@ -248,6 +362,28 @@ def main() -> int:
         print(f"  neutral question, {arm}: "
               f"{neutral_question[arm][2]['valid_positions']} valid, sha256 "
               f"{neutral_question[arm][2]['sha256'][:16]}...")
+
+    # G13 per distinct seed, and G4/G5 once at this scale. The canonical plan
+    # makes G0 and G4-G11 and G13 per-run gates; G13 is what establishes that
+    # A1 and A1r share a bitwise-identical trunk AND projection at a given
+    # seed, which is the property the within-size causal contrast rests on.
+    gate_arms = tuple(sorted({r["arm"] for r in wanted}))
+    construction = {}
+    for seed in sorted({r["seed"] for r in wanted}):
+        construction[str(seed)] = run_pilot.gate_g13_construction(
+            recipe["dropout"], seed, arms=gate_arms)
+
+    probe_arm = gate_arms[0]
+    probe_dataset = e8a.E8ATokenDataset(e8a.V2_DIR / f"{args.scale}.csv",
+                                        images, questions[probe_arm])
+    probe_loader = DataLoader(probe_dataset, batch_size=recipe["batch_size"],
+                              shuffle=False, collate_fn=e8a.collate_e8a)
+    e8a.prepare_encoder_for_build(probe_arm)
+    probe_model = e8a.build_e8a_model(e8a.arm_d_question(probe_arm),
+                                      recipe["dropout"], 0)
+    forward_gate = run_pilot.gate_g4_g5(probe_model, probe_loader, device)
+    del probe_model, probe_loader, probe_dataset
+    torch.cuda.empty_cache()
 
     completed = []
     for spec in wanted:
@@ -288,12 +424,17 @@ def main() -> int:
                 "matrix_cell": f"{arm}/{args.scale}/seed{seed}",
                 "question_store": spec["question_store"],
                 "question_store_sha256": store_hashes[arm],
-                "data_hashes": manifest["data_hashes"],
+                "execution_manifest_sha256": e8a.sha256_file(MANIFEST),
+                "data_hashes": measured_hashes,
                 "run": run,
                 "evaluation": evaluation,
                 "pinned_neutral_image": neutral_image_provenance,
                 "pinned_neutral_question": neutral_question[arm][2],
                 "recipe": recipe,
+                "gates": {"g13_construction": construction[str(seed)],
+                          "g4_g5_forward_and_mask": forward_gate,
+                          "store_agreement_40k_vs_250k":
+                              store_agreement.get(arm)},
                 "clean_test_accessed": False,
             },
         }
@@ -315,7 +456,17 @@ def main() -> int:
               f"checkpoint {run['checkpoint_sha256'][:16]}...")
         del reloaded
 
+    outstanding = [r for r in manifest["runs"]
+                   if r["scale"] == args.scale and r["status"] == "to_run"
+                   and not (e8a.OUT_DIR
+                            / r["expected_artefacts"]["record"]).exists()]
     print(f"\n{len(completed)} run(s) complete at {args.scale}")
+    if outstanding:
+        print(f"INCOMPLETE: {len(outstanding)} cell(s) at {args.scale} still "
+              f"have no record: "
+              + ", ".join(f"{r['arm']}/seed{r['seed']}" for r in outstanding))
+        return 2
+    print(f"[PASS] every to_run cell at {args.scale} now has a record")
     return 0
 
 

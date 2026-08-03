@@ -352,7 +352,7 @@ def preflight(arm: str, strings, token_ids, device, verbose=True) -> dict:
     return result
 
 
-def storage_projection(lengths_all, hidden_size) -> dict:
+def storage_projection(lengths_all, hidden_size, scope="train_40k") -> dict:
     """Packed and canonical-padded storage projections."""
     def packed(n_tokens):
         return n_tokens * hidden_size * 2
@@ -379,10 +379,11 @@ def storage_projection(lengths_all, hidden_size) -> dict:
             "canonical_padded_estimate_gib": round(
                 n250 * e8a.TOKEN_BUDGET_L * hidden_size * 2 / gib, 4),
         },
-        "phase_1a_written": {
+        "written_this_invocation": {
             "stores": 2,
-            "scope": "train_40k + dev only, arms A1 and A1r",
-            "gib": round(2 * packed(tokens_40k) / gib, 4),
+            "scope": f"{scope} + dev, arms A1 and A1r",
+            "gib": round(2 * packed(tokens_250k if scope == "train_250k"
+                                    else tokens_40k) / gib, 4),
         },
         "full_programme_sequence_stores_if_authorised": {
             "note": "not written in Phase 1A; shown for the Stage-8 "
@@ -623,16 +624,16 @@ def main() -> int:
 
     storage = storage_projection(
         {"train_40k + dev": lengths, "train_250k + dev": lengths_250},
-        e8a.MODEL_HIDDEN_SIZE)
+        e8a.MODEL_HIDDEN_SIZE, args.scope)
     free_bytes = shutil.disk_usage(e8a.SLM_TOKEN_DIR.parent).free
     storage["free_disk_gib"] = round(free_bytes / 2 ** 30, 1)
-    storage["phase_1a_fits"] = bool(
+    storage["fits"] = bool(
         free_bytes > STORAGE_SAFETY_FACTOR
-        * storage["phase_1a_written"]["gib"] * 2 ** 30 + 2e9)
-    print(f"  storage: Phase-1A stores "
-          f"{storage['phase_1a_written']['gib']} GiB packed against "
+        * storage["written_this_invocation"]["gib"] * 2 ** 30 + 2e9)
+    print(f"  storage: {args.scope} stores "
+          f"{storage['written_this_invocation']['gib']} GiB packed against "
           f"{storage['free_disk_gib']} GiB free -> "
-          f"{'PASS' if storage['phase_1a_fits'] else 'FAIL'}")
+          f"{'PASS' if storage['fits'] else 'FAIL'}")
 
     preflights = {arm: preflight(arm, strings, token_ids, device)
                   for arm in e8a.ARMS}
@@ -653,7 +654,7 @@ def main() -> int:
             p["determinism"]["repeated_extraction_bitwise_identical"]
             for p in preflights.values()),
         "memory": bool(memory_pass),
-        "storage": storage["phase_1a_fits"],
+        "storage": storage["fits"],
         "throughput": all(p["throughput"]["strings_per_second"] > 0
                           for p in preflights.values()),
     }
@@ -663,10 +664,14 @@ def main() -> int:
     print(f"  peak {worst_peak:.0f} MiB against the 80 per cent ceiling "
           f"{ceiling:.0f} MiB")
 
+    # H4: the record path is scoped, so a later scope cannot destroy an
+    # earlier scope's G20 write-and-reload evidence and measured cost.
+    record_name = ("extraction.json" if args.scope == "train_40k"
+                   else f"extraction_{args.scope}.json")
     record = {
         "metadata": utils.run_metadata(),
         "e8a_extraction": {
-            "phase": "Phase 1A bounded pilot",
+            "phase": f"E8A hidden-state extraction, scope {args.scope}",
             "recipe": recipe,
             "token_budget_L": e8a.TOKEN_BUDGET_L,
             "length_statistics": length_stats,
@@ -684,7 +689,7 @@ def main() -> int:
 
     if args.write:
         if not all(gates.values()):
-            utils.save_json(record, e8a.OUT_DIR / "extraction.json")
+            utils.save_json(record, e8a.OUT_DIR / record_name)
             sys.exit("EXTRACTION GATE FAILED: no store written; evidence in "
                      "results/experiments/e8a_question_encoder/extraction.json")
         written = {arm: write_store(arm, strings, token_ids, frames, device,
@@ -692,9 +697,9 @@ def main() -> int:
                    for arm in e8a.ARMS}
         record["e8a_extraction"]["stores_written"] = written
 
-    utils.save_json(record, e8a.OUT_DIR / "extraction.json")
-    print("\nextraction record written to "
-          "results/experiments/e8a_question_encoder/extraction.json")
+    utils.save_json(record, e8a.OUT_DIR / record_name)
+    print(f"\nextraction record written to "
+          f"results/experiments/e8a_question_encoder/{record_name}")
     return 0
 
 
