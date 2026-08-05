@@ -27,6 +27,14 @@ results/experiments/e8a_question_encoder/*
 !results/experiments/e8a_question_encoder/predictions_g21_v1/
 results/experiments/e8a_question_encoder/predictions_g21_v1/*
 !results/experiments/e8a_question_encoder/predictions_g21_v1/*.json
+# E7b serial-efficiency records: all artefacts are small JSON/CSV/PNG and
+# tracked in full; there are no omitted binaries.
+!results/experiments/e7b_serial_efficiency/
+results/experiments/e7b_serial_efficiency/*
+!results/experiments/e7b_serial_efficiency/*.json
+!results/experiments/e7b_serial_efficiency/*.csv
+!results/experiments/e7b_serial_efficiency/*.png
+!results/experiments/e7b_serial_efficiency/*.txt
 
 # Python bytecode
 __pycache__/
