@@ -47,6 +47,7 @@ import argparse
 import gzip
 import json
 import os
+import subprocess
 import sys
 import time
 from pathlib import Path
@@ -86,6 +87,32 @@ def atomic_write_bytes(path: Path, payload: bytes) -> None:
     temporary = path.with_name(path.name + ".tmp")
     temporary.write_bytes(payload)
     os.replace(temporary, path)
+
+
+def foreign_gpu_processes() -> list:
+    """Compute processes on the GPU that do not belong to this process.
+
+    This session must never run concurrently with another user's GPU
+    process: doing so risks failing their allocation as well as ours. The
+    guard is checked before every cell, so an evaluation already under way
+    stops cleanly between cells if someone else starts work.
+    """
+    result = subprocess.run(
+        ["nvidia-smi", "--query-compute-apps=pid",
+         "--format=csv,noheader,nounits"],
+        capture_output=True, text=True)
+    pids = [int(p) for p in result.stdout.split() if p.strip().isdigit()]
+    return [p for p in pids if p != os.getpid()]
+
+
+def assert_gpu_exclusive(context: str) -> None:
+    foreign = foreign_gpu_processes()
+    if foreign:
+        sys.exit(f"GPU NOT EXCLUSIVE at {context}: foreign compute "
+                 f"process(es) {foreign} present. Stopping cleanly; rerun "
+                 f"with --resume once the GPU is free. No artefact was "
+                 f"corrupted: writes are atomic and completed cells verify "
+                 f"by hash.")
 
 
 def neutral_provenance_of(block: dict, arm: str) -> tuple:
@@ -225,9 +252,18 @@ def main() -> int:
     parser.add_argument("--resume", action="store_true",
                         help="skip cells whose artefact already exists and "
                              "verifies; without it an existing artefact halts")
+    parser.add_argument("--only", default=None,
+                        help="run a single cell, e.g. A1/train_250k/seed0; "
+                             "used for the representative pilot measurement")
     args = parser.parse_args()
+    only = None
+    if args.only:
+        arm_, scale_, seed_ = args.only.split("/")
+        only = (arm_, scale_, int(seed_.replace("seed", "")))
     utils.set_seed()
     device = utils.get_device()
+    if device == "cuda":
+        assert_gpu_exclusive("startup")
     recipe = e8a.gate_g0_recipe(verbose=False)
     assert recipe["dropout"] == DROPOUT, recipe["dropout"]
 
@@ -254,6 +290,8 @@ def main() -> int:
     summary = {}
     for scale in SCALES:
         for arm in ARMS:
+            if only and (arm, scale) != only[:2]:
+                continue
             store_started = time.perf_counter()
             questions = (e8a.open_clip_question_store() if arm == "A0p"
                          else e8a.SLMQuestionStore.open(
@@ -271,6 +309,8 @@ def main() -> int:
 
             neutral_question = None
             for seed in SEEDS:
+                if only and (arm, scale, seed) != only:
+                    continue
                 cell = f"{arm}/{scale}/seed{seed}"
                 out_csv = OUT_DIR / f"predictions_{arm}_{scale}_seed{seed}.csv.gz"
                 out_json = out_csv.with_suffix("").with_suffix(".json")
@@ -331,6 +371,9 @@ def main() -> int:
                         f"{cell}: rebuilt derangement differs from the "
                         f"recorded provenance")
 
+                if device == "cuda":
+                    assert_gpu_exclusive(cell)
+                    torch.cuda.reset_peak_memory_stats()
                 model = e8a.build_e8a_model(e8a.arm_d_question(arm), DROPOUT,
                                             seed).to(device)
                 model.load_state_dict(torch.load(checkpoint_path,
@@ -340,6 +383,11 @@ def main() -> int:
                 predictions, labels, g11, timings = evaluate_conditions(
                     model, dataset, loader, device, neutral_image,
                     neutral_question[:2], mapping)
+                if device == "cuda":
+                    timings["peak_allocated_mib"] = round(
+                        torch.cuda.max_memory_allocated() / 2 ** 20, 1)
+                    timings["peak_reserved_mib"] = round(
+                        torch.cuda.max_memory_reserved() / 2 ** 20, 1)
                 del model
                 torch.cuda.empty_cache()
 
@@ -395,10 +443,13 @@ def main() -> int:
                 atomic_write_bytes(out_json, (json.dumps(sidecar, indent=2)
                                               + "\n").encode("utf-8"))
                 summary[cell] = accuracies
+                eval_seconds = sum(v for k, v in timings.items()
+                                   if k.endswith("_s"))
                 print(f"[DONE] {cell}: normal raw "
                       f"{accuracies['normal']['raw_exact']:.5f} normalized "
                       f"{accuracies['normal']['normalized_exact']:.5f} "
-                      f"({sum(timings.values()):.1f}s)")
+                      f"({eval_seconds:.1f}s eval, peak "
+                      f"{timings.get('peak_allocated_mib', 'n/a')} MiB)")
             del questions, dataset, loader
     total_seconds = time.perf_counter() - total_started
 
