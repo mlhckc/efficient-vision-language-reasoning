@@ -1,0 +1,551 @@
+{
+  "metadata": {
+    "batch_size": 256,
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "deterministic": true,
+    "device": "cuda",
+    "dropout": 0.3,
+    "embed_dim": 512,
+    "git_commit": "9aeb993",
+    "git_dirty": true,
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "h5py_version": "3.16.0",
+    "hidden_dim": 512,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "n_train": 40000,
+    "n_val": 8000,
+    "numpy_version": "2.5.0",
+    "open_clip_version": "3.3.0",
+    "pandas_version": "3.0.3",
+    "python": "3.12.3",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "timestamp": "2026-08-05T17:34:28",
+    "top_k_answers": 100,
+    "torch": "2.12.1+cu130",
+    "weight_decay": 0.0001
+  },
+  "v2_05c_clustered_correction": {
+    "checkpoints": "results/experiments/v2_02_multiseed/checkpoints/{concat,fusion}_seed{0,1,2,3,42}.pt, evaluation only",
+    "clean_test_accessed": false,
+    "method": "image-clustered bootstrap, 2000 draws, default_rng(0), clusters are the slice's represented development imageIds, percentile 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+    "multiseed_gap_ci": [
+      {
+        "ci95_image_clustered": [
+          0.03236,
+          0.06034
+        ],
+        "excludes_zero": true,
+        "gap_mean": 0.04621,
+        "gap_per_seed": {
+          "seed0": 0.04877,
+          "seed1": 0.03744,
+          "seed2": 0.05961,
+          "seed3": 0.04384,
+          "seed42": 0.04138
+        },
+        "gap_std": 0.00854,
+        "kind": "structural",
+        "n_rows": 2030,
+        "n_unique_images": 615,
+        "slice": "verify"
+      },
+      {
+        "ci95_image_clustered": [
+          -0.00711,
+          0.0081
+        ],
+        "excludes_zero": false,
+        "gap_mean": 0.00064,
+        "gap_per_seed": {
+          "seed0": -0.00354,
+          "seed1": 0.00612,
+          "seed2": -0.00419,
+          "seed3": 0.00354,
+          "seed42": 0.00129
+        },
+        "gap_std": 0.00446,
+        "kind": "structural",
+        "n_rows": 3104,
+        "n_unique_images": 687,
+        "slice": "query"
+      },
+      {
+        "ci95_image_clustered": [
+          -0.03669,
+          -0.00954
+        ],
+        "excludes_zero": true,
+        "gap_mean": -0.02303,
+        "gap_per_seed": {
+          "seed0": -0.0144,
+          "seed1": -0.03551,
+          "seed2": -0.03359,
+          "seed3": -0.01536,
+          "seed42": -0.01631
+        },
+        "gap_std": 0.01056,
+        "kind": "structural",
+        "n_rows": 1042,
+        "n_unique_images": 465,
+        "slice": "choose"
+      },
+      {
+        "ci95_image_clustered": [
+          0.01687,
+          0.05815
+        ],
+        "excludes_zero": true,
+        "gap_mean": 0.03802,
+        "gap_per_seed": {
+          "seed0": 0.03883,
+          "seed1": 0.04045,
+          "seed2": 0.02508,
+          "seed3": 0.04531,
+          "seed42": 0.04045
+        },
+        "gap_std": 0.00763,
+        "kind": "structural",
+        "n_rows": 1236,
+        "n_unique_images": 561,
+        "slice": "logical"
+      },
+      {
+        "ci95_image_clustered": [
+          -0.06598,
+          0.01355
+        ],
+        "excludes_zero": false,
+        "gap_mean": -0.02517,
+        "gap_per_seed": {
+          "seed0": -0.04636,
+          "seed1": 0.00331,
+          "seed2": -0.00662,
+          "seed3": -0.03311,
+          "seed42": -0.04305
+        },
+        "gap_std": 0.02229,
+        "kind": "structural",
+        "n_rows": 302,
+        "n_unique_images": 226,
+        "slice": "compare"
+      },
+      {
+        "ci95_image_clustered": [
+          0.023,
+          0.06247
+        ],
+        "excludes_zero": true,
+        "gap_mean": 0.04257,
+        "gap_per_seed": {
+          "seed0": 0.04786,
+          "seed1": 0.03932,
+          "seed2": 0.03077,
+          "seed3": 0.05556,
+          "seed42": 0.03932
+        },
+        "gap_std": 0.00945,
+        "kind": "semantic",
+        "n_rows": 1170,
+        "n_unique_images": 547,
+        "slice": "obj"
+      },
+      {
+        "ci95_image_clustered": [
+          -0.00762,
+          0.01441
+        ],
+        "excludes_zero": false,
+        "gap_mean": 0.00324,
+        "gap_per_seed": {
+          "seed0": 0.00709,
+          "seed1": 0.00337,
+          "seed2": 0.00607,
+          "seed3": 0.00405,
+          "seed42": -0.00439
+        },
+        "gap_std": 0.00452,
+        "kind": "semantic",
+        "n_rows": 2964,
+        "n_unique_images": 691,
+        "slice": "attr"
+      },
+      {
+        "ci95_image_clustered": [
+          -0.01639,
+          0.01264
+        ],
+        "excludes_zero": false,
+        "gap_mean": -0.00228,
+        "gap_per_seed": {
+          "seed0": -0.00683,
+          "seed1": -0.00228,
+          "seed2": 0.0,
+          "seed3": -0.00683,
+          "seed42": 0.00456
+        },
+        "gap_std": 0.00483,
+        "kind": "semantic",
+        "n_rows": 439,
+        "n_unique_images": 219,
+        "slice": "cat"
+      },
+      {
+        "ci95_image_clustered": [
+          0.00921,
+          0.0278
+        ],
+        "excludes_zero": true,
+        "gap_mean": 0.01806,
+        "gap_per_seed": {
+          "seed0": 0.01007,
+          "seed1": 0.01813,
+          "seed2": 0.0178,
+          "seed3": 0.0188,
+          "seed42": 0.02552
+        },
+        "gap_std": 0.00548,
+        "kind": "semantic",
+        "n_rows": 2978,
+        "n_unique_images": 570,
+        "slice": "rel"
+      },
+      {
+        "ci95_image_clustered": [
+          -0.03558,
+          0.02099
+        ],
+        "excludes_zero": false,
+        "gap_mean": -0.00613,
+        "gap_per_seed": {
+          "seed0": 0.0184,
+          "seed1": 0.0,
+          "seed2": -0.03067,
+          "seed3": 0.0,
+          "seed42": -0.0184
+        },
+        "gap_std": 0.01891,
+        "kind": "semantic",
+        "n_rows": 163,
+        "n_unique_images": 133,
+        "slice": "global"
+      },
+      {
+        "ci95_image_clustered": [
+          0.00876,
+          0.03247
+        ],
+        "excludes_zero": true,
+        "gap_mean": 0.02075,
+        "gap_per_seed": {
+          "seed0": 0.02833,
+          "seed1": 0.01917,
+          "seed2": 0.02417,
+          "seed3": 0.02167,
+          "seed42": 0.01042
+        },
+        "gap_std": 0.00669,
+        "kind": "steps",
+        "n_rows": 2400,
+        "n_unique_images": 674,
+        "slice": "<=2"
+      },
+      {
+        "ci95_image_clustered": [
+          -0.01163,
+          0.00644
+        ],
+        "excludes_zero": false,
+        "gap_mean": -0.00246,
+        "gap_per_seed": {
+          "seed0": -0.00511,
+          "seed1": -0.0036,
+          "seed2": -0.00721,
+          "seed3": -0.0012,
+          "seed42": 0.0048
+        },
+        "gap_std": 0.00461,
+        "kind": "steps",
+        "n_rows": 3330,
+        "n_unique_images": 658,
+        "slice": "3"
+      },
+      {
+        "ci95_image_clustered": [
+          0.00912,
+          0.05049
+        ],
+        "excludes_zero": true,
+        "gap_mean": 0.02966,
+        "gap_per_seed": {
+          "seed0": 0.01609,
+          "seed1": 0.02874,
+          "seed2": 0.04023,
+          "seed3": 0.03678,
+          "seed42": 0.02644
+        },
+        "gap_std": 0.00946,
+        "kind": "steps",
+        "n_rows": 870,
+        "n_unique_images": 396,
+        "slice": "4"
+      },
+      {
+        "ci95_image_clustered": [
+          0.01872,
+          0.05975
+        ],
+        "excludes_zero": true,
+        "gap_mean": 0.03932,
+        "gap_per_seed": {
+          "seed0": 0.0377,
+          "seed1": 0.04488,
+          "seed2": 0.02962,
+          "seed3": 0.04488,
+          "seed42": 0.0395
+        },
+        "gap_std": 0.0063,
+        "kind": "steps",
+        "n_rows": 1114,
+        "n_unique_images": 531,
+        "slice": ">=5"
+      }
+    ],
+    "reason": "the v2_05b row-level normal-approximation intervals treat development rows as independent although rows share images; these image-clustered intervals replace them. Gaps themselves are unchanged and each is verified to reproduce the stored value exactly before its interval is replaced.",
+    "seed42_conclusion_changes": [],
+    "seed42_gap_ci": [
+      {
+        "ci95_image_clustered": [
+          0.02111,
+          0.06274
+        ],
+        "conclusion_changed": false,
+        "excludes_zero": true,
+        "gap_seed42": 0.04138,
+        "kind": "structural",
+        "n_rows": 2030,
+        "n_unique_images": 615,
+        "row_level_excluded_zero": true,
+        "slice": "verify",
+        "superseded_row_level_ci": [
+          0.02039,
+          0.06237
+        ]
+      },
+      {
+        "ci95_image_clustered": [
+          -0.01362,
+          0.01608
+        ],
+        "conclusion_changed": false,
+        "excludes_zero": false,
+        "gap_seed42": 0.00129,
+        "kind": "structural",
+        "n_rows": 3104,
+        "n_unique_images": 687,
+        "row_level_excluded_zero": false,
+        "slice": "query",
+        "superseded_row_level_ci": [
+          -0.01199,
+          0.01457
+        ]
+      },
+      {
+        "ci95_image_clustered": [
+          -0.03949,
+          0.0066
+        ],
+        "conclusion_changed": false,
+        "excludes_zero": false,
+        "gap_seed42": -0.01631,
+        "kind": "structural",
+        "n_rows": 1042,
+        "n_unique_images": 465,
+        "row_level_excluded_zero": false,
+        "slice": "choose",
+        "superseded_row_level_ci": [
+          -0.0435,
+          0.01087
+        ]
+      },
+      {
+        "ci95_image_clustered": [
+          0.01403,
+          0.0676
+        ],
+        "conclusion_changed": false,
+        "excludes_zero": true,
+        "gap_seed42": 0.04045,
+        "kind": "structural",
+        "n_rows": 1236,
+        "n_unique_images": 561,
+        "row_level_excluded_zero": true,
+        "slice": "logical",
+        "superseded_row_level_ci": [
+          0.01448,
+          0.06642
+        ]
+      },
+      {
+        "ci95_image_clustered": [
+          -0.10065,
+          0.01347
+        ],
+        "conclusion_changed": false,
+        "excludes_zero": false,
+        "gap_seed42": -0.04305,
+        "kind": "structural",
+        "n_rows": 302,
+        "n_unique_images": 226,
+        "row_level_excluded_zero": false,
+        "slice": "compare",
+        "superseded_row_level_ci": [
+          -0.09838,
+          0.01228
+        ]
+      },
+      {
+        "ci95_image_clustered": [
+          0.01424,
+          0.06444
+        ],
+        "conclusion_changed": false,
+        "excludes_zero": true,
+        "gap_seed42": 0.03932,
+        "kind": "semantic",
+        "n_rows": 1170,
+        "n_unique_images": 547,
+        "row_level_excluded_zero": true,
+        "slice": "obj",
+        "superseded_row_level_ci": [
+          0.0127,
+          0.06593
+        ]
+      },
+      {
+        "ci95_image_clustered": [
+          -0.02343,
+          0.01387
+        ],
+        "conclusion_changed": false,
+        "excludes_zero": false,
+        "gap_seed42": -0.00439,
+        "kind": "semantic",
+        "n_rows": 2964,
+        "n_unique_images": 691,
+        "row_level_excluded_zero": false,
+        "slice": "attr",
+        "superseded_row_level_ci": [
+          -0.02081,
+          0.01204
+        ]
+      },
+      {
+        "ci95_image_clustered": [
+          -0.02734,
+          0.03633
+        ],
+        "conclusion_changed": false,
+        "excludes_zero": false,
+        "gap_seed42": 0.00456,
+        "kind": "semantic",
+        "n_rows": 439,
+        "n_unique_images": 219,
+        "row_level_excluded_zero": false,
+        "slice": "cat",
+        "superseded_row_level_ci": [
+          -0.02705,
+          0.03616
+        ]
+      },
+      {
+        "ci95_image_clustered": [
+          0.01043,
+          0.04109
+        ],
+        "conclusion_changed": false,
+        "excludes_zero": true,
+        "gap_seed42": 0.02552,
+        "kind": "semantic",
+        "n_rows": 2978,
+        "n_unique_images": 570,
+        "row_level_excluded_zero": true,
+        "slice": "rel",
+        "superseded_row_level_ci": [
+          0.01037,
+          0.04068
+        ]
+      },
+      {
+        "ci95_image_clustered": [
+          -0.06876,
+          0.03068
+        ],
+        "conclusion_changed": false,
+        "excludes_zero": false,
+        "gap_seed42": -0.0184,
+        "kind": "semantic",
+        "n_rows": 163,
+        "n_unique_images": 133,
+        "row_level_excluded_zero": false,
+        "slice": "global",
+        "superseded_row_level_ci": [
+          -0.06806,
+          0.03125
+        ]
+      },
+      {
+        "ci95_image_clustered": [
+          -0.00916,
+          0.03016
+        ],
+        "excludes_zero": false,
+        "gap_seed42": 0.01042,
+        "kind": "steps",
+        "n_rows": 2400,
+        "n_unique_images": 674,
+        "slice": "<=2"
+      },
+      {
+        "ci95_image_clustered": [
+          -0.00991,
+          0.01914
+        ],
+        "excludes_zero": false,
+        "gap_seed42": 0.0048,
+        "kind": "steps",
+        "n_rows": 3330,
+        "n_unique_images": 658,
+        "slice": "3"
+      },
+      {
+        "ci95_image_clustered": [
+          -0.00117,
+          0.05474
+        ],
+        "excludes_zero": false,
+        "gap_seed42": 0.02644,
+        "kind": "steps",
+        "n_rows": 870,
+        "n_unique_images": 396,
+        "slice": "4"
+      },
+      {
+        "ci95_image_clustered": [
+          0.01297,
+          0.06595
+        ],
+        "excludes_zero": true,
+        "gap_seed42": 0.0395,
+        "kind": "steps",
+        "n_rows": 1114,
+        "n_unique_images": 531,
+        "slice": ">=5"
+      }
+    ]
+  }
+}
