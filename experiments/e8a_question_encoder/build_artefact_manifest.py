@@ -156,11 +156,20 @@ def main() -> int:
 
     for path in sorted(e8a.OUT_DIR.glob("correctness_*.npz")):
         entries.append(describe(
-            path, "prediction_vectors", False,
+            path, "correctness_vectors", False,
             "Deterministic given its checkpoint: gate G11 shows repeated "
             "evaluation of one checkpoint is bitwise identical. It is "
             "therefore reproducible only while that checkpoint survives, and "
             "is irreplaceable in practice if the checkpoint is lost.", True))
+
+    for path in sorted((e8a.OUT_DIR / "predictions_g21_v1").glob("*.csv.gz")):
+        entries.append(describe(
+            path, "g21_prediction_artefact", False,
+            "Deterministic given its checkpoint and the cached stores: the "
+            "G21 re-inference reproduces the recorded evaluation row for row "
+            "(gates in the committed sidecar), so the artefact is "
+            "regenerable while those survive. Its SHA-256 is pinned in the "
+            "committed sidecar of the same name.", True))
 
     for path in sorted(TOKEN_STORE_DIR.glob("*.h5")):
         entries.append(describe(
@@ -171,6 +180,8 @@ def main() -> int:
             "deterministic, and the 40k and 250k stores were shown bitwise "
             "identical on all 47,714 shared questionIds. Cost is about 1.45 "
             "GPU-hours for all four.", False))
+
+    backup_verification = verify_backup(entries, BACKUP_ROOT)
 
     committed = sorted(p.name for p in e8a.OUT_DIR.glob("*.json"))
     head = subprocess.run(["git", "rev-parse", "HEAD"], cwd=PROJECT_ROOT,
