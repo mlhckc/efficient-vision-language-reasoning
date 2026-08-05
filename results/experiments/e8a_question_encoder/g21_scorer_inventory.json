@@ -1,0 +1,189 @@
+{
+  "g21_scorer_inventory": {
+    "behavioural_adaptations": [
+      "A1 Python-3 translation of the Python-2 pinned source",
+      "A2 period-strip count=0 instead of the pinned accidental count=32 (re.UNICODE passed positionally); user-ruled 2026-08-05; identical output through 32 eligible periods; makes one pass idempotent",
+      "A3 non-mutating MANUAL_MAP.get in place of setdefault; output-identical",
+      "A4 comma-context test evaluated once per call on the unchanged input; output-identical",
+      "A5 CR handled like LF and TAB, per the explicit G21 Unicode order",
+      "A6 single-gold control flow; the upstream multi-annotator branch is not reproduced"
+    ],
+    "clean_test_accessed": false,
+    "dev_answers": {
+      "collisions": {
+        "collision_groups": {},
+        "n_collision_groups": 0,
+        "n_distinct_strings": 100,
+        "n_normalized_forms": 100,
+        "n_strings": 100
+      },
+      "distinct_answer_strings": 100,
+      "fixed_points": {
+        "changed": {},
+        "idempotent_on_all": true,
+        "n_changed_by_normalization": 0,
+        "n_distinct_strings": 100
+      }
+    },
+    "no_silent_merge": "No class ID is merged, removed or remapped by any collision; the inventory reports groups and their class IDs, and row correctness is defined only by normalised prediction-string versus normalised canonical-gold-string equality.",
+    "raw_versus_normalized_consequence": "The top-100 vocabulary has zero normalised collisions and zero strings changed by normalisation, so for classifiers whose predictions and golds are both top-100 vocabulary strings, rowwise normalised exact match coincides with rowwise raw exact match. This is now a measured inventory result, not an untested assertion; the per-row prediction artefacts still carry both metrics independently.",
+    "scorer": {
+      "adapter": "experiments/e8a_question_encoder/g21_scorer.py",
+      "adapter_sha256": "22ea9c59082840a60568d7b804a3cb66ac0daccb7b503a6c50305d1354f2f40d",
+      "licence": "BSD 2-Clause",
+      "upstream_commit": "a013f0043c1e2cdc995922dfe257f7149aa9af06",
+      "upstream_repository": "GT-Vision-Lab/VQA",
+      "upstream_source_path": "PythonEvaluationTools/vqaEvaluation/vqaEval.py",
+      "vendored_licence": "experiments/e8a_question_encoder/vendor/vqa/LICENSE",
+      "vendored_licence_sha256": "4bf86fe8b104b69fc72caaa095b2fff4bade0d3d9a7970c6a5fd01fb736cad04",
+      "vendored_source": "experiments/e8a_question_encoder/vendor/vqa/vqaEval.py",
+      "vendored_source_sha256": "f08edfcad5be0112500993e245c706b6cb928eadebe203f89f838e5e0d04bec8"
+    },
+    "top_100": {
+      "collisions": {
+        "collision_groups": {},
+        "n_collision_groups": 0,
+        "n_distinct_strings": 100,
+        "n_normalized_forms": 100,
+        "n_strings": 100
+      },
+      "fixed_points": {
+        "changed": {},
+        "idempotent_on_all": true,
+        "n_changed_by_normalization": 0,
+        "n_distinct_strings": 100
+      },
+      "vocabulary": {
+        "n_classes": 100,
+        "path": "data/v2/answer_vocab_v2.json",
+        "sha256": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680"
+      }
+    },
+    "top_1000": {
+      "collisions": {
+        "collision_groups": {},
+        "n_collision_groups": 0,
+        "n_distinct_strings": 1000,
+        "n_normalized_forms": 1000,
+        "n_strings": 1000
+      },
+      "fixed_points": {
+        "changed": {
+          "at the camera": "at camera",
+          "t-shirt": "t shirt",
+          "taking a picture": "taking picture"
+        },
+        "idempotent_on_all": true,
+        "n_changed_by_normalization": 3,
+        "n_distinct_strings": 1000
+      },
+      "vocabulary": {
+        "n_classes": 1000,
+        "path": "data/v2_1000/answer_vocab_v2_1000.json",
+        "sha256": "6f307c2bd088340e56e831986e7cfe2b3e8f505bb5117f061bb5329089b7dbde"
+      }
+    },
+    "training_answers": {
+      "v2_1000": {
+        "collisions": {
+          "collision_groups": {},
+          "n_collision_groups": 0,
+          "n_distinct_strings": 1000,
+          "n_normalized_forms": 1000,
+          "n_strings": 1000
+        },
+        "distinct_answer_strings": 1000,
+        "fixed_points": {
+          "changed": {
+            "at the camera": "at camera",
+            "t-shirt": "t shirt",
+            "taking a picture": "taking picture"
+          },
+          "idempotent_on_all": true,
+          "n_changed_by_normalization": 3,
+          "n_distinct_strings": 1000
+        },
+        "manifests": {
+          "data/v2_1000/train_100k.csv": {
+            "distinct_answer_strings": 1000,
+            "rows": 100000,
+            "sha256": "d6f088f427a60f4dedf19f3e1e63cedc43d6d037e7942ee7f3b6ca621b76be10"
+          },
+          "data/v2_1000/train_250k.csv": {
+            "distinct_answer_strings": 1000,
+            "rows": 250000,
+            "sha256": "23c549dcec7130a5331b643bf01814ece98c2534949241cc752a889eb64b71b9"
+          },
+          "data/v2_1000/train_40k.csv": {
+            "distinct_answer_strings": 977,
+            "rows": 40000,
+            "sha256": "1a71f92715d4e5386dd3db6c5dfab501b69799474a3511ceddfbd14222e38370"
+          }
+        }
+      },
+      "v2_top100": {
+        "collisions": {
+          "collision_groups": {},
+          "n_collision_groups": 0,
+          "n_distinct_strings": 100,
+          "n_normalized_forms": 100,
+          "n_strings": 100
+        },
+        "distinct_answer_strings": 100,
+        "fixed_points": {
+          "changed": {},
+          "idempotent_on_all": true,
+          "n_changed_by_normalization": 0,
+          "n_distinct_strings": 100
+        },
+        "manifests": {
+          "data/v2/train_100k.csv": {
+            "distinct_answer_strings": 100,
+            "rows": 100000,
+            "sha256": "5fa02a71fe6786abf591c354ce07334281b527a0d41115c0f7d9164970054e15"
+          },
+          "data/v2/train_250k.csv": {
+            "distinct_answer_strings": 100,
+            "rows": 250000,
+            "sha256": "be7d867afd2757a631145bc1c56c3b1a4dcf43784c1a6abf1c3b75452b865074"
+          },
+          "data/v2/train_40k.csv": {
+            "distinct_answer_strings": 100,
+            "rows": 40000,
+            "sha256": "cda03c133e581d486c1e29f6d99376ee59f9841564b3fb890bc401f4da5c90d2"
+          }
+        }
+      }
+    }
+  },
+  "metadata": {
+    "batch_size": 256,
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "deterministic": true,
+    "device": "cuda",
+    "dropout": 0.3,
+    "embed_dim": 512,
+    "git_commit": "86af4c9",
+    "git_dirty": true,
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "h5py_version": "3.16.0",
+    "hidden_dim": 512,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "n_train": 40000,
+    "n_val": 8000,
+    "numpy_version": "2.5.0",
+    "open_clip_version": "3.3.0",
+    "pandas_version": "3.0.3",
+    "python": "3.12.3",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "timestamp": "2026-08-05T17:07:01",
+    "top_k_answers": 100,
+    "torch": "2.12.1+cu130",
+    "weight_decay": 0.0001
+  }
+}
