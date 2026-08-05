@@ -101,9 +101,14 @@ def verify_comparability(runs, evaluations, gates) -> dict:
         "identical": True}
     checks["metric_definition"] = {
         "values": "argmax over 100 classes equals the V2 label; strict raw "
-                  "exact match, which for a closed-set classifier coincides "
-                  "with the normalised metric absent an intra-vocabulary "
-                  "collision",
+                  "exact match. The G21 inventory "
+                  "(g21_scorer_inventory.json, 5 August 2026) measured zero "
+                  "normalised collisions and zero changed strings in the "
+                  "top-100 vocabulary, so rowwise normalised exact match "
+                  "coincides with raw exact match on this support as a "
+                  "verified fact, no longer an untested assumption; the "
+                  "primary normalised metric itself is computed per row by "
+                  "the G21 scorer in predictions_g21_v1",
         "identical": True}
 
     for name, record in checks.items():

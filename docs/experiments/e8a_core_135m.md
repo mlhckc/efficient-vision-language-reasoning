@@ -71,7 +71,10 @@ independently recomputed from train_40k; they reproduce it exactly
 ## Outputs
 
 results/experiments/e8a_question_encoder/: eighteen run records, eighteen
-prediction-vector files, eighteen checkpoints, core_analysis.json,
+correctness-vector files (the correctness_*.npz store questionIds, labels and
+per-condition correctness Booleans only; they are not prediction artefacts,
+and earlier wording that called them "prediction vectors" is corrected in the
+G21 addendum below), eighteen checkpoints, core_analysis.json,
 core_analysis_train_40k.json, efficiency_resources.json and
 e8a_135m_core_frozen.json, which collects all of it with every artefact hashed
 at freeze time. The runner's invocation_status_<scale>.json is written by
@@ -128,8 +131,13 @@ standard deviation of the stored reasoner runs is 0.0037 at 40k in v3_01,
 which has no 250k runs, and 0.0074 at 250k in v3_03.
 
 Every interval reported here is nominal 95 per cent and none is corrected for
-multiplicity; twenty-one are reported in total. An interval whose bound sits
-close to zero should be read as weaker than its nominal level. The
+multiplicity; the analysis constructs eighteen distinct intervals (six
+accuracy contrasts, six deficit contrasts, three scale gains and three
+deficit changes), and core_analysis.json prints twenty-four interval fields
+because the across-scales view repeats the six per-scale contrast intervals
+(the earlier "twenty-one" counted neither; corrected 5 August 2026). An
+interval whose bound sits close to zero should be read as weaker than its
+nominal level. The
 pre-registered primary contrast is A1 minus A1r; the rest are secondary or
 descriptive. Two intervals are marginal in that sense: the A1r deficit change,
 lower bound 0.00075, and the A0p deficit change, upper bound -0.00160.
@@ -151,7 +159,8 @@ seed 2, which peaked at 14. Time per epoch is 15.7-16.1 s at 40k and
 ### Multi-step reasoning
 
 The pooled >=4-step deficit persists in every arm at every scale, between
-0.082 and 0.109. Higher overall accuracy at 250k is not read as improved
+0.08212 and 0.10921 (the earlier "between 0.082 and 0.109" understated the
+maximum, which is A1r at 250k; corrected 5 August 2026). Higher overall accuracy at 250k is not read as improved
 multi-step reasoning; the deficit is reported separately.
 
 | arm | 40k | 250k | change | 95% CI | rule |
@@ -197,7 +206,7 @@ CLIP image tokens, no encoder forward pass.
 
 | row | dev acc | trainable | total loaded | cached-head ms | ckpt MiB | GPU-h |
 | --- | --- | --- | --- | --- | --- | --- |
-| A0p/40k | 0.54044 | 21,362,276 | 84,790,372 | 1.3848 | 81.53 | 0.0678 |
+| A0p/40k | 0.54045 | 21,362,276 | 84,790,372 | 1.3848 | 81.53 | 0.0678 |
 | A0p/250k | 0.59446 | 21,362,276 | 84,790,372 | 1.3347 | 81.53 | 0.4451 |
 | A1/40k | 0.52861 | 21,395,044 | 155,910,052 | 1.3844 | 81.66 | 0.0676 |
 | A1/250k | 0.57316 | 21,395,044 | 155,910,052 | 1.3418 | 81.66 | 0.4533 |
@@ -290,8 +299,8 @@ Three independent fresh-context reviews — implementation and artefact
 integrity, statistics and scientific interpretation, and protocol and scope
 regression — all returned ACCEPT with no blocker and no high finding. Each
 re-measured every artefact hash independently (65 to 66 files, no mismatch)
-and recomputed headline values from the raw prediction vectors rather than
-reading them back. One reviewer additionally reloaded four checkpoints and
+and recomputed headline values from the stored per-row correctness vectors
+rather than reading them back. One reviewer additionally reloaded four checkpoints and
 re-ran evaluation, reproducing the stored correctness vectors row for row.
 Twenty-two findings were raised and adversarially adjudicated: twenty-one
 confirmed at low severity and one refuted. Those touching code are closed in
@@ -322,3 +331,67 @@ features.
 
 Nothing here authorises SmolLM2-360M, E8B, E9, F1, F2 or any clean-test
 access, and none was run.
+
+## G21 addendum (5 August 2026): normalised scoring, prediction artefacts and corrections
+
+The binding G21 gate — scoring every cell under the pinned single-gold
+VQA-style normalised exact match — was not executed when this report was
+first written. It has now been discharged. The scorer adapter
+(experiments/e8a_question_encoder/g21_scorer.py) implements the canonical
+section-12 normaliser over the byte-verified vendored upstream evaluator
+(GT-Vision-Lab/VQA at a013f004, source SHA-256 f08edfca...), with every
+behavioural adaptation documented; two fresh-context scorer reviews and the
+collision inventory preceded any re-inference. The inventory measured zero
+normalised collisions and zero changed strings in the top-100 vocabulary
+(g21_scorer_inventory.json), so rowwise normalised exact match provably
+coincides with rowwise raw exact match on this support.
+
+Deterministic development re-inference of all eighteen cells under the four
+conditions produced true per-row prediction artefacts
+(predictions_g21_v1/, one gzip CSV per cell carrying predicted label IDs,
+answer strings, and both metrics per row, with committed sidecars). Every
+cell passed, before promotion: strict validation, pinned neutral-tensor and
+derangement hash equality, bitwise-identical repeated evaluation (G11), and
+row-for-row reproduction of the stored correctness vectors with no changed
+row. The evaluations ran on otter155.eps.surrey.ac.uk, an
+environment-identical node (same RTX 4000 Ada Generation, driver 580.126.09,
+CUDA 13.0, torch 2.12.1+cu130, Python 3.12.3) qualified by a user-approved
+pilot on the A1/train_250k/seed0 cell, because this node's GPU was occupied
+by another user's job; GPU exclusivity was enforced at startup, after every
+condition pass and before every artefact promotion, under an NFS-backed
+global execution lock.
+
+Result: under the primary normalised metric, no headline value, interval or
+directional outcome changes. The regenerated per-arm accuracies, all six
+contrasts, the three scale gains, the pooled >=4-step deficits, the deficit
+contrasts and the reliance drops are numerically identical to the label-
+argmax values above (old-versus-new comparison in core_analysis_g21.json,
+any_numerical_change false), because normalisation neither collides nor
+rewrites any top-100 answer string. Every comparative claim in this report
+now rests on the normalised metric, with raw exact match as the separately
+labelled secondary metric; the tables above carry both readings at once.
+
+The G21 analysis constructs 18 headline image-clustered intervals plus 84
+per-slice intervals (question-type and step slices, each with row and
+unique-image counts), all nominal 95 per cent and uncorrected, with the
+counts incremented at construction time.
+
+Resource correction (resource_correction_g21.json): the 5.78927 GPU-hour
+figure above is 4.33551 hours of training wall-clock (which includes the
+in-run evaluations, never separately timed) plus 1.45376 hours of
+extraction; it contains no standalone evaluation or analysis component. The
+G21 re-inference provides the first standalone evaluation timing: 180.5 s
+wall for all eighteen cells and four conditions (64.1 s normal plus repeat,
+93.7 s interventions; per-condition 1.6-1.9 s; peak 258.5-259.7 MiB
+allocated, 360 MiB reserved), plus 51.8 s for the analysis. Aggregated per
+frozen-model identity rather than pooled: A0p/CLIP 1.53894, A1/pretrained
+SmolLM2 2.29222, A1r/random SmolLM2 1.95811 GPU-hours, each far inside the
+35 GPU-hour per-model gate, the SLM identities remaining lower bounds until
+E8B. The scratch storage gate is recorded UNRESOLVED: free space exists but
+no authoritative per-project quota does.
+
+The legacy correctness_*.npz files are correctness vectors, not prediction
+artefacts; the terminology corrections in this report, the results README
+and the artefact manifest are part of this addendum. The pre-G21 frozen
+object e8a_135m_core_frozen.json is untouched as the before-state;
+e8a_135m_core_frozen_g21.json is the operative freeze.

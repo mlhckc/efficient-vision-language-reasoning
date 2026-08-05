@@ -30,14 +30,14 @@ Thirty-one JSON records, about 673 KiB in total:
 
 Together these are enough to check every number in the report, because each
 accuracy, contrast, interval and deficit is recorded alongside the hash of the
-prediction vectors it came from.
+correctness vectors it came from.
 
 ## Not committed
 
 | artefact | files | size | where it is |
 | --- | --- | --- | --- |
 | checkpoints, `checkpoints/*.pt` | 18 | 1.44 GiB | node-local and backed up |
-| prediction vectors, `correctness_*.npz` | 18 | 768 KiB | node-local and backed up |
+| correctness vectors, `correctness_*.npz` | 18 | 768 KiB | node-local and backed up |
 | frozen question stores, `data/v3_slm_tokens/*.h5` | 4 | 5.32 GiB | node-local only |
 
 Normal git is not used for these. Git stores every version of every blob
@@ -97,10 +97,10 @@ consumed most of the remaining quota on the persistent share.
 
 - **Reading the results**: the committed JSON records alone.
 - **Recomputing the statistics** — accuracies, contrasts, intervals,
-  reliance, step deficits — needs the prediction vectors as well, since those
+  reliance, step deficits — needs the correctness vectors as well, since those
   carry the per-row correctness the bootstrap resamples. Restore them from the
   backup and run `experiments/e8a_question_encoder/analyse_core.py`.
-- **Reproducing a prediction vector from its model** needs that cell's
+- **Reproducing a correctness vector from its model** needs that cell's
   checkpoint, from the backup, plus the image and question token stores.
 - **Retraining from scratch** needs the token stores as well, and costs about
   4.34 GPU-hours of training plus 1.45 of extraction. It would not reproduce
@@ -110,3 +110,14 @@ consumed most of the remaining quota on the persistent share.
   checkpoints are marked irreplaceable rather than reproducible.
 
 Every number here is a development-set result. The clean test was not read.
+
+Terminology correction (5 August 2026): the `correctness_*.npz` files were
+called "prediction vectors" above and in earlier records. They store
+questionIds, labels and per-condition correctness Booleans only — no
+predicted label or answer string — so they are correctness vectors, and the
+wording above now says so. True per-row prediction artefacts, carrying
+predicted label IDs, answer strings and both the raw and the pinned
+normalised exact-match metrics, were introduced by the G21 remediation under
+`predictions_g21_v1/`. The key name `prediction_vectors` inside the frozen
+`e8a_135m_core_frozen.json` is historical evidence and is left unchanged;
+the G21 freeze uses the corrected name.
