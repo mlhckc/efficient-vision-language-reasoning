@@ -193,7 +193,7 @@ def evaluate_conditions(model, dataset, loader, device, neutral_image,
     started = time.perf_counter()
     dataset.set_normal()
     logits, labels = e8a.predict_logits(model, loader, device)
-    if device == "cuda":
+    if device.type == "cuda":
         torch.cuda.synchronize()
     timings["normal_s"] = round(time.perf_counter() - started, 3)
     predictions["normal"] = logits.argmax(dim=-1).numpy()
@@ -201,7 +201,7 @@ def evaluate_conditions(model, dataset, loader, device, neutral_image,
 
     started = time.perf_counter()
     repeat, _ = e8a.predict_logits(model, loader, device)
-    if device == "cuda":
+    if device.type == "cuda":
         torch.cuda.synchronize()
     timings["g11_repeat_s"] = round(time.perf_counter() - started, 3)
     g11_identical = bool(torch.equal(logits, repeat))
@@ -214,7 +214,7 @@ def evaluate_conditions(model, dataset, loader, device, neutral_image,
     dataset.set_normal()
     dataset.set_fixed_image(neutral_image)
     fixed_image_logits, _ = e8a.predict_logits(model, loader, device)
-    if device == "cuda":
+    if device.type == "cuda":
         torch.cuda.synchronize()
     timings["fixed_image_s"] = round(time.perf_counter() - started, 3)
     predictions["fixed_image"] = fixed_image_logits.argmax(dim=-1).numpy()
@@ -224,7 +224,7 @@ def evaluate_conditions(model, dataset, loader, device, neutral_image,
     dataset.set_normal()
     dataset.set_fixed_question(*neutral_question)
     fixed_question_logits, _ = e8a.predict_logits(model, loader, device)
-    if device == "cuda":
+    if device.type == "cuda":
         torch.cuda.synchronize()
     timings["fixed_question_s"] = round(time.perf_counter() - started, 3)
     predictions["fixed_question"] = fixed_question_logits.argmax(dim=-1).numpy()
@@ -237,7 +237,7 @@ def evaluate_conditions(model, dataset, loader, device, neutral_image,
         raise AssertionError("the shuffled-image condition has self-pairs; "
                              "it must be an imageId derangement")
     shuffled_logits, _ = e8a.predict_logits(model, loader, device)
-    if device == "cuda":
+    if device.type == "cuda":
         torch.cuda.synchronize()
     timings["shuffled_image_s"] = round(time.perf_counter() - started, 3)
     predictions["shuffled_image_derangement"] = \
@@ -323,7 +323,11 @@ def main() -> int:
                            scope=args.only or "all 18 cells")
     utils.set_seed()
     device = utils.get_device()
-    if device == "cuda":
+    # torch.device("cuda") == "cuda" is False in this torch version, so the
+    # guard flag is derived once from the resolved device type, never by
+    # string comparison against the device object.
+    on_gpu = device.type == "cuda"
+    if on_gpu:
         assert_gpu_exclusive("startup")
     recipe = e8a.gate_g0_recipe(verbose=False)
     assert recipe["dropout"] == DROPOUT, recipe["dropout"]
@@ -432,7 +436,7 @@ def main() -> int:
                         f"{cell}: rebuilt derangement differs from the "
                         f"recorded provenance")
 
-                if device == "cuda":
+                if on_gpu:
                     assert_gpu_exclusive(cell)
                     torch.cuda.reset_peak_memory_stats()
                 model = e8a.build_e8a_model(e8a.arm_d_question(arm), DROPOUT,
@@ -443,11 +447,11 @@ def main() -> int:
 
                 sentinel = ((lambda context:
                              assert_gpu_exclusive(f"{cell} {context}"))
-                            if device == "cuda" else None)
+                            if on_gpu else None)
                 predictions, labels, g11, timings = evaluate_conditions(
                     model, dataset, loader, device, neutral_image,
                     neutral_question[:2], mapping, sentinel=sentinel)
-                if device == "cuda":
+                if on_gpu:
                     timings["peak_allocated_mib"] = round(
                         torch.cuda.max_memory_allocated() / 2 ** 20, 1)
                     timings["peak_reserved_mib"] = round(
@@ -467,7 +471,7 @@ def main() -> int:
                     arm, scale, seed, view, dataset, predictions, labels,
                     loaded["correctness_path"], index_to_answer, constants)
 
-                if device == "cuda":
+                if on_gpu:
                     assert_gpu_exclusive(f"{cell} pre-promotion")
                 payload = gzip.compress(
                     frame.to_csv(index=False).encode("utf-8"), mtime=0)
