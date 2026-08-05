@@ -503,7 +503,7 @@ def main() -> int:
                         **constants},
                     "scorer": scorer,
                     "timings_seconds": timings,
-                    "device": device,
+                    "device": str(device),
                     "clean_test_accessed": False,
                 }
                 atomic_write_bytes(out_json, (json.dumps(sidecar, indent=2)
@@ -537,7 +537,7 @@ def main() -> int:
                          "training figure, which never timed evaluation on "
                          "its own; per-condition GPU timings are in each "
                          "cell's sidecar")},
-            "device": device,
+            "device": str(device),
             "gpu": (torch.cuda.get_device_name(0)
                     if torch.cuda.is_available() else None),
             "clean_test_accessed": False}}
