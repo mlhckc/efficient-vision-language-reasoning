@@ -133,9 +133,13 @@ confirmatory and the clean test remains embargoed.
   medians (for example concat@100k 6.34318 ms = 2.25105 image tower
   + 1.73088 text tower + 2.29499 CPU decode + 0.03597 tokenise + 0.03029
   head). No stored latency is a measured serial decode-encode-head pass.
-- Status: OUTSTANDING. The 5 August 2026 correction relabels every such
-  figure an additive component estimate in docs/experiments/
-  e7a_efficiency.md; no additive number changed.
+- Status: COMPLETE (5 August 2026, E7b). The serial benchmark specified
+  below has run: docs/experiments/e7b_serial_efficiency.md and
+  results/experiments/e7b_serial_efficiency/e7b_results.json measure
+  every proposed system serially with 64/64 answer reproduction, and
+  supersede E7a's additive end-to-end columns; the additive figures
+  under-estimated the measured CLIP-global serial cost by about 20 per
+  cent. The design below is retained as the executed specification.
 - Required design for the next authorised phase (not run in this task):
   one timed pass per query executing, serially and unbroken, CPU JPEG
   decode and preprocess, host-to-device transfer, the frozen image tower,

@@ -395,3 +395,16 @@ artefacts; the terminology corrections in this report, the results README
 and the artefact manifest are part of this addendum. The pre-G21 frozen
 object e8a_135m_core_frozen.json is untouched as the before-state;
 e8a_135m_core_frozen_g21.json is the operative freeze.
+
+Serial-measurement update (5 August 2026, E7b): the efficiency section
+above records that no encoder-inclusive per-query cost existed for the
+SLM arms. E7b has now measured it serially
+(docs/experiments/e7b_serial_efficiency.md): e8a_A1 at 250k costs
+20.15 ms per warm serial query, of which the frozen SmolLM2-135M forward
+is 13.46 ms — about two-thirds of the query and the first online SmolLM2
+timing in the project — against 9.21 ms for e8a_A0p and 7.61-7.67 ms for
+the global CLIP heads; A1's cached-head figure above (1.34-1.44 ms) is
+reproduced by E7b's cached-feature regime. The absence statement is
+therefore superseded, and the conclusion it protected is now measured:
+the SLM question path buys no accuracy and roughly doubles the serial
+query cost relative to the interface-matched CLIP control.

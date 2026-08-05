@@ -328,3 +328,16 @@ encoders and head, with the same three-pass drift protocol) remains
 outstanding and is specified as the next authorised efficiency phase in
 the G21 remediation closure record; until it runs, every "end-to-end"
 statement citing this report must say "additive estimate".
+
+Serial-measurement supersession note (5 August 2026, E7b): the true
+serial end-to-end benchmark specified in the G21 closure record has now
+run (docs/experiments/e7b_serial_efficiency.md). For end-to-end claims,
+E7b's measured serial values supersede this report's additive GPU+head,
+full-pipeline and amortised columns and their Pareto fronts; the
+component measurements here remain valid as components. The measured
+CLIP-global serial medians (7.61-7.67 ms) sit about 1.3 ms (about 20 per
+cent) above this report's additive full-pipeline figures (6.34-6.35 ms),
+the gap tracing to decode and text-tower cost measured in-pipeline
+rather than in isolation. The headline conclusion survives measurement:
+the top-1000 product head remains on the measured serial frontier with
+the highest raw-distribution accuracy at global-head cost.
