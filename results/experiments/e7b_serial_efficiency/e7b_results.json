@@ -112,8 +112,8 @@
         ],
         "parameters": {
           "convention": "CLIP dual tower resident",
-          "resident_frozen": 302554626,
-          "total_loaded": 303130726,
+          "resident_frozen": 151277313,
+          "total_loaded": 151853413,
           "trainable": 576100
         },
         "peak_allocated_mib": 764.1,
@@ -148,9 +148,23 @@
           7.8263,
           7.6104
         ],
-        "warm_p5_p95_ms": [
+        "warm_p5_p95_envelope_ms": [
           6.5602,
-          7.471
+          8.4019
+        ],
+        "warm_p5_p95_ms_per_pass": [
+          [
+            6.5602,
+            7.471
+          ],
+          [
+            7.0282,
+            8.4019
+          ],
+          [
+            6.8727,
+            8.2483
+          ]
         ]
       },
       "e8a_a0p": {
@@ -196,8 +210,8 @@
         ],
         "parameters": {
           "convention": "CLIP dual tower resident (text side used for question tokens)",
-          "resident_frozen": 302554626,
-          "total_loaded": 323916902,
+          "resident_frozen": 151277313,
+          "total_loaded": 172639589,
           "trainable": 21362276
         },
         "peak_allocated_mib": 843.6,
@@ -233,9 +247,23 @@
           9.1842,
           9.3209
         ],
-        "warm_p5_p95_ms": [
-          8.5453,
-          10.2228
+        "warm_p5_p95_envelope_ms": [
+          8.5199,
+          10.3085
+        ],
+        "warm_p5_p95_ms_per_pass": [
+          [
+            8.5453,
+            10.2228
+          ],
+          [
+            8.6539,
+            10.2013
+          ],
+          [
+            8.5199,
+            10.3085
+          ]
         ]
       },
       "e8a_a1": {
@@ -281,8 +309,8 @@
         ],
         "parameters": {
           "convention": "CLIP dual tower plus SmolLM2-135M resident; the CLIP text tower is loaded but unused by this pipeline",
-          "resident_frozen": 437069634,
-          "total_loaded": 458464678,
+          "resident_frozen": 285792321,
+          "total_loaded": 307187365,
           "trainable": 21395044
         },
         "peak_allocated_mib": 1108.3,
@@ -318,9 +346,23 @@
           20.353,
           20.146
         ],
-        "warm_p5_p95_ms": [
+        "warm_p5_p95_envelope_ms": [
           18.6571,
-          19.5467
+          21.064
+        ],
+        "warm_p5_p95_ms_per_pass": [
+          [
+            18.6571,
+            19.5467
+          ],
+          [
+            18.9869,
+            21.064
+          ],
+          [
+            18.8731,
+            20.8251
+          ]
         ]
       },
       "fusion": {
@@ -368,8 +410,8 @@
         ],
         "parameters": {
           "convention": "CLIP dual tower resident",
-          "resident_frozen": 302554626,
-          "total_loaded": 303655014,
+          "resident_frozen": 151277313,
+          "total_loaded": 152377701,
           "trainable": 1100388
         },
         "peak_allocated_mib": 766.1,
@@ -404,9 +446,23 @@
           7.6351,
           7.8235
         ],
-        "warm_p5_p95_ms": [
+        "warm_p5_p95_envelope_ms": [
           6.5682,
-          7.4082
+          8.4814
+        ],
+        "warm_p5_p95_ms_per_pass": [
+          [
+            6.5682,
+            7.4082
+          ],
+          [
+            6.8451,
+            8.3336
+          ],
+          [
+            7.1425,
+            8.4814
+          ]
         ]
       },
       "question_only": {
@@ -454,8 +510,8 @@
         ],
         "parameters": {
           "convention": "CLIP dual tower resident",
-          "resident_frozen": 302554626,
-          "total_loaded": 302868582,
+          "resident_frozen": 151277313,
+          "total_loaded": 151591269,
           "trainable": 313956
         },
         "peak_allocated_mib": 623.2,
@@ -486,9 +542,23 @@
           1.9562,
           1.9695
         ],
-        "warm_p5_p95_ms": [
-          1.9421,
-          1.9818
+        "warm_p5_p95_envelope_ms": [
+          1.9368,
+          1.9876
+        ],
+        "warm_p5_p95_ms_per_pass": [
+          [
+            1.9421,
+            1.9818
+          ],
+          [
+            1.9368,
+            1.9746
+          ],
+          [
+            1.9487,
+            1.9876
+          ]
         ]
       },
       "reasoner": {
@@ -534,8 +604,8 @@
         ],
         "parameters": {
           "convention": "CLIP dual tower resident (text side used for question tokens)",
-          "resident_frozen": 302554626,
-          "total_loaded": 323654246,
+          "resident_frozen": 151277313,
+          "total_loaded": 172376933,
           "trainable": 21099620
         },
         "peak_allocated_mib": 842.6,
@@ -570,9 +640,23 @@
           9.1719,
           9.4518
         ],
-        "warm_p5_p95_ms": [
+        "warm_p5_p95_envelope_ms": [
           8.1483,
-          9.4308
+          10.2951
+        ],
+        "warm_p5_p95_ms_per_pass": [
+          [
+            8.1483,
+            9.4308
+          ],
+          [
+            8.2226,
+            9.9975
+          ],
+          [
+            8.6043,
+            10.2951
+          ]
         ]
       },
       "siglip_fusion": {
@@ -620,8 +704,8 @@
         ],
         "parameters": {
           "convention": "SigLIP dual tower resident",
-          "resident_frozen": 406311940,
-          "total_loaded": 407936616,
+          "resident_frozen": 203155970,
+          "total_loaded": 204780646,
           "trainable": 1624676
         },
         "peak_allocated_mib": 1293.7,
@@ -656,9 +740,23 @@
           9.9008,
           9.8433
         ],
-        "warm_p5_p95_ms": [
-          9.3947,
-          10.4484
+        "warm_p5_p95_envelope_ms": [
+          9.3877,
+          10.6942
+        ],
+        "warm_p5_p95_ms_per_pass": [
+          [
+            9.3947,
+            10.4484
+          ],
+          [
+            9.4558,
+            10.6014
+          ],
+          [
+            9.3877,
+            10.6942
+          ]
         ]
       },
       "vocab1000_product": {
@@ -706,8 +804,8 @@
         ],
         "parameters": {
           "convention": "CLIP dual tower resident",
-          "resident_frozen": 302554626,
-          "total_loaded": 303854570,
+          "resident_frozen": 151277313,
+          "total_loaded": 152577257,
           "trainable": 1299944
         },
         "peak_allocated_mib": 766.9,
@@ -742,9 +840,23 @@
           7.6147,
           7.7113
         ],
-        "warm_p5_p95_ms": [
-          7.1036,
-          8.2988
+        "warm_p5_p95_envelope_ms": [
+          6.9123,
+          8.3694
+        ],
+        "warm_p5_p95_ms_per_pass": [
+          [
+            7.1036,
+            8.2988
+          ],
+          [
+            6.9123,
+            8.2469
+          ],
+          [
+            7.052,
+            8.3694
+          ]
         ]
       }
     }
@@ -759,8 +871,8 @@
     "device": "cuda",
     "dropout": 0.3,
     "embed_dim": 512,
-    "git_commit": "b60c981",
-    "git_dirty": true,
+    "git_commit": "d85bece",
+    "git_dirty": false,
     "gpu": "NVIDIA RTX 4000 Ada Generation",
     "h5py_version": "3.16.0",
     "hidden_dim": 512,
@@ -774,7 +886,7 @@
     "python": "3.12.3",
     "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
     "seed": 42,
-    "timestamp": "2026-08-05T23:19:05",
+    "timestamp": "2026-08-05T23:32:22",
     "top_k_answers": 100,
     "torch": "2.12.1+cu130",
     "weight_decay": 0.0001

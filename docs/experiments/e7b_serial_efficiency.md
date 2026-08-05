@@ -64,14 +64,14 @@ the global heads, three for reasoner/E8A.
 
 | system | common-denom acc | vocab-supported acc | multi-seed mean +/- sd | warm serial (ms) | spread | cold (ms) | load (s) | QPS | peak MiB alloc/res | trainable | total loaded |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| question_only (context) | 0.38864 | 0.50402 | 0.4977 +/- 0.0007 | 1.960 | 0.013 | 76 | 2.1 | 510 | 623/690 | 313,956 | 302.9M |
-| concat | 0.44462 | 0.57661 | 0.5786 +/- 0.0011 | 7.610 | 0.904 | 117 | 2.0 | 131 | 764/852 | 576,100 | 303.1M |
-| fusion | 0.45062 | 0.58439 | 0.5823 +/- 0.0010 | 7.635 | 0.890 | 122 | 2.0 | 131 | 766/852 | 1,100,388 | 303.7M |
-| vocab1000_product | 0.49050 | 0.49954 | 0.4988 +/- 0.0006 | 7.671 | 0.097 | 121 | 2.1 | 130 | 767/852 | 1,299,944 | 303.9M |
-| siglip_fusion | 0.45792 | 0.59386 | 0.5939 +/- 0.0009 | 9.843 | 0.077 | 128 | 3.2 | 102 | 1294/1510 | 1,624,676 | 407.9M |
-| reasoner | 0.45602 | 0.59139 | 0.5958 +/- 0.0074 | 9.172 | 0.921 | 118 | 2.2 | 109 | 843/950 | 21,099,620 | 323.7M |
-| e8a_A0p | 0.45852 | 0.59463 | 0.5945 +/- 0.0003 | 9.212 | 0.137 | 120 | 2.2 | 109 | 844/952 | 21,362,276 | 323.9M |
-| e8a_A1 | 0.44332 | 0.57493 | 0.5732 +/- 0.0015 | 20.146 | 1.330 | 238 | 2.8 | 50 | 1108/1176 | 21,395,044 | 458.5M |
+| question_only (context) | 0.38864 | 0.50402 | 0.49769 +/- 0.00439 | 1.960 | 0.013 | 75 | 2.1 | 510 | 623/690 | 313,956 | 151.6M |
+| concat | 0.44462 | 0.57661 | 0.57861 +/- 0.00264 | 7.610 | 0.904 | 117 | 2.0 | 131 | 764/852 | 576,100 | 151.9M |
+| fusion | 0.45062 | 0.58439 | 0.58226 +/- 0.00197 | 7.635 | 0.890 | 122 | 2.0 | 131 | 766/852 | 1,100,388 | 152.4M |
+| vocab1000_product | 0.49050 | 0.49954 | 0.49946 +/- 0.00248 | 7.671 | 0.097 | 121 | 2.1 | 130 | 767/852 | 1,299,944 | 152.6M |
+| siglip_fusion | 0.45792 | 0.59386 | 0.59388 +/- 0.00317 | 9.843 | 0.077 | 128 | 3.2 | 102 | 1294/1510 | 1,624,676 | 204.8M |
+| reasoner | 0.45602 | 0.59139 | 0.59580 +/- 0.00741 | 9.172 | 0.921 | 118 | 2.2 | 109 | 843/950 | 21,099,620 | 172.4M |
+| e8a_A0p | 0.45852 | 0.59463 | 0.59446 +/- 0.00030 | 9.212 | 0.137 | 120 | 2.2 | 109 | 844/952 | 21,362,276 | 172.6M |
+| e8a_A1 | 0.44332 | 0.57493 | 0.57316 +/- 0.00154 | 20.146 | 1.330 | 238 | 2.8 | 50 | 1108/1176 | 21,395,044 | 307.2M |
 
 The multi-seed means are the architecture-level context (vocab-supported
 metric); the timed checkpoint is always the seed-0 one whose frozen
@@ -91,9 +91,12 @@ tower 2.24, tokenise 0.10, text tower 2.17, head 0.03-0.09); SigLIP's
 vision tower costs 4.99; the reasoner adds 1.75-1.80 of latent reasoning
 on top of the token path; e8a_A1 is dominated by the frozen SmolLM2
 forward at 13.46 — the first online SmolLM2 timing in the project, about
-two-thirds of A1's whole serial query. The additive stage sums match the
-unsegmented measured totals within -0.28 to +0.09 ms on every system, so
-inter-stage overhead is negligible WITHIN this harness.
+two-thirds of A1's whole serial query. The additive stage sums sit slightly ABOVE the
+unsegmented measured totals on every run: measured minus additive spans
+-0.4086 to -0.0105 ms across all 24 records, consistent with the
+per-stage synchronisation overhead the segmented pass carries, so
+inter-stage overhead is negligible within this harness and the additive
+sum is, if anything, a slight over-estimate of the serial total here.
 
 Measured against E7a's additive estimates: the CLIP-global measured
 serial medians (7.61-7.67 ms) sit about 1.3 ms (about 20 per cent) above
@@ -117,9 +120,9 @@ results/experiments/e7b_serial_efficiency/: benchmark_rows.json (pinned
 results.json, e7b_results.json (aggregate, frontier, supersession block,
 cache-integrity record), latency_memory.csv, stage_timings.csv,
 pareto_serial.png, cache_hashes_before/after.txt, and the pilot evidence
-(pilot_e8a_a1.json; its three qualification runs under pilot_evidence/ on
-the execution node are superseded by the full-run A1 measurements).
-tests/test_e7b.py (54 checks) covers the gates.
+(pilot_e8a_a1.json plus its three qualification per-run records under
+pilot_evidence/, tracked, and superseded for measurement by the
+full-run A1 records). tests/test_e7b.py (55 checks) covers the gates.
 
 ## Decisions and problems
 
