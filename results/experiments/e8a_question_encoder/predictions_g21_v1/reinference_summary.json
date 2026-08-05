@@ -1,0 +1,92 @@
+{
+  "metadata": {
+    "timestamp": "2026-08-05T21:21:00",
+    "git_commit": "12f1ae3",
+    "git_dirty": false,
+    "open_clip_version": "3.3.0",
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "h5py_version": "3.16.0",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "deterministic": true,
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "embed_dim": 512,
+    "top_k_answers": 100,
+    "n_train": 40000,
+    "n_val": 8000,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "hidden_dim": 512,
+    "dropout": 0.3,
+    "weight_decay": 0.0001
+  },
+  "g21_reinference": {
+    "cells": {
+      "A1/train_250k/seed0": {
+        "normal": {
+          "raw_exact": 0.57493,
+          "normalized_exact": 0.57493,
+          "n_rows": 7714
+        },
+        "fixed_image": {
+          "raw_exact": 0.46305,
+          "normalized_exact": 0.46305,
+          "n_rows": 7714
+        },
+        "fixed_question": {
+          "raw_exact": 0.23529,
+          "normalized_exact": 0.23529,
+          "n_rows": 7714
+        },
+        "shuffled_image": {
+          "raw_exact": 0.43389,
+          "normalized_exact": 0.43389,
+          "n_rows": 7714
+        }
+      }
+    },
+    "n_cells": 1,
+    "conditions_per_cell": [
+      "normal",
+      "fixed_image",
+      "fixed_question",
+      "shuffled_image"
+    ],
+    "artefact_directory": "results/experiments/e8a_question_encoder/predictions_g21_v1",
+    "scorer": {
+      "upstream_repository": "GT-Vision-Lab/VQA",
+      "upstream_commit": "a013f0043c1e2cdc995922dfe257f7149aa9af06",
+      "upstream_source_path": "PythonEvaluationTools/vqaEvaluation/vqaEval.py",
+      "licence": "BSD 2-Clause",
+      "vendored_source": "experiments/e8a_question_encoder/vendor/vqa/vqaEval.py",
+      "vendored_source_sha256": "f08edfcad5be0112500993e245c706b6cb928eadebe203f89f838e5e0d04bec8",
+      "vendored_licence": "experiments/e8a_question_encoder/vendor/vqa/LICENSE",
+      "vendored_licence_sha256": "4bf86fe8b104b69fc72caaa095b2fff4bade0d3d9a7970c6a5fd01fb736cad04",
+      "adapter": "experiments/e8a_question_encoder/g21_scorer.py",
+      "adapter_sha256": "22ea9c59082840a60568d7b804a3cb66ac0daccb7b503a6c50305d1354f2f40d"
+    },
+    "vocabulary": {
+      "path": "data/v2/answer_vocab_v2.json",
+      "sha256": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680",
+      "n_classes": 100
+    },
+    "evaluation_row_sha256": "ba12180a7c0bcaef1fa2d9f0fd69c2404e14cc9cf50bbcec86ebe600d0d1c5b7",
+    "timing": {
+      "total_wall_seconds": 19.0,
+      "store_and_image_load_seconds": 1.4,
+      "note": "evaluation-only wall clock, measured on a shared GPU and reported separately from the historical training figure, which never timed evaluation on its own; per-condition GPU timings are in each cell's sidecar"
+    },
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "clean_test_accessed": false
+  }
+}
