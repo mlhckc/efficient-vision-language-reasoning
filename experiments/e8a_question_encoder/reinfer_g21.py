@@ -89,6 +89,46 @@ def atomic_write_bytes(path: Path, payload: bytes) -> None:
     os.replace(temporary, path)
 
 
+# One global execution lock, NFS-backed so every lab node sees the same
+# file: the local otter159 path and any Condor remote path both pass
+# through this driver, so at most one Stage-4 execution can exist at a
+# time. O_CREAT|O_EXCL is atomic on the NFSv4 home export.
+EXECUTION_LOCK = Path("/user/HS400/mc02623/backups"
+                      "/efficient-vision-language-reasoning"
+                      "/stage4-execution.lock")
+
+
+def acquire_execution_lock(lock_path: Path, scope: str) -> None:
+    import atexit
+    import socket
+    lock_path.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        descriptor = os.open(lock_path, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+    except FileExistsError:
+        holder = "unreadable"
+        try:
+            holder = lock_path.read_text().strip()
+        except OSError:
+            pass
+        sys.exit(f"STAGE-4 EXECUTION LOCK HELD: {lock_path} exists "
+                 f"({holder}). Another Stage-4 execution is or was active. "
+                 f"If its host and PID are dead, remove the lock manually "
+                 f"and rerun; this driver never removes another run's lock.")
+    os.write(descriptor, json.dumps({
+        "host": socket.gethostname(),
+        "pid": os.getpid(),
+        "utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "scope": scope}).encode("utf-8"))
+    os.close(descriptor)
+
+    def release() -> None:
+        try:
+            lock_path.unlink()
+        except OSError:
+            pass
+    atexit.register(release)
+
+
 def foreign_gpu_processes() -> list:
     """Compute processes on the GPU that do not belong to this process.
 
@@ -271,11 +311,16 @@ def main() -> int:
     parser.add_argument("--only", default=None,
                         help="run a single cell, e.g. A1/train_250k/seed0; "
                              "used for the representative pilot measurement")
+    parser.add_argument("--lock-path", default=str(EXECUTION_LOCK),
+                        help="NFS-backed global execution lock shared by the "
+                             "local and remote paths")
     args = parser.parse_args()
     only = None
     if args.only:
         arm_, scale_, seed_ = args.only.split("/")
         only = (arm_, scale_, int(seed_.replace("seed", "")))
+    acquire_execution_lock(Path(args.lock_path),
+                           scope=args.only or "all 18 cells")
     utils.set_seed()
     device = utils.get_device()
     if device == "cuda":
