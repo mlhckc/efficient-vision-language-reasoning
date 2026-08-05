@@ -1,0 +1,519 @@
+{
+  "row_seed": 0,
+  "n_rows": 64,
+  "dev_sha256": "95d1b504dcc4deb7d69ba0c9e293d1c00bae93df4b6907174a1dd615cb93cdc9",
+  "rows": [
+    {
+      "dev_row_index": 21,
+      "questionId": "00141015",
+      "imageId": "2336359",
+      "question": "Are there pots to the left of the man the freezer is to the left of?",
+      "image_path": "data/gqa/images/2336359.jpg",
+      "image_sha256": "59f8ddf15e3ce51618048336ab7b41ff1a747c8f09acbd7dbdc8169081566b83"
+    },
+    {
+      "dev_row_index": 41,
+      "questionId": "00153941",
+      "imageId": "2331732",
+      "question": "Is the animal that is lying-down brown or white?",
+      "image_path": "data/gqa/images/2331732.jpg",
+      "image_sha256": "f1143a302e288084e24f22aeb378591d1f6b638d09391255bf619f357ec8fe24"
+    },
+    {
+      "dev_row_index": 63,
+      "questionId": "00165360",
+      "imageId": "2331829",
+      "question": "The pillow is on what?",
+      "image_path": "data/gqa/images/2331829.jpg",
+      "image_sha256": "1ebf72b911bb9e51f00e2bd0d810823f23a05144136a60bbbd11a40680582a33"
+    },
+    {
+      "dev_row_index": 126,
+      "questionId": "00374707",
+      "imageId": "2345717",
+      "question": "On which side of the photo is the bag, the right or the left?",
+      "image_path": "data/gqa/images/2345717.jpg",
+      "image_sha256": "a12c498107507ac6c0dbd1422e5f93e93e32c87b96df81ab8c8d4e799967bde4"
+    },
+    {
+      "dev_row_index": 169,
+      "questionId": "00571841",
+      "imageId": "2392090",
+      "question": "What color does the horse's hair have?",
+      "image_path": "data/gqa/images/2392090.jpg",
+      "image_sha256": "5b6a6a491981e8d1d3faa05927ee0fd8a4ce21d334995369cf8ab4fac3b5d145"
+    },
+    {
+      "dev_row_index": 217,
+      "questionId": "00709145",
+      "imageId": "2315774",
+      "question": "Are there mirrors or phones in this photograph?",
+      "image_path": "data/gqa/images/2315774.jpg",
+      "image_sha256": "edd43c044be52e67ccaef30e0db81b8b3d0186a19abb897aef459c93db1350ec"
+    },
+    {
+      "dev_row_index": 257,
+      "questionId": "00809610",
+      "imageId": "2400574",
+      "question": "Which kind of furniture is right of the remote control?",
+      "image_path": "data/gqa/images/2400574.jpg",
+      "image_sha256": "061f136fe33aa4a66bc34695f3a723bc90bf93f407a88c11220919487650192e"
+    },
+    {
+      "dev_row_index": 313,
+      "questionId": "01152489",
+      "imageId": "2402303",
+      "question": "Does the person that is to the left of the camera seem to be posing?",
+      "image_path": "data/gqa/images/2402303.jpg",
+      "image_sha256": "7af18dde5685b1cba43fa8c9d0b3dbdb1d5ee94c945492d07f38ea5e2e98e3e8"
+    },
+    {
+      "dev_row_index": 576,
+      "questionId": "0189425",
+      "imageId": "2389462",
+      "question": "Which kind of furniture is cushioned?",
+      "image_path": "data/gqa/images/2389462.jpg",
+      "image_sha256": "32e8bb2a6acad3055786c816b565e2f22a5554f8772e116a5176d783a6d99f17"
+    },
+    {
+      "dev_row_index": 618,
+      "questionId": "0199250",
+      "imageId": "2373827",
+      "question": "Are there both a window and a door in this image?",
+      "image_path": "data/gqa/images/2373827.jpg",
+      "image_sha256": "d7bf650066d89809ab72537f3be6677b0b37c36d17ed75ff873402122c7c9d2e"
+    },
+    {
+      "dev_row_index": 685,
+      "questionId": "02102441",
+      "imageId": "2383082",
+      "question": "Is the brown couch to the left or to the right of the woman on the left?",
+      "image_path": "data/gqa/images/2383082.jpg",
+      "image_sha256": "ecf4c3db64b158b11f657ad209bd2f18c906b3d35d7e184cae54b80909edfae7"
+    },
+    {
+      "dev_row_index": 956,
+      "questionId": "03187334",
+      "imageId": "2318675",
+      "question": "Is there any cheese in this photo?",
+      "image_path": "data/gqa/images/2318675.jpg",
+      "image_sha256": "a145c94498fa7dcc31aab1e5326a976912cdad8d9cf1c07fab24b241539e2ccd"
+    },
+    {
+      "dev_row_index": 1342,
+      "questionId": "03883799",
+      "imageId": "2316625",
+      "question": "What animal is small?",
+      "image_path": "data/gqa/images/2316625.jpg",
+      "image_sha256": "fecec2d95dbc104fd30f5e050274c6b5ae5cbf82a4a9cabcb195fb80da35351f"
+    },
+    {
+      "dev_row_index": 1349,
+      "questionId": "03888867",
+      "imageId": "2416061",
+      "question": "Do you see a knife to the right of the bottle?",
+      "image_path": "data/gqa/images/2416061.jpg",
+      "image_sha256": "5a4a8760cd0f2429a65f58c11b78ed3ab149fa338874cec460371f8f2ccdaea4"
+    },
+    {
+      "dev_row_index": 1980,
+      "questionId": "05590132",
+      "imageId": "2361055",
+      "question": "On which side of the image is the man?",
+      "image_path": "data/gqa/images/2361055.jpg",
+      "image_sha256": "1e3c637e17e27752d47ad466b9063e3c21b413e1e9516b0734a66e67d240aad9"
+    },
+    {
+      "dev_row_index": 2064,
+      "questionId": "0573330",
+      "imageId": "2401224",
+      "question": "On which side is the brown fence?",
+      "image_path": "data/gqa/images/2401224.jpg",
+      "image_sha256": "66f98e0506b00e999d899b9991c7a2f62245890f2a1f5abec6a2c4472c34b6e3"
+    },
+    {
+      "dev_row_index": 2127,
+      "questionId": "05860788",
+      "imageId": "2407416",
+      "question": "Which side of the photo is the racket on?",
+      "image_path": "data/gqa/images/2407416.jpg",
+      "image_sha256": "872e4c7e01d881a0e4f287b07bfaaec90ec81d8c40cfb99ce614375e2b53134d"
+    },
+    {
+      "dev_row_index": 2304,
+      "questionId": "06267974",
+      "imageId": "2364875",
+      "question": "Is the man to the left of a person?",
+      "image_path": "data/gqa/images/2364875.jpg",
+      "image_sha256": "3268878fef69a21653b9fcdc0e0630cdf5d39bbabc578af18f6165913e76353b"
+    },
+    {
+      "dev_row_index": 2356,
+      "questionId": "06290808",
+      "imageId": "2353637",
+      "question": "Are there any blankets or remote controls in the image?",
+      "image_path": "data/gqa/images/2353637.jpg",
+      "image_sha256": "fdae2227fcb8c404891ef7ab3829320c7bc2b9828ceb0cf058af58860eca0b86"
+    },
+    {
+      "dev_row_index": 2924,
+      "questionId": "0770302",
+      "imageId": "2368169",
+      "question": "What kind of clothing is not black?",
+      "image_path": "data/gqa/images/2368169.jpg",
+      "image_sha256": "3518fa469c3fbd683e4d0817f33fbc58a335b8d8f8831ee561692cdf5d07cf51"
+    },
+    {
+      "dev_row_index": 2955,
+      "questionId": "07759045",
+      "imageId": "2318543",
+      "question": "What color is the hair that looks long?",
+      "image_path": "data/gqa/images/2318543.jpg",
+      "image_sha256": "7c17e803e916eec246b79f208c4abc1abae9fa53bae3f84a1bde3f0c80725dc4"
+    },
+    {
+      "dev_row_index": 3000,
+      "questionId": "07941443",
+      "imageId": "2352155",
+      "question": "Is the basket on a bicycle?",
+      "image_path": "data/gqa/images/2352155.jpg",
+      "image_sha256": "dc523a92ed3dd0833d99430d9c5fdffefb0f3686fa038c2d1e1458e58b36b4fb"
+    },
+    {
+      "dev_row_index": 3025,
+      "questionId": "08109509",
+      "imageId": "2396977",
+      "question": "Is this mirror to the left of a towel?",
+      "image_path": "data/gqa/images/2396977.jpg",
+      "image_sha256": "fc606fe32d46fb81c879a4a40e048c0c055d2f0c1761a0feb13cd9acdf31e4c2"
+    },
+    {
+      "dev_row_index": 3101,
+      "questionId": "08286259",
+      "imageId": "2325554",
+      "question": "Do you see either any pot or bench?",
+      "image_path": "data/gqa/images/2325554.jpg",
+      "image_sha256": "243f16784dd9c30ee19b4967f9ae42bc3afd7fc2d423b6eb4c08f8185239b4d0"
+    },
+    {
+      "dev_row_index": 3250,
+      "questionId": "08955934",
+      "imageId": "2351493",
+      "question": "Are there both cups and plates in the image?",
+      "image_path": "data/gqa/images/2351493.jpg",
+      "image_sha256": "48ed1bf901111becb2252cca5ed33c60b83f799fb53dc7dbc365ac3da4289331"
+    },
+    {
+      "dev_row_index": 3550,
+      "questionId": "09747305",
+      "imageId": "2382483",
+      "question": "Is the brown animal that is to the right of the barn old and large?",
+      "image_path": "data/gqa/images/2382483.jpg",
+      "image_sha256": "a25bcf5b1775da7d1cafd197d7c95815e9ec5b45ffa3475aa99e37314928adc9"
+    },
+    {
+      "dev_row_index": 3698,
+      "questionId": "10232640",
+      "imageId": "2364186",
+      "question": "Are the eggs in the bottom or in the top part?",
+      "image_path": "data/gqa/images/2364186.jpg",
+      "image_sha256": "8db5e235a38b0b99a887380acfd265788b7da65fa4ae6404caa7c2277545aa55"
+    },
+    {
+      "dev_row_index": 3859,
+      "questionId": "1063361",
+      "imageId": "2345942",
+      "question": "The television is on what?",
+      "image_path": "data/gqa/images/2345942.jpg",
+      "image_sha256": "04ee51d31d505156d953f4984a5ecd85eab92a884ecac4665ae406fa4f24f939"
+    },
+    {
+      "dev_row_index": 3911,
+      "questionId": "10750475",
+      "imageId": "2361535",
+      "question": "Are there any grinders or hair clips?",
+      "image_path": "data/gqa/images/2361535.jpg",
+      "image_sha256": "a87e68d40ab8c8ab237b9e7dcada5e218331524952a54e417ce657bb0424520e"
+    },
+    {
+      "dev_row_index": 4045,
+      "questionId": "111043578",
+      "imageId": "1592288",
+      "question": "On which side of the photo is the man?",
+      "image_path": "data/gqa/images/1592288.jpg",
+      "image_sha256": "798d60008ac5ad15cf1b076f67c20804fa79b04fe2618ed50ddba2e23e838d61"
+    },
+    {
+      "dev_row_index": 4161,
+      "questionId": "11219374",
+      "imageId": "2403406",
+      "question": "What is the fence made of?",
+      "image_path": "data/gqa/images/2403406.jpg",
+      "image_sha256": "b764d9360f86bc94e51da204eae66c5dadfda044c4f56b532b90d4e4d736d334"
+    },
+    {
+      "dev_row_index": 4168,
+      "questionId": "11244509",
+      "imageId": "2331276",
+      "question": "Are there either any eggs or apples in the photo?",
+      "image_path": "data/gqa/images/2331276.jpg",
+      "image_sha256": "d44042618a35ba48f1b99b830e5f5a1f5b7beaf6a3729beab07a71d72fb8794d"
+    },
+    {
+      "dev_row_index": 4255,
+      "questionId": "11484948",
+      "imageId": "2415983",
+      "question": "Is the red bus to the left or to the right of the bag the lady is holding?",
+      "image_path": "data/gqa/images/2415983.jpg",
+      "image_sha256": "1d527920c8f0c7c1ab29c51879f21b86d5b2a8bdb7c9741c3a50d99e23ef57cb"
+    },
+    {
+      "dev_row_index": 4294,
+      "questionId": "11564165",
+      "imageId": "2400526",
+      "question": "Is there any boat to the left of the flag?",
+      "image_path": "data/gqa/images/2400526.jpg",
+      "image_sha256": "dae4d6e04eaf3f406521726f92966eeb1762eb9eac662cfd2bd4fdd54c55af11"
+    },
+    {
+      "dev_row_index": 4649,
+      "questionId": "12106113",
+      "imageId": "1159740",
+      "question": "Is there any cell phone next to the wallet?",
+      "image_path": "data/gqa/images/1159740.jpg",
+      "image_sha256": "14fe76ad9f48997d9bf6b9170c059ada5895eb130c54e9d68b4df76c36c118eb"
+    },
+    {
+      "dev_row_index": 4738,
+      "questionId": "12245175",
+      "imageId": "2331755",
+      "question": "What is the device that the man that is talking is holding?",
+      "image_path": "data/gqa/images/2331755.jpg",
+      "image_sha256": "158d175a7efcf96522e9696f063805b6242ca9a537dc9a61946720d586a599f3"
+    },
+    {
+      "dev_row_index": 4847,
+      "questionId": "12352672",
+      "imageId": "2361644",
+      "question": "What animal is on the dirt?",
+      "image_path": "data/gqa/images/2361644.jpg",
+      "image_sha256": "4b6f1bfadaf4d371c21c6ccad2973246b72804585162db6d4d6f63e9d88842e1"
+    },
+    {
+      "dev_row_index": 4874,
+      "questionId": "12422145",
+      "imageId": "2390996",
+      "question": "Are there drawers in the large kitchen?",
+      "image_path": "data/gqa/images/2390996.jpg",
+      "image_sha256": "e1998cecdaa7f0ee4cad213cddac31e630ccc5e777fe9954e38238199fd5c1e3"
+    },
+    {
+      "dev_row_index": 4975,
+      "questionId": "12595943",
+      "imageId": "2325009",
+      "question": "Which side is the woman on?",
+      "image_path": "data/gqa/images/2325009.jpg",
+      "image_sha256": "bf675493219c194c19ba3d16dd35e288fccde58de61a330d43a6e4f10a7c9995"
+    },
+    {
+      "dev_row_index": 4982,
+      "questionId": "1260449",
+      "imageId": "2402170",
+      "question": "In which part of the picture is the white container, the bottom or the top?",
+      "image_path": "data/gqa/images/2402170.jpg",
+      "image_sha256": "f0e448178ef9573695373bde29fdabe4513a9999c09bf2d251f7513a136e85ee"
+    },
+    {
+      "dev_row_index": 5015,
+      "questionId": "12708178",
+      "imageId": "2340549",
+      "question": "Are the chairs white or black?",
+      "image_path": "data/gqa/images/2340549.jpg",
+      "image_sha256": "efb51b8d4a3a6ca3c2ed30bac4c2c43825d8f9ab57ef355a672365464cd89bf7"
+    },
+    {
+      "dev_row_index": 5147,
+      "questionId": "13137879",
+      "imageId": "2406096",
+      "question": "Is the ice gray?",
+      "image_path": "data/gqa/images/2406096.jpg",
+      "image_sha256": "7cf4e5e5ebfc17fda58ffa8fb6dabca13d9c29ac2b5586a5b3c7f9d9597dfffe"
+    },
+    {
+      "dev_row_index": 5161,
+      "questionId": "13292855",
+      "imageId": "2342851",
+      "question": "What do both the shoe lace and the shoe have in common?",
+      "image_path": "data/gqa/images/2342851.jpg",
+      "image_sha256": "568eadf13413410ea69197d1f88e380b24acfd1eaff4ee9447bee53871d14767"
+    },
+    {
+      "dev_row_index": 5284,
+      "questionId": "13599556",
+      "imageId": "2366941",
+      "question": "Are there benches on the sidewalk?",
+      "image_path": "data/gqa/images/2366941.jpg",
+      "image_sha256": "6158f03cadc09cb3bfb645c1e22941c7c18093a8a8d07e872de02678e288d846"
+    },
+    {
+      "dev_row_index": 5309,
+      "questionId": "13662381",
+      "imageId": "2393780",
+      "question": "Are there either any kites or benches in this picture?",
+      "image_path": "data/gqa/images/2393780.jpg",
+      "image_sha256": "67418d9a16f95643183fc6c43a1628e1e2b0fb7f4f113b61a07eebe57a83d135"
+    },
+    {
+      "dev_row_index": 5429,
+      "questionId": "14168520",
+      "imageId": "2325157",
+      "question": "Do you see players to the left of the ball in the air?",
+      "image_path": "data/gqa/images/2325157.jpg",
+      "image_sha256": "4004d058d6f1e41bf899444fbee0710f828f9d8e7865031d0cb8e04c177e5147"
+    },
+    {
+      "dev_row_index": 5592,
+      "questionId": "14457897",
+      "imageId": "2404255",
+      "question": "How is the shiny piece of furniture called?",
+      "image_path": "data/gqa/images/2404255.jpg",
+      "image_sha256": "00abfdda061d443393aef4d9a3d4bd04a58c5ce5f8669de51bd5ec0033322ea1"
+    },
+    {
+      "dev_row_index": 5603,
+      "questionId": "14458044",
+      "imageId": "2404255",
+      "question": "Is there a plate or a knife?",
+      "image_path": "data/gqa/images/2404255.jpg",
+      "image_sha256": "00abfdda061d443393aef4d9a3d4bd04a58c5ce5f8669de51bd5ec0033322ea1"
+    },
+    {
+      "dev_row_index": 5873,
+      "questionId": "15158222",
+      "imageId": "2338737",
+      "question": "Are there both surfboards and wetsuits in this image?",
+      "image_path": "data/gqa/images/2338737.jpg",
+      "image_sha256": "32e3c556201f81c15ffca7082724b83f818abaa049341dd459588d428ef2ea75"
+    },
+    {
+      "dev_row_index": 5883,
+      "questionId": "15289578",
+      "imageId": "2386573",
+      "question": "Is this a pink chair?",
+      "image_path": "data/gqa/images/2386573.jpg",
+      "image_sha256": "24d4a39254ce3589a3bbf52864d917e13c1ee5052bbbdccd6f4df43d9a4cd3dc"
+    },
+    {
+      "dev_row_index": 6202,
+      "questionId": "15948686",
+      "imageId": "2368959",
+      "question": "Are there any people to the left of the man that is holding the camera?",
+      "image_path": "data/gqa/images/2368959.jpg",
+      "image_sha256": "666df920c73fcfb31d2e6b2ca570896c26d48be000dd463887cb99540350d952"
+    },
+    {
+      "dev_row_index": 6229,
+      "questionId": "161050547",
+      "imageId": "2406601",
+      "question": "Does the boy shirt look white?",
+      "image_path": "data/gqa/images/2406601.jpg",
+      "image_sha256": "41fa69c3456b01b3ff07319e45839145fa2efe6ddbde005bb0707d693040360e"
+    },
+    {
+      "dev_row_index": 6259,
+      "questionId": "161061167",
+      "imageId": "2348063",
+      "question": "Do the paper and the mug have a different colors?",
+      "image_path": "data/gqa/images/2348063.jpg",
+      "image_sha256": "eb2958b600f597ae8b2b161de0f5072cebfaa0d0432aa9b7a86e5f38dbf895bd"
+    },
+    {
+      "dev_row_index": 6479,
+      "questionId": "16742607",
+      "imageId": "2378985",
+      "question": "Are the men in the top part or in the bottom of the picture?",
+      "image_path": "data/gqa/images/2378985.jpg",
+      "image_sha256": "39b6317073f0ce319494d9203af491cf42095c40e9d203efa27927cdd7c99a30"
+    },
+    {
+      "dev_row_index": 6502,
+      "questionId": "16834609",
+      "imageId": "2391563",
+      "question": "What is the spoon made of?",
+      "image_path": "data/gqa/images/2391563.jpg",
+      "image_sha256": "7ee451eb16d9ddc42ae25e7e4a999f374c9f8d0458a27c0c87e3d6922487c420"
+    },
+    {
+      "dev_row_index": 6508,
+      "questionId": "16838437",
+      "imageId": "2414740",
+      "question": "Are there both glasses and ties in this photograph?",
+      "image_path": "data/gqa/images/2414740.jpg",
+      "image_sha256": "ab67bc6f4320e2b7337d2413e967425a272c4b03cd5bbe8c0ca44b0d501ed270"
+    },
+    {
+      "dev_row_index": 6581,
+      "questionId": "1716585",
+      "imageId": "2404553",
+      "question": "Are there any boats in the photograph?",
+      "image_path": "data/gqa/images/2404553.jpg",
+      "image_sha256": "d3f1ca1b3c70994976f05834b581cdea72d05a9c9430fdc29683f7f4ce037ce3"
+    },
+    {
+      "dev_row_index": 6632,
+      "questionId": "17203343",
+      "imageId": "2329514",
+      "question": "Are there any white trains or doors?",
+      "image_path": "data/gqa/images/2329514.jpg",
+      "image_sha256": "dbf1b0d44f6e1db824a1407dfc9d4387305b8e89af60a8c05505507bea3fc8e6"
+    },
+    {
+      "dev_row_index": 6993,
+      "questionId": "17952891",
+      "imageId": "2348101",
+      "question": "Which kind of clothing is gray?",
+      "image_path": "data/gqa/images/2348101.jpg",
+      "image_sha256": "f43d30aadb11facd97b983fadcdc2431604acbf80e7b61087bf16ffbf6fd8efc"
+    },
+    {
+      "dev_row_index": 7172,
+      "questionId": "1843456",
+      "imageId": "2400462",
+      "question": "Is there a dog on the floor?",
+      "image_path": "data/gqa/images/2400462.jpg",
+      "image_sha256": "2ea1cd7378e8e675b1b71c255e29997d753639899efb02c56ed0c433f38ac088"
+    },
+    {
+      "dev_row_index": 7324,
+      "questionId": "18779975",
+      "imageId": "2357215",
+      "question": "Do you see an apple there that is not red?",
+      "image_path": "data/gqa/images/2357215.jpg",
+      "image_sha256": "53bd1a1606964d333ee819f4419b6ac6e636888c15c83fa9581b212d10d8c003"
+    },
+    {
+      "dev_row_index": 7440,
+      "questionId": "19285140",
+      "imageId": "2377720",
+      "question": "Is the bench made of concrete?",
+      "image_path": "data/gqa/images/2377720.jpg",
+      "image_sha256": "f3e496c815aa92e651c6b87acf55ad8051c59b72ca84358d7b088e28a902506c"
+    },
+    {
+      "dev_row_index": 7558,
+      "questionId": "1954222",
+      "imageId": "2391166",
+      "question": "What color is the table?",
+      "image_path": "data/gqa/images/2391166.jpg",
+      "image_sha256": "9b183f9530264b5c3cb6070f708f7f5a9aff9fade5ed465dcf5dc46586023562"
+    },
+    {
+      "dev_row_index": 7682,
+      "questionId": "19908138",
+      "imageId": "2349671",
+      "question": "Are there any trays or soap dispensers?",
+      "image_path": "data/gqa/images/2349671.jpg",
+      "image_sha256": "12c165bbacc5241679a97c7cb679be23a661fdfc280a83e56fa25fb3a24a4b51"
+    }
+  ]
+}

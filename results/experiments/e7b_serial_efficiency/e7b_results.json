@@ -1,0 +1,782 @@
+{
+  "e7b_analysis": {
+    "clean_test_accessed": false,
+    "e7a_supersession": {
+      "statement": "E7a's component measurements (tower and head timings, CPU decode and tokenise terms, memory deltas) remain valid as components. E7a's additive gpu_encoder_plus_head_ms, full_pipeline_ms and amortised_ms values and their Pareto fronts are superseded for end-to-end claims by E7b's measured serial values, which are authoritative for online inference claims.",
+      "superseded_for_end_to_end_claims": [
+        "gpu_encoder_plus_head_ms",
+        "full_pipeline_ms",
+        "amortised_ms",
+        "pareto_fronts.gpu_encoder_plus_head_ms",
+        "pareto_fronts.full_pipeline_ms",
+        "pareto_fronts.amortised_ms"
+      ]
+    },
+    "fingerprint": {
+      "code_head": "b60c981",
+      "cuda_runtime": "13.0",
+      "cudnn_deterministic": true,
+      "driver": "580.126.09",
+      "gpu": "NVIDIA RTX 4000 Ada Generation",
+      "hostname": "otter155.eps.surrey.ac.uk",
+      "lock_file_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+      "python": "3.12.3",
+      "torch": "2.12.1+cu130"
+    },
+    "frontier_note": "multimodal systems only; question_only is a labelled non-multimodal pipeline floor and is excluded",
+    "model_cache_integrity": {
+      "loading_mode": "online-capable Hugging Face configuration, as in the qualified preflight: every model object loaded from the staged cache; the byte-identical before/after hash set proves no weight, tokenizer or configuration file was downloaded, updated or replaced. Network metadata probes cannot alter the cache and are the only requests this configuration can make for cached objects.",
+      "unchanged_across_benchmark": true,
+      "verified_files": 22
+    },
+    "pass_orders": [
+      [
+        "e8a_a1",
+        "question_only",
+        "fusion",
+        "siglip_fusion",
+        "reasoner",
+        "concat",
+        "e8a_a0p",
+        "vocab1000_product"
+      ],
+      [
+        "siglip_fusion",
+        "e8a_a1",
+        "vocab1000_product",
+        "question_only",
+        "reasoner",
+        "e8a_a0p",
+        "concat",
+        "fusion"
+      ],
+      [
+        "fusion",
+        "e8a_a1",
+        "e8a_a0p",
+        "vocab1000_product",
+        "siglip_fusion",
+        "concat",
+        "reasoner",
+        "question_only"
+      ]
+    ],
+    "primary_pareto_frontier_common_denominator": [
+      "concat",
+      "fusion",
+      "vocab1000_product"
+    ],
+    "systems": {
+      "concat": {
+        "accuracy": {
+          "denominator_note": "the primary Pareto frontier uses only the common 10004-row raw-distribution denominator; the 64-row timing sample supports no accuracy claim",
+          "frozen_seed0_dev_accuracy": 0.57661,
+          "multiseed_context": {
+            "mean": 0.57861,
+            "per_seed": {
+              "0": 0.57661,
+              "1": 0.577,
+              "2": 0.58193,
+              "3": 0.57648,
+              "42": 0.58102
+            },
+            "source": "results/experiments/v2_07_scaling/results.json",
+            "std": 0.00264
+          },
+          "raw_distribution_accuracy_common_denominator": 0.44462,
+          "timed_checkpoint_seed": 0,
+          "vocabulary_supported_accuracy": 0.57661,
+          "vocabulary_view_rows": 7714
+        },
+        "additive_sum_ms": [
+          7.061,
+          7.9746,
+          7.7581
+        ],
+        "batched_image_branch_ms": 257.1715,
+        "cached_feature_head_only_ms": 0.0271,
+        "cached_image_question_side_ms": 1.9133,
+        "checkpoint": "results/experiments/v2_07_scaling/checkpoints/concat_250k_seed0.pt",
+        "checkpoint_sha256": "6cac1be10154fc0efaa2aac7d5adf00b999ee4985d6d8e9f824ce24cb68876a4",
+        "cold_first_query_ms": [
+          114.66,
+          114.6,
+          122.02
+        ],
+        "context_only": false,
+        "cpu_vmhwm_mib": 2088.3,
+        "measured_minus_additive_ms": [
+          -0.1391,
+          -0.1483,
+          -0.1477
+        ],
+        "parameters": {
+          "convention": "CLIP dual tower resident",
+          "resident_frozen": 302554626,
+          "total_loaded": 303130726,
+          "trainable": 576100
+        },
+        "peak_allocated_mib": 764.1,
+        "peak_reserved_mib": 852.0,
+        "reproduction": {
+          "agreements": 64,
+          "disagreements": [],
+          "n_rows": 64
+        },
+        "single_stream_qps": 131.4,
+        "stage_medians_ms": {
+          "S10_decode": 0.0249,
+          "S1_read": 0.0327,
+          "S2_decode_preprocess": 3.0412,
+          "S3_image_h2d": 0.0848,
+          "S4_vision_tower": 2.2337,
+          "S5_tokenise": 0.1021,
+          "S6_token_h2d": 0.0232,
+          "S7_text_tower": 2.1654,
+          "S9_head": 0.0578
+        },
+        "startup_load_seconds": [
+          1.95,
+          1.96,
+          2.15
+        ],
+        "sync_floor_ms": 0.0027,
+        "warm_across_pass_spread_ms": 0.9044,
+        "warm_median_ms": 7.6104,
+        "warm_median_ms_per_pass": [
+          6.9219,
+          7.8263,
+          7.6104
+        ],
+        "warm_p5_p95_ms": [
+          6.5602,
+          7.471
+        ]
+      },
+      "e8a_a0p": {
+        "accuracy": {
+          "denominator_note": "the primary Pareto frontier uses only the common 10004-row raw-distribution denominator; the 64-row timing sample supports no accuracy claim",
+          "frozen_seed0_dev_accuracy": 0.59463,
+          "multiseed_context": {
+            "mean": 0.59446,
+            "per_seed": [
+              0.59463,
+              0.59411,
+              0.59463
+            ],
+            "source": "results/experiments/e8a_question_encoder/core_analysis.json",
+            "std": 0.0003
+          },
+          "raw_distribution_accuracy_common_denominator": 0.45852,
+          "timed_checkpoint_seed": 0,
+          "vocabulary_supported_accuracy": 0.59463,
+          "vocabulary_view_rows": 7714
+        },
+        "additive_sum_ms": [
+          9.3593,
+          9.4036,
+          9.4845
+        ],
+        "batched_image_branch_ms": 254.0121,
+        "cached_feature_head_only_ms": 1.3279,
+        "cached_image_question_side_ms": 3.3289,
+        "checkpoint": "results/experiments/e8a_question_encoder/checkpoints/e8a_A0p_train_250k_seed0.pt",
+        "checkpoint_sha256": "9ab8cc1e27dfddd9a3dbad4f8db991bbca2d528795333862adef5c51178e9281",
+        "cold_first_query_ms": [
+          121.93,
+          119.29,
+          117.31
+        ],
+        "context_only": false,
+        "cpu_vmhwm_mib": 2089.5,
+        "measured_minus_additive_ms": [
+          -0.1476,
+          -0.2194,
+          -0.1636
+        ],
+        "parameters": {
+          "convention": "CLIP dual tower resident (text side used for question tokens)",
+          "resident_frozen": 302554626,
+          "total_loaded": 323916902,
+          "trainable": 21362276
+        },
+        "peak_allocated_mib": 843.6,
+        "peak_reserved_mib": 952.0,
+        "reproduction": {
+          "agreements": 64,
+          "disagreements": [],
+          "n_rows": 64
+        },
+        "single_stream_qps": 108.6,
+        "stage_medians_ms": {
+          "S10_decode": 0.0254,
+          "S1_read": 0.0331,
+          "S2_decode_preprocess": 3.009,
+          "S3_image_h2d": 0.0843,
+          "S4_vision_tower": 2.2711,
+          "S5_tokenise": 0.1046,
+          "S6_token_h2d": 0.0237,
+          "S7_text_tower": 2.0528,
+          "S8_projection": 0.0242,
+          "S9_reasoner": 1.7527
+        },
+        "startup_load_seconds": [
+          2.1,
+          2.33,
+          2.13
+        ],
+        "sync_floor_ms": 0.0026,
+        "warm_across_pass_spread_ms": 0.1367,
+        "warm_median_ms": 9.2117,
+        "warm_median_ms_per_pass": [
+          9.2117,
+          9.1842,
+          9.3209
+        ],
+        "warm_p5_p95_ms": [
+          8.5453,
+          10.2228
+        ]
+      },
+      "e8a_a1": {
+        "accuracy": {
+          "denominator_note": "the primary Pareto frontier uses only the common 10004-row raw-distribution denominator; the 64-row timing sample supports no accuracy claim",
+          "frozen_seed0_dev_accuracy": 0.57493,
+          "multiseed_context": {
+            "mean": 0.57316,
+            "per_seed": [
+              0.57493,
+              0.57221,
+              0.57234
+            ],
+            "source": "results/experiments/e8a_question_encoder/core_analysis.json",
+            "std": 0.00154
+          },
+          "raw_distribution_accuracy_common_denominator": 0.44332,
+          "timed_checkpoint_seed": 0,
+          "vocabulary_supported_accuracy": 0.57493,
+          "vocabulary_view_rows": 7714
+        },
+        "additive_sum_ms": [
+          19.1151,
+          20.4972,
+          20.4776
+        ],
+        "batched_image_branch_ms": 255.286,
+        "cached_feature_head_only_ms": 1.4354,
+        "cached_image_question_side_ms": 13.6346,
+        "checkpoint": "results/experiments/e8a_question_encoder/checkpoints/e8a_A1_train_250k_seed0.pt",
+        "checkpoint_sha256": "51597f307559bdbae81d87e343cbaaa243693e13391688153e1812f401750d89",
+        "cold_first_query_ms": [
+          240.5,
+          235.19,
+          238.09
+        ],
+        "context_only": false,
+        "cpu_vmhwm_mib": 2089.1,
+        "measured_minus_additive_ms": [
+          -0.0923,
+          -0.1442,
+          -0.3316
+        ],
+        "parameters": {
+          "convention": "CLIP dual tower plus SmolLM2-135M resident; the CLIP text tower is loaded but unused by this pipeline",
+          "resident_frozen": 437069634,
+          "total_loaded": 458464678,
+          "trainable": 21395044
+        },
+        "peak_allocated_mib": 1108.3,
+        "peak_reserved_mib": 1176.0,
+        "reproduction": {
+          "agreements": 64,
+          "disagreements": [],
+          "n_rows": 64
+        },
+        "single_stream_qps": 49.6,
+        "stage_medians_ms": {
+          "S10_decode": 0.0243,
+          "S1_read": 0.0303,
+          "S2_decode_preprocess": 2.7285,
+          "S3_image_h2d": 0.0842,
+          "S4_vision_tower": 2.2692,
+          "S5_tokenise": 0.0625,
+          "S6_token_h2d": 0.0326,
+          "S7_text_tower": 13.4581,
+          "S8_projection": 0.0321,
+          "S9_reasoner": 1.7462
+        },
+        "startup_load_seconds": [
+          2.85,
+          2.74,
+          2.8
+        ],
+        "sync_floor_ms": 0.0026,
+        "warm_across_pass_spread_ms": 1.3302,
+        "warm_median_ms": 20.146,
+        "warm_median_ms_per_pass": [
+          19.0228,
+          20.353,
+          20.146
+        ],
+        "warm_p5_p95_ms": [
+          18.6571,
+          19.5467
+        ]
+      },
+      "fusion": {
+        "accuracy": {
+          "denominator_note": "the primary Pareto frontier uses only the common 10004-row raw-distribution denominator; the 64-row timing sample supports no accuracy claim",
+          "frozen_seed0_dev_accuracy": 0.58439,
+          "multiseed_context": {
+            "mean": 0.58226,
+            "per_seed": {
+              "0": 0.58439,
+              "1": 0.58128,
+              "2": 0.58089,
+              "3": 0.58439,
+              "42": 0.58037
+            },
+            "source": "results/experiments/v2_07_scaling/results.json",
+            "std": 0.00197
+          },
+          "raw_distribution_accuracy_common_denominator": 0.45062,
+          "timed_checkpoint_seed": 0,
+          "vocabulary_supported_accuracy": 0.58439,
+          "vocabulary_view_rows": 7714
+        },
+        "additive_sum_ms": [
+          7.0617,
+          7.8219,
+          7.9587
+        ],
+        "batched_image_branch_ms": 256.7655,
+        "cached_feature_head_only_ms": 0.042,
+        "cached_image_question_side_ms": 1.9499,
+        "checkpoint": "results/experiments/v2_07_scaling/checkpoints/fusion_250k_seed0.pt",
+        "checkpoint_sha256": "2c0f40fab3f91e10adb6603c77653d5e9a2942a12f1b12882b18885f67f15b27",
+        "cold_first_query_ms": [
+          126.93,
+          119.27,
+          121.14
+        ],
+        "context_only": false,
+        "cpu_vmhwm_mib": 2088.3,
+        "measured_minus_additive_ms": [
+          -0.1285,
+          -0.1868,
+          -0.1352
+        ],
+        "parameters": {
+          "convention": "CLIP dual tower resident",
+          "resident_frozen": 302554626,
+          "total_loaded": 303655014,
+          "trainable": 1100388
+        },
+        "peak_allocated_mib": 766.1,
+        "peak_reserved_mib": 852.0,
+        "reproduction": {
+          "agreements": 64,
+          "disagreements": [],
+          "n_rows": 64
+        },
+        "single_stream_qps": 131.0,
+        "stage_medians_ms": {
+          "S10_decode": 0.0263,
+          "S1_read": 0.0325,
+          "S2_decode_preprocess": 3.0426,
+          "S3_image_h2d": 0.0856,
+          "S4_vision_tower": 2.2449,
+          "S5_tokenise": 0.1025,
+          "S6_token_h2d": 0.0239,
+          "S7_text_tower": 2.1747,
+          "S9_head": 0.0878
+        },
+        "startup_load_seconds": [
+          2.09,
+          1.96,
+          2.06
+        ],
+        "sync_floor_ms": 0.0027,
+        "warm_across_pass_spread_ms": 0.8903,
+        "warm_median_ms": 7.6351,
+        "warm_median_ms_per_pass": [
+          6.9332,
+          7.6351,
+          7.8235
+        ],
+        "warm_p5_p95_ms": [
+          6.5682,
+          7.4082
+        ]
+      },
+      "question_only": {
+        "accuracy": {
+          "denominator_note": "the primary Pareto frontier uses only the common 10004-row raw-distribution denominator; the 64-row timing sample supports no accuracy claim",
+          "frozen_seed0_dev_accuracy": 0.50402,
+          "multiseed_context": {
+            "mean": 0.49769,
+            "per_seed": {
+              "0": 0.50402,
+              "1": 0.49287,
+              "2": 0.49767,
+              "3": 0.49948,
+              "42": 0.49443
+            },
+            "source": "results/experiments/v2_07_scaling/results.json",
+            "std": 0.00439
+          },
+          "raw_distribution_accuracy_common_denominator": 0.38864,
+          "timed_checkpoint_seed": 0,
+          "vocabulary_supported_accuracy": 0.50402,
+          "vocabulary_view_rows": 7714
+        },
+        "additive_sum_ms": [
+          1.9719,
+          1.9667,
+          1.9834
+        ],
+        "batched_image_branch_ms": null,
+        "cached_feature_head_only_ms": 0.0235,
+        "cached_image_question_side_ms": null,
+        "checkpoint": "results/experiments/v2_07_scaling/checkpoints/question_only_250k_seed0.pt",
+        "checkpoint_sha256": "52d2fde1ff25e07ca61a5354f5f97d5a8c3a46fe864f9f167276fcb38fa2d1c3",
+        "cold_first_query_ms": [
+          81.68,
+          71.51,
+          73.22
+        ],
+        "context_only": true,
+        "cpu_vmhwm_mib": 2088.4,
+        "measured_minus_additive_ms": [
+          -0.0116,
+          -0.0105,
+          -0.0139
+        ],
+        "parameters": {
+          "convention": "CLIP dual tower resident",
+          "resident_frozen": 302554626,
+          "total_loaded": 302868582,
+          "trainable": 313956
+        },
+        "peak_allocated_mib": 623.2,
+        "peak_reserved_mib": 690.0,
+        "reproduction": {
+          "agreements": 64,
+          "disagreements": [],
+          "n_rows": 64
+        },
+        "single_stream_qps": 510.1,
+        "stage_medians_ms": {
+          "S10_decode": 0.0198,
+          "S5_tokenise": 0.0764,
+          "S6_token_h2d": 0.0166,
+          "S7_text_tower": 1.8226,
+          "S9_head": 0.0366
+        },
+        "startup_load_seconds": [
+          1.94,
+          2.15,
+          2.16
+        ],
+        "sync_floor_ms": 0.0027,
+        "warm_across_pass_spread_ms": 0.0133,
+        "warm_median_ms": 1.9603,
+        "warm_median_ms_per_pass": [
+          1.9603,
+          1.9562,
+          1.9695
+        ],
+        "warm_p5_p95_ms": [
+          1.9421,
+          1.9818
+        ]
+      },
+      "reasoner": {
+        "accuracy": {
+          "denominator_note": "the primary Pareto frontier uses only the common 10004-row raw-distribution denominator; the 64-row timing sample supports no accuracy claim",
+          "frozen_seed0_dev_accuracy": 0.59139,
+          "multiseed_context": {
+            "mean": 0.5958,
+            "per_seed": {
+              "0": 0.59139,
+              "1": 0.59165,
+              "2": 0.60436
+            },
+            "source": "results/experiments/v3_03_scaling/results.json",
+            "std": 0.00741
+          },
+          "raw_distribution_accuracy_common_denominator": 0.45602,
+          "timed_checkpoint_seed": 0,
+          "vocabulary_supported_accuracy": 0.59139,
+          "vocabulary_view_rows": 7714
+        },
+        "additive_sum_ms": [
+          8.6449,
+          9.5311,
+          9.5907
+        ],
+        "batched_image_branch_ms": 256.8752,
+        "cached_feature_head_only_ms": 1.3577,
+        "cached_image_question_side_ms": 3.367,
+        "checkpoint": "results/experiments/v3_03_scaling/checkpoints/reasoner_250k_seed0.pt",
+        "checkpoint_sha256": "ccc47e1333f8947359bf87896948ef661d1edd2f8cd31a808dc40ff63b3ea4d8",
+        "cold_first_query_ms": [
+          118.18,
+          118.04,
+          116.37
+        ],
+        "context_only": false,
+        "cpu_vmhwm_mib": 2089.7,
+        "measured_minus_additive_ms": [
+          -0.1142,
+          -0.3592,
+          -0.1389
+        ],
+        "parameters": {
+          "convention": "CLIP dual tower resident (text side used for question tokens)",
+          "resident_frozen": 302554626,
+          "total_loaded": 323654246,
+          "trainable": 21099620
+        },
+        "peak_allocated_mib": 842.6,
+        "peak_reserved_mib": 950.0,
+        "reproduction": {
+          "agreements": 64,
+          "disagreements": [],
+          "n_rows": 64
+        },
+        "single_stream_qps": 109.0,
+        "stage_medians_ms": {
+          "S10_decode": 0.0258,
+          "S1_read": 0.0329,
+          "S2_decode_preprocess": 3.0127,
+          "S3_image_h2d": 0.0861,
+          "S4_vision_tower": 2.2954,
+          "S5_tokenise": 0.1031,
+          "S6_token_h2d": 0.0238,
+          "S7_text_tower": 2.1218,
+          "S9_reasoner": 1.8014
+        },
+        "startup_load_seconds": [
+          2.22,
+          2.18,
+          2.07
+        ],
+        "sync_floor_ms": 0.0027,
+        "warm_across_pass_spread_ms": 0.9211,
+        "warm_median_ms": 9.1719,
+        "warm_median_ms_per_pass": [
+          8.5307,
+          9.1719,
+          9.4518
+        ],
+        "warm_p5_p95_ms": [
+          8.1483,
+          9.4308
+        ]
+      },
+      "siglip_fusion": {
+        "accuracy": {
+          "denominator_note": "the primary Pareto frontier uses only the common 10004-row raw-distribution denominator; the 64-row timing sample supports no accuracy claim",
+          "frozen_seed0_dev_accuracy": 0.59386,
+          "multiseed_context": {
+            "mean": 0.59388,
+            "per_seed": {
+              "0": 0.59386,
+              "1": 0.59774,
+              "2": 0.59619,
+              "3": 0.5901,
+              "42": 0.59152
+            },
+            "source": "results/experiments/e2_siglip/results.json",
+            "std": 0.00317
+          },
+          "raw_distribution_accuracy_common_denominator": 0.45792,
+          "timed_checkpoint_seed": 0,
+          "vocabulary_supported_accuracy": 0.59386,
+          "vocabulary_view_rows": 7714
+        },
+        "additive_sum_ms": [
+          10.0693,
+          10.2396,
+          10.2519
+        ],
+        "batched_image_branch_ms": 416.5203,
+        "cached_feature_head_only_ms": 0.0482,
+        "cached_image_question_side_ms": 2.2798,
+        "checkpoint": "results/experiments/e2_siglip/checkpoints/fusion_250k_seed0.pt",
+        "checkpoint_sha256": "caa297c8a26e5050d3eda5835194591d3a8dc04ed9c8f4637aa54b65d4e65a33",
+        "cold_first_query_ms": [
+          127.74,
+          127.12,
+          128.26
+        ],
+        "context_only": false,
+        "cpu_vmhwm_mib": 2487.9,
+        "measured_minus_additive_ms": [
+          -0.2455,
+          -0.3388,
+          -0.4086
+        ],
+        "parameters": {
+          "convention": "SigLIP dual tower resident",
+          "resident_frozen": 406311940,
+          "total_loaded": 407936616,
+          "trainable": 1624676
+        },
+        "peak_allocated_mib": 1293.7,
+        "peak_reserved_mib": 1510.0,
+        "reproduction": {
+          "agreements": 64,
+          "disagreements": [],
+          "n_rows": 64
+        },
+        "single_stream_qps": 101.6,
+        "stage_medians_ms": {
+          "S10_decode": 0.024,
+          "S1_read": 0.0293,
+          "S2_decode_preprocess": 2.6801,
+          "S3_image_h2d": 0.08,
+          "S4_vision_tower": 4.9889,
+          "S5_tokenise": 0.1518,
+          "S6_token_h2d": 0.0238,
+          "S7_text_tower": 2.154,
+          "S9_head": 0.0763
+        },
+        "startup_load_seconds": [
+          3.21,
+          3.27,
+          3.18
+        ],
+        "sync_floor_ms": 0.0026,
+        "warm_across_pass_spread_ms": 0.077,
+        "warm_median_ms": 9.8433,
+        "warm_median_ms_per_pass": [
+          9.8238,
+          9.9008,
+          9.8433
+        ],
+        "warm_p5_p95_ms": [
+          9.3947,
+          10.4484
+        ]
+      },
+      "vocab1000_product": {
+        "accuracy": {
+          "denominator_note": "the primary Pareto frontier uses only the common 10004-row raw-distribution denominator; the 64-row timing sample supports no accuracy claim",
+          "frozen_seed0_dev_accuracy": 0.49954,
+          "multiseed_context": {
+            "mean": 0.49946,
+            "per_seed": {
+              "0": 0.49954,
+              "1": 0.49669,
+              "2": 0.4973,
+              "3": 0.50137,
+              "42": 0.50239
+            },
+            "source": "results/experiments/e3_vocab1000/results.json",
+            "std": 0.00248
+          },
+          "raw_distribution_accuracy_common_denominator": 0.4905,
+          "timed_checkpoint_seed": 0,
+          "vocabulary_supported_accuracy": 0.49954,
+          "vocabulary_view_rows": 9823
+        },
+        "additive_sum_ms": [
+          7.7998,
+          7.7854,
+          7.8486
+        ],
+        "batched_image_branch_ms": 256.7709,
+        "cached_feature_head_only_ms": 0.0356,
+        "cached_image_question_side_ms": 1.9313,
+        "checkpoint": "results/experiments/e3_vocab1000/checkpoints/product_250k_seed0.pt",
+        "checkpoint_sha256": "004115a2c79cbf287eecd09b15b3eb9d64a55d63ce4cda5382befada5ebfeba4",
+        "cold_first_query_ms": [
+          122.84,
+          118.27,
+          120.73
+        ],
+        "context_only": false,
+        "cpu_vmhwm_mib": 2088.8,
+        "measured_minus_additive_ms": [
+          -0.129,
+          -0.1707,
+          -0.1373
+        ],
+        "parameters": {
+          "convention": "CLIP dual tower resident",
+          "resident_frozen": 302554626,
+          "total_loaded": 303854570,
+          "trainable": 1299944
+        },
+        "peak_allocated_mib": 766.9,
+        "peak_reserved_mib": 852.0,
+        "reproduction": {
+          "agreements": 64,
+          "disagreements": [],
+          "n_rows": 64
+        },
+        "single_stream_qps": 130.4,
+        "stage_medians_ms": {
+          "S10_decode": 0.0253,
+          "S1_read": 0.0325,
+          "S2_decode_preprocess": 3.0701,
+          "S3_image_h2d": 0.0864,
+          "S4_vision_tower": 2.252,
+          "S5_tokenise": 0.103,
+          "S6_token_h2d": 0.0233,
+          "S7_text_tower": 2.1656,
+          "S9_head": 0.0646
+        },
+        "startup_load_seconds": [
+          2.12,
+          1.97,
+          2.08
+        ],
+        "sync_floor_ms": 0.0027,
+        "warm_across_pass_spread_ms": 0.0966,
+        "warm_median_ms": 7.6708,
+        "warm_median_ms_per_pass": [
+          7.6708,
+          7.6147,
+          7.7113
+        ],
+        "warm_p5_p95_ms": [
+          7.1036,
+          8.2988
+        ]
+      }
+    }
+  },
+  "metadata": {
+    "batch_size": 256,
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "deterministic": true,
+    "device": "cuda",
+    "dropout": 0.3,
+    "embed_dim": 512,
+    "git_commit": "b60c981",
+    "git_dirty": true,
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "h5py_version": "3.16.0",
+    "hidden_dim": 512,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "n_train": 40000,
+    "n_val": 8000,
+    "numpy_version": "2.5.0",
+    "open_clip_version": "3.3.0",
+    "pandas_version": "3.0.3",
+    "python": "3.12.3",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "timestamp": "2026-08-05T23:19:05",
+    "top_k_answers": 100,
+    "torch": "2.12.1+cu130",
+    "weight_decay": 0.0001
+  }
+}
