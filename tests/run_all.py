@@ -21,6 +21,7 @@ if str(PROJECT_ROOT) not in sys.path:
 
 from tests import (
     test_checkpoints,
+    test_e7b,
     test_e8a,
     test_e8a_safety,
     test_g21_scorer,
@@ -41,6 +42,7 @@ MODULES = (
     test_e8a,
     test_g21_scorer,
     test_e8a_safety,
+    test_e7b,
 )
 
 EMBARGOED_TOKEN = "test_" + "clean"
