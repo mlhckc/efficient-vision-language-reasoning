@@ -22,6 +22,11 @@ results/experiments/*
 results/experiments/e8a_question_encoder/*
 !results/experiments/e8a_question_encoder/*.json
 !results/experiments/e8a_question_encoder/README.md
+# G21 per-row prediction artefacts: the JSON sidecars and summary are small
+# and tracked; the per-row csv.gz tables are manifested binaries.
+!results/experiments/e8a_question_encoder/predictions_g21_v1/
+results/experiments/e8a_question_encoder/predictions_g21_v1/*
+!results/experiments/e8a_question_encoder/predictions_g21_v1/*.json
 
 # Python bytecode
 __pycache__/
