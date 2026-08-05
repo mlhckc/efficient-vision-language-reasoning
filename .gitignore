@@ -35,6 +35,9 @@ results/experiments/e7b_serial_efficiency/*
 !results/experiments/e7b_serial_efficiency/*.csv
 !results/experiments/e7b_serial_efficiency/*.png
 !results/experiments/e7b_serial_efficiency/*.txt
+!results/experiments/e7b_serial_efficiency/pilot_evidence/
+results/experiments/e7b_serial_efficiency/pilot_evidence/*
+!results/experiments/e7b_serial_efficiency/pilot_evidence/*.json
 
 # Python bytecode
 __pycache__/

@@ -43,11 +43,14 @@ SUPERSEDED_E7A_KEYS = ("gpu_encoder_plus_head_ms", "full_pipeline_ms",
 
 
 def tower_parameters() -> dict:
+    """E7a's encoder_total_parameters is already the WHOLE dual-tower count
+    (its note: "resident when either tower runs"), so it is taken once per
+    encoder, never summed across the two tower entries."""
     cost = json.loads(E7A_RESULTS.read_text())["e7a_efficiency"]["cost"]
-    clip = (cost["clip_image_tower"]["encoder_total_parameters"]
-            + cost["clip_text_tower"]["encoder_total_parameters"])
-    siglip = (cost["siglip_image_tower"]["encoder_total_parameters"]
-              + cost["siglip_text_tower"]["encoder_total_parameters"])
+    clip = cost["clip_image_tower"]["encoder_total_parameters"]
+    siglip = cost["siglip_image_tower"]["encoder_total_parameters"]
+    assert clip == cost["clip_text_tower"]["encoder_total_parameters"]
+    assert siglip == cost["siglip_text_tower"]["encoder_total_parameters"]
     return {"clip_dual_tower": int(clip), "siglip_dual_tower": int(siglip)}
 
 
@@ -90,8 +93,14 @@ def aggregate_system(name: str, runs: list) -> dict:
         "warm_median_ms_per_pass": warm,
         "warm_median_ms": round(float(np.median(warm)), 4),
         "warm_across_pass_spread_ms": round(max(warm) - min(warm), 4),
-        "warm_p5_p95_ms": [runs[0]["warm_single_unsegmented"]["p5_ms"],
-                           runs[0]["warm_single_unsegmented"]["p95_ms"]],
+        "warm_p5_p95_ms_per_pass": [
+            [run["warm_single_unsegmented"]["p5_ms"],
+             run["warm_single_unsegmented"]["p95_ms"]] for run in runs],
+        "warm_p5_p95_envelope_ms": [
+            round(min(run["warm_single_unsegmented"]["p5_ms"]
+                      for run in runs), 4),
+            round(max(run["warm_single_unsegmented"]["p95_ms"]
+                      for run in runs), 4)],
         "single_stream_qps": round(1000.0 / float(np.median(warm)), 1),
         "stage_medians_ms": stages,
         "additive_sum_ms": [run["additive_sum_ms"] for run in runs],
