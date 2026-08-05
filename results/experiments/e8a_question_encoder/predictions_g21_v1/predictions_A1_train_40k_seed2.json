@@ -1,0 +1,113 @@
+{
+  "metadata": {
+    "timestamp": "2026-08-05T21:37:48",
+    "git_commit": "1041393",
+    "git_dirty": false,
+    "open_clip_version": "3.3.0",
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "h5py_version": "3.16.0",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "deterministic": true,
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "embed_dim": 512,
+    "top_k_answers": 100,
+    "n_train": 40000,
+    "n_val": 8000,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "hidden_dim": 512,
+    "dropout": 0.3,
+    "weight_decay": 0.0001
+  },
+  "cell": "A1/train_40k/seed2",
+  "arm": "A1",
+  "scale": "train_40k",
+  "seed": 2,
+  "artefact": {
+    "path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1_train_40k_seed2.csv.gz",
+    "sha256": "45e23a0f1528d3c13212d9db7c932aea11da2d9b5a5aaed04de1e8fd0943796b",
+    "bytes": 372054,
+    "rows": 30856,
+    "conditions": [
+      "normal",
+      "fixed_image",
+      "fixed_question",
+      "shuffled_image"
+    ],
+    "format": "gzip csv, one row per development question per condition"
+  },
+  "accuracies": {
+    "normal": {
+      "raw_exact": 0.52917,
+      "normalized_exact": 0.52917,
+      "n_rows": 7714
+    },
+    "fixed_image": {
+      "raw_exact": 0.43505,
+      "normalized_exact": 0.43505,
+      "n_rows": 7714
+    },
+    "fixed_question": {
+      "raw_exact": 0.22556,
+      "normalized_exact": 0.22556,
+      "n_rows": 7714
+    },
+    "shuffled_image": {
+      "raw_exact": 0.41937,
+      "normalized_exact": 0.41937,
+      "n_rows": 7714
+    }
+  },
+  "gates": {
+    "cell_validated": true,
+    "g11_repeat_bitwise_identical": true,
+    "stored_correctness_reproduced_row_for_row": true,
+    "neutral_image_sha256_matches_recorded": true,
+    "neutral_question_sha256_matches_recorded": true,
+    "derangement_sha256_matches_recorded": true,
+    "derangement_self_pairs_by_imageid": 0
+  },
+  "pinned": {
+    "neutral_image_sha256": "8cb31f37bde17768238ff7fd5ba716c795e238091cbc94a0a5c6242297e414b3",
+    "neutral_question_sha256": "96fc8f6dc43d9e155469008aab4d1c53ed91bcca8757571d0ea50816e448387d",
+    "derangement_sha256": "8de10e8020327258f4ad188d2a2a195a297ac6558cbb3caeec4ef047cf2e7658",
+    "checkpoint_sha256": "dac5af7f6853071699d114310be4c0696521880dd416fa023540f991c398855c",
+    "vocabulary_sha256": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680",
+    "evaluation_row_sha256": "ba12180a7c0bcaef1fa2d9f0fd69c2404e14cc9cf50bbcec86ebe600d0d1c5b7",
+    "code_head": "1041393",
+    "scorer_source_sha256": "f08edfcad5be0112500993e245c706b6cb928eadebe203f89f838e5e0d04bec8"
+  },
+  "scorer": {
+    "upstream_repository": "GT-Vision-Lab/VQA",
+    "upstream_commit": "a013f0043c1e2cdc995922dfe257f7149aa9af06",
+    "upstream_source_path": "PythonEvaluationTools/vqaEvaluation/vqaEval.py",
+    "licence": "BSD 2-Clause",
+    "vendored_source": "experiments/e8a_question_encoder/vendor/vqa/vqaEval.py",
+    "vendored_source_sha256": "f08edfcad5be0112500993e245c706b6cb928eadebe203f89f838e5e0d04bec8",
+    "vendored_licence": "experiments/e8a_question_encoder/vendor/vqa/LICENSE",
+    "vendored_licence_sha256": "4bf86fe8b104b69fc72caaa095b2fff4bade0d3d9a7970c6a5fd01fb736cad04",
+    "adapter": "experiments/e8a_question_encoder/g21_scorer.py",
+    "adapter_sha256": "22ea9c59082840a60568d7b804a3cb66ac0daccb7b503a6c50305d1354f2f40d"
+  },
+  "timings_seconds": {
+    "normal_s": 1.773,
+    "g11_repeat_s": 1.769,
+    "fixed_image_s": 1.63,
+    "fixed_question_s": 1.779,
+    "shuffled_image_s": 1.769,
+    "peak_allocated_mib": 259.7,
+    "peak_reserved_mib": 360.0
+  },
+  "device": "cuda",
+  "clean_test_accessed": false
+}
