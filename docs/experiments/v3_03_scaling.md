@@ -121,18 +121,23 @@ is unchanged from v3_01, so its stored cached-feature latency applies
 
 ## Decisions and problems
 
-(a) The 40k negative result was data-limited, not architectural. With
-100k training questions the same frozen recipe puts the reasoner ahead
-of every global head in every seed (+0.0065 over fusion), and at 250k
-the margin roughly doubles (+0.0136) while fusion's own advantage over
-concat has decayed to noise (v2_07). Token-level access plus the
-latent-query head extracts information at scale that the pooled global
-embedding path does not provide. This is consistent with the published
-low-data connector findings (DePALM, Vallaeys 2024, arXiv:2403.13499;
-see docs/RELATED_WORK.md) and sharpens the project's scoping: the
-v3_02a conclusion that the head "leans on CLS" described the 40k
-regime, and the representation-sufficiency framing must now be scoped
-to that regime for overall accuracy.
+(a) The combined token-level latent-reasoner configuration outperforms
+the compared global configurations at the larger scales: with 100k
+training questions the same frozen recipe puts the reasoner ahead of
+every global head in every seed (+0.0065 over fusion), and at 250k the
+margin roughly doubles (+0.0136) while fusion's own advantage over
+concat has decayed to noise (v2_07). This comparison does not causally
+isolate what produces the margin: the reasoner differs from the global
+heads jointly in architecture, in token-level rather than pooled access
+to the frozen features, and in trainable capacity (21.1M against about
+1.1M), and no experiment holds two of those fixed while varying the
+third. The result is therefore a configuration-level finding, observed
+at these scales, consistent with the published low-data connector
+findings (DePALM, Vallaeys 2024, arXiv:2403.13499; see
+docs/RELATED_WORK.md). It sharpens the project's scoping: the v3_02a
+conclusion that the head "leans on CLS" described the 40k regime, and
+the representation-sufficiency framing must now be scoped to that
+regime for overall accuracy.
 
 (b) The compositional conclusion stands unchanged. The pooled >=4-step
 deficit persists for every model at every scale (0.064-0.096), and the
@@ -157,3 +162,12 @@ which makes the freeze decision (F1) more consequential than it was
 under the 40k-parity picture.
 
 Supersession note (1 August 2026): the latency and memory figures in this report were produced under an earlier protocol (random inputs, 20/200 iterations, means without pre-call synchronisation) and are superseded by docs/experiments/e7a_efficiency.md, which benchmarks every stored head and both frozen encoders under one protocol. Accuracy results in this report are unaffected.
+
+Correction note (5 August 2026): decision (a) previously read "The 40k
+negative result was data-limited, not architectural" and "Token-level
+access plus the latent-query head extracts information at scale that the
+pooled global embedding path does not provide". Both sentences claimed a
+causal isolation this design does not support: architecture, token-level
+access and trainable capacity change together between the reasoner and
+the global heads. The paragraph above now states the supported
+configuration-level finding; no measured number changed.

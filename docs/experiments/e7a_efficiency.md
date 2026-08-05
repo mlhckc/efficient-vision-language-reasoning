@@ -50,7 +50,13 @@ Four cost regimes, never mixed: head-only; GPU encoder plus head; full
 per-query pipeline (adds CPU image decode/preprocess and tokenisation);
 and amortised, where image decode and the image tower are divided by a
 questions-per-image reference of 10.0 (measured 10.04 on the top-100 dev
-view and 12.66 on the E3 view). The common accuracy axis is
+view and 12.66 on the E3 view). The GPU-plus-head, full-pipeline and
+amortised regimes are ADDITIVE COMPONENT ESTIMATES: each stage was timed
+in isolation and the regime is the sum of those stage medians. No single
+serially executed decode-encode-head pass was timed in this experiment,
+so these figures exclude any inter-stage overhead (host-device transfer
+scheduling, cache effects, pipeline stalls) a true serial measurement
+would include (correction of 5 August 2026; see the note at the end). The common accuracy axis is
 raw-distribution accuracy over the identical 10,004 raw dev questions
 (in-vocabulary accuracy times coverage), which is exactly correct/10004
 in both dev views; accuracies are five-seed means, three-seed for the
@@ -309,3 +315,16 @@ model list. The
 reasoner remains scientifically important as the controlled negative and
 scale-reversal result, but it is not on any efficiency Pareto front. No
 freeze decision is taken here.
+
+Correction note (5 August 2026): the "GPU+head", "full pipeline" and
+"amortised" columns and their Pareto fronts are additive component
+estimates — sums of stage medians each measured in isolation — not
+measurements of one serially executed decode-encode-head pass. Earlier
+wording presented the full-pipeline column as an end-to-end figure
+without that qualification. No number changed; the additive construction
+was already recorded in results.json's regime definitions. A true serial
+end-to-end benchmark (one timed pass per query through CPU decode, GPU
+encoders and head, with the same three-pass drift protocol) remains
+outstanding and is specified as the next authorised efficiency phase in
+the G21 remediation closure record; until it runs, every "end-to-end"
+statement citing this report must say "additive estimate".

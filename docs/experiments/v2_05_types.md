@@ -142,6 +142,21 @@ zero. None of the three negative gaps does: choose -0.016 [-0.044, +0.011],
 compare -0.043 [-0.098, +0.012], global -0.018 [-0.068, +0.031]. At seed 42
 alone, no per-type loss is statistically established.
 
+Correction (v2_05c, 5 August 2026): the intervals in the paragraph above
+are row-level and treat the 7,714 development rows as independent although
+they share 768 images, so they are superseded for inference by the
+image-clustered intervals of
+results/experiments/v2_05_types/addendum_clustered.json
+(experiments/v2_05_types/addendum_clustered.py; 2,000 draws,
+default_rng(0), clusters the slice's represented imageIds). Every
+recomputed gap reproduced the stored value exactly before its interval was
+replaced. Under clustering, none of the ten exclusion conclusions changes:
+verify [+0.021, +0.063], logical [+0.014, +0.068], obj [+0.014, +0.064]
+and rel [+0.010, +0.041] still exclude zero and the rest still do not. The
+clustered table also adds the step buckets and per-slice row and
+unique-image counts, and a five-seed clustered interval per slice. The
+row-level figures above are retained as description only.
+
 Multi-seed gaps (all five seeds, evaluation only). The positive conclusions
 survive: verify (+0.046 +/- 0.009), logical (+0.038 +/- 0.008), obj
 (+0.043 +/- 0.009) and rel (+0.018 +/- 0.005) are positive in every seed,

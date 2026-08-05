@@ -105,3 +105,18 @@ quantities. One incidental observation: concat's logical slice loses
 nothing under zeroing at seed 42 (+0.0000) yet 0.033 under shuffling,
 a clean example of zeros understating reliance relative to misleading
 real vectors.
+
+Self-pair disclosure and supersession note (5 August 2026): the shuffled
+condition here permutes image embeddings across the 7,714 development rows
+(seed 42). Because rows share images, that row-level permutation leaves 11
+rows paired with their own image by imageId (0.14 per cent of rows), which
+dilutes the measured drop by at most that fraction; the drops in this
+report are retained as descriptive five-seed quantities with that dilution
+now stated. For the E8A programme onwards, the operative wrong-image
+control is the imageId-level derangement with zero self-pairs
+(experiments/e8a_question_encoder/e8a_common.imageid_level_derangement),
+whose G21 re-inference artefacts under
+results/experiments/e8a_question_encoder/predictions_g21_v1/ supersede any
+row-level shuffled figure wherever both exist. The v3_01-comparable
+row-level condition remains in the E8A records only as clearly labelled
+historical context.
