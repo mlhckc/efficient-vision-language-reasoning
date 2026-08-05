@@ -57,7 +57,7 @@ def cell_of(name: str) -> dict:
 
 
 def describe(path: Path, kind: str, irreplaceable: bool, reason: str,
-             backed_up: bool) -> dict:
+             backup_expected: bool) -> dict:
     relative = path.relative_to(PROJECT_ROOT).as_posix()
     record = {
         "path": relative,
@@ -66,15 +66,78 @@ def describe(path: Path, kind: str, irreplaceable: bool, reason: str,
         "artefact_type": kind,
         "committed_to_git": False,
         "present_on_node_local_scratch": True,
-        "backed_up_off_node": backed_up,
+        "backup_expected_by_policy": backup_expected,
         "irreplaceable": irreplaceable,
         "regeneration": reason,
     }
-    if backed_up:
-        record["backup_path"] = (
-            BACKUP_ROOT / path.relative_to(PROJECT_ROOT)).as_posix()
     record.update(cell_of(path.name))
     return record
+
+
+def verify_backup_entry(entry: dict, backup_root: Path) -> dict:
+    """Inspect the actual backup destination for one artefact, now.
+
+    The destination file is located under the supplied backup root, its size
+    and SHA-256 are re-measured at call time and compared with the source
+    entry. Nothing is asserted from memory or from an earlier manifest: a
+    backup that is absent, truncated or altered is reported as exactly that.
+    """
+    destination = backup_root / entry["path"]
+    if not destination.exists():
+        return {"backup_path": destination.as_posix(),
+                "backup_present": False, "backup_verified": False}
+    measured_bytes = destination.stat().st_size
+    measured_sha = e8a.sha256_file(destination)
+    return {"backup_path": destination.as_posix(),
+            "backup_present": True,
+            "backup_bytes": measured_bytes,
+            "backup_sha256": measured_sha,
+            "backup_verified": (measured_bytes == entry["bytes"]
+                                and measured_sha == entry["sha256"])}
+
+
+def verify_backup(entries: list, backup_root: Path) -> dict:
+    """Measure the whole backup against the source entries, fail-closed.
+
+    `verified` is computed from this inspection alone. If the backup root is
+    not reachable from this node the answer is False with the reason, never a
+    hard-coded success.
+    """
+    if not backup_root.exists():
+        for entry in entries:
+            entry["backup_present"] = False
+            entry["backup_verified"] = False
+        return {"destination_root": backup_root.as_posix(),
+                "reachable": False, "verified": False,
+                "reason": ("the backup root does not exist or is not "
+                           "mounted on this node; nothing was verified")}
+    present, verified, mismatched, missing = 0, 0, [], []
+    expected = [e for e in entries if e["backup_expected_by_policy"]]
+    for entry in entries:
+        inspection = verify_backup_entry(entry, backup_root)
+        entry.update(inspection)
+        if inspection["backup_present"]:
+            present += 1
+            if inspection["backup_verified"]:
+                verified += 1
+            else:
+                mismatched.append(entry["path"])
+        elif entry["backup_expected_by_policy"]:
+            missing.append(entry["path"])
+    return {
+        "destination_root": backup_root.as_posix(),
+        "reachable": True,
+        "artefacts_expected_by_policy": len(expected),
+        "artefacts_present_at_destination": present,
+        "artefacts_verified_by_rehash": verified,
+        "expected_but_missing": missing,
+        "present_but_mismatched": mismatched,
+        "verified": (not missing and not mismatched
+                     and verified == len(expected) and len(expected) > 0),
+        "verification": ("every destination file re-hashed by this run at "
+                         "the moment the manifest was written; no verdict "
+                         "is carried forward from an earlier copy"),
+    }
 
 
 def main() -> int:
@@ -134,47 +197,26 @@ def main() -> int:
             "CLAUDE.md records that the venv and scratch contents exist only "
             "on the node where they were created."),
         "backup": {
-            "destination_root": BACKUP_ROOT.as_posix(),
-            "backed_up_directory": (
-                BACKUP_ROOT / BACKED_UP_SOURCE.relative_to(PROJECT_ROOT)
-            ).as_posix(),
-            "filesystem": ("NFS export "
-                           "isilon01-az3.surrey.ac.uk:"
-                           "/ifs/isilon01/az3/Personal/HS400"),
-            "persistent_across_node_loss": True,
-            "evidence": (
-                "stat -f reports fstype nfs against ext2/ext3 for the source, "
-                "and the two paths sit on different devices. CLAUDE.md states "
-                "that /scratch is node-local and contrasts it with the shared "
-                "home filesystem."),
-            "verified": True,
-            "verification": (
-                "every file re-hashed independently at the destination after "
-                "the copy and compared with the source: 67 of 67 paths, sizes "
-                "and SHA-256 values identical, and the two full manifests "
-                "share the digest "
-                "e14c5c45f2253e5ef57e938c5d934d1c4628e66ea21a6c60df0fcf79b41a"
-                "9488"),
-            "artefact_files_verified": 67,
-            "artefact_bytes_verified": 1541946524,
-            "documents_added_after_the_first_copy": [
-                "README.md", "ARTEFACT_MANIFEST.json"],
-            "documents_note": (
-                "these two were written after the artefacts were copied and "
-                "verified; both are also tracked in git, and the backup was "
-                "re-synchronised and re-verified over the whole directory "
-                "afterwards"),
-            "method": ("rsync -a --partial; no --delete, so nothing is "
-                       "removed from either side, and the destination did not "
-                       "exist beforehand so no earlier backup was overwritten"),
-            "not_backed_up": {
+            **backup_verification,
+            "filesystem_policy_note": (
+                "the destination is an NFS export "
+                "(isilon01-az3.surrey.ac.uk:/ifs/isilon01/az3/Personal/HS400)"
+                " and survives loss of this node-local /scratch; the "
+                "token-store policy exception below records why "
+                "data/v3_slm_tokens is not expected there"),
+            "not_backed_up_by_policy": {
                 "path": "data/v3_slm_tokens",
                 "reason": (
-                    "5.4 GB of regenerable frozen question states. The "
-                    "project documentation does not record them as "
-                    "irreplaceable and they are reproducible from the pinned "
-                    "model, so they were left out rather than consume the "
-                    "remaining quota on the persistent share.")},
+                    "5.4 GB of regenerable frozen question states, "
+                    "reproducible from the pinned model by "
+                    "extract_hidden.py, left off the quota-limited "
+                    "persistent share deliberately")},
+            "supersession_note": (
+                "this manifest's backup block is measured by "
+                "verify_backup at write time. It supersedes the earlier "
+                "ARTEFACT_MANIFEST.json whose backup block carried a "
+                "hard-coded verified=true narrative; the earlier state "
+                "remains in git history"),
         },
         "committed_json_records": {
             "count": len(committed),

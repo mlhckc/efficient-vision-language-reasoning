@@ -40,6 +40,9 @@ if str(PROJECT_ROOT) not in sys.path:
 from src import utils  # noqa: E402
 from experiments.e8a_question_encoder import e8a_common as e8a  # noqa: E402
 from experiments.e8a_question_encoder import run_pilot  # noqa: E402
+from experiments.e8a_question_encoder import (  # noqa: E402
+    analysis_integrity as integrity)
+from experiments.e8a_question_encoder import cell_validator  # noqa: E402
 
 ARMS = ("A0p", "A1", "A1r")
 SCALES = ("train_40k", "train_250k")
@@ -220,11 +223,56 @@ def build_matrix(recipe: dict) -> dict:
     }
 
 
-def freeze(recipe: dict, force: bool = False) -> dict:
+def results_already_observed() -> list:
+    """Artefacts whose existence means the frozen manifest governed results."""
+    observed = sorted(str(p.relative_to(e8a.OUT_DIR))
+                      for pattern in ("run_*.json", "pilot*.json",
+                                      "correctness_*.npz")
+                      for p in e8a.OUT_DIR.glob(pattern))
+    observed += sorted("checkpoints/" + p.name
+                       for p in (e8a.OUT_DIR / "checkpoints").glob("*.pt"))
+    return observed
+
+
+def refreeze_guard(force: bool, reason: str | None, authorized_by: str | None,
+                   observed: list) -> dict | None:
+    """A frozen manifest is a pre-registration. Rewriting it needs a reason,
+    and once any result exists it additionally needs explicit authorisation;
+    both are recorded in a supersession note, never applied silently."""
+    if not force:
+        return None
+    if not reason:
+        sys.exit("--force-refreeze requires --refreeze-reason: a frozen "
+                 "manifest is a pre-registration and is never rewritten "
+                 "without a recorded reason")
+    if observed and not authorized_by:
+        sys.exit(f"{len(observed)} result artefact(s) already exist under "
+                 f"this manifest; --force-refreeze after results requires "
+                 f"--refreeze-authorized-by naming the explicit user "
+                 f"authorisation")
+    return {"reason": reason, "authorized_by": authorized_by,
+            "results_observed_at_refreeze": observed}
+
+
+def freeze(recipe: dict, force: bool = False, reason: str | None = None,
+           authorized_by: str | None = None) -> dict:
+    supersession = refreeze_guard(force, reason, authorized_by,
+                                  results_already_observed())
     if MANIFEST.exists() and not force:
         sys.exit("the execution manifest is already frozen; refusing to "
                  "overwrite it. Pass --force-refreeze only with a recorded "
                  "reason, and never after a result has been observed.")
+    if MANIFEST.exists() and supersession is not None:
+        stamp = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
+        preserved = e8a.OUT_DIR / f"execution_manifest_superseded_{stamp}.json"
+        preserved.write_bytes(MANIFEST.read_bytes())
+        supersession["superseded_manifest"] = {
+            "path": str(preserved.relative_to(PROJECT_ROOT)),
+            "sha256": e8a.sha256_file(preserved)}
+        utils.save_json({"metadata": utils.run_metadata(),
+                         "e8a_manifest_supersession": supersession},
+                        e8a.OUT_DIR / f"manifest_supersession_{stamp}.json")
+        print(f"superseded manifest preserved at {preserved.name}")
     matrix = build_matrix(recipe)
     matrix["data_hashes"] = {
         p: e8a.sha256_file(PROJECT_ROOT / p) for p in sorted({
@@ -284,6 +332,41 @@ def assert_manifest_unchanged(recipe: dict) -> dict:
 
 def cell_name(spec: dict) -> str:
     return f"{spec['arm']}/{spec['scale']}/seed{spec['seed']}"
+
+
+# Pair preservation is binding (canonical plan and CLAUDE.md): A1 and A1r are
+# an inseparable within-size pair. Scheduling is therefore atomic per seed,
+# with the RANDOM control first, so that an interruption at any point can
+# leave a trained A1 only where its own seed's A1r already completed. A0p is
+# unpaired and runs first within its seed.
+PAIR_ORDER = {"A0p": 0, "A1r": 1, "A1": 2}
+
+
+def schedule_pairs(wanted: list) -> list:
+    """Order requested cells into atomic per-seed pairs, random control first."""
+    return sorted(wanted, key=lambda spec: (spec["seed"],
+                                            PAIR_ORDER[spec["arm"]]))
+
+
+def interrupt_evidence(arm: str, scale: str, seed: int, signal_name: str,
+                       detail: str, seconds: float) -> Path:
+    """Structured failure evidence for a halt that is not a Python exception.
+
+    train_arm's own resource halts write a FAILED record before raising
+    SystemExit; this only fills the gap where a SystemExit or
+    KeyboardInterrupt reaches the runner with no evidence file on disk, so a
+    canonical halt can never end the process silently.
+    """
+    path = e8a.OUT_DIR / f"FAILED_{arm}_{scale}_seed{seed}.json"
+    if not path.exists():
+        utils.save_json(
+            {"metadata": utils.run_metadata(seed=seed),
+             "arm": arm, "scale": scale, "seed": seed,
+             "status": "INTERRUPTED",
+             "signal": signal_name,
+             "failure": detail,
+             "seconds_before_interrupt": round(seconds, 1)}, path)
+    return path
 
 
 def classify_invocation(manifest: dict, scale: str, requested: list,
@@ -351,6 +434,8 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--freeze", action="store_true")
     parser.add_argument("--force-refreeze", action="store_true")
+    parser.add_argument("--refreeze-reason", default=None)
+    parser.add_argument("--refreeze-authorized-by", default=None)
     parser.add_argument("--run", action="store_true")
     parser.add_argument("--scale", choices=list(SCALES))
     parser.add_argument("--arms", default=",".join(ARMS))
@@ -365,7 +450,8 @@ def main() -> int:
     recipe = e8a.gate_g0_recipe()
 
     if args.freeze:
-        freeze(recipe, args.force_refreeze)
+        freeze(recipe, args.force_refreeze, args.refreeze_reason,
+               args.refreeze_authorized_by)
         return 0
 
     if not args.scale:
@@ -387,9 +473,10 @@ def main() -> int:
     def has_record(spec: dict) -> bool:
         return (e8a.OUT_DIR / spec["expected_artefacts"]["record"]).exists()
 
-    wanted = [r for r in manifest["runs"]
-              if r["scale"] == args.scale and r["arm"] in arms
-              and r["seed"] in seeds and r["status"] == "to_run"]
+    wanted = schedule_pairs([r for r in manifest["runs"]
+                             if r["scale"] == args.scale and r["arm"] in arms
+                             and r["seed"] in seeds
+                             and r["status"] == "to_run"])
     if not wanted:
         print("nothing to run for this selection")
         return report_invocation(classify_invocation(
@@ -489,6 +576,7 @@ def main() -> int:
         del probe_model, probe_loader, probe_dataset
         torch.cuda.empty_cache()
 
+    validation_view = integrity.canonical_dev_view()
     completed = []
     for spec in wanted:
         arm, seed = spec["arm"], spec["seed"]
@@ -496,8 +584,21 @@ def main() -> int:
         checkpoint = (e8a.OUT_DIR
                       / spec["expected_artefacts"]["checkpoint"])
         if record_path.exists():
+            # A record's existence is not proof of a completed, compatible
+            # cell. Reuse passes the strong validator or the invocation fails
+            # closed; a stale or partial cell is never silently counted.
+            try:
+                cell_validator.validate_cell(manifest, validation_view, arm,
+                                             args.scale, seed)
+            except AssertionError as error:
+                print(f"\n[INVALID] {arm} {args.scale} seed {seed}: recorded "
+                      f"but failed validation: {error}")
+                interrupt_evidence(arm, args.scale, seed,
+                                   "ReuseValidationFailure", str(error), 0.0)
+                return report_invocation(classify_invocation(
+                    manifest, args.scale, wanted, has_record, failed=[spec]))
             print(f"\n[SKIP] {arm} {args.scale} seed {seed}: already recorded "
-                  f"at {record_path.name}")
+                  f"at {record_path.name} and validated for reuse")
             completed.append(json.loads(record_path.read_text()))
             continue
         assert not checkpoint.exists(), (
@@ -511,6 +612,18 @@ def main() -> int:
             evaluation = run_pilot.evaluate_arm(
                 arm, recipe, seed, run, images, questions, neutral_image,
                 neutral_question, device, scale=args.scale)
+        except (SystemExit, KeyboardInterrupt) as halt:
+            # A canonical resource halt or an operator interrupt must leave
+            # structured evidence and a recorded invocation status; it must
+            # never end the process silently.
+            evidence = interrupt_evidence(
+                arm, args.scale, seed, type(halt).__name__,
+                str(halt) or "no message", time.time() - started)
+            print(f"\n[HALT] {arm} {args.scale} seed {seed}: "
+                  f"{type(halt).__name__} recorded at {evidence.name}")
+            report_invocation(classify_invocation(
+                manifest, args.scale, wanted, has_record, failed=[spec]))
+            raise
         except Exception as error:                   # noqa: BLE001
             # The traceback is the evidence, so it is printed, but the process
             # then exits through the recorded status rather than through the
