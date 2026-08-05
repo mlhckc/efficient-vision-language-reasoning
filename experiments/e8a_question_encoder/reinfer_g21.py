@@ -134,8 +134,19 @@ def neutral_provenance_of(block: dict, arm: str) -> tuple:
 
 
 def evaluate_conditions(model, dataset, loader, device, neutral_image,
-                        neutral_question, mapping) -> tuple:
-    """Predicted label IDs for the four conditions, plus G11 and timings."""
+                        neutral_question, mapping, sentinel=None) -> tuple:
+    """Predicted label IDs for the four conditions, plus G11 and timings.
+
+    `sentinel` is called after every condition pass: a lightweight in-cell
+    exclusivity check, so a foreign GPU process that appears mid-cell is
+    detected at the next pass boundary and the cell is abandoned before any
+    output is promoted. A promoted cell therefore had the check pass on
+    both sides of every one of its evaluation passes.
+    """
+    def checkpoint(context):
+        if sentinel is not None:
+            sentinel(context)
+
     timings = {}
     predictions = {}
 
@@ -146,6 +157,7 @@ def evaluate_conditions(model, dataset, loader, device, neutral_image,
         torch.cuda.synchronize()
     timings["normal_s"] = round(time.perf_counter() - started, 3)
     predictions["normal"] = logits.argmax(dim=-1).numpy()
+    checkpoint("after normal pass")
 
     started = time.perf_counter()
     repeat, _ = e8a.predict_logits(model, loader, device)
@@ -156,6 +168,7 @@ def evaluate_conditions(model, dataset, loader, device, neutral_image,
     if not g11_identical:
         raise AssertionError("G11 FAILED: repeated deterministic evaluation "
                              "is not bitwise identical")
+    checkpoint("after G11 repeat")
 
     started = time.perf_counter()
     dataset.set_normal()
@@ -165,6 +178,7 @@ def evaluate_conditions(model, dataset, loader, device, neutral_image,
         torch.cuda.synchronize()
     timings["fixed_image_s"] = round(time.perf_counter() - started, 3)
     predictions["fixed_image"] = fixed_image_logits.argmax(dim=-1).numpy()
+    checkpoint("after fixed-image pass")
 
     started = time.perf_counter()
     dataset.set_normal()
@@ -174,6 +188,7 @@ def evaluate_conditions(model, dataset, loader, device, neutral_image,
         torch.cuda.synchronize()
     timings["fixed_question_s"] = round(time.perf_counter() - started, 3)
     predictions["fixed_question"] = fixed_question_logits.argmax(dim=-1).numpy()
+    checkpoint("after fixed-question pass")
 
     started = time.perf_counter()
     dataset.set_normal()
@@ -188,6 +203,7 @@ def evaluate_conditions(model, dataset, loader, device, neutral_image,
     predictions["shuffled_image_derangement"] = \
         shuffled_logits.argmax(dim=-1).numpy()
     dataset.set_normal()
+    checkpoint("after shuffled-image pass")
 
     return predictions, labels.numpy(), g11_identical, timings
 
@@ -380,9 +396,12 @@ def main() -> int:
                                                  map_location=device))
                 model.eval()
 
+                sentinel = ((lambda context:
+                             assert_gpu_exclusive(f"{cell} {context}"))
+                            if device == "cuda" else None)
                 predictions, labels, g11, timings = evaluate_conditions(
                     model, dataset, loader, device, neutral_image,
-                    neutral_question[:2], mapping)
+                    neutral_question[:2], mapping, sentinel=sentinel)
                 if device == "cuda":
                     timings["peak_allocated_mib"] = round(
                         torch.cuda.max_memory_allocated() / 2 ** 20, 1)
@@ -403,6 +422,8 @@ def main() -> int:
                     arm, scale, seed, view, dataset, predictions, labels,
                     loaded["correctness_path"], index_to_answer, constants)
 
+                if device == "cuda":
+                    assert_gpu_exclusive(f"{cell} pre-promotion")
                 payload = gzip.compress(
                     frame.to_csv(index=False).encode("utf-8"), mtime=0)
                 atomic_write_bytes(out_csv, payload)
