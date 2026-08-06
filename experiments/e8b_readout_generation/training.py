@@ -51,34 +51,60 @@ V2_DIR = config.DATA_DIR / "v2"
 OUT_DIR = e8b_run.OUT_DIR
 CHECKPOINT_DIR = OUT_DIR / "checkpoints"
 
-# The complete frozen recipe (canonical plan section 5; grid point 1).
-RECIPE = {
-    "grid_point": 1,
-    "lr": 3e-4,
-    "warmup_frac": 0.0,
-    "dropout": 0.1,
-    "objective": "teacher-forced mean token NLL over answer tokens plus "
-                 "EOS, per example, then mean over the batch",
-    "selection_metric": "development R1 accuracy, EOS included",
-    "tie_break": "earliest epoch attaining the best value",
-    "max_epochs": 100,
-    "patience": 10,
-    "batch_size": 128,
-    "weight_decay": 0.01,
-    "weight_decay_on": "parameters with ndim >= 2 only",
-    "grad_clip": 1.0,
-    "scheduler": "cosine after warmup, LambdaLR, horizon "
-                 "100 x steps_per_epoch, stepped per optimizer step",
-    "precision": "bf16 autocast on the training path only; fp32 "
-                 "evaluation of the trainable path; the frozen LM runs "
-                 "in its pinned bfloat16",
-    "wall_clock_halt_hours": 8.0,
-    "seed": 0,
-    "arm": "B3",
-    "scale": "train_40k",
-}
-RECIPE_SHA256 = hashlib.sha256(
-    json.dumps(RECIPE, sort_keys=True).encode()).hexdigest()
+def build_recipe(grid_point: int) -> dict:
+    """The complete frozen recipe for one section-7.4 search grid point.
+
+    Only lr, warmup_frac and dropout vary across the eight points; every
+    other property is pinned by section 7.4 and is identical in all
+    eight recipes. The grid itself lives in run.py and is transcribed
+    from the protocol; nothing may be added after results are observed.
+    """
+    row = next((r for r in e8b_run.SEARCH_GRID
+                if r["grid_point"] == grid_point), None)
+    if row is None:
+        raise AssertionError(
+            f"grid point {grid_point} is not one of the eight frozen "
+            f"section-7.4 points")
+    return {
+        "grid_point": row["grid_point"],
+        "lr": row["lr"],
+        "warmup_frac": row["warmup_frac"],
+        "dropout": row["dropout"],
+        "objective": "teacher-forced mean token NLL over answer tokens "
+                     "plus EOS, per example, then mean over the batch",
+        "selection_metric": "development R1 accuracy, EOS included",
+        "tie_break": "earliest epoch attaining the best value",
+        "max_epochs": 100,
+        "patience": 10,
+        "batch_size": 128,
+        "weight_decay": 0.01,
+        "weight_decay_on": "parameters with ndim >= 2 only",
+        "grad_clip": 1.0,
+        "scheduler": "cosine after warmup, LambdaLR, horizon "
+                     "100 x steps_per_epoch, stepped per optimizer step",
+        "precision": "bf16 autocast on the training path only; fp32 "
+                     "evaluation of the trainable path; the frozen LM "
+                     "runs in its pinned bfloat16",
+        "wall_clock_halt_hours": 8.0,
+        "seed": 0,
+        "arm": "B3",
+        "scale": "train_40k",
+    }
+
+
+def recipe_sha256(recipe: dict) -> str:
+    return hashlib.sha256(
+        json.dumps(recipe, sort_keys=True).encode()).hexdigest()
+
+
+def run_name_for(grid_point: int) -> str:
+    return f"e8b_B3_train_40k_seed0_search{grid_point}"
+
+
+# Grid point 1, the G19 multiplier pilot, kept as the module default so
+# the recorded pilot artefacts stay reproducible from these constants.
+RECIPE = build_recipe(1)
+RECIPE_SHA256 = recipe_sha256(RECIPE)
 
 VOCAB_SHA256_PIN = ("f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10"
                     "f6a3947d90358680")  # G18: the V2 vocabulary
@@ -93,14 +119,37 @@ WALL_CHECK_EVERY_STEPS = 25
 # U1 E8B-min remaining-matrix constants for the G19 projection: 18 core
 # runs (B1/B2/B3 x two scales x seeds 0/1/2) of which B3/40k/seed0 comes
 # from promotion (U4), 8 search runs of which this pilot is point 1.
-REMAINING_SEARCH_RUNS = 7
+TOTAL_SEARCH_RUNS = 8         # the frozen section-7.4 grid
+REMAINING_SEARCH_RUNS = 7     # after grid point 1, the G19 pilot
 CORE_LM_RUNS_40K = 5          # B2 x3, B3 seeds 1-2 (seed 0 promoted, U4)
 CORE_LM_RUNS_250K = 6         # B2 x3, B3 x3
 CORE_B1_RUNS = 6              # classifier recipe, both scales x3 seeds
+CORE_B1_RUNS_40K = 3          # priced at the 40k rate and epoch count
+CORE_B1_RUNS_250K = 3         # priced at the 250k step ratio and epochs
 LM_CORE_CHECKPOINTS = 12      # B2/B3 x two scales x three seeds
 READOUTS_PER_CHECKPOINT = 3   # R1, R2, R3
 INTERVENTION_CONDITIONS = 3   # fixed-image, fixed-question, shuffled
-SELECTION_SENSITIVITY_EVALS = 22  # two B3 configs, <= 11 checkpoints each
+SELECTION_SENSITIVITY_EVALS = 22   # retained checkpoints (U1 halving)
+SELECTION_SENSITIVITY_PASSES = 44  # those checkpoints x (R2, R3)
+
+# Protocol section 13.2b: the pretrained SmolLM2-135M identity is
+# A1 + A4 + A7c + B3. The stored IDENTITY_BASELINE_HOURS figure is A1
+# alone, and its source record (resource_correction_g21.json) states in
+# terms that it is a lower bound because the E8B readout arms were then
+# unauthorised. A4 and A7c are unconditional core arms that load the same
+# pinned pretrained checkpoint, so they belong in the 35 h aggregate.
+A4_IDENTITY_HOURS = 1.804     # protocol table line 1186
+A7C_IDENTITY_HOURS = 1.864    # protocol table line 1188
+# Evaluation-hour split between the two identities, by weighted units.
+EVAL_SHARE_PRETRAINED = 0.634
+EVAL_SHARE_RANDOM = 0.366
+
+# Checkpoint sizes MEASURED from the grid point 1 artefacts on
+# 2026-08-06, replacing an earlier 85 MiB placeholder. A resume
+# checkpoint carries the model, both AdamW moments and the best state,
+# i.e. four copies of the 21,343,808 trainable fp32 parameters.
+RESUME_CHECKPOINT_MIB = 325.9
+BEST_CHECKPOINT_MIB = 81.5
 
 
 def sha256_file(path: Path) -> str:
@@ -192,7 +241,7 @@ def pinned_g14_rows(n_dev: int) -> list:
 
 @torch.no_grad()
 def g14_binding_gate(model, lm, dev_dataset, cache: dict, trie: dict,
-                     device, stage: str) -> dict:
+                     device, stage: str, run_name: str) -> dict:
     """Master protocol section 18 G14 at the binding width: on 64 pinned
     development examples, the batched selection scorer AND the
     single-example cached scorer must both agree with the single-sequence
@@ -219,18 +268,27 @@ def g14_binding_gate(model, lm, dev_dataset, cache: dict, trie: dict,
         cached = readouts.r1_cached(lm, prefix, cache)
         if not (brute["argmax"] == cached["argmax"]
                 == batched_argmax[position]):
-            sys.exit(f"G14 FAILED ({stage}) at pinned row {row}: "
-                     f"brute {brute['argmax']} cached {cached['argmax']} "
-                     f"batched {batched_argmax[position]} -- execution "
-                     f"halts and returns to the user")
+            e8b_run.gate_halt(
+                run_name, "G14",
+                f"R1 argmax disagreement ({stage}) at pinned row {row}",
+                {"stage": stage, "pinned_row": int(row),
+                 "brute_argmax": brute["argmax"],
+                 "cached_argmax": cached["argmax"],
+                 "batched_argmax": batched_argmax[position],
+                 "examples_checked_before_failure": position})
         deltas = [abs(a - b) for a, b in zip(
             brute["scores"], batched[position].cpu().tolist())]
         worst_delta = max(worst_delta, max(deltas))
         r2_brute = readouts.r2_brute_force(lm, prefix, cache, trie)
         r2_cached = readouts.r2_cached(lm, prefix, cache, trie)
         if r2_brute != r2_cached:
-            sys.exit(f"G14 R2 FAILED ({stage}) at pinned row {row}: "
-                     f"brute {r2_brute} cached {r2_cached}")
+            e8b_run.gate_halt(
+                run_name, "G14_R2",
+                f"R2 constrained-walk disagreement ({stage}) at pinned "
+                f"row {row}",
+                {"stage": stage, "pinned_row": int(row),
+                 "brute": r2_brute, "cached": r2_cached,
+                 "examples_checked_before_failure": position})
         r2_checked += 1
     return {"stage": stage, "examples": len(rows),
             "pinned_rows_sha256": hashlib.sha256(
@@ -247,7 +305,8 @@ def g14_binding_gate(model, lm, dev_dataset, cache: dict, trie: dict,
 
 # --- Implementation gates (G4-G12, G15, G18) ----------------------------------
 
-def implementation_gates(model, lm, train_loader, cache, device) -> dict:
+def implementation_gates(model, lm, train_loader, cache, device,
+                         run_name: str) -> dict:
     record = {}
     images, questions, _, mask, labels = next(iter(train_loader))
     images, questions, mask = (images.to(device), questions.to(device),
@@ -263,7 +322,10 @@ def implementation_gates(model, lm, train_loader, cache, device) -> dict:
     if prefix.shape != (labels.shape[0], 33, e8b_latents.D_LM) \
             or not torch.isfinite(loss) \
             or not torch.isfinite(per_example).all():
-        sys.exit("G4 FAILED: non-finite loss or wrong prefix shape")
+        e8b_run.gate_halt(run_name, "G4",
+                          "non-finite loss or wrong prefix shape",
+                          {"prefix_shape": list(prefix.shape),
+                           "loss_finite": bool(torch.isfinite(loss))})
     record["g4"] = {"prefix_shape": list(prefix.shape),
                     "loss_finite": True,
                     "one_batch_loss": round(float(loss), 4)}
@@ -278,8 +340,10 @@ def implementation_gates(model, lm, train_loader, cache, device) -> dict:
             lm, prefix_corrupt.to(torch.bfloat16), answer_ids)
     delta = abs(float(loss) - float(loss_corrupt))
     if delta >= 1e-4:
-        sys.exit(f"G5 FAILED: padded-position corruption moved the loss "
-                 f"by {delta:.2e}")
+        e8b_run.gate_halt(run_name, "G5",
+                          f"padded-position corruption moved the loss "
+                          f"by {delta:.2e}, tolerance 1e-4",
+                          {"loss_delta": delta, "tolerance": 1e-4})
     record["g5"] = {"loss_delta": delta}
 
     # G6: the explicit indexed loss equals the labels= path within 1e-5,
@@ -294,8 +358,12 @@ def implementation_gates(model, lm, train_loader, cache, device) -> dict:
         hf_loss = _labels_path_loss(lm, prefix_subset, ids_subset, device)
     g6_delta = abs(float(explicit) - float(hf_loss))
     if g6_delta >= 1e-5:
-        sys.exit(f"G6 FAILED: explicit loss {float(explicit):.6f} vs "
-                 f"labels= path {float(hf_loss):.6f}")
+        e8b_run.gate_halt(run_name, "G6",
+                          f"explicit loss {float(explicit):.6f} differs "
+                          f"from the labels= path {float(hf_loss):.6f}",
+                          {"explicit": float(explicit),
+                           "labels_path": float(hf_loss),
+                           "delta": g6_delta, "tolerance": 1e-5})
     record["g6"] = {"explicit": float(explicit), "labels_path":
                     float(hf_loss), "delta": g6_delta,
                     "note": "equal-length targets, where the per-example "
@@ -311,8 +379,10 @@ def implementation_gates(model, lm, train_loader, cache, device) -> dict:
                if p.grad is None]
     frozen_hit = any(p.grad is not None for p in lm.parameters())
     if missing or frozen_hit:
-        sys.exit(f"G7 FAILED: missing grads {missing}, "
-                 f"frozen touched {frozen_hit}")
+        e8b_run.gate_halt(run_name, "G7",
+                          "gradient isolation violated",
+                          {"trainable_without_grad": missing,
+                           "frozen_lm_received_grad": bool(frozen_hit)})
     model.zero_grad(set_to_none=True)
     record["g7"] = {"trainable_with_grad": "all", "lm_grads": "none"}
 
@@ -321,7 +391,10 @@ def implementation_gates(model, lm, train_loader, cache, device) -> dict:
     read_only = all('"r"' in line for line in source.splitlines()
                     if "h5py.File" in line)
     if not read_only:
-        sys.exit("G12 FAILED: tokens_data opens a store not read-only")
+        e8b_run.gate_halt(run_name, "G12",
+                          "tokens_data opens a token store not "
+                          "read-only",
+                          {"source": "src/tokens_data.py"})
     record["g12"] = {"stores_read_only": True}
     return record
 
@@ -344,7 +417,8 @@ def _labels_path_loss(lm, prefix, answer_ids: list, device):
     return out.loss.float()
 
 
-def g8_overfit_gate(lm, train_loader, cache, device) -> dict:
+def g8_overfit_gate(lm, train_loader, cache, device,
+                    run_name: str) -> dict:
     """Tiny-subset overfit, halting for the principal arm: gate settings
     lr 1e-3, dropout 0.0 (not tuned hyperparameters), 1,000 examples,
     target R1 accuracy >= 0.99."""
@@ -387,8 +461,14 @@ def g8_overfit_gate(lm, train_loader, cache, device) -> dict:
     del model, trunk, projection, optimizer
     torch.cuda.empty_cache()
     if reached is None:
-        sys.exit(f"G8 FAILED (halting, principal arm): subset R1 "
-                 f"accuracy {accuracy:.4f} after {G8_MAX_EPOCHS} epochs")
+        e8b_run.gate_halt(
+            run_name, "G8",
+            f"tiny-subset overfit did not reach {G8_TARGET}: subset R1 "
+            f"accuracy {accuracy:.4f} after {G8_MAX_EPOCHS} epochs "
+            f"(halting for the principal arm)",
+            {"subset_accuracy": round(float(accuracy), 5),
+             "target": G8_TARGET, "epochs": G8_MAX_EPOCHS,
+             "subset_size": G8_SUBSET})
     return {"epochs_to_target": reached[0],
             "subset_accuracy": round(reached[1], 5),
             "gate_settings": "lr 1e-3, dropout 0.0, 1000 examples"}
@@ -420,24 +500,44 @@ def make_scheduler(optimizer, total_steps, warmup_frac):
 
 def g19_projection(train_seconds_per_epoch: float,
                    eval_seconds_per_epoch: float,
-                   peak_memory_bytes: int,
+                   peak_allocated_bytes: int,
+                   peak_reserved_bytes: int,
                    device_total_bytes: int,
                    v3_01_seconds_per_epoch: float,
                    b1_seconds_per_epoch: float,
-                   storage_dir: Path) -> dict:
-    """The operative section-14 projection from measured pilot numbers.
+                   storage_dir: Path,
+                   completed_search_runs: int = 1,
+                   measured_search_hours: float = 0.0) -> dict:
+    """The operative section-14 projection from measured run quantities.
 
     Per-epoch time at 250k scales the TRAIN component by the step ratio;
-    the dev evaluation is a fixed 7,714-row cost at every scale. The
-    100-epoch worst case is always reported beside the expected 15/22
-    basis (U3); every gate verdict is returned and enforcement is the
-    caller's g19_halt (U2: stop and return, never descope)."""
+    the dev evaluation is a fixed 7,714-row cost at every scale.
+
+    U3 as clarified by the user on 2026-08-07 (P3): the GOVERNING
+    projection is the expected 15/22-epoch basis; the 100-epoch
+    projection is a mandatory reported stress scenario that does not
+    halt by itself. Enforcement remains the caller's g19_halt (U2/P2:
+    stop and return, never descope).
+
+    Three arithmetic corrections recorded by the pre-execution audits are
+    applied here, all in the conservative direction. The per-identity
+    aggregate now includes the A4 and A7c arms that share the pretrained
+    checkpoint, per protocol section 13.2b, which the stored A1-only
+    baseline explicitly calls a lower bound. B1's three 250k runs are
+    priced at the 250k step ratio and epoch count instead of the 40k
+    rate. Storage uses the sizes MEASURED from the grid point 1
+    artefacts, a 325.9 MiB resume checkpoint (model plus two AdamW
+    moments plus the best state) and an 81.5 MiB best checkpoint,
+    instead of the earlier 85 MiB placeholder, and the selection
+    sensitivity term counts 44 evaluation passes rather than 22
+    checkpoints."""
     steps = e8b_run.STEPS_PER_EPOCH
     epoch_40k = train_seconds_per_epoch + eval_seconds_per_epoch
     epoch_250k = (train_seconds_per_epoch
                   * steps["train_250k"] / steps["train_40k"]
                   + eval_seconds_per_epoch)
     multiplier = epoch_40k / v3_01_seconds_per_epoch
+    remaining_search = max(0, TOTAL_SEARCH_RUNS - completed_search_runs)
 
     def hours(seconds, epochs):
         return seconds * epochs / 3600.0
@@ -450,16 +550,22 @@ def g19_projection(train_seconds_per_epoch: float,
         run_40k = hours(epoch_40k, epochs["train_40k"])
         run_250k = hours(epoch_250k, epochs["train_250k"])
         run_250k_walled = min(run_250k, wall)
-        search_remaining = REMAINING_SEARCH_RUNS * run_40k
-        core_lm = (CORE_LM_RUNS_40K * run_40k
+        run_40k_walled = min(run_40k, wall)
+        search_remaining = remaining_search * run_40k_walled
+        core_lm = (CORE_LM_RUNS_40K * run_40k_walled
                    + CORE_LM_RUNS_250K * run_250k_walled)
-        core_b1 = CORE_B1_RUNS * hours(
-            b1_seconds_per_epoch, epochs["train_40k"])
+        b1_epoch_250k = (b1_seconds_per_epoch
+                         * steps["train_250k"] / steps["train_40k"])
+        core_b1 = (CORE_B1_RUNS_40K
+                   * min(hours(b1_seconds_per_epoch, epochs["train_40k"]),
+                         wall)
+                   + CORE_B1_RUNS_250K
+                   * min(hours(b1_epoch_250k, epochs["train_250k"]), wall))
         eval_hours = (LM_CORE_CHECKPOINTS * READOUTS_PER_CHECKPOINT
                       * eval_seconds_per_epoch * 1.5 / 3600
                       + LM_CORE_CHECKPOINTS * INTERVENTION_CONDITIONS
                       * eval_seconds_per_epoch / 3600
-                      + SELECTION_SENSITIVITY_EVALS
+                      + SELECTION_SENSITIVITY_PASSES
                       * eval_seconds_per_epoch * 1.5 / 3600)
         remaining_core = (search_remaining + core_lm + core_b1
                           + eval_hours)
@@ -471,6 +577,7 @@ def g19_projection(train_seconds_per_epoch: float,
                           "train_250k_after_8h_wall":
                               round(run_250k_walled, 3)},
             "largest_250k_run_hours": round(run_250k, 3),
+            "remaining_search_runs": remaining_search,
             "search_remaining_hours": round(search_remaining, 3),
             "core_lm_hours": round(core_lm, 3),
             "core_b1_hours": round(core_b1, 3),
@@ -480,23 +587,26 @@ def g19_projection(train_seconds_per_epoch: float,
     expected = projections["expected_epoch_15_22"]
     worst = projections["worst_case_100_epoch"]
 
-    # Per-identity aggregates (35 h ceiling), expected basis, measured
-    # E8A baselines plus every E8B component that loads the checkpoint.
+    # Per-identity aggregates (35 h ceiling), governing expected basis.
+    # Search runs already executed are charged at their MEASURED cost;
+    # only the runs still to do are projected.
     b3_hours = (e8b_run.IDENTITY_BASELINE_HOURS["pretrained_smollm2_135m"]
-                + hours(epoch_40k, 15)              # this pilot itself
+                + A4_IDENTITY_HOURS + A7C_IDENTITY_HOURS
+                + measured_search_hours
                 + expected["search_remaining_hours"]
                 + 2 * hours(epoch_40k, 15)          # B3 40k seeds 1-2
                 + 3 * min(hours(epoch_250k, 22), wall)
-                + expected["evaluation_hours"] * 0.6)
+                + expected["evaluation_hours"] * EVAL_SHARE_PRETRAINED)
     b2_hours = (e8b_run.IDENTITY_BASELINE_HOURS["random_smollm2_135m"]
                 + 3 * hours(epoch_40k, 15)
                 + 3 * min(hours(epoch_250k, 22), wall)
-                + expected["evaluation_hours"] * 0.4)
+                + expected["evaluation_hours"] * EVAL_SHARE_RANDOM)
 
+    runs_with_checkpoints = (remaining_search + CORE_LM_RUNS_40K
+                             + CORE_LM_RUNS_250K + CORE_B1_RUNS)
     storage_needed = int(
-        ((REMAINING_SEARCH_RUNS + CORE_LM_RUNS_40K + CORE_LM_RUNS_250K
-          + CORE_B1_RUNS) * 2 + SELECTION_SENSITIVITY_EVALS)
-        * 85 * 2 ** 20)  # resume + best per run at ~85 MiB each
+        (runs_with_checkpoints * (RESUME_CHECKPOINT_MIB + BEST_CHECKPOINT_MIB)
+         + SELECTION_SENSITIVITY_EVALS * BEST_CHECKPOINT_MIB) * 2 ** 20)
 
     gates = {
         "per_run_8h": {
@@ -509,65 +619,173 @@ def g19_projection(train_seconds_per_epoch: float,
                     "construction"},
         "pretrained_identity_35h": {
             "fires": b3_hours > e8b_run.PER_IDENTITY_CEILING_HOURS,
-            "projected_hours": round(b3_hours, 3)},
+            "projected_hours": round(b3_hours, 3),
+            "includes": "A1 baseline, A4, A7c, every B3 search and core "
+                        "run and the pretrained share of evaluation "
+                        "(protocol section 13.2b)"},
         "random_identity_35h": {
             "fires": b2_hours > e8b_run.PER_IDENTITY_CEILING_HOURS,
             "projected_hours": round(b2_hours, 3)},
         "remaining_core": e8b_run.remaining_core_gate(
             expected["remaining_core_hours"],
-            min(worst["remaining_core_hours"],
-                worst["search_remaining_hours"]
-                + CORE_LM_RUNS_40K * wall + CORE_LM_RUNS_250K * wall
-                + worst["core_b1_hours"] + worst["evaluation_hours"])),
-        "memory_80pct": e8b_run.memory_gate(peak_memory_bytes,
-                                            device_total_bytes),
+            worst["remaining_core_hours"]),
+        "memory_80pct": e8b_run.memory_gate(peak_allocated_bytes,
+                                            device_total_bytes,
+                                            peak_reserved_bytes),
         "storage": e8b_run.storage_gate(storage_needed, storage_dir),
     }
     fired = [name for name, gate in gates.items() if gate["fires"]]
     return {"multiplier_vs_v3_01": round(multiplier, 3),
             "v3_01_seconds_per_epoch": v3_01_seconds_per_epoch,
+            "completed_search_runs": completed_search_runs,
+            "measured_search_hours": round(measured_search_hours, 3),
             "projections": projections,
-            "governing_basis": "expected_epoch_15_22 (U3); the 100-epoch "
-                               "worst case is reported beside it, "
-                               "truncated by the 8 h operational wall "
-                               "where it applies",
+            "governing_basis": "expected_epoch_15_22 (U3 as clarified "
+                               "2026-08-07, P3). The 100-epoch "
+                               "projection is a mandatory reported "
+                               "stress scenario and does not halt by "
+                               "itself.",
             "gates": gates, "fired": fired,
             "stop_and_return": bool(fired)}
 
 
-# --- The pilot run ------------------------------------------------------------
+# --- G1 and G15: bindings derived from the manifests, never assumed ----------
 
-def train_pilot() -> int:
+EXPECTED_ROWS = {"train_40k": 40000, "dev": 7714}
+
+
+def g1_label_binding(manifest: Path, answers: list, run_name: str,
+                     which: str) -> dict:
+    """G1, the answer-string to label-index binding, ASSERTED for every
+    row of the manifest rather than assumed. `answers` is the V2
+    vocabulary in index order, so answers[label] must equal the row's
+    recorded answer string. A V1-indexed manifest would otherwise train
+    on silently wrong targets and score a silently wrong metric."""
+    import pandas as pd
+    frame = pd.read_csv(manifest)
+    if "answer" not in frame.columns or "label" not in frame.columns:
+        e8b_run.gate_halt(run_name, "G1",
+                          f"{which} manifest lacks an answer or label "
+                          f"column", {"columns": list(frame.columns)})
+    labels = frame["label"].to_numpy()
+    strings = frame["answer"].astype(str).tolist()
+    mismatches, out_of_range = [], []
+    for position, (label, answer) in enumerate(zip(labels, strings)):
+        index = int(label)
+        if index < 0 or index >= len(answers):
+            out_of_range.append(position)
+            if len(out_of_range) > 5:
+                break
+        elif answers[index] != answer:
+            mismatches.append({"row": position, "label": index,
+                               "manifest_answer": answer,
+                               "vocabulary_answer": answers[index]})
+            if len(mismatches) > 5:
+                break
+    if mismatches or out_of_range:
+        e8b_run.gate_halt(
+            run_name, "G1",
+            f"answer-string to label-index binding broken in the "
+            f"{which} manifest",
+            {"first_mismatches": mismatches[:5],
+             "first_out_of_range_rows": out_of_range[:5],
+             "rows_checked": int(len(labels))})
+    return {"manifest": str(manifest), "rows_checked": int(len(labels)),
+            "mismatches": 0, "out_of_range": 0,
+            "vocabulary_size": len(answers)}
+
+
+def g15_manifest_record(manifest: Path, dataset_rows: int, key: str,
+                        run_name: str) -> dict:
+    """G15 pins each manifest by path, MEASURED row count and SHA-256.
+    The row count is derived from the live dataset and asserted against
+    the protocol figure, never recorded as a literal."""
+    expected = EXPECTED_ROWS[key]
+    if dataset_rows != expected:
+        e8b_run.gate_halt(
+            run_name, "G15",
+            f"{key} manifest has {dataset_rows} rows, expected "
+            f"{expected}",
+            {"manifest": str(manifest), "measured_rows": dataset_rows,
+             "expected_rows": expected})
+    return {"path": str(manifest), "rows": int(dataset_rows),
+            "rows_source": "measured from the live dataset and asserted",
+            "sha256": sha256_file(manifest)}
+
+
+def completed_search_runs() -> tuple:
+    """How many section-7.4 grid points already have an immutable result
+    record, and their total MEASURED wall hours. Used so the identity
+    aggregate charges executed runs at their real cost and projects only
+    the runs still to do."""
+    total_hours = 0.0
+    count = 0
+    for point in range(1, TOTAL_SEARCH_RUNS + 1):
+        path = OUT_DIR / f"pilot_{run_name_for(point)}.json"
+        if not path.exists():
+            continue
+        try:
+            body = json.loads(path.read_text())["e8b_pilot_g19"]
+        except (KeyError, json.JSONDecodeError):
+            continue
+        count += 1
+        total_hours += float(body.get("wall_hours", 0.0))
+    return count, total_hours
+
+
+# --- The search runs ----------------------------------------------------------
+
+def train_search_point(grid_point: int) -> int:
+    """One authorised B3/train_40k/seed0 search grid point."""
     device = torch.device("cuda")
-    run_name = "e8b_B3_train_40k_seed0_search1"
+    recipe = build_recipe(grid_point)
+    run_name = run_name_for(grid_point)
     started = time.time()
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     CHECKPOINT_DIR.mkdir(parents=True, exist_ok=True)
     result_path = OUT_DIR / f"pilot_{run_name}.json"
     if result_path.exists():
         sys.exit(f"{result_path} already exists; E8B records are "
-                 f"immutable and the pilot is not rerun automatically")
+                 f"immutable and a run is never repeated automatically")
     if (OUT_DIR / f"pilot_{run_name}_FAILED.json").exists():
         sys.exit("a recorded failure status exists for this run; a "
                  "failed run's result is not used and is never resumed "
                  "automatically -- execution returns to the user")
+    existing_halts = sorted(OUT_DIR.glob(f"HALT_{run_name}_*.json"))
+    if existing_halts:
+        sys.exit(f"a recorded gate halt exists for this run "
+                 f"({existing_halts[0].name}); execution returns to the "
+                 f"user rather than silently retrying")
 
     from experiments.e8a_question_encoder import reinfer_g21
-    reinfer_g21.assert_gpu_exclusive("e8b pilot start")
-    lock_path = e8b_run.acquire_run_lock(*e8b_run.PILOT_CELL)
-    print(f"[LOCK] {lock_path.name} acquired")
+    reinfer_g21.assert_gpu_exclusive(f"e8b search point {grid_point}")
+    # The lock is keyed on the CELL, so at most one of the eight grid
+    # points can execute anywhere on the pool at a time (one node per
+    # run, sequential by construction).
+    lock_path = e8b_run.acquire_run_lock(*e8b_run.SEARCH_CELL)
+    print(f"[LOCK] {lock_path.name} acquired for grid point {grid_point}")
 
     try:
-        return _train_pilot_locked(device, run_name, result_path, started)
+        return _train_locked(device, recipe, run_name, result_path,
+                             started)
     finally:
         lock_path.unlink(missing_ok=True)
 
 
-def _train_pilot_locked(device, run_name, result_path, started) -> int:
+def train_pilot() -> int:
+    """Grid point 1, the G19 multiplier pilot."""
+    return train_search_point(1)
+
+
+def _train_locked(device, recipe, run_name, result_path, started) -> int:
+    RECIPE_LOCAL_SHA = recipe_sha256(recipe)
     fingerprint = e8b_run.environment_fingerprint()
     if fingerprint["gpu"] != "NVIDIA RTX 4000 Ada Generation" \
             or not fingerprint["python"].startswith("3.12"):
-        sys.exit(f"FINGERPRINT GATE FAILED: {fingerprint}")
+        e8b_run.gate_halt(run_name, "FINGERPRINT",
+                          "environment fingerprint does not match the "
+                          "pinned execution environment",
+                          {"fingerprint": fingerprint})
 
     # G2/G3 first, then G13 order: seed, trunk, projection.
     lm, lm_provenance = e8b_run.load_frozen_causal_lm(True, device)
@@ -575,22 +793,39 @@ def _train_pilot_locked(device, run_name, result_path, started) -> int:
     answers, vocabulary = g21.load_index_to_answer(
         V2_DIR / "answer_vocab_v2.json")
     if vocabulary["sha256"] != VOCAB_SHA256_PIN:
-        sys.exit("G18 FAILED: V2 vocabulary hash mismatch")
+        e8b_run.gate_halt(run_name, "G18",
+                          "V2 vocabulary hash mismatch",
+                          {"observed": vocabulary["sha256"],
+                           "pinned": VOCAB_SHA256_PIN})
     cache = readouts.build_answer_cache(tokenizer, answers)   # G1
     trie = readouts.build_trie(cache)
     model, scale_record = e8b_run.build_arm(
-        "B3", RECIPE["seed"], RECIPE["dropout"], lm)
+        "B3", recipe["seed"], recipe["dropout"], lm)
     model = model.to(device)
 
     # G15: manifests, stores and comparators pinned before first use.
     train_manifest = V2_DIR / "train_40k.csv"
     dev_manifest = V2_DIR / "dev.csv"
     stores = tokens_data.TokenStores()
-    g15 = {"train_manifest": {"path": str(train_manifest),
-                              "rows": 40000,
-                              "sha256": sha256_file(train_manifest)},
-           "dev_manifest": {"path": str(dev_manifest), "rows": 7714,
-                            "sha256": sha256_file(dev_manifest)},
+
+    train_loader, dev_loader = tokens_data.make_token_loaders(
+        train_manifest, dev_manifest, stores=stores,
+        batch_size=recipe["batch_size"])
+    train_loader.generator.manual_seed(recipe["seed"])
+    steps_per_epoch = len(train_loader)
+    if steps_per_epoch != e8b_run.STEPS_PER_EPOCH["train_40k"]:
+        e8b_run.gate_halt(run_name, "G15",
+                          f"steps per epoch {steps_per_epoch} does not "
+                          f"match the pinned 313",
+                          {"observed": steps_per_epoch})
+
+    # Row counts DERIVED from the live datasets and asserted; the answer
+    # to label-index binding asserted for every row of both manifests.
+    g15 = {"train_manifest": g15_manifest_record(
+               train_manifest, len(train_loader.dataset), "train_40k",
+               run_name),
+           "dev_manifest": g15_manifest_record(
+               dev_manifest, len(dev_loader.dataset), "dev", run_name),
            "image_store_sha256": sha256_file(
                tokens_data.TOKEN_DIR / "image_tokens.h5"),
            "question_store_sha256": sha256_file(
@@ -598,42 +833,42 @@ def _train_pilot_locked(device, run_name, result_path, started) -> int:
            "v3_01_results_sha256": sha256_file(
                config.RESULTS_DIR / "experiments" / "v3_01_reasoner"
                / "results.json")}
-
-    train_loader, dev_loader = tokens_data.make_token_loaders(
-        train_manifest, dev_manifest, stores=stores,
-        batch_size=RECIPE["batch_size"])
-    train_loader.generator.manual_seed(RECIPE["seed"])
-    steps_per_epoch = len(train_loader)
-    assert steps_per_epoch == e8b_run.STEPS_PER_EPOCH["train_40k"]
+    g1_binding = {
+        "train": g1_label_binding(train_manifest, answers, run_name,
+                                  "train_40k"),
+        "dev": g1_label_binding(dev_manifest, answers, run_name, "dev")}
 
     # Canonical section 20: the record carries the COMPLETE provenance
     # block, not a subset. E8B records are immutable and U4 conditions
     # promotion of this checkpoint on complete provenance, so a partial
     # record would fail its own promotion test.
-    gates_record = {"g0_recipe": RECIPE, "g0_recipe_sha256": RECIPE_SHA256,
+    gates_record = {"g0_recipe": recipe,
+                    "g0_recipe_sha256": RECIPE_LOCAL_SHA,
                     "recipe_identifier": "7.4 E8B likelihood recipe",
                     "g1_answer_cache_sha256": cache["sha256"],
+                    "g1_label_binding": g1_binding,
                     "g2_provenance": dict(lm_provenance),
                     "g13_projection_scale": scale_record, "g15": g15,
                     "g18_vocabulary_sha256": vocabulary["sha256"]}
     gates_record.update(implementation_gates(model, lm, train_loader,
-                                             cache, device))
-    gates_record["g8"] = g8_overfit_gate(lm, train_loader, cache, device)
+                                             cache, device, run_name))
+    gates_record["g8"] = g8_overfit_gate(lm, train_loader, cache, device,
+                                         run_name)
 
     # The binding G14 BEFORE any checkpoint selection.
     gates_record["g14_pre_selection"] = g14_binding_gate(
         model, lm, dev_loader.dataset, cache, trie, device,
-        stage="pre-selection, initial weights")
+        stage="pre-selection, initial weights", run_name=run_name)
     print(f"[G14] pre-selection: argmax identity on all "
           f"{G14_N_EXAMPLES} pinned examples (R1 and R2)")
 
-    optimizer = make_optimizer(model, RECIPE["lr"])
+    optimizer = make_optimizer(model, recipe["lr"])
     scheduler = make_scheduler(optimizer,
-                               RECIPE["max_epochs"] * steps_per_epoch,
-                               RECIPE["warmup_frac"])
+                               recipe["max_epochs"] * steps_per_epoch,
+                               recipe["warmup_frac"])
     resume_path = CHECKPOINT_DIR / f"resume_{run_name}.pt"
     best_path = CHECKPOINT_DIR / f"{run_name}_best.pt"
-    wall_seconds = RECIPE["wall_clock_halt_hours"] * 3600
+    wall_seconds = recipe["wall_clock_halt_hours"] * 3600
     device_total = torch.cuda.get_device_properties(0).total_memory
     torch.cuda.reset_peak_memory_stats()
 
@@ -647,13 +882,15 @@ def _train_pilot_locked(device, run_name, result_path, started) -> int:
     resumed_from = None
     if resume_path.exists():
         state = e8b_run.verify_resume_checkpoint(
-            resume_path, recipe_sha256=RECIPE_SHA256)
+            resume_path, recipe_sha256=RECIPE_LOCAL_SHA)
         if state["vocabulary_sha256"] != vocabulary["sha256"] \
                 or state["store_sha256s"] != {
                     "image_tokens": g15["image_store_sha256"],
                     "question_tokens": g15["question_store_sha256"]}:
-            sys.exit("RESUME PROHIBITED: vocabulary or store hash "
-                     "mismatch against the live inputs")
+            e8b_run.gate_halt(run_name, "RESUME",
+                              "vocabulary or store hash mismatch "
+                              "against the live inputs",
+                              {"checkpoint": str(resume_path)})
         restored = e8b_run.restore_resume_state(
             state, model=model, optimizer=optimizer, scheduler=scheduler,
             loader_generator=train_loader.generator)
@@ -683,11 +920,13 @@ def _train_pilot_locked(device, run_name, result_path, started) -> int:
                                    "not used (section 13.2c)"}}
             e8b_run.atomic_write_json(
                 OUT_DIR / f"pilot_{run_name}_FAILED.json", failure)
-            sys.exit("G19 HALT: the 8 GPU-hour per-run wall was reached; "
-                     "recorded failure status written; execution stops "
-                     "and returns to the user")
+            e8b_run.gate_halt(
+                run_name, "G19_WALL",
+                "the 8 GPU-hour per-run operational wall was reached",
+                {"epoch": epoch, "step": step,
+                 "elapsed_hours": round(elapsed / 3600, 3)})
 
-    for epoch in range(start_epoch, RECIPE["max_epochs"] + 1):
+    for epoch in range(start_epoch, recipe["max_epochs"] + 1):
         model.train()
         epoch_start = time.time()
         running_loss, seen = 0.0, 0
@@ -705,7 +944,7 @@ def _train_pilot_locked(device, run_name, result_path, started) -> int:
                     lm, prefix.to(torch.bfloat16), answer_ids)
             loss.backward()
             torch.nn.utils.clip_grad_norm_(model.parameters(),
-                                           RECIPE["grad_clip"])
+                                           recipe["grad_clip"])
             optimizer.step()
             scheduler.step()
             step_count += 1
@@ -713,7 +952,11 @@ def _train_pilot_locked(device, run_name, result_path, started) -> int:
             seen += labels.shape[0]
         train_seconds = time.time() - epoch_start
         if not math.isfinite(running_loss):
-            sys.exit(f"HALT: non-finite training loss at epoch {epoch}")
+            e8b_run.gate_halt(run_name, "NAN",
+                              f"non-finite training loss at epoch "
+                              f"{epoch}",
+                              {"epoch": epoch,
+                               "running_loss": str(running_loss)})
 
         eval_start = time.time()
         predictions, labels_np, _ = dev_r1_predictions(model, lm, dev_loader,
@@ -746,22 +989,25 @@ def _train_pilot_locked(device, run_name, result_path, started) -> int:
             best_model_state=best_state, best_metric=best_accuracy,
             best_epoch=best_epoch, loader_generator=train_loader.generator,
             epoch_permutation_counter=permutation_counter,
-            recipe_sha256=RECIPE_SHA256,
+            recipe_sha256=RECIPE_LOCAL_SHA,
             vocabulary_sha256=vocabulary["sha256"],
             store_sha256s={"image_tokens": g15["image_store_sha256"],
                            "question_tokens":
                                g15["question_store_sha256"]})
 
         memory_check = e8b_run.memory_gate(
-            torch.cuda.max_memory_allocated(), device_total)
+            torch.cuda.max_memory_allocated(), device_total,
+            torch.cuda.max_memory_reserved())
         if memory_check["fires"]:
-            e8b_run.g19_halt([f"peak memory "
-                              f"{memory_check['fraction_used']:.1%} "
-                              f"exceeds the 80 per cent ceiling"])
+            e8b_run.g19_halt(
+                [f"peak reserved memory "
+                 f"{memory_check['reserved_fraction']:.1%} exceeds the "
+                 f"80 per cent ceiling"],
+                run_name, {"memory": memory_check, "epoch": epoch})
         wall_halt(epoch, step_count)
-        if epochs_without_improvement >= RECIPE["patience"]:
+        if epochs_without_improvement >= recipe["patience"]:
             print(f"[{run_name}] early stop at epoch {epoch} "
-                  f"(patience {RECIPE['patience']})")
+                  f"(patience {recipe['patience']})")
             break
 
     # Selected checkpoint: earliest epoch attaining the best value.
@@ -774,8 +1020,8 @@ def _train_pilot_locked(device, run_name, result_path, started) -> int:
 
     # G9: save and reload reproduces identical scores on one dev batch.
     reload_trunk, reload_projection = \
-        e8b_latents.build_trunk_and_projection(RECIPE["seed"],
-                                               RECIPE["dropout"])
+        e8b_latents.build_trunk_and_projection(recipe["seed"],
+                                               recipe["dropout"])
     reloaded = e8b_latents.E8BPrefixModel(reload_trunk, reload_projection)
     reloaded.load_state_dict(torch.load(best_path, map_location="cpu",
                                         weights_only=False))
@@ -792,8 +1038,10 @@ def _train_pilot_locked(device, run_name, result_path, started) -> int:
         s_a = r1_scores_batched(lm, p_a, cache)
         s_b = r1_scores_batched(lm, p_b, cache)
     if not torch.equal(s_a, s_b):
-        sys.exit("G9 FAILED: reloaded checkpoint does not reproduce "
-                 "identical scores")
+        e8b_run.gate_halt(run_name, "G9",
+                          "reloaded checkpoint does not reproduce "
+                          "identical scores",
+                          {"checkpoint": str(best_path)})
 
     # G11: repeated deterministic evaluation matches exactly; this pass
     # also provides the final predictions for G10.
@@ -802,12 +1050,17 @@ def _train_pilot_locked(device, run_name, result_path, started) -> int:
     predictions_b, _, _ = dev_r1_predictions(model, lm, dev_loader, cache,
                                              device)
     if not np.array_equal(predictions_a, predictions_b):
-        sys.exit("G11 FAILED: repeated evaluation differs")
+        e8b_run.gate_halt(run_name, "G11",
+                          "repeated deterministic evaluation differs",
+                          {"differing_rows": int(
+                              (predictions_a != predictions_b).sum())})
     final_accuracy = float((predictions_a == labels_np).mean())
     if round(final_accuracy, 5) != round(best_accuracy, 5):
-        sys.exit(f"HALT: selected-checkpoint accuracy {final_accuracy:.5f} "
-                 f"does not reproduce the recorded best "
-                 f"{best_accuracy:.5f}")
+        e8b_run.gate_halt(
+            run_name, "SELECTION",
+            f"selected-checkpoint accuracy {final_accuracy:.5f} does "
+            f"not reproduce the recorded best {best_accuracy:.5f}",
+            {"reproduced": final_accuracy, "recorded": best_accuracy})
 
     # G10: no collapse (halting for the principal arm). Section 11 fixed
     # both thresholds before execution: collapse fires if the mean
@@ -824,14 +1077,21 @@ def _train_pilot_locked(device, run_name, result_path, started) -> int:
     histogram_entropy = float(
         -(shares[shares > 0] * np.log(shares[shares > 0])).sum())
     if top1_share >= 0.60 or entropy <= 0.30:
-        sys.exit(f"G10 FAILED (halting, principal arm): top-1 share "
-                 f"{top1_share:.3f}, mean prediction entropy "
-                 f"{entropy:.3f} nats")
+        e8b_run.gate_halt(
+            run_name, "G10",
+            f"prediction collapse (halting, principal arm): top-1 "
+            f"share {top1_share:.3f}, mean prediction entropy "
+            f"{entropy:.3f} nats",
+            {"top1_share": top1_share, "entropy_nats": entropy,
+             "distinct_answers": distinct,
+             "thresholds": {"entropy_at_or_below": 0.30,
+                            "share_at_or_above": 0.60}})
 
     # Closing binding G14 on the selected checkpoint.
     g14_post = g14_binding_gate(model, lm, dev_loader.dataset, cache,
                                 trie, device,
-                                stage="post-selection, best checkpoint")
+                                stage="post-selection, best checkpoint",
+                                run_name=run_name)
     print(f"[G14] post-selection: argmax identity on all "
           f"{G14_N_EXAMPLES} pinned examples (R1 and R2)")
 
@@ -840,22 +1100,30 @@ def _train_pilot_locked(device, run_name, result_path, started) -> int:
         (config.RESULTS_DIR / "experiments" / "v3_01_reasoner"
          / "results.json").read_text())["v3_01_reasoner"]
     v3_seconds = float(v3_results["efficiency"]["seconds_per_epoch"])
+    completed, measured_hours = completed_search_runs()
+    elapsed_now = (time.time() - started) / 3600.0
     projection = g19_projection(
         train_seconds_per_epoch=float(np.mean(train_times)),
         eval_seconds_per_epoch=float(np.mean(eval_times)),
-        peak_memory_bytes=torch.cuda.max_memory_allocated(),
+        peak_allocated_bytes=torch.cuda.max_memory_allocated(),
+        peak_reserved_bytes=torch.cuda.max_memory_reserved(),
         device_total_bytes=torch.cuda.get_device_properties(0)
         .total_memory,
         v3_01_seconds_per_epoch=v3_seconds,
         b1_seconds_per_epoch=v3_seconds,
-        storage_dir=OUT_DIR)
+        storage_dir=OUT_DIR,
+        completed_search_runs=completed + 1,
+        measured_search_hours=measured_hours + elapsed_now)
 
     elapsed = time.time() - started
     record = {"metadata": utils.run_metadata(),
               "e8b_pilot_g19": {
-        "label": "G19 MULTIPLIER PILOT and search grid point 1",
-        "run": run_name, "cell": list(e8b_run.PILOT_CELL),
-        "recipe": RECIPE, "recipe_sha256": RECIPE_SHA256,
+        "label": (f"E8B search grid point {recipe['grid_point']}"
+                  + (" and G19 MULTIPLIER PILOT"
+                     if recipe["grid_point"] == 1 else "")),
+        "grid_point": recipe["grid_point"],
+        "run": run_name, "cell": list(e8b_run.SEARCH_CELL),
+        "recipe": recipe, "recipe_sha256": RECIPE_LOCAL_SHA,
         "gates": gates_record,
         "epochs_run": len(history),
         "resumed_from_epoch": resumed_from,
@@ -870,7 +1138,8 @@ def _train_pilot_locked(device, run_name, result_path, started) -> int:
         "gpu": fingerprint,
         "peak_memory": e8b_run.memory_gate(
             torch.cuda.max_memory_allocated(),
-            torch.cuda.get_device_properties(0).total_memory),
+            torch.cuda.get_device_properties(0).total_memory,
+            torch.cuda.max_memory_reserved()),
         "checkpoints": {
             "best": {"path": str(best_path),
                      "sha256": sha256_file(best_path)},
@@ -893,16 +1162,24 @@ def _train_pilot_locked(device, run_name, result_path, started) -> int:
             "argmax_histogram_entropy_nats": round(histogram_entropy, 6),
             "argmax_histogram_entropy_note": "reported for completeness; "
                                              "NOT the section 11 gate "
-                                             "quantity"},
+                                             "quantity",
+            "comparability": "P1 (user decision 2026-08-07): p_n is an "
+                             "E8B-specific PSEUDO-PROBABILITY for "
+                             "collapse diagnostics only. This entropy "
+                             "must NEVER be compared numerically with "
+                             "an E8A prediction entropy, in either "
+                             "direction."},
         "g14_post_selection": g14_post,
         "g19_projection": projection,
         "clean_test_accessed": False}}
     e8b_run.atomic_write_json(result_path, record)
-    print(f"[PILOT DONE] {len(history)} epochs, best epoch {best_epoch}, "
-          f"dev R1 {best_accuracy:.4f}, wall {elapsed / 3600:.2f} h; "
+    print(f"[RUN DONE] grid point {recipe['grid_point']}: "
+          f"{len(history)} epochs, best epoch {best_epoch}, dev R1 "
+          f"{best_accuracy:.4f}, wall {elapsed / 3600:.2f} h; "
           f"record written")
 
     if projection["stop_and_return"]:
         e8b_run.g19_halt([f"projection gate(s) fired: "
-                          f"{projection['fired']}"])
+                          f"{projection['fired']}"],
+                         run_name, {"projection": projection})
     return 0

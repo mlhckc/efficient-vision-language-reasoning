@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import os
 import sys
 import tempfile
@@ -195,11 +196,14 @@ def test_registry_and_scope() -> None:
           e8b_run.MODEL_REPO == e8a.MODEL_REPO
           and e8b_run.MODEL_REVISION == e8a.MODEL_REVISION
           and e8b_run.RANDOM_INIT_SEED == e8a.RANDOM_INIT_SEED)
-    check("authorisation names exactly the G19 pilot run",
-          e8b_run.TRAINING_AUTHORIZED == "g19-pilot-only"
+    check("authorisation names exactly the B3/train_40k/seed0 search",
+          e8b_run.TRAINING_AUTHORIZED == "search-grid-b3-train40k-seed0"
           and e8b_run.PILOT_CELL == ("B3", "train_40k", 0)
+          and e8b_run.SEARCH_CELL == ("B3", "train_40k", 0)
           and e8b_run.PILOT_HYPER == {"lr": 3e-4, "warmup_frac": 0.0,
                                       "dropout": 0.1})
+    check("the authorised search is the frozen eight-point grid only",
+          len(e8b_run.SEARCH_GRID) == 8)
     check("U4 is decided as PROMOTE with fail-closed validation",
           e8b_run.U4_DECIDED == "promote")
 
@@ -853,21 +857,91 @@ def test_resource_projections() -> None:
     check("the 80 per cent memory gate fires and passes correctly",
           fired_memory["fires"] and not quiet_memory["fires"]
           and fired_memory["ceiling_fraction"] == 0.80)
+
+    # P3: the HARD memory gate is peak RESERVED over device total, and
+    # both peaks are always recorded. A run whose allocated peak is below
+    # the ceiling but whose reserved peak is above it must fire.
+    split = e8b_run.memory_gate(int(0.70 * 20 * 2 ** 30), 20 * 2 ** 30,
+                                int(0.81 * 20 * 2 ** 30))
+    check("the hard memory gate uses reserved, not allocated (P3)",
+          split["fires"] and split["allocated_fraction"] <= 0.80
+          and split["reserved_fraction"] > 0.80
+          and split["gate_basis"].startswith("peak reserved"))
+    check("both memory peaks are recorded (P3)",
+          "peak_allocated_mib" in split and "peak_reserved_mib" in split
+          and split["peak_reserved_mib"] > split["peak_allocated_mib"])
+    check("memory_gate defaults reserved to allocated when unmeasured",
+          e8b_run.memory_gate(1024, 4096)["reserved_fraction"] == 0.25)
+
     with tempfile.TemporaryDirectory() as tmp:
         fired_storage = e8b_run.storage_gate(2 ** 62, Path(tmp))
         quiet_storage = e8b_run.storage_gate(1024, Path(tmp))
     check("the storage gate fires and passes correctly",
           fired_storage["fires"] and not quiet_storage["fires"])
-    fired_core = e8b_run.remaining_core_gate(50.0, 200.0)
+
+    # P3: the GOVERNING remaining-core projection is the expected 15/22
+    # basis against the 180 h ceiling; the 100-epoch stress scenario is
+    # reported but never halts on its own.
+    stress_only = e8b_run.remaining_core_gate(50.0, 200.0)
+    check("a 100-epoch stress scenario alone does not halt (P3)",
+          not stress_only["fires"]
+          and stress_only["stress_scenario"]["exceeds_threshold"]
+          and stress_only["stress_scenario"]["halting"] is False
+          and stress_only["stress_scenario"]["threshold_hours"] == 150.0)
+    governing = e8b_run.remaining_core_gate(200.0, 400.0)
+    check("the governing expected projection halts above 180 h (P3)",
+          governing["fires"]
+          and governing["core_ceiling_hours"] == 180.0)
     quiet_core = e8b_run.remaining_core_gate(100.0, 170.0)
-    check("the remaining-core gate applies min(180, 3 x expected)",
-          fired_core["fires"] and fired_core["threshold_hours"] == 150.0
-          and not quiet_core["fires"]
-          and quiet_core["threshold_hours"] == 180.0)
-    must_fail("g19_halt is an explicit sys.exit on any fired gate",
-              lambda: e8b_run.g19_halt(["demo gate fired"]))
-    check("g19_halt passes silently with nothing fired",
-          e8b_run.g19_halt([]) is None)
+    check("a governing projection below the ceiling is quiet",
+          not quiet_core["fires"]
+          and not quiet_core["stress_scenario"]["exceeds_threshold"])
+
+    # Every halting gate writes an atomic JSON artefact before exiting,
+    # so a halt is never evidenced only on stderr. Redirect OUT_DIR so
+    # the test never writes into the real results tree.
+    original_out = e8b_run.OUT_DIR
+    try:
+        with tempfile.TemporaryDirectory() as tmp:
+            e8b_run.OUT_DIR = Path(tmp)
+            must_fail("g19_halt is an explicit sys.exit on any fired gate",
+                      lambda: e8b_run.g19_halt(["demo gate fired"]))
+            check("g19_halt passes silently with nothing fired",
+                  e8b_run.g19_halt([]) is None)
+
+            must_fail("gate_halt exits",
+                      lambda: e8b_run.gate_halt("demo_run", "G14",
+                                                "argmax disagreement",
+                                                {"row": 7}))
+            written = sorted(Path(tmp).glob("HALT_*.json"))
+            check("every gate halt writes an atomic JSON record",
+                  len(written) == 2)
+            body = json.loads(
+                (Path(tmp) / "HALT_demo_run_G14.json").read_text())
+            halt = body["gate_halt"]
+            check("the halt record names the run, gate and reason",
+                  halt["run"] == "demo_run" and halt["gate"] == "G14"
+                  and "argmax disagreement" in halt["reason"]
+                  and halt["detail"]["row"] == 7
+                  and halt["status"].startswith("FAILED")
+                  and halt["clean_test_accessed"] is False
+                  and "metadata" in body)
+            check("no temporary halt file is left behind",
+                  not list(Path(tmp).glob("*.tmp")))
+
+            # A second, different failure must never overwrite the first.
+            must_fail("a repeated gate halt still exits",
+                      lambda: e8b_run.gate_halt("demo_run", "G14",
+                                                "a different failure"))
+            check("a second halt record is suffixed, never overwriting",
+                  (Path(tmp) / "HALT_demo_run_G14_2.json").exists()
+                  and "argmax disagreement" in json.loads(
+                      (Path(tmp) / "HALT_demo_run_G14.json").read_text()
+                  )["gate_halt"]["reason"])
+    finally:
+        e8b_run.OUT_DIR = original_out
+    check("OUT_DIR is restored after the halt-record test",
+          e8b_run.OUT_DIR == original_out)
 
 
 # --- Training module: recipe, scorer, G14-64 pinning, G19 projection ----------
@@ -939,10 +1013,11 @@ def test_training_module() -> None:
 
     projection = training.g19_projection(
         train_seconds_per_epoch=120.0, eval_seconds_per_epoch=40.0,
-        peak_memory_bytes=4 * 2 ** 30,
+        peak_allocated_bytes=4 * 2 ** 30,
+        peak_reserved_bytes=4 * 2 ** 30,
         device_total_bytes=20 * 2 ** 30,
         v3_01_seconds_per_epoch=40.0, b1_seconds_per_epoch=40.0,
-        storage_dir=Path(tempfile.gettempdir()))
+        storage_dir=config.RESULTS_DIR)
     expected = projection["projections"]["expected_epoch_15_22"]
     epoch_250k = 120.0 * 1954 / 313 + 40.0
     check("the 250k epoch scales the train part by the step ratio and "
@@ -967,16 +1042,42 @@ def test_training_module() -> None:
               "storage"})
     check("a benign projection fires nothing",
           projection["stop_and_return"] is False
-          and projection["fired"] == [])
+          and projection["fired"] == [],
+          f"fired {projection['fired']}")
+    # The storage requirement uses the checkpoint sizes MEASURED from
+    # the grid point 1 artefacts, not the withdrawn 85 MiB placeholder.
+    check("storage is projected from the measured checkpoint sizes",
+          training.RESUME_CHECKPOINT_MIB > 300
+          and training.BEST_CHECKPOINT_MIB > 80
+          and projection["gates"]["storage"]["required_gib"] > 10.0)
+    # The 35 h identity aggregate covers the whole pretrained identity.
+    check("the pretrained identity aggregate includes A4 and A7c",
+          training.A4_IDENTITY_HOURS == 1.804
+          and training.A7C_IDENTITY_HOURS == 1.864
+          and "A4" in projection["gates"][
+              "pretrained_identity_35h"]["includes"])
+    # B1's three 250k runs are priced at the 250k rate, not the 40k one.
+    check("B1 is priced per scale",
+          training.CORE_B1_RUNS_40K == 3
+          and training.CORE_B1_RUNS_250K == 3
+          and expected["core_b1_hours"]
+          > 6 * 40.0 * 15 / 3600)
     hot = training.g19_projection(
         train_seconds_per_epoch=120.0, eval_seconds_per_epoch=40.0,
-        peak_memory_bytes=int(0.9 * 20 * 2 ** 30),
+        peak_allocated_bytes=int(0.5 * 20 * 2 ** 30),
+        peak_reserved_bytes=int(0.9 * 20 * 2 ** 30),
         device_total_bytes=20 * 2 ** 30,
         v3_01_seconds_per_epoch=40.0, b1_seconds_per_epoch=40.0,
-        storage_dir=Path(tempfile.gettempdir()))
-    check("an over-ceiling memory measurement fires stop-and-return",
+        storage_dir=config.RESULTS_DIR)
+    check("an over-ceiling RESERVED measurement fires stop-and-return "
+          "even when allocated is under the ceiling (P3)",
           hot["stop_and_return"] is True
           and "memory_80pct" in hot["fired"])
+    check("the 100-epoch stress scenario alone never fires the "
+          "projection (P3)",
+          projection["gates"]["remaining_core"]["fires"] is False
+          and projection["gates"]["remaining_core"]["stress_scenario"][
+              "halting"] is False)
 
     source = (E8B_DIR / "training.py").read_text()
     check("the training loop halts on the 8 h wall with a recorded "
@@ -986,7 +1087,200 @@ def test_training_module() -> None:
     check("the binding G14 runs before checkpoint selection",
           "g14_pre_selection" in source
           and source.index("g14_pre_selection")
-          < source.index('make_optimizer(model, RECIPE["lr"])'))
+          < source.index('make_optimizer(model, recipe["lr"])'))
+
+
+# --- 26b. G10: the section-11 mean prediction entropy -------------------------
+
+def test_g10_prediction_entropy() -> None:
+    """Regression cover for the corrected G10 quantity. The gate limb
+    previously computed the entropy of the ARGMAX HISTOGRAM, a second
+    function of the same counts as the class share, against a threshold
+    fixed for the per-row quantity. Rounds 1 and 2 of the pre-execution
+    audit both rejected on this code region, so it is pinned here."""
+    from experiments.e8b_readout_generation import training
+
+    entropy = training.mean_prediction_entropy_nats
+
+    uniform = torch.zeros(37, 100)
+    check("a uniform predictive distribution gives ln(100) nats",
+          abs(entropy(uniform) - math.log(100)) < 1e-9,
+          f"{entropy(uniform):.12f} vs {math.log(100):.12f}")
+
+    collapsed = torch.full((37, 100), -1e3)
+    collapsed[:, 7] = 0.0
+    check("a fully collapsed distribution gives ~0 nats",
+          entropy(collapsed) < 1e-9 and math.isfinite(entropy(collapsed)))
+
+    half = torch.cat([uniform[:8], collapsed[:8]])
+    check("the entropy is a mean over rows, not over the pooled scores",
+          abs(entropy(half) - math.log(100) / 2) < 1e-9)
+
+    # log(0) must not produce NaN: the clamp is load-bearing.
+    extreme = torch.full((4, 100), -1e4)
+    extreme[:, 0] = 1e4
+    value = entropy(extreme)
+    check("an extreme distribution underflows to 0 without NaN",
+          math.isfinite(value) and not math.isnan(value) and value >= 0.0)
+
+    # float64 accumulation, not float32.
+    probe = torch.randn(64, 100, generator=torch.Generator().manual_seed(0))
+    reference = float((-(torch.softmax(probe.double(), dim=-1)
+                         * torch.log_softmax(probe.double(), dim=-1))
+                       ).sum(dim=-1).mean())
+    check("the entropy matches an independent float64 reference",
+          abs(entropy(probe) - reference) < 1e-12,
+          f"delta {abs(entropy(probe) - reference):.3e}")
+
+    # The decisive case: per-row confident but argmax spread across all
+    # 100 classes. The section-11 quantity fires; the withdrawn
+    # argmax-histogram statistic does not.
+    diverse = torch.full((100, 100), -1e3)
+    for row in range(100):
+        diverse[row, row] = 0.0
+    counts = np.bincount(diverse.argmax(dim=1).numpy(), minlength=100)
+    shares = counts / counts.sum()
+    histogram = float(-(shares[shares > 0] * np.log(shares[shares > 0]))
+                      .sum())
+    check("the section-11 entropy catches per-row collapse that the "
+          "withdrawn argmax-histogram statistic missed",
+          entropy(diverse) <= 0.30 and histogram > 0.30,
+          f"section-11 {entropy(diverse):.3e} nats vs histogram "
+          f"{histogram:.4f} nats")
+    check("maximum class share is unchanged by the correction",
+          abs(float(shares.max()) - 0.01) < 1e-12)
+
+    # The gate direction, exactly as section 11 states it.
+    def fires(h, share):
+        return share >= 0.60 or h <= 0.30
+    check("collapse fires on H <= 0.30 or class share >= 0.60",
+          fires(0.30, 0.1) and fires(0.29, 0.1) and fires(4.0, 0.60)
+          and fires(4.0, 0.61) and not fires(0.31, 0.59))
+
+    src = (E8B_DIR / "training.py").read_text()
+    check("G10 halts on the section-11 quantity, not the histogram",
+          "entropy = mean_prediction_entropy_nats(scores_a)" in src
+          and "if top1_share >= 0.60 or entropy <= 0.30:" in src)
+    check("the withdrawn histogram statistic is still recorded, marked "
+          "as not the gate quantity",
+          "argmax_histogram_entropy_nats" in src
+          and "NOT the section 11 gate " in src)
+    check("the record carries the P1 non-comparability statement",
+          "PSEUDO-PROBABILITY" in src and "never be compared" in src
+          .replace("NEVER be compared", "never be compared"))
+
+
+# --- 26c. The frozen eight-point grid and the derived G1/G15 bindings ---------
+
+def test_search_grid_and_bindings() -> None:
+    from experiments.e8b_readout_generation import training
+
+    grid = e8b_run.SEARCH_GRID
+    check("the grid has exactly the eight frozen section-7.4 points",
+          len(grid) == 8
+          and [row["grid_point"] for row in grid] == list(range(1, 9)))
+    check("the grid is the section-7.4 product of lr, warmup and dropout",
+          {(row["lr"], row["warmup_frac"], row["dropout"])
+           for row in grid}
+          == {(lr, w, d) for lr in (3e-4, 1e-3)
+              for w in (0.0, 0.03) for d in (0.1, 0.3)})
+
+    recipes = [training.build_recipe(i) for i in range(1, 9)]
+    hashes = {training.recipe_sha256(r) for r in recipes}
+    check("every grid point has a distinct recipe hash", len(hashes) == 8)
+    check("grid point 1 keeps the hash the pilot record was written "
+          "under", training.recipe_sha256(recipes[0])
+          == training.RECIPE_SHA256)
+    pinned = ("objective", "selection_metric", "max_epochs", "patience",
+              "batch_size", "weight_decay", "grad_clip", "scheduler",
+              "precision", "wall_clock_halt_hours", "seed", "arm",
+              "scale")
+    check("everything not on the grid is pinned identically across all "
+          "eight points",
+          all(len({json.dumps(r[key], sort_keys=True) for r in recipes})
+              == 1 for key in pinned))
+    check("every point is B3 / train_40k / seed 0",
+          all(r["arm"] == "B3" and r["scale"] == "train_40k"
+              and r["seed"] == 0 for r in recipes))
+    must_fail("a grid point outside 1-8 is refused",
+              lambda: training.build_recipe(9))
+    must_fail("grid point 0 is refused",
+              lambda: training.build_recipe(0))
+
+    check("run names are one per grid point and carry the cell",
+          len({training.run_name_for(i) for i in range(1, 9)}) == 8
+          and training.run_name_for(3)
+          == "e8b_B3_train_40k_seed0_search3")
+
+    # The authorisation guard confines training to the search cell.
+    must_fail("a core cell is refused",
+              lambda: e8b_run.train("B3", "train_250k", 0))
+    must_fail("another seed is refused",
+              lambda: e8b_run.train("B3", "train_40k", 1))
+    must_fail("B2 is refused", lambda: e8b_run.train("B2", "train_40k", 0))
+    must_fail("B1 is refused", lambda: e8b_run.train("B1", "train_40k", 0))
+    must_fail("a grid point outside the frozen eight is refused at the "
+              "entry point",
+              lambda: e8b_run.train("B3", "train_40k", 0, grid_point=9))
+
+    # G15 row counts are derived and asserted, never literals.
+    src = (E8B_DIR / "training.py").read_text()
+    check("G15 row counts come from the live dataset, not literals",
+          "g15_manifest_record" in src
+          and "len(train_loader.dataset)" in src
+          and "len(dev_loader.dataset)" in src
+          and '"rows": 40000' not in src and '"rows": 7714' not in src)
+    check("G15 asserts the measured count against the protocol figure",
+          "rows_source" in src
+          and "measured from the live dataset and asserted" in src)
+    original_out = e8b_run.OUT_DIR
+    try:
+        with tempfile.TemporaryDirectory() as tmp:
+            e8b_run.OUT_DIR = Path(tmp)
+            must_fail("a wrong row count halts G15",
+                      lambda: training.g15_manifest_record(
+                          Path(tmp) / "absent.csv", 39999, "train_40k",
+                          "demo"))
+            check("the G15 halt is recorded atomically",
+                  (Path(tmp) / "HALT_demo_G15.json").exists())
+    finally:
+        e8b_run.OUT_DIR = original_out
+
+    # G1 binds answer strings to label indices for every row.
+    check("G1 asserts the answer-to-label binding per row",
+          "g1_label_binding" in src
+          and "answers[index] != answer" in src)
+    vocabulary = json.loads(
+        (config.DATA_DIR / "v2" / "answer_vocab_v2.json").read_text())
+    answers = (vocabulary["answers"] if isinstance(vocabulary, dict)
+               else vocabulary)
+    original_out = e8b_run.OUT_DIR
+    try:
+        with tempfile.TemporaryDirectory() as tmp:
+            e8b_run.OUT_DIR = Path(tmp)
+            good = Path(tmp) / "good.csv"
+            good.write_text("answer,label\n"
+                            f"{answers[0]},0\n{answers[5]},5\n")
+            record = training.g1_label_binding(good, answers, "demo",
+                                               "probe")
+            check("a correct manifest passes G1 with zero mismatches",
+                  record["rows_checked"] == 2
+                  and record["mismatches"] == 0)
+            bad = Path(tmp) / "bad.csv"
+            bad.write_text("answer,label\n"
+                           f"{answers[0]},0\n{answers[5]},6\n")
+            must_fail("a shifted label index halts G1",
+                      lambda: training.g1_label_binding(bad, answers,
+                                                        "demo2", "probe"))
+            check("the G1 halt is recorded atomically",
+                  (Path(tmp) / "HALT_demo2_G1.json").exists())
+            out_of_range = Path(tmp) / "oor.csv"
+            out_of_range.write_text(f"answer,label\n{answers[0]},4242\n")
+            must_fail("an out-of-range label halts G1",
+                      lambda: training.g1_label_binding(
+                          out_of_range, answers, "demo3", "probe"))
+    finally:
+        e8b_run.OUT_DIR = original_out
 
 
 # --- 27. E7b serial-extension contracts ---------------------------------------
@@ -1222,6 +1516,8 @@ def run() -> None:
     test_checkpoint_resume()
     test_resource_projections()
     test_training_module()
+    test_g10_prediction_entropy()
+    test_search_grid_and_bindings()
     test_serial_contract()
     test_serial_queries()
     test_provenance()

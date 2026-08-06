@@ -50,15 +50,37 @@ from experiments.e8b_readout_generation import readouts  # noqa: E402
 
 OUT_DIR = config.RESULTS_DIR / "experiments" / "e8b_readout_generation"
 
-# Authorisation state for the execution-hardening and G19 pilot phase
-# (user decision of 2026-08-06). Exactly ONE training run is authorised:
-# the B3/train_40k/seed0 search grid point 1 (lr 3e-4, warmup 0.0, dropout
-# 0.1), serving simultaneously as the G19 multiplier pilot. Grid points
-# 2-8, every core cell, every other arm, scale and seed remain refused
-# and require further explicit user authorisation.
-TRAINING_AUTHORIZED = "g19-pilot-only"
+# Authorisation state for the remaining-search phase (user decision of
+# 2026-08-07, recorded in protocol_clarification_20260807.json). The
+# authorised runs are the eight B3/train_40k/seed0 search grid points of
+# master protocol section 7.4, of which point 1 already ran on
+# 2026-08-06 as the G19 multiplier pilot; points 2-8 are now authorised.
+# Every core cell, every other arm, scale and seed, B1, B2, E9, E10, F1,
+# F2 and the clean test remain refused and require further explicit user
+# authorisation.
+TRAINING_AUTHORIZED = "search-grid-b3-train40k-seed0"
 PILOT_CELL = ("B3", "train_40k", 0)
 PILOT_HYPER = {"lr": 3e-4, "warmup_frac": 0.0, "dropout": 0.1}
+
+# The frozen eight-point search grid, master protocol section 7.4,
+# transcribed verbatim. Nothing here may be added, removed or reordered
+# after results are observed. Grid point 1 ran on 2026-08-06 as the G19
+# multiplier pilot; the user authorised points 2-8 on 2026-08-07.
+SEARCH_GRID = (
+    {"grid_point": 1, "lr": 3e-4, "warmup_frac": 0.0, "dropout": 0.1},
+    {"grid_point": 2, "lr": 3e-4, "warmup_frac": 0.0, "dropout": 0.3},
+    {"grid_point": 3, "lr": 3e-4, "warmup_frac": 0.03, "dropout": 0.1},
+    {"grid_point": 4, "lr": 3e-4, "warmup_frac": 0.03, "dropout": 0.3},
+    {"grid_point": 5, "lr": 1e-3, "warmup_frac": 0.0, "dropout": 0.1},
+    {"grid_point": 6, "lr": 1e-3, "warmup_frac": 0.0, "dropout": 0.3},
+    {"grid_point": 7, "lr": 1e-3, "warmup_frac": 0.03, "dropout": 0.1},
+    {"grid_point": 8, "lr": 1e-3, "warmup_frac": 0.03, "dropout": 0.3},
+)
+SEARCH_CELL = PILOT_CELL
+# Section 7.4 selection: highest development R1 accuracy; ties broken by
+# the lowest grid index, then the earlier epoch.
+SELECTION_METRIC = "development R1 accuracy, EOS included"
+SELECTION_TIE_BREAK = "lowest grid index, then the earlier epoch"
 
 # U4, decided by the user on 2026-08-06 and recorded verbatim in
 # results/experiments/e8b_readout_generation/u4_decision.json: PROMOTE.
@@ -669,27 +691,87 @@ def preflight(device) -> int:
 
 # --- G19 halt machinery (master protocol section 14) --------------------------
 
-def g19_halt(fired: list) -> None:
+def halt_record_path(run_name: str, gate: str) -> Path:
+    """One atomic JSON per halt, never overwritten. The gate name is part
+    of the filename so a second, different failure cannot silently
+    replace the first."""
+    return OUT_DIR / f"HALT_{run_name}_{gate}.json"
+
+
+def record_gate_halt(run_name: str, gate: str, reason: str,
+                     detail: dict | None = None) -> Path:
+    """Master protocol section 18: a gate failure is recorded verbatim.
+    Every halting gate writes an atomic JSON artefact before exiting, so
+    a halt is never evidenced only on stderr. Written with a temporary
+    file and os.replace; an existing record for the same run and gate is
+    never overwritten, and a suffixed record is written instead."""
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    payload = {"metadata": utils.run_metadata(),
+               "gate_halt": {"run": run_name, "gate": gate,
+                             "reason": reason,
+                             "detail": detail or {},
+                             "utc": time.strftime("%Y-%m-%dT%H:%M:%SZ",
+                                                  time.gmtime()),
+                             "host": socket.gethostname(),
+                             "status": "FAILED: halting gate fired; this "
+                                       "run's result is not used and is "
+                                       "never resumed automatically",
+                             "clean_test_accessed": False}}
+    path = halt_record_path(run_name, gate)
+    if path.exists():
+        index = 2
+        while path.with_name(f"{path.stem}_{index}.json").exists():
+            index += 1
+        path = path.with_name(f"{path.stem}_{index}.json")
+    temporary = path.with_name(path.name + ".tmp")
+    temporary.write_text(json.dumps(payload, indent=2, default=str) + "\n")
+    os.replace(temporary, path)
+    return path
+
+
+def gate_halt(run_name: str, gate: str, reason: str,
+              detail: dict | None = None) -> None:
+    """Record the halt atomically, then stop. Used by every halting gate
+    so that no failure is evidenced only on the console."""
+    path = record_gate_halt(run_name, gate, reason, detail)
+    sys.exit(f"{gate} HALT: {reason} -- recorded at {path.name}; "
+             f"execution stops and returns to the user with "
+             f"pair-preserving alternatives; no arm is descoped "
+             f"automatically (U2, P2)")
+
+
+def g19_halt(fired: list, run_name: str = "e8b", detail: dict | None = None
+             ) -> None:
     """Section 14: the halt is an explicit sys.exit with a recorded
     reason, in the style of the v3_01 GATE 4 wall-clock gate. Execution
     stops and returns to the user with pair-preserving alternatives;
-    no arm is ever descoped automatically (U2)."""
+    no arm is ever descoped automatically (U2, P2)."""
     if fired:
-        sys.exit("G19 HALT: " + "; ".join(fired) + " -- execution stops "
-                 "and returns to the user with pair-preserving "
-                 "alternatives; no arm is descoped automatically (U2)")
+        gate_halt(run_name, "G19", "; ".join(fired), detail)
 
 
-def memory_gate(peak_bytes: int, total_bytes: int) -> dict:
+def memory_gate(allocated_bytes: int, total_bytes: int,
+                reserved_bytes: int | None = None) -> dict:
     """Peak memory against 80 per cent of the memory the device actually
-    reports (the percentage rule; the old absolute figures are
-    withdrawn)."""
-    fraction = peak_bytes / total_bytes
-    return {"peak_mib": round(peak_bytes / 2 ** 20, 1),
+    reports. The user's decision of 2026-08-07 (P3) makes the RESERVED
+    peak the hard gate: reserved is what the caching allocator has taken
+    from the device and is the honest footprint, while allocated
+    understates it (the E8B preflight measured 1333.2 MiB allocated
+    against 1454.0 MiB reserved, a 9.1 per cent gap). Both are always
+    recorded."""
+    if reserved_bytes is None:
+        reserved_bytes = allocated_bytes
+    allocated_fraction = allocated_bytes / total_bytes
+    reserved_fraction = reserved_bytes / total_bytes
+    return {"peak_allocated_mib": round(allocated_bytes / 2 ** 20, 1),
+            "peak_reserved_mib": round(reserved_bytes / 2 ** 20, 1),
             "device_total_mib": round(total_bytes / 2 ** 20, 1),
-            "fraction_used": round(fraction, 4),
+            "allocated_fraction": round(allocated_fraction, 4),
+            "reserved_fraction": round(reserved_fraction, 4),
+            "fraction_used": round(reserved_fraction, 4),
+            "gate_basis": "peak reserved / device total (P3)",
             "ceiling_fraction": MEMORY_CEILING_FRACTION,
-            "fires": fraction > MEMORY_CEILING_FRACTION}
+            "fires": reserved_fraction > MEMORY_CEILING_FRACTION}
 
 
 def storage_gate(required_bytes: int, target_dir: Path) -> dict:
@@ -704,38 +786,71 @@ def storage_gate(required_bytes: int, target_dir: Path) -> dict:
 
 def remaining_core_gate(expected_remaining_hours: float,
                         worst_case_remaining_hours: float) -> dict:
-    """Section 14: worst-case remaining-core projection above
-    min(180 GPU-hours, 3 x the revised expected projection) fires."""
-    threshold = min(CORE_CEILING_HOURS, 3.0 * expected_remaining_hours)
-    return {"expected_remaining_hours": round(expected_remaining_hours, 3),
-            "worst_case_remaining_hours":
-                round(worst_case_remaining_hours, 3),
-            "threshold_hours": round(threshold, 3),
-            "rule": "worst case > min(180, 3 x revised expected)",
-            "fires": worst_case_remaining_hours > threshold}
+    """Section 14 as clarified by the user on 2026-08-07 (P3).
+
+    The GOVERNING projection is the expected-epoch basis, 15 epochs at
+    train_40k and 22 at train_250k. It is gated against the 180 GPU-hour
+    core ceiling and HALTS if it exceeds it.
+
+    The 100-epoch projection is a mandatory reported stress scenario and
+    is explicitly NON-HALTING on its own. Its comparison against
+    min(180, 3 x expected) is still computed and reported, under
+    `stress_scenario`, so the previous rule's verdict remains visible;
+    but `fires` -- the halting verdict -- is the governing comparison
+    alone."""
+    stress_threshold = min(CORE_CEILING_HOURS,
+                           3.0 * expected_remaining_hours)
+    return {"governing_basis": "expected epochs 15/22 (U3 as clarified "
+                               "2026-08-07, P3)",
+            "expected_remaining_hours": round(expected_remaining_hours, 3),
+            "core_ceiling_hours": CORE_CEILING_HOURS,
+            "rule": "governing expected remaining core > 180",
+            "fires": expected_remaining_hours > CORE_CEILING_HOURS,
+            "stress_scenario": {
+                "worst_case_remaining_hours":
+                    round(worst_case_remaining_hours, 3),
+                "threshold_hours": round(stress_threshold, 3),
+                "rule": "worst case > min(180, 3 x expected)",
+                "exceeds_threshold":
+                    worst_case_remaining_hours > stress_threshold,
+                "halting": False,
+                "note": "mandatory reported stress scenario; does not "
+                        "halt by itself (P3)"}}
 
 
 # --- Guarded training entry ---------------------------------------------------
 
-def train(arm: str, scale: str, seed: int) -> int:
-    if TRAINING_AUTHORIZED != "g19-pilot-only":
+def train(arm: str, scale: str, seed: int, grid_point: int = 1) -> int:
+    """The only training entry. Refuses anything that is not one of the
+    eight authorised B3/train_40k/seed0 search grid points of section
+    7.4. B1, B2, every core cell, every other scale and seed, E9, E10,
+    F1 and F2 require further explicit user authorisation."""
+    if TRAINING_AUTHORIZED != "search-grid-b3-train40k-seed0":
         sys.exit("E8B TRAINING IS NOT AUTHORISED: the recorded "
                  "authorisation state does not name an authorised run")
-    if (arm, scale, seed) != PILOT_CELL:
+    if (arm, scale, seed) != SEARCH_CELL:
         sys.exit(f"E8B TRAINING REFUSED for {arm}/{scale}/seed{seed}: "
-                 f"only the G19 pilot cell {PILOT_CELL} (search grid "
-                 f"point 1, which doubles as the multiplier pilot) is "
-                 f"authorised; grid points 2-8 and every core cell "
-                 f"require further explicit user authorisation")
+                 f"only the search cell {SEARCH_CELL} is authorised. "
+                 f"Every core cell, B1, B2, every other scale and seed, "
+                 f"E9, E10, F1 and F2 require further explicit user "
+                 f"authorisation")
+    if grid_point not in {row["grid_point"] for row in SEARCH_GRID}:
+        sys.exit(f"E8B TRAINING REFUSED: grid point {grid_point} is not "
+                 f"one of the eight frozen section-7.4 points; no grid "
+                 f"point may be added after results are observed")
     from experiments.e8b_readout_generation import training
-    return training.train_pilot()
+    return training.train_search_point(grid_point)
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--preflight", action="store_true")
     parser.add_argument("--pilot", action="store_true",
-                        help="run the single authorised G19 pilot cell")
+                        help="run the G19 pilot cell, search grid point 1")
+    parser.add_argument("--search-point", type=int, default=None,
+                        metavar="N",
+                        help="run authorised search grid point N (1-8) "
+                             "at B3/train_40k/seed0")
     args = parser.parse_args()
     utils.set_seed()
     OUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -743,8 +858,11 @@ def main() -> int:
     if args.preflight:
         return preflight(device)
     if args.pilot:
-        return train(*PILOT_CELL)
-    parser.error("this phase supports --preflight and --pilot only")
+        return train(*SEARCH_CELL, grid_point=1)
+    if args.search_point is not None:
+        return train(*SEARCH_CELL, grid_point=args.search_point)
+    parser.error("this phase supports --preflight, --pilot and "
+                 "--search-point N only")
 
 
 if __name__ == "__main__":

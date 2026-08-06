@@ -1,0 +1,54 @@
+{
+  "protocol_clarification": {
+    "dated_utc": "2026-08-07",
+    "status": "RATIFIED BY THE USER",
+    "supersedes": [
+      "the open p_n construction recorded as a user decision in review rounds 09 and 10 (SM9-6, SM10-1)",
+      "the U3 reading under which the 100-epoch worst case could halt on its own"
+    ],
+    "decisions": [
+      {
+        "id": "P1",
+        "topic": "the p_n construction for the E8B G10 collapse diagnostic",
+        "user_wording": "p_n is softmax over length-normalised R1 scores. Treat it only as an E8B-specific pseudo-probability for collapse diagnostics. Do not compare its entropy numerically with E8A entropy. Keep the top-1-share and intervention limbs unchanged.",
+        "operational_meaning": [
+          "p_n is the softmax over the 100 answers of the fp32 length-normalised R1 candidate scores whose argmax is the recorded prediction",
+          "the resulting mean prediction entropy is an E8B-specific PSEUDO-PROBABILITY diagnostic, not a calibrated posterior",
+          "its numeric value must never be compared with an E8A prediction entropy, in either direction, because the E8A quantity is a softmax over classifier logits on a different scale",
+          "every disclosure of an E8B G10 entropy must carry that non-comparability statement",
+          "the maximum-class-share limb and the intervention limbs are unchanged"
+        ]
+      },
+      {
+        "id": "P2",
+        "topic": "pair preservation and scale coverage",
+        "user_wording": "Preserve the full pair-matched B2/B3 design and both 40k and 250k scales. No automatic 250k-only fallback or arm removal is authorised.",
+        "operational_meaning": [
+          "B3 is inseparable from B2 at every scale and seed that either occupies",
+          "both train_40k and train_250k remain in the matrix",
+          "no code path may drop a 40k arm, reduce seeds, or switch to a 250k-only matrix",
+          "if a hard gate fires, execution stops and returns to the user with pair-preserving alternatives"
+        ]
+      },
+      {
+        "id": "P3",
+        "topic": "U3, the governing remaining-program projection",
+        "user_wording": "Clarify U3: expected epochs 15/22 are the governing remaining-program projection. The 100-epoch projection remains a mandatory reported stress scenario, but does not halt by itself. The 8-hour per-run, 35-hour per-identity, 80%-reserved-memory, storage, provenance, determinism and G14 gates remain hard halts.",
+        "operational_meaning": [
+          "the governing remaining-program projection uses the expected epoch basis, 15 epochs at train_40k and 22 at train_250k",
+          "the governing remaining-core projection is gated against the 180 GPU-hour core ceiling and halts if it exceeds it",
+          "the 100-epoch projection is computed and reported on every run as a mandatory stress scenario and is explicitly NON-HALTING on its own",
+          "the previous rule under which a 100-epoch worst case above min(180, 3 x expected) halted no longer governs; that comparison is still reported as the stress-scenario verdict",
+          "HARD HALTS, unchanged: 8-hour per-run operational wall with a recorded failure status; 35-hour per-model-identity aggregate; peak RESERVED memory above 80 per cent of the device total; storage; provenance; determinism; the binding 64-example G14"
+        ]
+      }
+    ],
+    "authorised_next_work": {
+      "runs": "the seven remaining B3/train_40k/seed0 search grid points, 2 to 8, under the frozen eight-point recipe matrix of master protocol section 7.4",
+      "sequencing": "sequential, on otter159 where possible; otter155 only under the qualified copy-only staging, hash, environment-fingerprint, NFS-lock and one-node-per-run protocol",
+      "after_each_run": "validate the complete checkpoint and provenance, run the binding G14 R1 and R2 checks, record epochs, best epoch, R1 metric, time, allocated and reserved memory, storage and hashes, recompute the governing expected-epoch and the reported 100-epoch projections, and stop if any hard gate fires",
+      "after_all_eight": "select the winner only by the frozen R1 selection metric with the section 7.4 tie-break, freeze the recipe, promote only if every U4 condition passes, recompute the full 17-run remaining core and evaluation projections, run independent selection, provenance and resource audits, then stop",
+      "not_authorised": "any B1, B2 or core run; the core matrix; E9; E10 or any 360M identity; F1; F2; and any access to the clean test"
+    }
+  }
+}
