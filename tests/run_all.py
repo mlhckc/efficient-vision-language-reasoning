@@ -24,6 +24,7 @@ from tests import (
     test_e7b,
     test_e8a,
     test_e8a_safety,
+    test_e8b,
     test_g21_scorer,
     test_mask,
     test_reproduction,
@@ -43,6 +44,7 @@ MODULES = (
     test_g21_scorer,
     test_e8a_safety,
     test_e7b,
+    test_e8b,
 )
 
 EMBARGOED_TOKEN = "test_" + "clean"
