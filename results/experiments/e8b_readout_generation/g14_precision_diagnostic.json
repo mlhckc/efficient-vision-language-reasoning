@@ -1,0 +1,43 @@
+{
+  "metadata": {
+    "timestamp": "2026-08-06T17:13:13",
+    "git_commit": "0ce49fc",
+    "git_dirty": true,
+    "open_clip_version": "3.3.0",
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "h5py_version": "3.16.0",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "deterministic": true,
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "embed_dim": 512,
+    "top_k_answers": 100,
+    "n_train": 40000,
+    "n_val": 8000,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "hidden_dim": 512,
+    "dropout": 0.3,
+    "weight_decay": 0.0001
+  },
+  "g14_precision_diagnostic": {
+    "label": "NON-SCIENTIFIC DIAGNOSTIC",
+    "purpose": "establish that the large recorded R1 score delta under the bf16 frozen model is kernel numerics, not a cached-path defect: the identical implementations under fp32 agree within the informational 1e-4 tolerance",
+    "probe": "one pinned random prefix (torch.manual_seed(0), scale 0.13), full top-100 answer cache, pretrained SmolLM2-135M",
+    "generator": "experiments/e8b_readout_generation/g14_precision_probe.py",
+    "bf16_max_abs_score_delta": 0.06640994548797607,
+    "bf16_argmax_identical": true,
+    "fp32_max_abs_score_delta": 1.1444091796875e-05,
+    "fp32_argmax_identical": true,
+    "binding_clause": "G14 argmax identity (master protocol section 18); the score tolerance is informational"
+  }
+}
