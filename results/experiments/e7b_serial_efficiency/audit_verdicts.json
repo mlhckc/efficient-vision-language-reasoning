@@ -10,46 +10,69 @@
         "MEDIUM/LOW: aggregate p5/p95 silently pass-1-only; e7b_results.json dirty-worktree provenance; test-count 54 vs 55; cold rounding; pilot evidence untracked"
       ],
       "head_audited": "1e883b4",
-      "verdicts": [
-        "REJECT",
-        "REJECT",
-        "REJECT"
-      ]
+      "verdicts": {
+        "accuracy_denominator_pareto": "REJECT",
+        "protocol_provenance": "REJECT",
+        "timing_methodology": "REJECT"
+      }
     },
     "round_2": {
       "acceptance": "all three fresh-context auditors ACCEPT with zero BLOCKER and zero HIGH; every round-1 fix independently verified and every corrected number recomputed from the raw records and upstream stored sources",
       "blocker": 0,
+      "findings": {
+        "analysis_code_and_aggregation": [
+          {
+            "detail": "docs/experiments/e7b_serial_efficiency.md line 31-32 says 'a 0.0026 ms no-op floor self-check'; the 24 per-run records carry sync_floor_ms of 0.0026 and 0.0027. Pre-existing text unchanged since 1e883b4, not introduced by the fixes, no conclusion affected.",
+            "severity": "LOW",
+            "title": "Sync-floor prose slightly narrower than records"
+          },
+          {
+            "detail": "The unchanged comparison sentence (report lines 101-107) quotes E7a's additive full_pipeline_ms as 6.34-6.35 ms for the CLIP globals; reconstructing from E7a's stored components (image tower 2.2510 + text tower 1.7309 + CPU decode 2.2950 + tokenise 0.0360 + per-head 0.016-0.047) gives roughly 6.33-6.36 across concat/fusion/vocab1000_product (E7a criterion entries show 6.32909 and 6.34593). The hedged 'about 1.3 ms (about 20 per cent)' conclusion holds (gaps 1.28-1.33 ms). Pre-existing text, not touched by the fix commits.",
+            "severity": "LOW",
+            "title": "E7a additive band '6.34-6.35 ms' is approximate at the edges"
+          }
+        ],
+        "numbers_and_tables": [
+          {
+            "detail": "docs/experiments/e7b_serial_efficiency.md line 103 gives E7a's additive full_pipeline_ms for the CLIP globals as \"6.34-6.35 ms\". The stored E7a values (results/experiments/e7a_efficiency/results.json points) are concat 6.34318, vocab1000_product 6.34593, fusion 6.35788; at the sentence's 2-dp precision the upper end rounds to 6.36, so the range should read 6.34-6.36 (or 6.343-6.358). This sentence is unchanged since 1e883b4 (not part of the round-1 fixes), and the derived claims hold exactly: gap 1.27-1.33 ms (\"about 1.3 ms\") and 20.0-20.9 per cent (\"about 20 per cent\"). No conclusion is affected.",
+            "severity": "LOW",
+            "title": "Pre-existing rounding truncation in the E7a comparison range \"6.34-6.35 ms\""
+          },
+          {
+            "detail": "Recomputing the sample sd (ddof=1) from the stored per-seed list [0.57493, 0.57221, 0.57234] gives 0.001534 -> 0.00153, versus the published 0.00154. The published value is copied verbatim from the source aggregate (e8a core_analysis per_arm_summary A1 std_dev_accuracy 0.00154), which is correct at full precision: the accuracies are 4435/4414/4415 correct over 7714 rows, whose exact sample sd is 0.0015357 -> 0.00154. The fix promised the column verbatim from the source aggregates and delivers exactly that; all seven other rows agree under both computations. Recorded only so a future auditor does not re-flag it.",
+            "severity": "LOW",
+            "title": "e8a_a1 sd 0.00154 is not reproducible from the stored 5-dp per-seed values alone (source-precision artefact, not an error)"
+          }
+        ],
+        "provenance_and_consistency": [
+          {
+            "detail": "docs/experiments/e7b_serial_efficiency.md gives per-stage heads as \"head 0.03-0.09\"; the smallest head-stage median across systems is question_only at 0.0366 ms, which rounds to 0.04 at two decimals. Similarly \"decode+preprocess 3.04\" is representative of concat/fusion (3.0412/3.0426) while vocab1000_product is 3.0701. This sentence is unchanged from the round-1 version (it is not one of the fixed cells), the underlying CSV values are exact, and the discrepancy is cosmetic rounding of a prose summary.",
+            "severity": "LOW",
+            "title": "Report head-stage range lower bound reads as truncation"
+          },
+          {
+            "detail": "preflight.json multiseed_context.e8a_a1 stores std 0.00154, copied verbatim from results/experiments/e8a_question_encoder/core_analysis.json per_arm_summary (computed at full precision upstream); recomputing the sample sd from the 5-dp-rounded per_seed values [0.57493, 0.57221, 0.57234] gives 0.00153. Provenance is correct and the report matches its stated source exactly; this is a rounding-order note only, present since before round 1 (preflight.json is unchanged in the fix commits).",
+            "severity": "LOW",
+            "title": "e8a_a1 multiseed sd differs in the last digit when recomputed from rounded per-seed values"
+          }
+        ]
+      },
       "fix_verification": {
-        "0": "F1 VERIFIED: all eight report multi-seed cells match preflight.json multiseed_context verbatim, and multiseed_context itself matches the original aggregates (v2_07_scaling aggregate/250k, e3_vocab1000 aggregate/250k/product, e2_siglip aggregate/250k/fusion, v3_03_scaling summary/250k, e8a core_analysis per_arm_summary and per_arm_seed) value-for-value including per-seed lists; sds independently reproduce as sample sds of the per-seed values. The old cells (e.g. question_only sd 0.0007 vs true 0.00439, vocab1000 mean 0.4988 vs true 0.49946) confirm the round-1 diagnosis. F2 VERIFIED: E7a stores",
-        "1": "F1 VERIFIED: the report's multi-seed column now matches preflight.json multiseed_context verbatim for all eight rows (0.49769+/-0.00439, 0.57861+/-0.00264, 0.58226+/-0.00197, 0.49946+/-0.00248, 0.59388+/-0.00317, 0.59580+/-0.00741, 0.59446+/-0.00030, 0.57316+/-0.00154). I recomputed every mean and sample sd from the per-seed values and traced every per-seed value to its authoritative source file (v2_07_scaling, e3_vocab1000, e2_siglip, v3_03_scaling best_val/dev_accuracy entries; e8a core_analysis per_arm_summary). All match; e8a_A1's stored sd 0.00154 derives from unrounded seed accuracies (4",
-        "2": "F1 FIXED: all eight report multi-seed cells equal preflight.json multiseed_context verbatim (0.49769+/-0.00439, 0.57861+/-0.00264, 0.58226+/-0.00197, 0.49946+/-0.00248, 0.59388+/-0.00317, 0.59580+/-0.00741, 0.59446+/-0.00030, 0.57316+/-0.00154), and each mean/sd recomputes from per-seed values traced to the upstream stored results files. F2 FIXED: analyse.py tower_parameters() takes E7a's encoder_total_parameters once per encoder with image==text equality assertions; CLIP 151,277,313 and SigLIP 203,155,970 confirmed in E7a results.json; e8a_a1 total 307,187,365 recomputes exactly; all eight \"t",
-        "3": "F1 (multiseed column) FIXED: all eight report cells now equal preflight.json multiseed_context, which itself equals the source aggregates verbatim (v2_07_scaling results.json aggregate 250k for question_only/concat/fusion; e3_vocab1000 product 250k; e2_siglip fusion 250k; v3_03_scaling summary 250k; e8a core_analysis per_arm_summary A0p/A1 at train_250k). Means and sample sds (ddof=1) recomputed independently from every per-seed list match to stored precision (e8a_a1 last digit explained by source full precision, see LOW finding). The old cells (e.g. concat 0.5786 +/- 0.0011, vocab1000 0.4988 ",
-        "4": "F1 VERIFIED: the report's multi-seed column is verbatim preflight.json multiseed_context for all 8 rows (0.49769+/-0.00439, 0.57861+/-0.00264, 0.58226+/-0.00197, 0.49946+/-0.00248, 0.59388+/-0.00317, 0.59580+/-0.00741, 0.59446+/-0.00030, 0.57316+/-0.00154), and preflight itself copies the stored source aggregates (v2_07_scaling, e3_vocab1000, e2_siglip, v3_03_scaling, e8a core_analysis per_arm_summary); per-seed values match the underlying run records exactly and means/sample-sds recompute (A1's 0.00154 is correct from unrounded accuracies: sd of 4435/4414/4415 correct over 7714 = 0.0015356). "
+        "analysis_code_and_aggregation": "F1 VERIFIED: the report's multi-seed column is verbatim preflight.json multiseed_context for all 8 rows (0.49769+/-0.00439, 0.57861+/-0.00264, 0.58226+/-0.00197, 0.49946+/-0.00248, 0.59388+/-0.00317, 0.59580+/-0.00741, 0.59446+/-0.00030, 0.57316+/-0.00154), and preflight itself copies the stored source aggregates (v2_07_scaling, e3_vocab1000, e2_siglip, v3_03_scaling, e8a core_analysis per_arm_summary); per-seed values match the underlying run records exactly and means/sample-sds recompute (A1's 0.00154 is correct from unrounded accuracies: sd of 4435/4414/4415 correct over 7714 = 0.0015356). F2 VERIFIED: E7a's encoder_total_parameters is the whole dual-tower count (its own note: 'the whole dual-tower encoder, which is resident when either tower runs'; image and text entries equal), taken once with equality assertions in analyse.py; CLIP 151,277,313, SigLIP 203,155,970, SmolLM2 134,515,008; all 8 total_loaded values recompute exactly (e8a_a1 = 21,395,044 + 151,277,313 + 134,515,008 = 307,187,365 as claimed); the field-level JSON diff 1e883b4->HEAD shows exactly the halving of resident_frozen/total_loaded and nothing else in parameters; report M-values and latency_memory.csv match; no stale double-counted number (302.9M/458.5M etc.) remains anywhere in docs. F3 VERIFIED: recomputed over all 24 per-run records, warm median minus additive sum spans -0.4086 (siglip_fusion pass 3) to -0.0105 ms (question_only pass 2), all 24 negative; the report sentence states exactly this range with the correct sign interpretation (additive sits above measured). F4 VERIFIED: warm_p5_p95_ms_per_pass (three [p5,p95] pairs) and warm_p5_p95_envelope_ms ([min p5, max p95]) recompute exactly from the raw records for all 8 systems; the old pass-1-only warm_p5_p95_ms field is removed. F5 VERIFIED: e7b_results.json metadata now git_commit d85bece, git_dirty false (previously b60c981/dirty true). F6 VERIFIED: running tests/test_e7b.py prints 'test_e7b: 55 checks passed'; question_only cold 75 is correct from the raw mean 75.47 (the old 76 was a double-rounding via the CSV's 75.5); the three pilot_evidence records are tracked via the new .gitignore exception and are field-identical to the three qualification runs embedded in pilot_e8a_a1.json. Provenance: d85bece touches only .gitignore, analyse.py (tower_parameters and aggregate_system) and the 3 pilot files; 500e917 touches only the report, e7b_results.json and latency_memory.csv (whose diff changes only the total_loaded column); the 24 per-run records and preflight.json are byte-identical from the benchmark commit abeddc4 through HEAD (empty git diff) with a clean worktree, and every record carries code_head b60c981. Embargo: git diff --name-only 1e883b4..500e917 contains no clean-test file; the only 'clean_test' strings in the content diff are 'clean_test_accessed: false' flags; the embargoed file was never opened.",
+        "numbers_and_tables": "F1 (multiseed column) FIXED: all eight report cells now equal preflight.json multiseed_context, which itself equals the source aggregates verbatim (v2_07_scaling results.json aggregate 250k for question_only/concat/fusion; e3_vocab1000 product 250k; e2_siglip fusion 250k; v3_03_scaling summary 250k; e8a core_analysis per_arm_summary A0p/A1 at train_250k). Means and sample sds (ddof=1) recomputed independently from every per-seed list match to stored precision (e8a_a1 last digit explained by source full precision, see LOW finding). The old cells (e.g. concat 0.5786 +/- 0.0011, vocab1000 0.4988 +/- 0.0006) are confirmed gone. F2 (parameter double-count) FIXED: E7a's encoder_total_parameters is identical on the image and text tower entries (its note says the dual tower is resident when either runs), analyse.py now takes it once with equality assertions; CLIP 151,277,313 and SigLIP 203,155,970 confirmed; trainable counts recomputed by torch numel over each stored checkpoint match all eight rows; e8a_a1 total 307,187,365 = 151,277,313 + 134,515,008 (SmolLM2-135M) + 21,395,044 recomputed exactly; all eight \"total loaded\" table cells (151.6M...307.2M) match; old values (302.9M...458.5M) were exactly the tower-double-counted figures. F3 (additive range) FIXED: recomputed over all 24 per-run records, measured_minus_additive spans -0.4086 (e8a_a1 pass2) to -0.0105 (question_only pass1), all 24 negative; per record it equals warm_median - additive_sum and additive_sum equals the sum of stage medians; the corrected sentence's sign interpretation (additive sums sit above measured totals) is right. F4 (p5/p95) FIXED: old warm_p5_p95_ms is byte-identical to pass 1's [p5,p95] for every system (confirming the silent pass-1-only defect); the new per-pass lists match the raw records and each envelope equals [min p5, max p95] across the three passes. F5 (dirty worktree) FIXED: regenerated e7b_results.json metadata records git_commit d85bece, git_dirty false; worktree clean against HEAD 500e917. F6 FIXED: tests/test_e7b.py executes and prints \"test_e7b: 55 checks passed\" (report now says 55); question_only cold mean is 75.47 ms -> 75 (was 76); the three pilot_evidence per-run records are git-tracked via the new .gitignore exception and are genuine A1 qualification runs (warm 18.65/18.74/19.22 ms, consistent with the report's 18.65-19.22 range). No new error introduced: the field-by-field diff of e7b_results.json between 1e883b4 and 500e917 shows changes ONLY in parameters, p5/p95 fields and metadata \u2014 every timing, accuracy, stage, memory and reproduction field is unchanged.",
+        "provenance_and_consistency": "F1 FIXED: all eight report multi-seed cells equal preflight.json multiseed_context verbatim (0.49769+/-0.00439, 0.57861+/-0.00264, 0.58226+/-0.00197, 0.49946+/-0.00248, 0.59388+/-0.00317, 0.59580+/-0.00741, 0.59446+/-0.00030, 0.57316+/-0.00154), and each mean/sd recomputes from per-seed values traced to the upstream stored results files. F2 FIXED: analyse.py tower_parameters() takes E7a's encoder_total_parameters once per encoder with image==text equality assertions; CLIP 151,277,313 and SigLIP 203,155,970 confirmed in E7a results.json; e8a_a1 total 307,187,365 recomputes exactly; all eight \"total loaded\" cells correct (old double-counted 302.9M-458.5M values removed per the diff). F3 FIXED: recomputed over all 24 records, measured-minus-additive spans exactly -0.4086 to -0.0105 ms, all negative; the corrected sentence's sign interpretation (additive sums sit above measured totals) is right. F4 FIXED: warm_p5_p95_ms_per_pass and warm_p5_p95_envelope_ms in e7b_results.json recompute exactly from the raw records for every system. F5 FIXED: e7b_results.json metadata shows git_commit d85bece with git_dirty false. F6 FIXED: tests/test_e7b.py run prints \"55 checks passed\"; question_only cold 75.47 now reported as 75 (was 76); pilot_evidence records tracked via .gitignore exceptions, distinct from the full-run A1 records. No new errors found in any changed cell or sentence; the report diff touches only the table, the additive-sum paragraph and the outputs paragraph, all re-verified. Per-run records untouched since abeddc4. Embargo intact."
       },
       "head_audited": "500e917",
       "high": 0,
-      "low_disposition": "recorded for the dissertation-cleanup pass without editing the accepted artefacts, preserving the audit-to-artefact binding; the one numeric item (E7a comparison upper bound 6.35 -> 6.36 at 2 dp) changes no conclusion",
-      "low_findings": [
-        "Pre-existing prose approximations in the unchanged per-stage sentence",
-        "preflight multiseed_context per_seed format inconsistency",
-        "e8a_a1 sd 0.00154 is not reproducible from the rounded per-seed values alone",
-        "E7a comparison range endpoint slightly understated (pre-existing, not fix-introduced)",
-        "Sync-floor figure quoted as a single value while per-run floors span 0.0026-0.0027 ms (pre-existing)",
-        "Report head-stage range lower bound reads as truncation",
-        "e8a_a1 multiseed sd differs in the last digit when recomputed from rounded per-seed values",
-        "Pre-existing rounding truncation in the E7a comparison range \"6.34-6.35 ms\"",
-        "e8a_a1 sd 0.00154 is not reproducible from the stored 5-dp per-seed values alone (source-precision artefact, not an error)",
-        "Sync-floor prose slightly narrower than records",
-        "E7a additive band '6.34-6.35 ms' is approximate at the edges"
-      ],
-      "verdicts": [
-        "ACCEPT",
-        "ACCEPT",
-        "ACCEPT",
-        "ACCEPT",
-        "ACCEPT"
-      ]
-    }
+      "low": 6,
+      "low_disposition": "the LOW findings are pre-existing prose approximations and source-precision notes, recorded for the dissertation-cleanup pass without editing the accepted artefacts so the audit-to-artefact binding stays exact; the one numeric item (the E7a comparison upper bound reads 6.35 where fusion's 6.35788 rounds to 6.36 at 2 dp) changes no conclusion",
+      "verdicts": {
+        "analysis_code_and_aggregation": "ACCEPT",
+        "numbers_and_tables": "ACCEPT",
+        "provenance_and_consistency": "ACCEPT"
+      }
+    },
+    "supersedes_note": "this version replaces the malformed first write of this record (committed at c550996), which embedded five journal rows including cached replays under integer keys; the verdicts themselves are unchanged"
   },
   "metadata": {
     "batch_size": 256,
@@ -61,7 +84,7 @@
     "device": "cuda",
     "dropout": 0.3,
     "embed_dim": 512,
-    "git_commit": "500e917",
+    "git_commit": "c550996",
     "git_dirty": false,
     "gpu": "NVIDIA RTX 4000 Ada Generation",
     "h5py_version": "3.16.0",
@@ -76,7 +99,7 @@
     "python": "3.12.3",
     "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
     "seed": 42,
-    "timestamp": "2026-08-06T03:11:15",
+    "timestamp": "2026-08-06T03:14:19",
     "top_k_answers": 100,
     "torch": "2.12.1+cu130",
     "weight_decay": 0.0001
