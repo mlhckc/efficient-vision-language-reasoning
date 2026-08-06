@@ -1,0 +1,167 @@
+{
+  "metadata": {
+    "timestamp": "2026-08-06T17:12:27",
+    "git_commit": "0ce49fc",
+    "git_dirty": true,
+    "open_clip_version": "3.3.0",
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "h5py_version": "3.16.0",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "deterministic": true,
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "embed_dim": 512,
+    "top_k_answers": 100,
+    "n_train": 40000,
+    "n_val": 8000,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "hidden_dim": 512,
+    "dropout": 0.3,
+    "weight_decay": 0.0001
+  },
+  "e8b_implementation_audit_verdicts": {
+    "phase": "E8B implementation-readiness (no training authorised)",
+    "workflow_run_id": "wf_e576152e-fd3",
+    "auditors": [
+      "A-architecture-and-causal-controls",
+      "B-lm-scoring-tokenisation-decoding",
+      "C-checkpoint-resume-resources-provenance-embargo"
+    ],
+    "verdicts": [
+      "ACCEPT",
+      "ACCEPT",
+      "ACCEPT"
+    ],
+    "severity_totals": {
+      "MEDIUM": 5,
+      "LOW": 11
+    },
+    "acceptance": "all three ACCEPT, zero BLOCKER, zero HIGH; the MEDIUM findings are execution-phase obligations recorded below and carried forward to the Phase-1 package",
+    "audits": [
+      {
+        "verdict": "ACCEPT",
+        "findings": [
+          {
+            "severity": "MEDIUM",
+            "title": "G14 fp32 precision diagnostic has no checked-in producer",
+            "detail": "results/experiments/e8b_readout_generation/g14_precision_diagnostic.json (bf16 delta 0.0664 / fp32 delta 1.14e-05, argmax identical) is the key evidence that the large bf16 R1 score deltas are kernel numerics rather than a cached-path defect, but no script in the repository writes it: grep for 'g14_precision_diagnostic' across all .py files returns nothing, and run.py's preflight writes only preflight_nonscientific.json. The probe is described only in prose ('torch.manual_seed(0), scale 0.13'). CLAUDE.md requires every number to be traceable to the code that produced it; the diagnostic supports the binding G14 argmax-identity interpretation and should be regenerable from retained code before the \u226564-example G14 gate runs. Mitigating: the same conclusion is independently corroborated by the checked-in tiny-LM fp32 tests (tests/test_e8b.py test_r1, gate delta < 1e-4) and the corrupted-cache known-negative.",
+            "location": "results/experiments/e8b_readout_generation/g14_precision_diagnostic.json (no producer script found in repo)"
+          },
+          {
+            "severity": "MEDIUM",
+            "title": "Serial integrity guards execute inside the timed S9b segment",
+            "detail": "In serial_efficiency._readout_stages, the R2/R3 cache-integrity replays (a complete second decode including an extra uncached prefix forward, lines 120-124 and 132-136) and the two R1 cache fingerprints (SHA-256 over all layer tensors after CPU transfer, lines 105 and 108) all run between mark('S9a_prefix_forward') and mark('S9b_readout') (line 140). The recorded S9b stage time therefore includes roughly 2x decode work plus hashing overhead, and _latency_fields (lines 190-205) derives ms_per_generated_token and ms_per_lm_decode_forward from that inflated segment (visible in the preflight: R1 S9b 1277.8 ms / 100 forwards = 12.8 ms per forward includes two full-cache fingerprints). Harmless now because every current output is labelled NON-SCIENTIFIC and run_full_benchmark refuses to run, but this is the timing path the future scientific serial benchmark would reuse; guards should be kept as correctness gates while being moved outside the timed marks (or their cost marked separately) before any scientific serial execution is authorised.",
+            "location": "experiments/e8b_readout_generation/serial_efficiency.py:104-140, 190-205"
+          },
+          {
+            "severity": "LOW",
+            "title": "optimizer.step ran in the test suite's toy resume fixture",
+            "detail": "tests/test_e8b.py:716 calls optimizer.step() inside _toy_training, a synthetic loop over an nn.Linear(4,3) with random data, explicitly documented (lines 689-691) as 'Not an E8B model and not project training', existing solely to prove the resume checkpoint format reproduces an uninterrupted trajectory bitwise. Strictly read, the phase rule 'no optimizer.step ran anywhere' is contravened by this fixture; no project model, project data, or scientific number is involved, and the preflight itself constructed but never stepped its optimizer (optimizer_step_count 0, resume_format.optimizer_stepped false, both recorded). Recommend recording this deliberate exception in the phase closure report.",
+            "location": "tests/test_e8b.py:687-728 (step at line 716)"
+          },
+          {
+            "severity": "LOW",
+            "title": "Binding 64-example G14 gate not yet exercised at protocol scale",
+            "detail": "Master protocol section 18 (line 1501) requires argmax identity 'on every one of at least 64 examples'. The preflight ran g14_r1_gate on 2 real prefixes (max bf16 score delta 0.0913, argmax identical) and the diagnostic on 1 probe prefix. This is phase-appropriate (the full gate belongs to the evaluation phase and the gate function accepts any prefix list), but with recorded bf16 deltas near 0.09 on mean log-prob scores over 100 candidates, argmax identity over 64+ real prefixes is not yet demonstrated and could fail closed at evaluation; run.py does not yet construct the 64-example gate set. This should be an explicit step in the training/evaluation-phase plan, and the g14_r1_gate default tolerance parameter (1e-4, informational) will be nominally exceeded on every bf16 example, which the tolerance_note wording already accommodates.",
+            "location": "experiments/e8b_readout_generation/readouts.py:218-240; results/experiments/e8b_readout_generation/preflight_nonscientific.json (g14_r1)"
+          }
+        ],
+        "evidence_summary": "Read every audited file in full (latents.py, readouts.py, run.py, serial_efficiency.py, tests/test_e8b.py, preregistration.json, preflight_nonscientific.json, g14_precision_diagnostic.json, the relevant master-protocol sections 10/18/20) and ran independent read-only computations in the project venv (transformers 5.14.1, torch 2.12.1). Tokenizer facts verified live against the pinned revision 93efa2f097d58c2a74874c7e644dbc9b0cee75a2 via e8a_common constants: BOS=EOS=0, pad_token None; re-tokenising all 100 vocabulary answers with add_special_tokens=False reproduced the preflight G1 record exactly (max length 4, histogram {1:63,2:31,3:5,4:1}, 0 strict prefix pairs, cache SHA 08f56d16b2f28a13...), first tokens carry no leading space ('no', not 'Gno'), no uppercase answers exist, and the R3 cap 8 = measured 4 + fixed margin 4 is asserted fail-closed in build_answer_cache and pinned in the preregistration. R1: mean log-prob over answer tokens PLUS EOS, fp32 log-softmax and accumulation in both paths, ties to the lowest vocabulary index via the (score, -i) key; the cached path clones the prefix cache per candidate (_clone_cache verified on a real DynamicCache: no data_ptr aliasing, extending a clone leaves the original at its length; layer-structure assertion fails loudly on API change), position ids derive from prefix.shape[1], and the brute-force reference is single-sequence, unpadded, uncached. G14's binding clause is argmax identity, matching the master protocol's explicit parenthetical (line 1501) and section 20's rationale; the fp32 diagnostic (1.14e-05) plus tiny-LM fp32 gate tests and a corrupted-cache known-negative support cached-path soundness, with two MEDIUM caveats (unretained diagnostic producer; guard overhead inside timed stages). R2: deterministic trie from exact sequences with sorted-child iteration, EOS permitted exactly at leaf nodes, leaf set asserted equal to the answer set, the strict prefix pair handled ([1] < [1,2] exercised in tests), total-order tie key makes list order irrelevant, cached walk gated identical to brute force. R3: greedy only, cap 8, stop on EOS id 0, emitted string is decode of ids excluding the terminating EOS with skip_special_tokens=False and clean_up_tokenization_spaces=False, no strip/lower/normalize anywhere in readouts.py (asserted by test), EOS-first yields a labelled empty string, cap-hit-without-EOS is overlong, and torch.argmax first-occurrence tie behavior was verified empirically. Invalid outputs (empty, overlong, out-of-vocabulary) stay in every denominator (summarise_r3_outcomes asserts coverage; the strict exact-string membership means a leading-space emission counts out_of_vocabulary, which is the preregistered behavior). Raw and G21-normalised outputs stay separate: the serial path records normalised_text_recorded_not_scored. Phase rules held: TRAINING_AUTHORIZED False with a fail-closed U4 refusal on B3/train_40k/seed0, no 360M identity anywhere, preflight and smoke outputs labelled NON-SCIENTIFIC with optimizer_step_count 0, the embargo token absent from all E8B sources, git status shows only the E8B additions plus the tests/run_all.py registration with all tracked E7b/G21 artefacts unchanged, and the full registered test module passes on this node (152 checks). Zero BLOCKER, zero HIGH: ACCEPT."
+      },
+      {
+        "verdict": "ACCEPT",
+        "findings": [
+          {
+            "severity": "MEDIUM",
+            "title": "Programme-level resource gates declared but not implemented in project_resources",
+            "detail": "run.py defines CORE_CEILING_HOURS = 180.0 and MEMORY_CEILING_FRACTION = 0.80 (lines 79-80) but project_resources (lines 363-419) implements only the per-run 8h and per-identity 35h gates. Neither the worst-case remaining-core projection against min(180, 3x revised expected) nor the 80%-of-usable-memory comparison is computed anywhere in the E8B runner (the preflight records peak memory but compares it to nothing). E8A implemented these in efficiency_resources.py:297,317. The training loop itself is unimplemented (train() raises), so nothing can currently slip past the missing gates, but they must be wired in before Phase-1 execution together with the G19 pilot recomputation that U3 requires.",
+            "location": "experiments/e8b_readout_generation/run.py:79-80, 363-419, 595-600"
+          },
+          {
+            "severity": "MEDIUM",
+            "title": "Binding G14 (>=64 examples) has not run; preflight keys named g14 cover only 2 prefixes",
+            "detail": "Master protocol section 18 defines G14 as argmax identity on every one of at least 64 examples. The preflight runs the gate machinery on exactly 2 prefixes and stores the results under keys g14_r1/g14_r2 in preflight_nonscientific.json. The record is labelled NON-SCIENTIFIC and the gate functions accept arbitrary prefix lists, but the naming invites reading G14 as satisfied; the 64-example binding run is still outstanding and must be executed and recorded before any R1/R2 result is trusted. Related: the recorded bf16 max score delta (0.0913, preflight; 0.0664, diagnostic) exceeds the 1e-4 tolerance in the section-18 wording; the code demotes that clause to informational, which master protocol section 20 supports ('argmax identity and not merely a numeric tolerance' for the never-upcast bf16 frozen LM) and the fp32 diagnostic (delta 1.14e-05) confirms implementation equivalence, but the eventual G14 gates record should restate this reading explicitly.",
+            "location": "experiments/e8b_readout_generation/run.py:557-572; results/experiments/e8b_readout_generation/preflight_nonscientific.json (g14_r1.examples=2); .agent-bridge/tasks/_shared/e8-master-protocol-canonical.md:1501,1621"
+          },
+          {
+            "severity": "LOW",
+            "title": "g14_precision_diagnostic.json has no committed generator script",
+            "detail": "The diagnostic record (bf16 vs fp32 R1 score deltas on one pinned random prefix) carries run_metadata and a NON-SCIENTIFIC label, but no script in the repository produces it; it was evidently written by an ad-hoc probe. It is therefore not reproducible from the codebase. Since it is the recorded justification for treating the 1e-4 score clause as informational, committing the probe (or folding it into the preflight) would close the provenance gap.",
+            "location": "results/experiments/e8b_readout_generation/g14_precision_diagnostic.json"
+          },
+          {
+            "severity": "LOW",
+            "title": "Neutral-tensor hash enforcement and intervention evaluation passes not yet implemented",
+            "detail": "run.py pins only 8-hex-character prefixes (NEUTRAL_IMAGE_SHA_PREFIX '8cb31f37', NEUTRAL_QUESTION_SHA_PREFIX '64589b2e', lines 203-204); the full SHA-256 values exist in E8A artefacts (gates.json:203, gates_A0p.json:203) and the preregistration, but no E8B code loads the neutral tensors or verifies the full hash before use, and the intervention evaluation passes themselves are unimplemented. intervention_inputs correctly replaces trunk inputs only (verified by tests, including failure on a missing derangement and on unknown kinds), and imageid_level_derangement is the shared E8A helper with zero self-pairs, so the design is right; the hash check must be added when the evaluation pass is built, against the full 64-character digests, not the prefixes.",
+            "location": "experiments/e8b_readout_generation/run.py:203-228"
+          },
+          {
+            "severity": "LOW",
+            "title": "Test harness toy loop calls optimizer.step(), against a literal reading of the phase rule",
+            "detail": "tests/test_e8b.py _toy_training (step at line 716) runs 6 AdamW steps on a synthetic nn.Linear(4,3) with random data to prove the resume format reproduces an uninterrupted trajectory bitwise. No project model, encoder, LM, trunk or dataset is involved, and the E8B experiment code never steps an optimizer (preflight constructs one, records optimizer_step_count 0, and the string check at test line 213 confirms no step call in run.py). The resume-format guarantee cannot be tested without stepping some optimizer, so this is a justified, clearly documented exception rather than covert training, but it is reported because the phase rule says 'no optimizer.step ran anywhere'.",
+            "location": "tests/test_e8b.py:687-728 (step at 716)"
+          },
+          {
+            "severity": "LOW",
+            "title": "build_arm ignores its lm argument; G13 load-LM-first order enforced by convention only",
+            "detail": "build_arm(arm, seed, dropout, lm) never uses lm; the G13 construction order (load and freeze LM, then set_seed, then trunk, then projection) is honoured by the preflight caller but not asserted in the function. Additionally, _pretrained_embed_weight() loads the pretrained checkpoint a second time inside a B3 process instead of reusing the caller's LM; this is deliberate (a single cached CPU tensor gives both pair members a bitwise-identical alpha, and the preflight asserts B3's own table equals that cached copy), but the redundant load and the unused parameter would be cleaner made explicit. Bitwise pair identity was verified True at runtime and alpha is identical across B2/B3 (0.23676691).",
+            "location": "experiments/e8b_readout_generation/run.py:161-198"
+          }
+        ],
+        "evidence_summary": "Read every E8B source file in full (latents.py 191 lines, readouts.py 408, run.py 675, serial_efficiency.py 353, tests/test_e8b.py 1054), src/reasoner.py, canonical plan sections 1-8, master protocol gate table and precision section, the preregistration and both preflight artefacts; ran read-only git and grep checks plus two verification computations in the project venv. (1) Architecture: sequence [BOS] p_1..p_32 a_1..a_m [EOS] built exactly as plan section 2 specifies -- LayerNorm(512)+Linear(512,576), BOS from the frozen embedding table (id 0, asserted against the loaded config in G2 at run.py:140-144), contiguous position ids (attention.cumsum-1; pinned by PositionSpy and ScriptedLM tests), right padding with id 0/attention 0, EOS appended and scored, per-example mean token NLL then batch mean. I independently recomputed the loss against an explicit -100-label cross-entropy on a tiny tied-embedding Llama: 4.307291507720947 both, exact match, confirming the masking is mathematically equivalent to labels -100 at BOS/prefix/padding. (2) The question reaches SmolLM2 only through the latents: prefix width is question-length-invariant (tested), the SmolLM2 tokenizer touches only answer strings and R3 decoding, and the question path everywhere (preflight, serial pipeline S5-S7) is CLIP token states into the trunk. (3) src/reasoner.py is untracked-clean (git diff empty; SHA-256 3faafcd2... matches the preregistration binding hash), ReasonerBlock imported unchanged, and tests prove the trunk equals a freshly seeded unmodified LatentQueryReasoner bitwise. (4) G13: build order LM-first then set_seed/trunk/projection in the preflight; pair bitwise identity recorded True over full state_dicts (including the alpha buffer); alpha = s/r0 from one cached CPU pretrained embedding table for both members (recorded identically for B2 and B3, 0.23676691), single application enforced by the alpha==1 assertion with a known-negative test. (5) B1 is one query + LayerNorm + Linear(512,100) = 512+1024+51,300 = 52,836, asserted in the preflight and never referenced as a degeneracy control. (6) Interventions replace trunk inputs only; the derangement helper is the shared E8A zero-self-pair construction; neutral pins trace to full hashes in E8A gates records. (7) Frozen split verified: every LM parameter requires_grad False + eval() with runtime assertion, LM not a submodule so no optimiser can reach it, and the preflight gradient gate proves grads on exactly trunk (21,047,296) + projection (296,512) = 21,343,808 trainable against 134,515,008 frozen -- I recomputed both counts independently and they match plan section 3. (8) Registry is exactly B1/B2/B3, no 360M string or path anywhere (grep clean, U1), train() refuses while TRAINING_AUTHORIZED is False and fails closed on B3/train_40k/seed0 while U4 is None (both exercised as known-negatives). Phase rules: no optimizer.step in experiment code, preflight records 0 steps, no epoch, no dev-accuracy evaluation, all outputs labelled NON-SCIENTIFIC; no clean-test token in any E8B file; git shows only the two-line tests/run_all.py registration modified, with E7b, E8A, v3_00 and src untouched. All 152 tests pass on this node. Findings: two MEDIUM (missing core-ceiling/memory gate wiring; binding 64-example G14 still outstanding with the preflight's 2-example g14-named record) and four LOW; zero BLOCKER, zero HIGH, hence ACCEPT for the implementation-readiness phase -- the MEDIUMs must be closed as part of any training-authorisation package."
+      },
+      {
+        "verdict": "ACCEPT",
+        "findings": [
+          {
+            "severity": "MEDIUM",
+            "title": "G19 gate set incomplete in project_resources: remaining-core, memory and storage gates absent and no sys.exit halt",
+            "detail": "project_resources implements the 8 GPU-hour per-run wall and the two 35 GPU-hour per-identity gates with correct U3 (expected 15/22 basis governs, 100-epoch worst case always reported) and U2 (stop-and-return, no descope) semantics, but master protocol section 14 defines five gate families: the worst-case remaining-core projection against min(180 GPU-hours, 3x revised expected), the 80 per cent peak-memory gate and the storage gate are not implemented anywhere in the E8B code. CORE_CEILING_HOURS = 180.0 and MEMORY_CEILING_FRACTION = 0.80 are declared (run.py lines 79-80) and asserted by tests (tests/test_e8b.py lines 791-792) but never consumed by any enforcement code, which could be mistaken for coverage. Section 14 also requires the halt 'implemented as an explicit sys.exit'; project_resources only returns a stop_and_return flag and its sole caller (preflight, as a labelled demo) merely records it. Mitigations: the G19 pilot, where these projections operate, is explicitly NOT authorised in this phase; no execution path exists (train() fails closed, the serial benchmark refuses); and the complete precedent exists at experiments/e8a_question_encoder/efficiency_resources.py lines 297-317. The full section-14 gate set with sys.exit halts must ship with the Phase-1 pilot implementation before any principal run.",
+            "location": "experiments/e8b_readout_generation/run.py:363-419 (also 79-80); tests/test_e8b.py:787-836"
+          },
+          {
+            "severity": "LOW",
+            "title": "Preflight self-overwrites its own evidence record, bypassing the refuse-overwrite rule",
+            "detail": "atomic_write_json refuses to overwrite existing records ('E8B records are immutable'), but preflight() calls out.unlink(missing_ok=True) immediately before writing preflight_nonscientific.json (run.py lines 637-639), so any later preflight run silently destroys and replaces the evidence file cited in this audit. The record is labelled NON-SCIENTIFIC and re-runnable by design, so scientific immutability is not affected, but prior preflight evidence is not versioned. Consider timestamped filenames or retaining superseded copies.",
+            "location": "experiments/e8b_readout_generation/run.py:637-639"
+          },
+          {
+            "severity": "LOW",
+            "title": "g14_precision_diagnostic.json has no generating script preserved in the repository",
+            "detail": "grep finds no reference to g14_precision in any .py file in the tree; the record was produced by ad-hoc code from a dirty tree (git_dirty true). Its binding content (bf16 argmax identity) is independently reproduced by the preserved g14_r1_gate code and the preflight, but the fp32 comparison (fp32 max delta 1.14e-05 vs bf16 0.0664) that justifies attributing the large bf16 score delta to kernel numerics is not re-runnable as recorded. The record is labelled NON-SCIENTIFIC DIAGNOSTIC, limiting the impact.",
+            "location": "results/experiments/e8b_readout_generation/g14_precision_diagnostic.json"
+          },
+          {
+            "severity": "LOW",
+            "title": "environment_fingerprint crashes on nodes without nvidia-smi, breaking checkpoint save/verify",
+            "detail": "environment_fingerprint() calls subprocess.run(['nvidia-smi', ...]) unconditionally; on a CPU-only node the missing binary raises FileNotFoundError, so save_resume_checkpoint and verify_resume_checkpoint crash instead of recording driver=None. The failure direction is closed (no silent resume), and the project runs on a single fixed GPU node, so this is a robustness defect only.",
+            "location": "experiments/e8b_readout_generation/run.py:242-250"
+          },
+          {
+            "severity": "LOW",
+            "title": "Resume-trajectory test compares losses rounded to 8 decimals rather than raw bits; resume verification checks hash presence but not live consistency of vocabulary/store hashes",
+            "detail": "The toy trajectory test proves the resumed run reproduces the uninterrupted run: parameters are compared bitwise via torch.equal, but the loss stream is compared after round(float(loss), 8) (tests/test_e8b.py lines 718 and 738), marginally weaker than a raw-bits comparison. Separately, verify_resume_checkpoint enforces presence of all 19 fields fail-closed and the recipe hash when supplied, but does not compare the stored vocabulary_sha256, store_sha256s or code_head to the live environment; the training loop that would supply those comparisons is unimplemented in this phase, so this should be closed when the loop is written.",
+            "location": "tests/test_e8b.py:707-760; experiments/e8b_readout_generation/run.py:287-307"
+          },
+          {
+            "severity": "LOW",
+            "title": "Stale bridge state.json still describes the pre-U1 matrix (B4/360M, 30 core runs)",
+            "detail": "The gitignored .agent-bridge/tasks/e8b-readout-generation/state.json (last modified 2 August) still lists 'B3 and B4' selection-sensitivity configurations, the B4-minus-B4r primary contrast and the 30-core-run matrix, all superseded by the 2026-08-06 preregistration under decision U1 (all 360M work deferred, selection-sensitivity halved to two 135M configurations). The code registry correctly contains no 360M identity or execution path ('360' absent from ARMS and all four E8B sources), and the preregistration governs, but the stale bridge record could mislead a future reader and should be updated or banner-marked.",
+            "location": ".agent-bridge/tasks/e8b-readout-generation/state.json"
+          }
+        ],
+        "evidence_summary": "All eight lens items were verified against the live tree at HEAD 0ce49fc on branch v2-protocol, read-only. (1) Checkpoint format: RESUME_FIELDS (run.py:233-239) contains exactly the 19 required categories; verify_resume_checkpoint raises RESUME PROHIBITED on any missing field, on a recipe-hash mismatch and on a hostname mismatch when same-node is required; the live test run (152/152 checks passed, executed during this audit) proves a toy trajectory checkpointed at step 3 of 6 resumes to bitwise-identical parameters and matching losses, and that removal of any of five representative fields prohibits resume. (2) Atomicity and locks: both writers use tmp + os.replace; atomic_write_json refuses overwrite; run locks use O_CREAT|O_EXCL in an NFS-backed home-filesystem directory, record host/pid/UTC and reject duplicates (tested). (3) U3/U2: project_resources computes both the governing expected-epoch 15/22 basis and the always-reported 100-epoch worst case, fires the 8h per-run and 35h per-identity gates with stop-and-return, and no code path mutates ARMS/SCALES (tested); the remaining-core/memory/storage section-14 gates are not yet implemented (MEDIUM finding). (4) Serial extension: STAGE_NAMES_FULL[:7] equals the live E7b TokenReasonerPipeline S1-S7 verbatim (verified by executing the comparison), the new stages are S8/S9a/S9b/S10; generated-token counts, ms-per-generated-token and ms-per-decode-forward are computed with divide-by-zero protection; startup/cold/warm are separated via E7b's own timed_calls; R1 cache-fingerprint and R2/R3 replay integrity guards are always on and their failure modes tested; SCIENTIFIC_EXECUTION_AUTHORIZED is False and run_full_benchmark sys.exits; git shows zero modification under experiments/e7b_serial_efficiency/ or its tracked results (all mtimes predate or equal the HEAD commit). (5) Preflight: no optimizer.step( or scheduler.step( call exists in any E8B source (grep; the only steps are in the tests' toy nn.Linear(4,3) resume-proof loop, which the checkpoint-bitwise requirement necessitates); the record is labelled NON-SCIENTIFIC PREFLIGHT with optimizer_step_count 0, no epoch, no accuracy anywhere; the probe checkpoint is deleted; peak reserved memory 1454 MiB is about 7 per cent of the 20 GB card, far under the 80 per cent ceiling. (6) Provenance: all six preregistration binding hashes (answer_vocab_v2, dev.csv, src/reasoner.py, g21_scorer.py, canonical plan, master protocol) were independently recomputed and match bitwise; code_head matches HEAD; preflight metadata is attached; G21/E7b/E8A tracked artefacts are unchanged per git status/diff. (7) Embargo: no E8B source or test contains the embargoed token or any clean-targets reference (grep, split-token aware); tests/run_all.py's embargo source scan was executed and passes; config.py exposes no clean-test variable to E8B. (8) Git status shows only the E8B additions (experiments/e8b_readout_generation/, tests/test_e8b.py, three untracked JSON records under results/) plus the two-line tests/run_all.py registration; no new .pt files exist anywhere under results/ since 5 August; no E9/E10/F1/F2 implementation exists (the .agent-bridge e9-compact-vlm directory holds only pre-existing planning documents dated 2-4 August). U1 is honoured in code (no 360M registry or path), U2 in project_resources and the registry, U3 in the projection bases, and U4 fails closed: train() refuses the B3/train_40k/seed0 cell while U4_DECIDED is None even when TRAINING_AUTHORIZED is flipped (tested). One execution-phase obligation to carry forward: the binding G14 clause requires argmax identity on at least 64 examples; the preflight smoke ran it on 2 prefixes, which is phase-appropriate, and the full-width gate must run at evaluation time. Verdict ACCEPT: zero BLOCKER, zero HIGH; one MEDIUM (complete the section-14 gate set with the Phase-1 pilot) and five LOW findings."
+      }
+    ]
+  }
+}
