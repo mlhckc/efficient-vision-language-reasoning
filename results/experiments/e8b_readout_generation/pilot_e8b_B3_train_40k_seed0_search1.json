@@ -1,0 +1,517 @@
+{
+  "metadata": {
+    "timestamp": "2026-08-07T00:02:59",
+    "git_commit": "af43b02",
+    "git_dirty": false,
+    "open_clip_version": "3.3.0",
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "h5py_version": "3.16.0",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "deterministic": true,
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "embed_dim": 512,
+    "top_k_answers": 100,
+    "n_train": 40000,
+    "n_val": 8000,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "hidden_dim": 512,
+    "dropout": 0.3,
+    "weight_decay": 0.0001
+  },
+  "e8b_pilot_g19": {
+    "label": "G19 MULTIPLIER PILOT and search grid point 1",
+    "run": "e8b_B3_train_40k_seed0_search1",
+    "cell": [
+      "B3",
+      "train_40k",
+      0
+    ],
+    "recipe": {
+      "grid_point": 1,
+      "lr": 0.0003,
+      "warmup_frac": 0.0,
+      "dropout": 0.1,
+      "objective": "teacher-forced mean token NLL over answer tokens plus EOS, per example, then mean over the batch",
+      "selection_metric": "development R1 accuracy, EOS included",
+      "tie_break": "earliest epoch attaining the best value",
+      "max_epochs": 100,
+      "patience": 10,
+      "batch_size": 128,
+      "weight_decay": 0.01,
+      "weight_decay_on": "parameters with ndim >= 2 only",
+      "grad_clip": 1.0,
+      "scheduler": "cosine after warmup, LambdaLR, horizon 100 x steps_per_epoch, stepped per optimizer step",
+      "precision": "bf16 autocast on the training path only; fp32 evaluation of the trainable path; the frozen LM runs in its pinned bfloat16",
+      "wall_clock_halt_hours": 8.0,
+      "seed": 0,
+      "arm": "B3",
+      "scale": "train_40k"
+    },
+    "recipe_sha256": "8e94b4bff1015555e46ce4145fb876c5345374b7d94846810cb3b35c86d83427",
+    "gates": {
+      "g0_recipe": {
+        "grid_point": 1,
+        "lr": 0.0003,
+        "warmup_frac": 0.0,
+        "dropout": 0.1,
+        "objective": "teacher-forced mean token NLL over answer tokens plus EOS, per example, then mean over the batch",
+        "selection_metric": "development R1 accuracy, EOS included",
+        "tie_break": "earliest epoch attaining the best value",
+        "max_epochs": 100,
+        "patience": 10,
+        "batch_size": 128,
+        "weight_decay": 0.01,
+        "weight_decay_on": "parameters with ndim >= 2 only",
+        "grad_clip": 1.0,
+        "scheduler": "cosine after warmup, LambdaLR, horizon 100 x steps_per_epoch, stepped per optimizer step",
+        "precision": "bf16 autocast on the training path only; fp32 evaluation of the trainable path; the frozen LM runs in its pinned bfloat16",
+        "wall_clock_halt_hours": 8.0,
+        "seed": 0,
+        "arm": "B3",
+        "scale": "train_40k"
+      },
+      "g0_recipe_sha256": "8e94b4bff1015555e46ce4145fb876c5345374b7d94846810cb3b35c86d83427",
+      "recipe_identifier": "7.4 E8B likelihood recipe",
+      "g1_answer_cache_sha256": "08f56d16b2f28a139248415cb633113e034ee23bf3d826b3f37d3eeb4d3e3e1c",
+      "g2_provenance": {
+        "arm_model": "pretrained",
+        "repo_id": "HuggingFaceTB/SmolLM2-135M",
+        "pinned_revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+        "construction": "AutoModelForCausalLM.from_pretrained at the pinned revision",
+        "tied_embeddings_verified": true,
+        "parameter_count": 134515008,
+        "config_sha256": "1d556eab73b69c7f11f64c557a2f9c6f440bd4c6b89bb2584a6b498c92603843",
+        "tokenizer_file_sha256": "9ca9acddb6525a194ec8ac7a87f24fbba7232a9a15ffa1af0c1224fcd888e47c",
+        "state_dict_sha256": "20add223ddf2bc38dfdf4ffa8833e3f62cce2c21807afb41cbb281b2435b8f3d",
+        "resolved_revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+        "resolved_snapshot_path": "/scratch/Efficient Vision-Language Reasoning with Small Language Models/.cache/huggingface/hub/models--HuggingFaceTB--SmolLM2-135M/snapshots/93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+        "transformers_version": "5.14.1",
+        "tokenizers_version": "0.22.2",
+        "loaded_dtype": "torch.bfloat16"
+      },
+      "g13_projection_scale": {
+        "target_rms_s": 0.13466305,
+        "initial_projection_rms_r0": 0.5687579,
+        "alpha": 0.23676691,
+        "rule": "alpha = s / r0; identical alpha for both pair members; interface-initialisation parity, not native-embedding-distribution parity"
+      },
+      "g15": {
+        "train_manifest": {
+          "path": "/scratch/Efficient Vision-Language Reasoning with Small Language Models/data/v2/train_40k.csv",
+          "rows": 40000,
+          "sha256": "cda03c133e581d486c1e29f6d99376ee59f9841564b3fb890bc401f4da5c90d2"
+        },
+        "dev_manifest": {
+          "path": "/scratch/Efficient Vision-Language Reasoning with Small Language Models/data/v2/dev.csv",
+          "rows": 7714,
+          "sha256": "95d1b504dcc4deb7d69ba0c9e293d1c00bae93df4b6907174a1dd615cb93cdc9"
+        },
+        "image_store_sha256": "c852811a4e3393387012a099d3ad8d494fe4be0f3d95f70b4a1328db4ad59588",
+        "question_store_sha256": "503f33827f25202b979076333a4a5258b31808f674b31d521b4b43e098732037",
+        "v3_01_results_sha256": "472fe626775d755e1a24ae3da814466773b3e067537201cb88351ea27d8abfd9"
+      },
+      "g18_vocabulary_sha256": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680",
+      "g4": {
+        "prefix_shape": [
+          128,
+          33,
+          576
+        ],
+        "loss_finite": true,
+        "one_batch_loss": 8.2902
+      },
+      "g5": {
+        "loss_delta": 0.0
+      },
+      "g6": {
+        "explicit": 7.781250476837158,
+        "labels_path": 7.781250953674316,
+        "delta": 4.76837158203125e-07,
+        "note": "equal-length targets, where the per-example and per-token reductions coincide"
+      },
+      "g7": {
+        "trainable_with_grad": "all",
+        "lm_grads": "none"
+      },
+      "g12": {
+        "stores_read_only": true
+      },
+      "g8": {
+        "epochs_to_target": 30,
+        "subset_accuracy": 0.998,
+        "gate_settings": "lr 1e-3, dropout 0.0, 1000 examples"
+      },
+      "g14_pre_selection": {
+        "stage": "pre-selection, initial weights",
+        "examples": 64,
+        "pinned_rows_sha256": "38d2c9d3cdbf012858a9c63b24688ea6aed64797ad0bd714daece45c0aad7bb4",
+        "r1_argmax_identical_all": true,
+        "r2_identical_all": true,
+        "r2_examples": 64,
+        "max_abs_score_delta_batched_vs_brute": 0.15260473887125592,
+        "tolerance_note": "binding clause is argmax identity on all 64 examples (master protocol sections 18 and 20); the 1e-4 score tolerance is informational under the bf16 frozen LM, per g14_precision_diagnostic.json"
+      }
+    },
+    "epochs_run": 30,
+    "resumed_from_epoch": null,
+    "best_epoch": 20,
+    "best_dev_r1_accuracy": 0.5385,
+    "selected_checkpoint_reproduced_accuracy": 0.5385,
+    "history": [
+      {
+        "epoch": 1,
+        "train_loss": 1.34174,
+        "dev_r1_accuracy": 0.40835,
+        "train_seconds": 54.8,
+        "eval_seconds": 85.1
+      },
+      {
+        "epoch": 2,
+        "train_loss": 0.6433,
+        "dev_r1_accuracy": 0.45541,
+        "train_seconds": 53.8,
+        "eval_seconds": 84.6
+      },
+      {
+        "epoch": 3,
+        "train_loss": 0.53803,
+        "dev_r1_accuracy": 0.49015,
+        "train_seconds": 53.8,
+        "eval_seconds": 84.9
+      },
+      {
+        "epoch": 4,
+        "train_loss": 0.47437,
+        "dev_r1_accuracy": 0.51582,
+        "train_seconds": 53.9,
+        "eval_seconds": 84.9
+      },
+      {
+        "epoch": 5,
+        "train_loss": 0.42101,
+        "dev_r1_accuracy": 0.52476,
+        "train_seconds": 53.8,
+        "eval_seconds": 84.9
+      },
+      {
+        "epoch": 6,
+        "train_loss": 0.36405,
+        "dev_r1_accuracy": 0.52761,
+        "train_seconds": 53.8,
+        "eval_seconds": 85.2
+      },
+      {
+        "epoch": 7,
+        "train_loss": 0.3021,
+        "dev_r1_accuracy": 0.52878,
+        "train_seconds": 53.8,
+        "eval_seconds": 85.0
+      },
+      {
+        "epoch": 8,
+        "train_loss": 0.23873,
+        "dev_r1_accuracy": 0.52774,
+        "train_seconds": 53.8,
+        "eval_seconds": 84.9
+      },
+      {
+        "epoch": 9,
+        "train_loss": 0.17975,
+        "dev_r1_accuracy": 0.53008,
+        "train_seconds": 53.9,
+        "eval_seconds": 85.0
+      },
+      {
+        "epoch": 10,
+        "train_loss": 0.13055,
+        "dev_r1_accuracy": 0.52541,
+        "train_seconds": 53.9,
+        "eval_seconds": 84.9
+      },
+      {
+        "epoch": 11,
+        "train_loss": 0.0976,
+        "dev_r1_accuracy": 0.53254,
+        "train_seconds": 53.8,
+        "eval_seconds": 84.7
+      },
+      {
+        "epoch": 12,
+        "train_loss": 0.07365,
+        "dev_r1_accuracy": 0.53267,
+        "train_seconds": 53.9,
+        "eval_seconds": 85.2
+      },
+      {
+        "epoch": 13,
+        "train_loss": 0.0574,
+        "dev_r1_accuracy": 0.53422,
+        "train_seconds": 53.8,
+        "eval_seconds": 84.7
+      },
+      {
+        "epoch": 14,
+        "train_loss": 0.04744,
+        "dev_r1_accuracy": 0.53228,
+        "train_seconds": 53.9,
+        "eval_seconds": 85.0
+      },
+      {
+        "epoch": 15,
+        "train_loss": 0.04157,
+        "dev_r1_accuracy": 0.53422,
+        "train_seconds": 53.9,
+        "eval_seconds": 84.8
+      },
+      {
+        "epoch": 16,
+        "train_loss": 0.03593,
+        "dev_r1_accuracy": 0.53202,
+        "train_seconds": 53.9,
+        "eval_seconds": 84.9
+      },
+      {
+        "epoch": 17,
+        "train_loss": 0.0302,
+        "dev_r1_accuracy": 0.52593,
+        "train_seconds": 53.9,
+        "eval_seconds": 85.3
+      },
+      {
+        "epoch": 18,
+        "train_loss": 0.0311,
+        "dev_r1_accuracy": 0.52852,
+        "train_seconds": 53.9,
+        "eval_seconds": 84.9
+      },
+      {
+        "epoch": 19,
+        "train_loss": 0.03078,
+        "dev_r1_accuracy": 0.521,
+        "train_seconds": 53.9,
+        "eval_seconds": 85.1
+      },
+      {
+        "epoch": 20,
+        "train_loss": 0.02917,
+        "dev_r1_accuracy": 0.5385,
+        "train_seconds": 53.9,
+        "eval_seconds": 85.0
+      },
+      {
+        "epoch": 21,
+        "train_loss": 0.02708,
+        "dev_r1_accuracy": 0.52917,
+        "train_seconds": 53.8,
+        "eval_seconds": 84.9
+      },
+      {
+        "epoch": 22,
+        "train_loss": 0.02439,
+        "dev_r1_accuracy": 0.53656,
+        "train_seconds": 53.9,
+        "eval_seconds": 85.0
+      },
+      {
+        "epoch": 23,
+        "train_loss": 0.01979,
+        "dev_r1_accuracy": 0.53396,
+        "train_seconds": 53.8,
+        "eval_seconds": 84.9
+      },
+      {
+        "epoch": 24,
+        "train_loss": 0.02166,
+        "dev_r1_accuracy": 0.53513,
+        "train_seconds": 53.9,
+        "eval_seconds": 85.0
+      },
+      {
+        "epoch": 25,
+        "train_loss": 0.02248,
+        "dev_r1_accuracy": 0.53695,
+        "train_seconds": 53.9,
+        "eval_seconds": 84.7
+      },
+      {
+        "epoch": 26,
+        "train_loss": 0.01998,
+        "dev_r1_accuracy": 0.52411,
+        "train_seconds": 53.8,
+        "eval_seconds": 85.1
+      },
+      {
+        "epoch": 27,
+        "train_loss": 0.01973,
+        "dev_r1_accuracy": 0.53435,
+        "train_seconds": 53.9,
+        "eval_seconds": 84.8
+      },
+      {
+        "epoch": 28,
+        "train_loss": 0.0143,
+        "dev_r1_accuracy": 0.53008,
+        "train_seconds": 53.9,
+        "eval_seconds": 84.8
+      },
+      {
+        "epoch": 29,
+        "train_loss": 0.01896,
+        "dev_r1_accuracy": 0.52761,
+        "train_seconds": 53.9,
+        "eval_seconds": 85.0
+      },
+      {
+        "epoch": 30,
+        "train_loss": 0.01516,
+        "dev_r1_accuracy": 0.52852,
+        "train_seconds": 53.8,
+        "eval_seconds": 84.9
+      }
+    ],
+    "train_seconds_per_epoch": 53.88,
+    "eval_seconds_per_epoch": 84.94,
+    "wall_hours": 1.379,
+    "gpu": {
+      "hostname": "otter159.eps.surrey.ac.uk",
+      "gpu": "NVIDIA RTX 4000 Ada Generation",
+      "driver": "580.126.09",
+      "cuda": "13.0",
+      "python": "3.12.3",
+      "torch": "2.12.1+cu130"
+    },
+    "peak_memory": {
+      "peak_mib": 4728.3,
+      "device_total_mib": 20017.4,
+      "fraction_used": 0.2362,
+      "ceiling_fraction": 0.8,
+      "fires": false
+    },
+    "checkpoints": {
+      "best": {
+        "path": "/scratch/Efficient Vision-Language Reasoning with Small Language Models/results/experiments/e8b_readout_generation/checkpoints/e8b_B3_train_40k_seed0_search1_best.pt",
+        "sha256": "d8fee72144e70b9cca517bee123204814aef02532d51985843d00d76d86e8d13"
+      },
+      "resume": {
+        "path": "/scratch/Efficient Vision-Language Reasoning with Small Language Models/results/experiments/e8b_readout_generation/checkpoints/resume_e8b_B3_train_40k_seed0_search1.pt",
+        "sha256": "aa69e36d1711bd5b5e58d0cfac47666089db2b7603c13a495935bd59ba3d74ce"
+      }
+    },
+    "g9_reload_identical": true,
+    "g11_repeat_identical": true,
+    "g10_collapse": {
+      "distinct_answers": 100,
+      "top1_share": 0.2318,
+      "mean_prediction_entropy_nats": 0.966046,
+      "entropy_definition": "master protocol section 11: H = mean_n(-sum_k p_n[k] ln p_n[k]) in nats, p_n = softmax over the 100 answers of the fp32 length-normalised R1 scores whose argmax is the prediction, over all development rows",
+      "thresholds": {
+        "entropy_nats_at_or_below": 0.3,
+        "max_class_share_at_or_above": 0.6
+      },
+      "argmax_histogram_entropy_nats": 3.135359,
+      "argmax_histogram_entropy_note": "reported for completeness; NOT the section 11 gate quantity"
+    },
+    "g14_post_selection": {
+      "stage": "post-selection, best checkpoint",
+      "examples": 64,
+      "pinned_rows_sha256": "38d2c9d3cdbf012858a9c63b24688ea6aed64797ad0bd714daece45c0aad7bb4",
+      "r1_argmax_identical_all": true,
+      "r2_identical_all": true,
+      "r2_examples": 64,
+      "max_abs_score_delta_batched_vs_brute": 0.2914974689004648,
+      "tolerance_note": "binding clause is argmax identity on all 64 examples (master protocol sections 18 and 20); the 1e-4 score tolerance is informational under the bf16 frozen LM, per g14_precision_diagnostic.json"
+    },
+    "g19_projection": {
+      "multiplier_vs_v3_01": 9.091,
+      "v3_01_seconds_per_epoch": 15.27,
+      "projections": {
+        "expected_epoch_15_22": {
+          "seconds_per_epoch": {
+            "train_40k": 138.82,
+            "train_250k": 421.33
+          },
+          "run_hours": {
+            "train_40k": 0.578,
+            "train_250k": 2.575,
+            "train_250k_after_8h_wall": 2.575
+          },
+          "largest_250k_run_hours": 2.575,
+          "search_remaining_hours": 4.049,
+          "core_lm_hours": 18.341,
+          "core_b1_hours": 0.382,
+          "evaluation_hours": 2.902,
+          "remaining_core_hours": 25.674
+        },
+        "worst_case_100_epoch": {
+          "seconds_per_epoch": {
+            "train_40k": 138.82,
+            "train_250k": 421.33
+          },
+          "run_hours": {
+            "train_40k": 3.856,
+            "train_250k": 11.704,
+            "train_250k_after_8h_wall": 8.0
+          },
+          "largest_250k_run_hours": 11.704,
+          "search_remaining_hours": 26.994,
+          "core_lm_hours": 67.281,
+          "core_b1_hours": 2.545,
+          "evaluation_hours": 2.902,
+          "remaining_core_hours": 99.722
+        }
+      },
+      "governing_basis": "expected_epoch_15_22 (U3); the 100-epoch worst case is reported beside it, truncated by the 8 h operational wall where it applies",
+      "gates": {
+        "per_run_8h": {
+          "fires": false,
+          "largest_250k_expected_hours": 2.575,
+          "worst_case_hours": 11.704,
+          "note": "the 8 h wall is also a hard operational halt during every run, so the worst case is bounded by construction"
+        },
+        "pretrained_identity_35h": {
+          "fires": false,
+          "projected_hours": 17.542
+        },
+        "random_identity_35h": {
+          "fires": false,
+          "projected_hours": 12.579
+        },
+        "remaining_core": {
+          "expected_remaining_hours": 25.674,
+          "worst_case_remaining_hours": 99.722,
+          "threshold_hours": 77.022,
+          "rule": "worst case > min(180, 3 x revised expected)",
+          "fires": true
+        },
+        "memory_80pct": {
+          "peak_mib": 4728.3,
+          "device_total_mib": 20017.4,
+          "fraction_used": 0.2362,
+          "ceiling_fraction": 0.8,
+          "fires": false
+        },
+        "storage": {
+          "required_gib": 5.811,
+          "free_gib": 323.596,
+          "fires": false
+        }
+      },
+      "fired": [
+        "remaining_core"
+      ],
+      "stop_and_return": true
+    },
+    "clean_test_accessed": false
+  }
+}
