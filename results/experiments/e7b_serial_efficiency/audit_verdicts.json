@@ -1,0 +1,84 @@
+{
+  "e7b_audit_verdicts": {
+    "clean_test_accessed": false,
+    "round_1": {
+      "disposition": "all findings fixed in commits d85bece and 500e917; the 24 per-run timing records and every timing measurement were confirmed valid and left untouched",
+      "findings_summary": [
+        "BLOCKER/HIGH x3: report multi-seed mean/sd column matched no stored record (five global-head rows; one mean wrong; sds understated up to sixfold)",
+        "HIGH: total-loaded parameters double-counted the dual-tower encoders",
+        "HIGH/MEDIUM x3: additive-versus-measured range -0.28..+0.09 matched no computation over the 24 records",
+        "MEDIUM/LOW: aggregate p5/p95 silently pass-1-only; e7b_results.json dirty-worktree provenance; test-count 54 vs 55; cold rounding; pilot evidence untracked"
+      ],
+      "head_audited": "1e883b4",
+      "verdicts": [
+        "REJECT",
+        "REJECT",
+        "REJECT"
+      ]
+    },
+    "round_2": {
+      "acceptance": "all three fresh-context auditors ACCEPT with zero BLOCKER and zero HIGH; every round-1 fix independently verified and every corrected number recomputed from the raw records and upstream stored sources",
+      "blocker": 0,
+      "fix_verification": {
+        "0": "F1 VERIFIED: all eight report multi-seed cells match preflight.json multiseed_context verbatim, and multiseed_context itself matches the original aggregates (v2_07_scaling aggregate/250k, e3_vocab1000 aggregate/250k/product, e2_siglip aggregate/250k/fusion, v3_03_scaling summary/250k, e8a core_analysis per_arm_summary and per_arm_seed) value-for-value including per-seed lists; sds independently reproduce as sample sds of the per-seed values. The old cells (e.g. question_only sd 0.0007 vs true 0.00439, vocab1000 mean 0.4988 vs true 0.49946) confirm the round-1 diagnosis. F2 VERIFIED: E7a stores",
+        "1": "F1 VERIFIED: the report's multi-seed column now matches preflight.json multiseed_context verbatim for all eight rows (0.49769+/-0.00439, 0.57861+/-0.00264, 0.58226+/-0.00197, 0.49946+/-0.00248, 0.59388+/-0.00317, 0.59580+/-0.00741, 0.59446+/-0.00030, 0.57316+/-0.00154). I recomputed every mean and sample sd from the per-seed values and traced every per-seed value to its authoritative source file (v2_07_scaling, e3_vocab1000, e2_siglip, v3_03_scaling best_val/dev_accuracy entries; e8a core_analysis per_arm_summary). All match; e8a_A1's stored sd 0.00154 derives from unrounded seed accuracies (4",
+        "2": "F1 FIXED: all eight report multi-seed cells equal preflight.json multiseed_context verbatim (0.49769+/-0.00439, 0.57861+/-0.00264, 0.58226+/-0.00197, 0.49946+/-0.00248, 0.59388+/-0.00317, 0.59580+/-0.00741, 0.59446+/-0.00030, 0.57316+/-0.00154), and each mean/sd recomputes from per-seed values traced to the upstream stored results files. F2 FIXED: analyse.py tower_parameters() takes E7a's encoder_total_parameters once per encoder with image==text equality assertions; CLIP 151,277,313 and SigLIP 203,155,970 confirmed in E7a results.json; e8a_a1 total 307,187,365 recomputes exactly; all eight \"t",
+        "3": "F1 (multiseed column) FIXED: all eight report cells now equal preflight.json multiseed_context, which itself equals the source aggregates verbatim (v2_07_scaling results.json aggregate 250k for question_only/concat/fusion; e3_vocab1000 product 250k; e2_siglip fusion 250k; v3_03_scaling summary 250k; e8a core_analysis per_arm_summary A0p/A1 at train_250k). Means and sample sds (ddof=1) recomputed independently from every per-seed list match to stored precision (e8a_a1 last digit explained by source full precision, see LOW finding). The old cells (e.g. concat 0.5786 +/- 0.0011, vocab1000 0.4988 ",
+        "4": "F1 VERIFIED: the report's multi-seed column is verbatim preflight.json multiseed_context for all 8 rows (0.49769+/-0.00439, 0.57861+/-0.00264, 0.58226+/-0.00197, 0.49946+/-0.00248, 0.59388+/-0.00317, 0.59580+/-0.00741, 0.59446+/-0.00030, 0.57316+/-0.00154), and preflight itself copies the stored source aggregates (v2_07_scaling, e3_vocab1000, e2_siglip, v3_03_scaling, e8a core_analysis per_arm_summary); per-seed values match the underlying run records exactly and means/sample-sds recompute (A1's 0.00154 is correct from unrounded accuracies: sd of 4435/4414/4415 correct over 7714 = 0.0015356). "
+      },
+      "head_audited": "500e917",
+      "high": 0,
+      "low_disposition": "recorded for the dissertation-cleanup pass without editing the accepted artefacts, preserving the audit-to-artefact binding; the one numeric item (E7a comparison upper bound 6.35 -> 6.36 at 2 dp) changes no conclusion",
+      "low_findings": [
+        "Pre-existing prose approximations in the unchanged per-stage sentence",
+        "preflight multiseed_context per_seed format inconsistency",
+        "e8a_a1 sd 0.00154 is not reproducible from the rounded per-seed values alone",
+        "E7a comparison range endpoint slightly understated (pre-existing, not fix-introduced)",
+        "Sync-floor figure quoted as a single value while per-run floors span 0.0026-0.0027 ms (pre-existing)",
+        "Report head-stage range lower bound reads as truncation",
+        "e8a_a1 multiseed sd differs in the last digit when recomputed from rounded per-seed values",
+        "Pre-existing rounding truncation in the E7a comparison range \"6.34-6.35 ms\"",
+        "e8a_a1 sd 0.00154 is not reproducible from the stored 5-dp per-seed values alone (source-precision artefact, not an error)",
+        "Sync-floor prose slightly narrower than records",
+        "E7a additive band '6.34-6.35 ms' is approximate at the edges"
+      ],
+      "verdicts": [
+        "ACCEPT",
+        "ACCEPT",
+        "ACCEPT",
+        "ACCEPT",
+        "ACCEPT"
+      ]
+    }
+  },
+  "metadata": {
+    "batch_size": 256,
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "deterministic": true,
+    "device": "cuda",
+    "dropout": 0.3,
+    "embed_dim": 512,
+    "git_commit": "500e917",
+    "git_dirty": false,
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "h5py_version": "3.16.0",
+    "hidden_dim": 512,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "n_train": 40000,
+    "n_val": 8000,
+    "numpy_version": "2.5.0",
+    "open_clip_version": "3.3.0",
+    "pandas_version": "3.0.3",
+    "python": "3.12.3",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "timestamp": "2026-08-06T03:11:15",
+    "top_k_answers": 100,
+    "torch": "2.12.1+cu130",
+    "weight_decay": 0.0001
+  }
+}
