@@ -1,0 +1,80 @@
+{
+  "e8b_preregistration": {
+    "recorded_utc": "2026-08-06T09:31:46Z",
+    "git_head": "0ce49fc",
+    "status": "design accepted; implementation/testing/preflight/review authorised; training, the eight-point search, the G19 pilot and all scientific evaluation NOT authorised",
+    "user_decisions": {
+      "U1": "APPROVED: defer B4 and B4r (SmolLM2-360M) together from E8B-min. A deferral, not a cancellation: preserved as a separately authorised conditional E10 size-sensitivity extension after E8B and E9. No 360M path is implemented or run now. Consequences as stated in the accepted design: the pre-registered 135M-versus-360M size contrast is removed at both scales and the selection-sensitivity analysis is halved to two pretrained-135M configurations (one-sided).",
+      "U2": "REJECTED: no pre-authorised 250k-only fallback. If the unconditional 18-core-run matrix becomes infeasible under measured projections, execution stops and returns to the user. No automatic removal of 40k arms, selection-sensitivity configurations or any causal pair.",
+      "U3": "APPROVED: expected-epoch 15/22 projection basis for G19 go/no-go, WITH binding additions: the 100-epoch worst-case projection is always reported beside it; the eight-hour per-run hard wall stands; all projections are recomputed after the G19 multiplier pilot AND again after the eight-point search before core execution; no arm is ever descoped automatically; any projected resource-gate failure stops and returns.",
+      "U4_OPEN": "REPORTED AMBIGUITY, decision required before core execution: the canonical plan counts '30 core training runs, plus 8 search runs... 38 E8B training runs in total' (section 3), implying the B3/40k/seed-0 core run is executed afresh under the frozen recipe even though one search run has the identical configuration; the E8A precedent instead promoted valid seed-0 pilots as core cells without rerunning. Because bf16 training is not bitwise repeatable, the choice changes which checkpoint becomes canonical and must not be made after results are observed. The runner refuses to execute or promote the B3/40k/seed-0 core cell until the user decides: (a) promote the winning search checkpoint, or (b) rerun the cell under the frozen recipe as the 38-run arithmetic implies. Neither option is implemented as a default."
+    },
+    "accepted_design": "E8B-min revision 3 as returned in the design/preregistration report of 2026-08-06 and accepted by the user, comprising revision 2 plus deltas D1-D6; three-lens review round 3: ACCEPT/ACCEPT/ACCEPT with zero blocker, zero high, seven LOW findings folded into the final text",
+    "review_history": {
+      "round_1": {
+        "verdicts": [
+          "REJECT",
+          "REJECT",
+          "REJECT"
+        ],
+        "blocker": 3,
+        "high": 7,
+        "resolution": "single unconditional matrix with stop-and-return; E8A-executed intervention constructions as trunk-input replacements; per-identity accounting; honest evaluation ledger; post-search recorded no-go; two-level bootstrap added"
+      },
+      "round_2": {
+        "verdicts": [
+          "ACCEPT",
+          "ACCEPT",
+          "REJECT"
+        ],
+        "high": 2,
+        "resolution": "grand total corrected to 18.1-46.8 GPU-h; epoch basis converted to flagged decision U3"
+      },
+      "round_3": {
+        "verdicts": [
+          "ACCEPT",
+          "ACCEPT",
+          "ACCEPT"
+        ],
+        "blocker": 0,
+        "high": 0,
+        "low": 7,
+        "workflows": [
+          "wf_d64f63b6-331",
+          "wf_cf8451ae-24f",
+          "wf_01cfc698-e74"
+        ]
+      }
+    },
+    "binding_hashes": {
+      "e8b_canonical_plan": "3e3d703a5157e271d47373530025b377265301dcf7895d56c0e7c028c3c57169",
+      "master_protocol": "a84da21fb7b78243fb65a2dcd7d305a2bc48124c40c9dedefc32dd41a0a554ed",
+      "answer_vocab_v2": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680",
+      "dev_csv": "95d1b504dcc4deb7d69ba0c9e293d1c00bae93df4b6907174a1dd615cb93cdc9",
+      "g21_scorer": "22ea9c59082840a60568d7b804a3cb66ac0daccb7b503a6c50305d1354f2f40d",
+      "vendored_vqa_eval": "f08edfcad5be0112500993e245c706b6cb928eadebe203f89f838e5e0d04bec8",
+      "src_reasoner": "3faafcd25e3f9e233c5173b71c1e1bbdd92859047d7b701d97ee16049892062c",
+      "code_head": "0ce49fc"
+    },
+    "pinned_facts": {
+      "model": "HuggingFaceTB/SmolLM2-135M @ 93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+      "random_init_seed": 20260802,
+      "answer_tokenisation": "add_special_tokens=False, no leading space, case preserved; top-100 max 4 tokens, zero round-trip failures, zero duplicate sequences, zero strict prefix pairs (recorded; G1 re-verifies)",
+      "r3_cap_new_tokens": 8,
+      "bos_eos_ids": [
+        0,
+        0
+      ],
+      "pad_token": "None in the pinned tokenizer; pad=eos permitted only as an implementation idiom and never affects the unpadded G14 reference",
+      "neutral_image_sha256": "8cb31f37 prefix as pinned in the E8A run records",
+      "neutral_question_tensor": "E8A A0p/CLIP tensor of the fixed string 'question', shape (32,512), sha prefix 64589b2e, the only shape-compatible pinned tensor for the 512-wide trunk question input",
+      "derangement": "e8a_common.imageid_level_derangement at config.RANDOM_SEED, the E8A-pinned mapping hash, self-pairs reported (zero); intervention denominator 7,714 rows / 768 images",
+      "resource_baseline_gpu_hours": {
+        "pretrained_135m": 2.29222,
+        "random_135m": 1.95811
+      },
+      "projection_scale_rule": "alpha = s / r0 where s = RMS of the pretrained 135M embed_tokens weight rows and r0 = RMS of projection(LayerNorm(initial latent parameter)) measured once, deterministically, at construction; s, r0 and alpha are all recorded; the identical alpha applies to the paired random identity (interface-initialisation parity, not native-distribution parity)"
+    },
+    "clean_test_accessed": false
+  }
+}

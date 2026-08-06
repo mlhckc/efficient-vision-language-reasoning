@@ -39,6 +39,12 @@ results/experiments/e7b_serial_efficiency/*
 results/experiments/e7b_serial_efficiency/pilot_evidence/*
 !results/experiments/e7b_serial_efficiency/pilot_evidence/*.json
 
+# E8B readout-generation records: preregistration, preflight and audit
+# JSON records are tracked; checkpoints and large artefacts stay ignored.
+!results/experiments/e8b_readout_generation/
+results/experiments/e8b_readout_generation/*
+!results/experiments/e8b_readout_generation/*.json
+
 # Python bytecode
 __pycache__/
 *.pyc
