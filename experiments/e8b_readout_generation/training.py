@@ -1,0 +1,908 @@
+"""E8B pilot training: the single authorised B3/train_40k/seed0 run.
+
+This run is search grid point 1 (lr 3e-4, warmup 0, dropout 0.1) under the
+complete frozen recipe of the canonical plan section 5, and it is
+simultaneously the G19 multiplier pilot: its measured per-epoch train and
+evaluation times, peak memory and storage feed the operative section-14
+projections. Grid points 2-8 and every core cell are refused by the
+runner; nothing here evaluates, promotes or selects beyond this run's own
+preregistered checkpoint-selection metric (development R1 accuracy).
+
+Gate order per the master protocol: G2/G3 (pinned frozen LM) before
+anything; G13 construction order (LM first, then seed, trunk, projection);
+G15/G18 manifest, store and vocabulary pinning; G0 recipe identity; G4-G7
+and G12 implementation gates; G8 tiny-subset overfit (halting, principal
+arm); the binding 64-example G14 BEFORE any checkpoint selection; then the
+training loop with the 8 GPU-hour operational wall (recorded failure
+status on halt), complete 19-field resumable checkpoints every epoch,
+best-on-dev-R1 selection with patience 10; then G9/G10/G11 on the selected
+checkpoint, the closing 64-example G14, and the G19 projection and gate
+evaluation with explicit sys.exit halts.
+
+Nothing here reads, resolves or names the embargoed clean-test target.
+"""
+
+from __future__ import annotations
+
+import hashlib
+import json
+import math
+import sys
+import time
+from pathlib import Path
+
+import numpy as np
+import torch
+from torch.utils.data import DataLoader, Subset
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+import config  # noqa: E402
+from src import tokens_data, utils  # noqa: E402
+from experiments.e8a_question_encoder import e8a_common as e8a  # noqa: E402
+from experiments.e8a_question_encoder import g21_scorer as g21  # noqa: E402
+from experiments.e8b_readout_generation import latents as e8b_latents  # noqa: E402
+from experiments.e8b_readout_generation import readouts  # noqa: E402
+from experiments.e8b_readout_generation import run as e8b_run  # noqa: E402
+
+V2_DIR = config.DATA_DIR / "v2"
+OUT_DIR = e8b_run.OUT_DIR
+CHECKPOINT_DIR = OUT_DIR / "checkpoints"
+
+# The complete frozen recipe (canonical plan section 5; grid point 1).
+RECIPE = {
+    "grid_point": 1,
+    "lr": 3e-4,
+    "warmup_frac": 0.0,
+    "dropout": 0.1,
+    "objective": "teacher-forced mean token NLL over answer tokens plus "
+                 "EOS, per example, then mean over the batch",
+    "selection_metric": "development R1 accuracy, EOS included",
+    "tie_break": "earliest epoch attaining the best value",
+    "max_epochs": 100,
+    "patience": 10,
+    "batch_size": 128,
+    "weight_decay": 0.01,
+    "weight_decay_on": "parameters with ndim >= 2 only",
+    "grad_clip": 1.0,
+    "scheduler": "cosine after warmup, LambdaLR, horizon "
+                 "100 x steps_per_epoch, stepped per optimizer step",
+    "precision": "bf16 autocast on the training path only; fp32 "
+                 "evaluation of the trainable path; the frozen LM runs "
+                 "in its pinned bfloat16",
+    "wall_clock_halt_hours": 8.0,
+    "seed": 0,
+    "arm": "B3",
+    "scale": "train_40k",
+}
+RECIPE_SHA256 = hashlib.sha256(
+    json.dumps(RECIPE, sort_keys=True).encode()).hexdigest()
+
+VOCAB_SHA256_PIN = ("f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10"
+                    "f6a3947d90358680")  # G18: the V2 vocabulary
+G14_N_EXAMPLES = 64
+G14_ROW_SEED = 0
+G8_SUBSET = 1000
+G8_MAX_EPOCHS = 200
+G8_EVAL_EVERY = 10
+G8_TARGET = 0.99
+WALL_CHECK_EVERY_STEPS = 25
+
+# U1 E8B-min remaining-matrix constants for the G19 projection: 18 core
+# runs (B1/B2/B3 x two scales x seeds 0/1/2) of which B3/40k/seed0 comes
+# from promotion (U4), 8 search runs of which this pilot is point 1.
+REMAINING_SEARCH_RUNS = 7
+CORE_LM_RUNS_40K = 5          # B2 x3, B3 seeds 1-2 (seed 0 promoted, U4)
+CORE_LM_RUNS_250K = 6         # B2 x3, B3 x3
+CORE_B1_RUNS = 6              # classifier recipe, both scales x3 seeds
+LM_CORE_CHECKPOINTS = 12      # B2/B3 x two scales x three seeds
+READOUTS_PER_CHECKPOINT = 3   # R1, R2, R3
+INTERVENTION_CONDITIONS = 3   # fixed-image, fixed-question, shuffled
+SELECTION_SENSITIVITY_EVALS = 22  # two B3 configs, <= 11 checkpoints each
+
+
+def sha256_file(path: Path) -> str:
+    hasher = hashlib.sha256()
+    with open(path, "rb") as handle:
+        for block in iter(lambda: handle.read(1 << 22), b""):
+            hasher.update(block)
+    return hasher.hexdigest()
+
+
+# --- Batched R1 scoring (the checkpoint-selection path) -----------------------
+
+@torch.no_grad()
+def r1_scores_batched(lm, prefix, cache: dict) -> torch.Tensor:
+    """(B, n_candidates) length-normalised R1 scores in fp32: one batched
+    prefix forward, then one incremental forward per multi-token candidate
+    over a clone of the shared prefix cache. Candidate order is vocabulary
+    order, so argmax ties resolve to the lowest index."""
+    prefix_len = prefix.shape[1]
+    batch = prefix.shape[0]
+    out = lm(inputs_embeds=prefix, use_cache=True)
+    past = out.past_key_values
+    first = torch.log_softmax(out.logits[:, -1, :].float(), dim=-1)
+    embed = lm.get_input_embeddings()
+    scores = torch.empty(batch, len(cache["sequences"]),
+                         dtype=torch.float32, device=prefix.device)
+    for index, sequence in enumerate(cache["sequences"]):
+        target = sequence + [readouts.EOS_ID]
+        total = first[:, target[0]].clone()
+        if len(target) > 1:
+            ids = torch.tensor([target[:-1]],
+                               device=prefix.device).expand(batch, -1)
+            token_embeds = embed(ids).to(prefix.dtype)
+            positions = torch.arange(
+                prefix_len, prefix_len + len(target) - 1,
+                device=prefix.device).unsqueeze(0).expand(batch, -1)
+            step = lm(inputs_embeds=token_embeds,
+                      past_key_values=readouts._clone_cache(past),
+                      position_ids=positions)
+            logprobs = torch.log_softmax(step.logits.float(), dim=-1)
+            for offset in range(1, len(target)):
+                total = total + logprobs[:, offset - 1, target[offset]]
+        scores[:, index] = total / len(target)
+    return scores
+
+
+@torch.no_grad()
+def dev_r1_predictions(model, lm, loader, cache: dict, device) -> tuple:
+    """fp32 evaluation of the trainable path: R1 argmax per dev row, plus
+    the fp32 score matrix the argmax is taken over, so section 11's
+    prediction entropy is computed from the same distribution that
+    produces the prediction."""
+    model.eval()
+    predictions, labels, scores_all = [], [], []
+    for images, questions, _, mask, batch_labels in loader:
+        prefix = model.prefix_embeddings(
+            lm, images.to(device), questions.to(device), mask.to(device)
+        ).to(torch.bfloat16)
+        scores = r1_scores_batched(lm, prefix, cache)
+        predictions.append(scores.argmax(dim=1).cpu())
+        scores_all.append(scores.cpu())
+        labels.append(batch_labels)
+    return (torch.cat(predictions).numpy(), torch.cat(labels).numpy(),
+            torch.cat(scores_all))
+
+
+def mean_prediction_entropy_nats(scores: torch.Tensor) -> float:
+    """Master protocol section 11: `H = mean_n( - sum_k p_n[k] * ln
+    p_n[k] )` in nats, where `p_n` is the model's predictive distribution
+    over the 100 answers for development row `n`. For the R1 readout that
+    distribution is the softmax of the same fp32 length-normalised
+    candidate scores whose argmax is the recorded prediction, so the
+    entropy and the prediction describe one distribution. Accumulated in
+    float64 over every development row, matching the E8A implementation
+    of the same clause (e8a_common.py:915-918)."""
+    probabilities = torch.softmax(scores.double(), dim=-1)
+    return float((-(probabilities
+                    * torch.log(probabilities.clamp_min(1e-300)))
+                  ).sum(dim=-1).mean())
+
+
+# --- The binding 64-example G14 gate ------------------------------------------
+
+def pinned_g14_rows(n_dev: int) -> list:
+    rng = np.random.default_rng(G14_ROW_SEED)
+    return sorted(rng.choice(n_dev, size=G14_N_EXAMPLES,
+                             replace=False).tolist())
+
+
+@torch.no_grad()
+def g14_binding_gate(model, lm, dev_dataset, cache: dict, trie: dict,
+                     device, stage: str) -> dict:
+    """Master protocol section 18 G14 at the binding width: on 64 pinned
+    development examples, the batched selection scorer AND the
+    single-example cached scorer must both agree with the single-sequence
+    unpadded uncached brute force on the R1 argmax for every example, and
+    the cached R2 walk must equal the brute-force constrained search.
+    Any disagreement halts. Score deltas are recorded against the 1e-4
+    tolerance, which is informational for the bf16 frozen LM (the fp32
+    diagnostic g14_precision_diagnostic.json records why)."""
+    rows = pinned_g14_rows(len(dev_dataset))
+    model.eval()
+    batch = tokens_data.collate_tokens([dev_dataset[i] for i in rows])
+    images, questions, _, mask, _ = batch
+    prefixes = model.prefix_embeddings(
+        lm, images.to(device), questions.to(device), mask.to(device)
+    ).to(torch.bfloat16)
+    batched = r1_scores_batched(lm, prefixes, cache)
+    batched_argmax = batched.argmax(dim=1).cpu().tolist()
+
+    worst_delta = 0.0
+    r2_checked = 0
+    for position, row in enumerate(rows):
+        prefix = prefixes[position:position + 1]
+        brute = readouts.r1_brute_force(lm, prefix, cache)
+        cached = readouts.r1_cached(lm, prefix, cache)
+        if not (brute["argmax"] == cached["argmax"]
+                == batched_argmax[position]):
+            sys.exit(f"G14 FAILED ({stage}) at pinned row {row}: "
+                     f"brute {brute['argmax']} cached {cached['argmax']} "
+                     f"batched {batched_argmax[position]} -- execution "
+                     f"halts and returns to the user")
+        deltas = [abs(a - b) for a, b in zip(
+            brute["scores"], batched[position].cpu().tolist())]
+        worst_delta = max(worst_delta, max(deltas))
+        r2_brute = readouts.r2_brute_force(lm, prefix, cache, trie)
+        r2_cached = readouts.r2_cached(lm, prefix, cache, trie)
+        if r2_brute != r2_cached:
+            sys.exit(f"G14 R2 FAILED ({stage}) at pinned row {row}: "
+                     f"brute {r2_brute} cached {r2_cached}")
+        r2_checked += 1
+    return {"stage": stage, "examples": len(rows),
+            "pinned_rows_sha256": hashlib.sha256(
+                json.dumps(rows).encode()).hexdigest(),
+            "r1_argmax_identical_all": True,
+            "r2_identical_all": True, "r2_examples": r2_checked,
+            "max_abs_score_delta_batched_vs_brute": worst_delta,
+            "tolerance_note": "binding clause is argmax identity on all "
+                              "64 examples (master protocol sections 18 "
+                              "and 20); the 1e-4 score tolerance is "
+                              "informational under the bf16 frozen LM, "
+                              "per g14_precision_diagnostic.json"}
+
+
+# --- Implementation gates (G4-G12, G15, G18) ----------------------------------
+
+def implementation_gates(model, lm, train_loader, cache, device) -> dict:
+    record = {}
+    images, questions, _, mask, labels = next(iter(train_loader))
+    images, questions, mask = (images.to(device), questions.to(device),
+                               mask.to(device))
+    answer_ids = [cache["sequences"][int(label)] for label in labels]
+
+    # G4: one-batch forward, finite outputs, correct shapes.
+    model.eval()
+    with torch.no_grad():
+        prefix = model.prefix_embeddings(lm, images, questions, mask)
+        loss, per_example = model.teacher_forced_loss(
+            lm, prefix.to(torch.bfloat16), answer_ids)
+    if prefix.shape != (labels.shape[0], 33, e8b_latents.D_LM) \
+            or not torch.isfinite(loss) \
+            or not torch.isfinite(per_example).all():
+        sys.exit("G4 FAILED: non-finite loss or wrong prefix shape")
+    record["g4"] = {"prefix_shape": list(prefix.shape),
+                    "loss_finite": True,
+                    "one_batch_loss": round(float(loss), 4)}
+
+    # G5: corrupting padded question positions moves the loss < 1e-4.
+    corrupted = questions.clone()
+    corrupted[mask] = 1e4
+    with torch.no_grad():
+        prefix_corrupt = model.prefix_embeddings(lm, images, corrupted,
+                                                 mask)
+        loss_corrupt, _ = model.teacher_forced_loss(
+            lm, prefix_corrupt.to(torch.bfloat16), answer_ids)
+    delta = abs(float(loss) - float(loss_corrupt))
+    if delta >= 1e-4:
+        sys.exit(f"G5 FAILED: padded-position corruption moved the loss "
+                 f"by {delta:.2e}")
+    record["g5"] = {"loss_delta": delta}
+
+    # G6: the explicit indexed loss equals the labels= path within 1e-5,
+    # compared on equal-length targets where the two reductions coincide.
+    same_length = [i for i in range(len(answer_ids))
+                   if len(answer_ids[i]) == len(answer_ids[0])][:8]
+    ids_subset = [answer_ids[i] for i in same_length]
+    with torch.no_grad():
+        prefix_subset = prefix[same_length].to(torch.bfloat16)
+        explicit, _ = model.teacher_forced_loss(lm, prefix_subset,
+                                                ids_subset)
+        hf_loss = _labels_path_loss(lm, prefix_subset, ids_subset, device)
+    g6_delta = abs(float(explicit) - float(hf_loss))
+    if g6_delta >= 1e-5:
+        sys.exit(f"G6 FAILED: explicit loss {float(explicit):.6f} vs "
+                 f"labels= path {float(hf_loss):.6f}")
+    record["g6"] = {"explicit": float(explicit), "labels_path":
+                    float(hf_loss), "delta": g6_delta,
+                    "note": "equal-length targets, where the per-example "
+                            "and per-token reductions coincide"}
+
+    # G7: gradients reach trunk and projection; every LM parameter None.
+    model.train()
+    prefix = model.prefix_embeddings(lm, images, questions, mask)
+    loss, _ = model.teacher_forced_loss(lm, prefix.to(torch.bfloat16),
+                                        answer_ids)
+    loss.backward()
+    missing = [name for name, p in model.named_parameters()
+               if p.grad is None]
+    frozen_hit = any(p.grad is not None for p in lm.parameters())
+    if missing or frozen_hit:
+        sys.exit(f"G7 FAILED: missing grads {missing}, "
+                 f"frozen touched {frozen_hit}")
+    model.zero_grad(set_to_none=True)
+    record["g7"] = {"trainable_with_grad": "all", "lm_grads": "none"}
+
+    # G12: token stores are opened read-only by the data layer.
+    source = (PROJECT_ROOT / "src" / "tokens_data.py").read_text()
+    read_only = all('"r"' in line for line in source.splitlines()
+                    if "h5py.File" in line)
+    if not read_only:
+        sys.exit("G12 FAILED: tokens_data opens a store not read-only")
+    record["g12"] = {"stores_read_only": True}
+    return record
+
+
+@torch.no_grad()
+def _labels_path_loss(lm, prefix, answer_ids: list, device):
+    """The HuggingFace labels= cross-entropy over the same sequences."""
+    targets = [ids + [readouts.EOS_ID] for ids in answer_ids]
+    longest = max(len(t) for t in targets)
+    if any(len(t) != longest for t in targets):
+        raise AssertionError("G6 requires equal-length targets")
+    embed = lm.get_input_embeddings()
+    token_ids = torch.tensor(targets, device=device)
+    token_embeds = embed(token_ids).to(prefix.dtype)
+    inputs = torch.cat([prefix, token_embeds], dim=1)
+    labels = torch.cat(
+        [torch.full((len(targets), prefix.shape[1]), -100,
+                    dtype=torch.long, device=device), token_ids], dim=1)
+    out = lm(inputs_embeds=inputs, labels=labels)
+    return out.loss.float()
+
+
+def g8_overfit_gate(lm, train_loader, cache, device) -> dict:
+    """Tiny-subset overfit, halting for the principal arm: gate settings
+    lr 1e-3, dropout 0.0 (not tuned hyperparameters), 1,000 examples,
+    target R1 accuracy >= 0.99."""
+    utils.set_seed(0)
+    subset = Subset(train_loader.dataset, list(range(G8_SUBSET)))
+    loader = DataLoader(subset, batch_size=RECIPE["batch_size"],
+                        shuffle=True, generator=utils.make_generator(0),
+                        collate_fn=tokens_data.collate_tokens)
+    trunk, projection = e8b_latents.build_trunk_and_projection(
+        0, 0.0, d_lm=e8b_latents.D_LM)
+    e8b_latents.apply_projection_scale(projection, trunk,
+                                      e8b_run._pretrained_embed_weight())
+    model = e8b_latents.E8BPrefixModel(trunk, projection).to(device)
+    optimizer = make_optimizer(model, 1e-3)
+    reached = None
+    for epoch in range(1, G8_MAX_EPOCHS + 1):
+        model.train()
+        for images, questions, _, mask, labels in loader:
+            answer_ids = [cache["sequences"][int(l)] for l in labels]
+            optimizer.zero_grad(set_to_none=True)
+            with torch.autocast("cuda", dtype=torch.bfloat16):
+                prefix = model.prefix_embeddings(
+                    lm, images.to(device), questions.to(device),
+                    mask.to(device))
+                loss, _ = model.teacher_forced_loss(
+                    lm, prefix.to(torch.bfloat16), answer_ids)
+            loss.backward()
+            torch.nn.utils.clip_grad_norm_(model.parameters(),
+                                           RECIPE["grad_clip"])
+            optimizer.step()
+        if epoch % G8_EVAL_EVERY == 0 or epoch == G8_MAX_EPOCHS:
+            predictions, labels_np, _ = dev_r1_predictions(
+                model, lm, loader, cache, device)
+            accuracy = float((predictions == labels_np).mean())
+            print(f"[G8] epoch {epoch}: subset R1 accuracy "
+                  f"{accuracy:.4f}")
+            if accuracy >= G8_TARGET:
+                reached = (epoch, accuracy)
+                break
+    del model, trunk, projection, optimizer
+    torch.cuda.empty_cache()
+    if reached is None:
+        sys.exit(f"G8 FAILED (halting, principal arm): subset R1 "
+                 f"accuracy {accuracy:.4f} after {G8_MAX_EPOCHS} epochs")
+    return {"epochs_to_target": reached[0],
+            "subset_accuracy": round(reached[1], 5),
+            "gate_settings": "lr 1e-3, dropout 0.0, 1000 examples"}
+
+
+def make_optimizer(model, lr):
+    decay, no_decay = [], []
+    for _, parameter in model.named_parameters():
+        (no_decay if parameter.ndim < 2 else decay).append(parameter)
+    return torch.optim.AdamW(
+        [{"params": decay, "weight_decay": RECIPE["weight_decay"]},
+         {"params": no_decay, "weight_decay": 0.0}], lr=lr)
+
+
+def make_scheduler(optimizer, total_steps, warmup_frac):
+    warmup_steps = int(round(warmup_frac * total_steps))
+
+    def factor(step):
+        if warmup_steps > 0 and step < warmup_steps:
+            return (step + 1) / warmup_steps
+        progress = ((step - warmup_steps)
+                    / max(1, total_steps - warmup_steps))
+        return 0.5 * (1.0 + math.cos(math.pi * min(1.0, progress)))
+
+    return torch.optim.lr_scheduler.LambdaLR(optimizer, factor)
+
+
+# --- G19 projections from measured pilot quantities ---------------------------
+
+def g19_projection(train_seconds_per_epoch: float,
+                   eval_seconds_per_epoch: float,
+                   peak_memory_bytes: int,
+                   device_total_bytes: int,
+                   v3_01_seconds_per_epoch: float,
+                   b1_seconds_per_epoch: float,
+                   storage_dir: Path) -> dict:
+    """The operative section-14 projection from measured pilot numbers.
+
+    Per-epoch time at 250k scales the TRAIN component by the step ratio;
+    the dev evaluation is a fixed 7,714-row cost at every scale. The
+    100-epoch worst case is always reported beside the expected 15/22
+    basis (U3); every gate verdict is returned and enforcement is the
+    caller's g19_halt (U2: stop and return, never descope)."""
+    steps = e8b_run.STEPS_PER_EPOCH
+    epoch_40k = train_seconds_per_epoch + eval_seconds_per_epoch
+    epoch_250k = (train_seconds_per_epoch
+                  * steps["train_250k"] / steps["train_40k"]
+                  + eval_seconds_per_epoch)
+    multiplier = epoch_40k / v3_01_seconds_per_epoch
+
+    def hours(seconds, epochs):
+        return seconds * epochs / 3600.0
+
+    bases = {"expected_epoch_15_22": e8b_run.EXPECTED_EPOCHS,
+             "worst_case_100_epoch": e8b_run.WORST_CASE_EPOCHS}
+    wall = e8b_run.WALL_CLOCK_HALT_HOURS
+    projections = {}
+    for label, epochs in bases.items():
+        run_40k = hours(epoch_40k, epochs["train_40k"])
+        run_250k = hours(epoch_250k, epochs["train_250k"])
+        run_250k_walled = min(run_250k, wall)
+        search_remaining = REMAINING_SEARCH_RUNS * run_40k
+        core_lm = (CORE_LM_RUNS_40K * run_40k
+                   + CORE_LM_RUNS_250K * run_250k_walled)
+        core_b1 = CORE_B1_RUNS * hours(
+            b1_seconds_per_epoch, epochs["train_40k"])
+        eval_hours = (LM_CORE_CHECKPOINTS * READOUTS_PER_CHECKPOINT
+                      * eval_seconds_per_epoch * 1.5 / 3600
+                      + LM_CORE_CHECKPOINTS * INTERVENTION_CONDITIONS
+                      * eval_seconds_per_epoch / 3600
+                      + SELECTION_SENSITIVITY_EVALS
+                      * eval_seconds_per_epoch * 1.5 / 3600)
+        remaining_core = (search_remaining + core_lm + core_b1
+                          + eval_hours)
+        projections[label] = {
+            "seconds_per_epoch": {"train_40k": round(epoch_40k, 2),
+                                  "train_250k": round(epoch_250k, 2)},
+            "run_hours": {"train_40k": round(run_40k, 3),
+                          "train_250k": round(run_250k, 3),
+                          "train_250k_after_8h_wall":
+                              round(run_250k_walled, 3)},
+            "largest_250k_run_hours": round(run_250k, 3),
+            "search_remaining_hours": round(search_remaining, 3),
+            "core_lm_hours": round(core_lm, 3),
+            "core_b1_hours": round(core_b1, 3),
+            "evaluation_hours": round(eval_hours, 3),
+            "remaining_core_hours": round(remaining_core, 3)}
+
+    expected = projections["expected_epoch_15_22"]
+    worst = projections["worst_case_100_epoch"]
+
+    # Per-identity aggregates (35 h ceiling), expected basis, measured
+    # E8A baselines plus every E8B component that loads the checkpoint.
+    b3_hours = (e8b_run.IDENTITY_BASELINE_HOURS["pretrained_smollm2_135m"]
+                + hours(epoch_40k, 15)              # this pilot itself
+                + expected["search_remaining_hours"]
+                + 2 * hours(epoch_40k, 15)          # B3 40k seeds 1-2
+                + 3 * min(hours(epoch_250k, 22), wall)
+                + expected["evaluation_hours"] * 0.6)
+    b2_hours = (e8b_run.IDENTITY_BASELINE_HOURS["random_smollm2_135m"]
+                + 3 * hours(epoch_40k, 15)
+                + 3 * min(hours(epoch_250k, 22), wall)
+                + expected["evaluation_hours"] * 0.4)
+
+    storage_needed = int(
+        ((REMAINING_SEARCH_RUNS + CORE_LM_RUNS_40K + CORE_LM_RUNS_250K
+          + CORE_B1_RUNS) * 2 + SELECTION_SENSITIVITY_EVALS)
+        * 85 * 2 ** 20)  # resume + best per run at ~85 MiB each
+
+    gates = {
+        "per_run_8h": {
+            "fires": expected["largest_250k_run_hours"] > wall,
+            "largest_250k_expected_hours":
+                expected["largest_250k_run_hours"],
+            "worst_case_hours": worst["largest_250k_run_hours"],
+            "note": "the 8 h wall is also a hard operational halt during "
+                    "every run, so the worst case is bounded by "
+                    "construction"},
+        "pretrained_identity_35h": {
+            "fires": b3_hours > e8b_run.PER_IDENTITY_CEILING_HOURS,
+            "projected_hours": round(b3_hours, 3)},
+        "random_identity_35h": {
+            "fires": b2_hours > e8b_run.PER_IDENTITY_CEILING_HOURS,
+            "projected_hours": round(b2_hours, 3)},
+        "remaining_core": e8b_run.remaining_core_gate(
+            expected["remaining_core_hours"],
+            min(worst["remaining_core_hours"],
+                worst["search_remaining_hours"]
+                + CORE_LM_RUNS_40K * wall + CORE_LM_RUNS_250K * wall
+                + worst["core_b1_hours"] + worst["evaluation_hours"])),
+        "memory_80pct": e8b_run.memory_gate(peak_memory_bytes,
+                                            device_total_bytes),
+        "storage": e8b_run.storage_gate(storage_needed, storage_dir),
+    }
+    fired = [name for name, gate in gates.items() if gate["fires"]]
+    return {"multiplier_vs_v3_01": round(multiplier, 3),
+            "v3_01_seconds_per_epoch": v3_01_seconds_per_epoch,
+            "projections": projections,
+            "governing_basis": "expected_epoch_15_22 (U3); the 100-epoch "
+                               "worst case is reported beside it, "
+                               "truncated by the 8 h operational wall "
+                               "where it applies",
+            "gates": gates, "fired": fired,
+            "stop_and_return": bool(fired)}
+
+
+# --- The pilot run ------------------------------------------------------------
+
+def train_pilot() -> int:
+    device = torch.device("cuda")
+    run_name = "e8b_B3_train_40k_seed0_search1"
+    started = time.time()
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    CHECKPOINT_DIR.mkdir(parents=True, exist_ok=True)
+    result_path = OUT_DIR / f"pilot_{run_name}.json"
+    if result_path.exists():
+        sys.exit(f"{result_path} already exists; E8B records are "
+                 f"immutable and the pilot is not rerun automatically")
+    if (OUT_DIR / f"pilot_{run_name}_FAILED.json").exists():
+        sys.exit("a recorded failure status exists for this run; a "
+                 "failed run's result is not used and is never resumed "
+                 "automatically -- execution returns to the user")
+
+    from experiments.e8a_question_encoder import reinfer_g21
+    reinfer_g21.assert_gpu_exclusive("e8b pilot start")
+    lock_path = e8b_run.acquire_run_lock(*e8b_run.PILOT_CELL)
+    print(f"[LOCK] {lock_path.name} acquired")
+
+    try:
+        return _train_pilot_locked(device, run_name, result_path, started)
+    finally:
+        lock_path.unlink(missing_ok=True)
+
+
+def _train_pilot_locked(device, run_name, result_path, started) -> int:
+    fingerprint = e8b_run.environment_fingerprint()
+    if fingerprint["gpu"] != "NVIDIA RTX 4000 Ada Generation" \
+            or not fingerprint["python"].startswith("3.12"):
+        sys.exit(f"FINGERPRINT GATE FAILED: {fingerprint}")
+
+    # G2/G3 first, then G13 order: seed, trunk, projection.
+    lm, lm_provenance = e8b_run.load_frozen_causal_lm(True, device)
+    tokenizer = e8a.load_tokenizer()
+    answers, vocabulary = g21.load_index_to_answer(
+        V2_DIR / "answer_vocab_v2.json")
+    if vocabulary["sha256"] != VOCAB_SHA256_PIN:
+        sys.exit("G18 FAILED: V2 vocabulary hash mismatch")
+    cache = readouts.build_answer_cache(tokenizer, answers)   # G1
+    trie = readouts.build_trie(cache)
+    model, scale_record = e8b_run.build_arm(
+        "B3", RECIPE["seed"], RECIPE["dropout"], lm)
+    model = model.to(device)
+
+    # G15: manifests, stores and comparators pinned before first use.
+    train_manifest = V2_DIR / "train_40k.csv"
+    dev_manifest = V2_DIR / "dev.csv"
+    stores = tokens_data.TokenStores()
+    g15 = {"train_manifest": {"path": str(train_manifest),
+                              "rows": 40000,
+                              "sha256": sha256_file(train_manifest)},
+           "dev_manifest": {"path": str(dev_manifest), "rows": 7714,
+                            "sha256": sha256_file(dev_manifest)},
+           "image_store_sha256": sha256_file(
+               tokens_data.TOKEN_DIR / "image_tokens.h5"),
+           "question_store_sha256": sha256_file(
+               tokens_data.TOKEN_DIR / "question_tokens.h5"),
+           "v3_01_results_sha256": sha256_file(
+               config.RESULTS_DIR / "experiments" / "v3_01_reasoner"
+               / "results.json")}
+
+    train_loader, dev_loader = tokens_data.make_token_loaders(
+        train_manifest, dev_manifest, stores=stores,
+        batch_size=RECIPE["batch_size"])
+    train_loader.generator.manual_seed(RECIPE["seed"])
+    steps_per_epoch = len(train_loader)
+    assert steps_per_epoch == e8b_run.STEPS_PER_EPOCH["train_40k"]
+
+    # Canonical section 20: the record carries the COMPLETE provenance
+    # block, not a subset. E8B records are immutable and U4 conditions
+    # promotion of this checkpoint on complete provenance, so a partial
+    # record would fail its own promotion test.
+    gates_record = {"g0_recipe": RECIPE, "g0_recipe_sha256": RECIPE_SHA256,
+                    "recipe_identifier": "7.4 E8B likelihood recipe",
+                    "g1_answer_cache_sha256": cache["sha256"],
+                    "g2_provenance": dict(lm_provenance),
+                    "g13_projection_scale": scale_record, "g15": g15,
+                    "g18_vocabulary_sha256": vocabulary["sha256"]}
+    gates_record.update(implementation_gates(model, lm, train_loader,
+                                             cache, device))
+    gates_record["g8"] = g8_overfit_gate(lm, train_loader, cache, device)
+
+    # The binding G14 BEFORE any checkpoint selection.
+    gates_record["g14_pre_selection"] = g14_binding_gate(
+        model, lm, dev_loader.dataset, cache, trie, device,
+        stage="pre-selection, initial weights")
+    print(f"[G14] pre-selection: argmax identity on all "
+          f"{G14_N_EXAMPLES} pinned examples (R1 and R2)")
+
+    optimizer = make_optimizer(model, RECIPE["lr"])
+    scheduler = make_scheduler(optimizer,
+                               RECIPE["max_epochs"] * steps_per_epoch,
+                               RECIPE["warmup_frac"])
+    resume_path = CHECKPOINT_DIR / f"resume_{run_name}.pt"
+    best_path = CHECKPOINT_DIR / f"{run_name}_best.pt"
+    wall_seconds = RECIPE["wall_clock_halt_hours"] * 3600
+    device_total = torch.cuda.get_device_properties(0).total_memory
+    torch.cuda.reset_peak_memory_stats()
+
+    best_accuracy, best_epoch = 0.0, -1
+    best_state = None
+    epochs_without_improvement = 0
+    history, train_times, eval_times = [], [], []
+    step_count = 0
+    permutation_counter = 0
+    start_epoch = 1
+    resumed_from = None
+    if resume_path.exists():
+        state = e8b_run.verify_resume_checkpoint(
+            resume_path, recipe_sha256=RECIPE_SHA256)
+        if state["vocabulary_sha256"] != vocabulary["sha256"] \
+                or state["store_sha256s"] != {
+                    "image_tokens": g15["image_store_sha256"],
+                    "question_tokens": g15["question_store_sha256"]}:
+            sys.exit("RESUME PROHIBITED: vocabulary or store hash "
+                     "mismatch against the live inputs")
+        restored = e8b_run.restore_resume_state(
+            state, model=model, optimizer=optimizer, scheduler=scheduler,
+            loader_generator=train_loader.generator)
+        best_accuracy = restored["best_metric"]
+        best_epoch = restored["best_epoch"]
+        best_state = restored["best_model_state"]
+        permutation_counter = restored["epoch_permutation_counter"]
+        step_count = restored["global_step"]
+        start_epoch = restored["epoch"] + 1
+        epochs_without_improvement = restored["epoch"] - best_epoch
+        resumed_from = restored["epoch"]
+        print(f"[RESUME] complete state verified; continuing from epoch "
+              f"{start_epoch} (best {best_accuracy:.4f} at epoch "
+              f"{best_epoch})")
+
+    def wall_halt(epoch, step):
+        elapsed = time.time() - started
+        if elapsed >= wall_seconds:
+            failure = {"metadata": utils.run_metadata(),
+                       "pilot_failure": {
+                           "status": "FAILED: 8 GPU-hour operational "
+                                     "wall-clock halt",
+                           "epoch": epoch, "step": step,
+                           "elapsed_hours": round(elapsed / 3600, 3),
+                           "note": "the run terminates with a recorded "
+                                   "failure status and its result is "
+                                   "not used (section 13.2c)"}}
+            e8b_run.atomic_write_json(
+                OUT_DIR / f"pilot_{run_name}_FAILED.json", failure)
+            sys.exit("G19 HALT: the 8 GPU-hour per-run wall was reached; "
+                     "recorded failure status written; execution stops "
+                     "and returns to the user")
+
+    for epoch in range(start_epoch, RECIPE["max_epochs"] + 1):
+        model.train()
+        epoch_start = time.time()
+        running_loss, seen = 0.0, 0
+        for step, (images, questions, _, mask, labels) in enumerate(
+                train_loader):
+            if step % WALL_CHECK_EVERY_STEPS == 0:
+                wall_halt(epoch, step_count)
+            answer_ids = [cache["sequences"][int(l)] for l in labels]
+            optimizer.zero_grad(set_to_none=True)
+            with torch.autocast("cuda", dtype=torch.bfloat16):
+                prefix = model.prefix_embeddings(
+                    lm, images.to(device), questions.to(device),
+                    mask.to(device))
+                loss, _ = model.teacher_forced_loss(
+                    lm, prefix.to(torch.bfloat16), answer_ids)
+            loss.backward()
+            torch.nn.utils.clip_grad_norm_(model.parameters(),
+                                           RECIPE["grad_clip"])
+            optimizer.step()
+            scheduler.step()
+            step_count += 1
+            running_loss += float(loss.detach()) * labels.shape[0]
+            seen += labels.shape[0]
+        train_seconds = time.time() - epoch_start
+        if not math.isfinite(running_loss):
+            sys.exit(f"HALT: non-finite training loss at epoch {epoch}")
+
+        eval_start = time.time()
+        predictions, labels_np, _ = dev_r1_predictions(model, lm, dev_loader,
+                                                       cache, device)
+        accuracy = float((predictions == labels_np).mean())
+        eval_seconds = time.time() - eval_start
+        train_times.append(train_seconds)
+        eval_times.append(eval_seconds)
+        permutation_counter += 1
+        history.append({"epoch": epoch,
+                        "train_loss": round(running_loss / seen, 5),
+                        "dev_r1_accuracy": round(accuracy, 5),
+                        "train_seconds": round(train_seconds, 1),
+                        "eval_seconds": round(eval_seconds, 1)})
+        print(f"[{run_name}] epoch {epoch:3d}: loss "
+              f"{running_loss / seen:.4f}  dev R1 {accuracy:.4f}  "
+              f"({train_seconds:.0f}s train + {eval_seconds:.0f}s eval)")
+
+        if accuracy > best_accuracy:
+            best_accuracy, best_epoch = accuracy, epoch
+            epochs_without_improvement = 0
+            best_state = {k: v.detach().float().cpu().clone()
+                          for k, v in model.state_dict().items()}
+        else:
+            epochs_without_improvement += 1
+
+        e8b_run.save_resume_checkpoint(
+            resume_path, model=model, optimizer=optimizer,
+            scheduler=scheduler, epoch=epoch, global_step=step_count,
+            best_model_state=best_state, best_metric=best_accuracy,
+            best_epoch=best_epoch, loader_generator=train_loader.generator,
+            epoch_permutation_counter=permutation_counter,
+            recipe_sha256=RECIPE_SHA256,
+            vocabulary_sha256=vocabulary["sha256"],
+            store_sha256s={"image_tokens": g15["image_store_sha256"],
+                           "question_tokens":
+                               g15["question_store_sha256"]})
+
+        memory_check = e8b_run.memory_gate(
+            torch.cuda.max_memory_allocated(), device_total)
+        if memory_check["fires"]:
+            e8b_run.g19_halt([f"peak memory "
+                              f"{memory_check['fraction_used']:.1%} "
+                              f"exceeds the 80 per cent ceiling"])
+        wall_halt(epoch, step_count)
+        if epochs_without_improvement >= RECIPE["patience"]:
+            print(f"[{run_name}] early stop at epoch {epoch} "
+                  f"(patience {RECIPE['patience']})")
+            break
+
+    # Selected checkpoint: earliest epoch attaining the best value.
+    model.load_state_dict(best_state)
+    model = model.to(device)
+    tmp_best = best_path.with_name(best_path.name + ".tmp")
+    torch.save(best_state, tmp_best)
+    import os
+    os.replace(tmp_best, best_path)
+
+    # G9: save and reload reproduces identical scores on one dev batch.
+    reload_trunk, reload_projection = \
+        e8b_latents.build_trunk_and_projection(RECIPE["seed"],
+                                               RECIPE["dropout"])
+    reloaded = e8b_latents.E8BPrefixModel(reload_trunk, reload_projection)
+    reloaded.load_state_dict(torch.load(best_path, map_location="cpu",
+                                        weights_only=False))
+    reloaded = reloaded.to(device).eval()
+    batch = tokens_data.collate_tokens(
+        [dev_loader.dataset[i] for i in range(32)])
+    with torch.no_grad():
+        p_a = model.eval().prefix_embeddings(
+            lm, batch[0].to(device), batch[1].to(device),
+            batch[3].to(device)).to(torch.bfloat16)
+        p_b = reloaded.prefix_embeddings(
+            lm, batch[0].to(device), batch[1].to(device),
+            batch[3].to(device)).to(torch.bfloat16)
+        s_a = r1_scores_batched(lm, p_a, cache)
+        s_b = r1_scores_batched(lm, p_b, cache)
+    if not torch.equal(s_a, s_b):
+        sys.exit("G9 FAILED: reloaded checkpoint does not reproduce "
+                 "identical scores")
+
+    # G11: repeated deterministic evaluation matches exactly; this pass
+    # also provides the final predictions for G10.
+    predictions_a, labels_np, scores_a = dev_r1_predictions(
+        model, lm, dev_loader, cache, device)
+    predictions_b, _, _ = dev_r1_predictions(model, lm, dev_loader, cache,
+                                             device)
+    if not np.array_equal(predictions_a, predictions_b):
+        sys.exit("G11 FAILED: repeated evaluation differs")
+    final_accuracy = float((predictions_a == labels_np).mean())
+    if round(final_accuracy, 5) != round(best_accuracy, 5):
+        sys.exit(f"HALT: selected-checkpoint accuracy {final_accuracy:.5f} "
+                 f"does not reproduce the recorded best "
+                 f"{best_accuracy:.5f}")
+
+    # G10: no collapse (halting for the principal arm). Section 11 fixed
+    # both thresholds before execution: collapse fires if the mean
+    # PREDICTION entropy H <= 0.30 nats or the maximum class share
+    # >= 0.60. H is the per-row quantity of section 11, not the entropy
+    # of the argmax histogram; the histogram entropy is a second function
+    # of the same counts as the class share and is recorded separately,
+    # clearly marked as not the gate quantity.
+    counts = np.bincount(predictions_a, minlength=100)
+    shares = counts / counts.sum()
+    top1_share = float(shares.max())
+    distinct = int((counts > 0).sum())
+    entropy = mean_prediction_entropy_nats(scores_a)
+    histogram_entropy = float(
+        -(shares[shares > 0] * np.log(shares[shares > 0])).sum())
+    if top1_share >= 0.60 or entropy <= 0.30:
+        sys.exit(f"G10 FAILED (halting, principal arm): top-1 share "
+                 f"{top1_share:.3f}, mean prediction entropy "
+                 f"{entropy:.3f} nats")
+
+    # Closing binding G14 on the selected checkpoint.
+    g14_post = g14_binding_gate(model, lm, dev_loader.dataset, cache,
+                                trie, device,
+                                stage="post-selection, best checkpoint")
+    print(f"[G14] post-selection: argmax identity on all "
+          f"{G14_N_EXAMPLES} pinned examples (R1 and R2)")
+
+    # G19: the operative projections from this run's measurements.
+    v3_results = json.loads(
+        (config.RESULTS_DIR / "experiments" / "v3_01_reasoner"
+         / "results.json").read_text())["v3_01_reasoner"]
+    v3_seconds = float(v3_results["efficiency"]["seconds_per_epoch"])
+    projection = g19_projection(
+        train_seconds_per_epoch=float(np.mean(train_times)),
+        eval_seconds_per_epoch=float(np.mean(eval_times)),
+        peak_memory_bytes=torch.cuda.max_memory_allocated(),
+        device_total_bytes=torch.cuda.get_device_properties(0)
+        .total_memory,
+        v3_01_seconds_per_epoch=v3_seconds,
+        b1_seconds_per_epoch=v3_seconds,
+        storage_dir=OUT_DIR)
+
+    elapsed = time.time() - started
+    record = {"metadata": utils.run_metadata(),
+              "e8b_pilot_g19": {
+        "label": "G19 MULTIPLIER PILOT and search grid point 1",
+        "run": run_name, "cell": list(e8b_run.PILOT_CELL),
+        "recipe": RECIPE, "recipe_sha256": RECIPE_SHA256,
+        "gates": gates_record,
+        "epochs_run": len(history),
+        "resumed_from_epoch": resumed_from,
+        "best_epoch": best_epoch,
+        "best_dev_r1_accuracy": round(best_accuracy, 5),
+        "selected_checkpoint_reproduced_accuracy":
+            round(final_accuracy, 5),
+        "history": history,
+        "train_seconds_per_epoch": round(float(np.mean(train_times)), 2),
+        "eval_seconds_per_epoch": round(float(np.mean(eval_times)), 2),
+        "wall_hours": round(elapsed / 3600, 3),
+        "gpu": fingerprint,
+        "peak_memory": e8b_run.memory_gate(
+            torch.cuda.max_memory_allocated(),
+            torch.cuda.get_device_properties(0).total_memory),
+        "checkpoints": {
+            "best": {"path": str(best_path),
+                     "sha256": sha256_file(best_path)},
+            "resume": {"path": str(resume_path),
+                       "sha256": sha256_file(resume_path)}},
+        "g9_reload_identical": True,
+        "g11_repeat_identical": True,
+        "g10_collapse": {
+            "distinct_answers": distinct,
+            "top1_share": round(top1_share, 4),
+            "mean_prediction_entropy_nats": round(entropy, 6),
+            "entropy_definition": "master protocol section 11: H = "
+                                  "mean_n(-sum_k p_n[k] ln p_n[k]) in "
+                                  "nats, p_n = softmax over the 100 "
+                                  "answers of the fp32 length-normalised "
+                                  "R1 scores whose argmax is the "
+                                  "prediction, over all development rows",
+            "thresholds": {"entropy_nats_at_or_below": 0.30,
+                           "max_class_share_at_or_above": 0.60},
+            "argmax_histogram_entropy_nats": round(histogram_entropy, 6),
+            "argmax_histogram_entropy_note": "reported for completeness; "
+                                             "NOT the section 11 gate "
+                                             "quantity"},
+        "g14_post_selection": g14_post,
+        "g19_projection": projection,
+        "clean_test_accessed": False}}
+    e8b_run.atomic_write_json(result_path, record)
+    print(f"[PILOT DONE] {len(history)} epochs, best epoch {best_epoch}, "
+          f"dev R1 {best_accuracy:.4f}, wall {elapsed / 3600:.2f} h; "
+          f"record written")
+
+    if projection["stop_and_return"]:
+        e8b_run.g19_halt([f"projection gate(s) fired: "
+                          f"{projection['fired']}"])
+    return 0

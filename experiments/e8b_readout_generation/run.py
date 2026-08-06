@@ -1,15 +1,16 @@
 """E8B runner: arms, gates, checkpoint format, locks, projections, preflight.
 
     python -B experiments/e8b_readout_generation/run.py --preflight
+    python -B experiments/e8b_readout_generation/run.py --pilot
 
-Implementation-readiness phase only: training, the eight-point search, the
-G19 pilot and every scientific evaluation are NOT authorised.
-`TRAINING_AUTHORIZED` is False and the training entry point refuses until
-the user grants a later phase; the B3/train_40k/seed0 CORE cell
-additionally refuses until open decision U4 (promote the winning search
-checkpoint, or rerun under the frozen recipe) is decided by the user —
-neither option is implemented as a default (see
-results/experiments/e8b_readout_generation/preregistration.json).
+Execution-hardening and G19 pilot phase (user decision of 2026-08-06):
+exactly one training run is authorised, the B3/train_40k/seed0 search grid
+point 1 (lr 3e-4, warmup 0, dropout 0.1), which serves simultaneously as
+the G19 multiplier pilot. Grid points 2-8, every core cell and all
+scientific evaluation beyond the pilot's own recorded metrics remain
+refused. U4 is decided as PROMOTE with fail-closed validation (see
+u4_decision.json); promotion itself cannot occur until the full search
+has a winner, which this phase does not produce.
 
 Binding user decisions: U1 B4/B4r deferred (no 360M registry entry or
 execution path exists here); U2 no automatic 250k-only fallback (resource
@@ -49,11 +50,25 @@ from experiments.e8b_readout_generation import readouts  # noqa: E402
 
 OUT_DIR = config.RESULTS_DIR / "experiments" / "e8b_readout_generation"
 
-# Authorisation gates for this phase. Flipping TRAINING_AUTHORIZED requires
-# an explicit later user authorisation; it is checked at every training
-# entry, not only in the CLI.
-TRAINING_AUTHORIZED = False
-U4_DECIDED = None  # None until the user decides "promote" or "rerun"
+# Authorisation state for the execution-hardening and G19 pilot phase
+# (user decision of 2026-08-06). Exactly ONE training run is authorised:
+# the B3/train_40k/seed0 search grid point 1 (lr 3e-4, warmup 0.0, dropout
+# 0.1), serving simultaneously as the G19 multiplier pilot. Grid points
+# 2-8, every core cell, every other arm, scale and seed remain refused
+# and require further explicit user authorisation.
+TRAINING_AUTHORIZED = "g19-pilot-only"
+PILOT_CELL = ("B3", "train_40k", 0)
+PILOT_HYPER = {"lr": 3e-4, "warmup_frac": 0.0, "dropout": 0.1}
+
+# U4, decided by the user on 2026-08-06 and recorded verbatim in
+# results/experiments/e8b_readout_generation/u4_decision.json: PROMOTE.
+# The winning B3/train_40k/seed0 search checkpoint becomes the matching
+# core checkpoint ONLY if it satisfies the complete frozen recipe,
+# checkpoint, provenance and gate requirements; any validation failure
+# stops and returns to the user; no automatic rerun exists. Promotion can
+# only happen after the full eight-point search has selected its winner,
+# which this phase does not run.
+U4_DECIDED = "promote"
 
 MODEL_REPO = e8a.MODEL_REPO
 MODEL_REVISION = e8a.MODEL_REVISION
@@ -114,6 +129,8 @@ def load_frozen_causal_lm(pretrained: bool, device=None) -> tuple:
     """The frozen SmolLM2-135M as a CAUSAL LM (with the tied LM head),
     pretrained (B3) or pinned-seed random (B2). Offline-safe: everything
     resolves from the local pinned cache; nothing is downloaded."""
+    import tokenizers
+    import transformers
     from transformers import AutoConfig, AutoModelForCausalLM
     cfg = AutoConfig.from_pretrained(MODEL_REPO, revision=MODEL_REVISION)
     if pretrained:
@@ -154,6 +171,15 @@ def load_frozen_causal_lm(pretrained: bool, device=None) -> tuple:
         "config_sha256": e8a.sha256_file(snapshot / "config.json"),
         "tokenizer_file_sha256": e8a.sha256_file(snapshot / "tokenizer.json"),
         "state_dict_sha256": e8a.sha256_state_dict(lm.state_dict()),
+        # Canonical section 20 requires the resolved revision, both
+        # library versions and the loaded dtype beside the pinned
+        # revision; E8A records the same set (e8a_common.py:548-551).
+        "resolved_revision": getattr(cfg, "_commit_hash", None)
+        or snapshot.name,
+        "resolved_snapshot_path": str(snapshot),
+        "transformers_version": transformers.__version__,
+        "tokenizers_version": tokenizers.__version__,
+        "loaded_dtype": str(next(lm.parameters()).dtype),
     }
     return lm, provenance
 
@@ -425,8 +451,6 @@ def preflight(device) -> int:
     """Everything the phase authorises, nothing more. No optimizer.step, no
     parameter update, no epoch, no G19 timing, no accuracy, no selection.
     Every output is labelled NON-SCIENTIFIC."""
-    if TRAINING_AUTHORIZED:
-        sys.exit("preflight must run with TRAINING_AUTHORIZED False")
     started = time.time()
     tokenizer = e8a.load_tokenizer()
     answers, vocabulary = g21.load_index_to_answer(
@@ -643,32 +667,84 @@ def preflight(device) -> int:
     return 0
 
 
+# --- G19 halt machinery (master protocol section 14) --------------------------
+
+def g19_halt(fired: list) -> None:
+    """Section 14: the halt is an explicit sys.exit with a recorded
+    reason, in the style of the v3_01 GATE 4 wall-clock gate. Execution
+    stops and returns to the user with pair-preserving alternatives;
+    no arm is ever descoped automatically (U2)."""
+    if fired:
+        sys.exit("G19 HALT: " + "; ".join(fired) + " -- execution stops "
+                 "and returns to the user with pair-preserving "
+                 "alternatives; no arm is descoped automatically (U2)")
+
+
+def memory_gate(peak_bytes: int, total_bytes: int) -> dict:
+    """Peak memory against 80 per cent of the memory the device actually
+    reports (the percentage rule; the old absolute figures are
+    withdrawn)."""
+    fraction = peak_bytes / total_bytes
+    return {"peak_mib": round(peak_bytes / 2 ** 20, 1),
+            "device_total_mib": round(total_bytes / 2 ** 20, 1),
+            "fraction_used": round(fraction, 4),
+            "ceiling_fraction": MEMORY_CEILING_FRACTION,
+            "fires": fraction > MEMORY_CEILING_FRACTION}
+
+
+def storage_gate(required_bytes: int, target_dir: Path) -> dict:
+    """Projected additional storage against the space actually free on
+    the target filesystem."""
+    import shutil
+    free = shutil.disk_usage(target_dir).free
+    return {"required_gib": round(required_bytes / 2 ** 30, 3),
+            "free_gib": round(free / 2 ** 30, 3),
+            "fires": required_bytes > free}
+
+
+def remaining_core_gate(expected_remaining_hours: float,
+                        worst_case_remaining_hours: float) -> dict:
+    """Section 14: worst-case remaining-core projection above
+    min(180 GPU-hours, 3 x the revised expected projection) fires."""
+    threshold = min(CORE_CEILING_HOURS, 3.0 * expected_remaining_hours)
+    return {"expected_remaining_hours": round(expected_remaining_hours, 3),
+            "worst_case_remaining_hours":
+                round(worst_case_remaining_hours, 3),
+            "threshold_hours": round(threshold, 3),
+            "rule": "worst case > min(180, 3 x revised expected)",
+            "fires": worst_case_remaining_hours > threshold}
+
+
 # --- Guarded training entry ---------------------------------------------------
 
 def train(arm: str, scale: str, seed: int) -> int:
-    if not TRAINING_AUTHORIZED:
-        sys.exit("E8B TRAINING IS NOT AUTHORISED in the implementation-"
-                 "readiness phase; the user must grant a later phase")
-    if arm == "B3" and scale == "train_40k" and seed == 0 \
-            and U4_DECIDED not in ("promote", "rerun"):
-        sys.exit("U4 UNDECIDED: the B3/train_40k/seed0 core cell must not "
-                 "run or be promoted until the user decides between "
-                 "promoting the winning search checkpoint and rerunning "
-                 "under the frozen recipe")
-    raise NotImplementedError("training loop execution is gated to the "
-                              "next authorised phase")
+    if TRAINING_AUTHORIZED != "g19-pilot-only":
+        sys.exit("E8B TRAINING IS NOT AUTHORISED: the recorded "
+                 "authorisation state does not name an authorised run")
+    if (arm, scale, seed) != PILOT_CELL:
+        sys.exit(f"E8B TRAINING REFUSED for {arm}/{scale}/seed{seed}: "
+                 f"only the G19 pilot cell {PILOT_CELL} (search grid "
+                 f"point 1, which doubles as the multiplier pilot) is "
+                 f"authorised; grid points 2-8 and every core cell "
+                 f"require further explicit user authorisation")
+    from experiments.e8b_readout_generation import training
+    return training.train_pilot()
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--preflight", action="store_true")
+    parser.add_argument("--pilot", action="store_true",
+                        help="run the single authorised G19 pilot cell")
     args = parser.parse_args()
     utils.set_seed()
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     if args.preflight:
         return preflight(device)
-    parser.error("this phase supports --preflight only")
+    if args.pilot:
+        return train(*PILOT_CELL)
+    parser.error("this phase supports --preflight and --pilot only")
 
 
 if __name__ == "__main__":

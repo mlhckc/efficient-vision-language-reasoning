@@ -81,13 +81,18 @@ def _normalise(text: str) -> str:
     return g21.normalize_answer(text)
 
 
+GUARD_STAGE_PREFIX = "guard_"
+
+
 @torch.no_grad()
 def _readout_stages(lm, tokenizer, prefix_model, image_tokens,
                     question_tokens, question_mask, readout: str,
                     cache: dict, trie: dict, answers: list, mark) -> dict:
     """S8-S10 for one query and one readout, appending to the caller's
-    mark stream. Integrity guards are always on: they are correctness
-    gates, not optional instrumentation."""
+    mark stream. Integrity guards are always on -- they are correctness
+    gates, not optional instrumentation -- but their work is confined to
+    dedicated `guard_`-prefixed mark segments so no S-stage time and no
+    per-token latency ever includes guard cost (audit finding M2)."""
     if readout not in READOUT_NAMES:
         raise AssertionError(f"unknown readout {readout!r}")
 
@@ -101,15 +106,12 @@ def _readout_stages(lm, tokenizer, prefix_model, image_tokens,
 
     lm_decode_forwards = 0
     n_generated = 0
+    guard_before = None
     if readout == "R1":
         guard_before = cache_fingerprint(prefix_state[0])
+        mark("guard_r1_fingerprint_pre")
         result = readouts.r1_cached(lm, prefix, cache,
                                     prefix_state=prefix_state)
-        guard_after = cache_fingerprint(prefix_state[0])
-        if guard_before != guard_after:
-            raise AssertionError(
-                "CACHE-INTEGRITY GUARD FAILED: R1 candidate scoring "
-                "mutated the shared prefix cache")
         answer_index = result["argmax"]
         lm_decode_forwards = len(cache["sequences"])  # one per candidate
         emitted_ids: list = []
@@ -117,11 +119,6 @@ def _readout_stages(lm, tokenizer, prefix_model, image_tokens,
     elif readout == "R2":
         answer_index = readouts.r2_cached(lm, prefix, cache, trie,
                                           prefix_state=prefix_state)
-        replay = readouts.r2_cached(lm, prefix, cache, trie)
-        if replay != answer_index:
-            raise AssertionError(
-                "CACHE-INTEGRITY GUARD FAILED: the serial R2 walk does "
-                "not reproduce an independent recomputation")
         emitted_ids = list(cache["sequences"][answer_index])
         n_generated = len(emitted_ids)
         lm_decode_forwards = n_generated  # the EOS choice needs no forward
@@ -129,11 +126,6 @@ def _readout_stages(lm, tokenizer, prefix_model, image_tokens,
     else:
         emitted_ids, terminated = readouts.r3_generate_ids(
             lm, prefix, prefix_state=prefix_state)
-        replay_ids, replay_terminated = readouts.r3_generate_ids(lm, prefix)
-        if (replay_ids, replay_terminated) != (emitted_ids, terminated):
-            raise AssertionError(
-                "CACHE-INTEGRITY GUARD FAILED: the serial R3 decode does "
-                "not reproduce an independent recomputation")
         answer_index = None
         n_generated = len(emitted_ids)
         lm_decode_forwards = n_generated
@@ -149,6 +141,27 @@ def _readout_stages(lm, tokenizer, prefix_model, image_tokens,
         flags = {}
     normalised_text = _normalise(raw_text)
     mark("S10_decode_normalise")
+
+    # Guards run AFTER the last timed S-stage, in their own segment.
+    if readout == "R1":
+        guard_after = cache_fingerprint(prefix_state[0])
+        if guard_before != guard_after:
+            raise AssertionError(
+                "CACHE-INTEGRITY GUARD FAILED: R1 candidate scoring "
+                "mutated the shared prefix cache")
+    elif readout == "R2":
+        replay = readouts.r2_cached(lm, prefix, cache, trie)
+        if replay != answer_index:
+            raise AssertionError(
+                "CACHE-INTEGRITY GUARD FAILED: the serial R2 walk does "
+                "not reproduce an independent recomputation")
+    else:
+        replay_ids, replay_terminated = readouts.r3_generate_ids(lm, prefix)
+        if (replay_ids, replay_terminated) != (emitted_ids, terminated):
+            raise AssertionError(
+                "CACHE-INTEGRITY GUARD FAILED: the serial R3 decode does "
+                "not reproduce an independent recomputation")
+    mark("guard_post_readout")
 
     return {"readout": readout, "answer_index": answer_index,
             "raw_text": raw_text,
@@ -189,13 +202,23 @@ def serial_query_cached_features(lm, tokenizer, prefix_model, image_tokens,
 
 def _latency_fields(total_ms: float, stages: list, lm_decode_forwards: int,
                     n_generated: int) -> dict:
+    """Latency per answer is the sum of the S-stage segments only; the
+    `guard_`-prefixed integrity segments are reported separately and never
+    enter any latency or per-token figure (audit finding M2). The raw
+    wall total including guards is retained for transparency."""
     stage_map = dict(stages)
+    serial_ms = sum(ms for name, ms in stages
+                    if not name.startswith(GUARD_STAGE_PREFIX))
+    guard_ms = sum(ms for name, ms in stages
+                   if name.startswith(GUARD_STAGE_PREFIX))
     decode_ms = stage_map.get("S9b_readout")
     per_generated = (decode_ms / n_generated
                      if decode_ms is not None and n_generated else None)
     per_forward = (decode_ms / lm_decode_forwards
                    if decode_ms is not None and lm_decode_forwards else None)
-    return {"latency_per_answer_ms": round(total_ms, 4),
+    return {"latency_per_answer_ms": round(serial_ms, 4),
+            "guard_ms_excluded_from_latency": round(guard_ms, 4),
+            "wall_total_ms_including_guards": round(total_ms, 4),
             "stage_ms": stages,
             "ms_per_generated_token": (round(per_generated, 4)
                                        if per_generated is not None

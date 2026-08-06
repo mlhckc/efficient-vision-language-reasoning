@@ -78,7 +78,7 @@ _SHARED: dict = {}
 
 E8B_DIR = PROJECT_ROOT / "experiments" / "e8b_readout_generation"
 E8B_SOURCES = ("latents.py", "readouts.py", "run.py", "serial_efficiency.py",
-               "g14_precision_probe.py")
+               "g14_precision_probe.py", "training.py")
 
 
 def tiny_lm():
@@ -195,9 +195,13 @@ def test_registry_and_scope() -> None:
           e8b_run.MODEL_REPO == e8a.MODEL_REPO
           and e8b_run.MODEL_REVISION == e8a.MODEL_REVISION
           and e8b_run.RANDOM_INIT_SEED == e8a.RANDOM_INIT_SEED)
-    check("training is not authorised in this phase",
-          e8b_run.TRAINING_AUTHORIZED is False)
-    check("U4 is undecided and fail-closed", e8b_run.U4_DECIDED is None)
+    check("authorisation names exactly the G19 pilot run",
+          e8b_run.TRAINING_AUTHORIZED == "g19-pilot-only"
+          and e8b_run.PILOT_CELL == ("B3", "train_40k", 0)
+          and e8b_run.PILOT_HYPER == {"lr": 3e-4, "warmup_frac": 0.0,
+                                      "dropout": 0.1})
+    check("U4 is decided as PROMOTE with fail-closed validation",
+          e8b_run.U4_DECIDED == "promote")
 
     registry_text = json.dumps(e8b_run.ARMS).lower()
     check("no 360M identity in the arm registry", "360" not in registry_text)
@@ -220,16 +224,21 @@ def test_registry_and_scope() -> None:
         check(f"readouts.py never post-processes emissions ({token})",
               token not in readout_text)
 
-    must_fail("training entry refuses while unauthorised",
+    must_fail("a non-pilot arm refuses (B2/40k/seed0)",
               lambda: e8b_run.train("B2", "train_40k", 0))
+    must_fail("a non-pilot seed refuses (B3/40k/seed1)",
+              lambda: e8b_run.train("B3", "train_40k", 1))
+    must_fail("a non-pilot scale refuses (B3/250k/seed0)",
+              lambda: e8b_run.train("B3", "train_250k", 0))
+    must_fail("B1 refuses entirely",
+              lambda: e8b_run.train("B1", "train_40k", 0))
 
     original = e8b_run.TRAINING_AUTHORIZED
     try:
-        e8b_run.TRAINING_AUTHORIZED = True
-        must_fail("B3/40k/seed0 refuses while U4 is undecided",
-                  lambda: e8b_run.train("B3", "train_40k", 0))
-        must_fail("other cells still gate on the unimplemented loop",
-                  lambda: e8b_run.train("B2", "train_40k", 1))
+        e8b_run.TRAINING_AUTHORIZED = False
+        must_fail("even the pilot cell refuses without the recorded "
+                  "authorisation state",
+                  lambda: e8b_run.train(*e8b_run.PILOT_CELL))
     finally:
         e8b_run.TRAINING_AUTHORIZED = original
 
@@ -836,6 +845,149 @@ def test_resource_projections() -> None:
           and e8b_run.IDENTITY_BASELINE_HOURS["random_smollm2_135m"]
           == 1.95811)
 
+    # Section-14 gate helpers with explicit sys.exit halts (M3/M5).
+    fired_memory = e8b_run.memory_gate(int(0.9 * 20 * 2 ** 30),
+                                       20 * 2 ** 30)
+    quiet_memory = e8b_run.memory_gate(int(0.5 * 20 * 2 ** 30),
+                                       20 * 2 ** 30)
+    check("the 80 per cent memory gate fires and passes correctly",
+          fired_memory["fires"] and not quiet_memory["fires"]
+          and fired_memory["ceiling_fraction"] == 0.80)
+    with tempfile.TemporaryDirectory() as tmp:
+        fired_storage = e8b_run.storage_gate(2 ** 62, Path(tmp))
+        quiet_storage = e8b_run.storage_gate(1024, Path(tmp))
+    check("the storage gate fires and passes correctly",
+          fired_storage["fires"] and not quiet_storage["fires"])
+    fired_core = e8b_run.remaining_core_gate(50.0, 200.0)
+    quiet_core = e8b_run.remaining_core_gate(100.0, 170.0)
+    check("the remaining-core gate applies min(180, 3 x expected)",
+          fired_core["fires"] and fired_core["threshold_hours"] == 150.0
+          and not quiet_core["fires"]
+          and quiet_core["threshold_hours"] == 180.0)
+    must_fail("g19_halt is an explicit sys.exit on any fired gate",
+              lambda: e8b_run.g19_halt(["demo gate fired"]))
+    check("g19_halt passes silently with nothing fired",
+          e8b_run.g19_halt([]) is None)
+
+
+# --- Training module: recipe, scorer, G14-64 pinning, G19 projection ----------
+
+def test_training_module() -> None:
+    from experiments.e8b_readout_generation import training
+
+    check("the recipe is exactly the authorised grid point 1",
+          training.RECIPE["lr"] == 3e-4
+          and training.RECIPE["warmup_frac"] == 0.0
+          and training.RECIPE["dropout"] == 0.1
+          and training.RECIPE["grid_point"] == 1
+          and training.RECIPE["arm"] == "B3"
+          and training.RECIPE["scale"] == "train_40k"
+          and training.RECIPE["seed"] == 0)
+    check("the pinned recipe properties match the canonical plan",
+          training.RECIPE["max_epochs"] == 100
+          and training.RECIPE["patience"] == 10
+          and training.RECIPE["batch_size"] == 128
+          and training.RECIPE["weight_decay"] == 0.01
+          and training.RECIPE["grad_clip"] == 1.0
+          and training.RECIPE["wall_clock_halt_hours"] == 8.0)
+    recomputed = hashlib.sha256(json.dumps(
+        training.RECIPE, sort_keys=True).encode()).hexdigest()
+    check("the recipe hash is reproducible",
+          recomputed == training.RECIPE_SHA256)
+    check("the U1/U4 remaining-matrix constants are the E8B-min counts",
+          training.REMAINING_SEARCH_RUNS == 7
+          and training.CORE_LM_RUNS_40K == 5
+          and training.CORE_LM_RUNS_250K == 6
+          and training.CORE_B1_RUNS == 6
+          and training.LM_CORE_CHECKPOINTS == 12
+          and training.G14_N_EXAMPLES == 64)
+
+    rows_a = training.pinned_g14_rows(7714)
+    rows_b = training.pinned_g14_rows(7714)
+    check("the 64 G14 rows are pinned, unique and sorted",
+          rows_a == rows_b and len(set(rows_a)) == 64
+          and rows_a == sorted(rows_a) and max(rows_a) < 7714)
+
+    # The batched selection scorer must agree with the brute force.
+    lm = tiny_lm()
+    cache = tiny_cache()
+    prefixes = torch.cat([tiny_prefix(seed) for seed in (41, 42, 43)])
+    batched = training.r1_scores_batched(lm, prefixes, cache)
+    check("batched scores have one row per example and one column per "
+          "candidate", batched.shape == (3, len(cache["sequences"])))
+    for row in range(3):
+        brute = readouts.r1_brute_force(lm, prefixes[row:row + 1], cache)
+        deltas = [abs(a - b) for a, b in
+                  zip(brute["scores"], batched[row].tolist())]
+        check(f"batched scorer matches brute force on example {row}",
+              max(deltas) < 1e-4
+              and int(batched[row].argmax()) == brute["argmax"],
+              f"max delta {max(deltas):.2e}")
+
+    optimizer = training.make_optimizer(nn.Linear(4, 3), 1e-3)
+    decays = sorted(group["weight_decay"]
+                    for group in optimizer.param_groups)
+    check("optimizer decay groups follow the ndim rule",
+          decays == [0.0, 0.01])
+    scheduler = training.make_scheduler(
+        torch.optim.AdamW(nn.Linear(2, 2).parameters(), lr=1.0),
+        total_steps=100, warmup_frac=0.0)
+    factors = [scheduler.lr_lambdas[0](s) for s in (0, 50, 100)]
+    check("the cosine schedule spans 1.0 to 0.0 with no warmup",
+          abs(factors[0] - 1.0) < 1e-9 and abs(factors[1] - 0.5) < 1e-9
+          and abs(factors[2]) < 1e-9)
+
+    projection = training.g19_projection(
+        train_seconds_per_epoch=120.0, eval_seconds_per_epoch=40.0,
+        peak_memory_bytes=4 * 2 ** 30,
+        device_total_bytes=20 * 2 ** 30,
+        v3_01_seconds_per_epoch=40.0, b1_seconds_per_epoch=40.0,
+        storage_dir=Path(tempfile.gettempdir()))
+    expected = projection["projections"]["expected_epoch_15_22"]
+    epoch_250k = 120.0 * 1954 / 313 + 40.0
+    check("the 250k epoch scales the train part by the step ratio and "
+          "keeps the fixed dev evaluation",
+          abs(expected["seconds_per_epoch"]["train_250k"]
+              - round(epoch_250k, 2)) < 0.01)
+    check("the largest 250k run follows the 22-epoch expected basis",
+          abs(expected["largest_250k_run_hours"]
+              - epoch_250k * 22 / 3600) < 1e-3)
+    worst = projection["projections"]["worst_case_100_epoch"]
+    check("the 100-epoch worst case is reported beside the expected "
+          "basis and truncated by the 8 h wall where it applies (U3)",
+          abs(worst["largest_250k_run_hours"]
+              - epoch_250k * 100 / 3600) < 1e-3
+          and worst["run_hours"]["train_250k_after_8h_wall"] == 8.0)
+    check("the multiplier is measured against the stored v3_01 epoch",
+          projection["multiplier_vs_v3_01"] == 4.0)
+    check("every section-14 gate family is evaluated",
+          set(projection["gates"]) == {
+              "per_run_8h", "pretrained_identity_35h",
+              "random_identity_35h", "remaining_core", "memory_80pct",
+              "storage"})
+    check("a benign projection fires nothing",
+          projection["stop_and_return"] is False
+          and projection["fired"] == [])
+    hot = training.g19_projection(
+        train_seconds_per_epoch=120.0, eval_seconds_per_epoch=40.0,
+        peak_memory_bytes=int(0.9 * 20 * 2 ** 30),
+        device_total_bytes=20 * 2 ** 30,
+        v3_01_seconds_per_epoch=40.0, b1_seconds_per_epoch=40.0,
+        storage_dir=Path(tempfile.gettempdir()))
+    check("an over-ceiling memory measurement fires stop-and-return",
+          hot["stop_and_return"] is True
+          and "memory_80pct" in hot["fired"])
+
+    source = (E8B_DIR / "training.py").read_text()
+    check("the training loop halts on the 8 h wall with a recorded "
+          "failure status",
+          "FAILED: 8 GPU-hour operational" in source
+          and "wall_halt" in source)
+    check("the binding G14 runs before checkpoint selection",
+          "g14_pre_selection" in source
+          and source.index("g14_pre_selection")
+          < source.index('make_optimizer(model, RECIPE["lr"])'))
+
 
 # --- 27. E7b serial-extension contracts ---------------------------------------
 
@@ -856,13 +1008,18 @@ def test_serial_contract() -> None:
               "S10_decode_normalise"])
 
     fields = serial_efficiency._latency_fields(
-        12.0, [("S8_trunk_projection", 2.0), ("S9a_prefix_forward", 4.0),
-               ("S9b_readout", 5.0), ("S10_decode_normalise", 1.0)],
+        15.0, [("S8_trunk_projection", 2.0), ("S9a_prefix_forward", 4.0),
+               ("guard_r1_fingerprint_pre", 1.5), ("S9b_readout", 5.0),
+               ("S10_decode_normalise", 1.0), ("guard_post_readout", 1.5)],
         lm_decode_forwards=5, n_generated=2)
     check("per-token latency divides the S9b stage by the counts",
           fields["ms_per_generated_token"] == 2.5
-          and fields["ms_per_lm_decode_forward"] == 1.0
-          and fields["latency_per_answer_ms"] == 12.0)
+          and fields["ms_per_lm_decode_forward"] == 1.0)
+    check("guard segments are excluded from latency per answer and "
+          "reported separately (M2)",
+          fields["latency_per_answer_ms"] == 12.0
+          and fields["guard_ms_excluded_from_latency"] == 3.0
+          and fields["wall_total_ms_including_guards"] == 15.0)
     empty = serial_efficiency._latency_fields(1.0, [("S9b_readout", 1.0)],
                                               lm_decode_forwards=0,
                                               n_generated=0)
@@ -905,12 +1062,19 @@ def test_serial_queries() -> None:
             lm, tokenizer, prefix_model, image_tokens, question_tokens,
             question_mask, readout, cache, trie, answers)
     for readout, record in records.items():
-        stage_names = [name for name, _ in record["stage_ms"]]
+        stage_names = [name for name, _ in record["stage_ms"]
+                       if not name.startswith(
+                           serial_efficiency.GUARD_STAGE_PREFIX)]
         check(f"serial {readout} walks the cached-feature stage contract",
               stage_names
               == serial_efficiency.STAGE_NAMES_CACHED_FEATURES)
         check(f"serial {readout} reports latency per answer",
               record["latency_per_answer_ms"] > 0)
+        check(f"serial {readout} guard cost stays outside the latency",
+              record["guard_ms_excluded_from_latency"] > 0
+              and abs(record["latency_per_answer_ms"]
+                      + record["guard_ms_excluded_from_latency"]
+                      - sum(ms for _, ms in record["stage_ms"])) < 1e-6)
     check("serial R1 counts one decode forward per candidate",
           records["R1"]["lm_decode_forwards"] == len(cache["sequences"])
           and records["R1"]["n_generated"] == 0)
@@ -1005,6 +1169,21 @@ def test_provenance() -> None:
               "vocabulary_sha256", "store_sha256s", "code_head",
               "environment_fingerprint"})
 
+    u4_path = (config.RESULTS_DIR / "experiments"
+               / "e8b_readout_generation" / "u4_decision.json")
+    check("the U4 decision record exists and says PROMOTE",
+          u4_path.exists()
+          and json.loads(u4_path.read_text())["u4_decision"]["decision"]
+          == "PROMOTE")
+    clar_path = (config.RESULTS_DIR / "experiments"
+                 / "e8b_readout_generation"
+                 / "parameter_clarification.json")
+    clar = json.loads(clar_path.read_text())["parameter_clarification"]
+    check("the dated parameter clarification records 21,343,808 trainable",
+          clar["accounting"]["e8b_trainable_total"] == 21343808
+          and clar["accounting"]["trunk_parameters"] == 21047296
+          and clar["accounting"]["projection_parameters"] == 296512)
+
     preflight_path = (config.RESULTS_DIR / "experiments"
                       / "e8b_readout_generation"
                       / "preflight_nonscientific.json")
@@ -1042,6 +1221,7 @@ def run() -> None:
     test_interventions()
     test_checkpoint_resume()
     test_resource_projections()
+    test_training_module()
     test_serial_contract()
     test_serial_queries()
     test_provenance()

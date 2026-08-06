@@ -1,0 +1,44 @@
+{
+  "metadata": {
+    "timestamp": "2026-08-06T17:27:55",
+    "git_commit": "f03cced",
+    "git_dirty": false,
+    "open_clip_version": "3.3.0",
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "h5py_version": "3.16.0",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "deterministic": true,
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "embed_dim": 512,
+    "top_k_answers": 100,
+    "n_train": 40000,
+    "n_val": 8000,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "hidden_dim": 512,
+    "dropout": 0.3,
+    "weight_decay": 0.0001
+  },
+  "u4_decision": {
+    "decided_utc": "2026-08-06",
+    "decision": "PROMOTE",
+    "user_wording": "Record U4 as PROMOTE: the winning B3/train_40k/seed0 search checkpoint becomes the matching core checkpoint only if it satisfies the complete frozen recipe, checkpoint, provenance and gate requirements. Otherwise stop and return; do not rerun automatically.",
+    "operational_meaning": [
+      "the eight-point search at B3/train_40k/seed0 doubles as the core cell source",
+      "promotion happens only after the full search selects its winner AND the winning run is validated against the complete frozen recipe constants, the complete 19-field resumable checkpoint and provenance requirements, and every per-run gate (G0, G4-G13, G14-64, G15, G18)",
+      "any validation failure stops and returns to the user; no automatic rerun exists",
+      "in this execution-hardening phase only search grid point 1 (lr 3e-4, warmup 0, dropout 0.1) is authorised, serving simultaneously as the G19 multiplier pilot; grid points 2-8 and every core cell remain unauthorised"
+    ],
+    "supersedes": "the U4_OPEN entry in preregistration.json (the decision was open there)"
+  }
+}
