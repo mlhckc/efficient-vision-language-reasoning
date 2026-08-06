@@ -1188,9 +1188,29 @@ def test_search_grid_and_bindings() -> None:
     recipes = [training.build_recipe(i) for i in range(1, 9)]
     hashes = {training.recipe_sha256(r) for r in recipes}
     check("every grid point has a distinct recipe hash", len(hashes) == 8)
-    check("grid point 1 keeps the hash the pilot record was written "
-          "under", training.recipe_sha256(recipes[0])
-          == training.RECIPE_SHA256)
+    # Pinned against the LITERAL hash and against the immutable record
+    # itself, not against RECIPE_SHA256 -- which is defined as
+    # recipe_sha256(build_recipe(1)) and so would compare a value with
+    # itself and could never fail. If grid point 1's recipe ever drifts,
+    # the completed pilot's checkpoint stops resuming and its record
+    # stops reproducing, so this must be a real regression guard.
+    GRID1_SHA = ("8e94b4bff1015555e46ce4145fb876c5"
+                 "345374b7d94846810cb3b35c86d83427")
+    check("grid point 1 keeps the literal hash the pilot ran under",
+          training.recipe_sha256(recipes[0]) == GRID1_SHA,
+          training.recipe_sha256(recipes[0]))
+    pilot_record = (config.RESULTS_DIR / "experiments"
+                    / "e8b_readout_generation"
+                    / "pilot_e8b_B3_train_40k_seed0_search1.json")
+    if pilot_record.exists():
+        body = json.loads(pilot_record.read_text())["e8b_pilot_g19"]
+        check("grid point 1 matches the immutable pilot record's hash",
+              body["recipe_sha256"] == GRID1_SHA
+              and body["gates"]["g0_recipe_sha256"] == GRID1_SHA)
+        check("grid point 1's recipe reproduces the recorded recipe "
+              "byte for byte",
+              json.dumps(recipes[0], sort_keys=True)
+              == json.dumps(body["recipe"], sort_keys=True))
     pinned = ("objective", "selection_metric", "max_epochs", "patience",
               "batch_size", "weight_decay", "grad_clip", "scheduler",
               "precision", "wall_clock_halt_hours", "seed", "arm",

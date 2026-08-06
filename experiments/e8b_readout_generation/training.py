@@ -1,23 +1,28 @@
-"""E8B pilot training: the single authorised B3/train_40k/seed0 run.
+"""E8B search training: the authorised B3/train_40k/seed0 grid points.
 
-This run is search grid point 1 (lr 3e-4, warmup 0, dropout 0.1) under the
-complete frozen recipe of the canonical plan section 5, and it is
-simultaneously the G19 multiplier pilot: its measured per-epoch train and
-evaluation times, peak memory and storage feed the operative section-14
-projections. Grid points 2-8 and every core cell are refused by the
-runner; nothing here evaluates, promotes or selects beyond this run's own
-preregistered checkpoint-selection metric (development R1 accuracy).
+Each run is one point of the frozen eight-point section-7.4 grid, under
+the complete frozen recipe; only lr, warmup fraction and dropout vary,
+and each point carries its own recipe hash so a checkpoint can never
+resume under another point's recipe. Grid point 1 additionally served as
+the G19 multiplier pilot on 2026-08-06: its measured per-epoch train and
+evaluation times, peak memory and storage set the operative section-14
+projections. Every core cell, B1, B2, every other arm, scale and seed,
+E9, E10, F1 and F2 are refused by the runner; nothing here evaluates,
+promotes or selects beyond each run's own preregistered
+checkpoint-selection metric (development R1 accuracy).
 
 Gate order per the master protocol: G2/G3 (pinned frozen LM) before
 anything; G13 construction order (LM first, then seed, trunk, projection);
-G15/G18 manifest, store and vocabulary pinning; G0 recipe identity; G4-G7
-and G12 implementation gates; G8 tiny-subset overfit (halting, principal
-arm); the binding 64-example G14 BEFORE any checkpoint selection; then the
-training loop with the 8 GPU-hour operational wall (recorded failure
-status on halt), complete 19-field resumable checkpoints every epoch,
-best-on-dev-R1 selection with patience 10; then G9/G10/G11 on the selected
-checkpoint, the closing 64-example G14, and the G19 projection and gate
-evaluation with explicit sys.exit halts.
+G15/G18 manifest, store and vocabulary pinning, with row counts measured
+from the live datasets and the G1 answer-to-label binding asserted for
+every row; G0 recipe identity; G4-G7 and G12 implementation gates; G8
+tiny-subset overfit (halting, principal arm); the binding 64-example G14
+BEFORE any checkpoint selection; then the training loop with the 8
+GPU-hour operational wall (recorded failure status on halt), complete
+19-field resumable checkpoints every epoch, best-on-dev-R1 selection with
+patience 10; then G9/G10/G11 on the selected checkpoint, the closing
+64-example G14, and the G19 projection and gate evaluation. Every halting
+gate writes an atomic JSON record before it exits.
 
 Nothing here reads, resolves or names the embargoed clean-test target.
 """
@@ -140,9 +145,16 @@ SELECTION_SENSITIVITY_PASSES = 44  # those checkpoints x (R2, R3)
 # pinned pretrained checkpoint, so they belong in the 35 h aggregate.
 A4_IDENTITY_HOURS = 1.804     # protocol table line 1186
 A7C_IDENTITY_HOURS = 1.864    # protocol table line 1188
-# Evaluation-hour split between the two identities, by weighted units.
-EVAL_SHARE_PRETRAINED = 0.634
-EVAL_SHARE_RANDOM = 0.366
+# Evaluation-hour split between the two identities, by weighted units,
+# derived on the 44-pass selection-sensitivity basis the evaluation total
+# actually uses. Readout passes carry weight 1.5, intervention passes
+# 1.0, and the selection-sensitivity passes belong wholly to the
+# pretrained identity because section 10.1 runs them on two B3
+# configurations. B3: 6 checkpoints x 3 readouts x 1.5 = 27, plus
+# 6 x 3 x 1.0 = 18 interventions, plus 44 x 1.5 = 66, so 111 of 156
+# weighted units. B2 takes the remaining 45.
+EVAL_SHARE_PRETRAINED = 111.0 / 156.0   # 0.7115
+EVAL_SHARE_RANDOM = 45.0 / 156.0        # 0.2885
 
 # Checkpoint sizes MEASURED from the grid point 1 artefacts on
 # 2026-08-06, replacing an earlier 85 MiB placeholder. A resume
@@ -724,12 +736,16 @@ def completed_search_runs() -> tuple:
         path = OUT_DIR / f"pilot_{run_name_for(point)}.json"
         if not path.exists():
             continue
+        # Deliberately broad: this runs after training and the closing
+        # gates but before the record is written, so an unexpected shape
+        # in an EARLIER run's file must never cost this run its record.
         try:
             body = json.loads(path.read_text())["e8b_pilot_g19"]
-        except (KeyError, json.JSONDecodeError):
+            hours = float(body.get("wall_hours", 0.0))
+        except Exception:
             continue
         count += 1
-        total_hours += float(body.get("wall_hours", 0.0))
+        total_hours += hours
     return count, total_hours
 
 

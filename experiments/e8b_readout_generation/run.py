@@ -1,22 +1,28 @@
 """E8B runner: arms, gates, checkpoint format, locks, projections, preflight.
 
     python -B experiments/e8b_readout_generation/run.py --preflight
-    python -B experiments/e8b_readout_generation/run.py --pilot
+    python -B experiments/e8b_readout_generation/run.py --search-point N
 
-Execution-hardening and G19 pilot phase (user decision of 2026-08-06):
-exactly one training run is authorised, the B3/train_40k/seed0 search grid
-point 1 (lr 3e-4, warmup 0, dropout 0.1), which serves simultaneously as
-the G19 multiplier pilot. Grid points 2-8, every core cell and all
-scientific evaluation beyond the pilot's own recorded metrics remain
-refused. U4 is decided as PROMOTE with fail-closed validation (see
-u4_decision.json); promotion itself cannot occur until the full search
-has a winner, which this phase does not produce.
+Remaining-search phase (user decision of 2026-08-07, recorded in
+protocol_clarification_20260807.json). The authorised runs are the EIGHT
+B3/train_40k/seed0 search grid points of master protocol section 7.4, run
+sequentially. Grid point 1 already ran on 2026-08-06 as the G19 multiplier
+pilot; points 2-8 are now authorised. Every core cell, B1, B2, every other
+arm, scale and seed, E9, E10 or any 360M identity, F1, F2 and the clean
+test remain refused and require further explicit user authorisation.
+U4 is decided as PROMOTE with fail-closed validation (see
+u4_decision.json); promotion cannot occur until the full search has a
+winner and every U4 condition passes.
 
 Binding user decisions: U1 B4/B4r deferred (no 360M registry entry or
-execution path exists here); U2 no automatic 250k-only fallback (resource
-projections stop and return, never descope); U3 expected-epoch 15/22
-projections with the 100-epoch worst case always reported beside them and
-the 8 GPU-hour per-run wall retained.
+execution path exists here); U2 and P2 no automatic 250k-only fallback and
+no arm removal (resource projections stop and return, never descope);
+P3 the expected-epoch 15/22 basis is the GOVERNING remaining-program
+projection, the 100-epoch projection is a mandatory reported stress
+scenario that does not halt by itself, and the 8-hour per-run, 35-hour
+per-identity, 80-per-cent-RESERVED-memory, storage, provenance,
+determinism and G14 gates remain hard halts; P1 the G10 p_n is an
+E8B-specific pseudo-probability, never numerically compared with E8A.
 
 Nothing here reads, resolves or names the embargoed clean-test target.
 """
