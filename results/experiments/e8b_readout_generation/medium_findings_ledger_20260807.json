@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-07T19:39:41",
-    "git_commit": "d404891",
+    "timestamp": "2026-08-07T20:04:17",
+    "git_commit": "28afec5",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -635,7 +635,7 @@
         "issue": "The 180-hour gate's scope note cited 'about 17.6-21.6 h expected per section 13.2' for the remaining E8A arms. That range appears nowhere in the protocol. An Aug-6 implementation-audit record also lacked a marker though several of its verdicts no longer describe HEAD, and CLAUDE.md still stated the core ceiling as the min() form that user decision P3 made non-halting.",
         "classification": "provenance/reproducibility",
         "disposition": "FIXED BY DISCLOSURE",
-        "evidence": "the citation is corrected to the protocol's actual figures with the spent hours deducted; the Aug-6 record carries a marker distinguishing what is stale from what still stands; and CLAUDE.md records P3's clarification that the expected-epoch comparison alone halts.",
+        "evidence": "the citation is corrected to the protocol's actual figures with the spent hours deducted; the Aug-6 record carries a marker distinguishing what is stale from what still stands; and CLAUDE.md records P3's clarification that the expected-epoch comparison alone halts. RE-OPENED AND RE-CLOSED 2026-08-07: the generator was corrected but the published artefact was not regenerated, so the fabricated citation stayed live in the governing record while this entry reported it closed. The artefact is regenerated and a test now asserts it reproduces from its own generator.",
         "closed_by": "the corrected records and CLAUDE.md",
         "state": "FIXED_CLOSED"
       },
@@ -698,10 +698,100 @@
         "evidence": "models.py removed with the reason recorded in place, reinfer_g21.py added.",
         "closed_by": "test_audit_known_negatives, digest-scope checks",
         "state": "FIXED_CLOSED"
+      },
+      {
+        "id": "FINAL-B-HIGH-1",
+        "lens": "B (executable safety, final audit)",
+        "issue": "A fix reached the generator but never the artefact. The fabricated '17.6-21.6 h' citation was corrected in core_resource_projection.py, but the published JSON was not regenerated, so the governing 180-hour record still carried the fabricated citation as a live statement while the ledger reported it FIXED. The artefact no longer reproduced from the script its own docstring promises it reproduces from.",
+        "classification": "provenance/reproducibility",
+        "disposition": "FIXED AT SOURCE",
+        "evidence": "the artefact is regenerated and a test asserts every published record reproduces from its committed generator, so a generator-only fix cannot be reported as closed again.",
+        "closed_by": "test_records_reproduce_from_generators",
+        "state": "FIXED_CLOSED"
+      },
+      {
+        "id": "FINAL-AC-HIGH-1",
+        "lens": "A/C (honesty, final audit)",
+        "issue": "The largest residual assumption's break-even was stale and understated the risk by about 2.6 times: it quoted 12 per cent per cell and 17 per cent on the training rate, both computed verbatim on the superseded 4.189 h basis, while the current per-cell figure is 4.226 h. The whole sensitivity block was hardcoded inside a generator whose docstring claims it recomputes every figure.",
+        "classification": "scientific-validity",
+        "disposition": "FIXED AT SOURCE",
+        "evidence": "the entire block is now DERIVED from the same constants as the projection. The true break-evens are 4.55 per cent per cell and 5.24 per cent on the training rate.",
+        "closed_by": "the regenerated projection",
+        "state": "FIXED_CLOSED"
+      },
+      {
+        "id": "FINAL-AC-HIGH-2",
+        "lens": "A/C (honesty, final audit)",
+        "issue": "The claim 'A1 came in 23 per cent BELOW its projection', offered as the sole reassurance for the 3.668 h A4/A7c residual, was the EXACT mis-comparison the same file charges 0.723 h to correct: it divided a partial measurement by the full protocol row, treating unrun components as having cost nothing.",
+        "classification": "scientific-validity",
+        "disposition": "FIXED AT SOURCE",
+        "evidence": "like for like, A1 came in 1.25 per cent ABOVE projection and its extraction component overran by 82.4 per cent. The precedent is recorded as mildly UNFAVOURABLE, and the error is quoted where it was made.",
+        "closed_by": "the regenerated projection",
+        "state": "FIXED_CLOSED"
+      },
+      {
+        "id": "FINAL-AC-HIGH-3",
+        "lens": "A/C (honesty, final audit)",
+        "issue": "The published projection called the G14 margin 'conservative' while its own generator and the risk register both call it OPTIMISTIC. A withdrawn characterisation surviving in the governing artefact.",
+        "classification": "scientific-validity",
+        "disposition": "FIXED AT SOURCE",
+        "evidence": "the artefact now carries an explicit direction field reading OPTIMISTIC, NOT CONSERVATIVE, with the reason (the measurement covers the two R1 scorers only, while the live gate also runs both R2 walks).",
+        "closed_by": "the regenerated projection",
+        "state": "FIXED_CLOSED"
+      },
+      {
+        "id": "FINAL-AC-HIGH-4",
+        "lens": "A/C (honesty, final audit)",
+        "issue": "Superseded identity figures survived in the very markers added to fix superseded figures: 33.472 h / 1.528 h in the reverification record's 'current' line, a gate verification citing 33.4747 against 33.472, net_change_hours 0.786 from the previous round, and coverage lines still quoting 108.0 s and 7,714 rows.",
+        "classification": "provenance/reproducibility",
+        "disposition": "FIXED AT SOURCE",
+        "evidence": "every one is recomputed from the governing projection, and the reverification line now records that it has itself been corrected twice, always upward.",
+        "closed_by": "the regenerated records",
+        "state": "FIXED_CLOSED"
+      },
+      {
+        "id": "FINAL-AC-HIGH-5",
+        "lens": "A/C (honesty, final audit)",
+        "issue": "The selection-sensitivity study was REMOVED, on stated and defensible grounds, while the certifying record said 'NOTHING was descoped - every correction ADDED work'. Reinstating it costs several times the remaining headroom, and that number appeared nowhere.",
+        "classification": "scientific-validity",
+        "disposition": "FIXED BY DISCLOSURE",
+        "evidence": "both records now state plainly that this one component was removed, cost it at 4.451 h if reinstated, and explain that 'nothing descoped' refers to core arms and cells. The two statements can no longer be read as contradicting each other.",
+        "closed_by": "identity_reconciliation_20260807.json",
+        "state": "FIXED_CLOSED"
+      },
+      {
+        "id": "FINAL-B-MEDIUM-1",
+        "lens": "B (executable safety, final audit)",
+        "issue": "Three residual ways a bad day became unrecoverable: an uncontained ledger read AFTER the per-row dump was written but before the result was, which would strand a completed cell behind its own npz guard; the lock unlink sitting OUTSIDE the containment, where one stale NFS handle would leak the lock, skip the charge and mask the failure at once; and nothing anywhere READING a LEDGER_FAILURE record, so the under-count it warns about was never enforced.",
+        "classification": "execution-critical",
+        "disposition": "FIXED AT SOURCE",
+        "evidence": "the final ledger read is contained and degrades to a recorded 'unavailable' field; the unlink moved inside the containment; and train_core_cell now refuses to start while any LEDGER_FAILURE or matching IDENTITY_EXHAUSTED record exists.",
+        "closed_by": "test_audit_known_negatives",
+        "state": "FIXED_CLOSED"
+      },
+      {
+        "id": "FINAL-B-MEDIUM-2",
+        "lens": "B (executable safety, final audit)",
+        "issue": "pair_preserving_order ran B2 before B3, but the BINDING ceiling is the pretrained one that B3 charges. A firing at B3's pre-gate would therefore strand the B2 that had just completed - the exact outcome the function claims to prevent. The 8-hour wall was also removed entirely from the finalisation path rather than relaxed.",
+        "classification": "execution-critical",
+        "disposition": "FIXED AT SOURCE",
+        "evidence": "the pair runs B3 FIRST, so a firing leaves nothing stranded: the pair either both run or neither does. Finalisation gets a bounded one-hour allowance on top of the wall rather than no wall at all, and exceeding it still halts with a recorded failure status.",
+        "closed_by": "test_audit_known_negatives, pair-order checks",
+        "state": "FIXED_CLOSED"
+      },
+      {
+        "id": "FINAL-AC-MEDIUM-1",
+        "lens": "A/C (honesty, final audit)",
+        "issue": "The per-identity gate summed only spent, committed and THIS cell, so a rate overrun in cell 1 of 6 was not detected until cell 6 - after most of the arm's hours were already burned and unrecoverable.",
+        "classification": "execution-critical",
+        "disposition": "FIXED AT SOURCE",
+        "evidence": "the gate now RESERVES the cells that have not run yet, so detection scales with severity: a sustained 20 per cent overrun stops at B3 cell 3 having burned 4.1 h of a planned 17.8 h, where before it would have run to cell 6 regardless.",
+        "closed_by": "test_audit_known_negatives, reservation checks",
+        "state": "FIXED_CLOSED"
       }
     ],
     "summary": {
-      "total": 66,
+      "total": 75,
       "derivation": "computed mechanically from entries[].disposition via the state map below; never declared by hand. ACCEPTED LIMITATION is NOT counted as FIXED, and PARTIALLY FIXED is NOT counted as CLOSED.",
       "state_map": {
         "FIXED": "FIXED_CLOSED",
@@ -714,14 +804,14 @@
         "OPEN": "OPEN"
       },
       "by_state": {
-        "FIXED_CLOSED": 63,
+        "FIXED_CLOSED": 72,
         "ACCEPTED_LIMITATION": 1,
         "PARTIALLY_FIXED": 2
       },
       "by_classification": {
-        "scientific-validity": 14,
-        "execution-critical": 32,
-        "provenance/reproducibility": 16,
+        "scientific-validity": 18,
+        "execution-critical": 35,
+        "provenance/reproducibility": 18,
         "reporting/documentation": 4
       },
       "fixed_closed": [
@@ -787,7 +877,16 @@
         "CONFIRM-B-MEDIUM-3",
         "CONFIRM-B-MEDIUM-4",
         "CONFIRM-B-MEDIUM-5",
-        "CONFIRM-B-LOW-1"
+        "CONFIRM-B-LOW-1",
+        "FINAL-B-HIGH-1",
+        "FINAL-AC-HIGH-1",
+        "FINAL-AC-HIGH-2",
+        "FINAL-AC-HIGH-3",
+        "FINAL-AC-HIGH-4",
+        "FINAL-AC-HIGH-5",
+        "FINAL-B-MEDIUM-1",
+        "FINAL-B-MEDIUM-2",
+        "FINAL-AC-MEDIUM-1"
       ],
       "accepted_limitation": [
         "A-M5/B-M?"

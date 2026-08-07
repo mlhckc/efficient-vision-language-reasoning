@@ -119,6 +119,12 @@ CORE_CELL_PROJECTED_HOURS = {
 # checkpoint (81.5 MiB), a secondary best-of-22 checkpoint and a per-row
 # npz. Rounded up to 1 GiB, checked against the space actually free.
 CORE_CELL_STORAGE_BYTES = 1 * 2 ** 30
+# Finalisation (G9, G11, G10, the canonical passes and G14 post-selection)
+# costs roughly 0.5 to 1 h. A cell resumed at the final epoch has already
+# done its training, so it is given this bounded allowance ON TOP of the
+# 8-hour wall rather than being destroyed for the sake of it. Exceeding
+# the allowance still halts with a recorded failure status.
+FINALISATION_ALLOWANCE_S = 3600.0
 CORE_FIXED_JUSTIFICATION = (
     "retained SOLELY because it was the PRE-RESULT preregistered pilot "
     "and default configuration, which is also the section 7.1 inherited "
@@ -960,7 +966,7 @@ def g8_overfit_gate(lm, train_loader, cache, device,
     e8b_run.enable_strict_determinism()   # build_* re-seeded internally
     gate_determinism = e8b_run.assert_strict_determinism()
     record_determinism = {"verified_at_use": gate_determinism}
-    reached = None
+    reached, accuracy = None, 0.0    # bound before the loop, as in B1
     for epoch in range(1, G8_MAX_EPOCHS + 1):
         model.train()
         for images, questions, _, mask, labels in loader:
@@ -1307,6 +1313,26 @@ def train_core_cell(arm: str, scale: str, seed: int) -> int:
     if (OUT_DIR / f"{run_name}_FAILED.json").exists():
         sys.exit("a recorded failure status exists for this cell; "
                  "execution returns to the user")
+    # An unrepaired ledger failure anywhere means every per-identity
+    # gate from here on under-counts, so no further cell may start until
+    # a human repairs it. Without this the warning was written and never
+    # read, and the ceiling could be defeated in silence.
+    ledger_failures = sorted(OUT_DIR.glob("LEDGER_FAILURE_*.json"))
+    if ledger_failures:
+        sys.exit(
+            f"UNREPAIRED LEDGER FAILURE: {ledger_failures[0].name} "
+            f"records GPU hours that were never charged, so the "
+            f"per-identity ceiling under-counts and cannot be trusted. "
+            f"Repair the ledger by hand, then remove the record. "
+            f"Execution returns to the user.")
+    exhausted = sorted(OUT_DIR.glob("IDENTITY_EXHAUSTED_*.json"))
+    for marker in exhausted:
+        if marker.stem.endswith(e8b_run.model_identity(arm)):
+            sys.exit(
+                f"IDENTITY EXHAUSTED: {marker.name} records that the "
+                f"{e8b_run.model_identity(arm)} identity has crossed "
+                f"its GPU-hour ceiling. No further cell on this "
+                f"identity may start. Execution returns to the user.")
     halts = sorted(OUT_DIR.glob(f"HALT_{run_name}_*.json"))
     if halts:
         sys.exit(f"a recorded gate halt exists for this cell "
@@ -1318,7 +1344,8 @@ def train_core_cell(arm: str, scale: str, seed: int) -> int:
     # ceiling existed only as a constant inside a projection helper, so
     # nothing would have stopped cell 5 of 6 from crossing it.
     projected = CORE_CELL_PROJECTED_HOURS[(arm, scale)]
-    identity_gate = e8b_run.per_identity_gate(arm, projected)
+    identity_gate = e8b_run.per_identity_gate(
+        arm, projected, cell=(arm, scale, seed))
     if identity_gate["fires"]:
         e8b_run.gate_halt(run_name, "G19_IDENTITY",
                           f"the 35 GPU-hour ceiling for the "
@@ -1376,8 +1403,13 @@ def train_core_cell(arm: str, scale: str, seed: int) -> int:
         # CUDA OOM with a JSONDecodeError and leave the cell lock held.
         # The lock is released FIRST, and every accounting step is
         # contained, with its own failure recorded rather than raised.
-        lock_path.unlink(missing_ok=True)
         try:
+            # missing_ok suppresses only FileNotFoundError; on the
+            # shared filesystem ESTALE and EIO propagate, so the unlink
+            # belongs INSIDE the containment. Outside it, one stale NFS
+            # handle would leak the cell lock, skip the charge and
+            # replace the real failure all at once.
+            lock_path.unlink(missing_ok=True)
             e8b_run.charge_identity_hours(
                 arm, scale, seed, (time.time() - started) / 3600)
             after = e8b_run.per_identity_gate(arm, 0.0)
@@ -1682,9 +1714,18 @@ def _train_core_locked(arm, scale, seed, recipe, run_name, result_path,
     if start_epoch <= max_epochs:
         wall_halt(start_epoch - 1, step_count)
     else:
-        print(f"[WALL] skipped: resuming at epoch {start_epoch} of "
-              f"{max_epochs}, so the loop will not run and this cell "
-              f"only needs finalising")
+        # The wall is NOT abandoned here, only relaxed: finalisation
+        # gets a bounded allowance on top, because destroying a complete
+        # 22-epoch trajectory to save an hour of evaluation is the worse
+        # outcome. Exceeding even that is recorded, not ignored.
+        finalisation_budget = wall_seconds + FINALISATION_ALLOWANCE_S
+        if prior_seconds >= finalisation_budget:
+            wall_halt(start_epoch - 1, step_count)
+        print(f"[WALL] resuming at epoch {start_epoch} of {max_epochs}: "
+              f"the loop will not run, so this cell only needs "
+              f"finalising. {prior_seconds / 3600:.2f} h already spent "
+              f"against a {finalisation_budget / 3600:.2f} h "
+              f"finalisation budget.")
     verified_at_use = e8b_run.assert_strict_determinism()
     first_step_asserted = False
     for epoch in range(start_epoch, max_epochs + 1):
@@ -2016,8 +2057,24 @@ def _train_core_locked(arm, scale, seed, recipe, run_name, result_path,
     # EVERY exit path, so it is not repeated here. What is recorded here
     # is the ledger position as it stands before this process's own
     # charge lands.
-    record["e8b_core_cell"]["identity_gate_before_this_process_charge"] = \
-        e8b_run.per_identity_gate(arm, 0.0)
+    # Contained: the per-row dump is already written, and the result
+    # JSON is written a few lines below. An uncontained ledger read here
+    # -- deliberately fail-closed, on the shared filesystem -- would
+    # leave the npz with no result, and re-entry would then die at the
+    # npz-exists guard. A completed cell is never stranded for the sake
+    # of a diagnostic field.
+    try:
+        record["e8b_core_cell"][
+            "identity_gate_before_this_process_charge"] = \
+            e8b_run.per_identity_gate(arm, 0.0)
+    except BaseException as ledger_error:      # noqa: BLE001
+        record["e8b_core_cell"][
+            "identity_gate_before_this_process_charge"] = {
+                "unavailable": repr(ledger_error),
+                "note": "the ledger could not be read while writing "
+                        "this record; the charge itself is made by the "
+                        "caller's finally block and records its own "
+                        "failure separately"}
     e8b_run.atomic_write_json(result_path, record)
     print(f"[CORE DONE] {run_name}: canonical epoch {canonical_epoch}, "
           f"dev {primary_accuracy:.4f}, wall {elapsed / 3600:.2f} h")

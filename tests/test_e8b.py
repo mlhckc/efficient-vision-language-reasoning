@@ -2441,12 +2441,16 @@ def test_audit_known_negatives() -> None:
     # hard-coded here: a literal would let the gate and the record drift
     # apart silently, which is exactly what this check exists to catch.
     per_cell = projection["per_cell_hours"]
+    # The key format MUST match charge_identity_hours exactly, or the
+    # gate treats every cell as unrun and reserves it a second time.
     full = {"cells": {
-        f"B3_{s}_{i}": {"identity": "pretrained", "processes": [h],
-                        "hours": h, "arm": "B3", "scale": s, "seed": i}
-        for i, (s, h) in enumerate(
-            [("train_40k", per_cell["lm_train_40k"])] * 3
-            + [("train_250k", per_cell["lm_train_250k"])] * 3)}}
+        f"B3_{scale}_seed{seed}": {
+            "identity": "pretrained", "processes": [hours],
+            "hours": hours, "arm": "B3", "scale": scale, "seed": seed}
+        for scale, hours in (
+            ("train_40k", per_cell["lm_train_40k"]),
+            ("train_250k", per_cell["lm_train_250k"]))
+        for seed in e8b_run.CORE_SEEDS}}
     gate = e8b_run.per_identity_gate("B3", 0.0, ledger=full)
     check("the runtime per-cell constants match the published "
           "projection",
@@ -2466,6 +2470,20 @@ def test_audit_known_negatives() -> None:
     check("the gate counts committed-but-unspent work, or it would "
           "green-light a cell leaving no room for the readouts",
           gate["committed_not_yet_spent_hours"] > 0)
+    # With every cell charged there is nothing left to reserve.
+    check("nothing is reserved once every cell on the identity has run",
+          gate["reserved_for_unrun_cells_hours"] == 0)
+    # On the FIRST cell, the gate must already see the whole programme,
+    # or an overrun would not be detected until the arm was nearly done.
+    first = e8b_run.per_identity_gate(
+        "B3", per_cell["lm_train_40k"], ledger={"cells": {}},
+        cell=("B3", "train_40k", 0))
+    check("on the first cell the gate already reserves the rest of the "
+          "arm, so an overrun is detected early rather than at cell 6",
+          first["reserved_for_unrun_cells_hours"] > 15
+          and abs(first["projected_total_hours"] - published) < 0.01,
+          f"reserved {first['reserved_for_unrun_cells_hours']}, "
+          f"total {first['projected_total_hours']}")
     # Find the smallest 250k overrun that fires, and assert the ceiling
     # bites somewhere sane rather than at a hard-coded percentage.
     fired_at = None
@@ -2557,8 +2575,17 @@ def test_audit_known_negatives() -> None:
                   for a in recon["residual_assumptions"]),
           str([a[:60] for a in recon["residual_assumptions"]]))
     check("the residual assumptions withdraw the false claim explicitly",
-          any("THAT WAS FALSE" in a
-              for a in recon["residual_assumptions"]))
+          any("was\n" not in a and "FALSE" in a
+              for a in recon["residual_assumptions"]),
+          str([a[:70] for a in recon["residual_assumptions"]]))
+    check("the residual assumptions declare themselves DERIVED, so a "
+          "hand-written figure cannot go stale there again",
+          "DERIVED" in recon["residual_assumptions"][0])
+    check("the removed component is disclosed beside the "
+          "nothing-descoped claim",
+          "one_component_was_removed" in recon
+          and recon["one_component_was_removed"]["hours_if_reinstated"]
+          > recon["headroom_hours"])
     check("the retained parts of the protocol A1 row are charged",
           any("A1 row" in c["component"]
               for c in recon["complete_programme_components"]))
@@ -2799,11 +2826,19 @@ def test_audit_known_negatives() -> None:
           sorted(order) == sorted(e8b_run.CORE_CELLS)
           and len(order) == len(set(order)))
     lm_pairs = [c for c in order if c[0] in ("B2", "B3")]
-    check("every B3 runs immediately after its own B2, so a fired "
-          "ceiling breaks BETWEEN pairs and never inside one",
-          all(lm_pairs[i][0] == "B2"
-              and lm_pairs[i + 1] == ("B3", lm_pairs[i][1], lm_pairs[i][2])
-              for i in range(0, len(lm_pairs), 2)))
+    # B3 FIRST, then its B2. The binding ceiling is the pretrained one
+    # that B3 charges; running B2 first would let a firing at B3's
+    # pre-gate strand the B2 that had just completed.
+    check("every B2 runs immediately after its own B3, so a fired "
+          "ceiling strands nothing and each pair either both runs or "
+          "neither does",
+          all(lm_pairs[i][0] == "B3"
+              and lm_pairs[i + 1] == ("B2", lm_pairs[i][1], lm_pairs[i][2])
+              for i in range(0, len(lm_pairs), 2)),
+          str(lm_pairs[:4]))
+    check("the arm charged to the BINDING ceiling runs first in each "
+          "pair",
+          e8b_run.model_identity(lm_pairs[0][0]) == "pretrained")
     check("B1, charged to neither identity ceiling, runs last",
           all(c[0] == "B1" for c in order[len(lm_pairs):]))
 
@@ -2981,6 +3016,81 @@ def test_call_arity_everywhere() -> None:
                     f"{error}")
     check("every internal call binds against its callee's signature",
           problems == [], "; ".join(problems[:3]))
+
+
+def test_records_reproduce_from_generators() -> None:
+    """A published record must reproduce from its committed generator.
+
+    A fix once reached the generator and never the artefact, so the
+    governing record kept a fabricated citation live while the ledger
+    reported it closed. Regenerating into a temporary location and
+    comparing every field except the run metadata catches that class
+    without trusting either side.
+    """
+    import importlib
+    import shutil
+
+    generator = importlib.import_module(
+        "experiments.e8b_readout_generation.core_resource_projection")
+    published_path = (PROJECT_ROOT / "results" / "experiments"
+                      / "e8b_readout_generation"
+                      / "core_resource_projection_20260807.json")
+    check("the governing projection exists", published_path.exists())
+    published = json.loads(published_path.read_text())[
+        "e8b_core_resource_projection"]
+
+    with tempfile.TemporaryDirectory() as tmp:
+        backup = Path(tmp) / "published.json"
+        shutil.copy2(published_path, backup)
+        try:
+            generator.main()
+            regenerated = json.loads(published_path.read_text())[
+                "e8b_core_resource_projection"]
+        finally:
+            shutil.copy2(backup, published_path)
+
+    differing = [key for key in set(published) | set(regenerated)
+                 if published.get(key) != regenerated.get(key)]
+    check("the published projection reproduces from its own generator, "
+          "field for field",
+          differing == [], f"differing: {differing}")
+    check("the fabricated section-13.2 citation is gone from the "
+          "published record, not only from the generator",
+          "17.6-21.6 h expected"
+          not in published["gates"]["e8b_remaining_vs_180h_core"][
+              "scope_note"]
+          or "CORRECTED"
+          in published["gates"]["e8b_remaining_vs_180h_core"][
+              "scope_note"])
+
+    # The sensitivity block must be DERIVED, not hand-written: a
+    # hardcoded figure is what went stale and understated the exposure.
+    residual = published["residual_assumptions_quantified"]
+    check("the sensitivity block declares itself derived",
+          "DERIVATION" in residual)
+    per_cell = published["per_cell_hours"]["lm_train_250k"]
+    check("the 250k carried hours follow the CURRENT per-cell cost",
+          abs(residual["train_250k_step_scaling"]["carries_hours"]
+              - 3 * per_cell) < 0.01,
+          f"{residual['train_250k_step_scaling']['carries_hours']} vs "
+          f"{3 * per_cell}")
+    headroom = published["gates"]["pretrained_identity_35h"][
+        "headroom_hours"]
+    check("the break-even follows the CURRENT headroom",
+          abs(residual["train_250k_step_scaling"][
+                  "break_even_per_cell_percent"]
+              - 100 * headroom / (3 * per_cell)) < 0.05)
+    check("the G14 input is described as optimistic, not conservative",
+          "OPTIMISTIC, NOT CONSERVATIVE"
+          in residual["g14_row_cost"]["direction"])
+    check("the A1 precedent is stated like-for-like and is not offered "
+          "as reassurance",
+          "1.25 per cent ABOVE" in residual["a4_a7c_unrun"]["precedent"]
+          and "THAT WAS WRONG"
+          in residual["a4_a7c_unrun"]["precedent"])
+    check("the one REMOVED component is costed and disclosed",
+          residual["selection_sensitivity_REMOVED_NOT_UNCOSTED"][
+              "hours_if_reinstated"] > headroom)
 
 
 def test_core_call_signatures() -> None:
@@ -3273,6 +3383,7 @@ def run() -> None:
     test_no_unbound_names()
     test_core_call_signatures()
     test_call_arity_everywhere()
+    test_records_reproduce_from_generators()
     test_serial_contract()
     test_serial_queries()
     test_provenance()

@@ -234,6 +234,7 @@ def main() -> int:
                     + RETAINED_SEARCH_MIB + 20) / 1024)
     free_gib = shutil.disk_usage(D).free / 2 ** 30
 
+    headroom = IDENT_H - pretrained_identity
     gates = {
         "per_run_8h": {
             "largest_cell_hours": round(lm_cell_250k, 3),
@@ -345,17 +346,24 @@ def main() -> int:
                       "decision and a fresh projection."},
         "gates": gates, "fired": fired,
         "residual_assumptions_quantified": {
+            "DERIVATION": "every figure in this block is computed from "
+                          "the same constants as the projection above. "
+                          "An earlier version hardcoded them, so they "
+                          "silently went stale when the constants "
+                          "changed and understated the exposure.",
             "train_250k_step_scaling": {
-                "carries_hours": 12.566,
+                "carries_hours": round(3 * lm_cell_250k, 3),
                 "basis": "step-scaled from the MEASURED 40k rate; no "
                          "250k E8B cell has ever run",
-                "break_even": "the pretrained identity reaches 35 h if "
-                              "the per-CELL 250k cost rises about 12 "
-                              "per cent (4.70 h per cell instead of "
-                              "4.189 h). Because each cell also carries "
-                              "a fixed G14 and gate overhead, the "
-                              "break-even on the TRAINING RATE alone is "
-                              "higher, about 17 per cent."},
+                "break_even_per_cell_percent": round(
+                    100 * headroom / (3 * lm_cell_250k), 2),
+                "break_even_on_training_rate_percent": round(
+                    100 * headroom
+                    / (3 * hours(lm_epoch_250k * LM_EPOCHS)), 2),
+                "note": "the per-cell break-even is smaller than the "
+                        "training-rate one because each cell also "
+                        "carries a fixed G14 and gate overhead that "
+                        "does not scale with the training rate"},
             "r2_r3_per_row": {
                 "carries_hours": round(6 * hours(
                     N_RAW * (R2_ROW_S + R3_ROW_S)), 3),
@@ -366,29 +374,80 @@ def main() -> int:
                          "stage, a different operation in units 1000x "
                          "apart. No replacement provenance was "
                          "invented.",
-                "sensitivity": "if R2 and R3 each cost 3x the assumed "
-                               "rate, the six pretrained cells cost "
-                               + str(round(12 * hours(
-                                   N_RAW * (R2_ROW_S + R3_ROW_S)), 3))
-                               + " h more and the headroom is exhausted",
+                "increase_at_3x_hours": round(12 * hours(
+                    N_RAW * (R2_ROW_S + R3_ROW_S)), 3),
+                "headroom_after_3x_hours": round(
+                    headroom - 12 * hours(
+                        N_RAW * (R2_ROW_S + R3_ROW_S)), 3),
                 "status": "OPEN RISK: close it with a measurement or "
                           "accept it explicitly before core execution"},
             "g14_row_cost": {
-                "carries_hours": 1.979,
-                "basis": "pooled measurement 5.139 s/row plus a 3 per "
-                         "cent conservative margin"},
+                "carries_hours": round(12 * g14_h, 3),
+                "basis": f"pooled measurement "
+                         f"{G14_ROW_S_MEASURED_POOLED} s/row plus a "
+                         f"{round(100 * (G14_ROW_S / G14_ROW_S_MEASURED_POOLED - 1), 2)} "
+                         f"per cent margin",
+                "direction": "OPTIMISTIC, NOT CONSERVATIVE. The pooled "
+                             "measurement covers R1 brute force plus R1 "
+                             "cached only, while the live gate also "
+                             "runs r2_brute_force and r2_cached per row "
+                             "under clause C3. The margin does not "
+                             "cover two extra constrained walks over "
+                             f"{G14_ROWS} rows and 12 cells.",
+                "status": "OPEN and unquantified"},
             "a4_a7c_unrun": {
-                "carries_hours": 3.668,
+                "carries_hours": round(A4_H + A7C_H, 3),
                 "basis": "expected-epoch projections; neither arm has "
                          "run. Their recipes carry max_epochs 100 and "
                          "patience 10, so the configured-cap cost is "
-                         "8.469 h EACH (protocol 13.2). The one arm of "
-                         "this family that has run, A1, came in 23 per "
-                         "cent BELOW its projection."},
+                         "8.469 h EACH (protocol 13.2).",
+                "precedent": "A1 is the one arm of this family that has "
+                             "run. LIKE FOR LIKE against the protocol "
+                             "components it actually covers (core "
+                             "1.774 + extraction 0.400 + interventions "
+                             "0.090 = 2.264 h) it came in at 2.29222 h, "
+                             "which is 1.25 per cent ABOVE projection, "
+                             "and its extraction component alone "
+                             "overran by 82.4 per cent. An earlier "
+                             "version of this record claimed A1 came in "
+                             "'23 per cent BELOW its projection'. THAT "
+                             "WAS WRONG: it divided a partial "
+                             "measurement by the FULL protocol row, "
+                             "treating the unrun secondary study, "
+                             "ablation and mid-layer extraction as "
+                             "having cost nothing -- the very error "
+                             "this projection charges 0.723 h to "
+                             "correct. The precedent is mildly "
+                             "UNFAVOURABLE, not reassuring."},
+            "retained_a1_row": {
+                "carries_hours": round(sum(RETAINED_A1_ROW.values()), 3),
+                "components": RETAINED_A1_ROW,
+                "basis": "protocol 13.2b's own estimates for work that "
+                         "has not run. The middle-layer figure in "
+                         "particular is an estimate whose measured "
+                         "sibling, the full extraction, overran by 82.4 "
+                         "per cent."},
             "efficiency_s19": {
                 "carries_hours": EFFICIENCY_S19_H,
                 "basis": "protocol 13.2 range 0.500-1.000 h, charged at "
-                         "the upper bound"}},
+                         "the upper bound"},
+            "selection_sensitivity_REMOVED_NOT_UNCOSTED": {
+                "hours_if_reinstated": round(44 * (
+                    hours(N_RAW * (R2_ROW_S + R3_ROW_S)) / 2), 3),
+                "status": "REMOVED by the fixed-endpoint amendment, "
+                          "which eliminated its object (sensitivity to "
+                          "max-over-epochs checkpoint selection). This "
+                          "is the ONE component that was removed rather "
+                          "than added. Reinstating it would need a "
+                          "fresh user decision AND would exceed the "
+                          "remaining headroom several times over.",
+                "disclosure": "the reconciliation's phrase 'nothing was "
+                              "descoped' refers to CORE ARMS AND CELLS, "
+                              "none of which was removed. This study "
+                              "was removed, deliberately and on stated "
+                              "grounds, and that is recorded here so "
+                              "the two statements cannot be read as "
+                              "contradicting each other."}},
         "clean_test_accessed": False}}
     out = D / "core_resource_projection_20260807.json"
     if out.exists():

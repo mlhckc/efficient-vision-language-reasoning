@@ -1339,7 +1339,8 @@ def record_ledger_failure(run_name: str, reason: str,
     under-counted until a human repairs it."""
     path = OUT_DIR / f"LEDGER_FAILURE_{run_name}_{int(time.time())}.json"
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps({
+    temporary = path.with_name(path.name + ".tmp")
+    temporary.write_text(json.dumps({
         "metadata": utils.run_metadata(),
         "e8b_ledger_failure": {
             "run": run_name, "reason": reason, "detail": detail or {},
@@ -1350,6 +1351,7 @@ def record_ledger_failure(run_name: str, reason: str,
                            "on under-counts until the ledger is "
                            "repaired by hand"}},
         indent=2, default=str) + "\n")
+    os.replace(temporary, path)
     return path
 
 
@@ -1408,15 +1410,22 @@ def pair_preserving_order(cells=None) -> list:
     partway through B3 and leave unpaired B2 results -- a pair broken by
     accident rather than by decision.
 
-    Interleaving each (scale, seed) pair, B2 immediately before its B3,
-    means that if the ceiling fires it fires between pairs and every
-    completed pair is whole. B1 is charged to neither identity ceiling
-    and runs last."""
+    The pair runs B3 FIRST, then its B2. That ordering is deliberate
+    and was corrected on 2026-08-07: the BINDING ceiling is the
+    pretrained one, which B3 charges and which has well under an hour of
+    headroom, while the random ceiling B2 charges has more than twelve
+    hours spare and cannot realistically fire. Running B2 first would
+    mean a pretrained firing at B3's pre-gate strands the B2 that has
+    just completed -- the exact outcome this function exists to prevent.
+    With B3 first, a firing leaves nothing stranded: the pair either
+    both run or neither does.
+
+    B1 is charged to neither identity ceiling and runs last."""
     cells = list(CORE_CELLS if cells is None else cells)
     ordered = []
     for scale in CORE_SCALES:
         for seed in CORE_SEEDS:
-            for arm in ("B2", "B3"):
+            for arm in ("B3", "B2"):
                 if (arm, scale, seed) in cells:
                     ordered.append((arm, scale, seed))
     ordered += [c for c in cells if c[0] == "B1"]
@@ -1572,8 +1581,20 @@ def committed_hours(identity: str) -> float:
     return COMMITTED_NON_CELL_HOURS.get(identity, 0.0)
 
 
+# Projected cost of one core cell, mirrored from the governing
+# projection so the gate can reserve the cells that have not run yet.
+# core_resource_projection_20260807.json -> per_cell_hours.
+CELL_PROJECTED_HOURS = {
+    ("B3", "train_40k"): 1.718, ("B3", "train_250k"): 4.226,
+    ("B2", "train_40k"): 1.718, ("B2", "train_250k"): 4.226,
+    ("B1", "train_40k"): 0.287, ("B1", "train_250k"): 0.751,
+}
+_current_cell: dict = {}
+
+
 def per_identity_gate(arm: str, additional_hours: float = 0.0,
-                      ledger: dict | None = None) -> dict:
+                      ledger: dict | None = None,
+                      cell: tuple | None = None) -> dict:
     """The 35 GPU-hour per-model-identity ceiling, as an EXECUTABLE gate.
 
     The ceiling was re-ratified by the user on 2026-08-07 as a hard
@@ -1581,14 +1602,35 @@ def per_identity_gate(arm: str, additional_hours: float = 0.0,
     so it could only ever have been checked by hand. This reads the
     append-only ledger and adds the hours the caller is about to spend
     or has just spent."""
+    if cell is not None:
+        _current_cell["cell"] = cell
     identity = model_identity(arm)
     ledger = read_spend_ledger() if ledger is None else ledger
     already = identity_hours(ledger, identity)
     committed = committed_hours(identity)
-    total = already + committed + additional_hours
+    # RESERVE the cells on this identity that have not run yet. Without
+    # this the gate sums only what is spent plus THIS cell, so a rate
+    # overrun in cell 1 of 6 is not detected until cell 6 -- after most
+    # of the arm's hours are already burned and unrecoverable. Reserving
+    # the remainder makes the gate detect on the FIRST cell that shows
+    # the overrun, which is the only point at which stopping still
+    # saves anything.
+    reserved = 0.0
+    for cell in CORE_CELLS:
+        cell_arm, cell_scale, cell_seed = cell
+        if model_identity(cell_arm) != identity:
+            continue
+        key = f"{cell_arm}_{cell_scale}_seed{cell_seed}"
+        if key in ledger["cells"]:
+            continue                      # already charged above
+        if (cell_arm, cell_scale, cell_seed) == _current_cell.get("cell"):
+            continue                      # this cell is the additional
+        reserved += CELL_PROJECTED_HOURS.get((cell_arm, cell_scale), 0.0)
+    total = already + committed + additional_hours + reserved
     return {"identity": identity,
             "already_charged_hours": round(already, 4),
             "committed_not_yet_spent_hours": round(committed, 4),
+            "reserved_for_unrun_cells_hours": round(reserved, 4),
             "additional_hours": round(additional_hours, 4),
             "projected_total_hours": round(total, 4),
             "ceiling_hours": PER_IDENTITY_CEILING_HOURS,
