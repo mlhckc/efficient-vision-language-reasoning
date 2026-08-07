@@ -53,6 +53,7 @@ from experiments.e8b_readout_generation import run as e8b_run  # noqa: E402
 from experiments.e8b_readout_generation import readouts  # noqa: E402
 from experiments.e8b_readout_generation import training as e8b_training  # noqa: E402
 from experiments.e8b_readout_generation import validate_evaluation as ve  # noqa: E402
+from experiments.e8b_readout_generation import final_evaluation as fe  # noqa: E402
 
 V2_DIR = PROJECT_ROOT / "data" / "v2"
 RECORD = e8b_run.OUT_DIR / "readout_cost_measurement_20260807.json"
@@ -186,6 +187,30 @@ def main() -> int:
                 lengths.append(int(emitted["n_generated"]))
                 terminated.append(bool(emitted["terminated_by_eos"]))
 
+    # --- the batched readouts, timed separately -------------------------
+    from experiments.e8b_readout_generation import batched_readouts as br
+    batched_timings = {"R2_batched": [], "R3_batched": []}
+    with torch.no_grad():
+        for images, questions, question_ids, mask, labels in \
+                torch.utils.data.DataLoader(
+                    ve.RawRowDataset(subset, stores), batch_size=128,
+                    shuffle=False, collate_fn=ve.collate):
+            prefix = e8b_training.canonical_prefix(
+                model, lm, images.to(device), questions.to(device),
+                mask.to(device))
+            torch.cuda.synchronize()
+            start = time.perf_counter()
+            br.r2_batched(lm, prefix, cache, trie)
+            torch.cuda.synchronize()
+            per_row = (time.perf_counter() - start) / prefix.shape[0]
+            batched_timings["R2_batched"] += [per_row] * prefix.shape[0]
+            torch.cuda.synchronize()
+            start = time.perf_counter()
+            br.r3_batched(lm, prefix)
+            torch.cuda.synchronize()
+            per_row = (time.perf_counter() - start) / prefix.shape[0]
+            batched_timings["R3_batched"] += [per_row] * prefix.shape[0]
+
     # --- the pass as it will ACTUALLY run -------------------------------
     # Composing per-part timings taken at batch 16 would misstate the
     # real cost: R1 is batched, so its per-row cost falls with batch
@@ -214,14 +239,68 @@ def main() -> int:
     combined_seconds = time.perf_counter() - start
     combined_per_row = combined_seconds / len(subset)
 
+    # --- the ADOPTED execution shape, measured end to end ---------------
+    # R1 and R2 run on the in-vocabulary rows only and their
+    # full-denominator metric is reconstructed exactly; R3 runs on every
+    # row. Two sub-passes, so the prefix is built twice -- that cost is
+    # inside these measurements rather than argued away.
+    in_vocab_subset = subset[subset["in_vocabulary"]].reset_index(
+        drop=True)
+    def timed_pass(frame, which):
+        if len(frame) == 0:
+            return 0.0, 0
+        sub_loader = torch.utils.data.DataLoader(
+            ve.RawRowDataset(frame, stores), batch_size=128,
+            shuffle=False, collate_fn=ve.collate)
+        sub_context = fe.build_intervention_context(
+            sub_loader, frame, stores.image_vector, device,
+            e8b_training.canonical_prefix)
+        torch.cuda.synchronize()
+        started = time.perf_counter()
+        fe.evaluate_condition(model, lm, sub_loader, cache, trie,
+                              tokenizer, device, "normal", sub_context,
+                              which=which)
+        torch.cuda.synchronize()
+        return time.perf_counter() - started, len(frame)
+
+    r1r2_seconds, r1r2_rows = timed_pass(in_vocab_subset, ("R1", "R2"))
+    r3_seconds, r3_rows = timed_pass(subset, ("R3",))
+    restricted = {
+        "r1_r2_on_in_vocabulary": {
+            "rows_measured": r1r2_rows,
+            "s_per_row": round(r1r2_seconds / max(r1r2_rows, 1), 6),
+            "hours_per_condition_over_7714": round(
+                7714 * r1r2_seconds / max(r1r2_rows, 1) / 3600, 5)},
+        "r3_on_the_full_raw_denominator": {
+            "rows_measured": r3_rows,
+            "s_per_row": round(r3_seconds / max(r3_rows, 1), 6),
+            "hours_per_condition_over_10004": round(
+                10004 * r3_seconds / max(r3_rows, 1) / 3600, 5)}}
+    restricted["hours_per_condition_total"] = round(
+        restricted["r1_r2_on_in_vocabulary"][
+            "hours_per_condition_over_7714"]
+        + restricted["r3_on_the_full_raw_denominator"][
+            "hours_per_condition_over_10004"], 5)
+    restricted["reported_denominator"] = 10004
+    restricted["note"] = ("this is the shape the evaluation will "
+                          "actually run in, measured end to end. The "
+                          "reported denominator is 10,004 for every "
+                          "readout; only what is executed differs.")
+
     peak_allocated = torch.cuda.max_memory_allocated()
     peak_reserved = torch.cuda.max_memory_reserved()
     total_device = torch.cuda.get_device_properties(0).total_memory
 
+    timings.update(batched_timings)
     warm = {name: summarise(values[COLD_ROWS:])
             for name, values in timings.items()}
     cold = {name: summarise(values[:COLD_ROWS])
             for name, values in timings.items()}
+    speedups = {
+        "R2": round(warm["R2"]["mean_s"]
+                    / max(warm["R2_batched"]["mean_s"], 1e-9), 2),
+        "R3": round(warm["R3"]["mean_s"]
+                    / max(warm["R3_batched"]["mean_s"], 1e-9), 2)}
     measurement_hours = (time.time() - started_total) / 3600
 
     # What the projection needs: seconds per row on the RAW denominator.
@@ -289,6 +368,18 @@ def main() -> int:
             "ceiling_fraction": e8b_run.MEMORY_CEILING_FRACTION,
             "fires": (peak_reserved / total_device
                       > e8b_run.MEMORY_CEILING_FRACTION)},
+        "batched_vs_scalar_speedup": speedups,
+        "denominator_restricted_rows": {
+            "R1_and_R2": 7714,
+            "R3": 10004,
+            "reported_denominator": 10004,
+            "note": "R1 and R2 execute on the in-vocabulary rows and "
+                    "their full-denominator metric is reconstructed "
+                    "exactly; R3 executes on every row because free "
+                    "generation can emit a correct out-of-vocabulary "
+                    "answer. The REPORTED denominator is 10,004 "
+                    "throughout."},
+        "adopted_execution_shape_measured": restricted,
         "projected_over_raw_denominator": projected,
         "against_the_assumption": {
             "assumed_r2_plus_r3_hours_per_pass": assumed_r2_r3,
@@ -323,8 +414,8 @@ def main() -> int:
     body = record["e8b_readout_cost_measurement"]
     print(f"  rows            : {args.rows} "
           f"({COLD_ROWS} cold rows excluded from warm)")
-    for name in ("prefix", "prefix_state", "R1_batched",
-                 "R1_cached", "R2", "R3"):
+    for name in ("prefix", "prefix_state", "R1_batched", "R1_cached",
+                 "R2", "R2_batched", "R3", "R3_batched"):
         print(f"  {name:13s} : {warm[name]['mean_s']:.4f} s/row warm "
               f"(cold {cold[name]['mean_s']:.4f})")
     print(f"  R3 length       : mean {body['r3_generated_length']['mean']}, "
@@ -338,6 +429,11 @@ def main() -> int:
     print(f"  combined pass   : {projected['combined_pass_measured_s_per_row']:.4f} "
           f"s/row at batch 128 -> {projected['combined_pass_hours']} h "
           f"per condition over the raw denominator")
+    print(f"  ADOPTED shape   : R1+R2 on 7,714 "
+          f"({restricted['r1_r2_on_in_vocabulary']['hours_per_condition_over_7714']} h) "
+          f"+ R3 on 10,004 "
+          f"({restricted['r3_on_the_full_raw_denominator']['hours_per_condition_over_10004']} h)"
+          f" = {restricted['hours_per_condition_total']} h per condition")
     print(f"  this measurement: {body['measurement_cost']['hours']} h")
     return 0
 

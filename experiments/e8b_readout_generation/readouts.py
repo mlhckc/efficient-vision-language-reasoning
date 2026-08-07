@@ -318,6 +318,32 @@ def g14_r2_gate(lm, prefixes: list, cache: dict, trie: dict) -> dict:
 
 # --- R3: bounded free greedy --------------------------------------------------
 
+def cache_length(prefix_state) -> int:
+    """Length of the KV cache in a prefix state, across cache types."""
+    past = prefix_state[0]
+    if hasattr(past, "get_seq_length"):
+        return int(past.get_seq_length())
+    return int(past[0][0].shape[2])
+
+
+def assert_fresh_prefix_state(prefix, prefix_state, context: str) -> int:
+    """R3 must begin from ITS OWN state, never one another readout has
+    consumed.
+
+    r2_cached extends the cache it is given in place, so a shared state
+    leaves R3 attending over R2's emitted answer tokens. That produced
+    different text on most rows and raised nothing at all, so the
+    contract is enforced here rather than merely documented."""
+    length = cache_length(prefix_state)
+    if length != prefix.shape[1]:
+        raise AssertionError(
+            f"CONSUMED PREFIX STATE ({context}): the cache holds "
+            f"{length} positions but the prefix is {prefix.shape[1]}. "
+            f"Another readout has already extended this state; R3 must "
+            f"be given its own fresh prefix state.")
+    return length
+
+
 @torch.no_grad()
 def r3_generate_ids(lm, prefix, prefix_state=None) -> tuple:
     """The R3 decode loop alone: greedy, at most R3_MAX_NEW_TOKENS new
@@ -325,6 +351,8 @@ def r3_generate_ids(lm, prefix, prefix_state=None) -> tuple:
     torch.argmax returns the first maximal index, so ties break to the
     lowest token id deterministically. A supplied `prefix_state` is
     consumed in place."""
+    if prefix_state is not None:
+        assert_fresh_prefix_state(prefix, prefix_state, "r3_generate_ids")
     past, last_logits = (prefix_state if prefix_state is not None
                          else _prefix_cache(lm, prefix))
     embed = lm.get_input_embeddings()

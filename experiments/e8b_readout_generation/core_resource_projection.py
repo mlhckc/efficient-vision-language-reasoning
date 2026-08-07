@@ -87,7 +87,15 @@ B1_STRESS = 100           # section 7.3 patience cap
 # timings, is what caught the real error here: the pipeline had been
 # costed with the per-row R1 cross-check scorer (1.42 s/row) instead of
 # the canonical batched one (0.093 s/row at batch 16, less at 128).
-EVAL_PASS_S_PER_ROW = 0.075127
+EVAL_PASS_S_PER_ROW = 0.075127     # SUPERSEDED: unbatched, unrestricted
+# The ADOPTED shape, MEASURED end to end on 2026-08-07 after both
+# optimisations were proven exact: R1 and R2 execute on the 7,714
+# in-vocabulary rows (their full-denominator metric reconstructs
+# exactly), R3 executes on all 10,004 because free generation can emit a
+# correct out-of-vocabulary answer. Two sub-passes, so the prefix is
+# built twice and that cost is inside this figure. The REPORTED
+# denominator remains 10,004 for every readout.
+EVAL_CONDITION_HOURS = 0.04641
 # The per-part warm figures, retained for reporting. Each includes the
 # prefix-cache forward that readout must build for itself: r2_cached
 # CONSUMES the state it is given, so R2 and R3 cannot share one.
@@ -201,23 +209,23 @@ def spent_compute() -> dict:
     # the parts that loaded the PRETRAINED language model are charged
     # here; the calibration's B2 share is charged to the random identity
     # and the CLIP-only token extension touches neither.
-    readout = D / "readout_cost_measurement_20260807.json"
-    if readout.exists():
-        items["readout_cost_measurement_20260807"] = json.loads(
-            readout.read_text())["e8b_readout_cost_measurement"][
-                "measurement_cost"]["hours"]
-    calibration = D / "throughput_calibration_20260807.json"
-    if calibration.exists():
-        items["throughput_calibration_pretrained_share"] = json.loads(
-            calibration.read_text())["e8b_throughput_calibration"][
-                "calibration_cost"][
-                    "charged_to_pretrained_identity_hours"]
-    validation = D / "evaluation_pipeline_validation_20260807.json"
-    if validation.exists():
-        # The pipeline validation loaded the pretrained model. Its wall
-        # was not instrumented, so it is charged at a deliberate upper
-        # bound rather than omitted.
-        items["evaluation_pipeline_validation_UPPER_BOUND"] = 0.05
+    # The 2026-08-07 readiness AND optimisation phases, charged
+    # CUMULATIVELY. Each script's record holds only its LAST run, but
+    # several were run more than once as defects were found and fixed,
+    # and those hours were spent regardless. Itemised from the runs
+    # actually performed:
+    #   readout cost measurement, 5 runs   0.082 + 0.088 + 0.116
+    #                                      + 0.119 + 0.237  = 0.642
+    #   throughput calibration, 2 runs     0.016 + 0.016     = 0.032
+    #   optimisation equivalence, 2 runs   0.012 + 0.054     = 0.066
+    #   evaluation pipeline validation,
+    #     5 runs at an upper bound                           = 0.100
+    #   raw token extension (CLIP only, charged to neither
+    #     identity ceiling but real GPU time)                = 0.001
+    # A single conservative total is charged rather than the last run
+    # of each, because charging only the last run would under-count
+    # every hour spent finding the defects.
+    items["readiness_and_optimisation_phase_20260807_CUMULATIVE"] = 0.841
     items["_total"] = round(sum(v for k, v in items.items()
                                 if not k.startswith("_")), 3)
     return items
@@ -253,7 +261,7 @@ def main() -> int:
     # question and deranged image -- on every trained checkpoint. So a
     # cell's final evaluation is four complete passes, not a readout
     # cost plus a separate intervention cost.
-    eval_pass_hours = hours(N_RAW * EVAL_PASS_S_PER_ROW)
+    eval_pass_hours = EVAL_CONDITION_HOURS
     readouts_per_lm_cell = eval_pass_hours           # the normal pass
     interventions_per_lm_cell = 3 * eval_pass_hours  # the three others
     raw_r1_per_cell = eval_pass_hours

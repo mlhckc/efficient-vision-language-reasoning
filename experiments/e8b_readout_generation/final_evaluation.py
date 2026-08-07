@@ -68,6 +68,7 @@ from experiments.e8b_readout_generation import run as e8b_run  # noqa: E402
 from experiments.e8b_readout_generation import readouts  # noqa: E402
 from experiments.e8b_readout_generation import latents as e8b_latents  # noqa: E402
 from experiments.e8b_readout_generation import training as e8b_training  # noqa: E402
+from experiments.e8b_readout_generation import batched_readouts  # noqa: E402
 
 V2_DIR = PROJECT_ROOT / "data" / "v2"
 RAW_DEV = V2_DIR / "dev_raw.csv"
@@ -222,7 +223,7 @@ def neutral_inputs(loader, device) -> tuple:
 @torch.no_grad()
 def evaluate_condition(model, lm, loader, cache, trie, tokenizer, device,
                        condition: str, context: dict,
-                       which=READOUTS) -> dict:
+                       which=READOUTS, batched: bool = True) -> dict:
     """One full pass: R1, R2 and R3 for every row, under one condition.
 
     The prefix is computed ONCE per row and shared by all three
@@ -270,6 +271,39 @@ def evaluate_condition(model, lm, loader, cache, trie, tokenizer, device,
         else:
             rows["r1_pred"].extend([-1] * prefix.shape[0])
             rows["r1_margin"].extend([float("nan")] * prefix.shape[0])
+
+        if batched:
+            # PROVEN equivalent to the scalar path, row for row, on
+            # every observable and at every batch size tried, including
+            # the cap-hitting and empty cases real data does not
+            # produce. See optimisation_equivalence_20260807.json. The
+            # batched walk gives each row its own logical state, so the
+            # cache contract below is preserved by construction: no row
+            # ever sees another row's tokens, and R3 never sees R2's.
+            if "R2" in which:
+                rows["r2_pred"].extend(
+                    int(a) for a in batched_readouts.r2_batched(
+                        lm, prefix, cache, trie))
+            else:
+                rows["r2_pred"].extend([-1] * prefix.shape[0])
+            if "R3" in which:
+                for emitted, terminated in batched_readouts.r3_batched(
+                        lm, prefix):
+                    result = readouts.r3_result(emitted, terminated,
+                                                tokenizer)
+                    rows["r3_text"].append(result["text"])
+                    rows["r3_overlong"].append(bool(result["overlong"]))
+                    rows["r3_empty"].append(bool(result["empty"]))
+            else:
+                rows["r3_text"].extend([""] * prefix.shape[0])
+                rows["r3_overlong"].extend([False] * prefix.shape[0])
+                rows["r3_empty"].extend([False] * prefix.shape[0])
+            rows["questionId"].extend(list(question_ids))
+            rows["label"].extend([int(v) for v in labels])
+            lookup = context.get("image_by_question")
+            if lookup is not None:
+                rows["imageId"].extend([lookup[q] for q in question_ids])
+            continue
 
         for index in range(prefix.shape[0]):
             single = prefix[index:index + 1]
@@ -481,6 +515,22 @@ def paired_contrast(hits_a, hits_b, image_ids, label_a="B3",
             "why_clustered": "rows share images, so a row-level "
                              "interval would be too narrow and would "
                              "overstate significance"}}
+
+
+def rows_to_execute(frame, readout: str, adopted: dict):
+    """Which rows a readout must actually run on.
+
+    R1 and R2 are closed over the vocabulary, so their full-denominator
+    metric is reconstructible from the in-vocabulary rows -- PROVEN
+    exactly, per condition, in optimisation_equivalence_20260807.json.
+    R3 is never restricted: free generation can emit a correct
+    out-of-vocabulary answer, so those rows carry real information.
+
+    The REPORTED denominator is unchanged in every case. This decides
+    what is computed, not what is reported."""
+    if readout == "R3" or not adopted.get(readout, False):
+        return frame
+    return frame[frame["in_vocabulary"]].reset_index(drop=True)
 
 
 def main() -> int:

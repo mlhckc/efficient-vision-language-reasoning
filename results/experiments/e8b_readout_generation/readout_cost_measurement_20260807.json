@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-07T22:21:48",
-    "git_commit": "30c9f88",
+    "timestamp": "2026-08-07T23:06:19",
+    "git_commit": "ec8fb0c",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -33,176 +33,243 @@
     "NON_SCIENTIFIC": true,
     "dated_utc": "2026-08-07",
     "status": "NON-SCIENTIFIC COST MEASUREMENT - no accuracy is reported and none may be derived from it",
-    "rows_measured": 256,
+    "rows_measured": 512,
     "sampling": "sampled across the 10,004-row raw denominator with a pinned seed, not a prefix of it, so question length and answer difficulty are representative",
     "cold_rows_excluded_from_warm": 8,
     "warm_per_row_seconds": {
       "prefix": {
-        "n": 248,
-        "mean_s": 0.00059,
-        "median_s": 0.000427,
-        "p90_s": 0.000441,
-        "max_s": 0.005379,
-        "total_s": 0.146
+        "n": 504,
+        "mean_s": 0.000521,
+        "median_s": 0.000442,
+        "p90_s": 0.000453,
+        "max_s": 0.005393,
+        "total_s": 0.262
       },
       "prefix_state": {
-        "n": 248,
-        "mean_s": 0.014989,
-        "median_s": 0.014949,
-        "p90_s": 0.015161,
-        "max_s": 0.015832,
-        "total_s": 3.717
+        "n": 504,
+        "mean_s": 0.015332,
+        "median_s": 0.015277,
+        "p90_s": 0.015542,
+        "max_s": 0.01639,
+        "total_s": 7.727
       },
       "R1_batched": {
-        "n": 248,
-        "mean_s": 0.092539,
-        "median_s": 0.092333,
-        "p90_s": 0.092677,
-        "max_s": 0.096226,
-        "total_s": 22.95
+        "n": 504,
+        "mean_s": 0.09438,
+        "median_s": 0.094276,
+        "p90_s": 0.094673,
+        "max_s": 0.098811,
+        "total_s": 47.567
       },
       "R1_cached": {
-        "n": 248,
-        "mean_s": 1.412736,
-        "median_s": 1.412334,
-        "p90_s": 1.416398,
-        "max_s": 1.443129,
-        "total_s": 350.359
+        "n": 504,
+        "mean_s": 1.444442,
+        "median_s": 1.443625,
+        "p90_s": 1.449126,
+        "max_s": 1.477189,
+        "total_s": 727.999
       },
       "R2": {
-        "n": 248,
-        "mean_s": 0.031099,
-        "median_s": 0.028603,
-        "p90_s": 0.041534,
-        "max_s": 0.067782,
-        "total_s": 7.713
+        "n": 504,
+        "mean_s": 0.031924,
+        "median_s": 0.029228,
+        "p90_s": 0.042493,
+        "max_s": 0.069066,
+        "total_s": 16.09
       },
       "R3": {
-        "n": 248,
-        "mean_s": 0.030677,
-        "median_s": 0.028098,
-        "p90_s": 0.041016,
-        "max_s": 0.066901,
-        "total_s": 7.608
+        "n": 504,
+        "mean_s": 0.031449,
+        "median_s": 0.02874,
+        "p90_s": 0.04193,
+        "max_s": 0.070055,
+        "total_s": 15.85
+      },
+      "R2_batched": {
+        "n": 504,
+        "mean_s": 0.00199,
+        "median_s": 0.001956,
+        "p90_s": 0.002097,
+        "max_s": 0.002097,
+        "total_s": 1.003
+      },
+      "R3_batched": {
+        "n": 504,
+        "mean_s": 0.001461,
+        "median_s": 0.001445,
+        "p90_s": 0.001547,
+        "max_s": 0.001547,
+        "total_s": 0.736
       }
     },
     "cold_per_row_seconds": {
       "prefix": {
         "n": 8,
-        "mean_s": 0.005379,
-        "median_s": 0.005379,
-        "p90_s": 0.005379,
-        "max_s": 0.005379,
+        "mean_s": 0.005393,
+        "median_s": 0.005393,
+        "p90_s": 0.005393,
+        "max_s": 0.005393,
         "total_s": 0.043
       },
       "prefix_state": {
         "n": 8,
-        "mean_s": 0.014949,
-        "median_s": 0.01493,
-        "p90_s": 0.01507,
-        "max_s": 0.015097,
-        "total_s": 0.12
+        "mean_s": 0.015506,
+        "median_s": 0.015335,
+        "p90_s": 0.01571,
+        "max_s": 0.016193,
+        "total_s": 0.124
       },
       "R1_batched": {
         "n": 8,
-        "mean_s": 0.096226,
-        "median_s": 0.096226,
-        "p90_s": 0.096226,
-        "max_s": 0.096226,
-        "total_s": 0.77
+        "mean_s": 0.098811,
+        "median_s": 0.098811,
+        "p90_s": 0.098811,
+        "max_s": 0.098811,
+        "total_s": 0.79
       },
       "R1_cached": {
         "n": 8,
-        "mean_s": 1.415288,
-        "median_s": 1.416116,
-        "p90_s": 1.417933,
-        "max_s": 1.420047,
-        "total_s": 11.322
+        "mean_s": 1.451304,
+        "median_s": 1.45261,
+        "p90_s": 1.455611,
+        "max_s": 1.457,
+        "total_s": 11.61
       },
       "R2": {
         "n": 8,
-        "mean_s": 0.030225,
-        "median_s": 0.028584,
-        "p90_s": 0.028952,
-        "max_s": 0.041574,
-        "total_s": 0.242
+        "mean_s": 0.03109,
+        "median_s": 0.029285,
+        "p90_s": 0.030142,
+        "max_s": 0.042527,
+        "total_s": 0.249
       },
       "R3": {
         "n": 8,
-        "mean_s": 0.029986,
-        "median_s": 0.028057,
-        "p90_s": 0.030273,
-        "max_s": 0.040959,
-        "total_s": 0.24
+        "mean_s": 0.031181,
+        "median_s": 0.02912,
+        "p90_s": 0.033199,
+        "max_s": 0.042131,
+        "total_s": 0.249
+      },
+      "R2_batched": {
+        "n": 8,
+        "mean_s": 0.002097,
+        "median_s": 0.002097,
+        "p90_s": 0.002097,
+        "max_s": 0.002097,
+        "total_s": 0.017
+      },
+      "R3_batched": {
+        "n": 8,
+        "mean_s": 0.001547,
+        "median_s": 0.001547,
+        "p90_s": 0.001547,
+        "max_s": 0.001547,
+        "total_s": 0.012
       }
     },
     "cold_vs_warm": {
       "prefix": {
-        "cold_mean_s": 0.005379,
-        "warm_mean_s": 0.00059,
-        "ratio": 9.12
+        "cold_mean_s": 0.005393,
+        "warm_mean_s": 0.000521,
+        "ratio": 10.35
       },
       "prefix_state": {
-        "cold_mean_s": 0.014949,
-        "warm_mean_s": 0.014989,
-        "ratio": 1.0
+        "cold_mean_s": 0.015506,
+        "warm_mean_s": 0.015332,
+        "ratio": 1.01
       },
       "R1_batched": {
-        "cold_mean_s": 0.096226,
-        "warm_mean_s": 0.092539,
-        "ratio": 1.04
+        "cold_mean_s": 0.098811,
+        "warm_mean_s": 0.09438,
+        "ratio": 1.05
       },
       "R1_cached": {
-        "cold_mean_s": 1.415288,
-        "warm_mean_s": 1.412736,
+        "cold_mean_s": 1.451304,
+        "warm_mean_s": 1.444442,
         "ratio": 1.0
       },
       "R2": {
-        "cold_mean_s": 0.030225,
-        "warm_mean_s": 0.031099,
+        "cold_mean_s": 0.03109,
+        "warm_mean_s": 0.031924,
         "ratio": 0.97
       },
       "R3": {
-        "cold_mean_s": 0.029986,
-        "warm_mean_s": 0.030677,
-        "ratio": 0.98
+        "cold_mean_s": 0.031181,
+        "warm_mean_s": 0.031449,
+        "ratio": 0.99
+      },
+      "R2_batched": {
+        "cold_mean_s": 0.002097,
+        "warm_mean_s": 0.00199,
+        "ratio": 1.05
+      },
+      "R3_batched": {
+        "cold_mean_s": 0.001547,
+        "warm_mean_s": 0.001461,
+        "ratio": 1.06
       }
     },
     "r3_generated_length": {
-      "mean": 1.195,
+      "mean": 1.199,
       "median": 1.0,
       "max": 4,
       "terminated_by_eos_rate": 1.0,
       "note": "R3 cost is driven by generated length: every extra token is another sequential forward pass"
     },
     "memory": {
-      "peak_allocated_mib": 2365.3,
-      "peak_reserved_mib": 2826.0,
+      "peak_allocated_mib": 2350.7,
+      "peak_reserved_mib": 2806.0,
       "device_total_mib": 20017.4,
-      "reserved_fraction": 0.1412,
+      "reserved_fraction": 0.1402,
       "ceiling_fraction": 0.8,
       "fires": false
     },
+    "batched_vs_scalar_speedup": {
+      "R2": 16.04,
+      "R3": 21.53
+    },
+    "denominator_restricted_rows": {
+      "R1_and_R2": 7714,
+      "R3": 10004,
+      "reported_denominator": 10004,
+      "note": "R1 and R2 execute on the in-vocabulary rows and their full-denominator metric is reconstructed exactly; R3 executes on every row because free generation can emit a correct out-of-vocabulary answer. The REPORTED denominator is 10,004 throughout."
+    },
+    "adopted_execution_shape_measured": {
+      "r1_r2_on_in_vocabulary": {
+        "rows_measured": 392,
+        "s_per_row": 0.019365,
+        "hours_per_condition_over_7714": 0.04149
+      },
+      "r3_on_the_full_raw_denominator": {
+        "rows_measured": 512,
+        "s_per_row": 0.00177,
+        "hours_per_condition_over_10004": 0.00492
+      },
+      "hours_per_condition_total": 0.04641,
+      "reported_denominator": 10004,
+      "note": "this is the shape the evaluation will actually run in, measured end to end. The reported denominator is 10,004 for every readout; only what is executed differs."
+    },
     "projected_over_raw_denominator": {
-      "r1_batched_hours_per_pass": 0.2572,
-      "r1_cached_hours_per_pass_NOT_USED": 3.9258,
-      "r2_hours_per_pass": 0.0864,
-      "r3_hours_per_pass": 0.0852,
-      "prefix_hours_per_pass": 0.0433,
-      "r2_plus_r3_hours_per_pass": 0.1717,
-      "combined_pass_measured_s_per_row": 0.075127,
-      "combined_pass_hours": 0.2088,
-      "combined_pass_basis": "MEASURED end to end at batch 128 over 256 rows, which is how the evaluation actually runs. Composing the per-part timings above would overstate it: those were taken at batch 16 with a synchronise around every call.",
+      "r1_batched_hours_per_pass": 0.2623,
+      "r1_cached_hours_per_pass_NOT_USED": 4.0139,
+      "r2_hours_per_pass": 0.0887,
+      "r3_hours_per_pass": 0.0874,
+      "prefix_hours_per_pass": 0.0441,
+      "r2_plus_r3_hours_per_pass": 0.1761,
+      "combined_pass_measured_s_per_row": 0.017245,
+      "combined_pass_hours": 0.0479,
+      "combined_pass_basis": "MEASURED end to end at batch 128 over 512 rows, which is how the evaluation actually runs. Composing the per-part timings above would overstate it: those were taken at batch 16 with a synchronise around every call.",
       "note": "the prefix and its cache are built ONCE per row and shared by all three readouts, so a combined pass costs prefix + R1 + R2 + R3, not three separate prefixes. R1 is costed at the CANONICAL BATCHED rate; the per-row cached scorer is roughly ninety times more expensive and is used only inside G14."
     },
     "against_the_assumption": {
       "assumed_r2_plus_r3_hours_per_pass": 0.2023,
-      "measured_r2_plus_r3_hours_per_pass": 0.1717,
-      "ratio": 0.85,
+      "measured_r2_plus_r3_hours_per_pass": 0.1761,
+      "ratio": 0.87,
       "verdict": "the assumption was UNSOURCED and is now replaced by measurement"
     },
     "measurement_cost": {
-      "hours": 0.11918,
+      "hours": 0.23683,
       "charged_to": "the pretrained identity: this measurement loads the frozen pretrained SmolLM2-135M"
     },
     "checkpoint": {

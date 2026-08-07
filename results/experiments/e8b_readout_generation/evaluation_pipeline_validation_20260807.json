@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-07T22:14:20",
-    "git_commit": "30c9f88",
+    "timestamp": "2026-08-07T22:43:12",
+    "git_commit": "ec8fb0c",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -106,7 +106,7 @@
           },
           "note": "every emission stays in the denominator; invalid outputs are counted, never excluded"
         },
-        "seconds": 4.953
+        "seconds": 3.298
       },
       "fixed_image": {
         "R1_in_vocabulary": {
@@ -161,7 +161,7 @@
           },
           "note": "every emission stays in the denominator; invalid outputs are counted, never excluded"
         },
-        "seconds": 4.831
+        "seconds": 3.169
       },
       "fixed_question": {
         "R1_in_vocabulary": {
@@ -216,7 +216,7 @@
           },
           "note": "every emission stays in the denominator; invalid outputs are counted, never excluded"
         },
-        "seconds": 4.987
+        "seconds": 3.152
       },
       "shuffled_image": {
         "R1_in_vocabulary": {
@@ -271,7 +271,7 @@
           },
           "note": "every emission stays in the denominator; invalid outputs are counted, never excluded"
         },
-        "seconds": 5.221
+        "seconds": 3.212
       }
     },
     "paired_contrast_demo": {

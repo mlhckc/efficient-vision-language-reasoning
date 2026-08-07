@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-07T22:24:37",
-    "git_commit": "30c9f88",
+    "timestamp": "2026-08-07T23:07:17",
+    "git_commit": "ec8fb0c",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -61,7 +61,7 @@
       "B1_stress_100_epoch": 9.807,
       "B2": 17.899,
       "B3": 17.899,
-      "final_readouts_and_interventions_lm": 10.021,
+      "final_readouts_and_interventions_lm": 2.228,
       "final_b1_evaluations_upper_bound": 0.971
     },
     "spent_compute_hours_itemised": {
@@ -72,10 +72,8 @@
       "fp32_validation": 0.847,
       "determinism_probes_1_to_4": 0.627,
       "paired_rescoring_and_micro_probes": 0.25,
-      "readout_cost_measurement_20260807": 0.11918,
-      "throughput_calibration_pretrained_share": 0.00164,
-      "evaluation_pipeline_validation_UPPER_BOUND": 0.05,
-      "_total": 7.061
+      "readiness_and_optimisation_phase_20260807_CUMULATIVE": 0.841,
+      "_total": 7.731
     },
     "selection_sensitivity_study": {
       "status": "VOID under the fixed-22 epoch-22-canonical rule: the study's object (sensitivity to max-over-epochs checkpoint selection across retained search checkpoints) no longer exists. Not costed. Reinstating any analogue requires a fresh user decision and a fresh projection."
@@ -86,21 +84,21 @@
         "fires": false
       },
       "pretrained_identity_35h": {
-        "projected_hours": 37.744,
+        "projected_hours": 34.517,
         "ceiling_hours": 35.0,
-        "headroom_hours": -2.744,
+        "headroom_hours": 0.483,
         "includes": "the COMPLETE planned pretrained-identity programme: A1 baseline, A4, A7c, all six B3 core cells, B3's final R2/R3 readouts and interventions, and every already-spent search, characterisation, validation and probe hour that loaded the pretrained checkpoint",
         "retry_allowance": "NONE. The plan tolerates zero B3 retries; any retry or any additional B3-loading evaluation triggers a stop-and-ask BEFORE execution",
-        "fires": true
+        "fires": false
       },
       "random_identity_35h": {
-        "projected_hours": 25.172,
+        "projected_hours": 21.275,
         "ceiling_hours": 35.0,
         "fires": false
       },
       "e8b_remaining_vs_180h_core": {
-        "e8b_remaining_hours": 50.903,
-        "e8b_remaining_stress_hours": 57.598,
+        "e8b_remaining_hours": 43.109,
+        "e8b_remaining_stress_hours": 49.805,
         "scope_note": "E8B cells and E8B evaluation only. The programme-wide 180 h ceiling also covers the remaining E8A arms. CORRECTED 2026-08-07: an earlier note cited 'about 17.6-21.6 h expected per section 13.2'. That range appears nowhere in the protocol. Section 13.2's E8A rows total 20.413-21.968 h for ALL of E8A, of which 5.789 h is already spent, leaving about 14.6-16.2 h remaining. The combined expectation is still far below the ceiling.",
         "fires": false
       },
@@ -117,16 +115,14 @@
         "fires": false
       }
     },
-    "fired": [
-      "pretrained_identity_35h"
-    ],
+    "fired": [],
     "residual_assumptions_quantified": {
       "DERIVATION": "every figure in this block is computed from the same constants as the projection above. An earlier version hardcoded them, so they silently went stale when the constants changed and understated the exposure.",
       "train_250k_MEASURED": {
         "carries_hours": 12.747,
         "basis": "MEASURED on 2026-08-07 on the real train_250k loader and the real strict-deterministic BF16 path, then CORRECTED by the same-scale bias: a steady-state step window under-predicts a real epoch by 3.8 per cent, measured against twelve real full-epoch times at 40k. After correction the rate is ABOVE the step-scaled assumption it replaced. No full 250k E8B epoch has been run end to end; the residual is that the bias correction is itself measured at the other scale.",
-        "break_even_per_cell_percent": -21.53,
-        "break_even_on_training_rate_percent": -24.75,
+        "break_even_per_cell_percent": 3.79,
+        "break_even_on_training_rate_percent": 4.35,
         "note": "the per-cell break-even is smaller than the training-rate one because each cell also carries a fixed G14 and gate overhead that does not scale with the training rate"
       },
       "evaluation_pass_MEASURED": {

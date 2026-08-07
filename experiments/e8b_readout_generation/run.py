@@ -1536,14 +1536,14 @@ SPENT_BEFORE_CORE_HOURS = {
     # of the throughput calibration, and the pipeline validation).
     # Sourced from core_resource_projection_20260807.json ->
     # spent_compute_hours_itemised.
-    "pretrained": 7.061 + 2.29222,
+    "pretrained": 7.731 + 2.29222,
     "random": 1.95811,
 }
 COMMITTED_NON_CELL_HOURS = {
     # Committed but not yet spent, all charged to the identity whose
     # frozen model they load:
     #   A4 1.804 and A7c 1.864 (protocol 13.2b);
-    #   the per-identity share of the final readouts, 5.0105 -- MEASURED
+    #   the per-identity share of the final readouts, 1.114 -- MEASURED
     #     on 2026-08-07: four matched conditions, each a complete
     #     R1+R2+R3 pass over the 10,004-row RAW denominator at a
     #     measured 0.0603 s per row;
@@ -1555,10 +1555,10 @@ COMMITTED_NON_CELL_HOURS = {
     #     0.087 and A1's matched interventions 0.090. BASE counts only
     #     the MEASURED A1 core-plus-extraction figure, so omitting these
     #     silently dropped work that is retained, not descoped.
-    "pretrained": 1.804 + 1.864 + 5.0105 + 1.000 + 0.813,
+    "pretrained": 1.804 + 1.864 + 1.114 + 1.000 + 0.813,
     # A1r's row retains the ablation, the middle-layer extraction and
     # its own matched interventions.
-    "random": 5.0105 + 0.127 + 0.087 + 0.090,
+    "random": 1.114 + 0.127 + 0.087 + 0.090,
 }
 
 

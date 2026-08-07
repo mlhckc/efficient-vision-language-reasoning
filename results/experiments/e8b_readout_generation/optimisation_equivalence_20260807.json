@@ -1,0 +1,508 @@
+{
+  "metadata": {
+    "timestamp": "2026-08-07T22:42:23",
+    "git_commit": "ec8fb0c",
+    "git_dirty": true,
+    "open_clip_version": "3.3.0",
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "h5py_version": "3.16.0",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "deterministic": true,
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "embed_dim": 512,
+    "top_k_answers": 100,
+    "n_train": 40000,
+    "n_val": 8000,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "hidden_dim": 512,
+    "dropout": 0.3,
+    "weight_decay": 0.0001
+  },
+  "e8b_optimisation_equivalence": {
+    "NON_SCIENTIFIC": true,
+    "dated_utc": "2026-08-07",
+    "status": "NON-SCIENTIFIC EQUIVALENCE PROOF - no accuracy here is a result; the checkpoint is a frozen exploratory artefact of the abandoned search",
+    "binding_hashes": {
+      "answer_vocab_v2.json": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680",
+      "dev_raw.csv": "26f2ca2ddcfb1c55f19397497c309c584b097fde3b1e5d57699af7bd3187aaa8",
+      "dev.csv": "95d1b504dcc4deb7d69ba0c9e293d1c00bae93df4b6907174a1dd615cb93cdc9",
+      "vocabulary_sha256": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680",
+      "note": "the denominator proof is bound to THESE artefacts. A different vocabulary or a different raw manifest requires the proof to be re-run; it is not a dataset-independent theorem."
+    },
+    "batched_equivalence": {
+      "rows": 512,
+      "fields_compared": [
+        "r2_answer",
+        "r3_tokens",
+        "r3_text",
+        "r3_terminated",
+        "r3_outcome",
+        "r2_raw_correct",
+        "r2_normalised_correct",
+        "r3_raw_correct",
+        "r3_normalised_correct"
+      ],
+      "mismatches": {},
+      "mismatch_counts": {
+        "r2_answer": 0,
+        "r3_tokens": 0,
+        "r3_text": 0,
+        "r3_terminated": 0,
+        "r3_outcome": 0,
+        "r2_raw_correct": 0,
+        "r2_normalised_correct": 0,
+        "r3_raw_correct": 0,
+        "r3_normalised_correct": 0
+      },
+      "exactly_identical": true,
+      "difficulty_coverage": {
+        "rows_at_the_token_cap": 0,
+        "rows_with_multi_token_r3": 133,
+        "rows_with_empty_r3": 0,
+        "max_r3_tokens": 4,
+        "distinct_r2_answers": 83,
+        "r3_outcome_categories": [
+          "in_vocabulary",
+          "out_of_vocabulary"
+        ]
+      },
+      "timing": {
+        "scalar_seconds": 33.53,
+        "batched_seconds": 2.05,
+        "speedup": 16.39
+      },
+      "verdict": "EXACT EQUIVALENCE: every observable agrees row for row, so the batched path may be adopted"
+    },
+    "batched_equivalence_adversarial": {
+      "prefixes": 96,
+      "basis": "random off-distribution prefixes, pinned seed. Not data; no accuracy is computed from them.",
+      "outcome_categories_exercised": [
+        "empty",
+        "overlong"
+      ],
+      "rows_at_the_token_cap": 95,
+      "rows_with_empty_r3": 1,
+      "max_r3_tokens": 8,
+      "batch_size_invariance": {
+        "1": {
+          "r2_matches_scalar": true,
+          "r3_matches_scalar": true
+        },
+        "7": {
+          "r2_matches_scalar": true,
+          "r3_matches_scalar": true
+        },
+        "32": {
+          "r2_matches_scalar": true,
+          "r3_matches_scalar": true
+        },
+        "96": {
+          "r2_matches_scalar": true,
+          "r3_matches_scalar": true
+        }
+      },
+      "exactly_identical_at_every_batch_size": true,
+      "verdict": "EXACT at every batch size tried, including the cap-hitting and empty cases real data does not produce"
+    },
+    "denominator_equivalence": {
+      "normal": {
+        "condition": "normal",
+        "per_metric": {
+          "R1_raw": {
+            "direct": {
+              "hits": 135,
+              "n": 512,
+              "accuracy": 0.263671875
+            },
+            "restricted_plus_reconstruction": {
+              "hits": 135,
+              "n": 512,
+              "accuracy": 0.263671875
+            },
+            "out_of_vocabulary_hits_observed": 0,
+            "counts_equal": true,
+            "accuracies_equal": true,
+            "exact": true
+          },
+          "R1_normalised": {
+            "direct": {
+              "hits": 135,
+              "n": 512,
+              "accuracy": 0.263671875
+            },
+            "restricted_plus_reconstruction": {
+              "hits": 135,
+              "n": 512,
+              "accuracy": 0.263671875
+            },
+            "out_of_vocabulary_hits_observed": 0,
+            "counts_equal": true,
+            "accuracies_equal": true,
+            "exact": true
+          },
+          "R2_raw": {
+            "direct": {
+              "hits": 134,
+              "n": 512,
+              "accuracy": 0.26171875
+            },
+            "restricted_plus_reconstruction": {
+              "hits": 134,
+              "n": 512,
+              "accuracy": 0.26171875
+            },
+            "out_of_vocabulary_hits_observed": 0,
+            "counts_equal": true,
+            "accuracies_equal": true,
+            "exact": true
+          },
+          "R2_normalised": {
+            "direct": {
+              "hits": 134,
+              "n": 512,
+              "accuracy": 0.26171875
+            },
+            "restricted_plus_reconstruction": {
+              "hits": 134,
+              "n": 512,
+              "accuracy": 0.26171875
+            },
+            "out_of_vocabulary_hits_observed": 0,
+            "counts_equal": true,
+            "accuracies_equal": true,
+            "exact": true
+          }
+        },
+        "exact_for_every_metric": true,
+        "verdict": "EXACT: the restricted evaluation reconstructs the full-denominator metric identically"
+      },
+      "fixed_image": {
+        "condition": "fixed_image",
+        "per_metric": {
+          "R1_raw": {
+            "direct": {
+              "hits": 105,
+              "n": 512,
+              "accuracy": 0.205078125
+            },
+            "restricted_plus_reconstruction": {
+              "hits": 105,
+              "n": 512,
+              "accuracy": 0.205078125
+            },
+            "out_of_vocabulary_hits_observed": 0,
+            "counts_equal": true,
+            "accuracies_equal": true,
+            "exact": true
+          },
+          "R1_normalised": {
+            "direct": {
+              "hits": 105,
+              "n": 512,
+              "accuracy": 0.205078125
+            },
+            "restricted_plus_reconstruction": {
+              "hits": 105,
+              "n": 512,
+              "accuracy": 0.205078125
+            },
+            "out_of_vocabulary_hits_observed": 0,
+            "counts_equal": true,
+            "accuracies_equal": true,
+            "exact": true
+          },
+          "R2_raw": {
+            "direct": {
+              "hits": 105,
+              "n": 512,
+              "accuracy": 0.205078125
+            },
+            "restricted_plus_reconstruction": {
+              "hits": 105,
+              "n": 512,
+              "accuracy": 0.205078125
+            },
+            "out_of_vocabulary_hits_observed": 0,
+            "counts_equal": true,
+            "accuracies_equal": true,
+            "exact": true
+          },
+          "R2_normalised": {
+            "direct": {
+              "hits": 105,
+              "n": 512,
+              "accuracy": 0.205078125
+            },
+            "restricted_plus_reconstruction": {
+              "hits": 105,
+              "n": 512,
+              "accuracy": 0.205078125
+            },
+            "out_of_vocabulary_hits_observed": 0,
+            "counts_equal": true,
+            "accuracies_equal": true,
+            "exact": true
+          }
+        },
+        "exact_for_every_metric": true,
+        "verdict": "EXACT: the restricted evaluation reconstructs the full-denominator metric identically"
+      },
+      "fixed_question": {
+        "condition": "fixed_question",
+        "per_metric": {
+          "R1_raw": {
+            "direct": {
+              "hits": 10,
+              "n": 512,
+              "accuracy": 0.01953125
+            },
+            "restricted_plus_reconstruction": {
+              "hits": 10,
+              "n": 512,
+              "accuracy": 0.01953125
+            },
+            "out_of_vocabulary_hits_observed": 0,
+            "counts_equal": true,
+            "accuracies_equal": true,
+            "exact": true
+          },
+          "R1_normalised": {
+            "direct": {
+              "hits": 10,
+              "n": 512,
+              "accuracy": 0.01953125
+            },
+            "restricted_plus_reconstruction": {
+              "hits": 10,
+              "n": 512,
+              "accuracy": 0.01953125
+            },
+            "out_of_vocabulary_hits_observed": 0,
+            "counts_equal": true,
+            "accuracies_equal": true,
+            "exact": true
+          },
+          "R2_raw": {
+            "direct": {
+              "hits": 11,
+              "n": 512,
+              "accuracy": 0.021484375
+            },
+            "restricted_plus_reconstruction": {
+              "hits": 11,
+              "n": 512,
+              "accuracy": 0.021484375
+            },
+            "out_of_vocabulary_hits_observed": 0,
+            "counts_equal": true,
+            "accuracies_equal": true,
+            "exact": true
+          },
+          "R2_normalised": {
+            "direct": {
+              "hits": 11,
+              "n": 512,
+              "accuracy": 0.021484375
+            },
+            "restricted_plus_reconstruction": {
+              "hits": 11,
+              "n": 512,
+              "accuracy": 0.021484375
+            },
+            "out_of_vocabulary_hits_observed": 0,
+            "counts_equal": true,
+            "accuracies_equal": true,
+            "exact": true
+          }
+        },
+        "exact_for_every_metric": true,
+        "verdict": "EXACT: the restricted evaluation reconstructs the full-denominator metric identically"
+      },
+      "shuffled_image": {
+        "condition": "shuffled_image",
+        "per_metric": {
+          "R1_raw": {
+            "direct": {
+              "hits": 99,
+              "n": 512,
+              "accuracy": 0.193359375
+            },
+            "restricted_plus_reconstruction": {
+              "hits": 99,
+              "n": 512,
+              "accuracy": 0.193359375
+            },
+            "out_of_vocabulary_hits_observed": 0,
+            "counts_equal": true,
+            "accuracies_equal": true,
+            "exact": true
+          },
+          "R1_normalised": {
+            "direct": {
+              "hits": 99,
+              "n": 512,
+              "accuracy": 0.193359375
+            },
+            "restricted_plus_reconstruction": {
+              "hits": 99,
+              "n": 512,
+              "accuracy": 0.193359375
+            },
+            "out_of_vocabulary_hits_observed": 0,
+            "counts_equal": true,
+            "accuracies_equal": true,
+            "exact": true
+          },
+          "R2_raw": {
+            "direct": {
+              "hits": 99,
+              "n": 512,
+              "accuracy": 0.193359375
+            },
+            "restricted_plus_reconstruction": {
+              "hits": 99,
+              "n": 512,
+              "accuracy": 0.193359375
+            },
+            "out_of_vocabulary_hits_observed": 0,
+            "counts_equal": true,
+            "accuracies_equal": true,
+            "exact": true
+          },
+          "R2_normalised": {
+            "direct": {
+              "hits": 99,
+              "n": 512,
+              "accuracy": 0.193359375
+            },
+            "restricted_plus_reconstruction": {
+              "hits": 99,
+              "n": 512,
+              "accuracy": 0.193359375
+            },
+            "out_of_vocabulary_hits_observed": 0,
+            "counts_equal": true,
+            "accuracies_equal": true,
+            "exact": true
+          }
+        },
+        "exact_for_every_metric": true,
+        "verdict": "EXACT: the restricted evaluation reconstructs the full-denominator metric identically"
+      }
+    },
+    "intervention_drop_equivalence": {
+      "fixed_image": {
+        "R1_raw": {
+          "direct_drop": 0.05859375,
+          "reconstructed_drop": 0.05859375,
+          "exact": true
+        },
+        "R1_normalised": {
+          "direct_drop": 0.05859375,
+          "reconstructed_drop": 0.05859375,
+          "exact": true
+        },
+        "R2_raw": {
+          "direct_drop": 0.056640625,
+          "reconstructed_drop": 0.056640625,
+          "exact": true
+        },
+        "R2_normalised": {
+          "direct_drop": 0.056640625,
+          "reconstructed_drop": 0.056640625,
+          "exact": true
+        },
+        "exact_for_every_metric": true
+      },
+      "fixed_question": {
+        "R1_raw": {
+          "direct_drop": 0.244140625,
+          "reconstructed_drop": 0.244140625,
+          "exact": true
+        },
+        "R1_normalised": {
+          "direct_drop": 0.244140625,
+          "reconstructed_drop": 0.244140625,
+          "exact": true
+        },
+        "R2_raw": {
+          "direct_drop": 0.240234375,
+          "reconstructed_drop": 0.240234375,
+          "exact": true
+        },
+        "R2_normalised": {
+          "direct_drop": 0.240234375,
+          "reconstructed_drop": 0.240234375,
+          "exact": true
+        },
+        "exact_for_every_metric": true
+      },
+      "shuffled_image": {
+        "R1_raw": {
+          "direct_drop": 0.0703125,
+          "reconstructed_drop": 0.0703125,
+          "exact": true
+        },
+        "R1_normalised": {
+          "direct_drop": 0.0703125,
+          "reconstructed_drop": 0.0703125,
+          "exact": true
+        },
+        "R2_raw": {
+          "direct_drop": 0.068359375,
+          "reconstructed_drop": 0.068359375,
+          "exact": true
+        },
+        "R2_normalised": {
+          "direct_drop": 0.068359375,
+          "reconstructed_drop": 0.068359375,
+          "exact": true
+        },
+        "exact_for_every_metric": true
+      }
+    },
+    "adoption": {
+      "batched_r2_r3": true,
+      "denominator_restriction_per_condition": {
+        "normal": true,
+        "fixed_image": true,
+        "fixed_question": true,
+        "shuffled_image": true
+      },
+      "r3_denominator_restriction": false,
+      "why_r3_excluded": "R3 generates freely and CAN emit a correct out-of-vocabulary answer, so an out-of-vocabulary row is not automatically wrong and the reconstruction does not hold. Excluded by construction, not by measurement.",
+      "reporting_unchanged": "the reported denominator remains the full 10,004 rows for every readout; only the rows actually executed for R1 and R2 change"
+    },
+    "memory": {
+      "peak_reserved_mib": 1894.0,
+      "reserved_fraction": 0.0946
+    },
+    "phase_cost_hours": 0.05383,
+    "determinism_verified_at_use": {
+      "deterministic_algorithms": true,
+      "warn_only": false,
+      "flash_sdp": false,
+      "mem_efficient_sdp": false,
+      "math_sdp": true,
+      "cudnn_deterministic": true,
+      "cublas_workspace_config": ":4096:8"
+    },
+    "frozen_model": {
+      "arm_model": "pretrained",
+      "pinned_revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2"
+    },
+    "optimizer_steps": 0,
+    "clean_test_accessed": false
+  }
+}

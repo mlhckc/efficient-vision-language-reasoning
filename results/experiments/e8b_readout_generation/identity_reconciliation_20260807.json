@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-07T22:28:12",
-    "git_commit": "30c9f88",
+    "timestamp": "2026-08-07T23:08:06",
+    "git_commit": "ec8fb0c",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -104,7 +104,7 @@
         "component": "the 2026-08-07 measurement phase (phases B and C)",
         "old": "the evaluation was costed at 2.018 h per identity from unsourced per-row R2/R3 rates, and the 250k training rate was step-scaled from the 40k measurement",
         "correction": "both are now MEASURED. The evaluation pass is timed end to end at batch 128 after a correctness fix (R2 and R3 each need their own prefix state, because r2_cached consumes the one it is given); the 250k rate is measured on the real loader through a proven B2 proxy and then corrected for the same-scale extrapolation bias. Training came in slightly ABOVE its assumption after correction; the evaluation came in far above it.",
-        "effect_on_identity_hours": 3.231,
+        "effect_on_identity_hours": 0.004,
         "raised_by": "the user's phase B/C instruction of 2026-08-07"
       }
     ],
@@ -125,7 +125,7 @@
     "enforcement": {
       "previously": "the 35 h per-identity ceiling and the storage gate existed only as constants and helper functions with no call site in the execution path, so neither could have halted anything. Nothing summed GPU hours across cells.",
       "now": "run.per_identity_gate reads an append-only ledger (gpu_hour_ledger.json) and is checked BEFORE every core cell against that cell's projected cost, then re-checked AFTER the cell against its MEASURED hours, which are charged to the ledger. run.storage_gate is checked before every cell. Both halt through gate_halt.",
-      "verified": "the executable gate reproduces the published 37.744 h to within rounding, and it RESERVES the cells that have not run yet -- charging each the greater of its projected and its actual cost -- so a rate overrun is detected on the first cell that shows it rather than after most of the arm is burned."
+      "verified": "the executable gate reproduces the published 34.517 h to within rounding, and it RESERVES the cells that have not run yet -- charging each the greater of its projected and its actual cost -- so a rate overrun is detected on the first cell that shows it rather than after most of the arm is burned."
     },
     "open_risks": [
       {
@@ -152,7 +152,7 @@
       },
       {
         "risk": "a forced retry is unaffordable and not improbable",
-        "detail": "G14 fired as a halting gate on one of the three completed search runs. One forced B3/250k retry costs 4.249 h against -2.744 h of headroom.",
+        "detail": "G14 fired as a halting gate on one of the three completed search runs. One forced B3/250k retry costs 4.249 h against 0.483 h of headroom.",
         "status": "OPEN: the recorded retry allowance is NONE, and no contingency exists",
         "carries_hours": 4.249,
         "can_exhaust_the_margin": true
@@ -178,10 +178,10 @@
     },
     "dated_utc": "2026-08-07",
     "old_estimate_hours": 32.686,
-    "current_estimate_hours": 37.744,
-    "headroom_hours": -2.744,
+    "current_estimate_hours": 34.517,
+    "headroom_hours": 0.483,
     "ceiling_hours": 35.0,
-    "net_change_hours": 5.058,
+    "net_change_hours": 1.831,
     "complete_programme_components": [
       {
         "component": "A1 measured baseline: protocol 13.2b's A1 core + extraction only",
@@ -205,7 +205,7 @@
       },
       {
         "component": "B3 share of final readouts over the RAW denominator + 3 interventions",
-        "hours": 5.0105
+        "hours": 1.114
       },
       {
         "component": "section-19 serial efficiency pass (upper bound)",
@@ -213,10 +213,10 @@
       },
       {
         "component": "already-spent search + diagnostics (incl. superseded probes 1/2)",
-        "hours": 7.061
+        "hours": 7.731
       }
     ],
-    "component_sum_hours": 37.744,
+    "component_sum_hours": 34.517,
     "matches_generator": true,
     "retry_allowance": "NONE. The plan tolerates zero B3 retries; any retry or any additional B3-loading evaluation triggers a stop-and-ask BEFORE execution",
     "omissions_found_and_corrected": {
@@ -251,11 +251,14 @@
         "the section-19 efficiency pass is charged to the pretrained identity only"
       ]
     },
-    "summary_of_change": "the pretrained identity projects to 37.744 h against a 35.0 h ceiling (-2.744 h headroom). That is a rise of 5.058 h from the original 32.686 h. 5 separate omissions were found and corrected across seven review rounds, every one of them raising the total; the measurement phase then raised it again. The one reduction in the whole history was removing the selection-sensitivity study, whose object the fixed-endpoint rule eliminated, and it is disclosed and costed separately.",
-    "ceiling_breached": true,
-    "verdict": "DOES NOT FIT. The complete MEASURED programme projects to 37.744 h against the hard 35.0 h ceiling, exceeding it by 2.744 h. Execution STOPS and returns to the user. The ceiling has NOT been raised and nothing has been descoped: both are the user's decision, not this record's. The overage is driven by the final evaluation, which is now measured rather than assumed -- four matched conditions over the 10,004-row raw denominator, at a measured 0.0603 s per row, costs about 4.02 h per pretrained cell-set against the 2.018 h previously budgeted. The measured 250k training rate came in BELOW its assumption and reduced the cell cost; it was the evaluation, not the training, that was underestimated.",
+    "summary_of_change": "the pretrained identity projects to 34.517 h against a 35.0 h ceiling (0.483 h headroom). That is a rise of 1.831 h from the original 32.686 h. 5 separate omissions were found and corrected across seven review rounds, every one of them raising the total; the measurement phase then raised it again. The one reduction in the whole history was removing the selection-sensitivity study, whose object the fixed-endpoint rule eliminated, and it is disclosed and costed separately.",
+    "ceiling_breached": false,
+    "headroom_floor_hours": 1.0,
+    "headroom_below_floor": true,
+    "execution_may_start": false,
+    "verdict": "UNDER THE CEILING BUT NOT CLEARED TO RUN. The complete MEASURED programme projects to 34.517 h against the hard 35.0 h ceiling, leaving 0.483 h. That is below the 1.0 GPU-hour headroom floor the user set, so execution STOPS and returns to the user rather than starting training. This is NOT a pass: a projection that clears a hard ceiling by under half an hour, on a programme whose estimate has moved repeatedly, is not a margin worth committing six cells to. Both optimisations were proven EXACT and are adopted; the ceiling was not raised and no scientific condition, denominator or metric was removed.",
     "decision_required_from_user": {
-      "why": "the measured projection exceeds the hard ceiling, and the instruction is explicit that execution stops rather than auto-descoping or raising the ceiling",
+      "why": "the measured projection is under the ceiling but leaves only 0.483 h, below the 1.0 h floor the user set, and the instruction is explicit that execution stops rather than auto-descoping or raising the ceiling",
       "not_taken_unilaterally": [
         "raising the 35-hour ceiling",
         "reducing the number of matched conditions",

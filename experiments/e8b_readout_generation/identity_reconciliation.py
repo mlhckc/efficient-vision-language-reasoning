@@ -242,8 +242,31 @@ def derive(existing: dict, projection: dict) -> dict:
         f"selection-sensitivity study, whose object the fixed-endpoint "
         f"rule eliminated, and it is disclosed and costed separately.")
     breaches = gate["projected_hours"] >= gate["ceiling_hours"]
+    # The user's phase rule of 2026-08-07: a projection under the
+    # ceiling is NOT a pass if the margin is negligible. Under one
+    # GPU-hour of headroom returns to the user rather than starting
+    # training.
+    HEADROOM_FLOOR_HOURS = 1.0
+    thin = (not breaches
+            and gate["headroom_hours"] < HEADROOM_FLOOR_HOURS)
     body["ceiling_breached"] = bool(breaches)
+    body["headroom_floor_hours"] = HEADROOM_FLOOR_HOURS
+    body["headroom_below_floor"] = bool(thin)
+    body["execution_may_start"] = bool(not breaches and not thin)
     body["verdict"] = (
+        f"UNDER THE CEILING BUT NOT CLEARED TO RUN. The complete "
+        f"MEASURED programme projects to {gate['projected_hours']} h "
+        f"against the hard {gate['ceiling_hours']} h ceiling, leaving "
+        f"{gate['headroom_hours']} h. That is below the "
+        f"{HEADROOM_FLOOR_HOURS} GPU-hour headroom floor the user set, "
+        f"so execution STOPS and returns to the user rather than "
+        f"starting training. This is NOT a pass: a projection that "
+        f"clears a hard ceiling by under half an hour, on a programme "
+        f"whose estimate has moved repeatedly, is not a margin worth "
+        f"committing six cells to. Both optimisations were proven "
+        f"EXACT and are adopted; the ceiling was not raised and no "
+        f"scientific condition, denominator or metric was removed."
+        if thin else
         f"DOES NOT FIT. The complete MEASURED programme projects to "
         f"{gate['projected_hours']} h against the hard "
         f"{gate['ceiling_hours']} h ceiling, exceeding it by "
@@ -275,9 +298,13 @@ def derive(existing: dict, projection: dict) -> dict:
         f"measurement first, is the user's decision and not one this "
         f"record can make.")
     body["decision_required_from_user"] = {
-        "why": "the measured projection exceeds the hard ceiling, and "
-               "the instruction is explicit that execution stops rather "
-               "than auto-descoping or raising the ceiling",
+        "why": ("the measured projection exceeds the hard ceiling"
+                if breaches else
+                f"the measured projection is under the ceiling but "
+                f"leaves only {gate['headroom_hours']} h, below the "
+                f"{HEADROOM_FLOOR_HOURS} h floor the user set") +
+               ", and the instruction is explicit that execution stops "
+               "rather than auto-descoping or raising the ceiling",
         "not_taken_unilaterally": [
             "raising the 35-hour ceiling",
             "reducing the number of matched conditions",
@@ -285,7 +312,7 @@ def derive(existing: dict, projection: dict) -> dict:
             "instead of the raw one",
             "dropping any core cell or arm"],
         "note": "options and their measured costs are reported to the "
-                "user; none is applied here"} if breaches else None
+                "user; none is applied here"} if (breaches or thin) else None
     # M7: the last step of the chain, itemised rather than left to the
     # verdict's free text.
     # Idempotent: the entry is replaced in place if it is already

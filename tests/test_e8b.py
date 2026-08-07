@@ -2701,6 +2701,22 @@ def test_audit_known_negatives() -> None:
               recon["decision_required_from_user"] is not None
               and len(recon["decision_required_from_user"][
                   "not_taken_unilaterally"]) >= 4)
+    elif recon.get("headroom_below_floor"):
+        # Under the ceiling but inside the headroom floor: the user's
+        # rule is that this returns for a decision rather than starting.
+        check("a thin margin is NOT reported as a pass",
+              recon["verdict"].startswith(
+                  "UNDER THE CEILING BUT NOT CLEARED TO RUN")
+              and recon["execution_may_start"] is False)
+        check("the verdict names the floor it fell under",
+              f"{recon['headroom_floor_hours']} GPU-hour headroom floor"
+              in recon["verdict"])
+        check("the verdict says the ceiling was not raised and nothing "
+              "scientific was removed",
+              "ceiling was not raised" in recon["verdict"]
+              and "no scientific condition" in recon["verdict"])
+        check("the decision is escalated to the user",
+              recon["decision_required_from_user"] is not None)
     else:
         check("the verdict states the margin plainly and records the "
               "zero retry allowance",
@@ -2722,7 +2738,8 @@ def test_audit_known_negatives() -> None:
     # The breach verdict does not restate the risk counts: the margin
     # is already gone, so "any one of these could exhaust it" no longer
     # describes the situation. The counts remain derived in the summary.
-    if not recon.get("ceiling_breached"):
+    if not recon.get("ceiling_breached") \
+            and not recon.get("headroom_below_floor"):
         check("the verdict's risk counts match the derived summary",
               f"{risks['total']} open risks" in recon["verdict"]
               and f"{risks['can_exhaust_the_remaining_margin']} could "
@@ -3516,9 +3533,11 @@ def test_readiness_phase() -> None:
     )["e8b_core_resource_projection"]
     spent = projection["spent_compute_hours_itemised"]
     check("this readiness phase charges its own compute as spent",
-          "readout_cost_measurement_20260807" in spent
-          and "throughput_calibration_pretrained_share" in spent
-          and "evaluation_pipeline_validation_UPPER_BOUND" in spent)
+          "readiness_and_optimisation_phase_20260807_CUMULATIVE" in spent)
+    check("the phase is charged CUMULATIVELY, not just its last runs, "
+          "so the hours spent finding defects are not written off",
+          spent["readiness_and_optimisation_phase_20260807_CUMULATIVE"]
+          > 0.5)
     gate = projection["gates"]["pretrained_identity_35h"]
     check("the ceiling is UNCHANGED at exactly 35 hours",
           gate["ceiling_hours"] == 35.0)
@@ -3552,6 +3571,84 @@ def test_readiness_phase() -> None:
     check("core training authorisation is UNCHANGED",
           e8b_run.TRAINING_AUTHORIZED
           == "core-matrix-frozen-pending-approval")
+
+    # --- the two lossless optimisations ---
+    equivalence = json.loads(
+        (results / "optimisation_equivalence_20260807.json").read_text()
+    )["e8b_optimisation_equivalence"]
+    check("the equivalence proof is NON_SCIENTIFIC",
+          equivalence["NON_SCIENTIFIC"] is True)
+    batching = equivalence["batched_equivalence"]
+    check("batching is proven on EVERY observable, not on aggregate "
+          "accuracy",
+          {"r2_answer", "r3_tokens", "r3_text", "r3_terminated",
+           "r3_outcome", "r2_raw_correct", "r2_normalised_correct",
+           "r3_raw_correct", "r3_normalised_correct"}
+          <= set(batching["fields_compared"]))
+    check("batching agrees EXACTLY on real rows",
+          batching["exactly_identical"] is True
+          and all(count == 0
+                  for count in batching["mismatch_counts"].values()))
+    adversarial = equivalence["batched_equivalence_adversarial"]
+    check("the outcome categories real data never produced are "
+          "exercised deliberately",
+          {"overlong", "empty"}
+          <= set(adversarial["outcome_categories_exercised"])
+          and adversarial["rows_at_the_token_cap"] > 0
+          and adversarial["rows_with_empty_r3"] > 0)
+    check("batching is invariant to batch size, so no row depends on "
+          "what shares its batch",
+          adversarial["exactly_identical_at_every_batch_size"] is True
+          and len(adversarial["batch_size_invariance"]) >= 3)
+    for condition in fe.CONDITIONS:
+        proof = equivalence["denominator_equivalence"][condition]
+        check(f"the denominator identity is proven for {condition}",
+              proof["exact_for_every_metric"] is True)
+        for metric, detail in proof["per_metric"].items():
+            check(f"{condition}/{metric} agrees on COUNTS and accuracy",
+                  detail["counts_equal"] and detail["accuracies_equal"])
+    for condition, drops in equivalence[
+            "intervention_drop_equivalence"].items():
+        check(f"the {condition} accuracy DROP reconstructs exactly",
+              drops["exact_for_every_metric"] is True)
+    check("R3 is excluded from the denominator restriction BY "
+          "CONSTRUCTION, not by measurement",
+          equivalence["adoption"]["r3_denominator_restriction"] is False
+          and "by construction"
+          in equivalence["adoption"]["why_r3_excluded"])
+    check("the reported denominator is unchanged at 10,004",
+          "10,004" in equivalence["adoption"]["reporting_unchanged"])
+    check("the proof is bound to the vocabulary and data hashes",
+          {"answer_vocab_v2.json", "dev_raw.csv", "dev.csv"}
+          <= set(equivalence["binding_hashes"]))
+    check("the identity is NOT generalised beyond this data",
+          "not a dataset-independent theorem"
+          in equivalence["binding_hashes"]["note"])
+
+    # The R3 cache contract, enforced where the readout lives.
+    rsrc = (E8B_DIR / "readouts.py").read_text()
+    check("the fresh-state contract is enforced in readouts.py, not "
+          "only at one call site",
+          "def assert_fresh_prefix_state" in rsrc
+          and "CONSUMED PREFIX STATE" in rsrc)
+    check("r3_generate_ids checks the state it is handed",
+          "assert_fresh_prefix_state(prefix, prefix_state" in rsrc)
+
+    # The measured optimisation, and the headroom floor.
+    cost = json.loads(
+        (results / "readout_cost_measurement_20260807.json").read_text()
+    )["e8b_readout_cost_measurement"]
+    check("scalar and batched are timed separately",
+          {"R2", "R2_batched", "R3", "R3_batched"}
+          <= set(cost["warm_per_row_seconds"]))
+    check("batching is measurably faster, not just correct",
+          cost["batched_vs_scalar_speedup"]["R2"] > 2
+          and cost["batched_vs_scalar_speedup"]["R3"] > 2)
+    adopted = cost["adopted_execution_shape_measured"]
+    check("the adopted shape is MEASURED end to end, and R3 keeps the "
+          "full denominator",
+          adopted["r1_r2_on_in_vocabulary"]["rows_measured"] > 0
+          and adopted["reported_denominator"] == 10004)
 
     # --- the 18-cell order is deliverable ---
     order = e8b_run.pair_preserving_order()
