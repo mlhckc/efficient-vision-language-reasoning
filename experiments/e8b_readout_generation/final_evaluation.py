@@ -390,6 +390,10 @@ def score_closed(predicted, labels, index_to_answer) -> dict:
     return {"n": int(len(predicted)),
             "raw_exact": round(float(raw_hits.mean()), 6),
             "normalised_exact": round(float(normalised_hits.mean()), 6),
+            # The COUNTS, so a raw-denominator metric can be computed
+            # from them rather than from a rounded accuracy.
+            "raw_hit_count": int(raw_hits.sum()),
+            "normalised_hit_count": int(normalised_hits.sum()),
             "raw_hits": raw_hits, "normalised_hits": normalised_hits}
 
 
@@ -445,8 +449,24 @@ def raw_denominator_closed(in_vocab_score: dict, coverage: float,
             f"normalise onto a vocabulary answer, so the coverage "
             f"identity does NOT hold for the normalised metric and it "
             f"must be scored row by row instead")
+    # Computed from the HIT COUNT, never from a rounded accuracy: the
+    # in-vocabulary accuracy is rounded to six decimals before it is
+    # returned, and multiplying that rounded value by coverage disagrees
+    # with hits/n_raw at the sixth decimal for 1,489 of the 7,715
+    # possible hit counts. The reported number must be the one that was
+    # proven, not one derived from it.
+    hits_raw = in_vocab_score.get("raw_hit_count")
+    hits_normalised = in_vocab_score.get("normalised_hit_count")
+    if hits_raw is None or hits_normalised is None:
+        raise AssertionError(
+            "RAW DENOMINATOR REFUSED: the in-vocabulary score must "
+            "carry raw_hit_count and normalised_hit_count. Deriving the "
+            "raw-denominator accuracy from a rounded in-vocabulary "
+            "accuracy does not reproduce the proven value.")
     return {
         "n": n_raw,
+        "raw_hits": int(hits_raw),
+        "normalised_hits": int(hits_normalised),
         "basis": "EXACT for the RAW metric, by construction: a closed "
                  "readout can never emit an out-of-vocabulary string, "
                  "so every out-of-vocabulary row is a failure and raw "
@@ -457,9 +477,8 @@ def raw_denominator_closed(in_vocab_score: dict, coverage: float,
                  "assumed; see normalisation_check.",
         "normalisation_check": normalisation_check,
         "coverage": round(coverage, 6),
-        "raw_exact": round(in_vocab_score["raw_exact"] * coverage, 6),
-        "normalised_exact": round(
-            in_vocab_score["normalised_exact"] * coverage, 6)}
+        "raw_exact": round(int(hits_raw) / n_raw, 6),
+        "normalised_exact": round(int(hits_normalised) / n_raw, 6)}
 
 
 # --- Aggregation for the paired B3 - B2 contrast ------------------------------
@@ -517,20 +536,24 @@ def paired_contrast(hits_a, hits_b, image_ids, label_a="B3",
                              "overstate significance"}}
 
 
-def rows_to_execute(frame, readout: str, adopted: dict):
-    """Which rows a readout must actually run on.
-
-    R1 and R2 are closed over the vocabulary, so their full-denominator
-    metric is reconstructible from the in-vocabulary rows -- PROVEN
-    exactly, per condition, in optimisation_equivalence_20260807.json.
-    R3 is never restricted: free generation can emit a correct
-    out-of-vocabulary answer, so those rows carry real information.
-
-    The REPORTED denominator is unchanged in every case. This decides
-    what is computed, not what is reported."""
-    if readout == "R3" or not adopted.get(readout, False):
-        return frame
-    return frame[frame["in_vocabulary"]].reset_index(drop=True)
+# The denominator restriction was REJECTED on 2026-08-07 and the helper
+# that would have applied it is removed rather than left dead.
+#
+# WHY. The restriction looked exact, but the proof subsetted a FULL
+# evaluation instead of running a restricted one, and restriction is not
+# inert: build_intervention_context derives the deranged-image map and
+# the neutral means FROM THE ROW SET IT IS GIVEN. Dropping the 2,290
+# out-of-vocabulary rows takes the image set from 777 to 768, and 767 of
+# the 768 shared images then map to a DIFFERENT partner. So a genuine
+# restricted evaluation would change the shuffled-image condition
+# outright, and shift the two fixed-input conditions through their
+# neutral means. Equivalence was never established for the
+# interventions; it was assumed by construction of the proof.
+#
+# The saving was 0.036 GPU-hours -- about one per cent of the headroom.
+# That is not worth taking scientific risk for, so R1 and R2 execute on
+# the full 10,004-row denominator exactly as R3 does. The whole of the
+# adopted saving comes from batching, which IS proven exact.
 
 
 def main() -> int:

@@ -88,14 +88,18 @@ B1_STRESS = 100           # section 7.3 patience cap
 # costed with the per-row R1 cross-check scorer (1.42 s/row) instead of
 # the canonical batched one (0.093 s/row at batch 16, less at 128).
 EVAL_PASS_S_PER_ROW = 0.075127     # SUPERSEDED: unbatched, unrestricted
-# The ADOPTED shape, MEASURED end to end on 2026-08-07 after both
-# optimisations were proven exact: R1 and R2 execute on the 7,714
-# in-vocabulary rows (their full-denominator metric reconstructs
-# exactly), R3 executes on all 10,004 because free generation can emit a
-# correct out-of-vocabulary answer. Two sub-passes, so the prefix is
-# built twice and that cost is inside this figure. The REPORTED
-# denominator remains 10,004 for every readout.
-EVAL_CONDITION_HOURS = 0.04641
+# The ADOPTED shape, MEASURED end to end at batch 128 on 2026-08-07:
+# every readout runs on the FULL 10,004-row denominator, with R2 and R3
+# batched. Batching is the only optimisation adopted, and it is proven
+# bit-identical to the scalar reference.
+#
+# The denominator restriction was REJECTED. It would have saved 0.036 h
+# -- about one per cent of the headroom -- and its equivalence was never
+# actually established for the intervention conditions: restricting the
+# rows changes the deranged-image map for 767 of 768 shared images and
+# shifts the neutral means, and the proof subsetted a full evaluation
+# rather than running a restricted one, so it could not see that.
+EVAL_CONDITION_HOURS = 0.0479
 # The per-part warm figures, retained for reporting. Each includes the
 # prefix-cache forward that readout must build for itself: r2_cached
 # CONSUMES the state it is given, so R2 and R3 cannot share one.

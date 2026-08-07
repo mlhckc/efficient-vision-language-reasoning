@@ -218,6 +218,11 @@ def main(rows: int = 64) -> int:
     gold_strings = list(subset["answer"])
     labels = np.array(subset["label"])
     in_mask = np.array(subset["in_vocabulary"])
+    # The precondition for the normalised coverage identity, CHECKED on
+    # this data before any raw-denominator number is derived from it.
+    normalisation_check = fe.assert_normalisation_disjoint(
+        [g for g, keep in zip(gold_strings, in_mask) if not keep],
+        index_to_answer)
     scored = {}
     for condition, result in conditions.items():
         r1 = fe.score_closed(np.array(result["r1_pred"])[in_mask],
@@ -238,9 +243,11 @@ def main(rows: int = 64) -> int:
             "R2_in_vocabulary": {k: v for k, v in r2.items()
                                  if not k.endswith("hits")},
             "R1_raw_denominator": fe.raw_denominator_closed(
-                r1, float(in_mask.mean()), int(len(subset))),
+                r1, float(in_mask.mean()), int(len(subset)),
+                normalisation_check=normalisation_check),
             "R2_raw_denominator": fe.raw_denominator_closed(
-                r2, float(in_mask.mean()), int(len(subset))),
+                r2, float(in_mask.mean()), int(len(subset)),
+                normalisation_check=normalisation_check),
             "R3_in_vocabulary": {k: v for k, v in r3_in.items()
                                  if not k.endswith("hits")},
             "R3_raw_denominator": {k: v for k, v in r3_raw.items()
@@ -296,6 +303,7 @@ def main(rows: int = 64) -> int:
         "out_of_vocabulary_rows": int((~in_mask).sum()),
         "conditions_executed": list(fe.CONDITIONS),
         "readouts_executed": list(fe.READOUTS),
+        "normalisation_check": normalisation_check,
         "scored": scored,
         "paired_contrast_demo": contrast,
         "derangement": derangement,

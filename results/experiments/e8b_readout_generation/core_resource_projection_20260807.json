@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-07T23:07:17",
-    "git_commit": "ec8fb0c",
+    "timestamp": "2026-08-07T23:21:22",
+    "git_commit": "964302d",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -61,7 +61,7 @@
       "B1_stress_100_epoch": 9.807,
       "B2": 17.899,
       "B3": 17.899,
-      "final_readouts_and_interventions_lm": 2.228,
+      "final_readouts_and_interventions_lm": 2.299,
       "final_b1_evaluations_upper_bound": 0.971
     },
     "spent_compute_hours_itemised": {
@@ -84,21 +84,21 @@
         "fires": false
       },
       "pretrained_identity_35h": {
-        "projected_hours": 34.517,
+        "projected_hours": 34.553,
         "ceiling_hours": 35.0,
-        "headroom_hours": 0.483,
+        "headroom_hours": 0.447,
         "includes": "the COMPLETE planned pretrained-identity programme: A1 baseline, A4, A7c, all six B3 core cells, B3's final R2/R3 readouts and interventions, and every already-spent search, characterisation, validation and probe hour that loaded the pretrained checkpoint",
         "retry_allowance": "NONE. The plan tolerates zero B3 retries; any retry or any additional B3-loading evaluation triggers a stop-and-ask BEFORE execution",
         "fires": false
       },
       "random_identity_35h": {
-        "projected_hours": 21.275,
+        "projected_hours": 21.311,
         "ceiling_hours": 35.0,
         "fires": false
       },
       "e8b_remaining_vs_180h_core": {
-        "e8b_remaining_hours": 43.109,
-        "e8b_remaining_stress_hours": 49.805,
+        "e8b_remaining_hours": 43.181,
+        "e8b_remaining_stress_hours": 49.876,
         "scope_note": "E8B cells and E8B evaluation only. The programme-wide 180 h ceiling also covers the remaining E8A arms. CORRECTED 2026-08-07: an earlier note cited 'about 17.6-21.6 h expected per section 13.2'. That range appears nowhere in the protocol. Section 13.2's E8A rows total 20.413-21.968 h for ALL of E8A, of which 5.789 h is already spent, leaving about 14.6-16.2 h remaining. The combined expectation is still far below the ceiling.",
         "fires": false
       },
@@ -121,8 +121,8 @@
       "train_250k_MEASURED": {
         "carries_hours": 12.747,
         "basis": "MEASURED on 2026-08-07 on the real train_250k loader and the real strict-deterministic BF16 path, then CORRECTED by the same-scale bias: a steady-state step window under-predicts a real epoch by 3.8 per cent, measured against twelve real full-epoch times at 40k. After correction the rate is ABOVE the step-scaled assumption it replaced. No full 250k E8B epoch has been run end to end; the residual is that the bias correction is itself measured at the other scale.",
-        "break_even_per_cell_percent": 3.79,
-        "break_even_on_training_rate_percent": 4.35,
+        "break_even_per_cell_percent": 3.51,
+        "break_even_on_training_rate_percent": 4.03,
         "note": "the per-cell break-even is smaller than the training-rate one because each cell also carries a fixed G14 and gate overhead that does not scale with the training rate"
       },
       "evaluation_pass_MEASURED": {

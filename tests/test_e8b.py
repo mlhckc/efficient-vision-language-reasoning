@@ -3600,24 +3600,37 @@ def test_readiness_phase() -> None:
           "what shares its batch",
           adversarial["exactly_identical_at_every_batch_size"] is True
           and len(adversarial["batch_size_invariance"]) >= 3)
-    for condition in fe.CONDITIONS:
-        proof = equivalence["denominator_equivalence"][condition]
-        check(f"the denominator identity is proven for {condition}",
-              proof["exact_for_every_metric"] is True)
-        for metric, detail in proof["per_metric"].items():
-            check(f"{condition}/{metric} agrees on COUNTS and accuracy",
-                  detail["counts_equal"] and detail["accuracies_equal"])
-    for condition, drops in equivalence[
-            "intervention_drop_equivalence"].items():
-        check(f"the {condition} accuracy DROP reconstructs exactly",
-              drops["exact_for_every_metric"] is True)
-    check("R3 is excluded from the denominator restriction BY "
-          "CONSTRUCTION, not by measurement",
+    # The denominator restriction was REJECTED. The arithmetic identity
+    # holds on this data, but restricting the rows changes the
+    # intervention CONTEXT -- 767 of 768 shared images get a different
+    # deranged partner -- and the proof subsetted a full evaluation, so
+    # it never tested that. It is not adopted for any condition.
+    rejection = equivalence["adoption"][
+        "denominator_restriction_REJECTED"]
+    check("the denominator restriction is adopted for NO condition",
+          not any(equivalence["adoption"][
+              "denominator_restriction_per_condition"].values()))
+    check("the rejection states the mechanism, not just the verdict",
+          "767 of the 768 shared images" in rejection["why"])
+    check("the forgone saving is quantified, so the trade is visible",
+          rejection["measured_saving_forgone_hours"] < 0.1)
+    check("what remains TRUE is separated from what was not "
+          "established",
+          "ARITHMETIC identity itself holds"
+          in rejection["what_remains_true"])
+    check("the drop-equality caveat says it is arithmetically forced, "
+          "not independent evidence",
+          "ARITHMETICALLY FORCED"
+          in equivalence["intervention_drop_equivalence_caveat"])
+    check("R3 is excluded from the restriction BY CONSTRUCTION",
           equivalence["adoption"]["r3_denominator_restriction"] is False
           and "by construction"
           in equivalence["adoption"]["why_r3_excluded"])
     check("the reported denominator is unchanged at 10,004",
           "10,004" in equivalence["adoption"]["reporting_unchanged"])
+    check("only batching is adopted",
+          equivalence["adoption"]["batched_r2_r3"] is True
+          and "REJECTED" in equivalence["adoption"]["summary"])
     check("the proof is bound to the vocabulary and data hashes",
           {"answer_vocab_v2.json", "dev_raw.csv", "dev.csv"}
           <= set(equivalence["binding_hashes"]))
@@ -3644,11 +3657,25 @@ def test_readiness_phase() -> None:
     check("batching is measurably faster, not just correct",
           cost["batched_vs_scalar_speedup"]["R2"] > 2
           and cost["batched_vs_scalar_speedup"]["R3"] > 2)
-    adopted = cost["adopted_execution_shape_measured"]
-    check("the adopted shape is MEASURED end to end, and R3 keeps the "
-          "full denominator",
-          adopted["r1_r2_on_in_vocabulary"]["rows_measured"] > 0
-          and adopted["reported_denominator"] == 10004)
+    projection_source = (
+        E8B_DIR / "core_resource_projection.py").read_text()
+    check("the budget uses the FULL-denominator batched pass, not the "
+          "rejected restricted shape",
+          "denominator restriction was REJECTED" in projection_source
+          and "EVAL_CONDITION_HOURS" in projection_source)
+    # The guard that makes the normalised coverage identity safe must
+    # RUN, not merely exist.
+    validation = json.loads(
+        (results / "evaluation_pipeline_validation_20260807.json"
+         ).read_text())["e8b_evaluation_pipeline_validation"]
+    check("the normalisation precondition is CHECKED on the live path",
+          "normalisation_check" in validation
+          and validation["normalisation_check"][
+              "identity_holds_for_normalised_match"] is True)
+    check("the raw-denominator metric is computed from HIT COUNTS, not "
+          "from a rounded accuracy",
+          "raw_hit_count" in esrc
+          and "never from a rounded accuracy" in esrc)
 
     # --- the 18-cell order is deliverable ---
     order = e8b_run.pair_preserving_order()

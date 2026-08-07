@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-07T22:42:23",
-    "git_commit": "ec8fb0c",
+    "timestamp": "2026-08-07T23:21:21",
+    "git_commit": "964302d",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -475,14 +475,23 @@
     "adoption": {
       "batched_r2_r3": true,
       "denominator_restriction_per_condition": {
-        "normal": true,
-        "fixed_image": true,
-        "fixed_question": true,
-        "shuffled_image": true
+        "normal": false,
+        "fixed_image": false,
+        "fixed_question": false,
+        "shuffled_image": false
       },
       "r3_denominator_restriction": false,
       "why_r3_excluded": "R3 generates freely and CAN emit a correct out-of-vocabulary answer, so an out-of-vocabulary row is not automatically wrong and the reconstruction does not hold. Excluded by construction, not by measurement.",
-      "reporting_unchanged": "the reported denominator remains the full 10,004 rows for every readout; only the rows actually executed for R1 and R2 change"
+      "reporting_unchanged": "the reported denominator remains the full 10,004 rows for every readout; only the rows actually executed for R1 and R2 change",
+      "denominator_restriction_REJECTED": {
+        "rejected_on": "2026-08-07",
+        "why": "the proof SUBSETTED a full evaluation instead of running a restricted one, and restriction is not inert. build_intervention_context derives the deranged-image map and the neutral means from the row set it is given: dropping the 2,290 out-of-vocabulary rows takes the image set from 777 to 768, and 767 of the 768 shared images then map to a DIFFERENT partner. A genuine restricted evaluation would therefore change the shuffled-image condition outright and shift both fixed-input conditions. Exact equivalence was assumed by the construction of the proof, not established.",
+        "measured_saving_forgone_hours": 0.036,
+        "why_not_worth_re_proving": "0.036 h is about one per cent of the headroom. The rule is to adopt only where equivalence is exact, and buying one per cent of margin with unproven scientific equivalence is the wrong trade.",
+        "what_remains_true": "the ARITHMETIC identity itself holds on this data -- zero of 563 distinct out-of-vocabulary gold strings collide with a vocabulary normal form -- and that check is retained and now RUNS on the live path. What was not established is that a restricted EVALUATION produces the same inputs.",
+        "raised_by": "focused review A of 2026-08-07"
+      },
+      "summary": "ONE optimisation adopted: batched R2/R3, proven bit-identical. The denominator restriction is REJECTED."
     },
     "memory": {
       "peak_reserved_mib": 1894.0,
@@ -503,6 +512,7 @@
       "pinned_revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2"
     },
     "optimizer_steps": 0,
-    "clean_test_accessed": false
+    "clean_test_accessed": false,
+    "intervention_drop_equivalence_caveat": "the drop equality is ARITHMETICALLY FORCED once the per-condition accuracies are equal, so it adds no independent evidence. Recorded here rather than presented as an independent confirmation, which an earlier version of this record implied."
   }
 }
