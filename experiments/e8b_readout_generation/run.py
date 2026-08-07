@@ -862,6 +862,62 @@ def enable_strict_determinism() -> dict:
                     "rather than warning (OI1)"}
 
 
+
+def assert_strict_determinism() -> dict:
+    """Fail-closed verification that strict determinism is ACTUALLY in
+    force at the moment of use.
+
+    `utils.set_seed` calls `torch.use_deterministic_algorithms(True,
+    warn_only=True)`, so any call to it AFTER `enable_strict_determinism`
+    silently downgrades enforcement back to warn-only. That is exactly
+    the silent fallback the amendment forbids, and it is invisible unless
+    the flag is re-read at the point of use. This helper re-reads it."""
+    warn_only = torch.is_deterministic_algorithms_warn_only_enabled()
+    state = {
+        "deterministic_algorithms":
+            bool(torch.are_deterministic_algorithms_enabled()),
+        "warn_only": bool(warn_only),
+        "flash_sdp": bool(torch.backends.cuda.flash_sdp_enabled()),
+        "mem_efficient_sdp":
+            bool(torch.backends.cuda.mem_efficient_sdp_enabled()),
+        "math_sdp": bool(torch.backends.cuda.math_sdp_enabled()),
+        "cudnn_deterministic": bool(torch.backends.cudnn.deterministic),
+        "cublas_workspace_config":
+            os.environ.get("CUBLAS_WORKSPACE_CONFIG")}
+    problems = []
+    if not state["deterministic_algorithms"]:
+        problems.append("deterministic algorithms are OFF")
+    if warn_only:
+        problems.append(
+            "warn_only is True: non-deterministic kernels would WARN and "
+            "still execute. This is the silent fallback the amendment "
+            "forbids; call utils.set_seed BEFORE enable_strict_determinism")
+    if state["flash_sdp"] or state["mem_efficient_sdp"]:
+        problems.append("a non-deterministic attention backend is enabled")
+    if problems:
+        raise AssertionError(
+            "STRICT DETERMINISM NOT IN FORCE: " + "; ".join(problems)
+            + f" | state={json.dumps(state)}")
+    return state
+
+
+
+def reseed_strict(seed: int) -> dict:
+    """Seed, then RE-IMPOSE strict determinism, then verify.
+
+    `utils.set_seed` is shared with every other experiment in this
+    project and calls `torch.use_deterministic_algorithms(True,
+    warn_only=True)`, so ANY re-seed silently downgrades enforcement.
+    G13 requires `build_trunk_and_projection` to re-seed immediately
+    before constructing the trunk, so a re-seed is unavoidable inside
+    arm construction. Every such point must therefore be followed by a
+    re-imposition, and `assert_strict_determinism` at the point of use
+    is the backstop that catches any that is missed."""
+    utils.set_seed(seed)
+    enable_strict_determinism()
+    return assert_strict_determinism()
+
+
 def pin_fp32_precision() -> dict:
     """Pin and record the FP32 matmul path (amendment OI4). Canonical
     FP32 must be true IEEE fp32: TF32 carries a 10-bit mantissa and

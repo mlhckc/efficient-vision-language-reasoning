@@ -80,6 +80,15 @@
         "item": "the BF16 64-row G14 and its 1e-4 informational tolerance",
         "status": "SUPERSEDED by G14-FP32",
         "replaced_by": "g14_fp32_gate with the frozen P + L + O construction"
+      },
+      {
+        "item": "determinism_probe_run1.json, run2.json and determinism_probe_comparison.json",
+        "status": "SUPERSEDED - the strict-determinism label was false",
+        "why_wrong": "TWO silent downgrade paths reset warn_only to True after enable_strict_determinism. First, the probe called utils.set_seed AFTER imposing strict determinism. Second, and structurally, build_arm re-seeds internally because G13 requires a re-seed immediately before trunk construction, and utils.set_seed is shared with every experiment and unconditionally sets warn_only=True. Runs 1 and 2 therefore executed under warn_only=True, which is the silent fallback the amendment forbids.",
+        "what_still_holds": "their bit-for-bit agreement is real, but it evidences only that the deterministic math attention backend is reproducible under warn_only=True, a weaker claim than was made",
+        "replaced_by": "determinism_probe_run3.json, run4.json and determinism_probe_comparison_strict.json, which record verified_at_use with warn_only=False and are bit-for-bit identical",
+        "fix": "reseed_strict and assert_strict_determinism; enforcement is re-imposed after every seeding point and the flag is re-read at the point of use, so a downgrade raises instead of passing",
+        "carried_forward": "any future core trainer must repeat this discipline, because it too must call build_arm"
       }
     ],
     "clean_test_accessed": false

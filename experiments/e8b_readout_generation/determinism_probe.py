@@ -79,9 +79,12 @@ def optimizer_digest(optimizer) -> str:
 
 def probe(run_index: int) -> int:
     started = time.time()
+    # ORDER IS LOAD-BEARING: utils.set_seed re-enables warn_only, so it
+    # must run BEFORE strict determinism is imposed, never after.
+    utils.set_seed(PROBE_SEED)
     determinism = e8b_run.enable_strict_determinism()
     precision = e8b_run.pin_fp32_precision()
-    utils.set_seed(PROBE_SEED)
+    determinism["verified_at_use"] = e8b_run.assert_strict_determinism()
     device = torch.device("cuda")
 
     lm, provenance = e8b_run.load_frozen_causal_lm(True, device=None)
@@ -97,6 +100,9 @@ def probe(run_index: int) -> int:
     model, scale_record = e8b_run.build_arm(PROBE_ARM, recipe["seed"],
                                             recipe["dropout"], lm)
     model = model.to(device)
+    # build_arm re-seeds internally (G13 construction order), which
+    # downgrades warn_only; re-impose before anything else runs.
+    e8b_run.enable_strict_determinism()
 
     stores = tokens_data.TokenStores()
     train_loader, dev_loader = tokens_data.make_token_loaders(
@@ -109,6 +115,7 @@ def probe(run_index: int) -> int:
         optimizer, recipe["max_epochs"] * len(train_loader),
         recipe["warmup_frac"])
 
+    e8b_run.assert_strict_determinism()   # re-read at the point of use
     torch.cuda.reset_peak_memory_stats()
     step_losses, epochs = [], []
     step_count = 0
@@ -185,9 +192,9 @@ def probe(run_index: int) -> int:
 
 
 def compare() -> int:
-    a = json.loads((OUT_DIR / "determinism_probe_run1.json").read_text()
+    a = json.loads((OUT_DIR / "determinism_probe_run3.json").read_text()
                    )["determinism_probe"]
-    b = json.loads((OUT_DIR / "determinism_probe_run2.json").read_text()
+    b = json.loads((OUT_DIR / "determinism_probe_run4.json").read_text()
                    )["determinism_probe"]
     checks = {
         "step_losses": a["step_losses_sha256"] == b["step_losses_sha256"],
@@ -236,7 +243,7 @@ def compare() -> int:
                    ("STRICT DETERMINISM NOT CONFIRMED: see the failing "
                     "checks; do not fall back to warn_only"),
         "clean_test_accessed": False}}
-    out = OUT_DIR / "determinism_probe_comparison.json"
+    out = OUT_DIR / "determinism_probe_comparison_strict.json"
     e8b_run.atomic_write_json(out, verdict)
     print(json.dumps(verdict["determinism_probe_comparison"]["run_level_checks"],
                      indent=2))
@@ -250,7 +257,7 @@ def compare() -> int:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--run", type=int, choices=(1, 2))
+    parser.add_argument("--run", type=int, choices=(1, 2, 3, 4))
     parser.add_argument("--compare", action="store_true")
     args = parser.parse_args()
     if args.compare:

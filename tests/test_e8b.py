@@ -1670,6 +1670,44 @@ def test_core_readiness_closure() -> None:
         check("the probe is marked non-scientific and never promoted",
               body["NON_SCIENTIFIC"] is True)
 
+    # --- OI1 known-negatives: the two silent downgrade paths ---
+    import importlib
+    from src import utils as _utils
+    _utils.set_seed(0)
+    e8b_run.enable_strict_determinism()
+    state = e8b_run.assert_strict_determinism()
+    check("strict determinism verifies with warn_only False",
+          state["warn_only"] is False
+          and state["deterministic_algorithms"] is True
+          and state["flash_sdp"] is False
+          and state["mem_efficient_sdp"] is False)
+    _utils.set_seed(0)   # the downgrade path
+    must_fail("a re-seed AFTER strict determinism is caught, not silently "
+              "accepted", lambda: e8b_run.assert_strict_determinism())
+    restored = e8b_run.reseed_strict(0)
+    check("reseed_strict seeds and re-imposes enforcement in one step",
+          restored["warn_only"] is False)
+    check("the shared set_seed really is the downgrade source",
+          "warn_only=True" in (PROJECT_ROOT / "src" / "utils.py").read_text())
+    check("the probe re-imposes enforcement after arm construction",
+          "build_arm re-seeds internally" in
+          (E8B_DIR / "determinism_probe.py").read_text())
+
+    strict = probe_dir / "determinism_probe_comparison_strict.json"
+    check("the STRICT determinism comparison exists", strict.exists())
+    if strict.exists():
+        body = json.loads(strict.read_text())[
+            "determinism_probe_comparison"]
+        check("the strict probes agree bit-for-bit",
+              body["bitwise_identical"] is True)
+    for n in (3, 4):
+        rec = probe_dir / f"determinism_probe_run{n}.json"
+        if rec.exists():
+            v = json.loads(rec.read_text())["determinism_probe"][
+                "determinism"]["verified_at_use"]
+            check(f"probe run {n} recorded warn_only False at the point "
+                  f"of use", v["warn_only"] is False)
+
     # --- provenance and resource gates ---
     projection = probe_dir / "core_resource_projection_20260807.json"
     check("the core resource projection exists", projection.exists())
