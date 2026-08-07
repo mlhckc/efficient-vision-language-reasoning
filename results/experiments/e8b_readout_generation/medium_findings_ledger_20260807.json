@@ -1,0 +1,308 @@
+{
+  "metadata": {
+    "timestamp": "2026-08-07T15:37:02",
+    "git_commit": "c128e65",
+    "git_dirty": true,
+    "open_clip_version": "3.3.0",
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "h5py_version": "3.16.0",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "deterministic": true,
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "embed_dim": 512,
+    "top_k_answers": 100,
+    "n_train": 40000,
+    "n_val": 8000,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "hidden_dim": 512,
+    "dropout": 0.3,
+    "weight_decay": 0.0001
+  },
+  "e8b_medium_ledger": {
+    "dated_utc": "2026-08-07",
+    "scope": "every MEDIUM and LOW finding from the three review lenses of the previous round, plus findings raised in this session, each classified and dispositioned. No finding is silently dismissed.",
+    "classification_rules": {
+      "execution-critical": "must be fixed before any core training",
+      "scientific-validity": "must be fixed, or proven not to affect the frozen primary protocol",
+      "provenance/reproducibility": "must be fixed where it affects reconstruction",
+      "reporting/documentation": "may remain only if scheduled for dissertation cleanup and cannot mislead execution"
+    },
+    "entries": [
+      {
+        "id": "A-M1",
+        "lens": "A",
+        "issue": "Frozen LM training-path numerics change bf16->fp32 under autocast; A1_precision said training 'unchanged' and nothing pinned the LM training dtype",
+        "classification": "scientific-validity",
+        "disposition": "FIXED",
+        "evidence": "build_core_recipe now carries training_precision AND frozen_lm_instance_dtype explicitly, both inside recipe_sha256. Under bf16 autocast every per-op operand is the exactly-representable pinned bf16 value, so the training math equals the pinned-bf16 construction; this is stated in the recipe rather than assumed.",
+        "closed_by": "training.py build_core_recipe; test_fp32_amendment precision assertions"
+      },
+      {
+        "id": "A-M2/B-M1/C-M1",
+        "lens": "A,B,C",
+        "issue": "build_core_recipe still emitted max_epochs 100 and patience 10 for B2/B3, contradicting the fixed-22 decision, and the budget sat outside the hash",
+        "classification": "execution-critical",
+        "disposition": "FIXED",
+        "evidence": "B2/B3 recipes now carry max_epochs 22, early_stopping False, patience 'disabled', canonical_checkpoint_rule epoch_22 and primary_checkpoint_selection fixed_endpoint, all INSIDE recipe_sha256. Protocol family bumped to e8b-fp32-fixed22-core-2026-08-07 so any earlier recipe/checkpoint fails resume.",
+        "closed_by": "training.py build_core_recipe; test_core_known_negatives (8)"
+      },
+      {
+        "id": "A-M3/B-M2/C-M3",
+        "lens": "A,B,C",
+        "issue": "assert_lm_buffer_parity had no runnable call site; the OI5 pair check never executed",
+        "classification": "execution-critical",
+        "disposition": "FIXED",
+        "evidence": "Called in preflight on the two live inventories AND in _train_core_locked for every B2/B3 cell, comparing this arm against its counterpart, after construction and before the first optimizer step.",
+        "closed_by": "run.py preflight; training.py _train_core_locked; test_core_known_negatives (1),(2)"
+      },
+      {
+        "id": "A-M4",
+        "lens": "A",
+        "issue": "Fixing the epoch count equalises draws but not max-over-epochs selection bias (~0.008-0.010/cell), which does not cancel in B3-B2; no selection-free estimator planned",
+        "classification": "scientific-validity",
+        "disposition": "FIXED AT SOURCE",
+        "evidence": "Superseded by the user's fixed-endpoint decision: the primary checkpoint is epoch 22, not the max over epochs, so there is no max-over-epochs selection bias in the primary contrast at all. Best-of-22 survives only as a labelled secondary diagnostic that cannot determine the primary comparison, the freeze or the clean-test checkpoint. Per-row canonical predictions are dumped for paired tests.",
+        "closed_by": "training.py _train_core_locked canonical block; test_core_known_negatives (11),(12)"
+      },
+      {
+        "id": "A-M5/B-M?",
+        "lens": "A",
+        "issue": "B1 keeps patience-10/max-100 while B2/B3 are fixed, so B1-involving contrasts retain the run-length confound",
+        "classification": "scientific-validity",
+        "disposition": "ACCEPTED AND DISCLOSED",
+        "evidence": "The user's decision F is explicit that B1 retains its frozen section 7.3 recipe and must not be forced onto the 22-epoch rule. B1 is an interface-width control, not part of the primary B3-B2 contrast, which is unaffected. The asymmetry is recorded in the recipe (B1 canonical_checkpoint_rule = best dev accuracy, section 7.3 inherited) and in CLAUDE.md.",
+        "closed_by": "training.py build_core_recipe B1 branch; CLAUDE.md gate item 5"
+      },
+      {
+        "id": "A-M6/B-L?",
+        "lens": "A",
+        "issue": "lm.config.dtype and generation_config differed between the paired arms and were covered by no hash or pair check",
+        "classification": "scientific-validity",
+        "disposition": "FIXED",
+        "evidence": "load_frozen_causal_lm now normalises config.dtype for both arms and loads generation_config from the pinned snapshot for both, so no frozen state other than the parameter values differs across the pair. Both are recorded in provenance.",
+        "closed_by": "run.py load_frozen_causal_lm"
+      },
+      {
+        "id": "A-M7/B-M4/C-?",
+        "lens": "A,B",
+        "issue": "Resource projection and abandonment evidence had no committed generator; npz untracked; B1 hours not reproducible",
+        "classification": "provenance/reproducibility",
+        "disposition": "FIXED",
+        "evidence": "core_resource_projection.py and determinism_call_scan.py are committed generators that regenerate their records; the npz is force-added; B1 hours now derive from the MEASURED 86.36 s/epoch 250k rate rather than a step-scaled guess.",
+        "closed_by": "experiments/e8b_readout_generation/core_resource_projection.py; determinism_call_scan.py"
+      },
+      {
+        "id": "A-M8/C-M4",
+        "lens": "A,C",
+        "issue": "Supersession map incomplete: u4_decision.json still PROMOTE, protocol_clarification still authorised grid 2-8, preregistration U4_OPEN, g14_v2_preregistration contradicted the amendment",
+        "classification": "provenance/reproducibility",
+        "disposition": "FIXED",
+        "evidence": "superseded_evidence_20260807.json now carries 14 records including all four, each with why-wrong and replacement. Source files preserved verbatim; live constants carry the withdrawal.",
+        "closed_by": "superseded_evidence_20260807.json"
+      },
+      {
+        "id": "B-M3",
+        "lens": "B",
+        "issue": "dev_r1_predictions (the BF16 selection function) survived and was still wired into the only training loop and both G14 invocations",
+        "classification": "execution-critical",
+        "disposition": "FIXED BY DELETION",
+        "evidence": "dev_r1_predictions is DELETED. The only evaluation entry points are canonical_dev_predictions (LM arms) and b1_canonical_predictions (B1), both fp32 with fail-closed dtype gates. The search trainer that called it is deleted too.",
+        "closed_by": "training.py; test_training_module 'abandoned-search symbol removed'"
+      },
+      {
+        "id": "B-M5",
+        "lens": "B",
+        "issue": "The timing anchoring every projection was measured without GPU-exclusivity and without a run lock",
+        "classification": "provenance/reproducibility",
+        "disposition": "FIXED",
+        "evidence": "determinism_probe now asserts GPU exclusivity before timing anything and asserts its own non-scientific authorisation constant. Probe runs 3/4 (the timing source) were measured on an idle exclusive GPU.",
+        "closed_by": "determinism_probe.py probe()"
+      },
+      {
+        "id": "B-M6",
+        "lens": "B",
+        "issue": "G14-FP32 validated at chunk size 64, not the canonical 128",
+        "classification": "execution-critical",
+        "disposition": "FIXED",
+        "evidence": "The gate now chunks at 128, the canonical evaluation batch size named in the frozen specification.",
+        "closed_by": "training.py g14_fp32_gate"
+      },
+      {
+        "id": "B-M7/C-M2",
+        "lens": "B,C",
+        "issue": "The abandoned search was refused only at the CLI; train_search_point had no authorisation guard, and the probe bypassed authorisation",
+        "classification": "execution-critical",
+        "disposition": "FIXED BY DELETION + AUTHORISATION",
+        "evidence": "train_search_point, train_pilot and _train_locked are DELETED, so no search execution path exists at any entry. The probe asserts NONSCIENTIFIC_PROBE_AUTHORIZED. Every scientific entry refuses on TRAINING_AUTHORIZED.",
+        "closed_by": "training.py (symbols absent); run.py NONSCIENTIFIC_PROBE_AUTHORIZED"
+      },
+      {
+        "id": "C-M5",
+        "lens": "C",
+        "issue": "Storage gate declared passed against free space, reversing the E8A record that declared the allocation UNRESOLVED",
+        "classification": "provenance/reproducibility",
+        "disposition": "FIXED",
+        "evidence": "The storage gate now records status UNRESOLVED with the free-space check reported separately as context, matching the E8A precedent.",
+        "closed_by": "core_resource_projection.py gates.storage; test asserts UNRESOLVED"
+      },
+      {
+        "id": "C-M6",
+        "lens": "C",
+        "issue": "remaining_core_hours gated against the 180 h ceiling but covered only E8B",
+        "classification": "reporting/documentation",
+        "disposition": "FIXED",
+        "evidence": "Renamed e8b_remaining_vs_180h_core with an explicit scope_note stating it covers E8B cells and E8B evaluation only, and naming the remaining E8A component.",
+        "closed_by": "core_resource_projection.py gates"
+      },
+      {
+        "id": "C-M7",
+        "lens": "C",
+        "issue": "The 22-epoch budget was selected from observed search results, contradicting A3's claim that no selection was performed on any observed result",
+        "classification": "scientific-validity",
+        "disposition": "FIXED BY DISCLOSURE",
+        "evidence": "The recipe now separates the two: fixed_hyperparameters_justification (lr/warmup/dropout retained PRE-RESULT) and epoch_budget_justification (a DATED POST-DIAGNOSTIC amendment fixed after seeing best epochs 20/11/6). The distinction is inside the hashed recipe.",
+        "closed_by": "training.py build_core_recipe epoch_budget_justification"
+      },
+      {
+        "id": "C-M8",
+        "lens": "C",
+        "issue": "'Strict determinism costs 45 per cent' was confounded with the FP32 promotion and the SDPA backend change",
+        "classification": "reporting/documentation",
+        "disposition": "FIXED",
+        "evidence": "Relabelled amended_design_cost_note: the 78.0 vs 53.88 s/epoch difference is the TOTAL cost of the amended design relative to the superseded one, bundling three simultaneous changes, and is not attributed to any single one.",
+        "closed_by": "core_resource_projection.py measured_inputs"
+      },
+      {
+        "id": "A-L1",
+        "lens": "A",
+        "issue": "The identity headroom carried no re-run budget",
+        "classification": "execution-critical",
+        "disposition": "FIXED",
+        "evidence": "retry_allowance now records NONE explicitly: the plan tolerates zero B3 retries and any retry or extra B3-loading evaluation triggers a stop-and-ask before execution.",
+        "closed_by": "core_resource_projection.py gates.pretrained_identity_35h"
+      },
+      {
+        "id": "A-L2/B-L1",
+        "lens": "A,B",
+        "issue": "assert_canonical_scores was vacuous; the frozen-LM dtype check sampled a single parameter",
+        "classification": "execution-critical",
+        "disposition": "FIXED",
+        "evidence": "assert_canonical_scores now also enforces finiteness (a NaN would otherwise pass every threshold and sail through argmax). canonical_prefix checks the FULL dtype set of both the trainable model and the frozen LM, not one sampled parameter.",
+        "closed_by": "training.py; test_core_readiness_closure"
+      },
+      {
+        "id": "B-L2",
+        "lens": "B",
+        "issue": "G14 halt details omitted questionId/imageId; the record omitted the minimum margin",
+        "classification": "provenance/reproducibility",
+        "disposition": "FIXED",
+        "evidence": "g14_fp32_gate takes dev_frame and records questionId and imageId in every halt detail; dev_margin_quantiles now includes min.",
+        "closed_by": "training.py _g14_halt_detail, g14_fp32_gate"
+      },
+      {
+        "id": "B-L3",
+        "lens": "B",
+        "issue": "canonical_prefix's autocast guard did not see CPU autocast",
+        "classification": "execution-critical",
+        "disposition": "FIXED",
+        "evidence": "torch.is_autocast_enabled('cpu') added to the guard.",
+        "closed_by": "training.py canonical_prefix; test_core_readiness_closure"
+      },
+      {
+        "id": "B-L4",
+        "lens": "B",
+        "issue": "g14_fp32_gate checked only the length of the supplied margins",
+        "classification": "execution-critical",
+        "disposition": "PARTIALLY FIXED",
+        "evidence": "Length is checked AND all margins must be finite (a non-finite margin now halts, so a numerical failure cannot escape stratum L). Binding margins to a model-state digest is not implemented; the residual risk is confined to a caller passing another checkpoint's margins, and the only caller passes the margins returned by the immediately preceding canonical pass on the same model.",
+        "closed_by": "training.py g14_fp32_gate finiteness halt; test_core_readiness_closure"
+      },
+      {
+        "id": "B-L5",
+        "lens": "B",
+        "issue": "determinism_probe.compare() truncated silently on unequal epoch counts and did not compare the determinism/precision blocks",
+        "classification": "provenance/reproducibility",
+        "disposition": "FIXED",
+        "evidence": "compare() now hard-exits on any epoch-count mismatch and compares the determinism and fp32_precision blocks in run_level_checks.",
+        "closed_by": "determinism_probe.py compare()"
+      },
+      {
+        "id": "B-L6",
+        "lens": "B",
+        "issue": "save_resume_checkpoint stamped the module protocol_family unconditionally",
+        "classification": "provenance/reproducibility",
+        "disposition": "FIXED",
+        "evidence": "protocol_family is now a required keyword argument taken from the recipe, so a run can only stamp its own family.",
+        "closed_by": "run.py save_resume_checkpoint; test_core_readiness_closure"
+      },
+      {
+        "id": "B-L7",
+        "lens": "B",
+        "issue": "Non-buffer frozen state outside the OI5 inventory differed between arms",
+        "classification": "scientific-validity",
+        "disposition": "FIXED",
+        "evidence": "Same fix as A-M6: config.dtype normalised and generation_config pinned for both arms.",
+        "closed_by": "run.py load_frozen_causal_lm"
+      },
+      {
+        "id": "C-L1",
+        "lens": "C",
+        "issue": "CLAUDE.md materially stale ('Phase 1 has not begun')",
+        "classification": "reporting/documentation",
+        "disposition": "FIXED",
+        "evidence": "Replaced with a dated, binding seven-point E8B gate covering the abandoned search, the fixed recipe, withdrawn U4, FP32 canonical evaluation, the epoch-22 endpoint rule, the determinism discipline and the refusal of scientific execution.",
+        "closed_by": "CLAUDE.md E8B gate"
+      },
+      {
+        "id": "C-L2",
+        "lens": "C",
+        "issue": "The determinism probe's GPU time was not charged anywhere",
+        "classification": "provenance/reproducibility",
+        "disposition": "FIXED",
+        "evidence": "spent_compute() itemises probes 1-4 from their own recorded walls and charges them to the pretrained identity.",
+        "closed_by": "core_resource_projection.py spent_compute"
+      },
+      {
+        "id": "NEW-1",
+        "lens": "this session",
+        "issue": "B1's per-cell hours used a step-scaled 250k rate rather than the measured one; B1 final evaluation was charged at the LM R1 pass rate",
+        "classification": "provenance/reproducibility",
+        "disposition": "FIXED",
+        "evidence": "B1 now uses the MEASURED 86.36 s/epoch 250k rate from section 13.2; the B1 final-evaluation line is explicitly labelled an upper bound and never touches an identity ceiling because B1 loads no LM.",
+        "closed_by": "core_resource_projection.py"
+      },
+      {
+        "id": "NEW-2",
+        "lens": "this session",
+        "issue": "The selection-sensitivity study (22 checkpoints x R2/R3 = 44 passes) was still costed although the fixed-endpoint rule voids its object",
+        "classification": "scientific-validity",
+        "disposition": "FIXED",
+        "evidence": "Recorded VOID under the fixed-22 epoch-22-canonical rule and removed from the projection; reinstating any analogue requires a fresh user decision and a fresh projection.",
+        "closed_by": "core_resource_projection.py selection_sensitivity_study"
+      }
+    ],
+    "summary": {
+      "total": 28,
+      "by_classification": {
+        "execution-critical": 9,
+        "provenance/reproducibility": 9,
+        "reporting/documentation": 3,
+        "scientific-validity": 7
+      },
+      "execution_critical_open": [],
+      "open_any": []
+    },
+    "clean_test_accessed": false
+  }
+}

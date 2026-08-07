@@ -168,7 +168,53 @@ hash no longer matches the worktree.
   within-size random control does not. No core arm is ever descoped
   automatically: if a compute gate fires, execution stops and returns to the
   user with pair-preserving alternatives.
-  Phase 1 has not begun and requires the user's explicit authorisation.
+  Phase 1 (E8B) HAS begun and is superseded in part; see the E8B gate
+  immediately below. E8A execution has also begun (see results/).
+- E8B gate, updated 7 August 2026 and BINDING. Read before any E8B work.
+  1. The eight-point E8B recipe search (master protocol 7.4) is
+     PERMANENTLY ABANDONED. Grid points 4-8 must never run. Grid points
+     1-3 are exploratory protocol-diagnostic evidence only: they are
+     never core results, never select the recipe, and support no
+     superiority claim in either direction. Every statistic derived from
+     them for ranking purposes is INVALIDATED and recorded as such; do
+     not invent another. The honest narrative is that the exploratory
+     search could not support a meaningful winner claim, so the
+     pre-result default recipe was frozen outcome-independently.
+  2. The final B2/B3 recipe is FIXED at lr 3e-4, warmup 0, dropout 0.1,
+     retained because it was the pre-result pilot and default (it is
+     also the section 7.1 inherited v3_01 configuration), NOT because it
+     scored highest. It did also score highest of the three completed
+     points; that must be disclosed wherever the recipe choice is.
+  3. U4 is WITHDRAWN. No search checkpoint is promoted. All 18 core
+     cells (B1/B2/B3 x train_40k/train_250k x seeds 0/1/2) are trained
+     fresh.
+  4. Training remains bf16 autocast on the training path. CANONICAL
+     SCIENTIFIC EVALUATION IS FP32, computed directly in fp32 from the
+     trainable trunk onward; a bf16-computed prefix cast to fp32 is
+     FORBIDDEN. This supersedes master protocol section 20's
+     pre-registered "the frozen language models are never upcast"
+     clause for E8B only; the stop-and-ask that clause requires was
+     raised and the user authorised it on 7 August 2026. The frozen
+     model identity is unchanged: bf16 on disk promotes losslessly.
+     bf16 figures are secondary deployment diagnostics only, never a
+     scientific accuracy and never a selection basis.
+  5. For B2/B3: exactly 22 epochs, NO patience early stopping, and the
+     EPOCH-22 checkpoint is the canonical primary. Primary R1/R2/R3 and
+     the B3-B2 contrast use epoch 22. Any best-of-22 result is a clearly
+     labelled secondary diagnostic and never determines the primary
+     comparison, the model freeze or the clean-test checkpoint. B1
+     retains its frozen section 7.3 classifier recipe and is NOT forced
+     onto the 22-epoch rule.
+  6. Strict determinism cannot be established at startup: utils.set_seed
+     unconditionally sets warn_only=True, and build_arm re-seeds because
+     G13 requires it. Enforcement must be re-imposed after EVERY
+     reseeding point and asserted at the point of use.
+  7. Scientific core execution is REFUSED until the user flips the
+     recorded authorisation state. Non-scientific probes are separate
+     and are never promoted. The clean-test embargo is unchanged.
+  Authoritative records: results/experiments/e8b_readout_generation/
+  protocol_amendment_20260807_fp32.json, protocol_amendment_20260807_
+  fixed22.json, superseded_evidence_20260807.json.
 - Current gate, updated 1 August 2026: the user authorized the strengthening
   programme on 30 July 2026: V3 reasoner scaling to 100k/250k (E1), a
   SigLIP-B/16 frozen-encoder-swap experiment on the global-embedding path (E2)

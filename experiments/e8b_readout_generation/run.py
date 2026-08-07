@@ -84,8 +84,18 @@ SEARCH_ABANDONED = True
 # The amended protocol family. Every recipe hash in this family differs
 # from the superseded BF16 search family, so a search checkpoint can
 # never be resumed or reused by a core run (A8).
-PROTOCOL_FAMILY = "e8b-fp32-core-2026-08-07"
+# Bumped 2026-08-07 (fixed-22 amendment): the epoch-22 canonical rule is
+# encoded INSIDE every hashed recipe of this family, so the family string
+# changes too and any checkpoint of the earlier core family (none was
+# ever written) or of the BF16 search family fails resume.
+PROTOCOL_FAMILY = "e8b-fp32-fixed22-core-2026-08-07"
 EVALUATION_PRECISION = "fp32"
+
+# The ONLY authorised non-scientific training: the OI1 strict-determinism
+# probe (user authorisation of 2026-08-07, "Run only a NON-SCIENTIFIC
+# 3-epoch 40k determinism probe"). The probe asserts this constant; every
+# scientific entry ignores it and refuses on TRAINING_AUTHORIZED.
+NONSCIENTIFIC_PROBE_AUTHORIZED = "oi1-determinism-probe-2026-08-07"
 
 # The final pair-matched core matrix (A5): 3 arms x 2 scales x 3 seeds.
 CORE_ARMS = ("B1", "B2", "B3")
@@ -198,6 +208,17 @@ def load_frozen_causal_lm(pretrained: bool, device=None) -> tuple:
         construction = ("utils.set_seed(20260802); from_config in float32; "
                         "cast to bfloat16; no pretrained weight loaded")
     rotary = restore_rotary_fp32(lm, cfg)   # OI5, before any freeze
+    # Pair parity beyond weights and buffers: both arms take the SAME
+    # generation config from the pinned snapshot (the random arm would
+    # otherwise carry from_config defaults), and config.dtype is
+    # normalised to the pinned bfloat16 for both (from_config leaves the
+    # random arm's at float32). Neither field enters any forward pass on
+    # the manual R1/R2/R3 loops; they are normalised so that NO frozen
+    # state other than the parameter values differs across the pair.
+    from transformers import GenerationConfig
+    lm.generation_config = GenerationConfig.from_pretrained(
+        MODEL_REPO, revision=MODEL_REVISION)
+    lm.config.dtype = torch.bfloat16
     for parameter in lm.parameters():
         parameter.requires_grad_(False)
     lm.eval()
@@ -234,6 +255,12 @@ def load_frozen_causal_lm(pretrained: bool, device=None) -> tuple:
         "transformers_version": transformers.__version__,
         "tokenizers_version": tokenizers.__version__,
         "loaded_dtype": str(next(lm.parameters()).dtype),
+        "parameter_dtypes": sorted({str(p.dtype) for p in lm.parameters()}),
+        "config_dtype_normalised": str(lm.config.dtype),
+        "attn_implementation": str(getattr(lm.config,
+                                           "_attn_implementation", None)),
+        "generation_config_source": "pinned snapshot, identical for both "
+                                    "arms",
         "rotary_fp32_restoration": rotary,
         "buffer_inventory": lm_buffer_inventory(lm),
     }
@@ -420,12 +447,13 @@ def save_resume_checkpoint(path: Path, *, model, optimizer, scheduler,
                            best_metric: float, best_epoch: int,
                            loader_generator, epoch_permutation_counter: int,
                            recipe_sha256: str, vocabulary_sha256: str,
-                           store_sha256s: dict) -> None:
+                           store_sha256s: dict,
+                           protocol_family: str) -> None:
     """Atomic write of the complete resumable state. Every RESUME_FIELDS
     entry is present by construction."""
     import random
     state = {
-        "protocol_family": PROTOCOL_FAMILY,
+        "protocol_family": protocol_family,
         "model_state": model.state_dict(),
         "optimizer_state": optimizer.state_dict(),
         "scheduler_state": scheduler.state_dict(),
@@ -626,16 +654,24 @@ def preflight(device) -> int:
                                             "sha256")},
                "vocabulary_sha256": vocabulary["sha256"]}
 
-    lms = {}
+    lms, inventories = {}, {}
     for arm in ("B2", "B3"):
         lm, provenance = load_frozen_causal_lm(
             ARMS[arm]["lm"] == "pretrained", device)
         lms[arm] = lm
+        inventories[arm] = provenance["buffer_inventory"]
         results[f"g2_{arm}"] = {k: provenance[k] for k in (
             "arm_model", "pinned_revision", "tied_embeddings_verified",
             "parameter_count", "config_sha256", "tokenizer_file_sha256")}
         print(f"[G2] {arm}: {provenance['parameter_count']:,} params, "
               f"tied embeddings verified")
+
+    # OI5 pair-integrity beside G13: persistent AND non-persistent
+    # buffers must be byte-identical across the pair.
+    results["oi5_buffer_parity"] = assert_lm_buffer_parity(
+        inventories["B3"], inventories["B2"])
+    print(f"[OI5] {results['oi5_buffer_parity']['buffers_compared']} "
+          f"buffers byte-identical across the B2/B3 pair")
 
     # G13: paired trunk/projection bit identity at one probe seed.
     probe_seed = 0
@@ -946,12 +982,25 @@ def promote_lm_to_fp32(lm) -> dict:
     bf16_sha = e8a.sha256_state_dict(before)
     lm = lm.to(torch.float32)
     after = lm.state_dict()
+    # EXACT promotion check, not a tolerance: every promoted tensor must
+    # be bitwise equal to the direct bf16-to-fp32 upcast of the frozen
+    # value. (The earlier round-trip-only guard tolerated ~1e-3 relative
+    # corruption; this one tolerates none.)
+    exact = all(torch.equal(after[k], before[k].to(torch.float32))
+                for k in before)
     round_trips = all(torch.equal(after[k].to(torch.bfloat16), before[k])
                       for k in before)
-    if not round_trips:
-        sys.exit("FP32 PROMOTION REFUSED: the promoted state does not "
-                 "round-trip to the frozen bfloat16 values, so the "
-                 "promotion would not be identity-preserving")
+    if not (exact and round_trips):
+        sys.exit("FP32 PROMOTION REFUSED: the promoted state is not the "
+                 "exact bitwise upcast of the frozen bfloat16 values "
+                 "(or does not round-trip to the frozen bfloat16 "
+                 "values), so the promotion would not be "
+                 "identity-preserving")
+    dtypes = {str(p.dtype) for p in lm.parameters()}
+    if dtypes != {"torch.float32"}:
+        sys.exit(f"FP32 PROMOTION REFUSED: parameter dtypes after "
+                 f"promotion are {sorted(dtypes)}, not float32 only")
+    lm.config.dtype = torch.float32   # normalised identically per arm
     for parameter in lm.parameters():
         parameter.requires_grad_(False)
     lm.eval()
@@ -960,7 +1009,10 @@ def promote_lm_to_fp32(lm) -> dict:
     return {"evaluation_precision": "fp32",
             "promotion": "the pinned frozen bfloat16 state values "
                          "promoted to fp32; identity-preserving",
+            "exact_bitwise_upcast": True,
             "round_trips_to_bf16_exactly": True,
+            "all_parameter_dtypes_fp32": True,
+            "config_dtype_normalised": "torch.float32",
             "bf16_state_dict_sha256": bf16_sha,
             "fp32_state_dict_sha256": e8a.sha256_state_dict(after),
             "sha_note": "the two hashes differ only because the digest "
@@ -1138,18 +1190,8 @@ def train(arm: str, scale: str, seed: int, grid_point: int | None = None
                  f"review, and the recorded authorisation state is "
                  f"{TRAINING_AUTHORIZED!r}. Core execution requires a "
                  f"separate explicit user approval.")
-    # Reached only if a future approval flips TRAINING_AUTHORIZED. The
-    # core trainer is deliberately NOT implemented yet: three amendment
-    # open issues must be settled first (OI1 training determinism, OI2
-    # the epoch-budget confound, OI3 per-row prediction dumps), and B1
-    # needs its classifier training path. Refuse explicitly rather than
-    # dispatch to a half-built runner.
-    sys.exit("E8B CORE TRAINER NOT IMPLEMENTED: the amended protocol is "
-             "frozen but the core training path is not yet built. "
-             "Outstanding: the training-determinism probe (OI1), the "
-             "epoch-budget decision (OI2), per-row prediction dumps "
-             "(OI3), and the B1 classifier training path. Implement and "
-             "re-review before flipping the authorisation state.")
+    from experiments.e8b_readout_generation import training
+    return training.train_core_cell(arm, scale, seed)
 
 
 def main() -> int:

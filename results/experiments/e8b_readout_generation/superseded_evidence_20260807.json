@@ -89,6 +89,36 @@
         "replaced_by": "determinism_probe_run3.json, run4.json and determinism_probe_comparison_strict.json, which record verified_at_use with warn_only=False and are bit-for-bit identical",
         "fix": "reseed_strict and assert_strict_determinism; enforcement is re-imposed after every seeding point and the flag is re-read at the point of use, so a downgrade raises instead of passing",
         "carried_forward": "any future core trainer must repeat this discipline, because it too must call build_arm"
+      },
+      {
+        "item": "the 'mean of top 16' replacement statistic (the second plateau statistic)",
+        "status": "INVALIDATED (fixed-22 amendment, F3)",
+        "why_wrong": "its selection pools are the runs' own 30, 21 and 16 epochs, so selection into the top k remains length-dependent; it is not length-free either",
+        "consequence": "the sentence in protocol_amendment_20260807_fp32.json A2.withdrawn_claim stating the ordering is 'the SAME as the ordering by maximum' under that statistic is WITHDRAWN as a ranking claim; no ordering claim in either direction is made from Grids 1-3",
+        "replaced_by": "no statistic. Abandonment rests on the persisted McNemar tests and the seed-spread comparison only."
+      },
+      {
+        "item": "u4_decision.json (decision: PROMOTE)",
+        "status": "SUPERSEDED by A4 of the FP32 amendment; preserved verbatim as the historical record",
+        "live_state": "U4_DECIDED = 'withdrawn-2026-08-07' in run.py; no search checkpoint is promoted"
+      },
+      {
+        "item": "protocol_clarification_20260807.json, authorised_next_work (the seven remaining search grid points 2-8)",
+        "status": "SUPERSEDED: the search was permanently stopped after point 3; points 4-8 were never run and are not authorised",
+        "note": "the P1/P2/P3 decisions in the same file REMAIN in force"
+      },
+      {
+        "item": "preregistration.json fields U4_OPEN and the search-phase status wording",
+        "status": "SUPERSEDED by u4_decision.json (2026-08-06) and then by the FP32 amendment (2026-08-07); preserved verbatim"
+      },
+      {
+        "item": "g14_v2_preregistration.json",
+        "status": "SUPERSEDED by the G14-FP32 specification inside protocol_amendment_20260807_fp32.json and by the live g14_fp32_gate; its claim that the gate is 'stricter than the superseded gate' is WRONG (the halting clauses are substantively the same; the substrate and the validation set changed), and its 64-row scope is superseded by the P+L+O construction",
+        "preserved": "verbatim, as the record of an intermediate design"
+      },
+      {
+        "item": "the earlier core family string e8b-fp32-core-2026-08-07 and the pre-fixed-22 core recipes (max_epochs 100, patience 10 for B2/B3)",
+        "status": "SUPERSEDED by the fixed-22 family e8b-fp32-fixed22-core-2026-08-07; no checkpoint of the earlier core family was ever written, and any would fail resume on the family check"
       }
     ],
     "clean_test_accessed": false

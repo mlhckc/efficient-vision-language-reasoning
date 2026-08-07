@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-07T14:02:49",
-    "git_commit": "8d0a559",
+    "timestamp": "2026-08-07T15:24:46",
+    "git_commit": "c128e65",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -30,76 +30,86 @@
     "weight_decay": 0.0001
   },
   "e8b_core_resource_projection": {
-    "basis": "MEASURED under the amended execution design: strict deterministic execution (math SDPA backend), BF16 autocast training, canonical FP32 evaluation, FP32 rotary buffers",
+    "generator": "experiments/e8b_readout_generation/core_resource_projection.py",
+    "design": "strict deterministic BF16 training; fixed 22 epochs for B2/B3, no early stopping, epoch-22 canonical; B1 under the stored section-7.3 recipe (15/22 expected, 100-epoch stress); full FP32 canonical evaluation; G14-FP32 on the LM arms; final R1/R2/R3 readouts and interventions; measured checkpoint footprint",
     "measured_inputs": {
-      "train_seconds_per_epoch_40k_strict_deterministic": 78.0,
-      "train_seconds_per_epoch_40k_non_deterministic_superseded": 53.88,
-      "determinism_cost_fraction": 0.4477,
-      "canonical_fp32_dev_pass_seconds": 108.0,
-      "g14_fp32_seconds_per_row_strict_deterministic": 5.301,
-      "g14_rows_pre_selection": 64,
-      "g14_rows_post_selection": 160,
-      "non_g14_gate_overhead_hours_per_run": 0.223,
-      "b1_proxy_seconds_per_epoch": 15.27,
-      "step_ratio_250k_over_40k": 6.242812
-    },
-    "epoch_budget": {
-      "B2": 22,
-      "B3": 22,
-      "no_early_stopping": [
-        "B2",
-        "B3"
-      ],
-      "B1": "retains the section 7.3 inherited schedule"
+      "train_s_per_epoch_40k_strict_det": 78.0,
+      "canonical_fp32_dev_pass_s": 108.0,
+      "bf16_dev_pass_s_SECONDARY_DIAGNOSTIC_ONLY": 85.7,
+      "g14_fp32_s_per_row": 5.301,
+      "g14_rows_per_lm_cell": 224,
+      "non_g14_gate_overhead_h": 0.223,
+      "b1_s_per_epoch": {
+        "train_40k": 15.27,
+        "train_250k": 86.36
+      },
+      "r2_s_per_row_measured": 0.0291,
+      "r3_s_per_row_ASSUMED_1p5x_r2": 0.0437,
+      "step_ratio_250k_over_40k": 6.242812,
+      "amended_design_cost_note": "the 78.0 versus 53.88 s/epoch difference is the TOTAL cost of the amended execution design relative to the superseded one; it bundles three simultaneous changes (strict-deterministic math SDPA backend, the fp32 frozen-model instance, and enforcement assertions) and is not attributed to any single one"
     },
     "per_cell_hours": {
-      "B2_B3_train_40k": 1.69,
-      "B2_B3_train_250k": 4.189,
-      "B1_train_40k": 0.737,
-      "B1_train_250k": 1.07
+      "lm_train_40k": 1.69,
+      "lm_train_250k": 4.189,
+      "b1_train_40k_expected": 0.287,
+      "b1_train_250k_expected": 0.751
     },
     "arm_totals_hours": {
-      "B1": 5.42,
+      "B1_expected": 3.112,
+      "B1_stress_100_epoch": 9.807,
       "B2": 17.634,
       "B3": 17.634,
-      "final_readouts_and_interventions": 4.68
+      "final_readouts_and_interventions_lm": 2.952,
+      "final_b1_evaluations_upper_bound": 0.18
     },
-    "remaining_core_hours": 45.369,
+    "spent_compute_hours_itemised": {
+      "search_grid1_pilot": 1.379,
+      "search_grid2": 1.035,
+      "search_grid3_halted": 0.84,
+      "bf16_characterization_v2": 1.912,
+      "fp32_validation": 0.847,
+      "determinism_probes_1_to_4": 0.627,
+      "paired_rescoring_and_micro_probes": 0.25,
+      "_total": 6.89
+    },
+    "selection_sensitivity_study": {
+      "status": "VOID under the fixed-22 epoch-22-canonical rule: the study's object (sensitivity to max-over-epochs checkpoint selection across retained search checkpoints) no longer exists. Not costed. Reinstating any analogue requires a fresh user decision and a fresh projection."
+    },
     "gates": {
       "per_run_8h": {
         "largest_cell_hours": 4.189,
         "fires": false
       },
       "pretrained_identity_35h": {
-        "projected_hours": 32.686,
-        "headroom_hours": 2.314,
-        "fires": false,
-        "includes": "A1 baseline 2.29222, A4 1.804, A7c 1.864, all six B3 core cells, the pretrained share of final evaluation, the 3.20 h already spent on the abandoned search and the 2.56 h spent on the numerical diagnostics",
-        "WARNING": "only 2.31 hours of headroom against a HARD ceiling. Strict determinism added 45 per cent to training time. Any additional B3 evaluation, any extra G14 invocation or any epoch-budget increase can breach this gate."
-      },
-      "random_identity_35h": {
-        "projected_hours": 20.942,
+        "projected_hours": 31.96,
+        "headroom_hours": 3.04,
+        "includes": "the COMPLETE planned pretrained-identity programme: A1 baseline, A4, A7c, all six B3 core cells, B3's final R2/R3 readouts and interventions, and every already-spent search, characterisation, validation and probe hour that loaded the pretrained checkpoint",
+        "retry_allowance": "NONE. The plan tolerates zero B3 retries; any retry or any additional B3-loading evaluation triggers a stop-and-ask BEFORE execution",
         "fires": false
       },
-      "remaining_core_180h": {
-        "projected_hours": 45.369,
+      "random_identity_35h": {
+        "projected_hours": 21.068,
+        "fires": false
+      },
+      "e8b_remaining_vs_180h_core": {
+        "e8b_remaining_hours": 41.513,
+        "e8b_remaining_stress_hours": 48.208,
+        "scope_note": "E8B cells and E8B evaluation only; the programme-wide 180 h ceiling also covers the remaining E8A arms (about 17.6-21.6 h expected per section 13.2), which leaves the combined expectation far below the ceiling",
+        "fires": false
+      },
+      "memory_80pct_reserved": {
+        "peak_reserved_mib": 7608.0,
+        "reserved_fraction": 0.3801,
         "fires": false
       },
       "storage": {
-        "required_gib": 11.299,
+        "required_gib": 9.301,
         "free_gib": 322.8,
-        "fires": false,
-        "includes": "the six retained search checkpoints"
-      },
-      "memory_80pct_reserved": {
-        "peak_allocated_mib": 6000.5,
-        "peak_reserved_mib": 7608.0,
-        "device_total_mib": 20017.4,
-        "reserved_fraction": 0.3801,
-        "fires": false,
-        "note": "MEASURED in the strict-deterministic probe; the math SDPA backend and the FP32 frozen model raise the peak from the 5354 MiB measured under the superseded design"
+        "status": "UNRESOLVED allocation (E8A precedent: free space is not a quota). The free-space check passes and is reported as context, not as a discharged allocation gate.",
+        "free_space_check_passes": true
       }
     },
+    "fired": [],
     "clean_test_accessed": false
   }
 }

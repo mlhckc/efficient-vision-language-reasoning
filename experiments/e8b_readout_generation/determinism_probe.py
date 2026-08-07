@@ -78,6 +78,14 @@ def optimizer_digest(optimizer) -> str:
 
 
 def probe(run_index: int) -> int:
+    # The ONLY authorised non-scientific training (user authorisation of
+    # 2026-08-07). Anything else refuses; the probe never writes to a
+    # core or search path and is never promoted.
+    if e8b_run.NONSCIENTIFIC_PROBE_AUTHORIZED \
+            != "oi1-determinism-probe-2026-08-07":
+        sys.exit("DETERMINISM PROBE NOT AUTHORISED")
+    from experiments.e8a_question_encoder import reinfer_g21
+    reinfer_g21.assert_gpu_exclusive(f"e8b determinism probe {run_index}")
     started = time.time()
     # ORDER IS LOAD-BEARING: utils.set_seed re-enables warn_only, so it
     # must run BEFORE strict determinism is imposed, never after.
@@ -196,7 +204,15 @@ def compare() -> int:
                    )["determinism_probe"]
     b = json.loads((OUT_DIR / "determinism_probe_run4.json").read_text()
                    )["determinism_probe"]
+    if not (len(a["epochs_detail"]) == len(b["epochs_detail"])
+            == PROBE_EPOCHS):
+        sys.exit(f"PROBE COMPARISON INVALID: epoch counts "
+                 f"{len(a['epochs_detail'])} vs {len(b['epochs_detail'])} "
+                 f"vs the required {PROBE_EPOCHS}; a truncated run must "
+                 f"not silently pass")
     checks = {
+        "determinism_blocks": a["determinism"] == b["determinism"],
+        "fp32_precision_blocks": a["fp32_precision"] == b["fp32_precision"],
         "step_losses": a["step_losses_sha256"] == b["step_losses_sha256"],
         "total_steps": a["total_steps"] == b["total_steps"],
         "recipe_sha256": a["recipe_sha256"] == b["recipe_sha256"],

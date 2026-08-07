@@ -1,0 +1,149 @@
+{
+  "metadata": {
+    "timestamp": "2026-08-07T15:37:58",
+    "git_commit": "c128e65",
+    "git_dirty": true,
+    "open_clip_version": "3.3.0",
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "h5py_version": "3.16.0",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "deterministic": true,
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "embed_dim": 512,
+    "top_k_answers": 100,
+    "n_train": 40000,
+    "n_val": 8000,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "hidden_dim": 512,
+    "dropout": 0.3,
+    "weight_decay": 0.0001
+  },
+  "e8b_blocker_high_reverification": {
+    "dated_utc": "2026-08-07",
+    "rule": "no prior 'refuted' label is inherited. Every finding was restated and re-tested against LIVE code or artefacts in this session; CLOSED only where the executed evidence supports it.",
+    "note": "the previous adversarial-refutation layer wrongly refuted the strict-determinism finding, which was real; that is why no label is inherited here.",
+    "entries": [
+      {
+        "id": "R3-A-H1 / R3-B-H1",
+        "lens": "A,B",
+        "original_claim": "utils.set_seed downgrades warn_only, so strict determinism was never in force",
+        "reproduction_method": "executed: impose, verify, reseed, re-verify",
+        "status": "CLOSED",
+        "evidence": "imposed warn_only=False; a bare reseed is now CAUGHT (True); probe runs 3/4 record verified_at_use warn_only=False"
+      },
+      {
+        "id": "R3-A-H2",
+        "lens": "A",
+        "original_claim": "the replacement 'length-free' statistic is not length-free; the binding 'no reversal' claim is unsound",
+        "reproduction_method": "inspected the supersession index for BOTH statistics",
+        "status": "CLOSED",
+        "evidence": "2 record(s) invalidate the replacement statistic; no ranking claim in either direction survives"
+      },
+      {
+        "id": "R3-C-B1",
+        "lens": "C",
+        "original_claim": "the 35 h pretrained-identity verdict is not established; recomputation differs",
+        "reproduction_method": "regenerated from the committed generator and inspected inclusions",
+        "status": "CLOSED",
+        "evidence": "31.96 h vs 35 h, headroom 3.04 h, from a committed generator, including spent 6.89 h and final readouts/interventions"
+      },
+      {
+        "id": "R3-C-H1",
+        "lens": "C",
+        "original_claim": "OI6 declared closed but the bf16 prefix leak is still live in the only implemented evaluator",
+        "reproduction_method": "checked the evaluator actually used by the trainer",
+        "status": "CLOSED",
+        "evidence": "dev_r1_predictions DELETED; canonical_dev_predictions is the only LM evaluator and is fp32 fail-closed"
+      },
+      {
+        "id": "R3-C-H2",
+        "lens": "C",
+        "original_claim": "OI7 declared closed but no amendment function is wired into any execution path",
+        "reproduction_method": "grepped the executable trainer body for every helper",
+        "status": "CLOSED",
+        "evidence": "reseed_strict, pin_fp32_precision, promote_lm_to_fp32, assert_lm_buffer_parity, g14_fp32_gate and assert_strict_determinism all appear in _train_core_locked"
+      },
+      {
+        "id": "R3-C-H3",
+        "lens": "C",
+        "original_claim": "the artefact discharging a hard gate has no generating code and untraceable inputs",
+        "reproduction_method": "regenerated the record from the committed generator",
+        "status": "CLOSED",
+        "evidence": "generator=experiments/e8b_readout_generation/core_resource_projection.py; determinism_call_scan.py also committed"
+      },
+      {
+        "id": "R2-B-H1",
+        "lens": "B",
+        "original_claim": "B2 carries a bf16-truncated rotary table while B3 keeps fp32 - uncontrolled difference in the primary contrast",
+        "reproduction_method": "loaded BOTH arms and compared full buffer inventories",
+        "status": "CLOSED",
+        "evidence": "B3 buffers ['torch.float32'], B2 buffers ['torch.float32'], inventories identical=True"
+      },
+      {
+        "id": "R2-B-H2",
+        "lens": "B",
+        "original_claim": "the amendment recorded a rotary verification that was never performed and is false as written",
+        "reproduction_method": "inspected the amendment text and the live check",
+        "status": "CLOSED",
+        "evidence": "the false claim is WITHDRAWN in A1_precision.buffer_caveat and the defect is fixed and executable"
+      },
+      {
+        "id": "R2-B-H3",
+        "lens": "B",
+        "original_claim": "a bf16 prefix into the fp32 LM does not raise; dev_r1_predictions hard-casts on the selection path",
+        "reproduction_method": "checked the fail-closed guard exists and the caster is gone",
+        "status": "CLOSED",
+        "evidence": "canonical_prefix refuses autocast and any non-fp32 trunk/LM/cached input; the bf16 caster is deleted"
+      },
+      {
+        "id": "R2-C-B1",
+        "lens": "C",
+        "original_claim": "McNemar p-values had no provenance; no per-row data retained",
+        "reproduction_method": "checked the persisted per-row artefact exists and is referenced",
+        "status": "CLOSED",
+        "evidence": "exploratory_fp32_correctness.npz present (12035 bytes); the amendment cites it as evidence_file"
+      },
+      {
+        "id": "R2-C-B2",
+        "lens": "C",
+        "original_claim": "the 'run-length-free plateau' statistic is length-dependent and only it produced the claimed reversal",
+        "reproduction_method": "checked BOTH statistics are invalidated and no ranking claim survives",
+        "status": "CLOSED",
+        "evidence": "both plateau statistics recorded INVALIDATED; abandonment rests on McNemar + seed-spread only"
+      },
+      {
+        "id": "R1-A-H1",
+        "lens": "A",
+        "original_claim": "the pilot record omitted 8 of 11 mandatory section-20 provenance fields",
+        "reproduction_method": "inspected the live provenance dict keys",
+        "status": "CLOSED",
+        "evidence": "live provenance carries 20 keys including all section-20 fields plus buffer_inventory and rotary restoration"
+      },
+      {
+        "id": "R2-A-H1",
+        "lens": "A",
+        "original_claim": "G10 computed the entropy of the argmax histogram, not the section-11 mean prediction entropy",
+        "reproduction_method": "inspected the live G10 block",
+        "status": "CLOSED",
+        "evidence": "G10 gates on the section-11 per-row quantity; the histogram statistic is gone entirely"
+      }
+    ],
+    "summary": {
+      "total": 13,
+      "closed": 13,
+      "open": []
+    },
+    "clean_test_accessed": false
+  }
+}

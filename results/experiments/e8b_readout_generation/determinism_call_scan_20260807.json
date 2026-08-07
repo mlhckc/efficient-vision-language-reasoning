@@ -1,0 +1,1578 @@
+{
+  "determinism_call_scan": {
+    "purpose": "OI1: every call capable of changing deterministic algorithms, warn_only, SDPA backends, cudnn determinism/benchmark, TF32/matmul precision or RNG configuration, catalogued and classified",
+    "patterns": {
+      "deterministic_algorithms": "use_deterministic_algorithms",
+      "warn_only": "warn_only",
+      "sdpa_backend": "flash_sdp|mem_efficient_sdp|math_sdp|sdpa_kernel",
+      "cudnn_flags": "cudnn\\.deterministic|cudnn\\.benchmark",
+      "tf32_or_matmul_precision": "allow_tf32|float32_matmul_precision|fp32_precision",
+      "seeding": "\\bset_seed\\s*\\(|manual_seed\\s*\\(|seed_worker|set_rng_state|default_rng\\s*\\(",
+      "cublas_workspace": "CUBLAS_WORKSPACE_CONFIG"
+    },
+    "core_path_modules": [
+      "experiments/e8a_question_encoder/e8a_common.py",
+      "experiments/e8a_question_encoder/g21_scorer.py",
+      "experiments/e8a_question_encoder/reinfer_g21.py",
+      "experiments/e8b_readout_generation/determinism_probe.py",
+      "experiments/e8b_readout_generation/latents.py",
+      "experiments/e8b_readout_generation/readouts.py",
+      "experiments/e8b_readout_generation/run.py",
+      "experiments/e8b_readout_generation/training.py",
+      "src/tokens_data.py",
+      "src/utils.py"
+    ],
+    "core_path_hits": {
+      "experiments/e8a_question_encoder/e8a_common.py": [
+        {
+          "line": 28,
+          "category": "seeding",
+          "text": "is followed exactly: load and freeze the LM, then utils.set_seed(seed), then"
+        },
+        {
+          "line": 145,
+          "category": "seeding",
+          "text": "any arm, before `utils.set_seed(seed)` and the trunk are built."
+        },
+        {
+          "line": 480,
+          "category": "seeding",
+          "text": "A1r : AutoConfig from the same pinned revision, utils.set_seed(20260802)"
+        },
+        {
+          "line": 505,
+          "category": "seeding",
+          "text": "utils.set_seed(RANDOM_INIT_SEED)"
+        },
+        {
+          "line": 513,
+          "category": "seeding",
+          "text": "\"utils.set_seed(20260802); AutoModel.from_config(cfg, \""
+        },
+        {
+          "line": 781,
+          "category": "seeding",
+          "text": "generator=utils.make_generator(seed), worker_init_fn=utils.seed_worker,"
+        },
+        {
+          "line": 813,
+          "category": "seeding",
+          "text": "function then performs, in order: utils.set_seed(seed); build the trunk"
+        },
+        {
+          "line": 819,
+          "category": "seeding",
+          "text": "utils.set_seed(seed)"
+        },
+        {
+          "line": 1050,
+          "category": "seeding",
+          "text": "rng = np.random.default_rng(seed)"
+        },
+        {
+          "line": 1064,
+          "category": "seeding",
+          "text": "\"rng\": f\"np.random.default_rng({seed})\","
+        },
+        {
+          "line": 1084,
+          "category": "seeding",
+          "text": "permutation = np.random.default_rng(seed).permutation(n_rows)"
+        },
+        {
+          "line": 1086,
+          "category": "seeding",
+          "text": "\"construction\": \"np.random.default_rng(config.RANDOM_SEED)\""
+        }
+      ],
+      "experiments/e8a_question_encoder/reinfer_g21.py": [
+        {
+          "line": 324,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        }
+      ],
+      "experiments/e8b_readout_generation/determinism_probe.py": [
+        {
+          "line": 5,
+          "category": "warn_only",
+          "text": "algorithms (`warn_only=False`), TF32 pinned off, FP32 rotary buffers."
+        },
+        {
+          "line": 90,
+          "category": "warn_only",
+          "text": "# ORDER IS LOAD-BEARING: utils.set_seed re-enables warn_only, so it"
+        },
+        {
+          "line": 92,
+          "category": "seeding",
+          "text": "utils.set_seed(PROBE_SEED)"
+        },
+        {
+          "line": 94,
+          "category": "tf32_or_matmul_precision",
+          "text": "precision = e8b_run.pin_fp32_precision()"
+        },
+        {
+          "line": 112,
+          "category": "warn_only",
+          "text": "# downgrades warn_only; re-impose before anything else runs."
+        },
+        {
+          "line": 119,
+          "category": "seeding",
+          "text": "train_loader.generator.manual_seed(recipe[\"seed\"])"
+        },
+        {
+          "line": 178,
+          "category": "tf32_or_matmul_precision",
+          "text": "\"determinism\": determinism, \"fp32_precision\": precision,"
+        },
+        {
+          "line": 215,
+          "category": "tf32_or_matmul_precision",
+          "text": "\"fp32_precision_blocks\": a[\"fp32_precision\"] == b[\"fp32_precision\"],"
+        },
+        {
+          "line": 247,
+          "category": "deterministic_algorithms",
+          "text": "\"strict_determinism\": \"torch.use_deterministic_algorithms(\""
+        },
+        {
+          "line": 248,
+          "category": "warn_only",
+          "text": "\"True, warn_only=False) with the flash and \""
+        },
+        {
+          "line": 260,
+          "category": "warn_only",
+          "text": "\"checks; do not fall back to warn_only\"),"
+        }
+      ],
+      "experiments/e8b_readout_generation/latents.py": [
+        {
+          "line": 15,
+          "category": "seeding",
+          "text": "with the seed; nothing between `utils.set_seed(seed)` and the projection"
+        },
+        {
+          "line": 88,
+          "category": "seeding",
+          "text": "utils.set_seed(seed)"
+        }
+      ],
+      "experiments/e8b_readout_generation/run.py": [
+        {
+          "line": 205,
+          "category": "seeding",
+          "text": "utils.set_seed(RANDOM_INIT_SEED)"
+        },
+        {
+          "line": 208,
+          "category": "seeding",
+          "text": "construction = (\"utils.set_seed(20260802); from_config in float32; \""
+        },
+        {
+          "line": 364,
+          "category": "seeding",
+          "text": "utils.set_seed(seed)"
+        },
+        {
+          "line": 530,
+          "category": "seeding",
+          "text": "torch.set_rng_state(state[\"torch_cpu_rng\"])"
+        },
+        {
+          "line": 532,
+          "category": "seeding",
+          "text": "torch.cuda.set_rng_state_all(state[\"cuda_rng_all\"])"
+        },
+        {
+          "line": 868,
+          "category": "warn_only",
+          "text": "\"\"\"OI1: strict deterministic execution, NOT warn_only."
+        },
+        {
+          "line": 870,
+          "category": "warn_only",
+          "text": "`utils.set_seed` uses `warn_only=True`, under which non-deterministic"
+        },
+        {
+          "line": 876,
+          "category": "cublas_workspace",
+          "text": "os.environ.setdefault(\"CUBLAS_WORKSPACE_CONFIG\", \":4096:8\")"
+        },
+        {
+          "line": 877,
+          "category": "deterministic_algorithms",
+          "text": "torch.use_deterministic_algorithms(True, warn_only=False)"
+        },
+        {
+          "line": 877,
+          "category": "warn_only",
+          "text": "torch.use_deterministic_algorithms(True, warn_only=False)"
+        },
+        {
+          "line": 878,
+          "category": "cudnn_flags",
+          "text": "torch.backends.cudnn.deterministic = True"
+        },
+        {
+          "line": 879,
+          "category": "cudnn_flags",
+          "text": "torch.backends.cudnn.benchmark = False"
+        },
+        {
+          "line": 882,
+          "category": "sdpa_backend",
+          "text": "from torch.nn.attention import SDPBackend, sdpa_kernel  # noqa: F401"
+        },
+        {
+          "line": 883,
+          "category": "sdpa_backend",
+          "text": "torch.backends.cuda.enable_flash_sdp(False)"
+        },
+        {
+          "line": 884,
+          "category": "sdpa_backend",
+          "text": "torch.backends.cuda.enable_mem_efficient_sdp(False)"
+        },
+        {
+          "line": 885,
+          "category": "sdpa_backend",
+          "text": "torch.backends.cuda.enable_math_sdp(True)"
+        },
+        {
+          "line": 886,
+          "category": "sdpa_backend",
+          "text": "backends = {\"flash_sdp\": torch.backends.cuda.flash_sdp_enabled(),"
+        },
+        {
+          "line": 887,
+          "category": "sdpa_backend",
+          "text": "\"mem_efficient_sdp\":"
+        },
+        {
+          "line": 888,
+          "category": "sdpa_backend",
+          "text": "torch.backends.cuda.mem_efficient_sdp_enabled(),"
+        },
+        {
+          "line": 889,
+          "category": "sdpa_backend",
+          "text": "\"math_sdp\": torch.backends.cuda.math_sdp_enabled()}"
+        },
+        {
+          "line": 892,
+          "category": "deterministic_algorithms",
+          "text": "return {\"use_deterministic_algorithms\": True, \"warn_only\": False,"
+        },
+        {
+          "line": 892,
+          "category": "warn_only",
+          "text": "return {\"use_deterministic_algorithms\": True, \"warn_only\": False,"
+        },
+        {
+          "line": 895,
+          "category": "cublas_workspace",
+          "text": "os.environ.get(\"CUBLAS_WORKSPACE_CONFIG\"),"
+        },
+        {
+          "line": 906,
+          "category": "deterministic_algorithms",
+          "text": "`utils.set_seed` calls `torch.use_deterministic_algorithms(True,"
+        },
+        {
+          "line": 907,
+          "category": "warn_only",
+          "text": "warn_only=True)`, so any call to it AFTER `enable_strict_determinism`"
+        },
+        {
+          "line": 911,
+          "category": "warn_only",
+          "text": "warn_only = torch.is_deterministic_algorithms_warn_only_enabled()"
+        },
+        {
+          "line": 915,
+          "category": "warn_only",
+          "text": "\"warn_only\": bool(warn_only),"
+        },
+        {
+          "line": 916,
+          "category": "sdpa_backend",
+          "text": "\"flash_sdp\": bool(torch.backends.cuda.flash_sdp_enabled()),"
+        },
+        {
+          "line": 917,
+          "category": "sdpa_backend",
+          "text": "\"mem_efficient_sdp\":"
+        },
+        {
+          "line": 918,
+          "category": "sdpa_backend",
+          "text": "bool(torch.backends.cuda.mem_efficient_sdp_enabled()),"
+        },
+        {
+          "line": 919,
+          "category": "sdpa_backend",
+          "text": "\"math_sdp\": bool(torch.backends.cuda.math_sdp_enabled()),"
+        },
+        {
+          "line": 920,
+          "category": "cudnn_flags",
+          "text": "\"cudnn_deterministic\": bool(torch.backends.cudnn.deterministic),"
+        },
+        {
+          "line": 922,
+          "category": "cublas_workspace",
+          "text": "os.environ.get(\"CUBLAS_WORKSPACE_CONFIG\")}"
+        },
+        {
+          "line": 926,
+          "category": "warn_only",
+          "text": "if warn_only:"
+        },
+        {
+          "line": 928,
+          "category": "warn_only",
+          "text": "\"warn_only is True: non-deterministic kernels would WARN and \""
+        },
+        {
+          "line": 931,
+          "category": "sdpa_backend",
+          "text": "if state[\"flash_sdp\"] or state[\"mem_efficient_sdp\"]:"
+        },
+        {
+          "line": 945,
+          "category": "deterministic_algorithms",
+          "text": "project and calls `torch.use_deterministic_algorithms(True,"
+        },
+        {
+          "line": 946,
+          "category": "warn_only",
+          "text": "warn_only=True)`, so ANY re-seed silently downgrades enforcement."
+        },
+        {
+          "line": 952,
+          "category": "seeding",
+          "text": "utils.set_seed(seed)"
+        },
+        {
+          "line": 957,
+          "category": "tf32_or_matmul_precision",
+          "text": "def pin_fp32_precision() -> dict:"
+        },
+        {
+          "line": 962,
+          "category": "tf32_or_matmul_precision",
+          "text": "torch.backends.cuda.matmul.allow_tf32 = False"
+        },
+        {
+          "line": 963,
+          "category": "tf32_or_matmul_precision",
+          "text": "torch.backends.cudnn.allow_tf32 = False"
+        },
+        {
+          "line": 964,
+          "category": "tf32_or_matmul_precision",
+          "text": "torch.set_float32_matmul_precision(\"highest\")"
+        },
+        {
+          "line": 965,
+          "category": "tf32_or_matmul_precision",
+          "text": "return {\"cuda_matmul_allow_tf32\":"
+        },
+        {
+          "line": 966,
+          "category": "tf32_or_matmul_precision",
+          "text": "bool(torch.backends.cuda.matmul.allow_tf32),"
+        },
+        {
+          "line": 967,
+          "category": "tf32_or_matmul_precision",
+          "text": "\"cudnn_allow_tf32\": bool(torch.backends.cudnn.allow_tf32),"
+        },
+        {
+          "line": 968,
+          "category": "tf32_or_matmul_precision",
+          "text": "\"float32_matmul_precision\":"
+        },
+        {
+          "line": 969,
+          "category": "tf32_or_matmul_precision",
+          "text": "torch.get_float32_matmul_precision(),"
+        },
+        {
+          "line": 1209,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        }
+      ],
+      "experiments/e8b_readout_generation/training.py": [
+        {
+          "line": 158,
+          "category": "deterministic_algorithms",
+          "text": "\"deterministic_execution\": \"STRICT: use_deterministic_algorithms(\""
+        },
+        {
+          "line": 159,
+          "category": "warn_only",
+          "text": "\"True, warn_only=False); flash and \""
+        },
+        {
+          "line": 162,
+          "category": "cublas_workspace",
+          "text": "\"benchmark; CUBLAS_WORKSPACE_CONFIG \""
+        },
+        {
+          "line": 287,
+          "category": "seeding",
+          "text": "rng = np.random.default_rng(G14_FP32_ORDINARY_SEED + index)"
+        },
+        {
+          "line": 631,
+          "category": "seeding",
+          "text": "rng = np.random.default_rng(G14_ROW_SEED)"
+        },
+        {
+          "line": 825,
+          "category": "seeding",
+          "text": "utils.set_seed(0)"
+        },
+        {
+          "line": 1081,
+          "category": "seeding",
+          "text": "utils.set_seed(0)"
+        },
+        {
+          "line": 1188,
+          "category": "warn_only",
+          "text": "# downgrades warn_only, and build_arm / random-LM loading / G8 all"
+        },
+        {
+          "line": 1191,
+          "category": "tf32_or_matmul_precision",
+          "text": "precision = e8b_run.pin_fp32_precision()"
+        },
+        {
+          "line": 1246,
+          "category": "seeding",
+          "text": "train_loader.generator.manual_seed(recipe[\"seed\"])"
+        },
+        {
+          "line": 1295,
+          "category": "seeding",
+          "text": "train_loader.generator.manual_seed(recipe[\"seed\"])"
+        },
+        {
+          "line": 1633,
+          "category": "tf32_or_matmul_precision",
+          "text": "\"fp32_precision_pin\": precision,"
+        }
+      ],
+      "src/tokens_data.py": [
+        {
+          "line": 121,
+          "category": "seeding",
+          "text": "shuffle on train only, seed_worker, num_workers=0 first, pinned memory"
+        },
+        {
+          "line": 129,
+          "category": "seeding",
+          "text": "generator=utils.make_generator(), worker_init_fn=utils.seed_worker,"
+        }
+      ],
+      "src/utils.py": [
+        {
+          "line": 3,
+          "category": "seeding",
+          "text": "Reproducibility lives here. set_seed() fixes every source of randomness and, by"
+        },
+        {
+          "line": 4,
+          "category": "seeding",
+          "text": "default, turns on deterministic algorithms; seed_worker() and make_generator()"
+        },
+        {
+          "line": 9,
+          "category": "seeding",
+          "text": "Every stage's main() should call set_seed() first, before building data or"
+        },
+        {
+          "line": 29,
+          "category": "seeding",
+          "text": "def set_seed(seed: int = config.RANDOM_SEED,"
+        },
+        {
+          "line": 37,
+          "category": "warn_only",
+          "text": "Deterministic algorithms are requested with warn_only=True: if a particular"
+        },
+        {
+          "line": 48,
+          "category": "seeding",
+          "text": "torch.manual_seed(seed)"
+        },
+        {
+          "line": 53,
+          "category": "cublas_workspace",
+          "text": "os.environ.setdefault(\"CUBLAS_WORKSPACE_CONFIG\", \":4096:8\")"
+        },
+        {
+          "line": 54,
+          "category": "cudnn_flags",
+          "text": "torch.backends.cudnn.deterministic = True"
+        },
+        {
+          "line": 55,
+          "category": "cudnn_flags",
+          "text": "torch.backends.cudnn.benchmark = False"
+        },
+        {
+          "line": 56,
+          "category": "deterministic_algorithms",
+          "text": "torch.use_deterministic_algorithms(True, warn_only=True)"
+        },
+        {
+          "line": 56,
+          "category": "warn_only",
+          "text": "torch.use_deterministic_algorithms(True, warn_only=True)"
+        },
+        {
+          "line": 59,
+          "category": "seeding",
+          "text": "def seed_worker(worker_id: int) -> None:"
+        },
+        {
+          "line": 76,
+          "category": "seeding",
+          "text": "generator.manual_seed(seed)"
+        }
+      ]
+    },
+    "core_path_notes": {
+      "src/utils.py": "set_seed calls use_deterministic_algorithms(True, warn_only=True): EVERY call downgrades strict enforcement. Core discipline: reseed_strict or an explicit enable_strict_determinism after each call, with assert_strict_determinism at the point of use.",
+      "experiments/e8b_readout_generation/latents.py": "build_trunk_and_projection reseeds (G13 order) -> the trainer re-imposes immediately after build_arm.",
+      "experiments/e8b_readout_generation/run.py": "load_frozen_causal_lm reseeds for the random arm; enable_strict_determinism / reseed_strict / assert_strict_determinism are the enforcement helpers themselves; the trainer re-imposes after every load.",
+      "experiments/e8b_readout_generation/training.py": "g8/b1 overfit gates reseed internally -> the trainer re-imposes after the gate and asserts before the first optimizer step.",
+      "experiments/e8b_readout_generation/determinism_probe.py": "seeds BEFORE imposing strictness, re-imposes after build_arm, asserts at the point of use.",
+      "experiments/e8a_question_encoder/e8a_common.py": "not on the core E8B training path at runtime (tokenizer and provenance helpers only); its seeding sites belong to E8A runs.",
+      "experiments/e8a_question_encoder/g21_scorer.py": "pure scoring/normalisation; any RNG use is outside the E8B trainer path.",
+      "experiments/e8a_question_encoder/reinfer_g21.py": "GPU-exclusivity helper only on the E8B path.",
+      "src/tokens_data.py": "make_generator/seed_worker configure DataLoader RNG; they do not touch determinism enforcement flags."
+    },
+    "unexplained_core_path_files": [],
+    "non_core_hits": {
+      ".agent-bridge/tasks/e8b-readout-generation/evidence-partial-20260806/latents.py": [
+        {
+          "line": 15,
+          "category": "seeding",
+          "text": "with the seed; nothing between `utils.set_seed(seed)` and the projection"
+        },
+        {
+          "line": 88,
+          "category": "seeding",
+          "text": "utils.set_seed(seed)"
+        }
+      ],
+      ".agent-bridge/tasks/e8b-readout-generation/evidence-partial-20260806/recovered-1636/latents.py": [
+        {
+          "line": 15,
+          "category": "seeding",
+          "text": "with the seed; nothing between `utils.set_seed(seed)` and the projection"
+        },
+        {
+          "line": 88,
+          "category": "seeding",
+          "text": "utils.set_seed(seed)"
+        }
+      ],
+      ".agent-bridge/tasks/e8b-readout-generation/evidence-partial-20260806/recovered-1636/run.py": [
+        {
+          "line": 125,
+          "category": "seeding",
+          "text": "utils.set_seed(RANDOM_INIT_SEED)"
+        },
+        {
+          "line": 128,
+          "category": "seeding",
+          "text": "construction = (\"utils.set_seed(20260802); from_config in float32; \""
+        },
+        {
+          "line": 160,
+          "category": "seeding",
+          "text": "utils.set_seed(seed)"
+        },
+        {
+          "line": 306,
+          "category": "seeding",
+          "text": "torch.set_rng_state(state[\"torch_cpu_rng\"])"
+        },
+        {
+          "line": 308,
+          "category": "seeding",
+          "text": "torch.cuda.set_rng_state_all(state[\"cuda_rng_all\"])"
+        },
+        {
+          "line": 591,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        }
+      ],
+      "1_prepare_gqa.py": [
+        {
+          "line": 123,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        }
+      ],
+      "2_extract_embeddings.py": [
+        {
+          "line": 195,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        }
+      ],
+      "3_train_baselines.py": [
+        {
+          "line": 24,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        }
+      ],
+      "4_train_latent_model.py": [
+        {
+          "line": 26,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        }
+      ],
+      "5_evaluate.py": [
+        {
+          "line": 84,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        }
+      ],
+      "experiments/e2_siglip/run.py": [
+        {
+          "line": 265,
+          "category": "seeding",
+          "text": "rng = np.random.default_rng(0)"
+        },
+        {
+          "line": 343,
+          "category": "seeding",
+          "text": "utils.set_seed(seed)"
+        },
+        {
+          "line": 347,
+          "category": "seeding",
+          "text": "train_loader.generator.manual_seed(seed)"
+        },
+        {
+          "line": 467,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        }
+      ],
+      "experiments/e3_vocab1000/run.py": [
+        {
+          "line": 190,
+          "category": "seeding",
+          "text": "order = np.random.default_rng(TRAIN_QUESTION_SEED).permutation("
+        },
+        {
+          "line": 349,
+          "category": "seeding",
+          "text": "rng = np.random.default_rng(0)"
+        },
+        {
+          "line": 461,
+          "category": "seeding",
+          "text": "utils.set_seed(seed)"
+        },
+        {
+          "line": 465,
+          "category": "seeding",
+          "text": "train_loader.generator.manual_seed(seed)"
+        },
+        {
+          "line": 564,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        }
+      ],
+      "experiments/e7a_efficiency/run.py": [
+        {
+          "line": 347,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        },
+        {
+          "line": 951,
+          "category": "cudnn_flags",
+          "text": "torch.backends.cudnn.deterministic),"
+        },
+        {
+          "line": 952,
+          "category": "cudnn_flags",
+          "text": "\"cudnn_benchmark\": bool(torch.backends.cudnn.benchmark),"
+        },
+        {
+          "line": 954,
+          "category": "cublas_workspace",
+          "text": "\"CUBLAS_WORKSPACE_CONFIG\"),"
+        }
+      ],
+      "experiments/e7b_serial_efficiency/analyse.py": [
+        {
+          "line": 146,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        }
+      ],
+      "experiments/e7b_serial_efficiency/run.py": [
+        {
+          "line": 175,
+          "category": "cudnn_flags",
+          "text": "\"cudnn_deterministic\": torch.backends.cudnn.deterministic}"
+        },
+        {
+          "line": 207,
+          "category": "seeding",
+          "text": "rng = np.random.default_rng(ROW_SEED)"
+        },
+        {
+          "line": 854,
+          "category": "cudnn_flags",
+          "text": "torch.backends.cudnn.deterministic = True"
+        },
+        {
+          "line": 855,
+          "category": "cudnn_flags",
+          "text": "torch.backends.cudnn.benchmark = False"
+        },
+        {
+          "line": 1113,
+          "category": "seeding",
+          "text": "order_rng = np.random.default_rng(ORDER_SEED)"
+        },
+        {
+          "line": 1145,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        }
+      ],
+      "experiments/e8a_question_encoder/analyse_core.py": [
+        {
+          "line": 160,
+          "category": "seeding",
+          "text": "2,000 draws from a fresh default_rng(0), each drawing as many images as"
+        },
+        {
+          "line": 166,
+          "category": "seeding",
+          "text": "rng = np.random.default_rng(BOOTSTRAP_SEED)"
+        },
+        {
+          "line": 633,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        }
+      ],
+      "experiments/e8a_question_encoder/analyse_core_g21.py": [
+        {
+          "line": 207,
+          "category": "seeding",
+          "text": "rng = np.random.default_rng(core.BOOTSTRAP_SEED)"
+        },
+        {
+          "line": 425,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        }
+      ],
+      "experiments/e8a_question_encoder/build_artefact_manifest.py": [
+        {
+          "line": 144,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        }
+      ],
+      "experiments/e8a_question_encoder/cell_validator.py": [
+        {
+          "line": 264,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        }
+      ],
+      "experiments/e8a_question_encoder/compare_three_way.py": [
+        {
+          "line": 337,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        }
+      ],
+      "experiments/e8a_question_encoder/efficiency_resources.py": [
+        {
+          "line": 331,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        }
+      ],
+      "experiments/e8a_question_encoder/extract_hidden.py": [
+        {
+          "line": 214,
+          "category": "seeding",
+          "text": "utils.set_seed(PROJECTION_PROBE_SEED)"
+        },
+        {
+          "line": 220,
+          "category": "seeding",
+          "text": "\"probe\": \"Linear(H, 512) seeded with utils.set_seed(0); measures the \""
+        },
+        {
+          "line": 555,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        }
+      ],
+      "experiments/e8a_question_encoder/freeze_core_results.py": [
+        {
+          "line": 53,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        }
+      ],
+      "experiments/e8a_question_encoder/freeze_g21.py": [
+        {
+          "line": 89,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        }
+      ],
+      "experiments/e8a_question_encoder/g21_inventories.py": [
+        {
+          "line": 71,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        }
+      ],
+      "experiments/e8a_question_encoder/resource_correction_g21.py": [
+        {
+          "line": 75,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        }
+      ],
+      "experiments/e8a_question_encoder/run_a0p.py": [
+        {
+          "line": 100,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        }
+      ],
+      "experiments/e8a_question_encoder/run_matrix.py": [
+        {
+          "line": 447,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        }
+      ],
+      "experiments/e8a_question_encoder/run_pilot.py": [
+        {
+          "line": 159,
+          "category": "seeding",
+          "text": "utils.set_seed(seed)"
+        },
+        {
+          "line": 196,
+          "category": "seeding",
+          "text": "\"then utils.set_seed(seed), then the trunk \""
+        },
+        {
+          "line": 368,
+          "category": "seeding",
+          "text": "utils.set_seed(seed)"
+        },
+        {
+          "line": 937,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        }
+      ],
+      "experiments/e8b_readout_generation/determinism_call_scan.py": [
+        {
+          "line": 4,
+          "category": "warn_only",
+          "text": "Covers: deterministic-algorithm toggles and their warn_only argument,"
+        },
+        {
+          "line": 28,
+          "category": "deterministic_algorithms",
+          "text": "\"deterministic_algorithms\": r\"use_deterministic_algorithms\","
+        },
+        {
+          "line": 29,
+          "category": "warn_only",
+          "text": "\"warn_only\": r\"warn_only\","
+        },
+        {
+          "line": 30,
+          "category": "sdpa_backend",
+          "text": "\"sdpa_backend\": r\"flash_sdp|mem_efficient_sdp|math_sdp|sdpa_kernel\","
+        },
+        {
+          "line": 32,
+          "category": "tf32_or_matmul_precision",
+          "text": "\"tf32_or_matmul_precision\": r\"allow_tf32|float32_matmul_precision\""
+        },
+        {
+          "line": 33,
+          "category": "tf32_or_matmul_precision",
+          "text": "r\"|fp32_precision\","
+        },
+        {
+          "line": 34,
+          "category": "seeding",
+          "text": "\"seeding\": r\"\\bset_seed\\s*\\(|manual_seed\\s*\\(|seed_worker\""
+        },
+        {
+          "line": 35,
+          "category": "seeding",
+          "text": "r\"|set_rng_state|default_rng\\s*\\(\","
+        },
+        {
+          "line": 36,
+          "category": "cublas_workspace",
+          "text": "\"cublas_workspace\": r\"CUBLAS_WORKSPACE_CONFIG\","
+        },
+        {
+          "line": 58,
+          "category": "deterministic_algorithms",
+          "text": "\"src/utils.py\": \"set_seed calls use_deterministic_algorithms(True, \""
+        },
+        {
+          "line": 59,
+          "category": "warn_only",
+          "text": "\"warn_only=True): EVERY call downgrades strict \""
+        },
+        {
+          "line": 86,
+          "category": "seeding",
+          "text": "\"make_generator/seed_worker configure DataLoader RNG; they do \""
+        },
+        {
+          "line": 110,
+          "category": "warn_only",
+          "text": "\"warn_only\", \"sdpa_backend\","
+        },
+        {
+          "line": 115,
+          "category": "warn_only",
+          "text": "\"algorithms, warn_only, SDPA backends, cudnn \""
+        }
+      ],
+      "experiments/e8b_readout_generation/fp32_canonical_validation.py": [
+        {
+          "line": 209,
+          "category": "seeding",
+          "text": "rng = np.random.default_rng(SAMPLE_SEED + grid_point)"
+        },
+        {
+          "line": 327,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        }
+      ],
+      "experiments/e8b_readout_generation/g14_numerical_characterization.py": [
+        {
+          "line": 149,
+          "category": "seeding",
+          "text": "rng = np.random.default_rng(SAMPLE_SEED)"
+        },
+        {
+          "line": 308,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        }
+      ],
+      "experiments/e8b_readout_generation/g14_precision_probe.py": [
+        {
+          "line": 8,
+          "category": "seeding",
+          "text": "(torch.manual_seed(0), scale 0.13) over the full top-100 answer cache,"
+        },
+        {
+          "line": 52,
+          "category": "seeding",
+          "text": "torch.manual_seed(PROBE_SEED)"
+        },
+        {
+          "line": 68,
+          "category": "seeding",
+          "text": "\"probe\": f\"one pinned random prefix (torch.manual_seed(\""
+        }
+      ],
+      "experiments/v2_00_protocol/build_manifests.py": [
+        {
+          "line": 89,
+          "category": "seeding",
+          "text": "rng = np.random.default_rng(seed)"
+        },
+        {
+          "line": 114,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        },
+        {
+          "line": 164,
+          "category": "seeding",
+          "text": "train_order = np.random.default_rng(TRAIN_QUESTION_SEED).permutation(len(eligible))"
+        }
+      ],
+      "experiments/v2_00_protocol/verify_protocol.py": [
+        {
+          "line": 115,
+          "category": "seeding",
+          "text": "rng = np.random.default_rng(seed)"
+        },
+        {
+          "line": 370,
+          "category": "seeding",
+          "text": "train_order = np.random.default_rng(TRAIN_QUESTION_SEED).permutation("
+        }
+      ],
+      "experiments/v2_01_embeddings/extract_v2.py": [
+        {
+          "line": 147,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        }
+      ],
+      "experiments/v2_01_embeddings/zero_shot.py": [
+        {
+          "line": 42,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        }
+      ],
+      "experiments/v2_02_multiseed/run.py": [
+        {
+          "line": 61,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        },
+        {
+          "line": 80,
+          "category": "seeding",
+          "text": "utils.set_seed(seed)"
+        },
+        {
+          "line": 84,
+          "category": "seeding",
+          "text": "train_loader.generator.manual_seed(seed)"
+        }
+      ],
+      "experiments/v2_03_param_match/run.py": [
+        {
+          "line": 93,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        },
+        {
+          "line": 125,
+          "category": "seeding",
+          "text": "utils.set_seed(seed)"
+        },
+        {
+          "line": 128,
+          "category": "seeding",
+          "text": "train_loader.generator.manual_seed(seed)"
+        }
+      ],
+      "experiments/v2_04_ablation/run.py": [
+        {
+          "line": 109,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        },
+        {
+          "line": 133,
+          "category": "seeding",
+          "text": "utils.set_seed(seed)"
+        },
+        {
+          "line": 136,
+          "category": "seeding",
+          "text": "train_loader.generator.manual_seed(seed)"
+        }
+      ],
+      "experiments/v2_05_types/addendum.py": [
+        {
+          "line": 71,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        }
+      ],
+      "experiments/v2_05_types/addendum_clustered.py": [
+        {
+          "line": 13,
+          "category": "seeding",
+          "text": "draws from a fresh default_rng(0), each drawing as many images as the slice"
+        },
+        {
+          "line": 98,
+          "category": "seeding",
+          "text": "rng = np.random.default_rng(BOOTSTRAP_SEED)"
+        },
+        {
+          "line": 112,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        },
+        {
+          "line": 207,
+          "category": "seeding",
+          "text": "f\"default_rng({BOOTSTRAP_SEED}), clusters are the \""
+        }
+      ],
+      "experiments/v2_05_types/analyze.py": [
+        {
+          "line": 74,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        }
+      ],
+      "experiments/v2_05_types/join_metadata.py": [
+        {
+          "line": 110,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        }
+      ],
+      "experiments/v2_06_reliance/run.py": [
+        {
+          "line": 80,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        },
+        {
+          "line": 89,
+          "category": "seeding",
+          "text": "permutation = np.random.default_rng(PERMUTATION_SEED).permutation("
+        }
+      ],
+      "experiments/v2_07_scaling/addendum_pooled.py": [
+        {
+          "line": 173,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        }
+      ],
+      "experiments/v2_07_scaling/materialise.py": [
+        {
+          "line": 49,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        }
+      ],
+      "experiments/v2_07_scaling/run.py": [
+        {
+          "line": 121,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        },
+        {
+          "line": 145,
+          "category": "seeding",
+          "text": "utils.set_seed(seed)"
+        },
+        {
+          "line": 148,
+          "category": "seeding",
+          "text": "train_loader.generator.manual_seed(seed)"
+        }
+      ],
+      "experiments/v3_00_tokens/extract_tokens.py": [
+        {
+          "line": 119,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        },
+        {
+          "line": 353,
+          "category": "seeding",
+          "text": "rng = np.random.default_rng(config.RANDOM_SEED)"
+        }
+      ],
+      "experiments/v3_00_tokens/loader_bench.py": [
+        {
+          "line": 36,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        },
+        {
+          "line": 61,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        }
+      ],
+      "experiments/v3_01_reasoner/run.py": [
+        {
+          "line": 106,
+          "category": "seeding",
+          "text": "utils.set_seed(seed)"
+        },
+        {
+          "line": 110,
+          "category": "seeding",
+          "text": "train_loader.generator.manual_seed(seed)"
+        },
+        {
+          "line": 174,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        },
+        {
+          "line": 204,
+          "category": "seeding",
+          "text": "utils.set_seed(0)"
+        },
+        {
+          "line": 385,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        },
+        {
+          "line": 487,
+          "category": "seeding",
+          "text": "permutation = np.random.default_rng(config.RANDOM_SEED).permutation("
+        }
+      ],
+      "experiments/v3_02a_refs/build_meanpatch.py": [
+        {
+          "line": 105,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        }
+      ],
+      "experiments/v3_02a_refs/diagnostics.py": [
+        {
+          "line": 97,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        }
+      ],
+      "experiments/v3_02a_refs/patches_probe.py": [
+        {
+          "line": 57,
+          "category": "seeding",
+          "text": "utils.set_seed(SEED)"
+        },
+        {
+          "line": 79,
+          "category": "seeding",
+          "text": "train_loader.generator.manual_seed(SEED)"
+        },
+        {
+          "line": 148,
+          "category": "seeding",
+          "text": "permutation = np.random.default_rng(config.RANDOM_SEED).permutation("
+        }
+      ],
+      "experiments/v3_02a_refs/preflight.py": [
+        {
+          "line": 40,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        },
+        {
+          "line": 113,
+          "category": "seeding",
+          "text": "rng = np.random.default_rng(config.RANDOM_SEED)"
+        }
+      ],
+      "experiments/v3_02a_refs/run_refs.py": [
+        {
+          "line": 67,
+          "category": "seeding",
+          "text": "utils.set_seed(seed)"
+        },
+        {
+          "line": 70,
+          "category": "seeding",
+          "text": "train_loader.generator.manual_seed(seed)"
+        },
+        {
+          "line": 106,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        }
+      ],
+      "experiments/v3_02a_refs/stats_repair.py": [
+        {
+          "line": 74,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        },
+        {
+          "line": 261,
+          "category": "seeding",
+          "text": "rng = np.random.default_rng(BOOTSTRAP_SEED)"
+        }
+      ],
+      "experiments/v3_03_scaling/run.py": [
+        {
+          "line": 116,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        },
+        {
+          "line": 191,
+          "category": "seeding",
+          "text": "utils.set_seed(0)"
+        },
+        {
+          "line": 272,
+          "category": "seeding",
+          "text": "utils.set_seed()"
+        },
+        {
+          "line": 397,
+          "category": "seeding",
+          "text": "rng = np.random.default_rng(BOOTSTRAP_SEED)"
+        }
+      ],
+      "src/data.py": [
+        {
+          "line": 36,
+          "category": "seeding",
+          "text": "seed_worker so the order is reproducible. Batches are pinned when running on"
+        },
+        {
+          "line": 51,
+          "category": "seeding",
+          "text": "worker_init_fn=utils.seed_worker,"
+        }
+      ],
+      "tests/test_e7b.py": [
+        {
+          "line": 168,
+          "category": "seeding",
+          "text": "rng_a = np.random.default_rng(e7b.ORDER_SEED)"
+        },
+        {
+          "line": 169,
+          "category": "seeding",
+          "text": "rng_b = np.random.default_rng(e7b.ORDER_SEED)"
+        }
+      ],
+      "tests/test_e8a.py": [
+        {
+          "line": 392,
+          "category": "seeding",
+          "text": "utils.set_seed(SAMPLE_SEED)"
+        },
+        {
+          "line": 790,
+          "category": "seeding",
+          "text": "utils.set_seed(SAMPLE_SEED)"
+        },
+        {
+          "line": 1386,
+          "category": "seeding",
+          "text": "utils.set_seed(SAMPLE_SEED)"
+        }
+      ],
+      "tests/test_e8b.py": [
+        {
+          "line": 96,
+          "category": "seeding",
+          "text": "torch.manual_seed(20260806)"
+        },
+        {
+          "line": 105,
+          "category": "seeding",
+          "text": "torch.manual_seed(seed)"
+        },
+        {
+          "line": 266,
+          "category": "seeding",
+          "text": "utils.set_seed(0)"
+        },
+        {
+          "line": 278,
+          "category": "seeding",
+          "text": "torch.manual_seed(11)"
+        },
+        {
+          "line": 301,
+          "category": "seeding",
+          "text": "torch.manual_seed(3)"
+        },
+        {
+          "line": 644,
+          "category": "seeding",
+          "text": "torch.manual_seed(21)"
+        },
+        {
+          "line": 706,
+          "category": "seeding",
+          "text": "utils.set_seed(123)"
+        },
+        {
+          "line": 724,
+          "category": "seeding",
+          "text": "noise = torch.tensor(np.random.default_rng("
+        },
+        {
+          "line": 1127,
+          "category": "seeding",
+          "text": "probe = torch.randn(64, 100, generator=torch.Generator().manual_seed(0))"
+        },
+        {
+          "line": 1435,
+          "category": "seeding",
+          "text": "rng = np.random.default_rng(0)"
+        },
+        {
+          "line": 1508,
+          "category": "tf32_or_matmul_precision",
+          "text": "\"allow_tf32 = False\" in src"
+        },
+        {
+          "line": 1509,
+          "category": "tf32_or_matmul_precision",
+          "text": "and 'set_float32_matmul_precision(\"highest\")' in src)"
+        },
+        {
+          "line": 1652,
+          "category": "warn_only",
+          "text": "check(\"strict determinism is available and is NOT warn_only\","
+        },
+        {
+          "line": 1654,
+          "category": "warn_only",
+          "text": "and \"warn_only=False\" in src"
+        },
+        {
+          "line": 1655,
+          "category": "sdpa_backend",
+          "text": "and \"enable_flash_sdp(False)\" in src"
+        },
+        {
+          "line": 1656,
+          "category": "sdpa_backend",
+          "text": "and \"enable_mem_efficient_sdp(False)\" in src)"
+        },
+        {
+          "line": 1676,
+          "category": "seeding",
+          "text": "_utils.set_seed(0)"
+        },
+        {
+          "line": 1679,
+          "category": "warn_only",
+          "text": "check(\"strict determinism verifies with warn_only False\","
+        },
+        {
+          "line": 1680,
+          "category": "warn_only",
+          "text": "state[\"warn_only\"] is False"
+        },
+        {
+          "line": 1682,
+          "category": "sdpa_backend",
+          "text": "and state[\"flash_sdp\"] is False"
+        },
+        {
+          "line": 1683,
+          "category": "sdpa_backend",
+          "text": "and state[\"mem_efficient_sdp\"] is False)"
+        },
+        {
+          "line": 1684,
+          "category": "seeding",
+          "text": "_utils.set_seed(0)   # the downgrade path"
+        },
+        {
+          "line": 1689,
+          "category": "warn_only",
+          "text": "restored[\"warn_only\"] is False)"
+        },
+        {
+          "line": 1691,
+          "category": "warn_only",
+          "text": "\"warn_only=True\" in (PROJECT_ROOT / \"src\" / \"utils.py\").read_text())"
+        },
+        {
+          "line": 1708,
+          "category": "warn_only",
+          "text": "check(f\"probe run {n} recorded warn_only False at the point \""
+        },
+        {
+          "line": 1709,
+          "category": "warn_only",
+          "text": "f\"of use\", v[\"warn_only\"] is False)"
+        },
+        {
+          "line": 1801,
+          "category": "seeding",
+          "text": "torch.manual_seed(31)"
+        }
+      ],
+      "tests/test_mask.py": [
+        {
+          "line": 21,
+          "category": "seeding",
+          "text": "utils.set_seed(0)"
+        }
+      ],
+      "tests/test_seeding.py": [
+        {
+          "line": 30,
+          "category": "seeding",
+          "text": "utils.set_seed(0)"
+        },
+        {
+          "line": 33,
+          "category": "seeding",
+          "text": "utils.set_seed(0)"
+        }
+      ]
+    },
+    "rule": "strict determinism is NEVER assumed from startup state: it is re-imposed after every seeding point and re-verified at the point of use (assert_strict_determinism), and every scientific run records verified_at_use"
+  },
+  "metadata": {
+    "timestamp": "2026-08-07T15:23:12",
+    "git_commit": "c128e65",
+    "git_dirty": true,
+    "open_clip_version": "3.3.0",
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "h5py_version": "3.16.0",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "deterministic": true,
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "embed_dim": 512,
+    "top_k_answers": 100,
+    "n_train": 40000,
+    "n_val": 8000,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "hidden_dim": 512,
+    "dropout": 0.3,
+    "weight_decay": 0.0001
+  }
+}

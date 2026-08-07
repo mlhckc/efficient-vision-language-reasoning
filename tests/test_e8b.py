@@ -737,7 +737,8 @@ def _toy_training(steps: int, checkpoint_at: int | None,
                 best_model_state=None, best_metric=0.0, best_epoch=-1,
                 loader_generator=generator, epoch_permutation_counter=0,
                 recipe_sha256="toy", vocabulary_sha256="toy",
-                store_sha256s={})
+                store_sha256s={},
+                protocol_family=e8b_run.PROTOCOL_FAMILY)
     return losses, {k: v.detach().clone()
                     for k, v in model.state_dict().items()}
 
@@ -947,35 +948,40 @@ def test_resource_projections() -> None:
 # --- Training module: recipe, scorer, G14-64 pinning, G19 projection ----------
 
 def test_training_module() -> None:
+    """The search-era execution path is GONE (the eight-point search is
+    permanently abandoned). What survives is the historical grid table
+    for audit, the scorer, the pinned G14 rows, the optimiser/scheduler
+    builders and the core family."""
     from experiments.e8b_readout_generation import training
 
-    check("the recipe is exactly the authorised grid point 1",
+    # The abandoned grid survives ONLY as a historical table.
+    check("the historical grid table is intact and unextended",
+          len(e8b_run.SEARCH_GRID) == 8
+          and [r["grid_point"] for r in e8b_run.SEARCH_GRID]
+          == list(range(1, 9)))
+    check("grid point 1 still resolves to the pre-result default",
           training.RECIPE["lr"] == 3e-4
           and training.RECIPE["warmup_frac"] == 0.0
           and training.RECIPE["dropout"] == 0.1
-          and training.RECIPE["grid_point"] == 1
-          and training.RECIPE["arm"] == "B3"
-          and training.RECIPE["scale"] == "train_40k"
-          and training.RECIPE["seed"] == 0)
-    check("the pinned recipe properties match the canonical plan",
-          training.RECIPE["max_epochs"] == 100
-          and training.RECIPE["patience"] == 10
-          and training.RECIPE["batch_size"] == 128
-          and training.RECIPE["weight_decay"] == 0.01
-          and training.RECIPE["grad_clip"] == 1.0
-          and training.RECIPE["wall_clock_halt_hours"] == 8.0)
+          and training.RECIPE["grid_point"] == 1)
     recomputed = hashlib.sha256(json.dumps(
         training.RECIPE, sort_keys=True).encode()).hexdigest()
-    check("the recipe hash is reproducible",
+    check("the historical recipe hash is reproducible",
           recomputed == training.RECIPE_SHA256)
-    check("the U1/U4 remaining-matrix constants are the E8B-min counts",
-          training.REMAINING_SEARCH_RUNS == 7
-          and training.CORE_LM_RUNS_40K == 5
-          and training.CORE_LM_RUNS_250K == 6
-          and training.CORE_B1_RUNS == 6
-          and training.LM_CORE_CHECKPOINTS == 12
-          and training.G14_N_EXAMPLES == 64)
 
+    # The search EXECUTION path and the BF16 selection function are gone.
+    for gone in ("train_search_point", "train_pilot", "_train_locked",
+                 "dev_r1_predictions", "g19_projection",
+                 "completed_search_runs"):
+        check(f"the abandoned-search symbol {gone} is removed",
+              not hasattr(training, gone))
+    src = (E8B_DIR / "training.py").read_text()
+    check("no bfloat16 cast survives on any evaluation path",
+          "canonical_dev_predictions" in src
+          and ".to(torch.bfloat16)" in src   # training path only
+          and "def dev_r1_predictions" not in src)
+
+    check("the G14 row count is the pinned 64", training.G14_N_EXAMPLES == 64)
     rows_a = training.pinned_g14_rows(7714)
     rows_b = training.pinned_g14_rows(7714)
     check("the 64 G14 rows are pinned, unique and sorted",
@@ -1010,84 +1016,11 @@ def test_training_module() -> None:
     check("the cosine schedule spans 1.0 to 0.0 with no warmup",
           abs(factors[0] - 1.0) < 1e-9 and abs(factors[1] - 0.5) < 1e-9
           and abs(factors[2]) < 1e-9)
-
-    projection = training.g19_projection(
-        train_seconds_per_epoch=120.0, eval_seconds_per_epoch=40.0,
-        peak_allocated_bytes=4 * 2 ** 30,
-        peak_reserved_bytes=4 * 2 ** 30,
-        device_total_bytes=20 * 2 ** 30,
-        v3_01_seconds_per_epoch=40.0, b1_seconds_per_epoch=40.0,
-        storage_dir=config.RESULTS_DIR)
-    expected = projection["projections"]["expected_epoch_15_22"]
-    epoch_250k = 120.0 * 1954 / 313 + 40.0
-    check("the 250k epoch scales the train part by the step ratio and "
-          "keeps the fixed dev evaluation",
-          abs(expected["seconds_per_epoch"]["train_250k"]
-              - round(epoch_250k, 2)) < 0.01)
-    check("the largest 250k run follows the 22-epoch expected basis",
-          abs(expected["largest_250k_run_hours"]
-              - epoch_250k * 22 / 3600) < 1e-3)
-    worst = projection["projections"]["worst_case_100_epoch"]
-    check("the 100-epoch worst case is reported beside the expected "
-          "basis and truncated by the 8 h wall where it applies (U3)",
-          abs(worst["largest_250k_run_hours"]
-              - epoch_250k * 100 / 3600) < 1e-3
-          and worst["run_hours"]["train_250k_after_8h_wall"] == 8.0)
-    check("the multiplier is measured against the stored v3_01 epoch",
-          projection["multiplier_vs_v3_01"] == 4.0)
-    check("every section-14 gate family is evaluated",
-          set(projection["gates"]) == {
-              "per_run_8h", "pretrained_identity_35h",
-              "random_identity_35h", "remaining_core", "memory_80pct",
-              "storage"})
-    check("a benign projection fires nothing",
-          projection["stop_and_return"] is False
-          and projection["fired"] == [],
-          f"fired {projection['fired']}")
-    # The storage requirement uses the checkpoint sizes MEASURED from
-    # the grid point 1 artefacts, not the withdrawn 85 MiB placeholder.
-    check("storage is projected from the measured checkpoint sizes",
-          training.RESUME_CHECKPOINT_MIB > 300
-          and training.BEST_CHECKPOINT_MIB > 80
-          and projection["gates"]["storage"]["required_gib"] > 10.0)
-    # The 35 h identity aggregate covers the whole pretrained identity.
-    check("the pretrained identity aggregate includes A4 and A7c",
-          training.A4_IDENTITY_HOURS == 1.804
-          and training.A7C_IDENTITY_HOURS == 1.864
-          and "A4" in projection["gates"][
-              "pretrained_identity_35h"]["includes"])
-    # B1's three 250k runs are priced at the 250k rate, not the 40k one.
-    check("B1 is priced per scale",
-          training.CORE_B1_RUNS_40K == 3
-          and training.CORE_B1_RUNS_250K == 3
-          and expected["core_b1_hours"]
-          > 6 * 40.0 * 15 / 3600)
-    hot = training.g19_projection(
-        train_seconds_per_epoch=120.0, eval_seconds_per_epoch=40.0,
-        peak_allocated_bytes=int(0.5 * 20 * 2 ** 30),
-        peak_reserved_bytes=int(0.9 * 20 * 2 ** 30),
-        device_total_bytes=20 * 2 ** 30,
-        v3_01_seconds_per_epoch=40.0, b1_seconds_per_epoch=40.0,
-        storage_dir=config.RESULTS_DIR)
-    check("an over-ceiling RESERVED measurement fires stop-and-return "
-          "even when allocated is under the ceiling (P3)",
-          hot["stop_and_return"] is True
-          and "memory_80pct" in hot["fired"])
-    check("the 100-epoch stress scenario alone never fires the "
-          "projection (P3)",
-          projection["gates"]["remaining_core"]["fires"] is False
-          and projection["gates"]["remaining_core"]["stress_scenario"][
-              "halting"] is False)
-
-    source = (E8B_DIR / "training.py").read_text()
-    check("the training loop halts on the 8 h wall with a recorded "
-          "failure status",
-          "FAILED: 8 GPU-hour operational" in source
-          and "wall_halt" in source)
-    check("the binding G14 runs before checkpoint selection",
-          "g14_pre_selection" in source
-          and source.index("g14_pre_selection")
-          < source.index('make_optimizer(model, recipe["lr"])'))
+    check("the schedule horizon is the inherited 100 x steps_per_epoch, "
+          "so the fixed 22-epoch budget traverses only its first part",
+          "100 * steps_per_epoch" in src
+          or "100 x steps_per_epoch" in
+          training.build_core_recipe("B3", "train_40k", 0)["scheduler"])
 
 
 # --- 26b. G10: the section-11 mean prediction entropy -------------------------
@@ -1158,16 +1091,18 @@ def test_g10_prediction_entropy() -> None:
           and fires(4.0, 0.61) and not fires(0.31, 0.59))
 
     src = (E8B_DIR / "training.py").read_text()
-    check("G10 halts on the section-11 quantity, not the histogram",
+    check("G10 gates on the section-11 per-row quantity, not the "
+          "argmax histogram",
           "entropy = mean_prediction_entropy_nats(scores_a)" in src
-          and "if top1_share >= 0.60 or entropy <= 0.30:" in src)
-    check("the withdrawn histogram statistic is still recorded, marked "
-          "as not the gate quantity",
-          "argmax_histogram_entropy_nats" in src
-          and "NOT the section 11 gate " in src)
+          and "collapse = top1_share >= 0.60 or entropy <= 0.30" in src
+          and "argmax_histogram" not in src)
+    check("G10 halting treatment follows section 11: halting for the "
+          "principal arms, a recorded diagnostic for the random control",
+          'if collapse and arm != "B2":' in src
+          and "recorded scientific diagnostic (section " in src)
     check("the record carries the P1 non-comparability statement",
-          "PSEUDO-PROBABILITY" in src and "never be compared" in src
-          .replace("NEVER be compared", "never be compared"))
+          "pseudo-probability" in src.lower()
+          and "never numerically comparable" in src)
 
 
 # --- 26c. The frozen eight-point grid and the derived G1/G15 bindings ---------
@@ -1352,13 +1287,20 @@ def test_fp32_amendment() -> None:
     check("every core recipe carries the amended protocol family",
           all(r["protocol_family"] == e8b_run.PROTOCOL_FAMILY
               for r in core.values())
-          and e8b_run.PROTOCOL_FAMILY == "e8b-fp32-core-2026-08-07")
+          and e8b_run.PROTOCOL_FAMILY
+          == "e8b-fp32-fixed22-core-2026-08-07")
     check("no superseded search recipe carries a protocol family",
           all("protocol_family" not in training.build_recipe(i)
               for i in range(1, 9)))
-    check("every core recipe names FP32 canonical evaluation",
+    check("every core recipe names FP32 canonical evaluation and BF16 "
+          "training explicitly",
           all(r["canonical_evaluation_precision"] == "fp32"
-              and "CANONICAL FP32" in r["precision"]
+              and r["training_precision"].startswith("bf16 autocast")
+              and r["strict_determinism"] is True
+              and r["deterministic_backend"]["warn_only"] is False
+              and r["deterministic_backend"]["flash_sdp"] is False
+              and r["deterministic_backend"]["mem_efficient_sdp"] is False
+              and r["deterministic_backend"]["math_sdp"] is True
               for r in core.values()))
 
     # --- the fixed pre-result recipe, and its recorded justification ---
@@ -1507,12 +1449,17 @@ def test_fp32_amendment() -> None:
     check("TF32 is pinned off for the canonical FP32 path",
           "allow_tf32 = False" in src
           and 'set_float32_matmul_precision("highest")' in src)
-    check("FP32 promotion refuses if it is not identity preserving",
+    check("FP32 promotion refuses unless it is an EXACT bitwise upcast "
+          "and round-trips, and unless every parameter is fp32",
           "FP32 PROMOTION REFUSED" in src
-          and "round-trip to the frozen bfloat16 values" in src)
-    check("the core trainer refuses rather than dispatching to a "
-          "half-built runner",
-          "E8B CORE TRAINER NOT IMPLEMENTED" in src)
+          and "exact bitwise upcast" in src
+          and "round-trip to the frozen bfloat16 " in src
+          and "not float32 only" in src)
+    check("run.train dispatches to the implemented core trainer only "
+          "after the authorisation check",
+          "training.train_core_cell(arm, scale, seed)" in src
+          and src.index("core-matrix-approved")
+          < src.index("training.train_core_cell(arm, scale, seed)"))
 
 
 # --- 26e. The 2026-08-07 core-readiness closure (OI1/OI2/OI5/OI6/OI7) --------
@@ -1563,11 +1510,15 @@ def test_core_readiness_closure() -> None:
     check("canonical_prefix refuses autocast",
           "torch.is_autocast_enabled()" in tsrc
           and "autocast is active on the canonical" in tsrc)
-    check("canonical_prefix asserts the trainable, frozen and cached "
-          "inputs are all fp32",
-          "trainable trunk/projection weights" in tsrc
-          and "frozen language-model weights" in tsrc
+    check("canonical_prefix asserts EVERY trainable and frozen "
+          "parameter dtype (not a single sample) and the cached inputs",
+          "trainable parameter dtypes are" in tsrc
+          and "frozen language-model parameter " in tsrc
+          and "{p.dtype for p in model.parameters()}" in tsrc
+          and "{p.dtype for p in lm.parameters()}" in tsrc
           and "cached image tokens as stored" in tsrc)
+    check("canonical_prefix also refuses CPU autocast",
+          'torch.is_autocast_enabled("cpu")' in tsrc)
     check("a cast bfloat16 prefix is explicitly forbidden",
           "computed in bfloat16 and cast to " in tsrc)
     check("the canonical dev pass never casts to bfloat16",
@@ -1577,9 +1528,11 @@ def test_core_readiness_closure() -> None:
               tsrc.index("# --- OI7: G14-FP32")])
 
     # --- OI7: protocol family separation and resume refusal ---
-    check("protocol_family is a resume field and is written first",
+    check("protocol_family is a resume field and is written from the "
+          "recipe, not the module constant",
           e8b_run.RESUME_FIELDS[0] == "protocol_family"
-          and "\"protocol_family\": PROTOCOL_FAMILY," in src)
+          and '"protocol_family": protocol_family,' in src
+          and "protocol_family: str) -> None:" in src)
     check("verify_resume_checkpoint enforces the family BY DEFAULT",
           "protocol_family: str | None = PROTOCOL_FAMILY" in src)
     old_ckpt = (config.RESULTS_DIR / "experiments"
@@ -1596,25 +1549,38 @@ def test_core_readiness_closure() -> None:
               state["epoch"] == 30 and "protocol_family" not in state)
 
     # --- OI2: fixed 22-epoch schedule, no patience ---
-    check("the LM arms carry a fixed 22-epoch budget",
-          training.CORE_EPOCHS == {"B2": 22, "B3": 22}
-          and training.core_epoch_budget("B2") == 22
-          and training.core_epoch_budget("B3") == 22)
+    check("the LM arms carry a fixed 22-epoch budget INSIDE the hashed "
+          "recipe",
+          all(training.build_core_recipe(a, s_, d)["max_epochs"] == 22
+              and training.build_core_recipe(a, s_, d)["early_stopping"]
+              is False
+              and training.build_core_recipe(a, s_, d)[
+                  "canonical_checkpoint_rule"] == "epoch_22"
+              and training.build_core_recipe(a, s_, d)[
+                  "primary_checkpoint_selection"] == "fixed_endpoint"
+              for a in ("B2", "B3") for s_ in e8b_run.CORE_SCALES
+              for d in e8b_run.CORE_SEEDS)
+          and training.CORE_EPOCHS == {"B2": 22, "B3": 22})
     check("early stopping is disabled for the LM arms only",
           set(training.CORE_NO_EARLY_STOPPING) == {"B2", "B3"})
     check("B1 is NOT given the 22-epoch budget and keeps section 7.3",
           training.core_epoch_budget("B1") is None
           and training.build_core_recipe("B1", "train_40k", 0)[
-              "recipe_identifier"].startswith("7.3"))
+              "recipe_identifier"].startswith("7.3")
+          and training.build_core_recipe("B1", "train_40k", 0)[
+              "max_epochs"] == 100
+          and training.build_core_recipe("B1", "train_40k", 0)[
+              "patience"] == 10)
     check("the 22-epoch choice is recorded as a dated post-diagnostic "
           "amendment covering the observed best epochs",
           "post-diagnostic amendment" in training.CORE_EPOCH_JUSTIFICATION
           and "20, 11" in training.CORE_EPOCH_JUSTIFICATION
           and "SAME 22 evaluation opportunities"
           in training.CORE_EPOCH_JUSTIFICATION)
-    check("the core trainer is gated and not silently runnable",
-          "NotImplementedError" in tsrc
-          and "E8B CORE TRAINER NOT IMPLEMENTED" in src)
+    check("the core trainer is implemented and gated behind the "
+          "authorisation state",
+          "def train_core_cell" in tsrc
+          and "E8B CORE TRAINING IS NOT AUTHORISED" in tsrc)
 
     # --- G14-FP32 as the live gate ---
     check("G14-FP32 is implemented with the three hard clauses",
@@ -1714,18 +1680,60 @@ def test_core_readiness_closure() -> None:
     if projection.exists():
         pr = json.loads(projection.read_text())[
             "e8b_core_resource_projection"]
-        check("no hard ceiling is weakened and none fires",
+        check("the projection has a committed generator",
+              (E8B_DIR / "core_resource_projection.py").exists()
+              and "core_resource_projection.py" in pr["generator"])
+        check("no hard ceiling fires",
               not any(g.get("fires") for g in pr["gates"].values()))
-        check("the projection charges already-spent search and diagnostic "
-              "compute to the pretrained identity",
-              "already spent" in pr["gates"][
-                  "pretrained_identity_35h"]["includes"])
-        check("the tight pretrained-identity headroom is flagged",
-              pr["gates"]["pretrained_identity_35h"]["headroom_hours"] < 3.0
-              and "WARNING" in pr["gates"]["pretrained_identity_35h"])
+        ident = pr["gates"]["pretrained_identity_35h"]
+        check("the projection charges already-spent search and "
+              "diagnostic compute to the pretrained identity",
+              "already-spent" in ident["includes"]
+              and pr["spent_compute_hours_itemised"]["_total"] > 0)
+        check("the pretrained identity covers the COMPLETE planned "
+              "programme, not merely training",
+              "readouts" in ident["includes"]
+              and "interventions" in ident["includes"])
+        check("the identity projection stays under the hard 35 h ceiling",
+              ident["projected_hours"] < 35.0
+              and ident["headroom_hours"] > 0)
+        check("a zero-retry allowance is recorded explicitly",
+              "NONE" in ident["retry_allowance"])
         check("the projection uses the MEASURED strict-deterministic rate",
               pr["measured_inputs"][
-                  "train_seconds_per_epoch_40k_strict_deterministic"] == 78.0)
+                  "train_s_per_epoch_40k_strict_det"] == 78.0)
+        check("the 22-epoch LM budget drives the projection",
+              pr["design"].startswith("strict deterministic BF16")
+              and "22 epochs" in pr["design"])
+        check("BF16 timings are labelled secondary-diagnostic only",
+              "SECONDARY_DIAGNOSTIC_ONLY" in json.dumps(
+                  pr["measured_inputs"]))
+        check("the storage allocation gate is recorded UNRESOLVED, not "
+              "discharged against free space",
+              pr["gates"]["storage"]["status"].startswith("UNRESOLVED"))
+        check("the selection-sensitivity study is recorded VOID under "
+              "the fixed-endpoint rule",
+              pr["selection_sensitivity_study"]["status"]
+              .startswith("VOID"))
+
+    scan = probe_dir / "determinism_call_scan_20260807.json"
+    check("the determinism call scan exists with a committed generator",
+          scan.exists()
+          and (E8B_DIR / "determinism_call_scan.py").exists())
+    if scan.exists():
+        sc = json.loads(scan.read_text())["determinism_call_scan"]
+        check("no core-path determinism call is unexplained",
+              sc["unexplained_core_path_files"] == [])
+        check("the scan covers every required call category",
+              set(sc["patterns"]) >= {
+                  "deterministic_algorithms", "warn_only",
+                  "sdpa_backend", "cudnn_flags",
+                  "tf32_or_matmul_precision", "seeding",
+                  "cublas_workspace"})
+        check("src/utils.py is identified as the downgrade source",
+              "src/utils.py" in sc["core_path_notes"]
+              and "warn_only=True" in sc["core_path_notes"]["src/utils.py"])
+
     superseded = probe_dir / "superseded_evidence_20260807.json"
     check("the superseded-evidence map exists", superseded.exists())
     if superseded.exists():
@@ -1734,6 +1742,180 @@ def test_core_readiness_closure() -> None:
         check("history is preserved rather than rewritten",
               any("git history is not" in json.dumps(r) for r in items)
               and len(items) >= 6)
+
+
+# --- 26f. Known-negatives for the executable core path -----------------------
+
+def test_core_known_negatives() -> None:
+    """Phase-4 known-negatives: each proves that REMOVING or BREAKING a
+    guard makes the gate fail, rather than merely that the guard exists."""
+    from experiments.e8b_readout_generation import training
+    from src import utils as _utils
+
+    tsrc = (E8B_DIR / "training.py").read_text()
+    src = (E8B_DIR / "run.py").read_text()
+
+    # (1) removing the parity call must break the gate: prove the call
+    # site exists in the EXECUTABLE path, between construction and the
+    # first optimizer step.
+    body = tsrc[tsrc.index("def _train_core_locked"):]
+    call = body.index("assert_lm_buffer_parity")
+    first_step = body.index("optimizer.step()")
+    build = body.index("load_frozen_causal_lm")
+    check("assert_lm_buffer_parity has a real call site in the core "
+          "trainer, after model construction and before the first "
+          "optimizer step", build < call < first_step)
+    check("the parity call compares this arm against its COUNTERPART, "
+          "not itself",
+          "counterpart_prov[\"buffer_inventory\"]" in body)
+
+    # (2) mismatched non-persistent rotary buffers must halt.
+    base = {"model.rotary_emb.inv_freq":
+            {"dtype": "torch.float32", "shape": [32], "sha256": "a"},
+            "model.rotary_emb.original_inv_freq":
+            {"dtype": "torch.float32", "shape": [32], "sha256": "b"}}
+    for label, broken in (
+            ("bf16-truncated rotary",
+             {**base, "model.rotary_emb.inv_freq":
+              {"dtype": "torch.bfloat16", "shape": [32], "sha256": "a"}}),
+            ("differing rotary VALUE",
+             {**base, "model.rotary_emb.inv_freq":
+              {"dtype": "torch.float32", "shape": [32], "sha256": "z"}}),
+            ("differing rotary SHAPE",
+             {**base, "model.rotary_emb.inv_freq":
+              {"dtype": "torch.float32", "shape": [64], "sha256": "a"}}),
+            ("a missing rotary buffer",
+             {"model.rotary_emb.inv_freq": base[
+                 "model.rotary_emb.inv_freq"]})):
+        must_fail(f"{label} halts the pair check",
+                  lambda b=broken: e8b_run.assert_lm_buffer_parity(base, b))
+    check("identical inventories pass",
+          e8b_run.assert_lm_buffer_parity(base, dict(base))[
+              "all_identical"] is True)
+
+    # (3) warn_only=True at the point of use must halt.
+    _utils.set_seed(0)
+    e8b_run.enable_strict_determinism()
+    ok = e8b_run.assert_strict_determinism()
+    check("strict determinism verifies when correctly imposed",
+          ok["warn_only"] is False and ok["math_sdp"] is True
+          and ok["flash_sdp"] is False
+          and ok["mem_efficient_sdp"] is False)
+    import torch as _torch
+    _torch.use_deterministic_algorithms(True, warn_only=True)
+    must_fail("warn_only=True at the point of use halts",
+              lambda: e8b_run.assert_strict_determinism())
+    e8b_run.enable_strict_determinism()
+
+    # (4) a reseed followed by NO re-imposition must halt.
+    _utils.set_seed(0)
+    must_fail("a reseed with no re-imposition halts",
+              lambda: e8b_run.assert_strict_determinism())
+    restored = e8b_run.reseed_strict(0)
+    check("reseed_strict seeds and re-imposes in one step",
+          restored["warn_only"] is False)
+
+    # (5) a non-deterministic attention backend must halt.
+    _torch.backends.cuda.enable_mem_efficient_sdp(True)
+    must_fail("a non-deterministic SDPA backend halts",
+              lambda: e8b_run.assert_strict_determinism())
+    e8b_run.enable_strict_determinism()
+    check("enforcement is restored after the negative probes",
+          e8b_run.assert_strict_determinism()["warn_only"] is False)
+
+    # (6) the trainer re-imposes after EVERY reseeding point.
+    for anchor in ("load_frozen_causal_lm(pretrained",
+                   "build_arm(arm, recipe",
+                   "g8_overfit_gate(lm, train_loader, cache"):
+        idx = body.index(anchor)
+        after = body[idx:idx + 1400]
+        check(f"strict determinism is re-imposed after {anchor[:28]}",
+              "enable_strict_determinism()" in after)
+    check("the trainer asserts immediately before the FIRST optimizer "
+          "step", "first_step_asserted" in body
+          and "assert_strict_determinism()" in body[
+              :body.index("optimizer.step()")])
+    check("every core record carries determinism verified at use",
+          '"determinism_verified_at_use": verified_at_use' in body)
+
+    # (7) an old-family / pre-amendment checkpoint must fail resume, and
+    #     the new family must not resume under the old one.
+    original_out = e8b_run.OUT_DIR
+    try:
+        with tempfile.TemporaryDirectory() as tmp:
+            e8b_run.OUT_DIR = Path(tmp)
+            for family, label in (
+                    (None, "no protocol family (pre-amendment)"),
+                    ("e8b-bf16-search", "the BF16 search family"),
+                    ("e8b-fp32-core-2026-08-07",
+                     "the superseded pre-fixed-22 core family")):
+                state = {} if family is None else {
+                    "protocol_family": family}
+                must_fail(f"a checkpoint from {label} is refused",
+                          lambda st=state: e8b_run.assert_core_family(
+                              st, "demo", Path("old.pt")))
+            check("the current family is accepted",
+                  e8b_run.assert_core_family(
+                      {"protocol_family": e8b_run.PROTOCOL_FAMILY},
+                      "demo", Path("new.pt")) is None)
+    finally:
+        e8b_run.OUT_DIR = original_out
+
+    # (8) a recipe claiming max_epochs=100 / patience=10 for an LM arm is
+    #     invalid, and the hash separates it from the live recipe.
+    live = training.build_core_recipe("B3", "train_40k", 0)
+    invalid = dict(live, max_epochs=100, patience=10,
+                   early_stopping=True)
+    check("an old-style LM recipe hashes differently from the live one",
+          training.recipe_sha256(invalid) != training.recipe_sha256(live))
+    check("the live LM recipe cannot claim max_epochs 100 or patience 10",
+          live["max_epochs"] == 22 and live["patience"] != 10
+          and live["early_stopping"] is False)
+
+    # (9) B1 must not inherit the LM fixed-endpoint rule.
+    b1 = training.build_core_recipe("B1", "train_40k", 0)
+    check("B1 keeps the section 7.3 rule and is not forced to epoch 22",
+          b1["max_epochs"] == 100 and b1["patience"] == 10
+          and b1["early_stopping"] is True
+          and b1["canonical_checkpoint_rule"].startswith("best "))
+    check("B1 has no frozen-LM dtype claim",
+          "not applicable" in b1["frozen_lm_instance_dtype"])
+
+    # (10) the executable B1 path exists and is LM-free.
+    for name in ("B1Classifier", "b1_canonical_predictions",
+                 "b1_implementation_gates", "b1_overfit_gate"):
+        check(f"the executable B1 symbol {name} exists",
+              hasattr(training, name))
+    b1_body = tsrc[tsrc.index("def b1_canonical_predictions"):
+                   tsrc.index("def b1_overfit_gate")]
+    check("the B1 evaluation path never touches a language model",
+          " lm" not in b1_body.replace("lm_", "")
+          and "prefix" not in b1_body)
+
+    # (11) epoch-22 primary vs best-of-22 secondary.
+    check("the trainer takes epoch 22 as the canonical primary for the "
+          "LM arms and labels best-of-22 secondary only",
+          "canonical_epoch = max_epochs" in body
+          and "SECONDARY DIAGNOSTIC ONLY" in body
+          and "never determines the " in body)
+    check("the fixed budget is enforced: ending early is a halt",
+          'gate_halt(run_name, "SCHEDULE"' in body
+          and "the fixed budget requires exactly" in body)
+    check("patience is only consulted for the non-fixed-budget arm",
+          "if not fixed_budget \\" in body
+          and 'fixed_budget = arm != "B1"' in body)
+
+    # (12) per-row dumps and refuse-overwrite.
+    check("per-row canonical predictions are dumped for paired tests",
+          "_per_row.npz" in body and "canonical_correct" in body)
+    entry = tsrc[tsrc.index("def train_core_cell"):
+                 tsrc.index("def _train_core_locked")]
+    check("outputs refuse to overwrite",
+          "already exists; refusing to overwrite" in body
+          and "already exists; E8B records are " in entry
+          and "_FAILED.json" in entry
+          and "HALT_" in entry)
+
 
 
 # --- 27. E7b serial-extension contracts ---------------------------------------
@@ -1977,6 +2159,7 @@ def run() -> None:
     test_search_grid_and_bindings()
     test_fp32_amendment()
     test_core_readiness_closure()
+    test_core_known_negatives()
     test_serial_contract()
     test_serial_queries()
     test_provenance()
