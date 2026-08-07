@@ -35,7 +35,14 @@ D = PROJECT_ROOT / "results" / "experiments" / "e8b_readout_generation"
 TRAIN_S_40K = 78.0        # s/epoch, strict-deterministic probe runs 3/4
 EVAL_FP32_S = 108.0       # s, canonical FP32 dev pass (probe runs 3/4)
 EVAL_BF16_S = 85.7        # secondary deployment diagnostic only
-G14_ROW_S = 5.301         # s/row, strict-det FP32 (brute+cached+R2 pair)
+# G14 per-row cost. The measured three-way per-row costs are 5.149 /
+# 5.137 / 5.135 s/row (fp32_canonical_validation.json, pooled 5.139 over
+# 478 rows). 5.301 is NOT one of those measurements: it is a deliberate
+# +3 per cent conservative margin over the pooled measurement, applied
+# because the recorded runs did not carry the strict-deterministic
+# backend the core cells will. It is an ASSUMPTION, labelled as such.
+G14_ROW_S_MEASURED_POOLED = 5.139   # fp32_canonical_validation.json
+G14_ROW_S = 5.301         # ASSUMED: measured pooled + 3 per cent margin
 G14_ROWS = 64 + 160       # pre-selection P + post-selection P+L+O union
 GATE_OVERHEAD_H = 0.223   # measured non-G14 per-run gate overhead
 STEPS = {"train_40k": 313, "train_250k": 1954}
@@ -45,14 +52,20 @@ B1_S_40K = 15.27          # v3_01 measured, includes its dev pass
 B1_S_250K = 86.36         # v3_01/v3_03 MEASURED 250k rate (section 13.2)
 B1_EXPECTED = {"train_40k": 15, "train_250k": 22}   # section 7.1 planning
 B1_STRESS = 100           # section 7.3 patience cap
-# R2/R3 per-row costs. R2 is measured (29.1 ms strict-det fp32); R3 is
-# ASSUMED at 1.5x R2 (bounded free decode, comparable forwards per row)
-# and flagged as an assumption below.
+# R2/R3 per-row costs. NEITHER IS MEASURED FOR E8B. No E8B R2 or R3
+# readout has ever been executed, so no per-row walk exists to measure.
+# R2 0.0291 s/row is carried over from the E7b S8-stage per-row cost of
+# the same trunk-and-projection forward and is an ASSUMPTION for the
+# trie-constrained decode; R3 is a further ASSUMPTION at 1.5x R2.
+# Sensitivity for both is reported in residual_assumptions.
 R2_ROW_S, R3_ROW_S = 0.0291, 0.0437
 N_DEV = 7714
 WALL_H, IDENT_H, CORE_H, MEM_FRACTION = 8.0, 35.0, 180.0, 0.80
 BASE = {"pretrained": 2.29222, "random": 1.95811}   # A1 / A1r measured
 A4_H, A7C_H = 1.804, 1.864                          # protocol 13.2b
+# Section 19 / protocol 13.2: the mandatory serial efficiency pass,
+# charged at its UPPER bound. Loads the frozen pretrained LM.
+EFFICIENCY_S19_H = 1.000
 # Checkpoint footprint, measured from artefacts on disk.
 LM_RESUME_MIB, LM_CKPT_MIB = 325.9, 81.5
 B1_RESUME_MIB, B1_CKPT_MIB = 322.0, 80.6
@@ -132,16 +145,25 @@ def main() -> int:
     # a few seconds, far below 108 s; B1 loads no LM so this line never
     # touches either identity ceiling).
     final_eval_b1 = 6 * hours(EVAL_FP32_S)
+    # Section 19 mandates one E7a-protocol serial efficiency measurement
+    # on the final selected checkpoints (serial_efficiency.py). Protocol
+    # 13.2 costs it at 0.500-1.000 h; the UPPER bound is charged here.
+    # It loads the frozen PRETRAINED LM, so it is charged to that
+    # identity. Previously omitted entirely, which made the
+    # "complete programme" claim false.
+    efficiency_s19 = EFFICIENCY_S19_H
 
     e8b_remaining = (b1_total + b2_total + b3_total + final_eval_lm
-                     + final_eval_b1)
+                     + final_eval_b1 + efficiency_s19)
     e8b_remaining_stress = (b1_total_stress + b2_total + b3_total
-                            + final_eval_lm + final_eval_b1)
+                            + final_eval_lm + final_eval_b1
+                            + efficiency_s19)
 
     spent = spent_compute()
     share = readouts_per_lm_cell + interventions_per_lm_cell
     pretrained_identity = (BASE["pretrained"] + A4_H + A7C_H + b3_total
-                           + 6 * share + spent["_total"])
+                           + 6 * share + spent["_total"]
+                           + efficiency_s19)
     random_identity = BASE["random"] + b2_total + 6 * share
 
     storage_gib = ((12 * (LM_RESUME_MIB + 2 * LM_CKPT_MIB)
@@ -191,7 +213,12 @@ def main() -> int:
                       "is not a quota). The free-space check passes and "
                       "is reported as context, not as a discharged "
                       "allocation gate.",
-            "free_space_check_passes": storage_gib < free_gib},
+            "free_space_check_passes": storage_gib < free_gib,
+            # The allocation itself is unresolved, but the free-space
+            # check IS a halting condition: without a "fires" key the
+            # gate was structurally incapable of ever firing, so it
+            # could not have stopped anything.
+            "fires": storage_gib >= free_gib},
     }
     fired = [k for k, v in gates.items() if v.get("fires")]
 
@@ -209,12 +236,12 @@ def main() -> int:
             "train_s_per_epoch_40k_strict_det": TRAIN_S_40K,
             "canonical_fp32_dev_pass_s": EVAL_FP32_S,
             "bf16_dev_pass_s_SECONDARY_DIAGNOSTIC_ONLY": EVAL_BF16_S,
-            "g14_fp32_s_per_row": G14_ROW_S,
+            "g14_fp32_s_per_row_ASSUMED_pooled_plus_3pc": G14_ROW_S,
             "g14_rows_per_lm_cell": G14_ROWS,
             "non_g14_gate_overhead_h": GATE_OVERHEAD_H,
             "b1_s_per_epoch": {"train_40k": B1_S_40K,
                                "train_250k": B1_S_250K},
-            "r2_s_per_row_measured": R2_ROW_S,
+            "r2_s_per_row_ASSUMED_from_e7b_s8": R2_ROW_S,
             "r3_s_per_row_ASSUMED_1p5x_r2": R3_ROW_S,
             "step_ratio_250k_over_40k": round(RATIO_250K, 6),
             "amended_design_cost_note":
@@ -244,6 +271,40 @@ def main() -> int:
                       "Reinstating any analogue requires a fresh user "
                       "decision and a fresh projection."},
         "gates": gates, "fired": fired,
+        "residual_assumptions_quantified": {
+            "train_250k_step_scaling": {
+                "carries_hours": 12.566,
+                "basis": "step-scaled from the MEASURED 40k rate; no "
+                         "250k E8B cell has ever run",
+                "break_even": "the pretrained identity reaches 35 h if "
+                              "the true 250k training rate is about 16 "
+                              "per cent above the step-scaled value "
+                              "(4.86 h per cell instead of 4.189 h)"},
+            "r2_r3_per_row": {
+                "carries_hours": 1.556,
+                "basis": "NEITHER measured for E8B; R2 carried over "
+                         "from the E7b S8 per-row cost, R3 assumed at "
+                         "1.5x R2",
+                "sensitivity": "if R2 and R3 each cost 3x the assumed "
+                               "rate, the pretrained identity rises by "
+                               "about 1.87 h and the headroom falls to "
+                               "about 0.17 h"},
+            "g14_row_cost": {
+                "carries_hours": 1.979,
+                "basis": "pooled measurement 5.139 s/row plus a 3 per "
+                         "cent conservative margin"},
+            "a4_a7c_unrun": {
+                "carries_hours": 3.668,
+                "basis": "expected-epoch projections; neither arm has "
+                         "run. Their recipes carry max_epochs 100 and "
+                         "patience 10, so the configured-cap cost is "
+                         "8.469 h EACH (protocol 13.2). The one arm of "
+                         "this family that has run, A1, came in 23 per "
+                         "cent BELOW its projection."},
+            "efficiency_s19": {
+                "carries_hours": EFFICIENCY_S19_H,
+                "basis": "protocol 13.2 range 0.500-1.000 h, charged at "
+                         "the upper bound"}},
         "clean_test_accessed": False}}
     out = D / "core_resource_projection_20260807.json"
     if out.exists():

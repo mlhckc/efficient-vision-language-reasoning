@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-07T17:55:31",
-    "git_commit": "f9a7918",
+    "timestamp": "2026-08-07T18:31:56",
+    "git_commit": "aaabe21",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -170,12 +170,26 @@
       {
         "item": "FIRST INDEPENDENT HASH ANCHORS for two previously unhashed historical artefacts",
         "status": "ANCHOR RECORD (not a supersession)",
-        "important_caveat": "these hashes were NOT recorded at the artefacts' creation time. They are the FIRST independent hash anchors, computed at the current clean tracked repository state on 2026-08-07. Git history is the prior integrity anchor: both files are tracked and the worktree was clean when the hashes were taken.",
+        "important_caveat": "these hashes were NOT recorded at the artefacts' creation time. They are the FIRST independent hash anchors, computed on 2026-08-07. CORRECTED on 2026-08-07: an earlier version of this caveat claimed 'both files are tracked and the worktree was clean when the hashes were taken'. That was WRONG for the checkpoint. See git_tracking_status below for the verified position, which differs between the two artefacts and changes what each anchor is worth.",
         "anchors": {
           "results/experiments/e8b_readout_generation/checkpoints/resume_e8b_B3_train_40k_seed0_search3.pt": "575d522d914dde05db7a7fc12a76f58350cacb63ee6af0374149edd0bec374be",
           "results/experiments/e8b_readout_generation/HALT_e8b_B3_train_40k_seed0_search3_G14.json": "3606cd979cd0106b0ca65f326a96cfea3475b1bc4209d1135b5d16b4f83c6bdc"
         },
-        "why_unhashed_before": "grid point 3 halted at the post-selection G14 BEFORE its result record was written, so the record that would normally carry its checkpoint hashes never existed; and no record ever hashed the halt file itself."
+        "why_unhashed_before": "grid point 3 halted at the post-selection G14 BEFORE its result record was written, so the record that would normally carry its checkpoint hashes never existed; and no record ever hashed the halt file itself.",
+        "git_tracking_status": {
+          "results/experiments/e8b_readout_generation/checkpoints/resume_e8b_B3_train_40k_seed0_search3.pt": {
+            "tracked_by_git": false,
+            "ignored_by": ".gitignore:45 (results/experiments/e8b_readout_generation/*, with only *.json re-included)",
+            "what_this_anchor_is": "a FIRST AND ONLY self-attestation. The file has never been in git, so there is no prior independent record to corroborate it. If the file were altered before 2026-08-07, this hash would anchor the altered file and nothing would reveal it.",
+            "what_it_is_not": "NOT corroborated by git history."
+          },
+          "results/experiments/e8b_readout_generation/HALT_e8b_B3_train_40k_seed0_search3_G14.json": {
+            "tracked_by_git": true,
+            "what_this_anchor_is": "corroborated: the file is tracked, so git history is an independent prior integrity anchor and this hash confirms rather than merely asserts its content.",
+            "what_it_is_not": "not recorded at creation time."
+          }
+        },
+        "forward_use": "the anchors are verifiable by tests/test_e8b.py, which now HASHES both files rather than string-matching the digests inside this record"
       },
       {
         "item": "the wording 'no search execution path exists anywhere'",
@@ -197,6 +211,14 @@
       },
       "record_count": 21
     },
-    "completeness_statement": "this map aims to cover every E8B analysis superseded or invalidated to date. It is APPENDED to, never rewritten: historical record text is preserved verbatim and corrections are added as new records or as explicit forward pointers on the original."
+    "completeness_statement": "this map aims to cover every E8B analysis superseded or invalidated to date. It is APPENDED to, never rewritten: historical record text is preserved verbatim and corrections are added as new records or as explicit forward pointers on the original.",
+    "corrections_appended": [
+      {
+        "dated_utc": "2026-08-07",
+        "correction": "the anchor caveat claimed git tracking for a git-ignored checkpoint",
+        "raised_by": "fresh-context audit A (scientific and provenance honesty)",
+        "handling": "corrected in place, additively; the erroneous sentence is quoted in the replacement so the correction is self-documenting"
+      }
+    ]
   }
 }

@@ -111,6 +111,133 @@ REVIEW_A_ENTRIES = [
 ]
 
 
+# The findings raised by the three fresh-context audits of 2026-08-07,
+# appended additively.
+AUDIT_20260807_ENTRIES = [
+    {"id": "AUDIT-B-BLOCKER-1",
+     "lens": "B (executable safety)",
+     "issue": "B1Classifier.forward returned AttentionPoolReadout's "
+              "(logits, attention_weights) pair unchanged, while every "
+              "B1 consumer -- the loss, the dtype gate, the shape gate "
+              "and the canonical evaluation -- expects a tensor. All six "
+              "B1 core cells would have acquired the NFS lock, hashed "
+              "the token stores and then died with an uncaught "
+              "AttributeError, with no HALT and no FAILED record.",
+     "classification": "execution-critical",
+     "disposition": "FIXED AT SOURCE",
+     "evidence": "B1Classifier.forward now unpacks and returns logits "
+                 "only; forward_with_weights keeps the diagnostic pair. "
+                 "Reproduced before the fix and asserted after it by a "
+                 "REAL forward and backward pass, not a source-text "
+                 "check -- which is why the defect survived: every prior "
+                 "B1 test was a hasattr or substring assertion.",
+     "closed_by": "test_b1_forward_pass"},
+    {"id": "AUDIT-B-HIGH-1",
+     "lens": "B (executable safety)",
+     "issue": "Strict determinism was downgraded for the whole of both "
+              "overfit gates. utils.set_seed sets warn_only=True and the "
+              "builders re-seed again, so optimizer.step ran for up to "
+              "200 epochs with enforcement downgraded, inside a HALTING "
+              "gate, while the hashed recipe recorded strict enforcement "
+              "throughout. Confirmed empirically by reading the live "
+              "flag.",
+     "classification": "execution-critical",
+     "disposition": "FIXED AT SOURCE",
+     "evidence": "both gates now call reseed_strict at entry, re-impose "
+                 "after the internal builder re-seed, and assert at the "
+                 "point of use.",
+     "closed_by": "test_audit_known_negatives, gate determinism checks"},
+    {"id": "AUDIT-B-MEDIUM-1",
+     "lens": "B (executable safety)",
+     "issue": "Resume verified the recipe hash and protocol family but "
+              "never the implementation, though code_head was stored "
+              "from the beginning. A cell could crash at epoch 14, have "
+              "a defect fixed, resume, and run epochs 15-22 under "
+              "different code, producing an epoch-22 canonical "
+              "checkpoint spliced from two implementations.",
+     "classification": "execution-critical",
+     "disposition": "FIXED AT SOURCE",
+     "evidence": "verify_resume_checkpoint now compares code_head AND a "
+                 "new code_digest over the E8B sources, so a dirty "
+                 "-worktree edit that leaves the commit unchanged is "
+                 "caught too.",
+     "closed_by": "test_audit_known_negatives, code-identity negatives"},
+    {"id": "AUDIT-C-HIGH-1",
+     "lens": "C (operational and resource integrity)",
+     "issue": "The 35 GPU-hour per-model-identity ceiling and the "
+              "storage gate, both re-ratified as hard halts, had no "
+              "call site in the execution path. Nothing summed GPU "
+              "hours across cells, so the ceiling could only ever have "
+              "been checked by hand.",
+     "classification": "execution-critical",
+     "disposition": "FIXED AT SOURCE",
+     "evidence": "run.per_identity_gate reads an append-only ledger and "
+                 "is checked before every cell against its projected "
+                 "cost and after it against measured hours, which are "
+                 "charged; run.storage_gate is checked before every "
+                 "cell; both halt through gate_halt. The gate "
+                 "reproduces the published 32.960 h and fires between a "
+                 "16 and 17 per cent overrun on the 250k rate.",
+     "closed_by": "test_audit_known_negatives, ceiling checks"},
+    {"id": "AUDIT-C-HIGH-2",
+     "lens": "C (operational and resource integrity)",
+     "issue": "G14_ROW_S 5.301 and R2_ROW_S 0.0291 were emitted under "
+              "keys naming them MEASURED, but neither is traceable to "
+              "any E8B artefact: the recorded G14 per-row costs are "
+              "5.149/5.137/5.135 and no E8B R2 readout has ever run.",
+     "classification": "provenance/reproducibility",
+     "disposition": "FIXED BY DISCLOSURE",
+     "evidence": "both are relabelled as ASSUMPTIONS with their real "
+                 "basis stated (pooled 5.139 plus a 3 per cent margin; "
+                 "R2 carried over from the E7b S8 per-row cost), and "
+                 "their sensitivity is quantified.",
+     "closed_by": "test_audit_known_negatives, rate-labelling checks"},
+    {"id": "AUDIT-C-HIGH-3",
+     "lens": "C (operational and resource integrity)",
+     "issue": "The record claimed to cover the COMPLETE planned "
+              "pretrained-identity programme while omitting the "
+              "mandatory section-19 serial efficiency measurement, "
+              "which loads the pretrained language model and is costed "
+              "at 0.500-1.000 h.",
+     "classification": "scientific-validity",
+     "disposition": "FIXED AT SOURCE",
+     "evidence": "the pass is charged at its upper bound; the "
+                 "pretrained identity rises from 31.960 to 32.960 h and "
+                 "the headroom falls from 3.04 to 2.04 h. A correction "
+                 "UPWARD against the ceiling.",
+     "closed_by": "identity_reconciliation_20260807.json"},
+    {"id": "AUDIT-A-HIGH-1",
+     "lens": "A (scientific and provenance honesty)",
+     "issue": "The anchor caveat claimed 'both files are tracked and "
+              "the worktree was clean'. The checkpoint is git-ignored "
+              "and has never been in git, so its hash is a first-and"
+              "-only self-attestation, not a corroborated anchor.",
+     "classification": "provenance/reproducibility",
+     "disposition": "FIXED BY DISCLOSURE",
+     "evidence": "the caveat now quotes its own erroneous sentence and "
+                 "records the verified tracking status of each artefact "
+                 "separately, stating what each anchor is and is not "
+                 "worth. The tests now HASH both files instead of "
+                 "string-matching the digests inside the record.",
+     "closed_by": "test_audit_known_negatives, anchor verification"},
+    {"id": "AUDIT-A-HIGH-2",
+     "lens": "A (scientific and provenance honesty)",
+     "issue": "determinism_probe_run1/run2/comparison record "
+              "'warn_only': false and 'STRICT DETERMINISM CONFIRMED' "
+              "for runs the project has itself established ran under "
+              "warn_only=True, with no in-file marker; the correction "
+              "existed only in an external map.",
+     "classification": "provenance/reproducibility",
+     "disposition": "FIXED BY DISCLOSURE",
+     "evidence": "each file now carries a leading SUPERSEDED block "
+                 "naming the withdrawn claim, the replacement "
+                 "artefacts, the only reliable discriminator "
+                 "(verified_at_use) and the fact that the hours remain "
+                 "charged. Original content is unmodified below it.",
+     "closed_by": "test_audit_known_negatives, supersession markers"},
+]
+
+
 def derive_summary(entries: list) -> dict:
     """Every count here is computed from entries[].disposition. Nothing
     is declared by hand, and no state is collapsed into another."""
@@ -150,7 +277,8 @@ def main() -> int:
     body = json.loads(LEDGER.read_text())["e8b_medium_ledger"]
     entries = list(body["entries"])
     known = {e["id"] for e in entries}
-    appended = [e for e in REVIEW_A_ENTRIES if e["id"] not in known]
+    pending = REVIEW_A_ENTRIES + AUDIT_20260807_ENTRIES
+    appended = [e for e in pending if e["id"] not in known]
     for entry in appended:
         entry = dict(entry)
         entry["state"] = STATE_MAP[entry["disposition"]]

@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import hashlib
 import ast
+import subprocess
 import inspect
 import json
 import math
@@ -25,6 +26,7 @@ from types import SimpleNamespace
 
 import numpy as np
 import torch
+import torch.nn.functional as F
 from torch import nn
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -2254,6 +2256,319 @@ def test_remediation_known_negatives() -> None:
           b1["max_epochs"] != 22 and b1["early_stopping"] is True)
 
 
+# --- 26h. B1 executed, not merely inspected ---------------------------------
+
+def test_b1_forward_pass() -> None:
+    """A REAL forward and backward pass through the B1 arm.
+
+    Every earlier B1 test was a source-text or hasattr assertion, which
+    is exactly why B1Classifier could return a tuple to consumers that
+    expect a tensor and still pass the suite. This one executes it.
+    """
+    from experiments.e8b_readout_generation import training
+
+    trunk, readout = e8b_run.build_arm("B1", 0, 0.1, None)
+    model = training.B1Classifier(trunk, readout)
+    batch, n_image, n_question = 2, 50, 20
+    images = torch.randn(batch, n_image, e8b_latents.D_MODEL)
+    questions = torch.randn(batch, n_question, e8b_latents.D_MODEL)
+    mask = torch.ones(batch, n_question, dtype=torch.bool)
+
+    model.eval()
+    with torch.no_grad():
+        logits = model(images, questions, mask)
+    check("B1 forward returns a TENSOR, not a tuple",
+          isinstance(logits, torch.Tensor), type(logits).__name__)
+    check("B1 logits have the classifier shape (batch, 100)",
+          tuple(logits.shape) == (batch, 100), str(tuple(logits.shape)))
+    check("B1 logits are fp32 on the canonical path",
+          logits.dtype == torch.float32, str(logits.dtype))
+    check("B1 logits are finite", bool(torch.isfinite(logits).all()))
+
+    # The consumers that the blocker actually broke.
+    check("logits.shape is reachable, as the G4 gate requires",
+          logits.shape is not None)
+    model.train()
+    labels = torch.zeros(batch, dtype=torch.long)
+    loss = F.cross_entropy(model(images, questions, mask), labels)
+    check("cross_entropy accepts the B1 output", torch.isfinite(loss))
+    loss.backward()
+    missing = [n for n, p in model.named_parameters() if p.grad is None]
+    check("every B1 parameter receives a gradient", missing == [],
+          str(missing[:3]))
+
+    model.eval()   # dropout would otherwise make the two calls differ
+    with torch.no_grad():
+        pair = model.forward_with_weights(images, questions, mask)
+    check("the diagnostic form still returns (logits, weights)",
+          isinstance(pair, tuple) and len(pair) == 2
+          and tuple(pair[1].shape) == (batch, e8b_latents.N_LATENTS),
+          str([tuple(p.shape) for p in pair]))
+    with torch.no_grad():
+        check("the diagnostic logits equal the plain forward's",
+              torch.equal(pair[0], model(images, questions, mask)))
+
+
+# --- 26i. Known-negatives for the three fresh-context audits ----------------
+
+def test_audit_known_negatives() -> None:
+    """Each finding of the 2026-08-07 audits, proved closed by executing
+    the guard rather than by reading the code that declares it."""
+    from experiments.e8b_readout_generation import training
+
+    tsrc = (E8B_DIR / "training.py").read_text()
+    src = (E8B_DIR / "run.py").read_text()
+    probe_dir = PROJECT_ROOT / "results" / "experiments" / \
+        "e8b_readout_generation"
+    tree = ast.parse(tsrc)
+    bodies = {n.name: ast.get_source_segment(tsrc, n)
+              for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)}
+
+    # --- B-HIGH-1: determinism must hold INSIDE the overfit gates ---
+    for name in ("g8_overfit_gate", "b1_overfit_gate"):
+        body = bodies[name]
+        check(f"{name} re-imposes strict determinism at entry",
+              "reseed_strict(0)" in body)
+        check(f"{name} re-imposes after the internal builder re-seed "
+              f"and asserts at the point of use",
+              "enable_strict_determinism()" in body
+              and "assert_strict_determinism()" in body)
+        reseed = body.index("reseed_strict(0)")
+        step = body.index("optimizer.step()")
+        assert_at = body.index("assert_strict_determinism()")
+        check(f"{name} asserts BEFORE its first optimizer step",
+              reseed < assert_at < step)
+    # The downgrade this guards against is real, not hypothetical.
+    e8b_run.enable_strict_determinism()
+    check("enable_strict_determinism yields warn_only False",
+          not torch.is_deterministic_algorithms_warn_only_enabled())
+    utils.set_seed(0)
+    check("a bare utils.set_seed DOES silently downgrade, which is why "
+          "the re-imposition is required",
+          torch.is_deterministic_algorithms_warn_only_enabled())
+    e8b_run.reseed_strict(0)
+    check("reseed_strict restores strict enforcement",
+          not torch.is_deterministic_algorithms_warn_only_enabled())
+
+    # --- B-MEDIUM-1: resume must verify code identity ---
+    check("code_digest is part of the resume contract",
+          "code_digest" in e8b_run.RESUME_FIELDS)
+    digest = e8b_run.e8b_code_digest()
+    check("the code digest is a stable sha256 over live sources",
+          len(digest) == 64 and digest == e8b_run.e8b_code_digest())
+    with tempfile.TemporaryDirectory() as tmp:
+        path = Path(tmp) / "codecheck.pt"
+        model = nn.Linear(4, 3)
+        optimizer = torch.optim.AdamW(model.parameters())
+        scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer,
+                                                      lambda s: 1.0)
+        e8b_run.save_resume_checkpoint(
+            path, model=model, optimizer=optimizer, scheduler=scheduler,
+            epoch=1, global_step=1, best_model_state=None,
+            best_metric=0.0, best_epoch=-1,
+            loader_generator=utils.make_generator(7),
+            epoch_permutation_counter=0, recipe_sha256="x",
+            vocabulary_sha256="y", store_sha256s={},
+            protocol_family=e8b_run.PROTOCOL_FAMILY,
+            history=[{"epoch": 1}], train_times=[1.0], eval_times=[1.0])
+        check("an unmodified checkpoint verifies",
+              e8b_run.verify_resume_checkpoint(
+                  path, protocol_family=e8b_run.PROTOCOL_FAMILY)["epoch"]
+              == 1)
+        state = torch.load(path, map_location="cpu", weights_only=False)
+        for field, value in (("code_digest", "0" * 64),
+                             ("code_head", "deadbeef")):
+            tampered = dict(state)
+            tampered[field] = value
+            broken = Path(tmp) / f"changed_{field}.pt"
+            torch.save(tampered, broken)
+            must_fail(f"resume is prohibited when {field} differs",
+                      lambda p=broken: e8b_run.verify_resume_checkpoint(
+                          p, protocol_family=e8b_run.PROTOCOL_FAMILY))
+
+    # --- C-HIGH-1: the aggregate ceilings must be executable ---
+    check("the per-identity gate exists and maps arms to identities",
+          {a: e8b_run.model_identity(a) for a in ("B1", "B2", "B3")}
+          == {"B1": "none", "B2": "random", "B3": "pretrained"})
+    check("B1 is charged to neither identity ceiling",
+          e8b_run.per_identity_gate("B1", 99.0)["applies"] is False
+          and e8b_run.per_identity_gate("B1", 99.0)["fires"] is False)
+    full = {"cells": {
+        f"B3_{s}_{i}": {"identity": "pretrained", "hours": h,
+                        "arm": "B3", "scale": s, "seed": i}
+        for i, (s, h) in enumerate([("train_40k", 1.690)] * 3
+                                   + [("train_250k", 4.189)] * 3)}}
+    gate = e8b_run.per_identity_gate("B3", 0.0, ledger=full)
+    projection = json.loads(
+        (probe_dir / "core_resource_projection_20260807.json").read_text()
+    )["e8b_core_resource_projection"]
+    published = projection["gates"]["pretrained_identity_35h"][
+        "projected_hours"]
+    check("the EXECUTABLE ceiling reproduces the PUBLISHED projection, "
+          "so the gate and the record cannot drift apart",
+          abs(gate["projected_total_hours"] - published) < 0.01,
+          f"{gate['projected_total_hours']} vs {published}")
+    check("the full planned programme does not breach the ceiling",
+          gate["fires"] is False
+          and gate["ceiling_hours"] == 35.0)
+    check("the gate counts committed-but-unspent work, or it would "
+          "green-light a cell leaving no room for the readouts",
+          gate["committed_not_yet_spent_hours"] > 0)
+    over = {"cells": {k: dict(v, hours=v["hours"] * 1.17
+                              if v["scale"] == "train_250k"
+                              else v["hours"])
+                      for k, v in full["cells"].items()}}
+    fired = e8b_run.per_identity_gate("B3", 0.0, ledger=over)
+    check("the ceiling FIRES on a 17 per cent overrun of the "
+          "never-measured 250k rate",
+          fired["fires"] is True, str(fired["projected_total_hours"]))
+    check("the storage gate is structurally capable of firing",
+          e8b_run.storage_gate(10 ** 18, probe_dir)["fires"] is True
+          and e8b_run.storage_gate(1, probe_dir)["fires"] is False)
+    check("the projection's storage gate carries a fires key",
+          "fires" in projection["gates"]["storage"])
+    core = bodies["train_core_cell"]
+    check("the identity and storage gates are checked BEFORE the cell "
+          "acquires the GPU",
+          core.index("per_identity_gate") < core.index("assert_gpu_exclusive")
+          and core.index("storage_gate") < core.index("assert_gpu_exclusive"))
+    locked = bodies["_train_core_locked"]
+    check("measured hours are charged to the ledger when a cell ends",
+          "charge_identity_hours" in locked)
+    check("the ceiling is re-checked AFTER the measured charge",
+          locked.index("charge_identity_hours")
+          < locked.rindex("per_identity_gate"))
+
+    # --- C-HIGH-2: no rate may be labelled measured unless it is ---
+    measured = projection["measured_inputs"]
+    for key in measured:
+        if "5.301" == str(measured[key]) or measured[key] == 0.0291:
+            check(f"the untraceable rate under {key} is NOT labelled "
+                  f"measured",
+                  "ASSUMED" in key, key)
+    gsrc = (E8B_DIR / "core_resource_projection.py").read_text()
+    check("the G14 row cost records the real pooled measurement beside "
+          "the assumption",
+          "G14_ROW_S_MEASURED_POOLED = 5.139" in gsrc)
+    check("the R2/R3 rates are declared unmeasured for E8B",
+          "NEITHER IS MEASURED FOR E8B" in gsrc)
+
+    # --- C-HIGH-3: the section-19 efficiency pass must be costed ---
+    check("the efficiency pass is charged to the pretrained identity",
+          "EFFICIENCY_S19_H" in gsrc
+          and "efficiency_s19" in gsrc)
+    recon = json.loads(
+        (probe_dir / "identity_reconciliation_20260807.json").read_text()
+    )["e8b_identity_reconciliation"]
+    names = [c["component"] for c in recon["complete_programme_components"]]
+    check("the reconciliation lists the section-19 efficiency pass",
+          any("efficiency" in n for n in names), str(names))
+    total = sum(c["hours"] for c in recon["complete_programme_components"])
+    check("the reconciliation still sums to the published projection",
+          abs(total - published) < 1e-2, f"{total} vs {published}")
+    check("adding the omitted pass moved the total UP, against the "
+          "ceiling, and the ceiling itself is unchanged",
+          recon["current_estimate_hours"] > 31.96
+          and recon["ceiling_hours"] == 35.0)
+
+    # --- A-HIGH-1: the anchors must be verified, not string-matched ---
+    superseded = json.loads(
+        (probe_dir / "superseded_evidence_20260807.json").read_text()
+    )["e8b_superseded_evidence"]
+    anchor_records = [r for r in superseded["records"]
+                      if str(r.get("status", "")).startswith("ANCHOR")]
+    check("the anchor record exists", len(anchor_records) == 1)
+    anchors = anchor_records[0]
+    check("the corrected caveat quotes the sentence it withdraws",
+          "CORRECTED on 2026-08-07" in anchors["important_caveat"])
+    check("each anchored artefact records its VERIFIED git status",
+          len(anchors["git_tracking_status"]) == 2)
+    for relative, digest in anchors["anchors"].items():
+        target = PROJECT_ROOT / relative
+        if not target.exists():
+            continue
+        live = hashlib.sha256(target.read_bytes()).hexdigest()
+        check(f"the anchor for {Path(relative).name} matches the file "
+              f"on disk",
+              live == digest, f"{live[:12]} vs {digest[:12]}")
+        status = anchors["git_tracking_status"][relative]
+        tracked = subprocess.run(
+            ["git", "ls-files", "--error-unmatch", relative],
+            cwd=PROJECT_ROOT, capture_output=True).returncode == 0
+        check(f"the recorded git status of {Path(relative).name} is "
+              f"TRUE, not assumed",
+              status["tracked_by_git"] == tracked,
+              f"recorded {status['tracked_by_git']} vs actual {tracked}")
+        if not tracked:
+            check("an untracked anchor is disclosed as uncorroborated",
+                  "self-attestation" in status["what_this_anchor_is"])
+
+    # --- A-HIGH-2: superseded artefacts must be marked IN FILE ---
+    for name in ("determinism_probe_run1", "determinism_probe_run2",
+                 "determinism_probe_comparison"):
+        body = json.loads((probe_dir / f"{name}.json").read_text())
+        check(f"{name} carries an in-file SUPERSEDED marker",
+              "SUPERSEDED" in body)
+        marker = body["SUPERSEDED"]
+        check(f"{name} names the claim it withdraws",
+              "withdraw" in json.dumps(marker).lower())
+        check(f"{name} points forward to what replaced it",
+              "run3" in marker["what_replaced_it"]
+              or "run4" in marker["what_replaced_it"])
+        check(f"{name} still contains its original content",
+              len(body) > 1)
+        check(f"{name} discloses that its GPU hours remain charged",
+              "not refund" in marker["hours_still_charged"])
+    for name in ("pilot_e8b_B3_train_40k_seed0_search1",
+                 "pilot_e8b_B3_train_40k_seed0_search2"):
+        path = probe_dir / f"{name}.json"
+        if not path.exists():
+            continue
+        body = json.loads(path.read_text())
+        check(f"{name} is labelled exploratory in file",
+              "EXPLORATORY" in body)
+        check(f"{name} forbids the table comparison it enables",
+              "never_do_this" in body["EXPLORATORY"])
+
+    # --- Superseded diagnostics must not masquerade as live gates ---
+    check("the dead bf16 G14 gate is banner-marked",
+          "READ-ONLY SUPERSEDED DIAGNOSTIC"
+          in bodies["g14_binding_gate"])
+    check("the stale projection helper is banner-marked",
+          "READ-ONLY SUPERSEDED DIAGNOSTIC"
+          in src[src.index("def project_resources"):
+                 src.index("def project_resources") + 1400])
+    check("the nested NON_SCIENTIFIC scan is reachable, not dead",
+          '"non_scientific": true' in src)
+    must_fail("a nested NON_SCIENTIFIC flag is refused promotion",
+              lambda: e8b_run.assert_promotable(
+                  {"status": "complete",
+                   "protocol_family": e8b_run.PROTOCOL_FAMILY,
+                   "inner": {"NON_SCIENTIFIC": True}},
+                  "nested", "known-negative"))
+
+    # --- C-MEDIUM-2: the wall must be cumulative across resumes ---
+    check("the per-run wall carries hours from earlier processes",
+          "prior_seconds" in locked
+          and "prior_seconds + (time.time() - started)" in locked)
+    check("the charged hours are cumulative, not per-process",
+          locked.count("prior_seconds + (time.time() - started)") >= 2)
+
+    # --- The ledger records every audit finding ---
+    ledger = json.loads(
+        (probe_dir / "medium_findings_ledger_20260807.json").read_text()
+    )["e8b_medium_ledger"]
+    ids = {e["id"] for e in ledger["entries"]}
+    check("every 2026-08-07 audit finding is on the ledger",
+          {"AUDIT-B-BLOCKER-1", "AUDIT-B-HIGH-1", "AUDIT-B-MEDIUM-1",
+           "AUDIT-C-HIGH-1", "AUDIT-C-HIGH-2", "AUDIT-C-HIGH-3",
+           "AUDIT-A-HIGH-1", "AUDIT-A-HIGH-2"} <= ids,
+          str(sorted(i for i in ids if i.startswith("AUDIT"))))
+    check("nothing execution-critical remains open after the audits",
+          ledger["summary"]["execution_critical_open"] == []
+          and ledger["summary"]["open"] == [])
+
+
 
 # --- 27. E7b serial-extension contracts ---------------------------------------
 
@@ -2425,13 +2740,15 @@ def test_provenance() -> None:
               hashes[key] == live, f"{hashes[key][:12]} vs {live[:12]}")
 
     check("the resume format covers the nineteen required categories, "
-          "the protocol family (OI7) and the per-epoch record (M-5)",
-          len(e8b_run.RESUME_FIELDS) == 23
+          "the protocol family (OI7), the per-epoch record (M-5) and "
+          "the code identity (audit B)",
+          len(e8b_run.RESUME_FIELDS) == 24
           and "protocol_family" in e8b_run.RESUME_FIELDS
           and set(e8b_run.RESUME_FIELDS) >= {
               "model_state", "optimizer_state", "scheduler_state", "epoch",
               "global_step", "best_model_state", "best_metric",
               "history", "train_times", "eval_times",
+              "code_head", "code_digest",
               "best_epoch", "python_rng", "numpy_rng", "torch_cpu_rng",
               "cuda_rng_all", "loader_generator_state",
               "epoch_permutation_counter", "recipe_sha256",
@@ -2499,6 +2816,8 @@ def run() -> None:
     test_core_readiness_closure()
     test_core_known_negatives()
     test_remediation_known_negatives()
+    test_b1_forward_pass()
+    test_audit_known_negatives()
     test_serial_contract()
     test_serial_queries()
     test_provenance()

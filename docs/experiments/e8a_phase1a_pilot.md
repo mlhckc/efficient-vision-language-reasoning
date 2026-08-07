@@ -378,3 +378,16 @@ stored A0 reference of 0.54641, but A0 is not the interface-matched control
 and that comparison is not the one the protocol specifies. The E8B multiplier,
 which dominates the programme total, is untouched. Two of the five numeric
 compute gates remain unevaluable.
+
+> **Dated supersession note, 7 August 2026 (second location).** The
+> statement immediately above is superseded on the same grounds as the
+> note earlier in this report, and is kept as the historical record. The
+> E8B multiplier is no longer untouched: grid points 1 to 3 ran on 6-7
+> August 2026 and measured it at 9.091 and 9.121 under the then-current
+> BF16 design, above the assumed 8.004 upper bound; those figures are in
+> turn superseded by the amended strict-deterministic FP32 design. The
+> compute gates are no longer unevaluable: all five are evaluated in
+> `results/experiments/e8b_readout_generation/core_resource_projection_20260807.json`,
+> and the 35-hour per-model-identity ceiling is now enforced in code by
+> `run.per_identity_gate` rather than checked by hand. Nothing above has
+> been rewritten.

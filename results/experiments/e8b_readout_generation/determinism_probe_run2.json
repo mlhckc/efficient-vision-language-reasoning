@@ -1,4 +1,16 @@
 {
+  "SUPERSEDED": {
+    "dated_utc": "2026-08-07",
+    "status": "SUPERSEDED - DO NOT CITE AS DETERMINISM EVIDENCE",
+    "what_this_file_is": "run 2 of the OI1 strict-determinism probe",
+    "why_superseded": "this file records \"warn_only\": false, but the run it describes actually executed under warn_only=True. utils.set_seed unconditionally sets use_deterministic_algorithms(True, warn_only=True), and build_arm re-seeds internally because G13 requires it, so enforcement was silently downgraded at two points that were not re-imposed at the time. The recorded value came from the configuration the probe INTENDED, not from the live flag.",
+    "the_claim_that_is_withdrawn": "any statement that strict determinism was in force during this run, including \"STRICT DETERMINISM CONFIRMED\" where it appears below",
+    "what_replaced_it": "determinism_probe_run3.json, determinism_probe_run4.json and determinism_probe_comparison_strict.json, which read the LIVE flag at the point of use and record it under verified_at_use",
+    "how_to_tell_them_apart": "runs 3 and 4 carry a verified_at_use block; runs 1 and 2 do not. The machine-readable determinism block is byte-identical between the false and the true runs, so the presence of verified_at_use is the ONLY reliable discriminator inside the artefacts themselves.",
+    "hours_still_charged": "yes. Superseding the evidence does not refund the GPU hours; runs 1 and 2 remain charged to the pretrained identity in core_resource_projection_20260807.json.",
+    "authoritative_record": "superseded_evidence_20260807.json",
+    "original_content_below": "unmodified"
+  },
   "metadata": {
     "timestamp": "2026-08-07T13:59:56",
     "git_commit": "8d0a559",

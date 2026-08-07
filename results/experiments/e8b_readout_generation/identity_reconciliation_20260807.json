@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-07T17:56:50",
-    "git_commit": "f9a7918",
+    "timestamp": "2026-08-07T18:33:55",
+    "git_commit": "aaabe21",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -33,10 +33,10 @@
     "dated_utc": "2026-08-07",
     "question": "why did the pretrained-identity projection move from 32.686 h to 31.96 h, and does the COMPLETE planned programme fit under the hard 35 h ceiling?",
     "old_estimate_hours": 32.686,
-    "current_estimate_hours": 31.96,
-    "net_change_hours": -0.726,
+    "current_estimate_hours": 32.96,
+    "net_change_hours": 0.274,
     "ceiling_hours": 35.0,
-    "headroom_hours": 3.04,
+    "headroom_hours": 2.04,
     "reconciliation_old_to_current": [
       {
         "component": "B1 250k per-epoch rate",
@@ -84,20 +84,27 @@
         "old": "22-epoch cells at the measured strict-deterministic rate",
         "correction": "unchanged in method; the same 78.0 s train + 108.0 s FP32 eval per epoch, 22 epochs, plus G14-FP32 and the measured non-G14 gate overhead",
         "effect_on_identity_hours": 17.634
+      },
+      {
+        "component": "section-19 serial efficiency measurement",
+        "old": "OMITTED ENTIRELY from both the 32.686 h figure and the first 31.960 h reconciliation, in both cases inherited from protocol 13.2b, which never allocated that row to any arm",
+        "correction": "master protocol section 19 mandates one E7a-protocol serial efficiency measurement on the final selected checkpoints, and serial_efficiency.py exists solely to run it. It loads the frozen PRETRAINED language model, so it is charged to that identity. Costed at the UPPER bound of the protocol 13.2 range (0.500-1.000 h).",
+        "effect_on_identity_hours": 1.0,
+        "raised_by": "fresh-context audit C (operational and resource integrity)"
       }
     ],
-    "summary_of_change": "the reduction from 32.686 to 31.96 h is NOT a relaxation. It comes from removing the selection-sensitivity study, whose object the fixed-endpoint rule eliminated, and from pricing the remaining readouts and interventions directly per cell instead of through a pooled evaluation-share fraction. Every other correction was neutral for this identity or increased it (the spent-compute line grew once itemised from the artefacts' own walls).",
+    "summary_of_change": "the pretrained identity now projects to 32.960 h, not 31.960 h. The earlier figure was NOT wrong about the components it counted, but it omitted the mandatory section-19 efficiency pass, so the claim that it covered the COMPLETE planned programme was false. Adding it is a correction upward, against the ceiling, not a relaxation. The remaining fall from 32.686 h is still explained by removing the selection-sensitivity study, whose object the fixed-endpoint rule eliminated, and by pricing readouts per cell rather than through a pooled evaluation-share fraction.",
     "complete_programme_components": [
       {
         "component": "A1 measured baseline (E8A pretrained 135M)",
         "hours": 2.29222
       },
       {
-        "component": "A4 (protocol 13.2b)",
+        "component": "A4 (protocol 13.2b, projected, unrun)",
         "hours": 1.804
       },
       {
-        "component": "A7c (protocol 13.2b)",
+        "component": "A7c (protocol 13.2b, projected, unrun)",
         "hours": 1.864
       },
       {
@@ -109,11 +116,15 @@
         "hours": 1.476
       },
       {
+        "component": "section-19 serial efficiency pass (upper bound)",
+        "hours": 1.0
+      },
+      {
         "component": "already-spent search + diagnostics (incl. superseded probes 1/2)",
         "hours": 6.89
       }
     ],
-    "component_sum_hours": 31.96,
+    "component_sum_hours": 32.96,
     "matches_generator": true,
     "coverage_proof": {
       "already_spent_search": "search_grid1_pilot, search_grid2, search_grid3_halted in spent_compute",
@@ -124,15 +135,24 @@
       "G14": "G14_ROWS (64 pre + 160 post) x G14_ROW_S 5.301 s per LM cell",
       "final_R1_R2_R3": "R1 comes free from the epoch-22 canonical pass; R2 and R3 are charged as measured/assumed per-row walks over all 7,714 development rows",
       "mandatory_interventions": "three intervention conditions per LM cell, each one canonical FP32 dev pass",
-      "other_gate_overhead": "GATE_OVERHEAD_H 0.223 h per run, MEASURED as the residual between the grid runs' recorded wall and their epoch time (G8, G9, G11, G13, G15, G1, the selection reproduction check)"
+      "other_gate_overhead": "GATE_OVERHEAD_H 0.223 h per run, MEASURED as the residual between the grid runs' recorded wall and their epoch time (G8, G9, G11, G13, G15, G1, the selection reproduction check)",
+      "section_19_efficiency": "EFFICIENCY_S19_H in core_resource_projection.py, charged into the pretrained identity and into e8b_remaining"
     },
-    "verdict": "FITS: the complete planned pretrained-identity programme projects to 31.96 h against the hard 35 h ceiling, leaving 3.04 h. The ceiling is NOT weakened and NO component was dropped to achieve the fit.",
+    "verdict": "FITS, with less margin than previously stated: the complete planned pretrained-identity programme, now INCLUDING the section-19 efficiency pass, projects to 32.96 h against the hard 35 h ceiling, leaving 2.04 h. The ceiling is NOT weakened, NO component was dropped, and the ceiling is now enforced in code rather than checked by hand. The headroom is thin: a 16 per cent overrun on the unmeasured 250k rate exhausts it, and the recorded retry allowance is NONE.",
     "retry_allowance": "NONE. The plan tolerates zero B3 retries; any retry or any additional B3-loading evaluation triggers a stop-and-ask BEFORE execution",
     "residual_assumptions": [
-      "R3 per-row cost is ASSUMED at 1.5x the measured R2 rate; if R3 were 3x R2 instead, the B3 share would rise by about 0.19 h and the headroom would fall to about 2.85 h - still inside the ceiling",
-      "the 250k train rate is step-scaled from the measured 40k rate; no 250k E8B cell has ever run",
-      "B1's line is charged at an upper bound and touches neither identity"
+      "the 250k training rate is step-scaled from the measured 40k rate; no 250k E8B cell has ever run. This single assumption carries 12.566 h of the total, and the identity reaches 35 h if the true rate is about 16 per cent above the step-scaled value.",
+      "NEITHER R2 nor R3 per-row cost is measured for E8B; R2 is carried over from the E7b S8 per-row cost and R3 assumed at 1.5x R2. If both cost 3x the assumed rate the identity rises by about 1.87 h and the headroom falls to about 0.17 h.",
+      "the G14 per-row cost 5.301 s is the pooled measurement 5.139 s plus a 3 per cent conservative margin; it is an assumption, not a measurement, and is labelled as one.",
+      "A4 and A7c (3.668 h) are expected-epoch projections for arms that have not run; their configured 100-epoch cap would cost 8.469 h each. The one arm of this family that has run, A1, came in 23 per cent below its projection.",
+      "the section-19 efficiency pass is charged at the upper bound of its 0.500-1.000 h range.",
+      "B1 is charged at an upper bound and touches neither identity."
     ],
-    "clean_test_accessed": false
+    "clean_test_accessed": false,
+    "enforcement": {
+      "previously": "the 35 h per-identity ceiling and the storage gate existed only as constants and helper functions with no call site in the execution path, so neither could have halted anything. Nothing summed GPU hours across cells.",
+      "now": "run.per_identity_gate reads an append-only ledger (gpu_hour_ledger.json) and is checked BEFORE every core cell against that cell's projected cost, then re-checked AFTER the cell against its MEASURED hours, which are charged to the ledger. run.storage_gate is checked before every cell. Both halt through gate_halt.",
+      "verified": "the executable gate reproduces the published 32.960 h exactly and fires between a 16 and 17 per cent overrun on the never-measured 250k training rate, which matches the documented break-even."
+    }
   }
 }

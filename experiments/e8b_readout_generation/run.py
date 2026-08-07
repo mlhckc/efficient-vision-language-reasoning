@@ -474,13 +474,34 @@ RESUME_FIELDS = (
     "global_step", "best_model_state", "best_metric", "best_epoch",
     "python_rng", "numpy_rng", "torch_cpu_rng", "cuda_rng_all",
     "loader_generator_state", "epoch_permutation_counter", "recipe_sha256",
-    "vocabulary_sha256", "store_sha256s", "code_head",
+    "vocabulary_sha256", "store_sha256s", "code_head", "code_digest",
     "environment_fingerprint",
     # M-5: the per-epoch record must survive resume. The epoch-22
     # canonical rule reads history[-1], so a resume that dropped the
     # history would either crash or, worse, silently re-derive the
     # canonical epoch from a truncated record.
     "history", "train_times", "eval_times")
+
+
+def e8b_code_digest() -> str:
+    """A digest of the implementation that produces a trajectory.
+
+    code_head alone is not enough: a dirty worktree edit leaves the
+    commit unchanged while changing the code, and every 2026-08-07
+    record was written with git_dirty true. This hashes the actual
+    sources on the training path, so a crash-edit-resume splice cannot
+    pass unnoticed."""
+    here = Path(__file__).parent
+    files = sorted(here.glob("*.py")) + [
+        PROJECT_ROOT / "src" / "utils.py",
+        PROJECT_ROOT / "src" / "tokens_data.py",
+    ]
+    digest = hashlib.sha256()
+    for path in files:
+        if path.exists():
+            digest.update(path.name.encode())
+            digest.update(hashlib.sha256(path.read_bytes()).digest())
+    return digest.hexdigest()
 
 
 def environment_fingerprint() -> dict:
@@ -525,6 +546,7 @@ def save_resume_checkpoint(path: Path, *, model, optimizer, scheduler,
         "vocabulary_sha256": vocabulary_sha256,
         "store_sha256s": store_sha256s,
         "code_head": utils.run_metadata()["git_commit"],
+        "code_digest": e8b_code_digest(),
         "environment_fingerprint": environment_fingerprint(),
         "history": list(history),
         "train_times": list(train_times),
@@ -557,7 +579,7 @@ def verify_resume_checkpoint(path: Path, *, same_node_required: bool = False,
     # resume: restore_resume_state requires the full record and raises on
     # a legacy state.
     post_amendment = ("protocol_family", "history", "train_times",
-                      "eval_times")
+                      "eval_times", "code_digest")
     required = [f for f in RESUME_FIELDS
                 if f not in post_amendment or protocol_family is not None]
     missing = [f for f in required if f not in state]
@@ -576,6 +598,33 @@ def verify_resume_checkpoint(path: Path, *, same_node_required: bool = False,
             f"family.")
     if recipe_sha256 is not None and state["recipe_sha256"] != recipe_sha256:
         raise AssertionError("RESUME PROHIBITED: recipe hash mismatch")
+    # The recipe hash covers the CONFIGURATION, not the IMPLEMENTATION.
+    # Without this check a cell could crash at epoch 14, have a defect
+    # fixed in latents.py or readouts.py, resume, and run epochs 15-22
+    # under different code -- producing an epoch-22 canonical checkpoint
+    # spliced from two implementations, with nothing in the record to
+    # show it. code_head was stored from the beginning but never
+    # compared.
+    if protocol_family is not None:
+        here_head = utils.run_metadata()["git_commit"]
+        written_head = state["code_head"]
+        here_digest = e8b_code_digest()
+        if state["code_digest"] != here_digest:
+            raise AssertionError(
+                f"RESUME PROHIBITED: the implementation changed since "
+                f"this checkpoint was written (source digest "
+                f"{state['code_digest'][:12]} vs {here_digest[:12]}). "
+                f"A trajectory spliced from two implementations is "
+                f"never a canonical result. Restart this cell from "
+                f"scratch, or restore the original sources.")
+        if written_head != here_head:
+            raise AssertionError(
+                f"RESUME PROHIBITED: checkpoint written at code_head "
+                f"{written_head}, resume attempted at {here_head}. The "
+                f"recipe hash covers configuration, not implementation; "
+                f"a mixed-code trajectory is never a canonical result. "
+                f"Restart this cell from scratch, or resume at the "
+                f"original commit.")
     here = environment_fingerprint()
     written = state["environment_fingerprint"]
     if same_node_required and written["hostname"] != here["hostname"]:
@@ -644,7 +693,22 @@ def atomic_write_json(path: Path, payload: dict) -> None:
 
 def project_resources(seconds_per_epoch_40k: float,
                       eval_hours_range=(5.83, 11.67)) -> dict:
-    """Both bases, per U3: expected-epoch 15/22 governs go/no-go; the
+    """READ-ONLY SUPERSEDED DIAGNOSTIC - NOT THE GOVERNING PROJECTION.
+
+    Superseded on 2026-08-07. This formula still charges eight search
+    points, which were permanently abandoned, and still uses the pooled
+    evaluation-share basis that the fixed-endpoint amendment removed. It
+    omits A4, A7c, the spent compute and the section-19 efficiency pass,
+    so its identity figures are WRONG and must never be quoted.
+
+    The governing projection is
+    core_resource_projection.py -> core_resource_projection_20260807.json,
+    and the EXECUTABLE ceiling is per_identity_gate, which is checked
+    before every core cell and recharged from measured hours after it.
+
+    Retained only so the preflight record keeps a stable shape.
+
+    Both bases, per U3: expected-epoch 15/22 governs go/no-go; the
     100-epoch worst case is always reported beside it. Stop-and-return on
     any projected gate failure; nothing is descoped automatically (U2)."""
     per_epoch = {"train_40k": seconds_per_epoch_40k,
@@ -934,7 +998,15 @@ def preflight(device) -> int:
         "optimizer_stepped": False}
     checkpoint_path.unlink()
 
-    results["projection_demo_1s_per_epoch"] = project_resources(60.0)
+    results["projection_demo_SUPERSEDED_do_not_quote"] = {
+        "WARNING": "SUPERSEDED shape-only demo fed a fabricated 60 s "
+                   "per epoch. Its identity figures are WRONG (they "
+                   "charge the abandoned eight-point search and omit "
+                   "A4, A7c, spent compute and the section-19 "
+                   "efficiency pass). The governing projection is "
+                   "core_resource_projection_20260807.json and the "
+                   "executable ceiling is run.per_identity_gate.",
+        "output": project_resources(60.0)}
     results["wall_seconds"] = round(time.time() - started, 1)
     results["optimizer_step_count"] = 0
     results["clean_test_accessed"] = False
@@ -1126,8 +1198,12 @@ def assert_promotable(record: dict, source: str,
                 body = record[key]
                 break
     flat = json.dumps(record, default=str)
-    if '"NON_SCIENTIFIC": true' in flat.lower().replace(
-            '"non_scientific": true', '"NON_SCIENTIFIC": true'.lower()) \
+    # The nested scan searches the LOWERCASED serialisation, so the
+    # needle must be lowercase too. It previously searched for an
+    # uppercase literal inside flat.lower(), which can never match, so
+    # only the top-level check did any work and a NON_SCIENTIFIC flag
+    # nested one level down would have passed.
+    if '"non_scientific": true' in flat.lower() \
             or (isinstance(body, dict) and body.get("NON_SCIENTIFIC")):
         sys.exit(f"PROMOTION REFUSED ({context}): {source} is marked "
                  f"NON_SCIENTIFIC. Non-scientific probe artefacts are "
@@ -1242,6 +1318,105 @@ def memory_gate(allocated_bytes: int, total_bytes: int,
             "gate_basis": "peak reserved / device total (P3)",
             "ceiling_fraction": MEMORY_CEILING_FRACTION,
             "fires": reserved_fraction > MEMORY_CEILING_FRACTION}
+
+
+# --- Cumulative accounting: the aggregate ceilings, made enforceable ---------
+
+SPEND_LEDGER = OUT_DIR / "gpu_hour_ledger.json"
+
+# Hours charged to each frozen-model identity OUTSIDE the 18 core cells.
+# Both lines matter for the ceiling: work already spent cannot be
+# refunded, and work already committed must still fit, or the gate would
+# green-light a cell that leaves no room for the mandatory readouts.
+# Sourced from core_resource_projection_20260807.json.
+SPENT_BEFORE_CORE_HOURS = {
+    # Actually spent: the abandoned search, the diagnostics, the
+    # superseded determinism probes, and the measured A1 arm.
+    "pretrained": 6.890 + 2.29222,
+    "random": 1.95811,
+}
+COMMITTED_NON_CELL_HOURS = {
+    # Committed but not yet spent: A4 and A7c (protocol 13.2b), the
+    # per-identity share of the final R2/R3 readouts and the three
+    # intervention conditions, and the mandatory section-19 serial
+    # efficiency measurement, which loads the pretrained LM.
+    "pretrained": 1.804 + 1.864 + 1.476 + 1.000,
+    "random": 1.476,
+}
+
+
+def model_identity(arm: str) -> str:
+    """Which frozen-model identity a cell's GPU hours are charged to.
+
+    B3 uses the pretrained SmolLM2-135M; B2 uses the pinned-seed random
+    model of the same architecture; B1 loads no language model at all
+    and is charged to neither identity's 35-hour ceiling."""
+    return {"B3": "pretrained", "B2": "random", "B1": "none"}[arm]
+
+
+def read_spend_ledger() -> dict:
+    if SPEND_LEDGER.exists():
+        return json.loads(SPEND_LEDGER.read_text())
+    return {"cells": {}, "note": "cumulative GPU hours per frozen-model "
+                                 "identity; append-only"}
+
+
+def identity_hours(ledger: dict, identity: str) -> float:
+    """Total charged to one identity: what was spent before the core
+    matrix, plus every cell recorded since."""
+    spent = SPENT_BEFORE_CORE_HOURS.get(identity, 0.0)
+    for record in ledger["cells"].values():
+        if record["identity"] == identity:
+            spent += record["hours"]
+    return spent
+
+
+def committed_hours(identity: str) -> float:
+    """Work already committed to this identity but not yet executed."""
+    return COMMITTED_NON_CELL_HOURS.get(identity, 0.0)
+
+
+def per_identity_gate(arm: str, additional_hours: float = 0.0,
+                      ledger: dict | None = None) -> dict:
+    """The 35 GPU-hour per-model-identity ceiling, as an EXECUTABLE gate.
+
+    The ceiling was re-ratified by the user on 2026-08-07 as a hard
+    halt, but nothing in the execution path summed hours across cells,
+    so it could only ever have been checked by hand. This reads the
+    append-only ledger and adds the hours the caller is about to spend
+    or has just spent."""
+    identity = model_identity(arm)
+    ledger = read_spend_ledger() if ledger is None else ledger
+    already = identity_hours(ledger, identity)
+    committed = committed_hours(identity)
+    total = already + committed + additional_hours
+    return {"identity": identity,
+            "already_charged_hours": round(already, 4),
+            "committed_not_yet_spent_hours": round(committed, 4),
+            "additional_hours": round(additional_hours, 4),
+            "projected_total_hours": round(total, 4),
+            "ceiling_hours": PER_IDENTITY_CEILING_HOURS,
+            "applies": identity != "none",
+            "headroom_hours": round(PER_IDENTITY_CEILING_HOURS - total, 4),
+            "fires": identity != "none"
+                     and total > PER_IDENTITY_CEILING_HOURS}
+
+
+def charge_identity_hours(arm: str, scale: str, seed: int,
+                          hours: float) -> dict:
+    """Append one cell's measured GPU hours to the ledger, atomically.
+    Re-charging the same cell overwrites its own entry rather than
+    double-counting a resumed run."""
+    ledger = read_spend_ledger()
+    key = f"{arm}_{scale}_seed{seed}"
+    ledger["cells"][key] = {"identity": model_identity(arm),
+                            "hours": round(float(hours), 5),
+                            "arm": arm, "scale": scale, "seed": seed}
+    temporary = SPEND_LEDGER.with_name(SPEND_LEDGER.name + ".tmp")
+    SPEND_LEDGER.parent.mkdir(parents=True, exist_ok=True)
+    temporary.write_text(json.dumps(ledger, indent=2) + "\n")
+    os.replace(temporary, SPEND_LEDGER)
+    return ledger
 
 
 def storage_gate(required_bytes: int, target_dir: Path) -> dict:

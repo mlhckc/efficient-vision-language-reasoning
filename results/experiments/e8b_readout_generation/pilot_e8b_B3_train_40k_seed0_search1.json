@@ -1,4 +1,14 @@
 {
+  "EXPLORATORY": {
+    "dated_utc": "2026-08-07",
+    "status": "EXPLORATORY PROTOCOL-DIAGNOSTIC EVIDENCE ONLY - NON-CANONICAL - SUPERSEDED",
+    "binding_rule": "CLAUDE.md E8B gate item 1: grid points 1-3 are never core results, never select the recipe, and support no superiority claim in either direction. Every statistic derived from them for ranking purposes is INVALIDATED.",
+    "the_accuracy_below": "best_dev_r1_accuracy in this file is a BF16 best-of-run figure from the abandoned eight-point search. It is NOT comparable with a core result: the core protocol is FP32 canonical evaluation at a fixed epoch-22 endpoint under strict determinism, and this run had none of those properties.",
+    "never_do_this": "do not place this number in a results table beside an FP32 epoch-22 core figure, and do not use it to rank recipes.",
+    "promotion": "refused by run.assert_promotable: this record carries no protocol_family, so it can never resume or promote into the core family.",
+    "authoritative_record": "superseded_evidence_20260807.json",
+    "original_content_below": "unmodified"
+  },
   "metadata": {
     "timestamp": "2026-08-07T00:02:59",
     "git_commit": "af43b02",

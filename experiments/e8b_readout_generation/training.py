@@ -103,6 +103,22 @@ def build_recipe(grid_point: int) -> dict:
 # --- The amended core recipe family (2026-08-07) -----------------------------
 
 CORE_FIXED_HYPER = {"lr": 3e-4, "warmup_frac": 0.0, "dropout": 0.1}
+
+# Projected cost of one cell, used ONLY to check the 35 GPU-hour
+# per-identity ceiling BEFORE a cell starts. Sourced verbatim from
+# core_resource_projection_20260807.json -> per_cell_hours, so the gate
+# and the published projection cannot drift apart. The ceiling is
+# re-checked against MEASURED hours after the cell completes, which is
+# the authoritative charge.
+CORE_CELL_PROJECTED_HOURS = {
+    ("B3", "train_40k"): 1.690, ("B3", "train_250k"): 4.189,
+    ("B2", "train_40k"): 1.690, ("B2", "train_250k"): 4.189,
+    ("B1", "train_40k"): 0.287, ("B1", "train_250k"): 0.751,
+}
+# One cell writes a resume checkpoint (325.9 MiB), a canonical
+# checkpoint (81.5 MiB), a secondary best-of-22 checkpoint and a per-row
+# npz. Rounded up to 1 GiB, checked against the space actually free.
+CORE_CELL_STORAGE_BYTES = 1 * 2 ** 30
 CORE_FIXED_JUSTIFICATION = (
     "retained SOLELY because it was the PRE-RESULT preregistered pilot "
     "and default configuration, which is also the section 7.1 inherited "
@@ -725,7 +741,17 @@ def pinned_g14_rows(n_dev: int) -> list:
 @torch.no_grad()
 def g14_binding_gate(model, lm, dev_dataset, cache: dict, trie: dict,
                      device, stage: str, run_name: str) -> dict:
-    """Master protocol section 18 G14 at the binding width: on 64 pinned
+    """READ-ONLY SUPERSEDED DIAGNOSTIC - NOT THE LIVE G14 GATE.
+
+    Superseded on 2026-08-07 by g14_fp32_gate, which is the gate the
+    core cells actually call. This version builds a BF16 prefix and
+    scores in bf16, which the FP32 amendment forbids for any scientific
+    evaluation, and it has NO caller anywhere in the executable path.
+    It is retained only as the historical record of the pre-amendment
+    gate. Its name is one word away from the live gate's, so read the
+    call site before assuming which one ran.
+
+    Master protocol section 18 G14 at the binding width: on 64 pinned
     development examples, the batched selection scorer AND the
     single-example cached scorer must both agree with the single-sequence
     unpadded uncached brute force on the R1 argmax for every example, and
@@ -916,7 +942,11 @@ def g8_overfit_gate(lm, train_loader, cache, device,
     authorisation rather than relying on its caller."""
     e8b_run.authorize_optimizer_path("core-gate",
                                      f"g8_overfit_gate {run_name}")
-    utils.set_seed(0)
+    # The gate is itself an optimizer path, so enforcement must hold
+    # INSIDE it, not merely be restored for the caller afterwards.
+    # utils.set_seed downgrades to warn_only=True and
+    # build_trunk_and_projection re-seeds again, so both are re-imposed.
+    e8b_run.reseed_strict(0)
     subset = Subset(train_loader.dataset, list(range(G8_SUBSET)))
     loader = DataLoader(subset, batch_size=128,
                         shuffle=True, generator=utils.make_generator(0),
@@ -927,6 +957,8 @@ def g8_overfit_gate(lm, train_loader, cache, device,
                                       e8b_run._pretrained_embed_weight())
     model = e8b_latents.E8BPrefixModel(trunk, projection).to(device)
     optimizer = make_optimizer(model, 1e-3)
+    e8b_run.enable_strict_determinism()   # build_* re-seeded internally
+    gate_determinism = e8b_run.assert_strict_determinism()
     reached = None
     for epoch in range(1, G8_MAX_EPOCHS + 1):
         model.train()
@@ -1102,6 +1134,21 @@ class B1Classifier(nn.Module):
         self.readout = readout
 
     def forward(self, image_tokens, question_tokens, question_mask):
+        """Logits ONLY.
+
+        AttentionPoolReadout returns (logits, attention_weights) so the
+        pooling can be inspected. Every B1 consumer -- the loss, the
+        dtype gate, the shape gate and the canonical evaluation --
+        expects a tensor, so returning the pair unchanged made all six
+        B1 cells die on the first forward pass. The weights stay
+        reachable through forward_with_weights for diagnostics."""
+        logits, _ = self.readout(self.trunk(image_tokens, question_tokens,
+                                            question_mask))
+        return logits
+
+    def forward_with_weights(self, image_tokens, question_tokens,
+                             question_mask):
+        """The diagnostic form: (logits, attention_weights)."""
         return self.readout(self.trunk(image_tokens, question_tokens,
                                        question_mask))
 
@@ -1177,7 +1224,7 @@ def b1_overfit_gate(train_loader, device, run_name: str) -> dict:
     authorisation."""
     e8b_run.authorize_optimizer_path("core-gate",
                                      f"b1_overfit_gate {run_name}")
-    utils.set_seed(0)
+    e8b_run.reseed_strict(0)   # see g8_overfit_gate: enforcement INSIDE
     subset = Subset(train_loader.dataset, list(range(G8_SUBSET)))
     loader = DataLoader(subset, batch_size=128, shuffle=True,
                         generator=utils.make_generator(0),
@@ -1185,6 +1232,8 @@ def b1_overfit_gate(train_loader, device, run_name: str) -> dict:
     trunk, readout = e8b_run.build_arm("B1", 0, 0.0, None)
     model = B1Classifier(trunk, readout).to(device)
     optimizer = make_optimizer(model, 1e-3)
+    e8b_run.enable_strict_determinism()   # build_arm re-seeded internally
+    gate_determinism = e8b_run.assert_strict_determinism()
     reached, accuracy = None, 0.0
     for epoch in range(1, G8_MAX_EPOCHS + 1):
         model.train()
@@ -1259,10 +1308,38 @@ def train_core_cell(arm: str, scale: str, seed: int) -> int:
         sys.exit(f"a recorded gate halt exists for this cell "
                  f"({halts[0].name}); execution returns to the user")
 
+    # The 35 GPU-hour per-model-identity ceiling, checked BEFORE any GPU
+    # work: the projected cost of this cell is added to everything
+    # already charged to the same frozen-model identity. Previously the
+    # ceiling existed only as a constant inside a projection helper, so
+    # nothing would have stopped cell 5 of 6 from crossing it.
+    projected = CORE_CELL_PROJECTED_HOURS[(arm, scale)]
+    identity_gate = e8b_run.per_identity_gate(arm, projected)
+    if identity_gate["fires"]:
+        e8b_run.gate_halt(run_name, "G19_IDENTITY",
+                          f"the 35 GPU-hour ceiling for the "
+                          f"{identity_gate['identity']} model identity "
+                          f"would be exceeded: "
+                          f"{identity_gate['already_charged_hours']} h "
+                          f"already charged plus {projected} h projected "
+                          f"for this cell",
+                          {"identity_gate": identity_gate})
+    storage = e8b_run.storage_gate(CORE_CELL_STORAGE_BYTES, OUT_DIR)
+    if storage["fires"]:
+        e8b_run.gate_halt(run_name, "G19_STORAGE",
+                          f"this cell needs {storage['required_gib']} GiB "
+                          f"and only {storage['free_gib']} GiB are free",
+                          {"storage_gate": storage})
+
     from experiments.e8a_question_encoder import reinfer_g21
     reinfer_g21.assert_gpu_exclusive(f"e8b core {run_name}")
     lock_path = e8b_run.acquire_run_lock(arm, scale, seed)
     print(f"[LOCK] {lock_path.name} acquired")
+    # A SIGKILL leaves this lock held with no owner. Recovery is
+    # DELIBERATELY manual: the lock records host and pid, so a human can
+    # confirm the process is gone before removing it. Automatic stale
+    # -lock reclamation is not implemented, because a wrongly reclaimed
+    # lock means two processes training one cell.
     started = time.time()
     try:
         return _train_core_locked(arm, scale, seed, recipe, run_name,
@@ -1463,15 +1540,26 @@ def _train_core_locked(arm, scale, seed, recipe, run_name, result_path,
         e8b_run.assert_strict_determinism()
         print(f"[RESUME] verified; continuing from epoch {start_epoch}")
 
+    # C-M2: the wall is per CELL, not per process. A resumed cell keeps
+    # the hours its earlier processes already spent, restored from the
+    # per-epoch record, so a cell that crashes at 7 h cannot be handed a
+    # fresh 8 h by restarting.
+    prior_seconds = float(sum(train_times) + sum(eval_times))
+    if prior_seconds:
+        print(f"[WALL] {prior_seconds / 3600:.2f} h carried forward from "
+              f"earlier processes of this cell")
+
     def wall_halt(epoch, step):
-        elapsed = time.time() - started
+        elapsed = prior_seconds + (time.time() - started)
         if elapsed >= wall_seconds:
             failure = {"metadata": utils.run_metadata(),
                        "core_failure": {
                            "status": "FAILED: 8 GPU-hour operational "
                                      "wall-clock halt",
                            "epoch": epoch, "step": step,
-                           "elapsed_hours": round(elapsed / 3600, 3)}}
+                           "elapsed_hours": round(elapsed / 3600, 3),
+                           "includes_prior_process_hours":
+                               round(prior_seconds / 3600, 3)}}
             e8b_run.atomic_write_json(
                 OUT_DIR / f"{run_name}_FAILED.json", failure)
             e8b_run.gate_halt(run_name, "G19_WALL",
@@ -1659,6 +1747,7 @@ def _train_core_locked(arm, scale, seed, recipe, run_name, result_path,
             recipe["seed"], recipe["dropout"])
         reloaded = e8b_latents.E8BPrefixModel(trunk2, projection2)
     e8b_run.enable_strict_determinism()   # build_arm reseeded
+    e8b_run.assert_strict_determinism()    # G9/G10/G11/G14-post follow
     reloaded.load_state_dict(torch.load(
         canonical_path, map_location="cpu", weights_only=False)["state"])
     reloaded = reloaded.to(device).eval()
@@ -1760,7 +1849,10 @@ def _train_core_locked(arm, scale, seed, recipe, run_name, result_path,
         canonical_correct=(predictions_a == labels_np).astype(np.uint8),
         labels=labels_np)
 
-    elapsed = time.time() - started
+    # Cumulative across every process that trained this cell, so both
+    # the recorded wall_hours and the identity ledger charge the cell's
+    # true cost rather than only the final process's share.
+    elapsed = prior_seconds + (time.time() - started)
     record = {"metadata": utils.run_metadata(),
               "e8b_core_cell": {
         "run": run_name, "cell": [arm, scale, seed],
@@ -1781,6 +1873,13 @@ def _train_core_locked(arm, scale, seed, recipe, run_name, result_path,
         "train_seconds_per_epoch": round(float(np.mean(train_times)), 2),
         "eval_seconds_per_epoch": round(float(np.mean(eval_times)), 2),
         "wall_hours": round(elapsed / 3600, 3),
+        "wall_hours_this_process": round(
+            (elapsed - prior_seconds) / 3600, 3),
+        "wall_hours_carried_from_earlier_processes": round(
+            prior_seconds / 3600, 3),
+        "identity_gate_before": identity_gate,
+        "identity_gate_after": None,   # replaced below, once charged
+        "storage_gate": storage,
         "gpu": fingerprint,
         "peak_memory": e8b_run.memory_gate(
             torch.cuda.max_memory_allocated(), device_total,
@@ -1796,7 +1895,24 @@ def _train_core_locked(arm, scale, seed, recipe, run_name, result_path,
         "g10_collapse": g10,
         "g14_post_selection": g14_post,
         "clean_test_accessed": False}}
+    # Charge the MEASURED hours to this model identity, then re-check.
+    # Charging before writing the record means the ledger can never
+    # under-count a completed cell.
+    e8b_run.charge_identity_hours(arm, scale, seed, elapsed / 3600)
+    after = e8b_run.per_identity_gate(arm, 0.0)
+    record["e8b_core_cell"]["identity_gate_after"] = after
     e8b_run.atomic_write_json(result_path, record)
     print(f"[CORE DONE] {run_name}: canonical epoch {canonical_epoch}, "
           f"dev {primary_accuracy:.4f}, wall {elapsed / 3600:.2f} h")
+    print(f"[LEDGER] {after['identity']} identity now at "
+          f"{after['already_charged_hours']} h of "
+          f"{after['ceiling_hours']} h "
+          f"({after['headroom_hours']} h headroom)")
+    if after["fires"]:
+        e8b_run.gate_halt(run_name, "G19_IDENTITY",
+                          f"the {after['identity']} identity has "
+                          f"EXCEEDED its 35 GPU-hour ceiling after this "
+                          f"cell; execution stops and returns to the "
+                          f"user",
+                          {"identity_gate": after})
     return 0
