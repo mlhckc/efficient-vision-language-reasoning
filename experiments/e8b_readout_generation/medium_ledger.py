@@ -695,11 +695,15 @@ CONFIRM_B_20260807_ENTRIES = [
               "'pair-preserving alternatives'; nothing computed any.",
      "classification": "execution-critical",
      "disposition": "FIXED AT SOURCE",
-     "evidence": "run.pair_preserving_order interleaves each pair, B2 "
-                 "immediately before its B3, so if the ceiling fires it "
-                 "fires BETWEEN pairs and every completed pair is "
-                 "whole. B1, charged to neither identity ceiling, runs "
-                 "last.",
+     "evidence": "run.pair_preserving_order interleaves each pair so "
+                 "that if the ceiling fires it fires BETWEEN pairs and "
+                 "every completed pair is whole. B1, charged to neither "
+                 "identity ceiling, runs last. CORRECTED 2026-08-07: "
+                 "this entry originally said 'B2 immediately before its "
+                 "B3'. That ordering was BACKWARDS -- the binding "
+                 "ceiling is the pretrained one B3 charges, so a firing "
+                 "at B3's pre-gate would have stranded the B2 that had "
+                 "just completed. B3 now runs first.",
      "closed_by": "test_audit_known_negatives, pair-order checks"},
     {"id": "CONFIRM-B-MEDIUM-5",
      "lens": "B (executable safety, confirmation audit)",
@@ -751,10 +755,17 @@ FINAL_20260807_ENTRIES = [
               "promises it reproduces from.",
      "classification": "provenance/reproducibility",
      "disposition": "FIXED AT SOURCE",
-     "evidence": "the artefact is regenerated and a test asserts every "
-                 "published record reproduces from its committed "
-                 "generator, so a generator-only fix cannot be reported "
-                 "as closed again.",
+     "evidence": "the artefact is regenerated, and a test asserts that "
+                 "the projection AND the findings ledger each reproduce "
+                 "from their committed generators, field for field. "
+                 "SCOPE, stated exactly: two records -- "
+                 "identity_reconciliation_20260807.json and "
+                 "blocker_high_reverification_20260807.json -- have NO "
+                 "generator at all and are maintained by hand, so no "
+                 "reproduction test can cover them. That is a real "
+                 "residual gap, not a closed one, and it is recorded as "
+                 "such rather than papered over by a broader claim than "
+                 "the guard supports.",
      "closed_by": "test_records_reproduce_from_generators"},
     {"id": "FINAL-AC-HIGH-1",
      "lens": "A/C (honesty, final audit)",
@@ -884,6 +895,124 @@ FINAL_20260807_ENTRIES = [
 ]
 
 
+# Findings from the verification audit of b27696e.
+VERIFY_20260807_ENTRIES = [
+    {"id": "VERIFY-HIGH-1",
+     "lens": "verification audit",
+     "issue": "The closure evidence for FINAL-B-HIGH-1 claimed a test "
+              "asserts EVERY published record reproduces from its "
+              "generator. The test covered one record. Two governing "
+              "records have no generator at all and are hand-edited, so "
+              "the claim was broader than any guard could be -- the "
+              "same over-claiming this project has repeatedly had to "
+              "correct.",
+     "classification": "provenance/reproducibility",
+     "disposition": "PARTIALLY FIXED",
+     "evidence": "the test now covers the projection AND the findings "
+                 "ledger, and the evidence states the scope exactly, "
+                 "naming the two hand-maintained records it cannot "
+                 "cover. Those two remain a real residual gap.",
+     "closed_by": "NOT CLOSED - two records remain unguarded by "
+                  "construction, and that is now stated rather than "
+                  "hidden behind a broader claim"},
+    {"id": "VERIFY-HIGH-2",
+     "lens": "verification audit",
+     "issue": "The commit that fixed the counting claims broke two of "
+              "its own: the reconciliation said 'Five separate "
+              "omissions' above a list of four, and 'Five open risks "
+              "... ANY ONE of them exhausts the remaining margin' above "
+              "a list of six, two of which are not hours risks at all.",
+     "classification": "reporting/documentation",
+     "disposition": "FIXED AT SOURCE",
+     "evidence": "both counts are now DERIVED from the lists they "
+                 "describe rather than written beside them, and the "
+                 "verdict distinguishes the risks that can exhaust the "
+                 "margin from those that cannot.",
+     "closed_by": "the regenerated reconciliation"},
+    {"id": "VERIFY-MEDIUM-1",
+     "lens": "verification audit",
+     "issue": "The reservation skipped any cell with ANY ledger entry, "
+              "so a cell that crashed after six minutes had its whole "
+              "projected cost dropped from the reservation. A 250k cell "
+              "that OOMed early would leave every later pre-gate "
+              "reading 4.2 h of headroom that does not exist -- "
+              "restoring the 'not detected until cell 6' behaviour the "
+              "reservation was added to fix.",
+     "classification": "execution-critical",
+     "disposition": "FIXED AT SOURCE",
+     "evidence": "the gate reserves max(0, projected minus hours "
+                 "already charged to that cell), so a crashed cell is "
+                 "still reserved for the work it has left to do. Also "
+                 "removed a module-level 'current cell' global that "
+                 "could have leaked between calls in one process.",
+     "closed_by": "test_audit_known_negatives, reservation checks"},
+    {"id": "VERIFY-MEDIUM-2",
+     "lens": "verification audit",
+     "issue": "The A1 precedent was corrected once and was STILL not "
+              "like for like: '1.25 per cent ABOVE' credited an "
+              "interventions component the measurement excludes. The "
+              "measured 2.29222 h decomposes exactly as training "
+              "1.56262 plus extraction 0.729599, and the source record "
+              "states interventions are reported separately and never "
+              "added. Two successive framings each picked a more "
+              "favourable comparator than the evidence supports.",
+     "classification": "scientific-validity",
+     "disposition": "FIXED AT SOURCE",
+     "evidence": "the comparator is now core 1.774 plus extraction "
+                 "0.400, the components the measurement actually "
+                 "covers, giving 5.44 per cent ABOVE. Both earlier "
+                 "framings are quoted and withdrawn in place, and the "
+                 "precedent is stated as UNFAVOURABLE.",
+     "closed_by": "the regenerated projection"},
+    {"id": "VERIFY-MEDIUM-3",
+     "lens": "verification audit",
+     "issue": "One mandatory component was still uncosted after the "
+              "list was declared complete: A1's own matched "
+              "interventions, 0.090 h in protocol 13.2b's A1 row. BASE "
+              "covers core and extraction only, and the retained-row "
+              "constant covered the other three components but not "
+              "this one.",
+     "classification": "scientific-validity",
+     "disposition": "FIXED AT SOURCE",
+     "evidence": "charged for both A1 and A1r. The pretrained identity "
+                 "rises from 34.423 to 34.513 h and the headroom falls "
+                 "to 0.487 h. This is the FOURTH omission found and the "
+                 "fourth correction upward.",
+     "closed_by": "the regenerated projection"},
+    {"id": "VERIFY-MEDIUM-4",
+     "lens": "verification audit",
+     "issue": "Two operator-facing claims were falsified by code added "
+              "in the same commit: the ledger-failure message said "
+              "'this cell can still resume' while a new pre-check "
+              "stopped every cell including that one, and the "
+              "finalisation allowance was tested once on entry while "
+              "its comment claimed exceeding it is recorded -- the only "
+              "wall check lives inside a loop that does not run on that "
+              "path.",
+     "classification": "execution-critical",
+     "disposition": "FIXED AT SOURCE",
+     "evidence": "the message now says plainly that no cell starts "
+                 "while the record exists and how to clear it, and "
+                 "finalisation carries a real deadline that records a "
+                 "G19_FINALISATION overrun after the result is safely "
+                 "written.",
+     "closed_by": "test_audit_known_negatives"},
+    {"id": "VERIFY-MEDIUM-5",
+     "lens": "verification audit",
+     "issue": "pair_preserving_order still had no production call site, "
+              "so the documented ordering was whatever the operator "
+              "typed, and an entry closing it described the superseded "
+              "B2-first ordering.",
+     "classification": "execution-critical",
+     "disposition": "FIXED AT SOURCE",
+     "evidence": "run.py --core-order prints the sequence, and "
+                 "--core-cell warns when a cell is run ahead of "
+                 "earlier ones in the order. The stale entry text is "
+                 "corrected in place by quotation.",
+     "closed_by": "test_audit_known_negatives, pair-order checks"},
+]
+
+
 def derive_summary(entries: list) -> dict:
     """Every count here is computed from entries[].disposition. Nothing
     is declared by hand, and no state is collapsed into another."""
@@ -929,7 +1058,8 @@ def main() -> int:
                + REAUDIT_B2_20260807_ENTRIES
                + CONFIRM_20260807_ENTRIES
                + CONFIRM_B_20260807_ENTRIES
-               + FINAL_20260807_ENTRIES)
+               + FINAL_20260807_ENTRIES
+               + VERIFY_20260807_ENTRIES)
     appended = [e for e in pending if e["id"] not in known]
     for entry in appended:
         entry = dict(entry)

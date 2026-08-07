@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-07T20:04:17",
-    "git_commit": "28afec5",
+    "timestamp": "2026-08-07T20:31:52",
+    "git_commit": "b27696e",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -675,7 +675,7 @@
         "issue": "Nothing sequenced B2 and B3 for a given scale and seed. With under an hour of headroom, running the six B2 cells first could exhaust the pretrained ceiling partway through B3 and leave unpaired B2 results -- breaking a pairing CLAUDE.md declares binding, by accident rather than by decision. The halt message promised 'pair-preserving alternatives'; nothing computed any.",
         "classification": "execution-critical",
         "disposition": "FIXED AT SOURCE",
-        "evidence": "run.pair_preserving_order interleaves each pair, B2 immediately before its B3, so if the ceiling fires it fires BETWEEN pairs and every completed pair is whole. B1, charged to neither identity ceiling, runs last.",
+        "evidence": "run.pair_preserving_order interleaves each pair so that if the ceiling fires it fires BETWEEN pairs and every completed pair is whole. B1, charged to neither identity ceiling, runs last. CORRECTED 2026-08-07: this entry originally said 'B2 immediately before its B3'. That ordering was BACKWARDS -- the binding ceiling is the pretrained one B3 charges, so a firing at B3's pre-gate would have stranded the B2 that had just completed. B3 now runs first.",
         "closed_by": "test_audit_known_negatives, pair-order checks",
         "state": "FIXED_CLOSED"
       },
@@ -705,7 +705,7 @@
         "issue": "A fix reached the generator but never the artefact. The fabricated '17.6-21.6 h' citation was corrected in core_resource_projection.py, but the published JSON was not regenerated, so the governing 180-hour record still carried the fabricated citation as a live statement while the ledger reported it FIXED. The artefact no longer reproduced from the script its own docstring promises it reproduces from.",
         "classification": "provenance/reproducibility",
         "disposition": "FIXED AT SOURCE",
-        "evidence": "the artefact is regenerated and a test asserts every published record reproduces from its committed generator, so a generator-only fix cannot be reported as closed again.",
+        "evidence": "the artefact is regenerated, and a test asserts that the projection AND the findings ledger each reproduce from their committed generators, field for field. SCOPE, stated exactly: two records -- identity_reconciliation_20260807.json and blocker_high_reverification_20260807.json -- have NO generator at all and are maintained by hand, so no reproduction test can cover them. That is a real residual gap, not a closed one, and it is recorded as such rather than papered over by a broader claim than the guard supports.",
         "closed_by": "test_records_reproduce_from_generators",
         "state": "FIXED_CLOSED"
       },
@@ -788,10 +788,80 @@
         "evidence": "the gate now RESERVES the cells that have not run yet, so detection scales with severity: a sustained 20 per cent overrun stops at B3 cell 3 having burned 4.1 h of a planned 17.8 h, where before it would have run to cell 6 regardless.",
         "closed_by": "test_audit_known_negatives, reservation checks",
         "state": "FIXED_CLOSED"
+      },
+      {
+        "id": "VERIFY-HIGH-1",
+        "lens": "verification audit",
+        "issue": "The closure evidence for FINAL-B-HIGH-1 claimed a test asserts EVERY published record reproduces from its generator. The test covered one record. Two governing records have no generator at all and are hand-edited, so the claim was broader than any guard could be -- the same over-claiming this project has repeatedly had to correct.",
+        "classification": "provenance/reproducibility",
+        "disposition": "PARTIALLY FIXED",
+        "evidence": "the test now covers the projection AND the findings ledger, and the evidence states the scope exactly, naming the two hand-maintained records it cannot cover. Those two remain a real residual gap.",
+        "closed_by": "NOT CLOSED - two records remain unguarded by construction, and that is now stated rather than hidden behind a broader claim",
+        "state": "PARTIALLY_FIXED"
+      },
+      {
+        "id": "VERIFY-HIGH-2",
+        "lens": "verification audit",
+        "issue": "The commit that fixed the counting claims broke two of its own: the reconciliation said 'Five separate omissions' above a list of four, and 'Five open risks ... ANY ONE of them exhausts the remaining margin' above a list of six, two of which are not hours risks at all.",
+        "classification": "reporting/documentation",
+        "disposition": "FIXED AT SOURCE",
+        "evidence": "both counts are now DERIVED from the lists they describe rather than written beside them, and the verdict distinguishes the risks that can exhaust the margin from those that cannot.",
+        "closed_by": "the regenerated reconciliation",
+        "state": "FIXED_CLOSED"
+      },
+      {
+        "id": "VERIFY-MEDIUM-1",
+        "lens": "verification audit",
+        "issue": "The reservation skipped any cell with ANY ledger entry, so a cell that crashed after six minutes had its whole projected cost dropped from the reservation. A 250k cell that OOMed early would leave every later pre-gate reading 4.2 h of headroom that does not exist -- restoring the 'not detected until cell 6' behaviour the reservation was added to fix.",
+        "classification": "execution-critical",
+        "disposition": "FIXED AT SOURCE",
+        "evidence": "the gate reserves max(0, projected minus hours already charged to that cell), so a crashed cell is still reserved for the work it has left to do. Also removed a module-level 'current cell' global that could have leaked between calls in one process.",
+        "closed_by": "test_audit_known_negatives, reservation checks",
+        "state": "FIXED_CLOSED"
+      },
+      {
+        "id": "VERIFY-MEDIUM-2",
+        "lens": "verification audit",
+        "issue": "The A1 precedent was corrected once and was STILL not like for like: '1.25 per cent ABOVE' credited an interventions component the measurement excludes. The measured 2.29222 h decomposes exactly as training 1.56262 plus extraction 0.729599, and the source record states interventions are reported separately and never added. Two successive framings each picked a more favourable comparator than the evidence supports.",
+        "classification": "scientific-validity",
+        "disposition": "FIXED AT SOURCE",
+        "evidence": "the comparator is now core 1.774 plus extraction 0.400, the components the measurement actually covers, giving 5.44 per cent ABOVE. Both earlier framings are quoted and withdrawn in place, and the precedent is stated as UNFAVOURABLE.",
+        "closed_by": "the regenerated projection",
+        "state": "FIXED_CLOSED"
+      },
+      {
+        "id": "VERIFY-MEDIUM-3",
+        "lens": "verification audit",
+        "issue": "One mandatory component was still uncosted after the list was declared complete: A1's own matched interventions, 0.090 h in protocol 13.2b's A1 row. BASE covers core and extraction only, and the retained-row constant covered the other three components but not this one.",
+        "classification": "scientific-validity",
+        "disposition": "FIXED AT SOURCE",
+        "evidence": "charged for both A1 and A1r. The pretrained identity rises from 34.423 to 34.513 h and the headroom falls to 0.487 h. This is the FOURTH omission found and the fourth correction upward.",
+        "closed_by": "the regenerated projection",
+        "state": "FIXED_CLOSED"
+      },
+      {
+        "id": "VERIFY-MEDIUM-4",
+        "lens": "verification audit",
+        "issue": "Two operator-facing claims were falsified by code added in the same commit: the ledger-failure message said 'this cell can still resume' while a new pre-check stopped every cell including that one, and the finalisation allowance was tested once on entry while its comment claimed exceeding it is recorded -- the only wall check lives inside a loop that does not run on that path.",
+        "classification": "execution-critical",
+        "disposition": "FIXED AT SOURCE",
+        "evidence": "the message now says plainly that no cell starts while the record exists and how to clear it, and finalisation carries a real deadline that records a G19_FINALISATION overrun after the result is safely written.",
+        "closed_by": "test_audit_known_negatives",
+        "state": "FIXED_CLOSED"
+      },
+      {
+        "id": "VERIFY-MEDIUM-5",
+        "lens": "verification audit",
+        "issue": "pair_preserving_order still had no production call site, so the documented ordering was whatever the operator typed, and an entry closing it described the superseded B2-first ordering.",
+        "classification": "execution-critical",
+        "disposition": "FIXED AT SOURCE",
+        "evidence": "run.py --core-order prints the sequence, and --core-cell warns when a cell is run ahead of earlier ones in the order. The stale entry text is corrected in place by quotation.",
+        "closed_by": "test_audit_known_negatives, pair-order checks",
+        "state": "FIXED_CLOSED"
       }
     ],
     "summary": {
-      "total": 75,
+      "total": 82,
       "derivation": "computed mechanically from entries[].disposition via the state map below; never declared by hand. ACCEPTED LIMITATION is NOT counted as FIXED, and PARTIALLY FIXED is NOT counted as CLOSED.",
       "state_map": {
         "FIXED": "FIXED_CLOSED",
@@ -804,15 +874,15 @@
         "OPEN": "OPEN"
       },
       "by_state": {
-        "FIXED_CLOSED": 72,
+        "FIXED_CLOSED": 78,
         "ACCEPTED_LIMITATION": 1,
-        "PARTIALLY_FIXED": 2
+        "PARTIALLY_FIXED": 3
       },
       "by_classification": {
-        "scientific-validity": 18,
-        "execution-critical": 35,
-        "provenance/reproducibility": 18,
-        "reporting/documentation": 4
+        "scientific-validity": 20,
+        "execution-critical": 38,
+        "provenance/reproducibility": 19,
+        "reporting/documentation": 5
       },
       "fixed_closed": [
         "A-M1",
@@ -886,21 +956,29 @@
         "FINAL-AC-HIGH-5",
         "FINAL-B-MEDIUM-1",
         "FINAL-B-MEDIUM-2",
-        "FINAL-AC-MEDIUM-1"
+        "FINAL-AC-MEDIUM-1",
+        "VERIFY-HIGH-2",
+        "VERIFY-MEDIUM-1",
+        "VERIFY-MEDIUM-2",
+        "VERIFY-MEDIUM-3",
+        "VERIFY-MEDIUM-4",
+        "VERIFY-MEDIUM-5"
       ],
       "accepted_limitation": [
         "A-M5/B-M?"
       ],
       "partially_fixed": [
         "REAUDIT-AC-HIGH-2",
-        "CONFIRM-HIGH-3"
+        "CONFIRM-HIGH-3",
+        "VERIFY-HIGH-1"
       ],
       "open": [],
       "execution_critical_open": [],
       "not_fully_closed_any_class": [
         "A-M5/B-M?",
         "REAUDIT-AC-HIGH-2",
-        "CONFIRM-HIGH-3"
+        "CONFIRM-HIGH-3",
+        "VERIFY-HIGH-1"
       ]
     },
     "clean_test_accessed": false,

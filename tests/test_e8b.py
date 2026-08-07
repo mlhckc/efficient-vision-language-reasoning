@@ -2115,11 +2115,19 @@ def test_remediation_known_negatives() -> None:
         # PARTIALLY FIXED is a real state and is NOT laundered into
         # closed. REAUDIT-AC-HIGH-2 is budgeted but not implemented, and
         # the ledger must keep saying so until it is.
+        # PARTIALLY FIXED is a real state and is never laundered into
+        # closed. The set is asserted explicitly so a finding cannot be
+        # quietly promoted or a new gap quietly appear.
         check("partially fixed findings are reported as such, not as "
               "closed",
               set(summary["partially_fixed"])
-              == {"REAUDIT-AC-HIGH-2", "CONFIRM-HIGH-3"},
+              == {"REAUDIT-AC-HIGH-2", "CONFIRM-HIGH-3", "VERIFY-HIGH-1"},
               str(summary["partially_fixed"]))
+        for identifier in summary["partially_fixed"]:
+            entry = next(e for e in entries if e["id"] == identifier)
+            check(f"{identifier} says what remains undone",
+                  "NOT CLOSED" in entry["closed_by"]
+                  or "NOT closed" in entry["closed_by"])
         partial = next(e for e in entries
                        if e["id"] == "REAUDIT-AC-HIGH-2")
         check("the partially fixed entry states which half is done",
@@ -2581,6 +2589,9 @@ def test_audit_known_negatives() -> None:
     check("the residual assumptions declare themselves DERIVED, so a "
           "hand-written figure cannot go stale there again",
           "DERIVED" in recon["residual_assumptions"][0])
+    check("the A1 precedent compares only what the measurement covers",
+          "5.44 per cent ABOVE" in json.dumps(recon)
+          and "UNFAVOURABLE" in json.dumps(recon))
     check("the removed component is disclosed beside the "
           "nothing-descoped claim",
           "one_component_was_removed" in recon
@@ -2595,14 +2606,31 @@ def test_audit_known_negatives() -> None:
                   for r in recon["open_risks"])
           and any("FALSE" in json.dumps(r)
                   for r in recon["open_risks"]))
-    check("the verdict states the margin is thin and names the risks",
-          "only just" in recon["verdict"]
-          and "retry allowance of NONE" in recon["verdict"]
-          and "ANY ONE of them exhausts" in recon["verdict"])
-    check("the verdict records that every correction added work, so the "
-          "margin reads as an upper bound",
-          "upper bound" in recon["summary_of_change"]
-          and "ADDED work" in recon["verdict"])
+    check("the verdict states the margin plainly and records the zero "
+          "retry allowance",
+          "under half an hour" in recon["verdict"]
+          and "retry allowance of NONE" in recon["verdict"])
+    check("the verdict leaves the decision with the user rather than "
+          "reassuring them",
+          "the user's decision" in recon["verdict"])
+    # Both counts must be DERIVED from the lists they describe: an
+    # earlier verdict said five omissions above a list of four, and
+    # five risks above a list of six.
+    omissions = recon["omissions_found_and_corrected"]
+    check("the omission count is derived from its own list",
+          omissions["count"] == len(omissions["items"]),
+          f"{omissions['count']} vs {len(omissions['items'])}")
+    risks = recon["open_risks_summary"]
+    check("the risk counts are derived from the risk list",
+          risks["total"] == len(recon["open_risks"])
+          and risks["can_exhaust_the_remaining_margin"] <= risks["total"])
+    check("the verdict's risk counts match the derived summary",
+          f"{risks['total']} open risks" in recon["verdict"]
+          and f"{risks['can_exhaust_the_remaining_margin']} could each"
+          in recon["verdict"])
+    check("every omission is recorded as having raised the total",
+          "UPWARD" in omissions["direction"]
+          and "upper bound" in omissions["direction"])
 
     # --- A-HIGH-1: the anchors must be verified, not string-matched ---
     superseded = json.loads(
@@ -3030,30 +3058,59 @@ def test_records_reproduce_from_generators() -> None:
     import importlib
     import shutil
 
-    generator = importlib.import_module(
-        "experiments.e8b_readout_generation.core_resource_projection")
-    published_path = (PROJECT_ROOT / "results" / "experiments"
-                      / "e8b_readout_generation"
-                      / "core_resource_projection_20260807.json")
-    check("the governing projection exists", published_path.exists())
-    published = json.loads(published_path.read_text())[
-        "e8b_core_resource_projection"]
+    results = PROJECT_ROOT / "results" / "experiments" / \
+        "e8b_readout_generation"
+    generated = (
+        ("core_resource_projection", "core_resource_projection_20260807",
+         "e8b_core_resource_projection",
+         # A live free-space reading changes as the campaign writes
+         # checkpoints; it is not a reproducibility failure.
+         {("gates", "storage")}),
+        ("medium_ledger", "medium_findings_ledger_20260807",
+         "e8b_medium_ledger", set()),
+    )
+    for module_name, record_name, body_key, volatile in generated:
+        generator = importlib.import_module(
+            f"experiments.e8b_readout_generation.{module_name}")
+        published_path = results / f"{record_name}.json"
+        check(f"{record_name} exists", published_path.exists())
+        published = json.loads(published_path.read_text())[body_key]
+        with tempfile.TemporaryDirectory() as tmp:
+            backup = Path(tmp) / "published.json"
+            shutil.copy2(published_path, backup)
+            try:
+                generator.main()
+                regenerated = json.loads(published_path.read_text())[
+                    body_key]
+            finally:
+                shutil.copy2(backup, published_path)
+        differing = []
+        for key in set(published) | set(regenerated):
+            if published.get(key) == regenerated.get(key):
+                continue
+            if any(outer == key for outer, _ in volatile):
+                inner = {i for o, i in volatile if o == key}
+                a = {k: v for k, v in published.get(key, {}).items()
+                     if k not in inner}
+                b = {k: v for k, v in regenerated.get(key, {}).items()
+                     if k not in inner}
+                if a == b:
+                    continue
+            differing.append(key)
+        check(f"{record_name} reproduces from its own generator, field "
+              f"for field",
+              differing == [], f"differing: {differing}")
 
-    with tempfile.TemporaryDirectory() as tmp:
-        backup = Path(tmp) / "published.json"
-        shutil.copy2(published_path, backup)
-        try:
-            generator.main()
-            regenerated = json.loads(published_path.read_text())[
-                "e8b_core_resource_projection"]
-        finally:
-            shutil.copy2(backup, published_path)
-
-    differing = [key for key in set(published) | set(regenerated)
-                 if published.get(key) != regenerated.get(key)]
-    check("the published projection reproduces from its own generator, "
-          "field for field",
-          differing == [], f"differing: {differing}")
+    published = json.loads(
+        (results / "core_resource_projection_20260807.json").read_text()
+    )["e8b_core_resource_projection"]
+    # Stated exactly: two governing records have NO generator and are
+    # maintained by hand, so no reproduction test can cover them.
+    for hand_maintained in ("identity_reconciliation_20260807",
+                            "blocker_high_reverification_20260807"):
+        check(f"{hand_maintained} is acknowledged as hand-maintained "
+              f"and outside this guard",
+              (results / f"{hand_maintained}.json").exists())
     check("the fabricated section-13.2 citation is gone from the "
           "published record, not only from the generator",
           "17.6-21.6 h expected"
@@ -3083,11 +3140,13 @@ def test_records_reproduce_from_generators() -> None:
     check("the G14 input is described as optimistic, not conservative",
           "OPTIMISTIC, NOT CONSERVATIVE"
           in residual["g14_row_cost"]["direction"])
-    check("the A1 precedent is stated like-for-like and is not offered "
-          "as reassurance",
-          "1.25 per cent ABOVE" in residual["a4_a7c_unrun"]["precedent"]
-          and "THAT WAS WRONG"
-          in residual["a4_a7c_unrun"]["precedent"])
+    check("the A1 precedent compares only the components the "
+          "measurement actually covers, and both earlier framings are "
+          "withdrawn in place",
+          "5.44 per cent ABOVE" in residual["a4_a7c_unrun"]["precedent"]
+          and "23 per cent" in residual["a4_a7c_unrun"]["precedent"]
+          and "1.25 per cent" in residual["a4_a7c_unrun"]["precedent"]
+          and "UNFAVOURABLE" in residual["a4_a7c_unrun"]["precedent"])
     check("the one REMOVED component is costed and disclosed",
           residual["selection_sensitivity_REMOVED_NOT_UNCOSTED"][
               "hours_if_reinstated"] > headroom)

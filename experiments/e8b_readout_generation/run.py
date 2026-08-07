@@ -1509,14 +1509,16 @@ COMMITTED_NON_CELL_HOURS = {
     #     6, the raw-distribution R1 pass, and three interventions;
     #   the section-19 serial efficiency measurement, 1.000, which loads
     #     the pretrained LM;
-    #   the RETAINED but unrun parts of protocol 13.2b's A1 row, 0.723 =
+    #   the RETAINED but unrun parts of protocol 13.2b's A1 row, 0.813 =
     #     the 7.1b secondary optimisation study 0.509, the bounded
-    #     representation ablation 0.127 and the middle-layer extraction
-    #     0.087. BASE counts only the MEASURED A1 core run, so omitting
-    #     these silently dropped work that is retained, not descoped.
-    "pretrained": 1.804 + 1.864 + 2.018 + 1.000 + 0.723,
-    # A1r's row retains the ablation and the middle-layer extraction.
-    "random": 2.018 + 0.127 + 0.087,
+    #     representation ablation 0.127, the middle-layer extraction
+    #     0.087 and A1's matched interventions 0.090. BASE counts only
+    #     the MEASURED A1 core-plus-extraction figure, so omitting these
+    #     silently dropped work that is retained, not descoped.
+    "pretrained": 1.804 + 1.864 + 2.018 + 1.000 + 0.813,
+    # A1r's row retains the ablation, the middle-layer extraction and
+    # its own matched interventions.
+    "random": 2.018 + 0.127 + 0.087 + 0.090,
 }
 
 
@@ -1589,9 +1591,6 @@ CELL_PROJECTED_HOURS = {
     ("B2", "train_40k"): 1.718, ("B2", "train_250k"): 4.226,
     ("B1", "train_40k"): 0.287, ("B1", "train_250k"): 0.751,
 }
-_current_cell: dict = {}
-
-
 def per_identity_gate(arm: str, additional_hours: float = 0.0,
                       ledger: dict | None = None,
                       cell: tuple | None = None) -> dict:
@@ -1602,8 +1601,10 @@ def per_identity_gate(arm: str, additional_hours: float = 0.0,
     so it could only ever have been checked by hand. This reads the
     append-only ledger and adds the hours the caller is about to spend
     or has just spent."""
-    if cell is not None:
-        _current_cell["cell"] = cell
+    # Passed explicitly, never remembered: a module-level "current
+    # cell" would leak between calls in the same process and silently
+    # exclude the wrong cell from the reservation.
+    current = cell
     identity = model_identity(arm)
     ledger = read_spend_ledger() if ledger is None else ledger
     already = identity_hours(ledger, identity)
@@ -1620,12 +1621,17 @@ def per_identity_gate(arm: str, additional_hours: float = 0.0,
         cell_arm, cell_scale, cell_seed = cell
         if model_identity(cell_arm) != identity:
             continue
+        if (cell_arm, cell_scale, cell_seed) == current:
+            continue                      # this cell is `additional`
         key = f"{cell_arm}_{cell_scale}_seed{cell_seed}"
-        if key in ledger["cells"]:
-            continue                      # already charged above
-        if (cell_arm, cell_scale, cell_seed) == _current_cell.get("cell"):
-            continue                      # this cell is the additional
-        reserved += CELL_PROJECTED_HOURS.get((cell_arm, cell_scale), 0.0)
+        charged = cell_hours(ledger, cell_arm, cell_scale, cell_seed)
+        projected = CELL_PROJECTED_HOURS.get((cell_arm, cell_scale), 0.0)
+        # Reserve what this cell has STILL to spend, not zero. A cell
+        # that crashed after six minutes has a ledger entry but has done
+        # none of its work, and skipping it entirely under-reserved its
+        # whole projected cost -- restoring the very "not detected until
+        # cell 6" behaviour the reservation was added to fix.
+        reserved += max(0.0, projected - charged)
     total = already + committed + additional_hours + reserved
     return {"identity": identity,
             "already_charged_hours": round(already, 4),
@@ -1805,6 +1811,9 @@ def main() -> int:
                         metavar=("ARM", "SCALE", "SEED"),
                         help="run one of the 18 core cells (requires a "
                              "separate explicit user approval)")
+    parser.add_argument("--core-order", action="store_true",
+                        help="print the pair-preserving order the 18 "
+                             "core cells must be run in, and stop")
     args = parser.parse_args()
     utils.set_seed()
     OUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -1814,7 +1823,37 @@ def main() -> int:
     if args.pilot or args.search_point is not None:
         sys.exit("the eight-point recipe search was permanently stopped "
                  "on 2026-08-07; --pilot and --search-point are retired")
+    if args.core_order:
+        order = pair_preserving_order()
+        print("Pair-preserving core order. Run the cells in EXACTLY "
+              "this sequence.\n"
+              "Each B3 is followed immediately by its own B2: the "
+              "binding ceiling is the\npretrained one B3 charges, so "
+              "if it fires it fires between pairs and\nstrands "
+              "nothing.\n")
+        for position, (arm, scale, seed) in enumerate(order, 1):
+            print(f"  {position:>2}. --core-cell {arm} {scale} {seed}"
+                  f"   [{model_identity(arm)}]")
+        return 0
     if args.core_cell:
+        arm, scale, seed = args.core_cell
+        # The order is not enforced -- the operator may have a reason --
+        # but a deviation that risks stranding a pair is called out.
+        order = pair_preserving_order()
+        requested = (args.core_cell[0], args.core_cell[1],
+                     int(args.core_cell[2]))
+        if requested in order:
+            position = order.index(requested)
+            done = [c for c in order[:position]
+                    if (OUT_DIR / f"e8b_core_{c[0]}_{c[1]}_seed{c[2]}"
+                        f".json").exists()]
+            if len(done) < position:
+                print(f"[ORDER] this is position {position + 1} of "
+                      f"{len(order)} in the pair-preserving order, but "
+                      f"only {len(done)} earlier cells have results. "
+                      f"Run --core-order to see the sequence; running "
+                      f"out of order risks leaving a pair unfinished "
+                      f"if the identity ceiling fires.")
         arm, scale, seed = args.core_cell
         return train(arm, scale, int(seed))
     parser.error("this phase supports --preflight and "

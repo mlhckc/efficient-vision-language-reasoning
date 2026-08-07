@@ -101,14 +101,21 @@ BASE = {"pretrained": 2.29222, "random": 1.95811}   # A1 / A1r CORE measured
 # identity: the 7.1b secondary optimisation study (retained but demoted,
 # selects nothing), the bounded representation ablation, and the
 # middle-layer extraction. None is descoped, so all three are charged.
+# BASE covers protocol 13.2b's A1 core + extraction only: the measured
+# 2.29222 h decomposes exactly as training 1.56262 + extraction 0.729599
+# (resource_correction_g21.json), and that record states interventions
+# are "reported separately from, and never added to, the historical
+# training figure". So A1's interventions row is charged here too.
 RETAINED_A1_ROW = {
     "secondary_optimisation_7_1b": 0.509,
     "representation_ablation": 0.127,
     "middle_layer_extraction": 0.087,
+    "a1_matched_interventions": 0.090,
 }
-RETAINED_A1R_ROW = {          # the A1r row retains the same two
+RETAINED_A1R_ROW = {          # the A1r row retains the same components
     "representation_ablation": 0.127,
     "middle_layer_extraction": 0.087,
+    "a1r_matched_interventions": 0.090,
 }
 A4_H, A7C_H = 1.804, 1.864                          # protocol 13.2b
 # Section 19 / protocol 13.2: the mandatory serial efficiency pass,
@@ -319,7 +326,8 @@ def main() -> int:
             "r3_s_per_row_ASSUMED_1p5x_r2": R3_ROW_S,
             "step_ratio_250k_over_40k": round(RATIO_250K, 6),
             "amended_design_cost_note":
-                "the 78.0 versus 53.88 s/epoch difference is the TOTAL "
+                f"the {TRAIN_S_40K} versus 53.88 s/epoch difference is "
+                f"the TOTAL "
                 "cost of the amended execution design relative to the "
                 "superseded one; it bundles three simultaneous changes "
                 "(strict-deterministic math SDPA backend, the fp32 "
@@ -402,22 +410,24 @@ def main() -> int:
                          "patience 10, so the configured-cap cost is "
                          "8.469 h EACH (protocol 13.2).",
                 "precedent": "A1 is the one arm of this family that has "
-                             "run. LIKE FOR LIKE against the protocol "
-                             "components it actually covers (core "
-                             "1.774 + extraction 0.400 + interventions "
-                             "0.090 = 2.264 h) it came in at 2.29222 h, "
-                             "which is 1.25 per cent ABOVE projection, "
-                             "and its extraction component alone "
-                             "overran by 82.4 per cent. An earlier "
-                             "version of this record claimed A1 came in "
-                             "'23 per cent BELOW its projection'. THAT "
-                             "WAS WRONG: it divided a partial "
-                             "measurement by the FULL protocol row, "
-                             "treating the unrun secondary study, "
-                             "ablation and mid-layer extraction as "
-                             "having cost nothing -- the very error "
-                             "this projection charges 0.723 h to "
-                             "correct. The precedent is mildly "
+                             "run. LIKE FOR LIKE against the components "
+                             "the measurement ACTUALLY COVERS -- core "
+                             "1.774 + extraction 0.400 = 2.174 h, since "
+                             "resource_correction_g21.json decomposes "
+                             "the measured 2.29222 h as training "
+                             "1.56262 + extraction 0.729599 and states "
+                             "interventions are reported separately and "
+                             "never added -- A1 came in 5.44 per cent "
+                             "ABOVE projection, and its extraction "
+                             "component alone overran by 82.4 per cent. "
+                             "Two earlier versions of this record were "
+                             "wrong in the same direction: '23 per cent "
+                             "BELOW' divided a partial measurement by "
+                             "the FULL protocol row, and '1.25 per cent "
+                             "ABOVE' credited an interventions "
+                             "component the measurement excludes. Both "
+                             "picked a more favourable framing than the "
+                             "evidence supports. The precedent is "
                              "UNFAVOURABLE, not reassuring."},
             "retained_a1_row": {
                 "carries_hours": round(sum(RETAINED_A1_ROW.values()), 3),

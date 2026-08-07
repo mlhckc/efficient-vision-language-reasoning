@@ -1416,26 +1416,34 @@ def train_core_cell(arm: str, scale: str, seed: int) -> int:
         except BaseException as accounting_error:   # noqa: BLE001
             # Recorded, never raised: losing the accounting is bad, but
             # masking why the cell actually stopped is worse.
-            # NOT a gate halt. record_gate_halt writes
-            # HALT_{run_name}_*.json, and train_core_cell refuses any
-            # cell for which such a file exists -- so recording an
-            # accounting failure that way would turn a transient NFS
-            # hiccup into a permanent block on a perfectly resumable
-            # trajectory, at 4.2 h a restart against 0.6 h of headroom.
-            # This is an operational warning about the LEDGER, not a
-            # scientific halt about the CELL, and it is filed as such.
-            e8b_run.record_ledger_failure(
-                run_name, "the GPU-hour ledger could not be updated "
-                          "after this process; the hours it burned are "
-                          "NOT recorded and the identity ceiling is "
-                          "under-counted until a human repairs the "
-                          "ledger",
-                {"error": repr(accounting_error)})
+            # NOT a gate halt. A HALT record is PERMANENT and specific
+            # to one cell: it would condemn a perfectly resumable
+            # trajectory over a transient shared-filesystem error. A
+            # LEDGER_FAILURE is global and CLEARABLE: it stops every
+            # cell, including this one, because the ceiling genuinely
+            # cannot be trusted until the ledger is repaired -- but a
+            # human clears it by repairing the ledger and deleting the
+            # record, and the trajectory survives.
+            try:
+                e8b_run.record_ledger_failure(
+                    run_name,
+                    "the GPU-hour ledger could not be updated after "
+                    "this process; the hours it burned are NOT "
+                    "recorded and the identity ceiling is under-counted "
+                    "until a human repairs the ledger",
+                    {"error": repr(accounting_error)})
+            except BaseException as record_error:      # noqa: BLE001
+                # Recording the failure must never replace the failure.
+                print(f"[LEDGER] could not even record the accounting "
+                      f"failure: {record_error!r}")
             print(f"[LEDGER] FAILED to charge this process: "
-                  f"{accounting_error!r}; a LEDGER_FAILURE record was "
-                  f"written (NOT a halt, so this cell can still "
-                  f"resume) and the original failure, if any, is "
-                  f"preserved")
+                  f"{accounting_error!r}. A LEDGER_FAILURE record was "
+                  f"written and the original failure, if any, is "
+                  f"preserved. NOTE: no cell -- including this one -- "
+                  f"will start while that record exists, because the "
+                  f"ceiling under-counts until the ledger is repaired "
+                  f"by hand. Repair it, delete the record, then "
+                  f"resume.")
         else:
             print(f"[LEDGER] {after['identity']} identity now at "
                   f"{after['already_charged_hours']} h of "
@@ -1680,6 +1688,8 @@ def _train_core_locked(arm, scale, seed, recipe, run_name, result_path,
         print(f"[WALL] {prior_seconds / 3600:.2f} h carried forward from "
               f"earlier processes of this cell")
 
+    finalisation_deadline = None
+
     def wall_halt(epoch, step):
         elapsed = prior_seconds + (time.time() - started)
         if elapsed >= wall_seconds:
@@ -1721,6 +1731,13 @@ def _train_core_locked(arm, scale, seed, recipe, run_name, result_path,
         finalisation_budget = wall_seconds + FINALISATION_ALLOWANCE_S
         if prior_seconds >= finalisation_budget:
             wall_halt(start_epoch - 1, step_count)
+        # Checked ONCE before finalisation is not enough: finalisation
+        # itself (G9, G11, G10, the canonical passes, G14 post) takes
+        # roughly half an hour to an hour, so the budget has to bound
+        # the phase, not just its entry. wall_halt is reached only from
+        # inside the training loop, which does not run on this path.
+        finalisation_deadline = started + (
+            finalisation_budget - prior_seconds)
         print(f"[WALL] resuming at epoch {start_epoch} of {max_epochs}: "
               f"the loop will not run, so this cell only needs "
               f"finalising. {prior_seconds / 3600:.2f} h already spent "
@@ -2076,6 +2093,20 @@ def _train_core_locked(arm, scale, seed, recipe, run_name, result_path,
                         "caller's finally block and records its own "
                         "failure separately"}
     e8b_run.atomic_write_json(result_path, record)
+    if finalisation_deadline is not None \
+            and time.time() > finalisation_deadline:
+        # The record is already written, so nothing is lost; what is
+        # recorded is that the bounded allowance was exceeded.
+        e8b_run.record_gate_halt(
+            run_name, "G19_FINALISATION",
+            f"finalisation exceeded its bounded allowance of "
+            f"{FINALISATION_ALLOWANCE_S / 3600:.2f} h on top of the "
+            f"{wall_seconds / 3600:.0f} h wall; the cell COMPLETED and "
+            f"its result stands, but the overrun is recorded",
+            {"wall_hours": round(elapsed / 3600, 3)})
+        print(f"[G19_FINALISATION] the finalisation allowance was "
+              f"exceeded; the result stands and the overrun is "
+              f"recorded")
     print(f"[CORE DONE] {run_name}: canonical epoch {canonical_epoch}, "
           f"dev {primary_accuracy:.4f}, wall {elapsed / 3600:.2f} h")
     # The ledger charge and the post-charge ceiling re-check belong to

@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-07T20:03:29",
-    "git_commit": "28afec5",
+    "timestamp": "2026-08-07T20:33:55",
+    "git_commit": "b27696e",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -33,10 +33,10 @@
     "dated_utc": "2026-08-07",
     "question": "why did the pretrained-identity projection move from 32.686 h to 31.96 h, and does the COMPLETE planned programme fit under the hard 35 h ceiling?",
     "old_estimate_hours": 32.686,
-    "current_estimate_hours": 34.423,
-    "net_change_hours": 1.737,
+    "current_estimate_hours": 34.513,
+    "net_change_hours": 1.827,
     "ceiling_hours": 35.0,
-    "headroom_hours": 0.577,
+    "headroom_hours": 0.487,
     "reconciliation_old_to_current": [
       {
         "component": "B1 250k per-epoch rate",
@@ -107,15 +107,15 @@
         "raised_by": "fresh-context confirmation audit (honesty and resources)"
       }
     ],
-    "summary_of_change": "the pretrained identity now projects to 34.423 h with 0.577 h of headroom. Five separate omissions have now been found and corrected, every one of them UPWARD against an unchanged ceiling: the section-19 efficiency pass; the 10,004-row raw denominator with its raw-distribution pass and B1's intervention conditions; the retained parts of protocol 13.2b's A1 row; and the use of the low end rather than the maximum of the recorded per-epoch rates. The repeated direction of these corrections is itself the finding: each review has moved the number toward the ceiling, so the remaining margin should be treated as an upper bound on the true margin, not an estimate of it.",
+    "summary_of_change": "the pretrained identity projects to 34.513 h with 0.487 h of headroom. 5 separate omissions have been found and corrected across six review rounds, enumerated under omissions_found_and_corrected; every one of them raised the total. The fall from the original 32.686 h is explained solely by removing the selection-sensitivity study, whose object the fixed-endpoint rule eliminated, and by pricing readouts per cell instead of through a pooled evaluation-share fraction.",
     "complete_programme_components": [
       {
-        "component": "A1 measured CORE baseline (E8A pretrained 135M)",
+        "component": "A1 measured baseline: protocol 13.2b's A1 core + extraction only",
         "hours": 2.29222
       },
       {
-        "component": "retained but unrun parts of protocol 13.2b's A1 row (7.1b secondary 0.509, ablation 0.127, mid-layer 0.087)",
-        "hours": 0.723
+        "component": "retained but unrun parts of protocol 13.2b's A1 row (7.1b secondary 0.509, ablation 0.127, mid-layer 0.087, matched interventions 0.090)",
+        "hours": 0.813
       },
       {
         "component": "A4 (protocol 13.2b, projected, unrun)",
@@ -142,7 +142,7 @@
         "hours": 6.89
       }
     ],
-    "component_sum_hours": 34.423,
+    "component_sum_hours": 34.513,
     "matches_generator": true,
     "coverage_proof": {
       "already_spent_search": "search_grid1_pilot, search_grid2, search_grid3_halted in spent_compute",
@@ -158,16 +158,16 @@
       "raw_denominator": "N_RAW = 10004 in core_resource_projection.py; R2, R3 and the raw-distribution R1 pass are all charged over it",
       "b1_interventions": "final_eval_b1 charges each of the six B1 cells a normal pass, a raw pass and three intervention conditions"
     },
-    "verdict": "FITS, but only just, and on assumptions that keep moving the wrong way: 34.423 h against the hard 35 h ceiling leaves 0.577 h, with a recorded retry allowance of NONE. The ceiling is NOT weakened and NOTHING was descoped -- every correction across four review rounds ADDED work. Five open risks are listed above and ANY ONE of them exhausts the remaining margin. This is now a decision for the user rather than a reassurance: either accept the risks explicitly, or close the largest of them with a short measurement before core execution is authorised.",
+    "verdict": "FITS, but the margin is now under half an hour: 34.513 h against the hard 35 h ceiling leaves 0.487 h, with a recorded retry allowance of NONE. The ceiling is NOT weakened and no core arm or cell was descoped; the one component that WAS removed is disclosed and costed separately. Of the 6 open risks listed above, 3 could each on their own exhaust the remaining margin. Six review rounds have each moved this number toward the ceiling and never away from it, so it should be treated as an upper bound. Whether to proceed on this margin, or to close the largest risk with a short measurement first, is the user's decision and not one this record can make.",
     "retry_allowance": "NONE. The plan tolerates zero B3 retries; any retry or any additional B3-loading evaluation triggers a stop-and-ask BEFORE execution",
     "residual_assumptions": [
-      "This list is DERIVED. It previously carried hand-written figures that went stale silently when the constants changed, and a withdrawn provenance that survived here after being corrected elsewhere in this same file. Every figure below now comes from core_resource_projection_20260807.json -> residual_assumptions_quantified, which is computed from the same constants as the projection itself.",
-      "the 250k training rate is step-scaled from the measured 40k rate and no 250k E8B cell has ever run. It carries 12.679 h, and the ceiling is reached at a 4.55 per cent rise in per-cell cost (5.24 per cent on the training rate alone). An earlier version of this line said 12 and 17 per cent; those were computed on a superseded basis and UNDERSTATED the exposure by about 2.6 times.",
-      "NEITHER the R2 nor the R3 per-row cost is measured for E8B, and neither has a source. The previously claimed E7b provenance was FALSE. They carry 1.214 h; at 3x the assumed rate the identity rises by 2.428 h and the headroom goes to -1.851 h, i.e. EXHAUSTED.",
-      "the G14 per-row cost is OPTIMISTIC, not conservative: its measurement covers the two R1 scorers only, while the live gate also runs both R2 walks per row.",
-      "A1 is the one arm of this family that has run. LIKE FOR LIKE against the protocol components it actually covers (core 1.774 + extraction 0.400 + interventions 0.090 = 2.264 h) it came in at 2.29222 h, which is 1.25 per cent ABOVE projection, and its extraction component alone overran by 82.4 per cent. An earlier version of this record claimed A1 came in '23 per cent BELOW its projection'. THAT WAS WRONG: it divided a partial measurement by the FULL protocol row, treating the unrun secondary study, ablation and mid-layer extraction as having cost nothing -- the very error this projection charges 0.723 h to correct. The precedent is mildly UNFAVOURABLE, not reassuring.",
-      "the retained parts of protocol 13.2b's A1 row (0.723 h) are that protocol's own estimates for work that has not run; the middle-layer figure in particular is an estimate whose measured sibling, the full extraction, overran by 82.4 per cent.",
-      "the section-19 efficiency pass is charged at the upper bound of its 0.500-1.000 h range.",
+      "This list is DERIVED from core_resource_projection_20260807.json -> residual_assumptions_quantified, which is itself computed from the same constants as the projection. It previously carried hand-written figures that went stale silently, and a withdrawn provenance that survived here after being corrected elsewhere in this same file.",
+      "the 250k training rate is step-scaled from the measured 40k rate and no 250k E8B cell has ever run. It carries 12.679 h, and the ceiling is reached at a 3.84 per cent rise in per-cell cost (4.42 per cent on the training rate alone).",
+      "NEITHER the R2 nor the R3 per-row cost is measured for E8B, and neither has a source; the previously claimed E7b provenance was FALSE. They carry 1.214 h; at 3x the assumed rate the identity rises by 2.428 h and the headroom goes to -1.941 h, i.e. EXHAUSTED.",
+      "OPTIMISTIC, NOT CONSERVATIVE. The pooled measurement covers R1 brute force plus R1 cached only, while the live gate also runs r2_brute_force and r2_cached per row under clause C3. The margin does not cover two extra constrained walks over 224 rows and 12 cells.",
+      "A1 is the one arm of this family that has run. LIKE FOR LIKE against the components the measurement ACTUALLY COVERS -- core 1.774 + extraction 0.400 = 2.174 h, since resource_correction_g21.json decomposes the measured 2.29222 h as training 1.56262 + extraction 0.729599 and states interventions are reported separately and never added -- A1 came in 5.44 per cent ABOVE projection, and its extraction component alone overran by 82.4 per cent. Two earlier versions of this record were wrong in the same direction: '23 per cent BELOW' divided a partial measurement by the FULL protocol row, and '1.25 per cent ABOVE' credited an interventions component the measurement excludes. Both picked a more favourable framing than the evidence supports. The precedent is UNFAVOURABLE, not reassuring.",
+      "protocol 13.2b's own estimates for work that has not run. The middle-layer figure in particular is an estimate whose measured sibling, the full extraction, overran by 82.4 per cent.",
+      "protocol 13.2 range 0.500-1.000 h, charged at the upper bound",
       "B1 is charged at an upper bound and touches neither identity's 35-hour ceiling, though it counts toward the 180-hour core ceiling."
     ],
     "clean_test_accessed": false,
@@ -181,7 +181,7 @@
         "risk": "the R2 and R3 per-row costs are UNSOURCED",
         "detail": "no E8B R2 or R3 readout has ever run, and the previously claimed E7b provenance was FALSE: that figure is 0.0291 MILLISECONDS for a LayerNorm-plus-Linear stage, a different operation in units 1000x apart. No replacement provenance was invented.",
         "carries_hours": 1.214,
-        "exposure": "at 3x the assumed rate the identity rises by 2.428 h and the headroom goes to -1.851 h",
+        "exposure": "at 3x the assumed rate the headroom goes to -1.941 h",
         "status": "OPEN: close with a measurement or accept explicitly before core execution"
       },
       {
@@ -193,7 +193,7 @@
         "risk": "the 250k training rate is unmeasured",
         "detail": "step-scaled from the measured 40k rate; no 250k E8B cell has ever run.",
         "carries_hours": 12.679,
-        "exposure": "the ceiling is reached at a 4.55 per cent rise in per-cell cost",
+        "exposure": "the ceiling is reached at a 3.84 per cent rise in per-cell cost",
         "status": "OPEN"
       },
       {
@@ -217,6 +217,28 @@
       "why": "the fixed-endpoint amendment eliminated its object: with epoch 22 canonical there is no max-over-epochs selection effect to measure.",
       "hours_if_reinstated": 4.451,
       "disclosure": "the phrase 'nothing was descoped' elsewhere in this record refers to CORE ARMS AND CELLS, none of which was removed. This study WAS removed, deliberately and on stated grounds, and reinstating it would cost several times the remaining headroom and require a fresh user decision. Recorded here so the two statements cannot be read as contradicting each other."
+    },
+    "omissions_found_and_corrected": {
+      "count": 5,
+      "derived": "this count comes from the list below, not from a sentence written beside it. An earlier version said 'five' above a list of four.",
+      "items": [
+        "the mandatory section-19 serial efficiency measurement",
+        "the 10,004-row RAW denominator, with its raw-distribution pass and intervention conditions on every trained checkpoint including B1",
+        "the retained but unrun parts of protocol 13.2b's A1 row: the 7.1b secondary optimisation study, the bounded representation ablation and the middle-layer extraction",
+        "the use of the LOW end rather than the maximum of the recorded per-epoch rates",
+        "A1's own matched interventions, found after the list had once been declared complete"
+      ],
+      "direction": "EVERY one was a correction UPWARD, against an unchanged ceiling. That repeated direction is itself the finding: the remaining margin should be read as an upper bound on the true margin, not an estimate of it."
+    },
+    "open_risks_summary": {
+      "total": 6,
+      "can_exhaust_the_remaining_margin": 3,
+      "derived": "both counts come from the open_risks list itself. An earlier verdict said 'five open risks ... ANY ONE of them exhausts the margin' when there were six, two of which are not hours risks at all.",
+      "not_hours_risks": [
+        "the G14 per-row input is optimistic, not conservative",
+        "the mandatory readout and intervention evaluation is COSTED but NOT IMPLEMENTED",
+        "the section-19 efficiency pass is charged to the pretrained identity only"
+      ]
     }
   }
 }

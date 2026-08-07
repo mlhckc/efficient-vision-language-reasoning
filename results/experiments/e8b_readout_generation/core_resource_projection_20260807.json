@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-07T20:00:31",
-    "git_commit": "28afec5",
+    "timestamp": "2026-08-07T20:29:27",
+    "git_commit": "b27696e",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -47,7 +47,7 @@
       "r2_s_per_row_UNSOURCED_no_measurement_exists": 0.0291,
       "r3_s_per_row_ASSUMED_1p5x_r2": 0.0437,
       "step_ratio_250k_over_40k": 6.242812,
-      "amended_design_cost_note": "the 78.0 versus 53.88 s/epoch difference is the TOTAL cost of the amended execution design relative to the superseded one; it bundles three simultaneous changes (strict-deterministic math SDPA backend, the fp32 frozen-model instance, and enforcement assertions) and is not attributed to any single one"
+      "amended_design_cost_note": "the 78.3 versus 53.88 s/epoch difference is the TOTAL cost of the amended execution design relative to the superseded one; it bundles three simultaneous changes (strict-deterministic math SDPA backend, the fp32 frozen-model instance, and enforcement assertions) and is not attributed to any single one"
     },
     "per_cell_hours": {
       "lm_train_40k": 1.718,
@@ -82,14 +82,14 @@
         "fires": false
       },
       "pretrained_identity_35h": {
-        "projected_hours": 34.423,
-        "headroom_hours": 0.577,
+        "projected_hours": 34.513,
+        "headroom_hours": 0.487,
         "includes": "the COMPLETE planned pretrained-identity programme: A1 baseline, A4, A7c, all six B3 core cells, B3's final R2/R3 readouts and interventions, and every already-spent search, characterisation, validation and probe hour that loaded the pretrained checkpoint",
         "retry_allowance": "NONE. The plan tolerates zero B3 retries; any retry or any additional B3-loading evaluation triggers a stop-and-ask BEFORE execution",
         "fires": false
       },
       "random_identity_35h": {
-        "projected_hours": 22.022,
+        "projected_hours": 22.112,
         "fires": false
       },
       "e8b_remaining_vs_180h_core": {
@@ -117,15 +117,15 @@
       "train_250k_step_scaling": {
         "carries_hours": 12.679,
         "basis": "step-scaled from the MEASURED 40k rate; no 250k E8B cell has ever run",
-        "break_even_per_cell_percent": 4.55,
-        "break_even_on_training_rate_percent": 5.24,
+        "break_even_per_cell_percent": 3.84,
+        "break_even_on_training_rate_percent": 4.42,
         "note": "the per-cell break-even is smaller than the training-rate one because each cell also carries a fixed G14 and gate overhead that does not scale with the training rate"
       },
       "r2_r3_per_row": {
         "carries_hours": 1.214,
         "basis": "UNSOURCED. Neither rate is measured for E8B, and the previously claimed E7b provenance was FALSE: the E7b S8_projection figure is 0.0291 MILLISECONDS for a LayerNorm-plus-Linear stage, a different operation in units 1000x apart. No replacement provenance was invented.",
         "increase_at_3x_hours": 2.428,
-        "headroom_after_3x_hours": -1.851,
+        "headroom_after_3x_hours": -1.941,
         "status": "OPEN RISK: close it with a measurement or accept it explicitly before core execution"
       },
       "g14_row_cost": {
@@ -137,14 +137,15 @@
       "a4_a7c_unrun": {
         "carries_hours": 3.668,
         "basis": "expected-epoch projections; neither arm has run. Their recipes carry max_epochs 100 and patience 10, so the configured-cap cost is 8.469 h EACH (protocol 13.2).",
-        "precedent": "A1 is the one arm of this family that has run. LIKE FOR LIKE against the protocol components it actually covers (core 1.774 + extraction 0.400 + interventions 0.090 = 2.264 h) it came in at 2.29222 h, which is 1.25 per cent ABOVE projection, and its extraction component alone overran by 82.4 per cent. An earlier version of this record claimed A1 came in '23 per cent BELOW its projection'. THAT WAS WRONG: it divided a partial measurement by the FULL protocol row, treating the unrun secondary study, ablation and mid-layer extraction as having cost nothing -- the very error this projection charges 0.723 h to correct. The precedent is mildly UNFAVOURABLE, not reassuring."
+        "precedent": "A1 is the one arm of this family that has run. LIKE FOR LIKE against the components the measurement ACTUALLY COVERS -- core 1.774 + extraction 0.400 = 2.174 h, since resource_correction_g21.json decomposes the measured 2.29222 h as training 1.56262 + extraction 0.729599 and states interventions are reported separately and never added -- A1 came in 5.44 per cent ABOVE projection, and its extraction component alone overran by 82.4 per cent. Two earlier versions of this record were wrong in the same direction: '23 per cent BELOW' divided a partial measurement by the FULL protocol row, and '1.25 per cent ABOVE' credited an interventions component the measurement excludes. Both picked a more favourable framing than the evidence supports. The precedent is UNFAVOURABLE, not reassuring."
       },
       "retained_a1_row": {
-        "carries_hours": 0.723,
+        "carries_hours": 0.813,
         "components": {
           "secondary_optimisation_7_1b": 0.509,
           "representation_ablation": 0.127,
-          "middle_layer_extraction": 0.087
+          "middle_layer_extraction": 0.087,
+          "a1_matched_interventions": 0.09
         },
         "basis": "protocol 13.2b's own estimates for work that has not run. The middle-layer figure in particular is an estimate whose measured sibling, the full extraction, overran by 82.4 per cent."
       },
