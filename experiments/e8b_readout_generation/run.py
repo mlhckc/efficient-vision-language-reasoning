@@ -1297,7 +1297,8 @@ def halt_record_path(run_name: str, gate: str) -> Path:
 
 
 def record_gate_halt(run_name: str, gate: str, reason: str,
-                     detail: dict | None = None) -> Path:
+                     detail: dict | None = None,
+                     result_stands: bool = False) -> Path:
     """Master protocol section 18: a gate failure is recorded verbatim.
     Every halting gate writes an atomic JSON artefact before exiting, so
     a halt is never evidenced only on stderr. Written with a temporary
@@ -1311,9 +1312,21 @@ def record_gate_halt(run_name: str, gate: str, reason: str,
                              "utc": time.strftime("%Y-%m-%dT%H:%M:%SZ",
                                                   time.gmtime()),
                              "host": socket.gethostname(),
-                             "status": "FAILED: halting gate fired; this "
-                                       "run's result is not used and is "
-                                       "never resumed automatically",
+                             # Not every halting gate invalidates the
+                             # run that hit it. G19_FINALISATION fires
+                             # AFTER a cell has completed and written a
+                             # valid result; stamping that cell FAILED
+                             # would contradict its own record.
+                             "status": (
+                                 "COMPLETED: the halting gate fired, "
+                                 "but this run finished and its result "
+                                 "stands; the halt records the "
+                                 "condition, not a failure of this run"
+                                 if result_stands else
+                                 "FAILED: halting gate fired; this "
+                                 "run's result is not used and is "
+                                 "never resumed automatically"),
+                             "result_stands": result_stands,
                              "clean_test_accessed": False}}
     path = halt_record_path(run_name, gate)
     if path.exists():

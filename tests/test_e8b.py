@@ -3068,6 +3068,8 @@ def test_records_reproduce_from_generators() -> None:
          {("gates", "storage")}),
         ("medium_ledger", "medium_findings_ledger_20260807",
          "e8b_medium_ledger", set()),
+        ("identity_reconciliation", "identity_reconciliation_20260807",
+         "e8b_identity_reconciliation", set()),
     )
     for module_name, record_name, body_key, volatile in generated:
         generator = importlib.import_module(
@@ -3104,13 +3106,40 @@ def test_records_reproduce_from_generators() -> None:
     published = json.loads(
         (results / "core_resource_projection_20260807.json").read_text()
     )["e8b_core_resource_projection"]
-    # Stated exactly: two governing records have NO generator and are
-    # maintained by hand, so no reproduction test can cover them.
-    for hand_maintained in ("identity_reconciliation_20260807",
-                            "blocker_high_reverification_20260807"):
-        check(f"{hand_maintained} is acknowledged as hand-maintained "
-              f"and outside this guard",
-              (results / f"{hand_maintained}.json").exists())
+    # The reconciliation was the last governing record maintained by
+    # hand, and four consecutive rounds found a stale figure in it. It
+    # now has a generator and is covered above. One record remains
+    # hand-maintained, and that is stated rather than glossed.
+    reconciliation = json.loads(
+        (results / "identity_reconciliation_20260807.json").read_text()
+    )["e8b_identity_reconciliation"]
+    check("the reconciliation names its generator",
+          reconciliation["generator"].endswith(
+              "identity_reconciliation.py"))
+    check("the reconciliation carries no superseded identity figure",
+          "34.423" not in json.dumps(reconciliation)
+          and "33.472" not in json.dumps(reconciliation)
+          and "0.577" not in json.dumps(reconciliation))
+    check("every figure in the reconciliation agrees with the "
+          "projection it derives from",
+          reconciliation["current_estimate_hours"]
+          == published["gates"]["pretrained_identity_35h"][
+              "projected_hours"]
+          and reconciliation["headroom_hours"]
+          == published["gates"]["pretrained_identity_35h"][
+              "headroom_hours"])
+    check("each open risk is classified explicitly as able to exhaust "
+          "the margin or not, and the count follows the classification",
+          all("can_exhaust_the_margin" in r
+              for r in reconciliation["open_risks"])
+          and reconciliation["open_risks_summary"][
+              "can_exhaust_the_remaining_margin"]
+          == sum(1 for r in reconciliation["open_risks"]
+                 if r["can_exhaust_the_margin"]))
+    check("blocker_high_reverification remains hand-maintained, and "
+          "that is stated rather than glossed",
+          (results / "blocker_high_reverification_20260807.json"
+           ).exists())
     check("the fabricated section-13.2 citation is gone from the "
           "published record, not only from the generator",
           "17.6-21.6 h expected"

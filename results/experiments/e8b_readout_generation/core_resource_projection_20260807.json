@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-07T20:29:27",
-    "git_commit": "b27696e",
+    "timestamp": "2026-08-07T20:55:41",
+    "git_commit": "6e97ca0",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -34,6 +34,7 @@
     "design": "strict deterministic BF16 training; fixed 22 epochs for B2/B3, no early stopping, epoch-22 canonical; B1 under the stored section-7.3 recipe (15/22 expected, 100-epoch stress); full FP32 canonical evaluation; G14-FP32 on the LM arms; final R1/R2/R3 readouts and interventions; measured checkpoint footprint",
     "inputs_note": "NOT every entry below is measured. Keys ending ASSUMED or UNSOURCED are not measurements; the container name is retained for continuity with earlier records.",
     "measured_inputs": {
+      "efficiency_s19_h": 1.0,
       "train_s_per_epoch_40k_strict_det": 78.3,
       "canonical_fp32_dev_pass_s": 112.3,
       "bf16_dev_pass_s_SECONDARY_DIAGNOSTIC_ONLY": 85.7,
@@ -83,6 +84,7 @@
       },
       "pretrained_identity_35h": {
         "projected_hours": 34.513,
+        "ceiling_hours": 35.0,
         "headroom_hours": 0.487,
         "includes": "the COMPLETE planned pretrained-identity programme: A1 baseline, A4, A7c, all six B3 core cells, B3's final R2/R3 readouts and interventions, and every already-spent search, characterisation, validation and probe hour that loaded the pretrained checkpoint",
         "retry_allowance": "NONE. The plan tolerates zero B3 retries; any retry or any additional B3-loading evaluation triggers a stop-and-ask BEFORE execution",
@@ -90,6 +92,7 @@
       },
       "random_identity_35h": {
         "projected_hours": 22.112,
+        "ceiling_hours": 35.0,
         "fires": false
       },
       "e8b_remaining_vs_180h_core": {

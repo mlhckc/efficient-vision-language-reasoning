@@ -96,11 +96,15 @@ BASE = {"pretrained": 2.29222, "random": 1.95811}   # A1 / A1r CORE measured
 # Protocol 13.2b's A1 row is 2.987 h = core 1.774 + secondary 0.509 +
 # ablation 0.127 + extraction 0.400 + mid 0.087 + interventions 0.090.
 # BASE above is the MEASURED CORE run only. Substituting it for the full
-# row silently dropped three retained, unrun components that load the
+# row silently dropped FOUR retained, unrun components that load the
 # pinned pretrained SmolLM2-135M and are therefore charged to that
 # identity: the 7.1b secondary optimisation study (retained but demoted,
 # selects nothing), the bounded representation ablation, and the
-# middle-layer extraction. None is descoped, so all three are charged.
+# middle-layer extraction, and A1's own matched interventions. None is
+# descoped, so all four are charged.
+# The retained but unrun parts of protocol 13.2b's A1 row. FOUR
+# components, not three: an earlier version of this comment said three,
+# directly above the paragraph that adds the fourth.
 # BASE covers protocol 13.2b's A1 core + extraction only: the measured
 # 2.29222 h decomposes exactly as training 1.56262 + extraction 0.729599
 # (resource_correction_g21.json), and that record states interventions
@@ -248,6 +252,7 @@ def main() -> int:
             "fires": lm_cell_250k > WALL_H},
         "pretrained_identity_35h": {
             "projected_hours": round(pretrained_identity, 3),
+            "ceiling_hours": IDENT_H,
             "headroom_hours": round(IDENT_H - pretrained_identity, 3),
             "includes": "the COMPLETE planned pretrained-identity "
                         "programme: A1 baseline, A4, A7c, all six B3 "
@@ -262,6 +267,7 @@ def main() -> int:
             "fires": pretrained_identity > IDENT_H},
         "random_identity_35h": {
             "projected_hours": round(random_identity, 3),
+            "ceiling_hours": IDENT_H,
             "fires": random_identity > IDENT_H},
         "e8b_remaining_vs_180h_core": {
             "e8b_remaining_hours": round(e8b_remaining, 3),
@@ -314,6 +320,7 @@ def main() -> int:
                        "container name is retained for continuity with "
                        "earlier records.",
         "measured_inputs": {
+            "efficiency_s19_h": EFFICIENCY_S19_H,
             "train_s_per_epoch_40k_strict_det": TRAIN_S_40K,
             "canonical_fp32_dev_pass_s": EVAL_FP32_S,
             "bf16_dev_pass_s_SECONDARY_DIAGNOSTIC_ONLY": EVAL_BF16_S,

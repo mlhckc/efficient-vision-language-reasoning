@@ -2103,7 +2103,8 @@ def _train_core_locked(arm, scale, seed, recipe, run_name, result_path,
             f"{FINALISATION_ALLOWANCE_S / 3600:.2f} h on top of the "
             f"{wall_seconds / 3600:.0f} h wall; the cell COMPLETED and "
             f"its result stands, but the overrun is recorded",
-            {"wall_hours": round(elapsed / 3600, 3)})
+            {"wall_hours": round(elapsed / 3600, 3)},
+            result_stands=True)
         print(f"[G19_FINALISATION] the finalisation allowance was "
               f"exceeded; the result stands and the overrun is "
               f"recorded")
