@@ -1,0 +1,49 @@
+{
+  "metadata": {
+    "timestamp": "2026-08-07T02:36:07",
+    "git_commit": "1494f99",
+    "git_dirty": true,
+    "open_clip_version": "3.3.0",
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "h5py_version": "3.16.0",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "deterministic": true,
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "embed_dim": 512,
+    "top_k_answers": 100,
+    "n_train": 40000,
+    "n_val": 8000,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "hidden_dim": 512,
+    "dropout": 0.3,
+    "weight_decay": 0.0001
+  },
+  "gate_halt": {
+    "run": "e8b_B3_train_40k_seed0_search3",
+    "gate": "G14",
+    "reason": "R1 argmax disagreement (post-selection, best checkpoint) at pinned row 3101",
+    "detail": {
+      "stage": "post-selection, best checkpoint",
+      "pinned_row": 3101,
+      "brute_argmax": 0,
+      "cached_argmax": 1,
+      "batched_argmax": 0,
+      "examples_checked_before_failure": 23
+    },
+    "utc": "2026-08-07T01:36:07Z",
+    "host": "otter159.eps.surrey.ac.uk",
+    "status": "FAILED: halting gate fired; this run's result is not used and is never resumed automatically",
+    "clean_test_accessed": false
+  }
+}
