@@ -242,12 +242,14 @@ def main(rows: int = 64) -> int:
                                  if not k.endswith("hits")},
             "R2_in_vocabulary": {k: v for k, v in r2.items()
                                  if not k.endswith("hits")},
-            "R1_raw_denominator": fe.raw_denominator_closed(
-                r1, float(in_mask.mean()), int(len(subset)),
-                normalisation_check=normalisation_check),
-            "R2_raw_denominator": fe.raw_denominator_closed(
-                r2, float(in_mask.mean()), int(len(subset)),
-                normalisation_check=normalisation_check),
+            # HB3b: DIRECT over every row, with the coverage identity
+            # kept only as a cross-check that must agree.
+            "R1_raw_denominator": fe.score_closed_raw_denominator(
+                result["r1_pred"], gold_strings, index_to_answer,
+                in_vocabulary=in_mask),
+            "R2_raw_denominator": fe.score_closed_raw_denominator(
+                result["r2_pred"], gold_strings, index_to_answer,
+                in_vocabulary=in_mask),
             "R3_in_vocabulary": {k: v for k, v in r3_in.items()
                                  if not k.endswith("hits")},
             "R3_raw_denominator": {k: v for k, v in r3_raw.items()

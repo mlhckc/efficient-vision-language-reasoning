@@ -2513,10 +2513,14 @@ def test_audit_known_negatives() -> None:
     # ceiling must stay at 35 h.
     check("the ceiling itself is unchanged at 35 h",
           gate["ceiling_hours"] == 35.0)
+    # The gate fires on a breach OR on a margin under the floor: a
+    # projection clearing a hard ceiling by minutes is not a clearance.
     check("the gate's verdict follows its own arithmetic",
-          gate["fires"] is (gate["projected_total_hours"] > 35.0))
+          gate["fires"] is (gate["projected_total_hours"] > 35.0
+                            or (35.0 - gate["projected_total_hours"])
+                            < e8b_run.HEADROOM_FLOOR_HOURS))
     if gate["fires"]:
-        check("the breach is caught at the FIRST cell, before any GPU "
+        check("the halt is caught at the FIRST cell, before any GPU "
               "work, because the gate reserves the unrun cells",
               e8b_run.per_identity_gate(
                   "B3", per_cell["lm_train_40k"], ledger={"cells": {}},
@@ -2612,7 +2616,11 @@ def test_audit_known_negatives() -> None:
     # The raw denominator and the B1 intervention conditions.
     check("readouts are budgeted over the 10,004-row RAW denominator",
           "N_RAW = 10004" in gsrc
-          and "N_RAW * EVAL_PASS_S_PER_ROW" in gsrc)
+          and "EVAL_CONDITION_HOURS" in gsrc)
+    check("the budget's evaluation constant is the BATCHED "
+          "full-denominator pass, and the superseded one is marked",
+          "SUPERSEDED: unbatched, unrestricted" in gsrc
+          and "denominator restriction was REJECTED" in gsrc)
     check("all four matched conditions are budgeted, not just the "
           "readouts",
           "3 * eval_pass_hours" in gsrc)
@@ -3292,10 +3300,27 @@ def test_records_reproduce_from_generators() -> None:
           "MEASURED end to end"
           in residual["evaluation_pass_MEASURED"]["basis"]
           and residual["evaluation_pass_MEASURED"]["residual_risk"])
-    check("the evaluation pass is the largest single line, and is "
-          "costed over four conditions",
-          residual["evaluation_pass_MEASURED"]["carries_hours"]
-          > residual["train_250k_MEASURED"]["carries_hours"] * 0.3)
+    # The exposure must be derived from the LIVE constant. An earlier
+    # version computed it from the superseded unbatched rate and
+    # published 5.01 h against a real 2.228 h -- 4.5 times over -- while
+    # calling it "the largest single line" and naming a breach that no
+    # longer existed.
+    check("the evaluation exposure is derived from the LIVE per-"
+          "condition constant, not the superseded per-row rate",
+          abs(residual["evaluation_pass_MEASURED"]["carries_hours"]
+              - 6 * 4 * residual["evaluation_pass_MEASURED"][
+                  "hours_per_condition"]) < 0.01)
+    # The exposure is ONE identity's share (6 cells); the arm total
+    # covers both LM identities (12 cells).
+    check("the evaluation exposure is exactly one identity's share of "
+          "the arm total",
+          abs(residual["evaluation_pass_MEASURED"]["carries_hours"]
+              - published["arm_totals_hours"][
+                  "final_readouts_and_interventions_lm"] / 2) < 0.02)
+    check("after batching the evaluation is NO LONGER the largest "
+          "line; the 250k training is",
+          residual["train_250k_MEASURED"]["carries_hours"]
+          > residual["evaluation_pass_MEASURED"]["carries_hours"])
     check("the G14 input is described as optimistic, not conservative",
           "OPTIMISTIC, NOT CONSERVATIVE"
           in residual["g14_row_cost"]["direction"])
@@ -3413,10 +3438,19 @@ def test_readiness_phase() -> None:
           str(sorted(called)))
     check("R2 and R3 still walk per row, as they must",
           "r2_cached" in called and "r3_generate" in called)
-    check("closed readouts derive raw accuracy EXACTLY for the raw "
-          "metric, and the normalised case is CHECKED not assumed",
-          "EXACT for the RAW metric" in esrc
-          and "def assert_normalisation_disjoint" in esrc)
+    # HB3b is computed DIRECTLY. The canonical plan is categorical:
+    # "never approximated as in-vocabulary accuracy times coverage".
+    check("HB3b is computed DIRECTLY over every row, not by the "
+          "coverage identity the plan forbids",
+          "def score_closed_raw_denominator" in esrc
+          and "NEVER approximated as in-vocabulary accuracy times "
+              "coverage" in esrc)
+    check("the coverage identity survives only as a CROSS-CHECK that "
+          "must agree",
+          "coverage_identity_cross_check" in esrc
+          and "HB3b CROSS-CHECK FAILED" in esrc)
+    check("the normalisation precondition helper still exists",
+          "def assert_normalisation_disjoint" in esrc)
     check("an out-of-vocabulary gold label is REFUSED rather than "
           "silently wrapping to the last vocabulary answer",
           "SCORING REFUSED" in esrc)
@@ -3668,14 +3702,34 @@ def test_readiness_phase() -> None:
     validation = json.loads(
         (results / "evaluation_pipeline_validation_20260807.json"
          ).read_text())["e8b_evaluation_pipeline_validation"]
-    check("the normalisation precondition is CHECKED on the live path",
+    check("the normalisation precondition is CHECKED on the live path, "
+          "not merely defined",
           "normalisation_check" in validation
           and validation["normalisation_check"][
               "identity_holds_for_normalised_match"] is True)
-    check("the raw-denominator metric is computed from HIT COUNTS, not "
-          "from a rounded accuracy",
-          "raw_hit_count" in esrc
-          and "never from a rounded accuracy" in esrc)
+    for condition in fe.CONDITIONS:
+        raw_block = validation["scored"][condition]["R1_raw_denominator"]
+        check(f"{condition} HB3b is the DIRECT computation",
+              raw_block["basis"].startswith("DIRECT"))
+        check(f"{condition} HB3b cross-check agrees with the direct "
+              f"number",
+              raw_block["coverage_identity_cross_check"][
+                  "identity_agrees"] is True)
+    # The headroom floor must be ENFORCED, not only recorded: a
+    # projection that clears a hard ceiling by minutes is not a
+    # clearance, and flipping the authorisation state must not bypass
+    # that.
+    check("the headroom floor is executable in the gate",
+          e8b_run.HEADROOM_FLOOR_HOURS == 1.0)
+    # The real pre-cell call charges the cell about to run, exactly as
+    # train_core_cell does; passing 0.0 would omit it and understate.
+    thin = e8b_run.per_identity_gate(
+        "B3", e8b_run.CELL_PROJECTED_HOURS[("B3", "train_40k")],
+        ledger={"cells": {}}, cell=("B3", "train_40k", 0))
+    check("a thin margin FIRES the gate exactly as a breach does",
+          thin["below_headroom_floor"] is True and thin["fires"] is True)
+    check("the gate reports the floor it applied",
+          thin["headroom_floor_hours"] == 1.0)
 
     # --- the 18-cell order is deliverable ---
     order = e8b_run.pair_preserving_order()

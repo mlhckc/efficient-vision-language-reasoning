@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-07T23:06:19",
-    "git_commit": "ec8fb0c",
+    "timestamp": "2026-08-07T23:45:56",
+    "git_commit": "8ae9c3c",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -33,201 +33,201 @@
     "NON_SCIENTIFIC": true,
     "dated_utc": "2026-08-07",
     "status": "NON-SCIENTIFIC COST MEASUREMENT - no accuracy is reported and none may be derived from it",
-    "rows_measured": 512,
+    "rows_measured": 192,
     "sampling": "sampled across the 10,004-row raw denominator with a pinned seed, not a prefix of it, so question length and answer difficulty are representative",
     "cold_rows_excluded_from_warm": 8,
     "warm_per_row_seconds": {
       "prefix": {
-        "n": 504,
-        "mean_s": 0.000521,
-        "median_s": 0.000442,
-        "p90_s": 0.000453,
-        "max_s": 0.005393,
-        "total_s": 0.262
+        "n": 184,
+        "mean_s": 0.000652,
+        "median_s": 0.000433,
+        "p90_s": 0.000454,
+        "max_s": 0.005421,
+        "total_s": 0.12
       },
       "prefix_state": {
-        "n": 504,
-        "mean_s": 0.015332,
-        "median_s": 0.015277,
-        "p90_s": 0.015542,
-        "max_s": 0.01639,
-        "total_s": 7.727
+        "n": 184,
+        "mean_s": 0.015132,
+        "median_s": 0.015086,
+        "p90_s": 0.015286,
+        "max_s": 0.015854,
+        "total_s": 2.784
       },
       "R1_batched": {
-        "n": 504,
-        "mean_s": 0.09438,
-        "median_s": 0.094276,
-        "p90_s": 0.094673,
-        "max_s": 0.098811,
-        "total_s": 47.567
+        "n": 184,
+        "mean_s": 0.093367,
+        "median_s": 0.093132,
+        "p90_s": 0.093417,
+        "max_s": 0.097689,
+        "total_s": 17.18
       },
       "R1_cached": {
-        "n": 504,
-        "mean_s": 1.444442,
-        "median_s": 1.443625,
-        "p90_s": 1.449126,
-        "max_s": 1.477189,
-        "total_s": 727.999
+        "n": 184,
+        "mean_s": 1.426863,
+        "median_s": 1.426788,
+        "p90_s": 1.430513,
+        "max_s": 1.437999,
+        "total_s": 262.543
       },
       "R2": {
-        "n": 504,
-        "mean_s": 0.031924,
-        "median_s": 0.029228,
-        "p90_s": 0.042493,
-        "max_s": 0.069066,
-        "total_s": 16.09
+        "n": 184,
+        "mean_s": 0.031171,
+        "median_s": 0.028854,
+        "p90_s": 0.041906,
+        "max_s": 0.068696,
+        "total_s": 5.735
       },
       "R3": {
-        "n": 504,
-        "mean_s": 0.031449,
-        "median_s": 0.02874,
-        "p90_s": 0.04193,
-        "max_s": 0.070055,
-        "total_s": 15.85
+        "n": 184,
+        "mean_s": 0.030823,
+        "median_s": 0.028387,
+        "p90_s": 0.041408,
+        "max_s": 0.068241,
+        "total_s": 5.671
       },
       "R2_batched": {
-        "n": 504,
-        "mean_s": 0.00199,
-        "median_s": 0.001956,
-        "p90_s": 0.002097,
-        "max_s": 0.002097,
-        "total_s": 1.003
+        "n": 184,
+        "mean_s": 0.002054,
+        "median_s": 0.002094,
+        "p90_s": 0.002094,
+        "max_s": 0.002094,
+        "total_s": 0.378
       },
       "R3_batched": {
-        "n": 504,
-        "mean_s": 0.001461,
-        "median_s": 0.001445,
-        "p90_s": 0.001547,
-        "max_s": 0.001547,
-        "total_s": 0.736
+        "n": 184,
+        "mean_s": 0.001538,
+        "median_s": 0.001542,
+        "p90_s": 0.001542,
+        "max_s": 0.001542,
+        "total_s": 0.283
       }
     },
     "cold_per_row_seconds": {
       "prefix": {
         "n": 8,
-        "mean_s": 0.005393,
-        "median_s": 0.005393,
-        "p90_s": 0.005393,
-        "max_s": 0.005393,
+        "mean_s": 0.005421,
+        "median_s": 0.005421,
+        "p90_s": 0.005421,
+        "max_s": 0.005421,
         "total_s": 0.043
       },
       "prefix_state": {
         "n": 8,
-        "mean_s": 0.015506,
-        "median_s": 0.015335,
-        "p90_s": 0.01571,
-        "max_s": 0.016193,
-        "total_s": 0.124
+        "mean_s": 0.015171,
+        "median_s": 0.015152,
+        "p90_s": 0.015214,
+        "max_s": 0.015351,
+        "total_s": 0.121
       },
       "R1_batched": {
         "n": 8,
-        "mean_s": 0.098811,
-        "median_s": 0.098811,
-        "p90_s": 0.098811,
-        "max_s": 0.098811,
-        "total_s": 0.79
+        "mean_s": 0.097689,
+        "median_s": 0.097689,
+        "p90_s": 0.097689,
+        "max_s": 0.097689,
+        "total_s": 0.782
       },
       "R1_cached": {
         "n": 8,
-        "mean_s": 1.451304,
-        "median_s": 1.45261,
-        "p90_s": 1.455611,
-        "max_s": 1.457,
-        "total_s": 11.61
+        "mean_s": 1.433531,
+        "median_s": 1.432248,
+        "p90_s": 1.437448,
+        "max_s": 1.444388,
+        "total_s": 11.468
       },
       "R2": {
         "n": 8,
-        "mean_s": 0.03109,
-        "median_s": 0.029285,
-        "p90_s": 0.030142,
-        "max_s": 0.042527,
-        "total_s": 0.249
+        "mean_s": 0.030634,
+        "median_s": 0.028927,
+        "p90_s": 0.029853,
+        "max_s": 0.041876,
+        "total_s": 0.245
       },
       "R3": {
         "n": 8,
-        "mean_s": 0.031181,
-        "median_s": 0.02912,
-        "p90_s": 0.033199,
-        "max_s": 0.042131,
-        "total_s": 0.249
+        "mean_s": 0.030439,
+        "median_s": 0.028559,
+        "p90_s": 0.031055,
+        "max_s": 0.041611,
+        "total_s": 0.244
       },
       "R2_batched": {
         "n": 8,
-        "mean_s": 0.002097,
-        "median_s": 0.002097,
-        "p90_s": 0.002097,
-        "max_s": 0.002097,
+        "mean_s": 0.002094,
+        "median_s": 0.002094,
+        "p90_s": 0.002094,
+        "max_s": 0.002094,
         "total_s": 0.017
       },
       "R3_batched": {
         "n": 8,
-        "mean_s": 0.001547,
-        "median_s": 0.001547,
-        "p90_s": 0.001547,
-        "max_s": 0.001547,
+        "mean_s": 0.001542,
+        "median_s": 0.001542,
+        "p90_s": 0.001542,
+        "max_s": 0.001542,
         "total_s": 0.012
       }
     },
     "cold_vs_warm": {
       "prefix": {
-        "cold_mean_s": 0.005393,
-        "warm_mean_s": 0.000521,
-        "ratio": 10.35
+        "cold_mean_s": 0.005421,
+        "warm_mean_s": 0.000652,
+        "ratio": 8.31
       },
       "prefix_state": {
-        "cold_mean_s": 0.015506,
-        "warm_mean_s": 0.015332,
-        "ratio": 1.01
+        "cold_mean_s": 0.015171,
+        "warm_mean_s": 0.015132,
+        "ratio": 1.0
       },
       "R1_batched": {
-        "cold_mean_s": 0.098811,
-        "warm_mean_s": 0.09438,
+        "cold_mean_s": 0.097689,
+        "warm_mean_s": 0.093367,
         "ratio": 1.05
       },
       "R1_cached": {
-        "cold_mean_s": 1.451304,
-        "warm_mean_s": 1.444442,
+        "cold_mean_s": 1.433531,
+        "warm_mean_s": 1.426863,
         "ratio": 1.0
       },
       "R2": {
-        "cold_mean_s": 0.03109,
-        "warm_mean_s": 0.031924,
-        "ratio": 0.97
+        "cold_mean_s": 0.030634,
+        "warm_mean_s": 0.031171,
+        "ratio": 0.98
       },
       "R3": {
-        "cold_mean_s": 0.031181,
-        "warm_mean_s": 0.031449,
+        "cold_mean_s": 0.030439,
+        "warm_mean_s": 0.030823,
         "ratio": 0.99
       },
       "R2_batched": {
-        "cold_mean_s": 0.002097,
-        "warm_mean_s": 0.00199,
-        "ratio": 1.05
+        "cold_mean_s": 0.002094,
+        "warm_mean_s": 0.002054,
+        "ratio": 1.02
       },
       "R3_batched": {
-        "cold_mean_s": 0.001547,
-        "warm_mean_s": 0.001461,
-        "ratio": 1.06
+        "cold_mean_s": 0.001542,
+        "warm_mean_s": 0.001538,
+        "ratio": 1.0
       }
     },
     "r3_generated_length": {
-      "mean": 1.199,
+      "mean": 1.182,
       "median": 1.0,
       "max": 4,
       "terminated_by_eos_rate": 1.0,
       "note": "R3 cost is driven by generated length: every extra token is another sequential forward pass"
     },
     "memory": {
-      "peak_allocated_mib": 2350.7,
-      "peak_reserved_mib": 2806.0,
+      "peak_allocated_mib": 2343.0,
+      "peak_reserved_mib": 2826.0,
       "device_total_mib": 20017.4,
-      "reserved_fraction": 0.1402,
+      "reserved_fraction": 0.1412,
       "ceiling_fraction": 0.8,
       "fires": false
     },
     "batched_vs_scalar_speedup": {
-      "R2": 16.04,
-      "R3": 21.53
+      "R2": 15.18,
+      "R3": 20.04
     },
     "denominator_restricted_rows": {
       "R1_and_R2": 7714,
@@ -237,39 +237,45 @@
     },
     "adopted_execution_shape_measured": {
       "r1_r2_on_in_vocabulary": {
-        "rows_measured": 392,
-        "s_per_row": 0.019365,
-        "hours_per_condition_over_7714": 0.04149
+        "rows_measured": 142,
+        "s_per_row": 0.02497,
+        "hours_per_condition_over_7714": 0.0535
       },
       "r3_on_the_full_raw_denominator": {
-        "rows_measured": 512,
-        "s_per_row": 0.00177,
-        "hours_per_condition_over_10004": 0.00492
+        "rows_measured": 192,
+        "s_per_row": 0.001842,
+        "hours_per_condition_over_10004": 0.00512
       },
-      "hours_per_condition_total": 0.04641,
+      "hours_per_condition_total": 0.05862,
       "reported_denominator": 10004,
+      "intervention_context_construction": {
+        "measured_seconds_on_subset": 0.034,
+        "hours_once_per_cell_over_10004": 0.0005,
+        "note": "a full data pass for the neutral means plus the imageId-level derangement. Mandatory, previously outside every timer, and charged ONCE per cell because one context serves all four conditions."
+      },
+      "hours_per_cell_total": 0.23498,
       "note": "this is the shape the evaluation will actually run in, measured end to end. The reported denominator is 10,004 for every readout; only what is executed differs."
     },
     "projected_over_raw_denominator": {
-      "r1_batched_hours_per_pass": 0.2623,
-      "r1_cached_hours_per_pass_NOT_USED": 4.0139,
-      "r2_hours_per_pass": 0.0887,
-      "r3_hours_per_pass": 0.0874,
-      "prefix_hours_per_pass": 0.0441,
-      "r2_plus_r3_hours_per_pass": 0.1761,
-      "combined_pass_measured_s_per_row": 0.017245,
-      "combined_pass_hours": 0.0479,
-      "combined_pass_basis": "MEASURED end to end at batch 128 over 512 rows, which is how the evaluation actually runs. Composing the per-part timings above would overstate it: those were taken at batch 16 with a synchronise around every call.",
+      "r1_batched_hours_per_pass": 0.2595,
+      "r1_cached_hours_per_pass_NOT_USED": 3.9651,
+      "r2_hours_per_pass": 0.0866,
+      "r3_hours_per_pass": 0.0857,
+      "prefix_hours_per_pass": 0.0439,
+      "r2_plus_r3_hours_per_pass": 0.1723,
+      "combined_pass_measured_s_per_row": 0.020939,
+      "combined_pass_hours": 0.0582,
+      "combined_pass_basis": "MEASURED end to end at batch 128 over 192 rows, which is how the evaluation actually runs. Composing the per-part timings above would overstate it: those were taken at batch 16 with a synchronise around every call.",
       "note": "the prefix and its cache are built ONCE per row and shared by all three readouts, so a combined pass costs prefix + R1 + R2 + R3, not three separate prefixes. R1 is costed at the CANONICAL BATCHED rate; the per-row cached scorer is roughly ninety times more expensive and is used only inside G14."
     },
     "against_the_assumption": {
       "assumed_r2_plus_r3_hours_per_pass": 0.2023,
-      "measured_r2_plus_r3_hours_per_pass": 0.1761,
-      "ratio": 0.87,
+      "measured_r2_plus_r3_hours_per_pass": 0.1723,
+      "ratio": 0.85,
       "verdict": "the assumption was UNSOURCED and is now replaced by measurement"
     },
     "measurement_cost": {
-      "hours": 0.23683,
+      "hours": 0.08897,
       "charged_to": "the pretrained identity: this measurement loads the frozen pretrained SmolLM2-135M"
     },
     "checkpoint": {

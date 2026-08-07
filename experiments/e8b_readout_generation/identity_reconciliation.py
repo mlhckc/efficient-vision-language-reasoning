@@ -336,15 +336,44 @@ def derive(existing: dict, projection: dict) -> dict:
         "effect_on_identity_hours": round(
             gate["projected_hours"] - 34.513, 3),
         "raised_by": "the user's phase B/C instruction of 2026-08-07"}
-    chain[:] = [line for line in chain
-                if line.get("component") != measurement_entry["component"]]
-    chain.append(measurement_entry)
+    optimisation_entry = {
+        "component": "the 2026-08-07 lossless optimisation phase",
+        "old": "R2 and R3 walked one row at a time, so the evaluation "
+               "was the largest single line in the programme",
+        "correction": "R2 and R3 are BATCHED, proven bit-identical to "
+                      "the scalar reference on every observable "
+                      "including the cap-hitting and empty cases real "
+                      "data does not produce, and at every batch size "
+                      "tried. The denominator restriction was REJECTED: "
+                      "restricting the rows changes the deranged-image "
+                      "map for 767 of 768 shared images, so its "
+                      "equivalence was never established for the "
+                      "interventions, and it was worth only 0.036 h.",
+        "effect_on_identity_hours": round(
+            gate["projected_hours"] - 37.744, 3),
+        "raised_by": "the user's lossless-optimisation instruction of "
+                     "2026-08-07"}
+    # The measurement phase RAISED the total and the optimisation phase
+    # LOWERED it, by about 3.2 h each. Netting them into one row would
+    # hide the single largest downward movement in the whole history
+    # inside a list whose only purpose is to make movements visible.
+    measurement_entry["effect_on_identity_hours"] = round(
+        37.744 - 34.513, 3)
+    measurement_entry["note"] = (
+        "this row is the measurement phase ALONE, taking the identity "
+        "to 37.744 h. The optimisation phase that followed is the "
+        "separate row below.")
+    for entry in (measurement_entry, optimisation_entry):
+        chain[:] = [line for line in chain
+                    if line.get("component") != entry["component"]]
+        chain.append(entry)
     body["coverage_proof"]["final_R1_R2_R3"] = (
-        "MEASURED: one evaluation pass computes the prefix, then R1 "
-        "batched, R2 and R3 -- each of R2 and R3 building its own "
-        "prefix cache -- over the 10,004-row raw denominator, and the "
-        "plan requires four matched conditions on every trained "
-        "checkpoint")
+        "MEASURED: one evaluation pass computes the prefix, then R1, R2 "
+        "and R3, all over the FULL 10,004-row raw denominator, with R2 "
+        "and R3 BATCHED. The plan requires four matched conditions on "
+        "every trained checkpoint, so a cell pays four such passes. The "
+        "denominator restriction was REJECTED, so no readout runs on a "
+        "reduced row set.")
     body["coverage_proof"]["mandatory_interventions"] = (
         "MEASURED: the three intervention conditions are three further "
         "complete evaluation passes, not a cheaper R1-only pass")

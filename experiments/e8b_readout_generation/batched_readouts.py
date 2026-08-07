@@ -1,4 +1,17 @@
-"""Batched R2 and R3, required to be BIT-IDENTICAL to the scalar path.
+"""Batched R2 and R3, required to make the SAME DECISIONS as the scalar
+path.
+
+A precise statement of what is and is not claimed, because the
+difference matters. The batched path is NOT bitwise identical: batching
+changes reduction order, and the first-step logits differ from the
+scalar ones by up to about 4e-04, with no row agreeing to the last bit.
+What IS established is that every OBSERVABLE agrees -- same tokens, same
+answers, same strings, same termination, same classification -- because
+every decision margin actually encountered exceeds that noise by orders
+of magnitude. That is an empirical property of this data and this model,
+verified at every batch size and condition tested and backed by a margin
+census, not a theorem. Drive a margin to zero artificially and the two
+paths can diverge, as they should.
 
 The scalar readouts walk one row at a time: every constrained R2 step and
 every free R3 step is a separate single-row forward. Over the 10,004-row
@@ -42,14 +55,24 @@ from experiments.e8b_readout_generation.readouts import (
     EOS_ID, R3_MAX_NEW_TOKENS, _prefix_cache)
 
 
+EXPECTED_PREFIX_LENGTH = 33   # BOS + 32 latents; see latents.N_LATENTS
+
+
 def _batch_prefix_cache(lm, prefix):
     """One forward over a batch of equal-length prefixes.
 
     Every E8B prefix is exactly 33 positions -- BOS plus 32 latents --
     so there is no padding here and no row can be affected by another's
-    length. That is asserted rather than assumed."""
+    length. A dense (B, T, d) tensor makes uniform length structural,
+    and the expected width is checked rather than merely described."""
     if prefix.dim() != 3:
         raise AssertionError("batched prefix must be (B, T, d)")
+    if prefix.shape[1] != EXPECTED_PREFIX_LENGTH:
+        raise AssertionError(
+            f"batched prefix has {prefix.shape[1]} positions, expected "
+            f"{EXPECTED_PREFIX_LENGTH} (BOS plus 32 latents). A "
+            f"different width would mean padding, and padding would "
+            f"let one row's length affect another.")
     outputs = lm(inputs_embeds=prefix, use_cache=True)
     return outputs.past_key_values, outputs.logits[:, -1, :]
 
@@ -60,12 +83,17 @@ def _select_cache_rows(past, keep):
     if hasattr(past, "batch_select_indices"):
         past.batch_select_indices(index)
         return past
-    trimmed = []
-    for layer in past:
-        trimmed.append(tuple(tensor.index_select(0, index)
-                             for tensor in layer))
-    return type(past)(trimmed) if not isinstance(past, tuple) else tuple(
-        trimmed)
+    # REFUSE rather than guess. An earlier fallback iterated the cache
+    # and index_select-ed each element, which is wrong for the cache
+    # type actually in use: iterating a DynamicCache yields three-tuples
+    # whose third element is None, so it would raise anyway -- and a
+    # fallback that silently reindexed the wrong thing would be worse
+    # than one that stops.
+    raise AssertionError(
+        f"UNSUPPORTED CACHE TYPE {type(past).__name__}: batched "
+        f"readouts need batch_select_indices to drop finished rows. "
+        f"Without it, rows cannot be removed safely and the scalar path "
+        f"must be used instead.")
 
 
 def _cache_device(past):

@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-07T23:20:49",
-    "git_commit": "964302d",
+    "timestamp": "2026-08-07T23:35:08",
+    "git_commit": "8ae9c3c",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -76,33 +76,39 @@
         },
         "R1_raw_denominator": {
           "n": 32,
+          "basis": "DIRECT: every row scored against its gold string, including the out-of-vocabulary rows. The coverage identity is used only to cross-check this number, never to produce it (canonical plan section 6).",
           "raw_hits": 9,
           "normalised_hits": 9,
-          "basis": "EXACT for the RAW metric, by construction: a closed readout can never emit an out-of-vocabulary string, so every out-of-vocabulary row is a failure and raw accuracy is in-vocabulary accuracy times coverage. For the NORMALISED metric the same identity holds only while no out-of-vocabulary gold normalises onto a vocabulary answer, which is CHECKED rather than assumed; see normalisation_check.",
-          "normalisation_check": {
-            "distinct_oov_gold": 4,
-            "collisions_with_vocabulary_normal_form": [],
-            "identity_holds_for_normalised_match": true,
-            "note": "if this ever fails, the normalised raw-denominator accuracy must be scored row by row instead of derived by coverage"
-          },
-          "coverage": 0.5,
           "raw_exact": 0.28125,
-          "normalised_exact": 0.28125
+          "normalised_exact": 0.28125,
+          "coverage_identity_cross_check": {
+            "coverage": 0.5,
+            "raw_hits_in_vocabulary": 9,
+            "normalised_hits_in_vocabulary": 9,
+            "out_of_vocabulary_hits": {
+              "raw": 0,
+              "normalised": 0
+            },
+            "identity_agrees": true
+          }
         },
         "R2_raw_denominator": {
           "n": 32,
+          "basis": "DIRECT: every row scored against its gold string, including the out-of-vocabulary rows. The coverage identity is used only to cross-check this number, never to produce it (canonical plan section 6).",
           "raw_hits": 9,
           "normalised_hits": 9,
-          "basis": "EXACT for the RAW metric, by construction: a closed readout can never emit an out-of-vocabulary string, so every out-of-vocabulary row is a failure and raw accuracy is in-vocabulary accuracy times coverage. For the NORMALISED metric the same identity holds only while no out-of-vocabulary gold normalises onto a vocabulary answer, which is CHECKED rather than assumed; see normalisation_check.",
-          "normalisation_check": {
-            "distinct_oov_gold": 4,
-            "collisions_with_vocabulary_normal_form": [],
-            "identity_holds_for_normalised_match": true,
-            "note": "if this ever fails, the normalised raw-denominator accuracy must be scored row by row instead of derived by coverage"
-          },
-          "coverage": 0.5,
           "raw_exact": 0.28125,
-          "normalised_exact": 0.28125
+          "normalised_exact": 0.28125,
+          "coverage_identity_cross_check": {
+            "coverage": 0.5,
+            "raw_hits_in_vocabulary": 9,
+            "normalised_hits_in_vocabulary": 9,
+            "out_of_vocabulary_hits": {
+              "raw": 0,
+              "normalised": 0
+            },
+            "identity_agrees": true
+          }
         },
         "R3_in_vocabulary": {
           "n": 16,
@@ -130,7 +136,7 @@
           },
           "note": "every emission stays in the denominator; invalid outputs are counted, never excluded"
         },
-        "seconds": 3.678
+        "seconds": 3.684
       },
       "fixed_image": {
         "R1_in_vocabulary": {
@@ -149,33 +155,39 @@
         },
         "R1_raw_denominator": {
           "n": 32,
+          "basis": "DIRECT: every row scored against its gold string, including the out-of-vocabulary rows. The coverage identity is used only to cross-check this number, never to produce it (canonical plan section 6).",
           "raw_hits": 9,
           "normalised_hits": 9,
-          "basis": "EXACT for the RAW metric, by construction: a closed readout can never emit an out-of-vocabulary string, so every out-of-vocabulary row is a failure and raw accuracy is in-vocabulary accuracy times coverage. For the NORMALISED metric the same identity holds only while no out-of-vocabulary gold normalises onto a vocabulary answer, which is CHECKED rather than assumed; see normalisation_check.",
-          "normalisation_check": {
-            "distinct_oov_gold": 4,
-            "collisions_with_vocabulary_normal_form": [],
-            "identity_holds_for_normalised_match": true,
-            "note": "if this ever fails, the normalised raw-denominator accuracy must be scored row by row instead of derived by coverage"
-          },
-          "coverage": 0.5,
           "raw_exact": 0.28125,
-          "normalised_exact": 0.28125
+          "normalised_exact": 0.28125,
+          "coverage_identity_cross_check": {
+            "coverage": 0.5,
+            "raw_hits_in_vocabulary": 9,
+            "normalised_hits_in_vocabulary": 9,
+            "out_of_vocabulary_hits": {
+              "raw": 0,
+              "normalised": 0
+            },
+            "identity_agrees": true
+          }
         },
         "R2_raw_denominator": {
           "n": 32,
+          "basis": "DIRECT: every row scored against its gold string, including the out-of-vocabulary rows. The coverage identity is used only to cross-check this number, never to produce it (canonical plan section 6).",
           "raw_hits": 9,
           "normalised_hits": 9,
-          "basis": "EXACT for the RAW metric, by construction: a closed readout can never emit an out-of-vocabulary string, so every out-of-vocabulary row is a failure and raw accuracy is in-vocabulary accuracy times coverage. For the NORMALISED metric the same identity holds only while no out-of-vocabulary gold normalises onto a vocabulary answer, which is CHECKED rather than assumed; see normalisation_check.",
-          "normalisation_check": {
-            "distinct_oov_gold": 4,
-            "collisions_with_vocabulary_normal_form": [],
-            "identity_holds_for_normalised_match": true,
-            "note": "if this ever fails, the normalised raw-denominator accuracy must be scored row by row instead of derived by coverage"
-          },
-          "coverage": 0.5,
           "raw_exact": 0.28125,
-          "normalised_exact": 0.28125
+          "normalised_exact": 0.28125,
+          "coverage_identity_cross_check": {
+            "coverage": 0.5,
+            "raw_hits_in_vocabulary": 9,
+            "normalised_hits_in_vocabulary": 9,
+            "out_of_vocabulary_hits": {
+              "raw": 0,
+              "normalised": 0
+            },
+            "identity_agrees": true
+          }
         },
         "R3_in_vocabulary": {
           "n": 16,
@@ -203,7 +215,7 @@
           },
           "note": "every emission stays in the denominator; invalid outputs are counted, never excluded"
         },
-        "seconds": 3.402
+        "seconds": 3.592
       },
       "fixed_question": {
         "R1_in_vocabulary": {
@@ -222,33 +234,39 @@
         },
         "R1_raw_denominator": {
           "n": 32,
+          "basis": "DIRECT: every row scored against its gold string, including the out-of-vocabulary rows. The coverage identity is used only to cross-check this number, never to produce it (canonical plan section 6).",
           "raw_hits": 2,
           "normalised_hits": 2,
-          "basis": "EXACT for the RAW metric, by construction: a closed readout can never emit an out-of-vocabulary string, so every out-of-vocabulary row is a failure and raw accuracy is in-vocabulary accuracy times coverage. For the NORMALISED metric the same identity holds only while no out-of-vocabulary gold normalises onto a vocabulary answer, which is CHECKED rather than assumed; see normalisation_check.",
-          "normalisation_check": {
-            "distinct_oov_gold": 4,
-            "collisions_with_vocabulary_normal_form": [],
-            "identity_holds_for_normalised_match": true,
-            "note": "if this ever fails, the normalised raw-denominator accuracy must be scored row by row instead of derived by coverage"
-          },
-          "coverage": 0.5,
           "raw_exact": 0.0625,
-          "normalised_exact": 0.0625
+          "normalised_exact": 0.0625,
+          "coverage_identity_cross_check": {
+            "coverage": 0.5,
+            "raw_hits_in_vocabulary": 2,
+            "normalised_hits_in_vocabulary": 2,
+            "out_of_vocabulary_hits": {
+              "raw": 0,
+              "normalised": 0
+            },
+            "identity_agrees": true
+          }
         },
         "R2_raw_denominator": {
           "n": 32,
+          "basis": "DIRECT: every row scored against its gold string, including the out-of-vocabulary rows. The coverage identity is used only to cross-check this number, never to produce it (canonical plan section 6).",
           "raw_hits": 2,
           "normalised_hits": 2,
-          "basis": "EXACT for the RAW metric, by construction: a closed readout can never emit an out-of-vocabulary string, so every out-of-vocabulary row is a failure and raw accuracy is in-vocabulary accuracy times coverage. For the NORMALISED metric the same identity holds only while no out-of-vocabulary gold normalises onto a vocabulary answer, which is CHECKED rather than assumed; see normalisation_check.",
-          "normalisation_check": {
-            "distinct_oov_gold": 4,
-            "collisions_with_vocabulary_normal_form": [],
-            "identity_holds_for_normalised_match": true,
-            "note": "if this ever fails, the normalised raw-denominator accuracy must be scored row by row instead of derived by coverage"
-          },
-          "coverage": 0.5,
           "raw_exact": 0.0625,
-          "normalised_exact": 0.0625
+          "normalised_exact": 0.0625,
+          "coverage_identity_cross_check": {
+            "coverage": 0.5,
+            "raw_hits_in_vocabulary": 2,
+            "normalised_hits_in_vocabulary": 2,
+            "out_of_vocabulary_hits": {
+              "raw": 0,
+              "normalised": 0
+            },
+            "identity_agrees": true
+          }
         },
         "R3_in_vocabulary": {
           "n": 16,
@@ -276,7 +294,7 @@
           },
           "note": "every emission stays in the denominator; invalid outputs are counted, never excluded"
         },
-        "seconds": 3.174
+        "seconds": 3.549
       },
       "shuffled_image": {
         "R1_in_vocabulary": {
@@ -295,33 +313,39 @@
         },
         "R1_raw_denominator": {
           "n": 32,
+          "basis": "DIRECT: every row scored against its gold string, including the out-of-vocabulary rows. The coverage identity is used only to cross-check this number, never to produce it (canonical plan section 6).",
           "raw_hits": 11,
           "normalised_hits": 11,
-          "basis": "EXACT for the RAW metric, by construction: a closed readout can never emit an out-of-vocabulary string, so every out-of-vocabulary row is a failure and raw accuracy is in-vocabulary accuracy times coverage. For the NORMALISED metric the same identity holds only while no out-of-vocabulary gold normalises onto a vocabulary answer, which is CHECKED rather than assumed; see normalisation_check.",
-          "normalisation_check": {
-            "distinct_oov_gold": 4,
-            "collisions_with_vocabulary_normal_form": [],
-            "identity_holds_for_normalised_match": true,
-            "note": "if this ever fails, the normalised raw-denominator accuracy must be scored row by row instead of derived by coverage"
-          },
-          "coverage": 0.5,
           "raw_exact": 0.34375,
-          "normalised_exact": 0.34375
+          "normalised_exact": 0.34375,
+          "coverage_identity_cross_check": {
+            "coverage": 0.5,
+            "raw_hits_in_vocabulary": 11,
+            "normalised_hits_in_vocabulary": 11,
+            "out_of_vocabulary_hits": {
+              "raw": 0,
+              "normalised": 0
+            },
+            "identity_agrees": true
+          }
         },
         "R2_raw_denominator": {
           "n": 32,
+          "basis": "DIRECT: every row scored against its gold string, including the out-of-vocabulary rows. The coverage identity is used only to cross-check this number, never to produce it (canonical plan section 6).",
           "raw_hits": 11,
           "normalised_hits": 11,
-          "basis": "EXACT for the RAW metric, by construction: a closed readout can never emit an out-of-vocabulary string, so every out-of-vocabulary row is a failure and raw accuracy is in-vocabulary accuracy times coverage. For the NORMALISED metric the same identity holds only while no out-of-vocabulary gold normalises onto a vocabulary answer, which is CHECKED rather than assumed; see normalisation_check.",
-          "normalisation_check": {
-            "distinct_oov_gold": 4,
-            "collisions_with_vocabulary_normal_form": [],
-            "identity_holds_for_normalised_match": true,
-            "note": "if this ever fails, the normalised raw-denominator accuracy must be scored row by row instead of derived by coverage"
-          },
-          "coverage": 0.5,
           "raw_exact": 0.34375,
-          "normalised_exact": 0.34375
+          "normalised_exact": 0.34375,
+          "coverage_identity_cross_check": {
+            "coverage": 0.5,
+            "raw_hits_in_vocabulary": 11,
+            "normalised_hits_in_vocabulary": 11,
+            "out_of_vocabulary_hits": {
+              "raw": 0,
+              "normalised": 0
+            },
+            "identity_agrees": true
+          }
         },
         "R3_in_vocabulary": {
           "n": 16,
@@ -349,7 +373,7 @@
           },
           "note": "every emission stays in the denominator; invalid outputs are counted, never excluded"
         },
-        "seconds": 3.228
+        "seconds": 3.61
       }
     },
     "paired_contrast_demo": {

@@ -223,6 +223,11 @@ SEEDS = (0, 1, 2)
 # Resource constants (canonical section 14 and the accepted design).
 WALL_CLOCK_HALT_HOURS = 8.0
 PER_IDENTITY_CEILING_HOURS = 35.0
+# The user's rule of 2026-08-07: a projection under the ceiling is NOT a
+# clearance to run if the margin is negligible. Under this much headroom
+# execution returns to the user. Enforced here rather than only stated
+# in a record, so flipping the authorisation state cannot bypass it.
+HEADROOM_FLOOR_HOURS = 1.0
 CORE_CEILING_HOURS = 180.0
 MEMORY_CEILING_FRACTION = 0.80
 IDENTITY_BASELINE_HOURS = {"pretrained_smollm2_135m": 2.29222,
@@ -1543,10 +1548,11 @@ COMMITTED_NON_CELL_HOURS = {
     # Committed but not yet spent, all charged to the identity whose
     # frozen model they load:
     #   A4 1.804 and A7c 1.864 (protocol 13.2b);
-    #   the per-identity share of the final readouts, 1.1495 -- MEASURED
+    #   the per-identity share of the final readouts, 1.4 -- MEASURED
     #     on 2026-08-07: four matched conditions, each a complete
-    #     R1+R2+R3 pass over the 10,004-row RAW denominator at a
-    #     measured 0.0603 s per row;
+    #     R1+R2+R3 pass over the FULL 10,004-row RAW denominator with
+    #     R2 and R3 BATCHED. The denominator restriction was rejected,
+    #     so R1 and R2 are not run on a reduced row set;
     #   the section-19 serial efficiency measurement, 1.000, which loads
     #     the pretrained LM;
     #   the RETAINED but unrun parts of protocol 13.2b's A1 row, 0.813 =
@@ -1555,10 +1561,10 @@ COMMITTED_NON_CELL_HOURS = {
     #     0.087 and A1's matched interventions 0.090. BASE counts only
     #     the MEASURED A1 core-plus-extraction figure, so omitting these
     #     silently dropped work that is retained, not descoped.
-    "pretrained": 1.804 + 1.864 + 1.1495 + 1.000 + 0.813,
+    "pretrained": 1.804 + 1.864 + 1.4 + 1.000 + 0.813,
     # A1r's row retains the ablation, the middle-layer extraction and
     # its own matched interventions.
-    "random": 1.1495 + 0.127 + 0.087 + 0.090,
+    "random": 1.4 + 0.127 + 0.087 + 0.090,
 }
 
 
@@ -1682,8 +1688,18 @@ def per_identity_gate(arm: str, additional_hours: float = 0.0,
             "ceiling_hours": PER_IDENTITY_CEILING_HOURS,
             "applies": identity != "none",
             "headroom_hours": round(PER_IDENTITY_CEILING_HOURS - total, 4),
+            "headroom_floor_hours": HEADROOM_FLOOR_HOURS,
+            "below_headroom_floor": (
+                identity != "none"
+                and total <= PER_IDENTITY_CEILING_HOURS
+                and (PER_IDENTITY_CEILING_HOURS - total)
+                < HEADROOM_FLOOR_HOURS),
+            # A thin margin halts exactly as a breach does. Clearing a
+            # hard ceiling by a few minutes is not a clearance.
             "fires": identity != "none"
-                     and total > PER_IDENTITY_CEILING_HOURS}
+                     and (total > PER_IDENTITY_CEILING_HOURS
+                          or (PER_IDENTITY_CEILING_HOURS - total)
+                          < HEADROOM_FLOOR_HOURS)}
 
 
 def charge_identity_hours(arm: str, scale: str, seed: int,

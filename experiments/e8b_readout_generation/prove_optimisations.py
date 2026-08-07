@@ -232,7 +232,7 @@ def prove_batching_adversarial(lm, tokenizer, answers, cache, trie,
         scalar_r3.append((list(emitted), bool(terminated)))
 
     by_batch_size = {}
-    for batch_size in (1, 7, 32, n):
+    for batch_size in (1, 7, 32, 96, 128, n):
         r2_all, r3_all = [], []
         for start in range(0, n, batch_size):
             chunk = prefixes[start:start + batch_size]
@@ -267,6 +267,82 @@ def prove_batching_adversarial(lm, tokenizer, answers, cache, trie,
                     "produce"
                     if identical else
                     "REJECTED: the batched path diverges")}
+
+
+@torch.no_grad()
+def margin_census(model, lm, cache, trie, loader, context, device,
+                  conditions) -> dict:
+    """How close does any real decision come to the noise floor?
+
+    Output equivalence is not bitwise equivalence. Batching reorders
+    reductions, so the logits differ by a small amount; the outputs
+    agree only because every decision margin exceeds that difference.
+    This measures both sides of that inequality on real data instead of
+    asserting the conclusion.
+
+    The noise floor is the batched-versus-scalar logit difference. The
+    margins are the top-two gaps at every R2 and R3 decision actually
+    taken."""
+    e8b_run.assert_strict_determinism()
+    noise = 0.0
+    r2_margins, r3_margins = [], []
+    for condition in conditions:
+        for images, questions, question_ids, mask, labels in loader:
+            images, questions = images.to(device), questions.to(device)
+            mask = mask.to(device)
+            image_in, question_in, mask_in = e8b_run.intervention_inputs(
+                condition, images, questions, mask,
+                context["neutral_image"], context["neutral_question"],
+                context["neutral_mask"],
+                deranged_image_tokens=(
+                    context["deranged_lookup"](question_ids).to(device)
+                    if condition == "shuffled_image" else None))
+            prefix = context["prefix_fn"](model, lm, image_in,
+                                          question_in, mask_in)
+            _, batched_logits = br._batch_prefix_cache(lm, prefix)
+            scalar = torch.stack([
+                readouts._prefix_cache(lm, prefix[i:i + 1])[1][0]
+                for i in range(prefix.shape[0])])
+            noise = max(noise,
+                        float((batched_logits - scalar).abs().max()))
+            logprobs = torch.log_softmax(batched_logits.float(), dim=-1)
+            for row in range(prefix.shape[0]):
+                # R3 decision: the free top-two gap.
+                top2 = torch.topk(logprobs[row], 2).values
+                r3_margins.append(float(top2[0] - top2[1]))
+                # R2 decision: the gap among the trie's allowed tokens.
+                allowed = sorted(trie["children"])
+                if trie["leaf"] is not None:
+                    allowed = [readouts.EOS_ID] + [
+                        t for t in allowed if t != readouts.EOS_ID]
+                scores = sorted((float(logprobs[row][t])
+                                 for t in allowed), reverse=True)
+                if len(scores) > 1:
+                    r2_margins.append(scores[0] - scores[1])
+    smallest = min(min(r2_margins, default=float("inf")),
+                   min(r3_margins, default=float("inf")))
+    return {
+        "batched_vs_scalar_logit_noise_max": float(noise),
+        "bitwise_identical": False,
+        "r2_decisions": len(r2_margins),
+        "r3_decisions": len(r3_margins),
+        "smallest_r2_margin": min(r2_margins, default=None),
+        "smallest_r3_margin": min(r3_margins, default=None),
+        "smallest_margin_overall": smallest,
+        "margin_over_noise": (smallest / noise if noise else None),
+        "interpretation": (
+            "the outputs agree because every decision margin exceeds "
+            "the batching noise, not because the arithmetic is "
+            "identical. The ratio above is the safety factor on the "
+            "thinnest real decision observed. A margin driven "
+            "artificially below the noise floor CAN diverge, and that "
+            "is correct behaviour, not a defect."),
+        "residual": (
+            "this is an empirical property of this data and this "
+            "checkpoint. The twelve core checkpoints are unseen. Both "
+            "arms of the B3-B2 contrast use the same path, so any "
+            "residual divergence is unbiased with respect to the "
+            "primary comparison.")}
 
 
 # --- Optimisation 2: denominator restriction ---------------------------------
@@ -382,6 +458,30 @@ def main() -> int:
         print(f"  mismatches: {batching['mismatch_counts']}")
 
     # Denominator equivalence, per condition, on the SAME rows.
+    print("margin census across all four conditions...")
+    census = margin_census(model, lm, cache, trie, loader, context,
+                           device, fe.CONDITIONS)
+    print(f"  noise {census['batched_vs_scalar_logit_noise_max']:.2e} | "
+          f"thinnest margin {census['smallest_margin_overall']:.2e} | "
+          f"safety factor {census['margin_over_noise']:.0f}x")
+
+    print("proving batching under EVERY condition, not just normal...")
+    per_condition_batching = {}
+    for condition in fe.CONDITIONS:
+        scalar_rows = fe.evaluate_condition(
+            model, lm, loader, cache, trie, tokenizer, device, condition,
+            context, batched=False)
+        batched_rows = fe.evaluate_condition(
+            model, lm, loader, cache, trie, tokenizer, device, condition,
+            context, batched=True)
+        same = all(scalar_rows[f] == batched_rows[f]
+                   for f in ("r1_pred", "r2_pred", "r3_text",
+                             "r3_overlong", "r3_empty"))
+        per_condition_batching[condition] = {
+            "identical": bool(same),
+            "rows": len(scalar_rows["r2_pred"])}
+        print(f"  {condition:16s} {same}")
+
     print("proving denominator restriction per condition...")
     denominator = {}
     for condition in fe.CONDITIONS:
@@ -420,11 +520,18 @@ def main() -> int:
     phase_hours = (time.time() - started_total) / 3600
     adopt_batching = (batching["exactly_identical"]
                       and adversarial[
-                          "exactly_identical_at_every_batch_size"])
-    adopt_denominator = {c: denominator[c]["exact_for_every_metric"]
-                         and (c == "normal"
-                              or drops[c]["exact_for_every_metric"])
-                         for c in fe.CONDITIONS}
+                          "exactly_identical_at_every_batch_size"]
+                      and all(v["identical"] for v in
+                              per_condition_batching.values()))
+    # The denominator restriction is REJECTED regardless of the
+    # arithmetic below. The proof SUBSETS a full evaluation rather than
+    # running a restricted one, and restriction is not inert:
+    # build_intervention_context derives the deranged-image map and the
+    # neutral means FROM THE ROW SET IT IS GIVEN, so dropping the
+    # out-of-vocabulary rows changes the intervention inputs. That is
+    # asserted in the generator, not patched into the record
+    # afterwards, so re-running cannot quietly re-adopt it.
+    adopt_denominator = {c: False for c in fe.CONDITIONS}
 
     record = {"metadata": utils.run_metadata(),
               "e8b_optimisation_equivalence": {
@@ -445,10 +552,51 @@ def main() -> int:
                     "dataset-independent theorem."},
         "batched_equivalence": batching,
         "batched_equivalence_adversarial": adversarial,
+        "batched_equivalence_per_condition": per_condition_batching,
+        "decision_margin_census": census,
         "denominator_equivalence": denominator,
         "intervention_drop_equivalence": drops,
+        "intervention_drop_equivalence_caveat":
+            "the drop equality is ARITHMETICALLY FORCED once the "
+            "per-condition accuracies are equal, so it adds no "
+            "independent evidence. Recorded rather than presented as an "
+            "independent confirmation.",
         "adoption": {
             "batched_r2_r3": adopt_batching,
+            "summary": "ONE optimisation adopted: batched R2/R3, proven "
+                       "to make the same decisions as the scalar path. "
+                       "The denominator restriction is REJECTED.",
+            "denominator_restriction_REJECTED": {
+                "rejected_on": "2026-08-07",
+                "why": "the proof SUBSETTED a full evaluation instead "
+                       "of running a restricted one, and restriction is "
+                       "not inert. build_intervention_context derives "
+                       "the deranged-image map and the neutral means "
+                       "from the row set it is given: dropping the "
+                       "2,290 out-of-vocabulary rows takes the image "
+                       "set from 777 to 768, and 767 of the 768 shared "
+                       "images then map to a DIFFERENT partner. A "
+                       "genuine restricted evaluation would therefore "
+                       "change the shuffled-image condition outright "
+                       "and shift both fixed-input conditions. Exact "
+                       "equivalence was assumed by the construction of "
+                       "the proof, not established.",
+                "measured_saving_forgone_hours": 0.036,
+                "why_not_worth_re_proving": "0.036 h is about one per "
+                                            "cent of the headroom. The "
+                                            "rule is to adopt only "
+                                            "where equivalence is "
+                                            "exact.",
+                "what_remains_true": "the ARITHMETIC identity itself "
+                                     "holds on this data -- zero of 563 "
+                                     "distinct out-of-vocabulary gold "
+                                     "strings collide with a vocabulary "
+                                     "normal form -- and that check now "
+                                     "RUNS on the live path. What was "
+                                     "not established is that a "
+                                     "restricted EVALUATION produces "
+                                     "the same inputs.",
+                "raised_by": "focused review A of 2026-08-07"},
             "denominator_restriction_per_condition": adopt_denominator,
             "r3_denominator_restriction": False,
             "why_r3_excluded": "R3 generates freely and CAN emit a "

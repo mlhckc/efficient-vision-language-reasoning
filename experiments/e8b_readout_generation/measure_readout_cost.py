@@ -246,16 +246,27 @@ def main() -> int:
     # inside these measurements rather than argued away.
     in_vocab_subset = subset[subset["in_vocabulary"]].reset_index(
         drop=True)
+    context_seconds_holder = []
+
     def timed_pass(frame, which):
         if len(frame) == 0:
             return 0.0, 0
         sub_loader = torch.utils.data.DataLoader(
             ve.RawRowDataset(frame, stores), batch_size=128,
             shuffle=False, collate_fn=ve.collate)
+        # The intervention context is MANDATORY work -- a full data
+        # pass for the neutral means plus the derangement -- but the
+        # real pipeline builds it ONCE PER CELL and reuses it across all
+        # four conditions. Timing it inside the per-condition pass would
+        # charge it four times over. It is measured separately below and
+        # charged once.
+        torch.cuda.synchronize()
+        context_start = time.perf_counter()
         sub_context = fe.build_intervention_context(
             sub_loader, frame, stores.image_vector, device,
             e8b_training.canonical_prefix)
         torch.cuda.synchronize()
+        context_seconds_holder.append(time.perf_counter() - context_start)
         started = time.perf_counter()
         fe.evaluate_condition(model, lm, sub_loader, cache, trie,
                               tokenizer, device, "normal", sub_context,
@@ -282,6 +293,23 @@ def main() -> int:
         + restricted["r3_on_the_full_raw_denominator"][
             "hours_per_condition_over_10004"], 5)
     restricted["reported_denominator"] = 10004
+    # Charged ONCE per cell, not once per condition: the real pipeline
+    # builds one context and reuses it across all four. Scaled from the
+    # measured subset to the full raw denominator.
+    context_per_row = (max(context_seconds_holder)
+                       / max(len(subset), 1))
+    restricted["intervention_context_construction"] = {
+        "measured_seconds_on_subset": round(max(context_seconds_holder), 3),
+        "hours_once_per_cell_over_10004": round(
+            10004 * context_per_row / 3600, 5),
+        "note": "a full data pass for the neutral means plus the "
+                "imageId-level derangement. Mandatory, previously "
+                "outside every timer, and charged ONCE per cell because "
+                "one context serves all four conditions."}
+    restricted["hours_per_cell_total"] = round(
+        4 * restricted["hours_per_condition_total"]
+        + restricted["intervention_context_construction"][
+            "hours_once_per_cell_over_10004"], 5)
     restricted["note"] = ("this is the shape the evaluation will "
                           "actually run in, measured end to end. The "
                           "reported denominator is 10,004 for every "
@@ -429,6 +457,10 @@ def main() -> int:
     print(f"  combined pass   : {projected['combined_pass_measured_s_per_row']:.4f} "
           f"s/row at batch 128 -> {projected['combined_pass_hours']} h "
           f"per condition over the raw denominator")
+    print(f"  context/cell    : "
+          f"{restricted['intervention_context_construction']['hours_once_per_cell_over_10004']} h")
+    print(f"  ADOPTED per cell: {restricted['hours_per_cell_total']} h "
+          f"(4 conditions + one context)")
     print(f"  ADOPTED shape   : R1+R2 on 7,714 "
           f"({restricted['r1_r2_on_in_vocabulary']['hours_per_condition_over_7714']} h) "
           f"+ R3 on 10,004 "

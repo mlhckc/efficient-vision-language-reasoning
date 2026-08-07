@@ -99,7 +99,16 @@ EVAL_PASS_S_PER_ROW = 0.075127     # SUPERSEDED: unbatched, unrestricted
 # rows changes the deranged-image map for 767 of 768 shared images and
 # shifts the neutral means, and the proof subsetted a full evaluation
 # rather than running a restricted one, so it could not see that.
-EVAL_CONDITION_HOURS = 0.0479
+# MAX over the measured runs (0.0479, 0.0483, 0.0582 h per condition
+# across 512/256/192-row samples), following the project's convention of
+# costing at the conservative end. The spread is measurement noise plus
+# less amortisation on the smaller samples.
+EVAL_CONDITION_HOURS = 0.0582
+# The intervention context -- a full data pass for the neutral means
+# plus the imageId-level derangement -- is MANDATORY and was previously
+# outside every timer. It is built ONCE per cell and reused across all
+# four conditions, so it is charged once, not four times.
+INTERVENTION_CONTEXT_HOURS = 0.0005
 # The per-part warm figures, retained for reporting. Each includes the
 # prefix-cache forward that readout must build for itself: r2_cached
 # CONSUMES the state it is given, so R2 and R3 cannot share one.
@@ -266,9 +275,10 @@ def main() -> int:
     # cell's final evaluation is four complete passes, not a readout
     # cost plus a separate intervention cost.
     eval_pass_hours = EVAL_CONDITION_HOURS
-    readouts_per_lm_cell = eval_pass_hours           # the normal pass
+    # The normal pass, plus the one-per-cell context it shares with the
+    # three intervention passes.
+    readouts_per_lm_cell = eval_pass_hours + INTERVENTION_CONTEXT_HOURS
     interventions_per_lm_cell = 3 * eval_pass_hours  # the three others
-    raw_r1_per_cell = eval_pass_hours
     final_eval_lm = 12 * (readouts_per_lm_cell + interventions_per_lm_cell)
     # B1 final classification evaluations: charged at the LM R1 pass
     # rate as a LABELLED UPPER BOUND (a classifier forward over dev costs
@@ -398,7 +408,9 @@ def main() -> int:
             "non_g14_gate_overhead_h": GATE_OVERHEAD_H,
             "b1_s_per_epoch": {"train_40k": B1_S_40K,
                                "train_250k": B1_S_250K},
-            "r2_s_per_row_UNSOURCED_no_measurement_exists": R2_ROW_S,
+            "r2_s_per_row_SUPERSEDED_by_measurement": R2_ROW_S,
+            "r2_s_per_row_MEASURED_scalar": R2_ROW_S_MEASURED,
+            "r3_s_per_row_MEASURED_scalar": R3_ROW_S_MEASURED,
             "r3_s_per_row_ASSUMED_1p5x_r2": R3_ROW_S,
             "step_ratio_250k_over_40k": round(RATIO_250K, 6),
             "amended_design_cost_note":
@@ -459,9 +471,15 @@ def main() -> int:
                         "carries a fixed G14 and gate overhead that "
                         "does not scale with the training rate"},
             "evaluation_pass_MEASURED": {
-                "carries_hours": round(6 * 4 * hours(
-                    N_RAW * EVAL_PASS_S_PER_ROW), 3),
-                "s_per_row": EVAL_PASS_S_PER_ROW,
+                # Derived from the LIVE constant. An earlier version
+                # computed this from EVAL_PASS_S_PER_ROW, which had been
+                # superseded by the batched measurement, and published
+                # an exposure 4.5 times the real one. The constant is
+                # marked SUPERSEDED at its definition; that was not
+                # enough, because this block still read it.
+                "carries_hours": round(6 * 4 * EVAL_CONDITION_HOURS, 3),
+                "hours_per_condition": EVAL_CONDITION_HOURS,
+                "superseded_unbatched_s_per_row": EVAL_PASS_S_PER_ROW,
                 "basis": "MEASURED end to end at batch 128 on "
                          "2026-08-07, after the correctness fix that "
                          "gave R2 and R3 their own prefix states. This "
@@ -471,12 +489,16 @@ def main() -> int:
                          "MILLISECONDS for a different operation). The "
                          "assumption no longer enters the budget.",
                 "residual_risk": "the measurement is at batch 128, the "
-                                 "project default everywhere. At batch "
-                                 "16 the same pass costs 0.1405 s a "
-                                 "row, which would roughly double this "
-                                 "line, so the batch size is pinned and "
-                                 "asserted rather than left to a "
-                                 "caller.",
+                                 "project default everywhere; at batch "
+                                 "16 the same pass costs several times "
+                                 "more. Equivalence is decision-level "
+                                 "and empirical -- 512 real rows and 96 "
+                                 "adversarial prefixes on ONE "
+                                 "exploratory checkpoint -- not a proof "
+                                 "over the twelve unseen core "
+                                 "checkpoints, where a near-tie could "
+                                 "in principle resolve differently "
+                                 "under a different reduction order.",
                 "status": "MEASURED; the residual is the batch size, "
                           "which is pinned"},
             "g14_row_cost": {
@@ -532,8 +554,13 @@ def main() -> int:
                 "basis": "protocol 13.2 range 0.500-1.000 h, charged at "
                          "the upper bound"},
             "selection_sensitivity_REMOVED_NOT_UNCOSTED": {
-                "hours_if_reinstated": round(44 * (
-                    hours(N_RAW * (R2_ROW_S + R3_ROW_S)) / 2), 3),
+                "hours_if_reinstated": round(
+                    44 * EVAL_CONDITION_HOURS / 4, 3),
+                "basis_of_that_figure": "44 retained checkpoints at the "
+                                        "MEASURED per-readout cost. An "
+                                        "earlier version used the "
+                                        "superseded unsourced R2/R3 "
+                                        "rates.",
                 "status": "REMOVED by the fixed-endpoint amendment, "
                           "which eliminated its object (sensitivity to "
                           "max-over-epochs checkpoint selection). This "

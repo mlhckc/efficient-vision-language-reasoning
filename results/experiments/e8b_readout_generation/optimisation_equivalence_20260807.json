@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-07T23:21:21",
-    "git_commit": "964302d",
+    "timestamp": "2026-08-07T23:50:21",
+    "git_commit": "8ae9c3c",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -41,7 +41,7 @@
       "note": "the denominator proof is bound to THESE artefacts. A different vocabulary or a different raw manifest requires the proof to be re-run; it is not a dataset-independent theorem."
     },
     "batched_equivalence": {
-      "rows": 512,
+      "rows": 192,
       "fields_compared": [
         "r2_answer",
         "r3_tokens",
@@ -68,19 +68,19 @@
       "exactly_identical": true,
       "difficulty_coverage": {
         "rows_at_the_token_cap": 0,
-        "rows_with_multi_token_r3": 133,
+        "rows_with_multi_token_r3": 44,
         "rows_with_empty_r3": 0,
         "max_r3_tokens": 4,
-        "distinct_r2_answers": 83,
+        "distinct_r2_answers": 62,
         "r3_outcome_categories": [
           "in_vocabulary",
           "out_of_vocabulary"
         ]
       },
       "timing": {
-        "scalar_seconds": 33.53,
-        "batched_seconds": 2.05,
-        "speedup": 16.39
+        "scalar_seconds": 12.23,
+        "batched_seconds": 0.77,
+        "speedup": 15.95
       },
       "verdict": "EXACT EQUIVALENCE: every observable agrees row for row, so the batched path may be adopted"
     },
@@ -110,10 +110,44 @@
         "96": {
           "r2_matches_scalar": true,
           "r3_matches_scalar": true
+        },
+        "128": {
+          "r2_matches_scalar": true,
+          "r3_matches_scalar": true
         }
       },
       "exactly_identical_at_every_batch_size": true,
       "verdict": "EXACT at every batch size tried, including the cap-hitting and empty cases real data does not produce"
+    },
+    "batched_equivalence_per_condition": {
+      "normal": {
+        "identical": true,
+        "rows": 192
+      },
+      "fixed_image": {
+        "identical": true,
+        "rows": 192
+      },
+      "fixed_question": {
+        "identical": true,
+        "rows": 192
+      },
+      "shuffled_image": {
+        "identical": true,
+        "rows": 192
+      }
+    },
+    "decision_margin_census": {
+      "batched_vs_scalar_logit_noise_max": 0.0001621246337890625,
+      "bitwise_identical": false,
+      "r2_decisions": 768,
+      "r3_decisions": 768,
+      "smallest_r2_margin": 0.003116607666015625,
+      "smallest_r3_margin": 0.003116607666015625,
+      "smallest_margin_overall": 0.003116607666015625,
+      "margin_over_noise": 19.223529411764705,
+      "interpretation": "the outputs agree because every decision margin exceeds the batching noise, not because the arithmetic is identical. The ratio above is the safety factor on the thinnest real decision observed. A margin driven artificially below the noise floor CAN diverge, and that is correct behaviour, not a defect.",
+      "residual": "this is an empirical property of this data and this checkpoint. The twelve core checkpoints are unseen. Both arms of the B3-B2 contrast use the same path, so any residual divergence is unbiased with respect to the primary comparison."
     },
     "denominator_equivalence": {
       "normal": {
@@ -121,14 +155,14 @@
         "per_metric": {
           "R1_raw": {
             "direct": {
-              "hits": 135,
-              "n": 512,
-              "accuracy": 0.263671875
+              "hits": 61,
+              "n": 192,
+              "accuracy": 0.3177083333333333
             },
             "restricted_plus_reconstruction": {
-              "hits": 135,
-              "n": 512,
-              "accuracy": 0.263671875
+              "hits": 61,
+              "n": 192,
+              "accuracy": 0.3177083333333333
             },
             "out_of_vocabulary_hits_observed": 0,
             "counts_equal": true,
@@ -137,14 +171,14 @@
           },
           "R1_normalised": {
             "direct": {
-              "hits": 135,
-              "n": 512,
-              "accuracy": 0.263671875
+              "hits": 61,
+              "n": 192,
+              "accuracy": 0.3177083333333333
             },
             "restricted_plus_reconstruction": {
-              "hits": 135,
-              "n": 512,
-              "accuracy": 0.263671875
+              "hits": 61,
+              "n": 192,
+              "accuracy": 0.3177083333333333
             },
             "out_of_vocabulary_hits_observed": 0,
             "counts_equal": true,
@@ -153,14 +187,14 @@
           },
           "R2_raw": {
             "direct": {
-              "hits": 134,
-              "n": 512,
-              "accuracy": 0.26171875
+              "hits": 61,
+              "n": 192,
+              "accuracy": 0.3177083333333333
             },
             "restricted_plus_reconstruction": {
-              "hits": 134,
-              "n": 512,
-              "accuracy": 0.26171875
+              "hits": 61,
+              "n": 192,
+              "accuracy": 0.3177083333333333
             },
             "out_of_vocabulary_hits_observed": 0,
             "counts_equal": true,
@@ -169,14 +203,14 @@
           },
           "R2_normalised": {
             "direct": {
-              "hits": 134,
-              "n": 512,
-              "accuracy": 0.26171875
+              "hits": 61,
+              "n": 192,
+              "accuracy": 0.3177083333333333
             },
             "restricted_plus_reconstruction": {
-              "hits": 134,
-              "n": 512,
-              "accuracy": 0.26171875
+              "hits": 61,
+              "n": 192,
+              "accuracy": 0.3177083333333333
             },
             "out_of_vocabulary_hits_observed": 0,
             "counts_equal": true,
@@ -192,14 +226,14 @@
         "per_metric": {
           "R1_raw": {
             "direct": {
-              "hits": 105,
-              "n": 512,
-              "accuracy": 0.205078125
+              "hits": 52,
+              "n": 192,
+              "accuracy": 0.2708333333333333
             },
             "restricted_plus_reconstruction": {
-              "hits": 105,
-              "n": 512,
-              "accuracy": 0.205078125
+              "hits": 52,
+              "n": 192,
+              "accuracy": 0.2708333333333333
             },
             "out_of_vocabulary_hits_observed": 0,
             "counts_equal": true,
@@ -208,14 +242,14 @@
           },
           "R1_normalised": {
             "direct": {
-              "hits": 105,
-              "n": 512,
-              "accuracy": 0.205078125
+              "hits": 52,
+              "n": 192,
+              "accuracy": 0.2708333333333333
             },
             "restricted_plus_reconstruction": {
-              "hits": 105,
-              "n": 512,
-              "accuracy": 0.205078125
+              "hits": 52,
+              "n": 192,
+              "accuracy": 0.2708333333333333
             },
             "out_of_vocabulary_hits_observed": 0,
             "counts_equal": true,
@@ -224,14 +258,14 @@
           },
           "R2_raw": {
             "direct": {
-              "hits": 105,
-              "n": 512,
-              "accuracy": 0.205078125
+              "hits": 53,
+              "n": 192,
+              "accuracy": 0.2760416666666667
             },
             "restricted_plus_reconstruction": {
-              "hits": 105,
-              "n": 512,
-              "accuracy": 0.205078125
+              "hits": 53,
+              "n": 192,
+              "accuracy": 0.2760416666666667
             },
             "out_of_vocabulary_hits_observed": 0,
             "counts_equal": true,
@@ -240,14 +274,14 @@
           },
           "R2_normalised": {
             "direct": {
-              "hits": 105,
-              "n": 512,
-              "accuracy": 0.205078125
+              "hits": 53,
+              "n": 192,
+              "accuracy": 0.2760416666666667
             },
             "restricted_plus_reconstruction": {
-              "hits": 105,
-              "n": 512,
-              "accuracy": 0.205078125
+              "hits": 53,
+              "n": 192,
+              "accuracy": 0.2760416666666667
             },
             "out_of_vocabulary_hits_observed": 0,
             "counts_equal": true,
@@ -263,14 +297,14 @@
         "per_metric": {
           "R1_raw": {
             "direct": {
-              "hits": 10,
-              "n": 512,
-              "accuracy": 0.01953125
+              "hits": 1,
+              "n": 192,
+              "accuracy": 0.005208333333333333
             },
             "restricted_plus_reconstruction": {
-              "hits": 10,
-              "n": 512,
-              "accuracy": 0.01953125
+              "hits": 1,
+              "n": 192,
+              "accuracy": 0.005208333333333333
             },
             "out_of_vocabulary_hits_observed": 0,
             "counts_equal": true,
@@ -279,14 +313,14 @@
           },
           "R1_normalised": {
             "direct": {
-              "hits": 10,
-              "n": 512,
-              "accuracy": 0.01953125
+              "hits": 1,
+              "n": 192,
+              "accuracy": 0.005208333333333333
             },
             "restricted_plus_reconstruction": {
-              "hits": 10,
-              "n": 512,
-              "accuracy": 0.01953125
+              "hits": 1,
+              "n": 192,
+              "accuracy": 0.005208333333333333
             },
             "out_of_vocabulary_hits_observed": 0,
             "counts_equal": true,
@@ -295,14 +329,14 @@
           },
           "R2_raw": {
             "direct": {
-              "hits": 11,
-              "n": 512,
-              "accuracy": 0.021484375
+              "hits": 1,
+              "n": 192,
+              "accuracy": 0.005208333333333333
             },
             "restricted_plus_reconstruction": {
-              "hits": 11,
-              "n": 512,
-              "accuracy": 0.021484375
+              "hits": 1,
+              "n": 192,
+              "accuracy": 0.005208333333333333
             },
             "out_of_vocabulary_hits_observed": 0,
             "counts_equal": true,
@@ -311,14 +345,14 @@
           },
           "R2_normalised": {
             "direct": {
-              "hits": 11,
-              "n": 512,
-              "accuracy": 0.021484375
+              "hits": 1,
+              "n": 192,
+              "accuracy": 0.005208333333333333
             },
             "restricted_plus_reconstruction": {
-              "hits": 11,
-              "n": 512,
-              "accuracy": 0.021484375
+              "hits": 1,
+              "n": 192,
+              "accuracy": 0.005208333333333333
             },
             "out_of_vocabulary_hits_observed": 0,
             "counts_equal": true,
@@ -334,14 +368,14 @@
         "per_metric": {
           "R1_raw": {
             "direct": {
-              "hits": 99,
-              "n": 512,
-              "accuracy": 0.193359375
+              "hits": 52,
+              "n": 192,
+              "accuracy": 0.2708333333333333
             },
             "restricted_plus_reconstruction": {
-              "hits": 99,
-              "n": 512,
-              "accuracy": 0.193359375
+              "hits": 52,
+              "n": 192,
+              "accuracy": 0.2708333333333333
             },
             "out_of_vocabulary_hits_observed": 0,
             "counts_equal": true,
@@ -350,14 +384,14 @@
           },
           "R1_normalised": {
             "direct": {
-              "hits": 99,
-              "n": 512,
-              "accuracy": 0.193359375
+              "hits": 52,
+              "n": 192,
+              "accuracy": 0.2708333333333333
             },
             "restricted_plus_reconstruction": {
-              "hits": 99,
-              "n": 512,
-              "accuracy": 0.193359375
+              "hits": 52,
+              "n": 192,
+              "accuracy": 0.2708333333333333
             },
             "out_of_vocabulary_hits_observed": 0,
             "counts_equal": true,
@@ -366,14 +400,14 @@
           },
           "R2_raw": {
             "direct": {
-              "hits": 99,
-              "n": 512,
-              "accuracy": 0.193359375
+              "hits": 52,
+              "n": 192,
+              "accuracy": 0.2708333333333333
             },
             "restricted_plus_reconstruction": {
-              "hits": 99,
-              "n": 512,
-              "accuracy": 0.193359375
+              "hits": 52,
+              "n": 192,
+              "accuracy": 0.2708333333333333
             },
             "out_of_vocabulary_hits_observed": 0,
             "counts_equal": true,
@@ -382,14 +416,14 @@
           },
           "R2_normalised": {
             "direct": {
-              "hits": 99,
-              "n": 512,
-              "accuracy": 0.193359375
+              "hits": 52,
+              "n": 192,
+              "accuracy": 0.2708333333333333
             },
             "restricted_plus_reconstruction": {
-              "hits": 99,
-              "n": 512,
-              "accuracy": 0.193359375
+              "hits": 52,
+              "n": 192,
+              "accuracy": 0.2708333333333333
             },
             "out_of_vocabulary_hits_observed": 0,
             "counts_equal": true,
@@ -404,76 +438,86 @@
     "intervention_drop_equivalence": {
       "fixed_image": {
         "R1_raw": {
-          "direct_drop": 0.05859375,
-          "reconstructed_drop": 0.05859375,
+          "direct_drop": 0.046875,
+          "reconstructed_drop": 0.046875,
           "exact": true
         },
         "R1_normalised": {
-          "direct_drop": 0.05859375,
-          "reconstructed_drop": 0.05859375,
+          "direct_drop": 0.046875,
+          "reconstructed_drop": 0.046875,
           "exact": true
         },
         "R2_raw": {
-          "direct_drop": 0.056640625,
-          "reconstructed_drop": 0.056640625,
+          "direct_drop": 0.04166666666666663,
+          "reconstructed_drop": 0.04166666666666663,
           "exact": true
         },
         "R2_normalised": {
-          "direct_drop": 0.056640625,
-          "reconstructed_drop": 0.056640625,
+          "direct_drop": 0.04166666666666663,
+          "reconstructed_drop": 0.04166666666666663,
           "exact": true
         },
         "exact_for_every_metric": true
       },
       "fixed_question": {
         "R1_raw": {
-          "direct_drop": 0.244140625,
-          "reconstructed_drop": 0.244140625,
+          "direct_drop": 0.3125,
+          "reconstructed_drop": 0.3125,
           "exact": true
         },
         "R1_normalised": {
-          "direct_drop": 0.244140625,
-          "reconstructed_drop": 0.244140625,
+          "direct_drop": 0.3125,
+          "reconstructed_drop": 0.3125,
           "exact": true
         },
         "R2_raw": {
-          "direct_drop": 0.240234375,
-          "reconstructed_drop": 0.240234375,
+          "direct_drop": 0.3125,
+          "reconstructed_drop": 0.3125,
           "exact": true
         },
         "R2_normalised": {
-          "direct_drop": 0.240234375,
-          "reconstructed_drop": 0.240234375,
+          "direct_drop": 0.3125,
+          "reconstructed_drop": 0.3125,
           "exact": true
         },
         "exact_for_every_metric": true
       },
       "shuffled_image": {
         "R1_raw": {
-          "direct_drop": 0.0703125,
-          "reconstructed_drop": 0.0703125,
+          "direct_drop": 0.046875,
+          "reconstructed_drop": 0.046875,
           "exact": true
         },
         "R1_normalised": {
-          "direct_drop": 0.0703125,
-          "reconstructed_drop": 0.0703125,
+          "direct_drop": 0.046875,
+          "reconstructed_drop": 0.046875,
           "exact": true
         },
         "R2_raw": {
-          "direct_drop": 0.068359375,
-          "reconstructed_drop": 0.068359375,
+          "direct_drop": 0.046875,
+          "reconstructed_drop": 0.046875,
           "exact": true
         },
         "R2_normalised": {
-          "direct_drop": 0.068359375,
-          "reconstructed_drop": 0.068359375,
+          "direct_drop": 0.046875,
+          "reconstructed_drop": 0.046875,
           "exact": true
         },
         "exact_for_every_metric": true
       }
     },
+    "intervention_drop_equivalence_caveat": "the drop equality is ARITHMETICALLY FORCED once the per-condition accuracies are equal, so it adds no independent evidence. Recorded rather than presented as an independent confirmation.",
     "adoption": {
       "batched_r2_r3": true,
+      "summary": "ONE optimisation adopted: batched R2/R3, proven to make the same decisions as the scalar path. The denominator restriction is REJECTED.",
+      "denominator_restriction_REJECTED": {
+        "rejected_on": "2026-08-07",
+        "why": "the proof SUBSETTED a full evaluation instead of running a restricted one, and restriction is not inert. build_intervention_context derives the deranged-image map and the neutral means from the row set it is given: dropping the 2,290 out-of-vocabulary rows takes the image set from 777 to 768, and 767 of the 768 shared images then map to a DIFFERENT partner. A genuine restricted evaluation would therefore change the shuffled-image condition outright and shift both fixed-input conditions. Exact equivalence was assumed by the construction of the proof, not established.",
+        "measured_saving_forgone_hours": 0.036,
+        "why_not_worth_re_proving": "0.036 h is about one per cent of the headroom. The rule is to adopt only where equivalence is exact.",
+        "what_remains_true": "the ARITHMETIC identity itself holds on this data -- zero of 563 distinct out-of-vocabulary gold strings collide with a vocabulary normal form -- and that check now RUNS on the live path. What was not established is that a restricted EVALUATION produces the same inputs.",
+        "raised_by": "focused review A of 2026-08-07"
+      },
       "denominator_restriction_per_condition": {
         "normal": false,
         "fixed_image": false,
@@ -482,22 +526,13 @@
       },
       "r3_denominator_restriction": false,
       "why_r3_excluded": "R3 generates freely and CAN emit a correct out-of-vocabulary answer, so an out-of-vocabulary row is not automatically wrong and the reconstruction does not hold. Excluded by construction, not by measurement.",
-      "reporting_unchanged": "the reported denominator remains the full 10,004 rows for every readout; only the rows actually executed for R1 and R2 change",
-      "denominator_restriction_REJECTED": {
-        "rejected_on": "2026-08-07",
-        "why": "the proof SUBSETTED a full evaluation instead of running a restricted one, and restriction is not inert. build_intervention_context derives the deranged-image map and the neutral means from the row set it is given: dropping the 2,290 out-of-vocabulary rows takes the image set from 777 to 768, and 767 of the 768 shared images then map to a DIFFERENT partner. A genuine restricted evaluation would therefore change the shuffled-image condition outright and shift both fixed-input conditions. Exact equivalence was assumed by the construction of the proof, not established.",
-        "measured_saving_forgone_hours": 0.036,
-        "why_not_worth_re_proving": "0.036 h is about one per cent of the headroom. The rule is to adopt only where equivalence is exact, and buying one per cent of margin with unproven scientific equivalence is the wrong trade.",
-        "what_remains_true": "the ARITHMETIC identity itself holds on this data -- zero of 563 distinct out-of-vocabulary gold strings collide with a vocabulary normal form -- and that check is retained and now RUNS on the live path. What was not established is that a restricted EVALUATION produces the same inputs.",
-        "raised_by": "focused review A of 2026-08-07"
-      },
-      "summary": "ONE optimisation adopted: batched R2/R3, proven bit-identical. The denominator restriction is REJECTED."
+      "reporting_unchanged": "the reported denominator remains the full 10,004 rows for every readout; only the rows actually executed for R1 and R2 change"
     },
     "memory": {
-      "peak_reserved_mib": 1894.0,
-      "reserved_fraction": 0.0946
+      "peak_reserved_mib": 2290.0,
+      "reserved_fraction": 0.1144
     },
-    "phase_cost_hours": 0.05383,
+    "phase_cost_hours": 0.04904,
     "determinism_verified_at_use": {
       "deterministic_algorithms": true,
       "warn_only": false,
@@ -512,7 +547,6 @@
       "pinned_revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2"
     },
     "optimizer_steps": 0,
-    "clean_test_accessed": false,
-    "intervention_drop_equivalence_caveat": "the drop equality is ARITHMETICALLY FORCED once the per-condition accuracies are equal, so it adds no independent evidence. Recorded here rather than presented as an independent confirmation, which an earlier version of this record implied."
+    "clean_test_accessed": false
   }
 }

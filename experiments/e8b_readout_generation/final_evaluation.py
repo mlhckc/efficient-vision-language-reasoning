@@ -87,14 +87,6 @@ READOUTS = ("R1", "R2", "R3")
 NEUTRAL_BASIS = "mean over the evaluation set's cached token tensors"
 
 
-def _cache_length(prefix_state) -> int:
-    """Length of the KV cache in a prefix state, across cache types."""
-    past = prefix_state[0]
-    if hasattr(past, "get_seq_length"):
-        return int(past.get_seq_length())
-    return int(past[0][0].shape[2])
-
-
 def sha256_array(array) -> str:
     return hashlib.sha256(
         np.ascontiguousarray(array).tobytes()).hexdigest()
@@ -324,7 +316,7 @@ def evaluate_condition(model, lm, loader, cache, trie, tokenizer, device,
                 rows["r2_pred"].append(-1)
             if "R3" in which:
                 r3_state = readouts._prefix_cache(lm, single)
-                before = _cache_length(r3_state)
+                before = readouts.cache_length(r3_state)
                 emitted = readouts.r3_generate(lm, single, tokenizer,
                                                prefix_state=r3_state)
                 # The guard that would have caught the defect: R3 must
@@ -433,52 +425,64 @@ def assert_normalisation_disjoint(oov_gold, index_to_answer) -> dict:
                     "derived by coverage"}
 
 
-def raw_denominator_closed(in_vocab_score: dict, coverage: float,
-                           n_raw: int, normalisation_check=None) -> dict:
-    """R1/R2 on the raw denominator, COMPUTED not approximated.
+def score_closed_raw_denominator(predicted, gold_strings,
+                                 index_to_answer,
+                                 in_vocabulary=None) -> dict:
+    """HB3b for a closed readout, computed DIRECTLY over all 10,004 rows.
 
-    A closed readout cannot emit an out-of-vocabulary answer, so every
-    out-of-vocabulary row is wrong and raw accuracy is exactly
-    in-vocabulary accuracy times coverage. Stated explicitly so nobody
-    reads it as an estimate."""
-    if normalisation_check is not None \
-            and not normalisation_check["identity_holds_for_normalised_match"]:
-        raise AssertionError(
-            f"RAW DENOMINATOR REFUSED: "
-            f"{normalisation_check['collisions_with_vocabulary_normal_form']} "
-            f"normalise onto a vocabulary answer, so the coverage "
-            f"identity does NOT hold for the normalised metric and it "
-            f"must be scored row by row instead")
-    # Computed from the HIT COUNT, never from a rounded accuracy: the
-    # in-vocabulary accuracy is rounded to six decimals before it is
-    # returned, and multiplying that rounded value by coverage disagrees
-    # with hits/n_raw at the sixth decimal for 1,489 of the 7,715
-    # possible hit counts. The reported number must be the one that was
-    # proven, not one derived from it.
-    hits_raw = in_vocab_score.get("raw_hit_count")
-    hits_normalised = in_vocab_score.get("normalised_hit_count")
-    if hits_raw is None or hits_normalised is None:
-        raise AssertionError(
-            "RAW DENOMINATOR REFUSED: the in-vocabulary score must "
-            "carry raw_hit_count and normalised_hit_count. Deriving the "
-            "raw-denominator accuracy from a rounded in-vocabulary "
-            "accuracy does not reproduce the proven value.")
-    return {
-        "n": n_raw,
-        "raw_hits": int(hits_raw),
-        "normalised_hits": int(hits_normalised),
-        "basis": "EXACT for the RAW metric, by construction: a closed "
-                 "readout can never emit an out-of-vocabulary string, "
-                 "so every out-of-vocabulary row is a failure and raw "
-                 "accuracy is in-vocabulary accuracy times coverage. "
-                 "For the NORMALISED metric the same identity holds "
-                 "only while no out-of-vocabulary gold normalises onto "
-                 "a vocabulary answer, which is CHECKED rather than "
-                 "assumed; see normalisation_check.",
-        "normalisation_check": normalisation_check,
-        "coverage": round(coverage, 6),
-        "raw_exact": round(int(hits_raw) / n_raw, 6),
-        "normalised_exact": round(int(hits_normalised) / n_raw, 6)}
+    Canonical plan section 6 is categorical: the raw-distribution system
+    effect is "interpreted as net system effect including coverage,
+    NEVER approximated as in-vocabulary accuracy times coverage". So the
+    prediction is scored against the gold STRING on every row, including
+    the out-of-vocabulary ones, exactly as it would be if the model
+    could have got them right.
+
+    No label indexing is involved, so the -1 out-of-vocabulary label
+    never touches the vocabulary list.
+
+    The coverage identity is retained, but only as a CROSS-CHECK: it
+    must agree with the direct computation, and a disagreement is a
+    refusal. It is a verification of the direct number, not a substitute
+    for it."""
+    predicted = np.asarray(predicted)
+    texts = [index_to_answer[int(p)] for p in predicted]
+    raw_hits = np.array([g21.raw_exact(t, g)
+                         for t, g in zip(texts, gold_strings)])
+    normalised_hits = np.array([g21.normalized_exact(t, g)
+                                for t, g in zip(texts, gold_strings)])
+    result = {
+        "n": int(len(gold_strings)),
+        "basis": "DIRECT: every row scored against its gold string, "
+                 "including the out-of-vocabulary rows. The coverage "
+                 "identity is used only to cross-check this number, "
+                 "never to produce it (canonical plan section 6).",
+        "raw_hits": int(raw_hits.sum()),
+        "normalised_hits": int(normalised_hits.sum()),
+        "raw_exact": round(float(raw_hits.mean()), 6),
+        "normalised_exact": round(float(normalised_hits.mean()), 6)}
+    if in_vocabulary is not None:
+        mask = np.asarray(in_vocabulary, dtype=bool)
+        cross = {
+            "coverage": round(float(mask.mean()), 6),
+            "raw_hits_in_vocabulary": int(raw_hits[mask].sum()),
+            "normalised_hits_in_vocabulary": int(
+                normalised_hits[mask].sum()),
+            "out_of_vocabulary_hits": {
+                "raw": int(raw_hits[~mask].sum()),
+                "normalised": int(normalised_hits[~mask].sum())}}
+        cross["identity_agrees"] = (
+            cross["raw_hits_in_vocabulary"] == result["raw_hits"]
+            and cross["normalised_hits_in_vocabulary"]
+            == result["normalised_hits"])
+        if not cross["identity_agrees"]:
+            raise AssertionError(
+                f"HB3b CROSS-CHECK FAILED: a closed readout scored on "
+                f"{cross['out_of_vocabulary_hits']} out-of-vocabulary "
+                f"rows. The coverage identity does not hold on this "
+                f"data, and the DIRECT number above is the one to "
+                f"trust.")
+        result["coverage_identity_cross_check"] = cross
+    return result
 
 
 # --- Aggregation for the paired B3 - B2 contrast ------------------------------
