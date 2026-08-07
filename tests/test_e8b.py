@@ -1742,8 +1742,23 @@ def test_core_readiness_closure() -> None:
         check("the projection has a committed generator",
               (E8B_DIR / "core_resource_projection.py").exists()
               and "core_resource_projection.py" in pr["generator"])
-        check("no hard ceiling fires",
-              not any(g.get("fires") for g in pr["gates"].values()))
+        # A firing ceiling is a CORRECT outcome, not a test failure:
+        # the measured projection exceeds 35 h and the protocol is that
+        # execution stops and returns to the user. What must hold is
+        # that the gate reports it honestly and that nothing was
+        # descoped or relaxed to make it pass.
+        fired = [name for name, gate in pr["gates"].items()
+                 if gate.get("fires")]
+        check("every firing gate is the identity ceiling, reported "
+              "honestly rather than suppressed",
+              set(fired) <= {"pretrained_identity_35h"}, str(fired))
+        if fired:
+            check("a fired ceiling is reported at its true value with "
+                  "the ceiling unchanged at 35 h",
+                  pr["gates"]["pretrained_identity_35h"][
+                      "ceiling_hours"] == 35.0
+                  and pr["gates"]["pretrained_identity_35h"][
+                      "headroom_hours"] < 0)
         ident = pr["gates"]["pretrained_identity_35h"]
         check("the projection charges already-spent search and "
               "diagnostic compute to the pretrained identity",
@@ -1753,9 +1768,11 @@ def test_core_readiness_closure() -> None:
               "programme, not merely training",
               "readouts" in ident["includes"]
               and "interventions" in ident["includes"])
-        check("the identity projection stays under the hard 35 h ceiling",
-              ident["projected_hours"] < 35.0
-              and ident["headroom_hours"] > 0)
+        check("the hard ceiling itself is unchanged at 35 h",
+              ident.get("ceiling_hours", 35.0) == 35.0)
+        check("headroom is stated consistently with the projection",
+              abs(ident["headroom_hours"]
+                  - (35.0 - ident["projected_hours"])) < 0.01)
         check("a zero-retry allowance is recorded explicitly",
               "NONE" in ident["retry_allowance"])
         # The MAXIMUM of the recorded set, per the project's own
@@ -1999,7 +2016,18 @@ def test_remediation_known_negatives() -> None:
     check("the probe's standing authorisation is revoked",
           e8b_run.NONSCIENTIFIC_PROBE_AUTHORIZED is None
           and e8b_run.NONSCIENTIFIC_PROBE_REVOKED_ON == "2026-08-07")
+    # Every SCIENTIFIC class is still refused. throughput-calibration is
+    # deliberately open: the user authorised it on 2026-08-07 for the
+    # bounded phase-C measurement, and it can neither complete a cell
+    # nor write a checkpoint or result.
     for execution_class in sorted(e8b_run.EXECUTION_CLASSES):
+        if execution_class == "throughput-calibration":
+            check("the bounded calibration path is authorised, and only "
+                  "it",
+                  e8b_run.authorize_optimizer_path(
+                      execution_class, "check")["authorised_by"]
+                  == e8b_run.THROUGHPUT_CALIBRATION_AUTHORIZED)
+            continue
         must_fail(f"the optimizer path refuses class {execution_class!r} "
                   f"while authorisation is withheld",
                   lambda c=execution_class:
@@ -2238,9 +2266,16 @@ def test_remediation_known_negatives() -> None:
         check("the reconciliation total matches the live projection",
               abs(rb["current_estimate_hours"]
                   - rb["component_sum_hours"]) < 0.01)
+        # "Not weakened" is about the CEILING, not about whether the
+        # projection happens to fit under it. The measured projection
+        # now exceeds 35 h, and the correct response is to say so and
+        # halt -- not to move the ceiling.
         check("the ceiling is not weakened",
-              rb["ceiling_hours"] == 35.0
-              and rb["current_estimate_hours"] < 35.0)
+              rb["ceiling_hours"] == 35.0)
+        if rb["current_estimate_hours"] >= 35.0:
+            check("a breach halts and is escalated rather than absorbed",
+                  rb["ceiling_breached"] is True
+                  and rb["decision_required_from_user"] is not None)
         check("every old-to-current line states its effect",
               all("effect_on_identity_hours" in line
                   for line in rb["reconciliation_old_to_current"]))
@@ -2472,9 +2507,19 @@ def test_audit_known_negatives() -> None:
           "so the gate and the record cannot drift apart",
           abs(gate["projected_total_hours"] - published) < 0.01,
           f"{gate['projected_total_hours']} vs {published}")
-    check("the full planned programme does not breach the ceiling",
-          gate["fires"] is False
-          and gate["ceiling_hours"] == 35.0)
+    # The MEASURED programme breaches the ceiling. That is a real
+    # result, not a test failure: the gate must report it and the
+    # ceiling must stay at 35 h.
+    check("the ceiling itself is unchanged at 35 h",
+          gate["ceiling_hours"] == 35.0)
+    check("the gate's verdict follows its own arithmetic",
+          gate["fires"] is (gate["projected_total_hours"] > 35.0))
+    if gate["fires"]:
+        check("the breach is caught at the FIRST cell, before any GPU "
+              "work, because the gate reserves the unrun cells",
+              e8b_run.per_identity_gate(
+                  "B3", per_cell["lm_train_40k"], ledger={"cells": {}},
+                  cell=("B3", "train_40k", 0))["fires"] is True)
     check("the gate counts committed-but-unspent work, or it would "
           "green-light a cell leaving no room for the readouts",
           gate["committed_not_yet_spent_hours"] > 0)
@@ -2492,10 +2537,13 @@ def test_audit_known_negatives() -> None:
           and abs(first["projected_total_hours"] - published) < 0.01,
           f"reserved {first['reserved_for_unrun_cells_hours']}, "
           f"total {first['projected_total_hours']}")
-    # Find the smallest 250k overrun that fires, and assert the ceiling
-    # bites somewhere sane rather than at a hard-coded percentage.
-    fired_at = None
+    # Find the smallest 250k overrun that fires. With the measured
+    # projection already over the ceiling this fires at once, which is
+    # itself the correct answer.
+    fired_at = 0 if gate["fires"] else None
     for percent in range(1, 60):
+        if fired_at is not None:
+            break
         over = {"cells": {
             k: dict(v, processes=[h * (1 + percent / 100)
                                   if v["scale"] == "train_250k" else h
@@ -2504,8 +2552,8 @@ def test_audit_known_negatives() -> None:
         if e8b_run.per_identity_gate("B3", 0.0, ledger=over)["fires"]:
             fired_at = percent
             break
-    check("the ceiling FIRES on a modest overrun of the never-measured "
-          "250k rate, and the margin is thin enough to matter",
+    check("the ceiling fires on the measured programme, or on a modest "
+          "overrun of it",
           fired_at is not None and fired_at <= 20,
           f"fires at +{fired_at}%")
     check("the storage gate is structurally capable of firing",
@@ -2532,7 +2580,7 @@ def test_audit_known_negatives() -> None:
     # --- C-HIGH-2: no rate may be labelled measured unless it is ---
     measured = projection["measured_inputs"]
     for key in measured:
-        if str(measured[key]) == "5.301" or measured[key] == 0.0291:
+        if str(measured[key]) == "5.301":
             check(f"the untraceable rate under {key} is NOT presented "
                   f"as a measurement",
                   "ASSUMED" in key or "UNSOURCED" in key, key)
@@ -2549,15 +2597,27 @@ def test_audit_known_negatives() -> None:
     check("the G14 row cost records the real pooled measurement beside "
           "the assumption",
           "G14_ROW_S_MEASURED_POOLED = 5.139" in gsrc)
-    check("the R2/R3 rates are declared unsourced for E8B",
-          "BOTH ARE UNSOURCED" in gsrc)
+    # Superseded by measurement on 2026-08-07. What must hold now is
+    # that the withdrawn assumption is still recorded as withdrawn and
+    # the replacement is a real end-to-end measurement.
+    check("the evaluation pass cost is MEASURED, not assumed",
+          "EVAL_PASS_S_PER_ROW" in gsrc
+          and "MEASURED on 2026-08-07" in gsrc)
+    check("the withdrawn unsourced assumption is still marked as such",
+          "SUPERSEDED. The per-row costs below were UNSOURCED" in gsrc)
+    check("the false E7b provenance stays withdrawn after the "
+          "measurement replaced it",
+          "MILLISECONDS" in gsrc)
     # The raw denominator and the B1 intervention conditions.
     check("readouts are budgeted over the 10,004-row RAW denominator",
           "N_RAW = 10004" in gsrc
-          and "N_RAW * (R2_ROW_S + R3_ROW_S)" in gsrc)
-    check("every trained checkpoint including B1 is charged its three "
-          "intervention conditions",
-          "3 * hours(EVAL_FP32_S))" in gsrc)
+          and "N_RAW * EVAL_PASS_S_PER_ROW" in gsrc)
+    check("all four matched conditions are budgeted, not just the "
+          "readouts",
+          "3 * eval_pass_hours" in gsrc)
+    check("every trained checkpoint including B1 is charged all four "
+          "conditions",
+          "6 * 4 * b1_pass" in gsrc)
 
     # --- C-HIGH-3: the section-19 efficiency pass must be costed ---
     check("the efficiency pass is charged to the pretrained identity",
@@ -2606,13 +2666,27 @@ def test_audit_known_negatives() -> None:
                   for r in recon["open_risks"])
           and any("FALSE" in json.dumps(r)
                   for r in recon["open_risks"]))
-    check("the verdict states the margin plainly and records the zero "
-          "retry allowance",
-          "under half an hour" in recon["verdict"]
-          and "retry allowance of NONE" in recon["verdict"])
-    check("the verdict leaves the decision with the user rather than "
-          "reassuring them",
-          "the user's decision" in recon["verdict"])
+    if recon.get("ceiling_breached"):
+        check("a breached ceiling is stated as a breach, first word",
+              recon["verdict"].startswith("DOES NOT FIT"))
+        check("the breach names the amount and says execution stops",
+              "exceeding it by" in recon["verdict"]
+              and "STOPS and returns to the user" in recon["verdict"])
+        check("the verdict states that nothing was descoped and the "
+              "ceiling was not raised",
+              "has NOT been raised" in recon["verdict"]
+              and "nothing has been descoped" in recon["verdict"])
+        check("the decision is escalated, with the options NOT taken",
+              recon["decision_required_from_user"] is not None
+              and len(recon["decision_required_from_user"][
+                  "not_taken_unilaterally"]) >= 4)
+    else:
+        check("the verdict states the margin plainly and records the "
+              "zero retry allowance",
+              "under half an hour" in recon["verdict"]
+              and "retry allowance of NONE" in recon["verdict"])
+        check("the verdict leaves the decision with the user",
+              "the user's decision" in recon["verdict"])
     # Both counts must be DERIVED from the lists they describe: an
     # earlier verdict said five omissions above a list of four, and
     # five risks above a list of six.
@@ -2624,10 +2698,14 @@ def test_audit_known_negatives() -> None:
     check("the risk counts are derived from the risk list",
           risks["total"] == len(recon["open_risks"])
           and risks["can_exhaust_the_remaining_margin"] <= risks["total"])
-    check("the verdict's risk counts match the derived summary",
-          f"{risks['total']} open risks" in recon["verdict"]
-          and f"{risks['can_exhaust_the_remaining_margin']} could each"
-          in recon["verdict"])
+    # The breach verdict does not restate the risk counts: the margin
+    # is already gone, so "any one of these could exhaust it" no longer
+    # describes the situation. The counts remain derived in the summary.
+    if not recon.get("ceiling_breached"):
+        check("the verdict's risk counts match the derived summary",
+              f"{risks['total']} open risks" in recon["verdict"]
+              and f"{risks['can_exhaust_the_remaining_margin']} could "
+                  f"each" in recon["verdict"])
     check("every omission is recorded as having raised the total",
           "UPWARD" in omissions["direction"]
           and "upper bound" in omissions["direction"])
@@ -3219,6 +3297,218 @@ def test_core_call_signatures() -> None:
               signature is not None)
 
 
+# --- 26k. The 2026-08-07 resource and evaluation readiness phase --------------
+
+def test_readiness_phase() -> None:
+    """The raw denominator, the evaluation pipeline, the two
+    measurements and the recomputed budget."""
+    from experiments.e8b_readout_generation import final_evaluation as fe
+    from experiments.e8b_readout_generation import build_raw_dev
+
+    results = PROJECT_ROOT / "results" / "experiments" / \
+        "e8b_readout_generation"
+
+    # --- the raw denominator ---
+    raw_path = PROJECT_ROOT / "data" / "v2" / "dev_raw.csv"
+    check("the 10,004-row raw denominator exists", raw_path.exists())
+    manifest = json.loads(
+        (results / "raw_dev_manifest_20260807.json").read_text()
+    )["e8b_raw_dev_manifest"]
+    check("the raw denominator has exactly 10,004 rows",
+          manifest["rows"] == 10004, str(manifest["rows"]))
+    check("its in-vocabulary subset reproduces dev.csv row for row",
+          manifest["verification"][
+              "in_vocabulary_subset_reproduces_dev_csv"] is True)
+    check("its questionId set equals the recorded manifest",
+          manifest["verification"][
+              "questionid_set_equals_recorded_manifest"] is True)
+    check("coverage matches the Day-1 recorded value",
+          abs(manifest["coverage"] - 0.7711) < 0.0005,
+          str(manifest["coverage"]))
+    check("the raw build never touches the clean test",
+          manifest["clean_test_accessed"] is False)
+
+    # --- the token extension, and the pinned stores it must not touch ---
+    extension = json.loads(
+        (results / "raw_token_extension_20260807.json").read_text()
+    )["e8b_raw_token_extension"]
+    check("the out-of-vocabulary rows got their question tokens",
+          extension["questions_extracted"] == 2290)
+    check("the PINNED token stores were left byte-identical",
+          extension["pinned_stores_unchanged"]["verified"] is True)
+    check("the extension performed no optimizer step",
+          extension["NON_TRAINING"] is True
+          and extension["optimizer_steps"] == 0)
+
+    # --- the evaluation pipeline ---
+    check("the pipeline evaluates all four matched conditions",
+          set(fe.CONDITIONS) == {"normal", "fixed_image",
+                                 "fixed_question", "shuffled_image"})
+    check("the pipeline runs all three readouts",
+          set(fe.READOUTS) == {"R1", "R2", "R3"})
+    esrc = (E8B_DIR / "final_evaluation.py").read_text()
+    # By AST, not substring: the function's own comment explains why it
+    # avoids r1_cached, so a text search finds the name it forbids.
+    evaluate = next(n for n in ast.walk(ast.parse(esrc))
+                    if isinstance(n, ast.FunctionDef)
+                    and n.name == "evaluate_condition")
+    called = {n.func.attr for n in ast.walk(evaluate)
+              if isinstance(n, ast.Call)
+              and isinstance(n.func, ast.Attribute)}
+    check("R1 uses the CANONICAL BATCHED scorer, not the per-row "
+          "cross-check scorer that costs ninety times more",
+          "r1_scores_batched" in called and "r1_cached" not in called,
+          str(sorted(called)))
+    check("R2 and R3 still walk per row, as they must",
+          "r2_cached" in called and "r3_generate" in called)
+    check("closed readouts derive raw accuracy EXACTLY, not by estimate",
+          "EXACT, not estimated" in esrc)
+    check("nothing is renormalised away",
+          "renormalised" in esrc.lower())
+    # The padding-aware neutral input, which a naive mean gets wrong.
+    check("neutral inputs are padding-aware",
+          "valid_per_position" in esrc)
+
+    validation = json.loads(
+        (results / "evaluation_pipeline_validation_20260807.json"
+         ).read_text())["e8b_evaluation_pipeline_validation"]
+    check("the pipeline validation is marked NON_SCIENTIFIC",
+          validation["NON_SCIENTIFIC"] is True)
+    check("it says plainly why it is not a result",
+          "abandoned" in validation["why_not_a_result"])
+    check("it exercised both denominators",
+          validation["in_vocabulary_rows"] > 0
+          and validation["out_of_vocabulary_rows"] > 0)
+    check("it executed every condition and readout",
+          set(validation["conditions_executed"]) == set(fe.CONDITIONS)
+          and set(validation["readouts_executed"]) == set(fe.READOUTS))
+    check("the derangement has zero self-pairs",
+          validation["derangement"]["self_pairs"] == 0)
+    for condition in fe.CONDITIONS:
+        scored = validation["scored"][condition]
+        check(f"{condition} reports both denominators and both scorers",
+              {"R1_in_vocabulary", "R1_raw_denominator",
+               "R3_in_vocabulary", "R3_raw_denominator"} <= set(scored))
+        check(f"{condition} keeps invalid R3 output in the denominator",
+              sum(scored["R3_outcomes"]["counts"].values())
+              == validation["rows_evaluated"])
+    check("the paired-contrast machinery ran",
+          "mcnemar" in validation["paired_contrast_demo"]
+          and "image_clustered_bootstrap"
+          in validation["paired_contrast_demo"])
+    check("the bootstrap is image-clustered, not row-level",
+          validation["paired_contrast_demo"][
+              "image_clustered_bootstrap"]["n_images"] > 0)
+
+    # --- the readout cost measurement ---
+    cost = json.loads(
+        (results / "readout_cost_measurement_20260807.json").read_text()
+    )["e8b_readout_cost_measurement"]
+    check("the cost measurement is NON_SCIENTIFIC", cost["NON_SCIENTIFIC"])
+    check("it separates the canonical batched R1 from the per-row "
+          "cross-check scorer",
+          "R1_batched" in cost["warm_per_row_seconds"]
+          and "R1_cached" in cost["warm_per_row_seconds"])
+    check("the per-row cross-check scorer really is far more expensive, "
+          "which is why costing the pass with it was wrong",
+          cost["warm_per_row_seconds"]["R1_cached"]["mean_s"]
+          > 10 * cost["warm_per_row_seconds"]["R1_batched"]["mean_s"])
+    check("cold and warm are reported separately",
+          set(cost["cold_vs_warm"]) == set(cost["warm_per_row_seconds"]))
+    check("the R3 length distribution is reported",
+          cost["r3_generated_length"]["mean"] > 0
+          and cost["r3_generated_length"]["max"] > 0)
+    check("memory is reported and under the ceiling",
+          cost["memory"]["fires"] is False)
+    check("the combined pass is measured end to end, not composed",
+          "MEASURED end to end at batch 128" in cost[
+              "projected_over_raw_denominator"]["combined_pass_basis"])
+    check("the measurement charges its own cost",
+          cost["measurement_cost"]["hours"] > 0)
+    check("R2 and R3 were CHEAPER than the withdrawn assumption",
+          cost["against_the_assumption"]["ratio"] < 1.0)
+
+    # --- the throughput calibration ---
+    calibration = json.loads(
+        (results / "throughput_calibration_20260807.json").read_text()
+    )["e8b_throughput_calibration"]
+    check("the calibration is NON_SCIENTIFIC and bounded",
+          calibration["NON_SCIENTIFIC"] is True
+          and calibration["bounded"]["epochs_completed"] == 0
+          and calibration["bounded"]["checkpoints_written"] == 0
+          and calibration["bounded"]["results_written"] == 0)
+    equivalence = calibration["graph_equivalence"]
+    check("B2/B3 equivalence is PROVEN structurally before it is used",
+          equivalence["all_structural_properties_identical"] is True
+          and all(equivalence["identical"].values()))
+    check("the two arms differ ONLY in frozen weight values",
+          equivalence["differs_as_intended"]["frozen_weight_values"]
+          is True)
+    empirical = calibration["empirical_equivalence"]
+    check("the static argument is CONFIRMED empirically, not trusted "
+          "on its own",
+          empirical["within_noise"] is True
+          and "CONFIRMED" in empirical["verdict"])
+    check("the empirical cross-check ran on the cheaper scale, so the "
+          "binding identity paid as little as possible",
+          empirical["scale"].startswith("train_40k"))
+    check("the 250k rate is now MEASURED",
+          calibration["measured_rates"]["s_per_epoch_250k_measured"] > 0)
+    check("the calibration charges each identity its own share",
+          calibration["calibration_cost"][
+              "charged_to_pretrained_identity_hours"]
+          < calibration["calibration_cost"][
+              "charged_to_random_identity_hours"])
+
+    # --- the recomputed budget ---
+    projection = json.loads(
+        (results / "core_resource_projection_20260807.json").read_text()
+    )["e8b_core_resource_projection"]
+    spent = projection["spent_compute_hours_itemised"]
+    check("this readiness phase charges its own compute as spent",
+          "readout_cost_measurement_20260807" in spent
+          and "throughput_calibration_pretrained_share" in spent
+          and "evaluation_pipeline_validation_UPPER_BOUND" in spent)
+    gate = projection["gates"]["pretrained_identity_35h"]
+    check("the ceiling is UNCHANGED at exactly 35 hours",
+          gate["ceiling_hours"] == 35.0)
+    check("the ceiling gate reports the measured position honestly",
+          gate["fires"] is (gate["projected_hours"] > 35.0))
+    reconciliation = json.loads(
+        (results / "identity_reconciliation_20260807.json").read_text()
+    )["e8b_identity_reconciliation"]
+    check("the reconciliation agrees with the projection",
+          reconciliation["current_estimate_hours"]
+          == gate["projected_hours"])
+    if gate["fires"]:
+        check("a breach is stated as a breach, not softened",
+              reconciliation["ceiling_breached"] is True
+              and reconciliation["verdict"].startswith("DOES NOT FIT"))
+        check("nothing was descoped and the ceiling was not raised",
+              reconciliation["decision_required_from_user"] is not None
+              and "raising the 35-hour ceiling"
+              in reconciliation["decision_required_from_user"][
+                  "not_taken_unilaterally"])
+
+    # --- the calibration path is the ONLY optimizer path open ---
+    check("only the throughput calibration is authorised",
+          e8b_run.EXECUTION_CLASSES["throughput-calibration"]
+          == e8b_run.THROUGHPUT_CALIBRATION_AUTHORIZED)
+    for execution_class in ("core-cell", "core-gate",
+                            "nonscientific-probe"):
+        must_fail(f"{execution_class} is STILL refused",
+                  lambda c=execution_class:
+                  e8b_run.authorize_optimizer_path(c, "known-negative"))
+    check("core training authorisation is UNCHANGED",
+          e8b_run.TRAINING_AUTHORIZED
+          == "core-matrix-frozen-pending-approval")
+
+    # --- the 18-cell order is deliverable ---
+    order = e8b_run.pair_preserving_order()
+    check("the pair-preserving order covers all 18 cells",
+          sorted(order) == sorted(e8b_run.CORE_CELLS))
+
+
 
 # --- 27. E7b serial-extension contracts ---------------------------------------
 
@@ -3472,6 +3762,7 @@ def run() -> None:
     test_core_call_signatures()
     test_call_arity_everywhere()
     test_records_reproduce_from_generators()
+    test_readiness_phase()
     test_serial_contract()
     test_serial_queries()
     test_provenance()

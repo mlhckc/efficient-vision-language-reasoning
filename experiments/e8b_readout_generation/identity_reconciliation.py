@@ -236,7 +236,24 @@ def derive(existing: dict, projection: dict) -> dict:
         f"whose object the fixed-endpoint rule eliminated, and by "
         f"pricing readouts per cell instead of through a pooled "
         f"evaluation-share fraction.")
+    breaches = gate["projected_hours"] >= gate["ceiling_hours"]
+    body["ceiling_breached"] = bool(breaches)
     body["verdict"] = (
+        f"DOES NOT FIT. The complete MEASURED programme projects to "
+        f"{gate['projected_hours']} h against the hard "
+        f"{gate['ceiling_hours']} h ceiling, exceeding it by "
+        f"{round(gate['projected_hours'] - gate['ceiling_hours'], 3)} h. "
+        f"Execution STOPS and returns to the user. The ceiling has NOT "
+        f"been raised and nothing has been descoped: both are the "
+        f"user's decision, not this record's. The overage is driven by "
+        f"the final evaluation, which is now measured rather than "
+        f"assumed -- four matched conditions over the 10,004-row raw "
+        f"denominator, at a measured 0.0603 s per row, costs "
+        f"about 4.02 h per pretrained cell-set against the 2.018 h "
+        f"previously budgeted. The measured 250k training rate came in "
+        f"BELOW its assumption and reduced the cell cost; it was the "
+        f"evaluation, not the training, that was underestimated."
+        if breaches else
         f"FITS, but the margin is now under half an hour: "
         f"{gate['projected_hours']} h against the hard "
         f"{gate['ceiling_hours']} h ceiling leaves "
@@ -252,6 +269,18 @@ def derive(existing: dict, projection: dict) -> dict:
         f"this margin, or to close the largest risk with a short "
         f"measurement first, is the user's decision and not one this "
         f"record can make.")
+    body["decision_required_from_user"] = {
+        "why": "the measured projection exceeds the hard ceiling, and "
+               "the instruction is explicit that execution stops rather "
+               "than auto-descoping or raising the ceiling",
+        "not_taken_unilaterally": [
+            "raising the 35-hour ceiling",
+            "reducing the number of matched conditions",
+            "evaluating interventions on the in-vocabulary denominator "
+            "instead of the raw one",
+            "dropping any core cell or arm"],
+        "note": "options and their measured costs are reported to the "
+                "user; none is applied here"} if breaches else None
     body["generator"] = ("experiments/e8b_readout_generation/"
                          "identity_reconciliation.py")
     body["clean_test_accessed"] = False

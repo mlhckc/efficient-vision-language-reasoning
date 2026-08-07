@@ -1,0 +1,322 @@
+{
+  "metadata": {
+    "timestamp": "2026-08-07T21:21:56",
+    "git_commit": "b933358",
+    "git_dirty": true,
+    "open_clip_version": "3.3.0",
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "h5py_version": "3.16.0",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "deterministic": true,
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "embed_dim": 512,
+    "top_k_answers": 100,
+    "n_train": 40000,
+    "n_val": 8000,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "hidden_dim": 512,
+    "dropout": 0.3,
+    "weight_decay": 0.0001
+  },
+  "e8b_evaluation_pipeline_validation": {
+    "NON_SCIENTIFIC": true,
+    "dated_utc": "2026-08-07",
+    "status": "NON-SCIENTIFIC IMPLEMENTATION VALIDATION - NOT A RESULT",
+    "why_not_a_result": "the checkpoint is a FROZEN EXPLORATORY artefact of the permanently abandoned eight-point search. It carries no core protocol family, it was trained under the superseded BF16 design, and it was selected by a rule the fixed-endpoint amendment withdrew. Every accuracy below exists only to show the machinery runs, and none may be quoted, ranked or placed beside a core result.",
+    "checkpoint": {
+      "path": "results/experiments/e8b_readout_generation/checkpoints/e8b_B3_train_40k_seed0_search1_best.pt",
+      "sha256": "d8fee72144e70b9cca517bee123204814aef02532d51985843d00d76d86e8d13"
+    },
+    "rows_evaluated": 32,
+    "in_vocabulary_rows": 16,
+    "out_of_vocabulary_rows": 16,
+    "conditions_executed": [
+      "normal",
+      "fixed_image",
+      "fixed_question",
+      "shuffled_image"
+    ],
+    "readouts_executed": [
+      "R1",
+      "R2",
+      "R3"
+    ],
+    "scored": {
+      "normal": {
+        "R1_in_vocabulary": {
+          "n": 16,
+          "raw_exact": 0.5625,
+          "normalised_exact": 0.5625
+        },
+        "R2_in_vocabulary": {
+          "n": 16,
+          "raw_exact": 0.5625,
+          "normalised_exact": 0.5625
+        },
+        "R1_raw_denominator": {
+          "n": 32,
+          "basis": "EXACT, not estimated: a closed readout can never emit an out-of-vocabulary answer, so every out-of-vocabulary row is a failure and raw accuracy is in-vocabulary accuracy times coverage",
+          "coverage": 0.5,
+          "raw_exact": 0.28125,
+          "normalised_exact": 0.28125
+        },
+        "R2_raw_denominator": {
+          "n": 32,
+          "basis": "EXACT, not estimated: a closed readout can never emit an out-of-vocabulary answer, so every out-of-vocabulary row is a failure and raw accuracy is in-vocabulary accuracy times coverage",
+          "coverage": 0.5,
+          "raw_exact": 0.28125,
+          "normalised_exact": 0.28125
+        },
+        "R3_in_vocabulary": {
+          "n": 16,
+          "raw_exact": 0.5625,
+          "normalised_exact": 0.5625
+        },
+        "R3_raw_denominator": {
+          "n": 32,
+          "raw_exact": 0.28125,
+          "normalised_exact": 0.28125
+        },
+        "R3_outcomes": {
+          "denominator": 32,
+          "counts": {
+            "in_vocabulary": 32,
+            "out_of_vocabulary": 0,
+            "empty": 0,
+            "overlong": 0
+          },
+          "rates": {
+            "in_vocabulary": 1.0,
+            "out_of_vocabulary": 0.0,
+            "empty": 0.0,
+            "overlong": 0.0
+          },
+          "note": "every emission stays in the denominator; invalid outputs are counted, never excluded"
+        },
+        "seconds": 4.495
+      },
+      "fixed_image": {
+        "R1_in_vocabulary": {
+          "n": 16,
+          "raw_exact": 0.5625,
+          "normalised_exact": 0.5625
+        },
+        "R2_in_vocabulary": {
+          "n": 16,
+          "raw_exact": 0.5625,
+          "normalised_exact": 0.5625
+        },
+        "R1_raw_denominator": {
+          "n": 32,
+          "basis": "EXACT, not estimated: a closed readout can never emit an out-of-vocabulary answer, so every out-of-vocabulary row is a failure and raw accuracy is in-vocabulary accuracy times coverage",
+          "coverage": 0.5,
+          "raw_exact": 0.28125,
+          "normalised_exact": 0.28125
+        },
+        "R2_raw_denominator": {
+          "n": 32,
+          "basis": "EXACT, not estimated: a closed readout can never emit an out-of-vocabulary answer, so every out-of-vocabulary row is a failure and raw accuracy is in-vocabulary accuracy times coverage",
+          "coverage": 0.5,
+          "raw_exact": 0.28125,
+          "normalised_exact": 0.28125
+        },
+        "R3_in_vocabulary": {
+          "n": 16,
+          "raw_exact": 0.5625,
+          "normalised_exact": 0.5625
+        },
+        "R3_raw_denominator": {
+          "n": 32,
+          "raw_exact": 0.28125,
+          "normalised_exact": 0.28125
+        },
+        "R3_outcomes": {
+          "denominator": 32,
+          "counts": {
+            "in_vocabulary": 32,
+            "out_of_vocabulary": 0,
+            "empty": 0,
+            "overlong": 0
+          },
+          "rates": {
+            "in_vocabulary": 1.0,
+            "out_of_vocabulary": 0.0,
+            "empty": 0.0,
+            "overlong": 0.0
+          },
+          "note": "every emission stays in the denominator; invalid outputs are counted, never excluded"
+        },
+        "seconds": 4.327
+      },
+      "fixed_question": {
+        "R1_in_vocabulary": {
+          "n": 16,
+          "raw_exact": 0.125,
+          "normalised_exact": 0.125
+        },
+        "R2_in_vocabulary": {
+          "n": 16,
+          "raw_exact": 0.125,
+          "normalised_exact": 0.125
+        },
+        "R1_raw_denominator": {
+          "n": 32,
+          "basis": "EXACT, not estimated: a closed readout can never emit an out-of-vocabulary answer, so every out-of-vocabulary row is a failure and raw accuracy is in-vocabulary accuracy times coverage",
+          "coverage": 0.5,
+          "raw_exact": 0.0625,
+          "normalised_exact": 0.0625
+        },
+        "R2_raw_denominator": {
+          "n": 32,
+          "basis": "EXACT, not estimated: a closed readout can never emit an out-of-vocabulary answer, so every out-of-vocabulary row is a failure and raw accuracy is in-vocabulary accuracy times coverage",
+          "coverage": 0.5,
+          "raw_exact": 0.0625,
+          "normalised_exact": 0.0625
+        },
+        "R3_in_vocabulary": {
+          "n": 16,
+          "raw_exact": 0.125,
+          "normalised_exact": 0.125
+        },
+        "R3_raw_denominator": {
+          "n": 32,
+          "raw_exact": 0.0625,
+          "normalised_exact": 0.0625
+        },
+        "R3_outcomes": {
+          "denominator": 32,
+          "counts": {
+            "in_vocabulary": 27,
+            "out_of_vocabulary": 5,
+            "empty": 0,
+            "overlong": 0
+          },
+          "rates": {
+            "in_vocabulary": 0.84375,
+            "out_of_vocabulary": 0.15625,
+            "empty": 0.0,
+            "overlong": 0.0
+          },
+          "note": "every emission stays in the denominator; invalid outputs are counted, never excluded"
+        },
+        "seconds": 4.574
+      },
+      "shuffled_image": {
+        "R1_in_vocabulary": {
+          "n": 16,
+          "raw_exact": 0.6875,
+          "normalised_exact": 0.6875
+        },
+        "R2_in_vocabulary": {
+          "n": 16,
+          "raw_exact": 0.6875,
+          "normalised_exact": 0.6875
+        },
+        "R1_raw_denominator": {
+          "n": 32,
+          "basis": "EXACT, not estimated: a closed readout can never emit an out-of-vocabulary answer, so every out-of-vocabulary row is a failure and raw accuracy is in-vocabulary accuracy times coverage",
+          "coverage": 0.5,
+          "raw_exact": 0.34375,
+          "normalised_exact": 0.34375
+        },
+        "R2_raw_denominator": {
+          "n": 32,
+          "basis": "EXACT, not estimated: a closed readout can never emit an out-of-vocabulary answer, so every out-of-vocabulary row is a failure and raw accuracy is in-vocabulary accuracy times coverage",
+          "coverage": 0.5,
+          "raw_exact": 0.34375,
+          "normalised_exact": 0.34375
+        },
+        "R3_in_vocabulary": {
+          "n": 16,
+          "raw_exact": 0.6875,
+          "normalised_exact": 0.6875
+        },
+        "R3_raw_denominator": {
+          "n": 32,
+          "raw_exact": 0.34375,
+          "normalised_exact": 0.34375
+        },
+        "R3_outcomes": {
+          "denominator": 32,
+          "counts": {
+            "in_vocabulary": 31,
+            "out_of_vocabulary": 1,
+            "empty": 0,
+            "overlong": 0
+          },
+          "rates": {
+            "in_vocabulary": 0.96875,
+            "out_of_vocabulary": 0.03125,
+            "empty": 0.0,
+            "overlong": 0.0
+          },
+          "note": "every emission stays in the denominator; invalid outputs are counted, never excluded"
+        },
+        "seconds": 4.741
+      }
+    },
+    "paired_contrast_demo": {
+      "arm_a": "normal",
+      "arm_b": "fixed_image",
+      "accuracy_a": 0.28125,
+      "accuracy_b": 0.28125,
+      "difference": 0.0,
+      "mcnemar": {
+        "only_a": 2,
+        "only_b": 2,
+        "test": "exact binomial, two-sided",
+        "p_value": 1.0
+      },
+      "image_clustered_bootstrap": {
+        "draws": 2000,
+        "seed": 0,
+        "n_images": 3,
+        "ci95_low": -0.045455,
+        "ci95_high": 0.2,
+        "excludes_zero": false,
+        "why_clustered": "rows share images, so a row-level interval would be too narrow and would overstate significance"
+      }
+    },
+    "derangement": {
+      "construction": "rejection-sampled permutation of the sorted unique imageIds until it has no fixed point",
+      "rng": "np.random.default_rng(42)",
+      "seed": 42,
+      "draws_until_derangement": 3,
+      "n_images": 3,
+      "self_pairs": 0,
+      "sha256": "a11cb0dc3b112f261ecb39512476997d7cfae718e35d9931ff39c1c779dbd100"
+    },
+    "neutral_inputs": {
+      "basis": "mean over the evaluation set's cached token tensors",
+      "image_sha256": "06d7dc32cde76c89fa963db3b7b32aa300f783bd510652209b8a3a3d74b76a49",
+      "question_sha256": "33d6ff39658aec3ed3ee7799c7d21f2bca4dc9a0a90f01fc0ec360bc4dd0d3a5"
+    },
+    "per_row_records": "results/experiments/e8b_readout_generation/validation_per_row_20260807.npz",
+    "determinism_verified_at_use": {
+      "deterministic_algorithms": true,
+      "warn_only": false,
+      "flash_sdp": false,
+      "mem_efficient_sdp": false,
+      "math_sdp": true,
+      "cudnn_deterministic": true,
+      "cublas_workspace_config": ":4096:8"
+    },
+    "frozen_model": {
+      "arm_model": "pretrained",
+      "pinned_revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2"
+    },
+    "optimizer_steps": 0,
+    "clean_test_accessed": false
+  }
+}

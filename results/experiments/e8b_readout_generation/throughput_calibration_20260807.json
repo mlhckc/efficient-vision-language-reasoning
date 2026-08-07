@@ -1,0 +1,163 @@
+{
+  "metadata": {
+    "timestamp": "2026-08-07T21:45:36",
+    "git_commit": "b933358",
+    "git_dirty": true,
+    "open_clip_version": "3.3.0",
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "h5py_version": "3.16.0",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "deterministic": true,
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "embed_dim": 512,
+    "top_k_answers": 100,
+    "n_train": 40000,
+    "n_val": 8000,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "hidden_dim": 512,
+    "dropout": 0.3,
+    "weight_decay": 0.0001
+  },
+  "e8b_throughput_calibration": {
+    "NON_SCIENTIFIC": true,
+    "dated_utc": "2026-08-07",
+    "status": "NON-SCIENTIFIC BOUNDED THROUGHPUT CALIBRATION - no cell was completed, no checkpoint written, no result produced",
+    "authorised_by": "the user's phase-C instruction of 2026-08-07",
+    "graph_equivalence": {
+      "identical": {
+        "architecture_config_hash": true,
+        "frozen_parameter_count": true,
+        "frozen_shapes": true,
+        "trainable_names_and_shapes": true,
+        "trainable_count": true
+      },
+      "differs_as_intended": {
+        "frozen_weight_values": true
+      },
+      "all_structural_properties_identical": true,
+      "conclusion": "B2 and B3 present the SAME compute graph: identical architecture, identical frozen shapes, identical trainable parameter names, shapes and count, and identical optimizer construction. They differ ONLY in the values of frozen weights. Training throughput is a function of shapes and operations, not of values, and this forward has no data-dependent control flow, so B2 is a valid throughput proxy for B3. This static argument is confirmed empirically below rather than trusted on its own.",
+      "per_arm": {
+        "B3": {
+          "config_sha256": "1d556eab73b69c7f11f64c557a2f9c6f440bd4c6b89bb2584a6b498c92603843",
+          "frozen_parameter_count": 134515008,
+          "trainable_count": 21343808,
+          "frozen_shapes_sha256": "3abd8a2f850e12310fe13fe77d258f0d2055292efe8f7d2d671476b4c7a9adb5",
+          "projection_scale": {
+            "target_rms_s": 0.13466305,
+            "initial_projection_rms_r0": 0.5687579,
+            "alpha": 0.23676691,
+            "rule": "alpha = s / r0; identical alpha for both pair members; interface-initialisation parity, not native-embedding-distribution parity"
+          },
+          "parameter_state_sha256": "20add223ddf2bc38dfdf4ffa8833e3f62cce2c21807afb41cbb281b2435b8f3d"
+        },
+        "B2": {
+          "config_sha256": "1d556eab73b69c7f11f64c557a2f9c6f440bd4c6b89bb2584a6b498c92603843",
+          "frozen_parameter_count": 134515008,
+          "trainable_count": 21343808,
+          "frozen_shapes_sha256": "3abd8a2f850e12310fe13fe77d258f0d2055292efe8f7d2d671476b4c7a9adb5",
+          "projection_scale": {
+            "target_rms_s": 0.13466305,
+            "initial_projection_rms_r0": 0.5687579,
+            "alpha": 0.23676691,
+            "rule": "alpha = s / r0; identical alpha for both pair members; interface-initialisation parity, not native-embedding-distribution parity"
+          },
+          "parameter_state_sha256": "c6666d3ce0af64ae784d61562f9ea7e56e2b214220f26bbd2d6fd0999bce474b"
+        }
+      }
+    },
+    "empirical_equivalence": {
+      "steps_per_arm": 25,
+      "warmup_steps": 20,
+      "scale": "train_40k, the cheaper scale, so the pretrained identity pays as little as possible to confirm the proxy",
+      "B2": {
+        "arm": "B2",
+        "scale": "train_40k",
+        "warmup_steps": 20,
+        "measured_steps": 25,
+        "mean_s_per_step": 0.234282,
+        "median_s_per_step": 0.233904,
+        "p90_s_per_step": 0.240541,
+        "stdev_s_per_step": 0.003816,
+        "peak_reserved_mib": 6824.0,
+        "total_s": 5.86
+      },
+      "B3": {
+        "arm": "B3",
+        "scale": "train_40k",
+        "warmup_steps": 20,
+        "measured_steps": 25,
+        "mean_s_per_step": 0.23483,
+        "median_s_per_step": 0.234598,
+        "p90_s_per_step": 0.241013,
+        "stdev_s_per_step": 0.003755,
+        "peak_reserved_mib": 6842.0,
+        "total_s": 5.87
+      },
+      "b3_over_b2_ratio": 1.0023,
+      "within_noise": true,
+      "criterion": "the difference in mean step time is within three times the larger per-step standard deviation",
+      "verdict": "CONFIRMED: B2 and B3 train at the same rate, so B2 validly calibrates B3's throughput"
+    },
+    "calibration_250k": {
+      "arm": "B2",
+      "scale": "train_250k",
+      "warmup_steps": 20,
+      "measured_steps": 60,
+      "mean_s_per_step": 0.235672,
+      "median_s_per_step": 0.235907,
+      "p90_s_per_step": 0.242174,
+      "stdev_s_per_step": 0.003388,
+      "peak_reserved_mib": 6920.0,
+      "total_s": 14.14
+    },
+    "measured_rates": {
+      "s_per_step_250k": 0.235672,
+      "s_per_epoch_250k_measured": 460.5,
+      "s_per_epoch_40k_measured": 73.33,
+      "steps_per_epoch": {
+        "train_40k": 313,
+        "train_250k": 1954
+      }
+    },
+    "against_the_assumption": {
+      "assumed_s_per_epoch_40k": 78.3,
+      "assumed_s_per_epoch_250k_step_scaled": 488.81,
+      "measured_s_per_epoch_250k": 460.5,
+      "ratio_measured_over_assumed": 0.9421,
+      "verdict": "the step-scaled assumption was CONSERVATIVE"
+    },
+    "calibration_cost": {
+      "total_hours": 0.01598,
+      "charged_to_pretrained_identity_hours": 0.00163,
+      "charged_to_random_identity_hours": 0.00556,
+      "note": "only the B3 cross-check touches the pretrained identity, and it is deliberately the smaller half of the smaller scale"
+    },
+    "bounded": {
+      "steps_run": 170,
+      "epochs_completed": 0,
+      "checkpoints_written": 0,
+      "results_written": 0
+    },
+    "determinism_verified_at_use": {
+      "deterministic_algorithms": true,
+      "warn_only": false,
+      "flash_sdp": false,
+      "mem_efficient_sdp": false,
+      "math_sdp": true,
+      "cudnn_deterministic": true,
+      "cublas_workspace_config": ":4096:8"
+    },
+    "clean_test_accessed": false
+  }
+}

@@ -111,7 +111,17 @@ EXECUTION_CLASSES = {
     "core-gate": "core-matrix-approved",
     # the non-scientific determinism probe; its standing grant is revoked
     "nonscientific-probe": "oi1-determinism-probe-2026-08-07",
+    # the non-scientific throughput calibration authorised by the user on
+    # 2026-08-07 (phase C). It runs a BOUNDED number of real training
+    # steps on the real strict-deterministic BF16 path to replace the
+    # unmeasured 250k rate with a measurement. It may never complete a
+    # cell, write a scientific checkpoint or promote a result.
+    "throughput-calibration": "throughput-calibration-2026-08-07",
 }
+
+# Granted by the user on 2026-08-07 for phase C only. Bounded: a fixed
+# step count, no cell completion, no checkpoint, no result.
+THROUGHPUT_CALIBRATION_AUTHORIZED = "throughput-calibration-2026-08-07"
 
 
 def authorize_optimizer_path(execution_class: str, context: str) -> dict:
@@ -126,7 +136,12 @@ def authorize_optimizer_path(execution_class: str, context: str) -> dict:
                  f"class {execution_class!r}; every optimizer path must "
                  f"declare one of {sorted(EXECUTION_CLASSES)}")
     required = EXECUTION_CLASSES[execution_class]
-    if execution_class == "nonscientific-probe":
+    if execution_class == "throughput-calibration":
+        granted = THROUGHPUT_CALIBRATION_AUTHORIZED
+        detail = ("the throughput calibration is authorised for phase C "
+                  "only: a bounded step count on the real training "
+                  "path, no cell completion, no checkpoint, no result")
+    elif execution_class == "nonscientific-probe":
         granted = NONSCIENTIFIC_PROBE_AUTHORIZED
         detail = ("the determinism probe's standing authorisation was "
                   f"REVOKED on {NONSCIENTIFIC_PROBE_REVOKED_ON}; it has "
@@ -1509,17 +1524,22 @@ SPEND_LEDGER = EXECUTION_LOCK_DIR / "e8b_gpu_hour_ledger.json"
 # Sourced from core_resource_projection_20260807.json.
 SPENT_BEFORE_CORE_HOURS = {
     # Actually spent: the abandoned search, the diagnostics, the
-    # superseded determinism probes, and the measured A1 core run.
-    "pretrained": 6.890 + 2.29222,
+    # superseded determinism probes, the measured A1 core run, and the
+    # 2026-08-07 readiness phase (readout cost measurement, the B3 share
+    # of the throughput calibration, and the pipeline validation).
+    # Sourced from core_resource_projection_20260807.json ->
+    # spent_compute_hours_itemised.
+    "pretrained": 7.058 + 2.29222,
     "random": 1.95811,
 }
 COMMITTED_NON_CELL_HOURS = {
     # Committed but not yet spent, all charged to the identity whose
     # frozen model they load:
     #   A4 1.804 and A7c 1.864 (protocol 13.2b);
-    #   the per-identity share of the final readouts, 2.018 -- R2 and R3
-    #     over the 10,004-row RAW denominator per canonical plan section
-    #     6, the raw-distribution R1 pass, and three interventions;
+    #   the per-identity share of the final readouts, 4.0215 -- MEASURED
+    #     on 2026-08-07: four matched conditions, each a complete
+    #     R1+R2+R3 pass over the 10,004-row RAW denominator at a
+    #     measured 0.0603 s per row;
     #   the section-19 serial efficiency measurement, 1.000, which loads
     #     the pretrained LM;
     #   the RETAINED but unrun parts of protocol 13.2b's A1 row, 0.813 =
@@ -1528,10 +1548,10 @@ COMMITTED_NON_CELL_HOURS = {
     #     0.087 and A1's matched interventions 0.090. BASE counts only
     #     the MEASURED A1 core-plus-extraction figure, so omitting these
     #     silently dropped work that is retained, not descoped.
-    "pretrained": 1.804 + 1.864 + 2.018 + 1.000 + 0.813,
+    "pretrained": 1.804 + 1.864 + 4.0215 + 1.000 + 0.813,
     # A1r's row retains the ablation, the middle-layer extraction and
     # its own matched interventions.
-    "random": 2.018 + 0.127 + 0.087 + 0.090,
+    "random": 4.0215 + 0.127 + 0.087 + 0.090,
 }
 
 
@@ -1600,8 +1620,8 @@ def committed_hours(identity: str) -> float:
 # projection so the gate can reserve the cells that have not run yet.
 # core_resource_projection_20260807.json -> per_cell_hours.
 CELL_PROJECTED_HOURS = {
-    ("B3", "train_40k"): 1.718, ("B3", "train_250k"): 4.226,
-    ("B2", "train_40k"): 1.718, ("B2", "train_250k"): 4.226,
+    ("B3", "train_40k"): 1.718, ("B3", "train_250k"): 4.131,
+    ("B2", "train_40k"): 1.718, ("B2", "train_250k"): 4.131,
     ("B1", "train_40k"): 0.287, ("B1", "train_250k"): 0.751,
 }
 def per_identity_gate(arm: str, additional_hours: float = 0.0,

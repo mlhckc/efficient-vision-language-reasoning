@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-07T20:55:42",
-    "git_commit": "6e97ca0",
+    "timestamp": "2026-08-07T21:48:36",
+    "git_commit": "b933358",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -118,14 +118,14 @@
     "enforcement": {
       "previously": "the 35 h per-identity ceiling and the storage gate existed only as constants and helper functions with no call site in the execution path, so neither could have halted anything. Nothing summed GPU hours across cells.",
       "now": "run.per_identity_gate reads an append-only ledger (gpu_hour_ledger.json) and is checked BEFORE every core cell against that cell's projected cost, then re-checked AFTER the cell against its MEASURED hours, which are charged to the ledger. run.storage_gate is checked before every cell. Both halt through gate_halt.",
-      "verified": "the executable gate reproduces the published 34.513 h to within rounding, and it RESERVES the cells that have not run yet -- charging each the greater of its projected and its actual cost -- so a rate overrun is detected on the first cell that shows it rather than after most of the arm is burned."
+      "verified": "the executable gate reproduces the published 36.399 h to within rounding, and it RESERVES the cells that have not run yet -- charging each the greater of its projected and its actual cost -- so a rate overrun is detected on the first cell that shows it rather than after most of the arm is burned."
     },
     "open_risks": [
       {
         "risk": "the R2 and R3 per-row costs are UNSOURCED",
         "detail": "no E8B R2 or R3 readout has ever run, and the previously claimed E7b provenance was FALSE: that figure is 0.0291 MILLISECONDS for a LayerNorm-plus-Linear stage, a different operation in units 1000x apart. No replacement provenance was invented.",
         "carries_hours": 1.214,
-        "exposure": "at 3x the assumed rate the headroom goes to -1.941 h",
+        "exposure": "at 3x the assumed rate the headroom goes to -3.827 h",
         "status": "OPEN: close with a measurement or accept explicitly before core execution",
         "can_exhaust_the_margin": true
       },
@@ -138,16 +138,16 @@
       {
         "risk": "the 250k training rate is unmeasured",
         "detail": "step-scaled from the measured 40k rate; no 250k E8B cell has ever run.",
-        "carries_hours": 12.679,
-        "exposure": "the ceiling is reached at a 3.84 per cent rise in per-cell cost",
+        "carries_hours": 12.394,
+        "exposure": "the ceiling is reached at a -11.29 per cent rise in per-cell cost",
         "status": "OPEN",
         "can_exhaust_the_margin": true
       },
       {
         "risk": "a forced retry is unaffordable and not improbable",
-        "detail": "G14 fired as a halting gate on one of the three completed search runs. One forced B3/250k retry costs 4.226 h against 0.487 h of headroom.",
+        "detail": "G14 fired as a halting gate on one of the three completed search runs. One forced B3/250k retry costs 4.131 h against -1.399 h of headroom.",
         "status": "OPEN: the recorded retry allowance is NONE, and no contingency exists",
-        "carries_hours": 4.226,
+        "carries_hours": 4.131,
         "can_exhaust_the_margin": true
       },
       {
@@ -171,10 +171,10 @@
     },
     "dated_utc": "2026-08-07",
     "old_estimate_hours": 32.686,
-    "current_estimate_hours": 34.513,
-    "headroom_hours": 0.487,
+    "current_estimate_hours": 36.399,
+    "headroom_hours": -1.399,
     "ceiling_hours": 35.0,
-    "net_change_hours": 1.827,
+    "net_change_hours": 3.713,
     "complete_programme_components": [
       {
         "component": "A1 measured baseline: protocol 13.2b's A1 core + extraction only",
@@ -194,11 +194,11 @@
       },
       {
         "component": "six B3 final core cells (fixed 22 epochs, FP32 eval, G14, gates)",
-        "hours": 17.832
+        "hours": 17.547
       },
       {
         "component": "B3 share of final readouts over the RAW denominator + 3 interventions",
-        "hours": 2.018
+        "hours": 4.0215
       },
       {
         "component": "section-19 serial efficiency pass (upper bound)",
@@ -206,10 +206,10 @@
       },
       {
         "component": "already-spent search + diagnostics (incl. superseded probes 1/2)",
-        "hours": 6.89
+        "hours": 7.058
       }
     ],
-    "component_sum_hours": 34.513,
+    "component_sum_hours": 36.4,
     "matches_generator": true,
     "retry_allowance": "NONE. The plan tolerates zero B3 retries; any retry or any additional B3-loading evaluation triggers a stop-and-ask BEFORE execution",
     "omissions_found_and_corrected": {
@@ -226,8 +226,8 @@
     },
     "residual_assumptions": [
       "This list is DERIVED from core_resource_projection_20260807.json -> residual_assumptions_quantified, which is itself computed from the same constants as the projection. It previously carried hand-written figures that went stale silently, and a withdrawn provenance that survived here after being corrected elsewhere in this same file.",
-      "the 250k training rate is step-scaled from the measured 40k rate and no 250k E8B cell has ever run. It carries 12.679 h, and the ceiling is reached at a 3.84 per cent rise in per-cell cost (4.42 per cent on the training rate alone).",
-      "NEITHER the R2 nor the R3 per-row cost is measured for E8B, and neither has a source; the previously claimed E7b provenance was FALSE. They carry 1.214 h; at 3x the assumed rate the identity rises by 2.428 h and the headroom goes to -1.941 h, i.e. EXHAUSTED.",
+      "the 250k training rate is step-scaled from the measured 40k rate and no 250k E8B cell has ever run. It carries 12.394 h, and the ceiling is reached at a -11.29 per cent rise in per-cell cost (-13.04 per cent on the training rate alone).",
+      "NEITHER the R2 nor the R3 per-row cost is measured for E8B, and neither has a source; the previously claimed E7b provenance was FALSE. They carry 1.214 h; at 3x the assumed rate the identity rises by 2.428 h and the headroom goes to -3.827 h, i.e. EXHAUSTED.",
       "OPTIMISTIC, NOT CONSERVATIVE. The pooled measurement covers R1 brute force plus R1 cached only, while the live gate also runs r2_brute_force and r2_cached per row under clause C3. The margin does not cover two extra constrained walks over 224 rows and 12 cells.",
       "A1 is the one arm of this family that has run. LIKE FOR LIKE against the components the measurement ACTUALLY COVERS -- core 1.774 + extraction 0.400 = 2.174 h, since resource_correction_g21.json decomposes the measured 2.29222 h as training 1.56262 + extraction 0.729599 and states interventions are reported separately and never added -- A1 came in 5.44 per cent ABOVE projection, and its extraction component alone overran by 82.4 per cent. Two earlier versions of this record were wrong in the same direction: '23 per cent BELOW' divided a partial measurement by the FULL protocol row, and '1.25 per cent ABOVE' credited an interventions component the measurement excludes. Both picked a more favourable framing than the evidence supports. The precedent is UNFAVOURABLE, not reassuring.",
       "protocol 13.2b's own estimates for work that has not run. The middle-layer figure in particular is an estimate whose measured sibling, the full extraction, overran by 82.4 per cent.",
@@ -244,8 +244,19 @@
         "the section-19 efficiency pass is charged to the pretrained identity only"
       ]
     },
-    "summary_of_change": "the pretrained identity projects to 34.513 h with 0.487 h of headroom. 5 separate omissions have been found and corrected across seven review rounds, enumerated under omissions_found_and_corrected; every one of them raised the total. The fall from the original 32.686 h is explained solely by removing the selection-sensitivity study, whose object the fixed-endpoint rule eliminated, and by pricing readouts per cell instead of through a pooled evaluation-share fraction.",
-    "verdict": "FITS, but the margin is now under half an hour: 34.513 h against the hard 35.0 h ceiling leaves 0.487 h, with a recorded retry allowance of NONE. The ceiling is NOT weakened and no core arm or cell was descoped; the one component that WAS removed is disclosed and costed separately. Of the 6 open risks listed above, 3 could each on their own exhaust the remaining margin. Seven review rounds have each moved this number toward the ceiling and never away from it, so it should be treated as an upper bound. Whether to proceed on this margin, or to close the largest risk with a short measurement first, is the user's decision and not one this record can make.",
+    "summary_of_change": "the pretrained identity projects to 36.399 h with -1.399 h of headroom. 5 separate omissions have been found and corrected across seven review rounds, enumerated under omissions_found_and_corrected; every one of them raised the total. The fall from the original 32.686 h is explained solely by removing the selection-sensitivity study, whose object the fixed-endpoint rule eliminated, and by pricing readouts per cell instead of through a pooled evaluation-share fraction.",
+    "ceiling_breached": true,
+    "verdict": "DOES NOT FIT. The complete MEASURED programme projects to 36.399 h against the hard 35.0 h ceiling, exceeding it by 1.399 h. Execution STOPS and returns to the user. The ceiling has NOT been raised and nothing has been descoped: both are the user's decision, not this record's. The overage is driven by the final evaluation, which is now measured rather than assumed -- four matched conditions over the 10,004-row raw denominator, at a measured 0.0603 s per row, costs about 4.02 h per pretrained cell-set against the 2.018 h previously budgeted. The measured 250k training rate came in BELOW its assumption and reduced the cell cost; it was the evaluation, not the training, that was underestimated.",
+    "decision_required_from_user": {
+      "why": "the measured projection exceeds the hard ceiling, and the instruction is explicit that execution stops rather than auto-descoping or raising the ceiling",
+      "not_taken_unilaterally": [
+        "raising the 35-hour ceiling",
+        "reducing the number of matched conditions",
+        "evaluating interventions on the in-vocabulary denominator instead of the raw one",
+        "dropping any core cell or arm"
+      ],
+      "note": "options and their measured costs are reported to the user; none is applied here"
+    },
     "generator": "experiments/e8b_readout_generation/identity_reconciliation.py",
     "clean_test_accessed": false
   }

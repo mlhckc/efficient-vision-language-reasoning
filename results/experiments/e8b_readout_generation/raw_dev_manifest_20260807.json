@@ -1,0 +1,97 @@
+{
+  "metadata": {
+    "timestamp": "2026-08-07T21:04:18",
+    "git_commit": "b933358",
+    "git_dirty": true,
+    "open_clip_version": "3.3.0",
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "h5py_version": "3.16.0",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "deterministic": true,
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "embed_dim": 512,
+    "top_k_answers": 100,
+    "n_train": 40000,
+    "n_val": 8000,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "hidden_dim": 512,
+    "dropout": 0.3,
+    "weight_decay": 0.0001
+  },
+  "e8b_raw_dev_manifest": {
+    "dated_utc": "2026-08-07",
+    "purpose": "the 10,004-row RAW denominator required by canonical plan section 6, with gold answers, so R3 can be scored on it. R1 and R2 are closed over the vocabulary, so their raw accuracy is in-vocabulary accuracy times coverage and needs no gold string; R3 generates freely and genuinely needs these.",
+    "path": "data/v2/dev_raw.csv",
+    "sha256": "26f2ca2ddcfb1c55f19397497c309c584b097fde3b1e5d57699af7bd3187aaa8",
+    "rows": 10004,
+    "in_vocabulary_rows": 7714,
+    "out_of_vocabulary_rows": 2290,
+    "coverage": 0.771092,
+    "verification": {
+      "questionid_set_equals_recorded_manifest": true,
+      "in_vocabulary_subset_reproduces_dev_csv": true,
+      "dev_csv_sha256": "95d1b504dcc4deb7d69ba0c9e293d1c00bae93df4b6907174a1dd615cb93cdc9",
+      "recorded_ids_sha256": "deaa0e621e066d872054280c846947ad0cd0e68748d041e624560e30c09f95b7",
+      "note": "both checks are refusals, not warnings: a mismatch raises before anything is written"
+    },
+    "out_of_vocabulary_answer_head": [
+      [
+        "stuffed dog",
+        31
+      ],
+      [
+        "entertainment center",
+        27
+      ],
+      [
+        "bagel",
+        24
+      ],
+      [
+        "bears",
+        20
+      ],
+      [
+        "brick",
+        19
+      ],
+      [
+        "fries",
+        19
+      ],
+      [
+        "concrete",
+        16
+      ],
+      [
+        "carriage",
+        15
+      ],
+      [
+        "polar bear",
+        15
+      ],
+      [
+        "elephants",
+        15
+      ]
+    ],
+    "source": {
+      "questions": "data/gqa/raw/train_balanced_questions.json",
+      "loader": "1_prepare_gqa.load_questions, reused verbatim",
+      "selection": "by the RECORDED questionIds in dev_raw_question_ids.json, not by re-deriving the partition"
+    },
+    "clean_test_accessed": false
+  }
+}

@@ -60,12 +60,33 @@ G14_ROWS = 64 + 160       # pre-selection P + post-selection P+L+O union
 GATE_OVERHEAD_H = 0.223   # measured non-G14 per-run gate overhead
 STEPS = {"train_40k": 313, "train_250k": 1954}
 RATIO_250K = STEPS["train_250k"] / STEPS["train_40k"]
+# MEASURED on 2026-08-07 (throughput_calibration_20260807.json): 60 timed
+# steps on the real train_250k loader and the real strict-deterministic
+# BF16 path, after 20 warmup steps. B2 was used and its validity as a
+# proxy for B3 was proven both statically (identical compute graph) and
+# empirically (0.2343 against 0.2348 s/step at 40k, within noise).
+# The P90 step time is used rather than the mean, following the
+# project's convention of costing at the conservative end.
+TRAIN_S_250K_MEASURED = 1954 * 0.2422      # 473.3 s/epoch
+TRAIN_S_250K_MEAN = 1954 * 0.2357          # 460.5 s/epoch, reported
+TRAIN_S_250K_ASSUMED_STEP_SCALED = 78.3 * RATIO_250K
 LM_EPOCHS = 22            # fixed budget, both scales (recipe-encoded)
 B1_S_40K = 15.27          # v3_01 measured, includes its dev pass
 B1_S_250K = 86.36         # v3_01/v3_03 MEASURED 250k rate (section 13.2)
 B1_EXPECTED = {"train_40k": 15, "train_250k": 22}   # section 7.1 planning
 B1_STRESS = 100           # section 7.3 patience cap
-# R2/R3 per-row costs. BOTH ARE UNSOURCED. No E8B R2 or R3 readout has
+# MEASURED on 2026-08-07 (readout_cost_measurement_20260807.json): the
+# complete evaluation pass -- prefix, R1, R2 and R3 for every row -- run
+# end to end at batch 128 over rows sampled across the raw denominator.
+# Measuring the pass as it actually runs, rather than composing per-part
+# timings, is what caught the real error here: the pipeline had been
+# costed with the per-row R1 cross-check scorer (1.42 s/row) instead of
+# the canonical batched one (0.093 s/row at batch 16, less at 128).
+EVAL_PASS_S_PER_ROW = 0.0603
+# The per-part warm figures, retained for reporting.
+R2_ROW_S_MEASURED, R3_ROW_S_MEASURED = 0.0161, 0.0158
+
+# SUPERSEDED. The per-row costs below were UNSOURCED. No E8B R2 or R3 readout has
 # ever been executed, so no per-row walk exists to measure.
 #
 # CORRECTION of 2026-08-07: an earlier version of this comment claimed
@@ -83,7 +104,7 @@ B1_STRESS = 100           # section 7.3 patience cap
 # rests on nothing measured. The exposure is quantified in
 # residual_assumptions_quantified and is an OPEN RISK for the user to
 # accept or to close with a measurement before core execution.
-R2_ROW_S, R3_ROW_S = 0.0291, 0.0437
+R2_ROW_S, R3_ROW_S = 0.0291, 0.0437   # superseded by measurement
 N_DEV = 7714       # in-vocabulary development rows
 # Canonical plan section 6: "Every readout evaluation runs once over the
 # 10,004-row raw denominator", and section 6.1 requires every final
@@ -169,6 +190,27 @@ def spent_compute() -> dict:
                 "determinism_probe"]["wall_seconds"]
     items["determinism_probes_1_to_4"] = round(probes / 3600, 3)
     items["paired_rescoring_and_micro_probes"] = 0.25  # ESTIMATE, upper
+    # The 2026-08-07 readiness phase, read from its own records. Only
+    # the parts that loaded the PRETRAINED language model are charged
+    # here; the calibration's B2 share is charged to the random identity
+    # and the CLIP-only token extension touches neither.
+    readout = D / "readout_cost_measurement_20260807.json"
+    if readout.exists():
+        items["readout_cost_measurement_20260807"] = json.loads(
+            readout.read_text())["e8b_readout_cost_measurement"][
+                "measurement_cost"]["hours"]
+    calibration = D / "throughput_calibration_20260807.json"
+    if calibration.exists():
+        items["throughput_calibration_pretrained_share"] = json.loads(
+            calibration.read_text())["e8b_throughput_calibration"][
+                "calibration_cost"][
+                    "charged_to_pretrained_identity_hours"]
+    validation = D / "evaluation_pipeline_validation_20260807.json"
+    if validation.exists():
+        # The pipeline validation loaded the pretrained model. Its wall
+        # was not instrumented, so it is charged at a deliberate upper
+        # bound rather than omitted.
+        items["evaluation_pipeline_validation_UPPER_BOUND"] = 0.05
     items["_total"] = round(sum(v for k, v in items.items()
                                 if not k.startswith("_")), 3)
     return items
@@ -176,7 +218,9 @@ def spent_compute() -> dict:
 
 def main() -> int:
     lm_epoch_40k = TRAIN_S_40K + EVAL_FP32_S
-    lm_epoch_250k = TRAIN_S_40K * RATIO_250K + EVAL_FP32_S
+    # MEASURED, not step-scaled. This was the single largest unmeasured
+    # quantity in the plan and the one whose break-even was tightest.
+    lm_epoch_250k = TRAIN_S_250K_MEASURED + EVAL_FP32_S
     g14_h = hours(G14_ROWS * G14_ROW_S)
     lm_cell_40k = hours(lm_epoch_40k * LM_EPOCHS) + g14_h + GATE_OVERHEAD_H
     lm_cell_250k = (hours(lm_epoch_250k * LM_EPOCHS) + g14_h
@@ -196,13 +240,16 @@ def main() -> int:
     # Final readout passes on the 12 LM canonical checkpoints: R1 comes
     # free from the epoch-22 pass; R2 and R3 are per-row walks; the three
     # intervention conditions are one canonical R1 pass each.
-    # R2 and R3 run over the RAW denominator, per plan section 6.
-    readouts_per_lm_cell = hours(N_RAW * (R2_ROW_S + R3_ROW_S))
-    # Each final checkpoint also receives a raw-distribution R1 pass, in
-    # addition to the in-vocabulary one that comes free from epoch 22.
-    raw_r1_per_cell = hours(EVAL_FP32_S * N_RAW / N_DEV)
-    readouts_per_lm_cell += raw_r1_per_cell
-    interventions_per_lm_cell = 3 * hours(EVAL_FP32_S)
+    # MEASURED. One evaluation pass computes the prefix once and runs
+    # R1, R2 and R3 from it over the RAW denominator, and the plan
+    # requires FOUR matched conditions -- normal, fixed image, fixed
+    # question and deranged image -- on every trained checkpoint. So a
+    # cell's final evaluation is four complete passes, not a readout
+    # cost plus a separate intervention cost.
+    eval_pass_hours = hours(N_RAW * EVAL_PASS_S_PER_ROW)
+    readouts_per_lm_cell = eval_pass_hours           # the normal pass
+    interventions_per_lm_cell = 3 * eval_pass_hours  # the three others
+    raw_r1_per_cell = eval_pass_hours
     final_eval_lm = 12 * (readouts_per_lm_cell + interventions_per_lm_cell)
     # B1 final classification evaluations: charged at the LM R1 pass
     # rate as a LABELLED UPPER BOUND (a classifier forward over dev costs
@@ -215,8 +262,11 @@ def main() -> int:
     # now 18 cells, so 54 passes. The arithmetic below is per cell and
     # is unaffected. Only six plain B1 passes were costed before,
     # omitting B1's 18 intervention passes and its raw pass.
-    final_eval_b1 = 6 * (hours(EVAL_FP32_S) + raw_r1_per_cell
-                         + 3 * hours(EVAL_FP32_S))
+    # B1 is a classifier: no LM, no R2, no R3. Its four conditions cost
+    # a canonical dev pass each, charged over the raw denominator as a
+    # labelled UPPER BOUND.
+    b1_pass = hours(EVAL_FP32_S * N_RAW / N_DEV)
+    final_eval_b1 = 6 * 4 * b1_pass
     # Section 19 mandates one E7a-protocol serial efficiency measurement
     # on the final selected checkpoints (serial_efficiency.py). Protocol
     # 13.2 costs it at 0.500-1.000 h; the UPPER bound is charged here.

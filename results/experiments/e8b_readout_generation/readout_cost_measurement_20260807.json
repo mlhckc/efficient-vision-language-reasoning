@@ -1,0 +1,228 @@
+{
+  "metadata": {
+    "timestamp": "2026-08-07T21:42:26",
+    "git_commit": "b933358",
+    "git_dirty": true,
+    "open_clip_version": "3.3.0",
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "h5py_version": "3.16.0",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "deterministic": true,
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "embed_dim": 512,
+    "top_k_answers": 100,
+    "n_train": 40000,
+    "n_val": 8000,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "hidden_dim": 512,
+    "dropout": 0.3,
+    "weight_decay": 0.0001
+  },
+  "e8b_readout_cost_measurement": {
+    "NON_SCIENTIFIC": true,
+    "dated_utc": "2026-08-07",
+    "status": "NON-SCIENTIFIC COST MEASUREMENT - no accuracy is reported and none may be derived from it",
+    "rows_measured": 256,
+    "sampling": "sampled across the 10,004-row raw denominator with a pinned seed, not a prefix of it, so question length and answer difficulty are representative",
+    "cold_rows_excluded_from_warm": 8,
+    "warm_per_row_seconds": {
+      "prefix": {
+        "n": 248,
+        "mean_s": 0.000604,
+        "median_s": 0.000445,
+        "p90_s": 0.000457,
+        "max_s": 0.005381,
+        "total_s": 0.15
+      },
+      "prefix_state": {
+        "n": 248,
+        "mean_s": 0.015067,
+        "median_s": 0.015008,
+        "p90_s": 0.015217,
+        "max_s": 0.016512,
+        "total_s": 3.737
+      },
+      "R1_batched": {
+        "n": 248,
+        "mean_s": 0.092675,
+        "median_s": 0.092539,
+        "p90_s": 0.092782,
+        "max_s": 0.09667,
+        "total_s": 22.983
+      },
+      "R1_cached": {
+        "n": 248,
+        "mean_s": 1.418549,
+        "median_s": 1.41821,
+        "p90_s": 1.422463,
+        "max_s": 1.431579,
+        "total_s": 351.8
+      },
+      "R2": {
+        "n": 248,
+        "mean_s": 0.016144,
+        "median_s": 0.013648,
+        "p90_s": 0.026628,
+        "max_s": 0.052791,
+        "total_s": 4.004
+      },
+      "R3": {
+        "n": 248,
+        "mean_s": 0.015755,
+        "median_s": 0.013153,
+        "p90_s": 0.026155,
+        "max_s": 0.052372,
+        "total_s": 3.907
+      }
+    },
+    "cold_per_row_seconds": {
+      "prefix": {
+        "n": 8,
+        "mean_s": 0.005381,
+        "median_s": 0.005381,
+        "p90_s": 0.005381,
+        "max_s": 0.005381,
+        "total_s": 0.043
+      },
+      "prefix_state": {
+        "n": 8,
+        "mean_s": 0.015032,
+        "median_s": 0.01504,
+        "p90_s": 0.015097,
+        "max_s": 0.015117,
+        "total_s": 0.12
+      },
+      "R1_batched": {
+        "n": 8,
+        "mean_s": 0.09667,
+        "median_s": 0.09667,
+        "p90_s": 0.09667,
+        "max_s": 0.09667,
+        "total_s": 0.773
+      },
+      "R1_cached": {
+        "n": 8,
+        "mean_s": 1.418812,
+        "median_s": 1.416714,
+        "p90_s": 1.421752,
+        "max_s": 1.428477,
+        "total_s": 11.35
+      },
+      "R2": {
+        "n": 8,
+        "mean_s": 0.015303,
+        "median_s": 0.013599,
+        "p90_s": 0.013768,
+        "max_s": 0.027097,
+        "total_s": 0.122
+      },
+      "R3": {
+        "n": 8,
+        "mean_s": 0.015131,
+        "median_s": 0.013084,
+        "p90_s": 0.015954,
+        "max_s": 0.026337,
+        "total_s": 0.121
+      }
+    },
+    "cold_vs_warm": {
+      "prefix": {
+        "cold_mean_s": 0.005381,
+        "warm_mean_s": 0.000604,
+        "ratio": 8.91
+      },
+      "prefix_state": {
+        "cold_mean_s": 0.015032,
+        "warm_mean_s": 0.015067,
+        "ratio": 1.0
+      },
+      "R1_batched": {
+        "cold_mean_s": 0.09667,
+        "warm_mean_s": 0.092675,
+        "ratio": 1.04
+      },
+      "R1_cached": {
+        "cold_mean_s": 1.418812,
+        "warm_mean_s": 1.418549,
+        "ratio": 1.0
+      },
+      "R2": {
+        "cold_mean_s": 0.015303,
+        "warm_mean_s": 0.016144,
+        "ratio": 0.95
+      },
+      "R3": {
+        "cold_mean_s": 0.015131,
+        "warm_mean_s": 0.015755,
+        "ratio": 0.96
+      }
+    },
+    "r3_generated_length": {
+      "mean": 1.195,
+      "median": 1.0,
+      "max": 4,
+      "terminated_by_eos_rate": 1.0,
+      "note": "R3 cost is driven by generated length: every extra token is another sequential forward pass"
+    },
+    "memory": {
+      "peak_allocated_mib": 2342.2,
+      "peak_reserved_mib": 2736.0,
+      "device_total_mib": 20017.4,
+      "reserved_fraction": 0.1367,
+      "ceiling_fraction": 0.8,
+      "fires": false
+    },
+    "projected_over_raw_denominator": {
+      "r1_batched_hours_per_pass": 0.2575,
+      "r1_cached_hours_per_pass_NOT_USED": 3.942,
+      "r2_hours_per_pass": 0.0449,
+      "r3_hours_per_pass": 0.0438,
+      "prefix_hours_per_pass": 0.0435,
+      "r2_plus_r3_hours_per_pass": 0.0886,
+      "combined_pass_measured_s_per_row": 0.060318,
+      "combined_pass_hours": 0.1676,
+      "combined_pass_basis": "MEASURED end to end at batch 128 over 256 rows, which is how the evaluation actually runs. Composing the per-part timings above would overstate it: those were taken at batch 16 with a synchronise around every call.",
+      "note": "the prefix and its cache are built ONCE per row and shared by all three readouts, so a combined pass costs prefix + R1 + R2 + R3, not three separate prefixes. R1 is costed at the CANONICAL BATCHED rate; the per-row cached scorer is roughly ninety times more expensive and is used only inside G14."
+    },
+    "against_the_assumption": {
+      "assumed_r2_plus_r3_hours_per_pass": 0.2023,
+      "measured_r2_plus_r3_hours_per_pass": 0.0886,
+      "ratio": 0.44,
+      "verdict": "the assumption was UNSOURCED and is now replaced by measurement"
+    },
+    "measurement_cost": {
+      "hours": 0.11647,
+      "charged_to": "the pretrained identity: this measurement loads the frozen pretrained SmolLM2-135M"
+    },
+    "checkpoint": {
+      "path": "results/experiments/e8b_readout_generation/checkpoints/e8b_B3_train_40k_seed0_search1_best.pt",
+      "why_valid_for_timing": "cost depends on the compute graph, the shapes and the generated lengths, not on which weights the trunk holds. An exploratory checkpoint is therefore a valid timing subject even though it is never a valid scientific result."
+    },
+    "determinism_verified_at_use": {
+      "deterministic_algorithms": true,
+      "warn_only": false,
+      "flash_sdp": false,
+      "mem_efficient_sdp": false,
+      "math_sdp": true,
+      "cudnn_deterministic": true,
+      "cublas_workspace_config": ":4096:8"
+    },
+    "frozen_model": {
+      "arm_model": "pretrained",
+      "pinned_revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2"
+    },
+    "optimizer_steps": 0,
+    "clean_test_accessed": false
+  }
+}
