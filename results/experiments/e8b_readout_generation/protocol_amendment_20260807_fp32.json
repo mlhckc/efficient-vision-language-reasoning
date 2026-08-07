@@ -1,7 +1,7 @@
 {
   "e8b_protocol_amendment": {
     "dated_utc": "2026-08-07",
-    "status": "AUTHORISED BY THE USER; execution of core cells still requires a separate explicit approval",
+    "status": "AUTHORISED BY THE USER; two BLOCKER corrections applied 2026-08-07 after review; SEVEN open issues must be closed and the amendment re-reviewed before any core cell runs",
     "supersedes": [
       {
         "target": "master protocol section 20, the pre-registered native-BF16 evaluation clause",
@@ -26,7 +26,7 @@
     "amendment": {
       "A1_precision": {
         "training": "BF16 autocast on the training path only, unchanged",
-        "frozen_model_identity": "unchanged. The pinned SmolLM2-135M checkpoint at revision 93efa2f097d58c2a74874c7e644dbc9b0cee75a2 stores all 272 tensors as BF16 on disk. Canonical evaluation promotes those EXACT state values to FP32; BF16 is a truncated FP32 so the promotion is lossless and the values are bitwise unchanged. Verified: promotion equals a direct FP32 load bitwise, and the promoted state round-trips to BF16 exactly, including the non-persistent rotary inv_freq buffers.",
+        "frozen_model_identity": "unchanged. The pinned SmolLM2-135M checkpoint at revision 93efa2f097d58c2a74874c7e644dbc9b0cee75a2 stores all 272 tensors as BF16 on disk. Canonical evaluation promotes those EXACT state values to FP32; BF16 is a truncated FP32 so the promotion is lossless. VERIFIED for the state_dict: promotion equals a direct FP32 load bitwise, and the promoted state round-trips to BF16 exactly.",
         "canonical_evaluation": "FP32",
         "canonical_applies_to": [
           "per-epoch development evaluation",
@@ -37,7 +37,11 @@
           "every final E8B comparison, including B3 minus B2"
         ],
         "bf16_status": "may be reported ONLY as a secondary deployment or efficiency diagnostic, explicitly labelled; never as a scientific accuracy and never as a selection basis",
-        "provenance_caveat": "the frozen model's state_dict SHA-256 differs between dtypes (bf16 20add223..., fp32 d2f53e18...) because the hash covers serialised bytes. The VALUES are identical. Both hashes are recorded in every core record, and g2_provenance must record the EVALUATION dtype alongside the pinned load dtype."
+        "provenance_caveat": "the frozen model's state_dict SHA-256 differs between dtypes (bf16 20add223..., fp32 d2f53e18...) because the hash covers serialised bytes. The VALUES are identical. Both hashes are recorded in every core record, and g2_provenance must record the EVALUATION dtype alongside the pinned load dtype.",
+        "buffer_caveat": {
+          "status": "an earlier draft claimed this verification covered the non-persistent rotary inv_freq buffers. It did not. That claim is WITHDRAWN: no code in this repository has ever inspected those buffers, and the claim is false as written because B3's inv_freq is fp32 and does not round-trip through BF16.",
+          "open_issue": "OI5"
+        }
       },
       "A2_search_abandoned": {
         "decision": "the eight-point recipe search is permanently stopped",
@@ -48,7 +52,15 @@
           "no hyperparameter winner is claimed",
           "no between-grid difference is reported as evidence of recipe superiority"
         ],
-        "reason_recorded": "the three completed points are statistically indistinguishable (McNemar p = 0.88, 0.44, 0.54; 95% paired half-width about 0.0119, some 92 development rows, against a total observed spread of 36 rows), the single-arm seed spread measured elsewhere in this project (45 rows) exceeds the whole grid spread, and the observed ranking is confounded by unequal epoch counts: plateau evaluation counts 23/14/9 with plateau means 0.53143/0.53222/0.53237, so the run-length-free ordering REVERSES the ordering by maximum."
+        "reason_recorded": "the three completed points are statistically indistinguishable under REAL paired McNemar tests computed from persisted per-row correctness vectors (exploratory_fp32_correctness.npz): grid1 vs grid2 exact p=0.9040 (b=1241, c=1234, discordant 2475), grid1 vs grid3 p=0.4858 (b=1279, c=1243, n_d=2522), grid2 vs grid3 p=0.5616 (b=1178, c=1149, n_d=2327). The paired 95 per cent half-widths are 97.5, 98.4 and 94.5 development rows against a TOTAL observed spread of 36 rows, and the measured single-arm seed spread elsewhere in this project (A1, 40k, seeds 0/1/2) is 45 rows, larger than the whole grid spread. Five more single-seed runs cannot resolve a difference smaller than the noise from changing one seed of one arm.",
+        "evidence_file": "exploratory_fp32_correctness.npz, the per-row FP32 correctness vectors for grid points 1-3 on all 7,714 development rows",
+        "withdrawn_claim": {
+          "claim": "an earlier draft stated that the run-length-free ordering REVERSES the ordering by maximum, citing plateau means 0.53143/0.53222/0.53237",
+          "status": "WITHDRAWN as unsound",
+          "why": "that statistic was the mean of each run's top (n-7) epochs, so k depended on the run's own length and the statistic was NOT run-length free; it was also threshold-conditioned on the outcome variable and constructed after the three results were seen. Under a genuinely length-free statistic, the mean of the top k epochs with k fixed at the minimum run length of 16 for all three runs, the ordering is grid1 0.53322 > grid2 0.53123 > grid3 0.51205, which is the SAME as the ordering by maximum. There is no reversal.",
+          "what_survives": "the run-length CONFOUND itself is real and remains recorded as OI2: the maximum over epochs is biased upward by the number of evaluations, and the three runs had 30, 21 and 16 epochs. The confound is a reason not to interpret the ordering; it is not evidence that the ordering is reversed.",
+          "effect_on_the_decision": "none. Abandoning the search rests on the two auditable grounds above, both of which are unaffected."
+        }
       },
       "A3_fixed_recipe": {
         "lr": 0.0003,
@@ -56,7 +68,10 @@
         "dropout": 0.1,
         "identical_to": "the originally preregistered grid point 1 pilot configuration",
         "justification_recorded_explicitly": "retained because it was the PRE-RESULT pilot and default configuration, not because it achieved the highest observed development score. No selection was performed on any observed result. This wording is binding on every E8B report.",
-        "applies_to_arms": ["B2", "B3"],
+        "applies_to_arms": [
+          "B2",
+          "B3"
+        ],
         "b1_recipe": "B1 keeps the stored v3_01 classifier recipe of master protocol section 7.3; the E8B likelihood recipe and its search never applied to B1"
       },
       "A4_u4_withdrawn": {
@@ -65,9 +80,20 @@
         "old_checkpoints": "the six search checkpoints are retained as exploratory evidence, archived and hash-recorded, and are structurally prevented from being resumed or reused (see A8)"
       },
       "A5_final_matrix": {
-        "arms": ["B1", "B2", "B3"],
-        "scales": ["train_40k", "train_250k"],
-        "seeds": [0, 1, 2],
+        "arms": [
+          "B1",
+          "B2",
+          "B3"
+        ],
+        "scales": [
+          "train_40k",
+          "train_250k"
+        ],
+        "seeds": [
+          0,
+          1,
+          2
+        ],
         "cells": 18,
         "pair_preservation": "B1/B2/B3 all run at every scale and seed. No arm, scale or seed may be dropped automatically; if a gate fires, execution stops and returns to the user with pair-preserving alternatives."
       },
@@ -121,9 +147,21 @@
         "post_selection_invocation": "the full union"
       },
       "clauses": [
-        {"id": "C1", "requirement": "canonical (batched) argmax == brute-force argmax on EVERY row", "on_failure": "HARD HALT with an atomic JSON record"},
-        {"id": "C2", "requirement": "cached argmax == canonical argmax on EVERY row", "on_failure": "HARD HALT with an atomic JSON record"},
-        {"id": "C3", "requirement": "R2 brute-force constrained walk == R2 cached walk on EVERY row", "on_failure": "HARD HALT with an atomic JSON record"}
+        {
+          "id": "C1",
+          "requirement": "canonical (batched) argmax == brute-force argmax on EVERY row",
+          "on_failure": "HARD HALT with an atomic JSON record"
+        },
+        {
+          "id": "C2",
+          "requirement": "cached argmax == canonical argmax on EVERY row",
+          "on_failure": "HARD HALT with an atomic JSON record"
+        },
+        {
+          "id": "C3",
+          "requirement": "R2 brute-force constrained walk == R2 cached walk on EVERY row",
+          "on_failure": "HARD HALT with an atomic JSON record"
+        }
       ],
       "no_exemption": "no margin-based exemption, no tolerance band, no near-tie category. Any argmax disagreement halts.",
       "score_deltas": "recorded as DIAGNOSTICS ONLY and can neither cause nor prevent a halt",
@@ -169,6 +207,24 @@
         "id": "OI4",
         "issue": "TF32 matmul is currently off and the path is true IEEE FP32, but nothing pins or records this; a library default change would silently degrade canonical FP32",
         "status": "must be pinned explicitly and recorded in run metadata"
+      },
+      {
+        "id": "OI5",
+        "issue": "the B2 random control's non-persistent rotary inv_freq buffers are BF16-truncated (from_config in fp32 then .to(bfloat16) converts buffers), while B3's remain fp32. Measured relative error 3.31e-3, logit impact up to 0.121 and last-position log-prob delta up to 0.088 nats. state_dict hashing, the round-trip guard and the G13 pair check are all blind to it.",
+        "consequence": "an UNCONTROLLED difference inside the primary B3 minus B2 causal contrast, contradicting A6's claim that the frozen language model is the only difference",
+        "status": "MUST be fixed before any core cell runs: restore both rotary buffers to fp32 after the cast and add an LM-buffer bitwise pair check beside G13"
+      },
+      {
+        "id": "OI6",
+        "issue": "a BF16 prefix fed to the FP32-promoted language model does not raise; dev_r1_predictions hard-casts the prefix to BF16 on the selection path, and the amendment constrains prefix dtype only inside G14. Measured on the full development set: 5 of 7714 argmax flips and a maximum score delta of 0.1265.",
+        "consequence": "an implementer reusing dev_r1_predictions unchanged would select on a BF16-quantised prefix while every record said FP32",
+        "status": "MUST be fixed before any core cell runs: the canonical prefix dtype is FP32 everywhere on the selection path, asserted, not merely cast. Note the new stratum L caught all five leak rows and stratum P caught none."
+      },
+      {
+        "id": "OI7",
+        "issue": "pin_fp32_precision, promote_lm_to_fp32, assert_core_family, g14_fp32_validation_rows and g14_fp32_strata_record have no call sites; protocol_family is not written into any checkpoint; g14_binding_gate is unchanged and still BF16",
+        "consequence": "the amendment is specified and tested at the unit level but not yet wired into an execution path",
+        "status": "the core trainer is deliberately unimplemented and every training entry refuses; wiring and re-review precede any run"
       }
     ],
     "clean_test_accessed": false
