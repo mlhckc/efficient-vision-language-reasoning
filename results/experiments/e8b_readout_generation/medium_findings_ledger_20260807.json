@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-07T18:34:34",
-    "git_commit": "aaabe21",
+    "timestamp": "2026-08-07T18:55:56",
+    "git_commit": "94d8792",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -428,10 +428,70 @@
         "evidence": "each file now carries a leading SUPERSEDED block naming the withdrawn claim, the replacement artefacts, the only reliable discriminator (verified_at_use) and the fact that the hours remain charged. Original content is unmodified below it.",
         "closed_by": "test_audit_known_negatives, supersession markers",
         "state": "FIXED_CLOSED"
+      },
+      {
+        "id": "REAUDIT-B-BLOCKER-1",
+        "lens": "B (executable safety, re-audit)",
+        "issue": "The per-identity and storage gates were computed in train_core_cell but read in _train_core_locked, which does not receive them, so identity_gate and storage were unbound globals. Every core cell would have trained to completion, written its canonical checkpoint and per-row dump, then died with an uncaught NameError while assembling the result -- before the ledger charge and before the result was written. No result, no charge, no HALT and no FAILED record, and the re-run would then refuse at the existing npz. INTRODUCED BY THE FIX FOR AUDIT-C-HIGH-1.",
+        "classification": "execution-critical",
+        "disposition": "FIXED AT SOURCE",
+        "evidence": "the gate results are passed as parameters; asserted by disassembling _train_core_locked and checking that no gate name is read as LOAD_GLOBAL, and by asserting none of them is a module global.",
+        "closed_by": "test_audit_known_negatives, unbound-name checks",
+        "state": "FIXED_CLOSED"
+      },
+      {
+        "id": "REAUDIT-B-HIGH-1",
+        "lens": "B (executable safety, re-audit)",
+        "issue": "charge_identity_hours was reachable only after every gate passed, and every gate_halt is a sys.exit, so the hours burned by a halted or crashed cell were never charged. A cell that ran 7.9 hours and tripped the wall would vanish from the ledger and the 35-hour ceiling would green-light the next cell on an identity that had already spent the headroom.",
+        "classification": "execution-critical",
+        "disposition": "FIXED AT SOURCE",
+        "evidence": "the charge moved into train_core_cell's finally block, so it runs on every exit path, and the ledger now records ONE ENTRY PER PROCESS rather than a single overwritten total, which is what makes charging on every path safe without double-counting a resume.",
+        "closed_by": "test_audit_known_negatives, per-process charging",
+        "state": "FIXED_CLOSED"
+      },
+      {
+        "id": "REAUDIT-B-MEDIUM-1",
+        "lens": "B (executable safety, re-audit)",
+        "issue": "e8b_code_digest omitted src/reasoner.py, which defines the trunk architecture -- precisely the dirty-worktree splice the digest exists to catch, and the realistic case, since every 2026-08-07 record has git_dirty true.",
+        "classification": "execution-critical",
+        "disposition": "FIXED AT SOURCE",
+        "evidence": "the digest now covers all of src/, config.py and the E8A modules the core path imports, not only the E8B directory.",
+        "closed_by": "test_audit_known_negatives, digest scope checks",
+        "state": "FIXED_CLOSED"
+      },
+      {
+        "id": "REAUDIT-B-MEDIUM-2",
+        "lens": "B (executable safety, re-audit)",
+        "issue": "The resumed-cell wall carried only per-epoch train and eval time, so store hashing, the LM load and promotion, G8 and G14 pre-selection were bought back free on every crash-resume cycle. Ledger corruption raised uncaught exceptions with no halt artefact, and the ledger lived on node-local scratch while the duplicate-run lock deliberately does not.",
+        "classification": "execution-critical",
+        "disposition": "FIXED AT SOURCE",
+        "evidence": "the wall now reads every prior process's full wall from the ledger; an unreadable or malformed ledger REFUSES rather than assuming zero hours spent; and the ledger moved to the shared filesystem beside the execution locks.",
+        "closed_by": "test_audit_known_negatives, ledger checks",
+        "state": "FIXED_CLOSED"
+      },
+      {
+        "id": "REAUDIT-B-MEDIUM-3",
+        "lens": "B (executable safety, re-audit)",
+        "issue": "The 180 GPU-hour core ceiling was still not executable: remaining_core_gate had no call site outside tests, the identical defect that had just been closed for the 35-hour ceiling.",
+        "classification": "execution-critical",
+        "disposition": "FIXED AT SOURCE",
+        "evidence": "core_remaining_hours derives the remaining hours from the governing projection minus everything charged to the ledger, and train_core_cell halts on it before any GPU work.",
+        "closed_by": "test_audit_known_negatives, core ceiling checks",
+        "state": "FIXED_CLOSED"
+      },
+      {
+        "id": "REAUDIT-B-LOW-1",
+        "lens": "B (executable safety, re-audit)",
+        "issue": "restore_resume_state mutated the model, optimizer, scheduler and all four RNG streams before raising on a legacy checkpoint, leaving a half-restored process; and the overfit gates verified determinism into a variable that was then discarded, so the verified state never reached any record.",
+        "classification": "provenance/reproducibility",
+        "disposition": "FIXED AT SOURCE",
+        "evidence": "restore validates the full field set before touching anything, and both gates record their verified determinism block in the gate record.",
+        "closed_by": "test_audit_known_negatives",
+        "state": "FIXED_CLOSED"
       }
     ],
     "summary": {
-      "total": 39,
+      "total": 45,
       "derivation": "computed mechanically from entries[].disposition via the state map below; never declared by hand. ACCEPTED LIMITATION is NOT counted as FIXED, and PARTIALLY FIXED is NOT counted as CLOSED.",
       "state_map": {
         "FIXED": "FIXED_CLOSED",
@@ -444,13 +504,13 @@
         "OPEN": "OPEN"
       },
       "by_state": {
-        "FIXED_CLOSED": 38,
+        "FIXED_CLOSED": 44,
         "ACCEPTED_LIMITATION": 1
       },
       "by_classification": {
         "scientific-validity": 9,
-        "execution-critical": 15,
-        "provenance/reproducibility": 12,
+        "execution-critical": 20,
+        "provenance/reproducibility": 13,
         "reporting/documentation": 3
       },
       "fixed_closed": [
@@ -491,7 +551,13 @@
         "AUDIT-C-HIGH-2",
         "AUDIT-C-HIGH-3",
         "AUDIT-A-HIGH-1",
-        "AUDIT-A-HIGH-2"
+        "AUDIT-A-HIGH-2",
+        "REAUDIT-B-BLOCKER-1",
+        "REAUDIT-B-HIGH-1",
+        "REAUDIT-B-MEDIUM-1",
+        "REAUDIT-B-MEDIUM-2",
+        "REAUDIT-B-MEDIUM-3",
+        "REAUDIT-B-LOW-1"
       ],
       "accepted_limitation": [
         "A-M5/B-M?"

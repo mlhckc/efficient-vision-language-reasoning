@@ -238,6 +238,106 @@ AUDIT_20260807_ENTRIES = [
 ]
 
 
+# Findings from the RE-AUDIT of 94d8792, including one blocker that the
+# ceiling fix itself introduced.
+REAUDIT_20260807_ENTRIES = [
+    {"id": "REAUDIT-B-BLOCKER-1",
+     "lens": "B (executable safety, re-audit)",
+     "issue": "The per-identity and storage gates were computed in "
+              "train_core_cell but read in _train_core_locked, which "
+              "does not receive them, so identity_gate and storage were "
+              "unbound globals. Every core cell would have trained to "
+              "completion, written its canonical checkpoint and per-row "
+              "dump, then died with an uncaught NameError while "
+              "assembling the result -- before the ledger charge and "
+              "before the result was written. No result, no charge, no "
+              "HALT and no FAILED record, and the re-run would then "
+              "refuse at the existing npz. INTRODUCED BY THE FIX FOR "
+              "AUDIT-C-HIGH-1.",
+     "classification": "execution-critical",
+     "disposition": "FIXED AT SOURCE",
+     "evidence": "the gate results are passed as parameters; asserted "
+                 "by disassembling _train_core_locked and checking that "
+                 "no gate name is read as LOAD_GLOBAL, and by asserting "
+                 "none of them is a module global.",
+     "closed_by": "test_audit_known_negatives, unbound-name checks"},
+    {"id": "REAUDIT-B-HIGH-1",
+     "lens": "B (executable safety, re-audit)",
+     "issue": "charge_identity_hours was reachable only after every "
+              "gate passed, and every gate_halt is a sys.exit, so the "
+              "hours burned by a halted or crashed cell were never "
+              "charged. A cell that ran 7.9 hours and tripped the wall "
+              "would vanish from the ledger and the 35-hour ceiling "
+              "would green-light the next cell on an identity that had "
+              "already spent the headroom.",
+     "classification": "execution-critical",
+     "disposition": "FIXED AT SOURCE",
+     "evidence": "the charge moved into train_core_cell's finally "
+                 "block, so it runs on every exit path, and the ledger "
+                 "now records ONE ENTRY PER PROCESS rather than a "
+                 "single overwritten total, which is what makes "
+                 "charging on every path safe without double-counting a "
+                 "resume.",
+     "closed_by": "test_audit_known_negatives, per-process charging"},
+    {"id": "REAUDIT-B-MEDIUM-1",
+     "lens": "B (executable safety, re-audit)",
+     "issue": "e8b_code_digest omitted src/reasoner.py, which defines "
+              "the trunk architecture -- precisely the dirty-worktree "
+              "splice the digest exists to catch, and the realistic "
+              "case, since every 2026-08-07 record has git_dirty true.",
+     "classification": "execution-critical",
+     "disposition": "FIXED AT SOURCE",
+     "evidence": "the digest now covers all of src/, config.py and the "
+                 "E8A modules the core path imports, not only the E8B "
+                 "directory.",
+     "closed_by": "test_audit_known_negatives, digest scope checks"},
+    {"id": "REAUDIT-B-MEDIUM-2",
+     "lens": "B (executable safety, re-audit)",
+     "issue": "The resumed-cell wall carried only per-epoch train and "
+              "eval time, so store hashing, the LM load and promotion, "
+              "G8 and G14 pre-selection were bought back free on every "
+              "crash-resume cycle. Ledger corruption raised uncaught "
+              "exceptions with no halt artefact, and the ledger lived "
+              "on node-local scratch while the duplicate-run lock "
+              "deliberately does not.",
+     "classification": "execution-critical",
+     "disposition": "FIXED AT SOURCE",
+     "evidence": "the wall now reads every prior process's full wall "
+                 "from the ledger; an unreadable or malformed ledger "
+                 "REFUSES rather than assuming zero hours spent; and "
+                 "the ledger moved to the shared filesystem beside the "
+                 "execution locks.",
+     "closed_by": "test_audit_known_negatives, ledger checks"},
+    {"id": "REAUDIT-B-MEDIUM-3",
+     "lens": "B (executable safety, re-audit)",
+     "issue": "The 180 GPU-hour core ceiling was still not executable: "
+              "remaining_core_gate had no call site outside tests, the "
+              "identical defect that had just been closed for the "
+              "35-hour ceiling.",
+     "classification": "execution-critical",
+     "disposition": "FIXED AT SOURCE",
+     "evidence": "core_remaining_hours derives the remaining hours from "
+                 "the governing projection minus everything charged to "
+                 "the ledger, and train_core_cell halts on it before "
+                 "any GPU work.",
+     "closed_by": "test_audit_known_negatives, core ceiling checks"},
+    {"id": "REAUDIT-B-LOW-1",
+     "lens": "B (executable safety, re-audit)",
+     "issue": "restore_resume_state mutated the model, optimizer, "
+              "scheduler and all four RNG streams before raising on a "
+              "legacy checkpoint, leaving a half-restored process; and "
+              "the overfit gates verified determinism into a variable "
+              "that was then discarded, so the verified state never "
+              "reached any record.",
+     "classification": "provenance/reproducibility",
+     "disposition": "FIXED AT SOURCE",
+     "evidence": "restore validates the full field set before touching "
+                 "anything, and both gates record their verified "
+                 "determinism block in the gate record.",
+     "closed_by": "test_audit_known_negatives"},
+]
+
+
 def derive_summary(entries: list) -> dict:
     """Every count here is computed from entries[].disposition. Nothing
     is declared by hand, and no state is collapsed into another."""
@@ -277,7 +377,8 @@ def main() -> int:
     body = json.loads(LEDGER.read_text())["e8b_medium_ledger"]
     entries = list(body["entries"])
     known = {e["id"] for e in entries}
-    pending = REVIEW_A_ENTRIES + AUDIT_20260807_ENTRIES
+    pending = (REVIEW_A_ENTRIES + AUDIT_20260807_ENTRIES
+               + REAUDIT_20260807_ENTRIES)
     appended = [e for e in pending if e["id"] not in known]
     for entry in appended:
         entry = dict(entry)

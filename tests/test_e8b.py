@@ -2394,8 +2394,8 @@ def test_audit_known_negatives() -> None:
           e8b_run.per_identity_gate("B1", 99.0)["applies"] is False
           and e8b_run.per_identity_gate("B1", 99.0)["fires"] is False)
     full = {"cells": {
-        f"B3_{s}_{i}": {"identity": "pretrained", "hours": h,
-                        "arm": "B3", "scale": s, "seed": i}
+        f"B3_{s}_{i}": {"identity": "pretrained", "processes": [h],
+                        "hours": h, "arm": "B3", "scale": s, "seed": i}
         for i, (s, h) in enumerate([("train_40k", 1.690)] * 3
                                    + [("train_250k", 4.189)] * 3)}}
     gate = e8b_run.per_identity_gate("B3", 0.0, ledger=full)
@@ -2414,10 +2414,10 @@ def test_audit_known_negatives() -> None:
     check("the gate counts committed-but-unspent work, or it would "
           "green-light a cell leaving no room for the readouts",
           gate["committed_not_yet_spent_hours"] > 0)
-    over = {"cells": {k: dict(v, hours=v["hours"] * 1.17
-                              if v["scale"] == "train_250k"
-                              else v["hours"])
-                      for k, v in full["cells"].items()}}
+    over = {"cells": {
+        k: dict(v, processes=[h * 1.17 if v["scale"] == "train_250k"
+                              else h for h in v["processes"]])
+        for k, v in full["cells"].items()}}
     fired = e8b_run.per_identity_gate("B3", 0.0, ledger=over)
     check("the ceiling FIRES on a 17 per cent overrun of the "
           "never-measured 250k rate",
@@ -2433,11 +2433,15 @@ def test_audit_known_negatives() -> None:
           core.index("per_identity_gate") < core.index("assert_gpu_exclusive")
           and core.index("storage_gate") < core.index("assert_gpu_exclusive"))
     locked = bodies["_train_core_locked"]
-    check("measured hours are charged to the ledger when a cell ends",
-          "charge_identity_hours" in locked)
+    # The charge moved out of the locked body into train_core_cell's
+    # finally, so that a halted or crashed cell still charges. The
+    # re-audit checks below assert the new placement.
+    check("measured hours are charged to the ledger by the caller's "
+          "finally, on every exit path",
+          "charge_identity_hours" in bodies["train_core_cell"])
     check("the ceiling is re-checked AFTER the measured charge",
-          locked.index("charge_identity_hours")
-          < locked.rindex("per_identity_gate"))
+          bodies["train_core_cell"].index("charge_identity_hours")
+          < bodies["train_core_cell"].rindex("per_identity_gate"))
 
     # --- C-HIGH-2: no rate may be labelled measured unless it is ---
     measured = projection["measured_inputs"]
@@ -2553,6 +2557,99 @@ def test_audit_known_negatives() -> None:
           and "prior_seconds + (time.time() - started)" in locked)
     check("the charged hours are cumulative, not per-process",
           locked.count("prior_seconds + (time.time() - started)") >= 2)
+
+    # --- Re-audit of 94d8792: the ceiling fix's own defects ---
+    # The gate results are computed in train_core_cell and consumed in
+    # _train_core_locked; passing them by parameter is what keeps them
+    # from being unbound globals that only fail after a full run.
+    signature = inspect.signature(training._train_core_locked)
+    check("the locked body RECEIVES the gate results rather than "
+          "reading unbound globals",
+          {"identity_gate", "storage", "remaining"}
+          <= set(signature.parameters))
+    for name in ("identity_gate", "storage", "remaining"):
+        check(f"{name} is not a module global in training.py",
+              not hasattr(training, name))
+    import dis, io as _io
+    buf = _io.StringIO()
+    dis.dis(training._train_core_locked, file=buf)
+    loads = [line for line in buf.getvalue().splitlines()
+             if "LOAD_GLOBAL" in line
+             and any(f"({n})" in line for n in
+                     ("identity_gate", "storage", "remaining"))]
+    check("no gate result is read as an unbound global", loads == [],
+          str(loads[:2]))
+
+    # Hours must be charged on EVERY exit path, not only completion.
+    cell = bodies["train_core_cell"]
+    check("the identity charge sits in a finally block, so a halted or "
+          "crashed cell still charges what it burned",
+          "finally:" in cell
+          and cell.index("finally:") < cell.index("charge_identity_hours"))
+    check("the completion path no longer charges separately, so a "
+          "resume cannot double-count",
+          "charge_identity_hours" not in locked)
+
+    # Per-process accounting under crash, resume and corruption.
+    with tempfile.TemporaryDirectory() as tmp:
+        original = e8b_run.SPEND_LEDGER
+        try:
+            e8b_run.SPEND_LEDGER = Path(tmp) / "ledger.json"
+            e8b_run.charge_identity_hours("B3", "train_250k", 0, 7.9)
+            e8b_run.charge_identity_hours("B3", "train_250k", 0, 3.1)
+            led = e8b_run.read_spend_ledger()
+            check("each process appends its own charge",
+                  led["cells"]["B3_train_250k_seed0"]["processes"]
+                  == [7.9, 3.1])
+            check("a crashed process's hours are counted, not lost",
+                  abs(e8b_run.cell_hours(led, "B3", "train_250k", 0)
+                      - 11.0) < 1e-9)
+            e8b_run.SPEND_LEDGER.write_text("{ not json")
+            must_fail("an unreadable ledger REFUSES rather than "
+                      "assuming zero hours spent",
+                      e8b_run.read_spend_ledger)
+            e8b_run.SPEND_LEDGER.write_text(
+                json.dumps({"cells": {"x": {"hours": 1}}}))
+            must_fail("a malformed ledger entry refuses",
+                      e8b_run.read_spend_ledger)
+        finally:
+            e8b_run.SPEND_LEDGER = original
+
+    # The ledger must be pool-wide, like the lock.
+    check("the ledger lives on the shared filesystem beside the locks, "
+          "not on node-local scratch",
+          e8b_run.SPEND_LEDGER.parent == e8b_run.EXECUTION_LOCK_DIR)
+
+    # The code digest must cover the architecture it protects.
+    gsrc2 = (E8B_DIR / "run.py").read_text()
+    digest_body = gsrc2[gsrc2.index("def e8b_code_digest"):]
+    digest_body = digest_body[:digest_body.index("\ndef ", 1)]
+    check("the code digest covers src/, where the trunk architecture "
+          "lives, not only the E8B directory",
+          '"src"' in digest_body and "glob" in digest_body)
+    import src.reasoner as _reasoner
+    covered = Path(_reasoner.__file__).read_bytes()
+    check("src/reasoner.py exists and is inside the digest's scope",
+          len(covered) > 0
+          and (PROJECT_ROOT / "src" / "reasoner.py").exists())
+
+    # The 180-hour core ceiling must be executable too.
+    check("the core ceiling has a call site in the execution path",
+          "remaining_core_gate" in cell)
+    expected, stress = e8b_run.core_remaining_hours()
+    check("core remaining hours are derived from the projection minus "
+          "the ledger",
+          expected > 0 and stress >= expected)
+    check("the core gate does not fire on the current plan",
+          e8b_run.remaining_core_gate(expected, stress)["fires"] is False)
+
+    # Restore must validate before mutating.
+    must_fail("restore refuses a legacy state without mutating anything",
+              lambda: e8b_run.restore_resume_state(
+                  {"epoch": 1}, model=nn.Linear(4, 3),
+                  optimizer=torch.optim.AdamW(nn.Linear(4, 3).parameters()),
+                  scheduler=None,
+                  loader_generator=utils.make_generator(7)))
 
     # --- The ledger records every audit finding ---
     ledger = json.loads(

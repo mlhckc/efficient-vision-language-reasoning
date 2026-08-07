@@ -492,10 +492,16 @@ def e8b_code_digest() -> str:
     sources on the training path, so a crash-edit-resume splice cannot
     pass unnoticed."""
     here = Path(__file__).parent
-    files = sorted(here.glob("*.py")) + [
-        PROJECT_ROOT / "src" / "utils.py",
-        PROJECT_ROOT / "src" / "tokens_data.py",
-    ]
+    # src/reasoner.py defines the trunk architecture and was the single
+    # most important omission: a dirty-worktree edit to ReasonerBlock
+    # leaves the commit unchanged, which is exactly the splice this
+    # digest exists to catch. config.py and the E8A modules the core
+    # path imports are covered for the same reason.
+    files = sorted(here.glob("*.py"))
+    files += sorted((PROJECT_ROOT / "src").glob("*.py"))
+    files += [PROJECT_ROOT / "config.py"]
+    files += sorted((PROJECT_ROOT / "experiments"
+                     / "e8a_question_encoder").glob("*.py"))
     digest = hashlib.sha256()
     for path in files:
         if path.exists():
@@ -637,7 +643,16 @@ def verify_resume_checkpoint(path: Path, *, same_node_required: bool = False,
 
 def restore_resume_state(state: dict, *, model, optimizer, scheduler,
                          loader_generator) -> dict:
+    """Validate FIRST, then mutate. Restoring a legacy state used to
+    reload the model, the optimizer, the scheduler and all four RNG
+    streams before raising on the missing per-epoch record, leaving a
+    half-restored process behind."""
     import random
+    missing = [f for f in RESUME_FIELDS if f not in state]
+    if missing:
+        raise AssertionError(
+            f"RESTORE PROHIBITED: state is missing {missing}; nothing "
+            f"has been mutated")
     model.load_state_dict(state["model_state"])
     optimizer.load_state_dict(state["optimizer_state"])
     scheduler.load_state_dict(state["scheduler_state"])
@@ -1322,7 +1337,11 @@ def memory_gate(allocated_bytes: int, total_bytes: int,
 
 # --- Cumulative accounting: the aggregate ceilings, made enforceable ---------
 
-SPEND_LEDGER = OUT_DIR / "gpu_hour_ledger.json"
+# The ledger lives beside the execution locks on the SHARED filesystem,
+# not on node-local /scratch. Two nodes running cells for one identity
+# against two separate ledgers would each see headroom that does not
+# exist.
+SPEND_LEDGER = EXECUTION_LOCK_DIR / "e8b_gpu_hour_ledger.json"
 
 # Hours charged to each frozen-model identity OUTSIDE the 18 core cells.
 # Both lines matter for the ceiling: work already spent cannot be
@@ -1355,19 +1374,49 @@ def model_identity(arm: str) -> str:
 
 
 def read_spend_ledger() -> dict:
-    if SPEND_LEDGER.exists():
-        return json.loads(SPEND_LEDGER.read_text())
-    return {"cells": {}, "note": "cumulative GPU hours per frozen-model "
-                                 "identity; append-only"}
+    """Fail-closed. A ledger that cannot be read or does not have the
+    expected shape is a REFUSAL, not a reason to assume zero hours
+    spent: assuming zero would silently restore the very under-count the
+    ceiling exists to prevent."""
+    if not SPEND_LEDGER.exists():
+        return {"cells": {},
+                "note": "GPU hours per frozen-model identity, appended "
+                        "once per process; never rewritten"}
+    try:
+        ledger = json.loads(SPEND_LEDGER.read_text())
+    except (json.JSONDecodeError, OSError) as error:
+        raise AssertionError(
+            f"GPU-HOUR LEDGER UNREADABLE: {SPEND_LEDGER} ({error}). "
+            f"Execution refuses rather than assume zero hours spent "
+            f"against the 35-hour ceiling.") from None
+    if not isinstance(ledger.get("cells"), dict):
+        raise AssertionError(
+            f"GPU-HOUR LEDGER MALFORMED: {SPEND_LEDGER} has no 'cells' "
+            f"mapping. Execution refuses rather than assume zero.")
+    for key, record in ledger["cells"].items():
+        if not isinstance(record, dict) or "identity" not in record \
+                or "processes" not in record:
+            raise AssertionError(
+                f"GPU-HOUR LEDGER MALFORMED: entry {key!r} is missing "
+                f"'identity' or 'processes'. Execution refuses.")
+    return ledger
+
+
+def cell_hours(ledger: dict, arm: str, scale: str, seed: int) -> float:
+    """Every process that has run this cell, including crashed ones."""
+    record = ledger["cells"].get(f"{arm}_{scale}_seed{seed}")
+    return float(sum(record["processes"])) if record else 0.0
 
 
 def identity_hours(ledger: dict, identity: str) -> float:
     """Total charged to one identity: what was spent before the core
-    matrix, plus every cell recorded since."""
+    matrix, plus every PROCESS of every cell recorded since -- including
+    the processes of cells that halted or crashed, whose hours are just
+    as spent as a completed cell's."""
     spent = SPENT_BEFORE_CORE_HOURS.get(identity, 0.0)
     for record in ledger["cells"].values():
         if record["identity"] == identity:
-            spent += record["hours"]
+            spent += float(sum(record["processes"]))
     return spent
 
 
@@ -1404,14 +1453,19 @@ def per_identity_gate(arm: str, additional_hours: float = 0.0,
 
 def charge_identity_hours(arm: str, scale: str, seed: int,
                           hours: float) -> dict:
-    """Append one cell's measured GPU hours to the ledger, atomically.
-    Re-charging the same cell overwrites its own entry rather than
-    double-counting a resumed run."""
+    """Append ONE PROCESS's measured GPU hours, atomically.
+
+    Called once per process from a finally block, so a cell that halts
+    at a gate or dies mid-epoch still charges what it burned. Appending
+    per process is what makes that safe: a resumed cell adds its new
+    process rather than overwriting, and no process is counted twice."""
     ledger = read_spend_ledger()
     key = f"{arm}_{scale}_seed{seed}"
-    ledger["cells"][key] = {"identity": model_identity(arm),
-                            "hours": round(float(hours), 5),
-                            "arm": arm, "scale": scale, "seed": seed}
+    record = ledger["cells"].setdefault(
+        key, {"identity": model_identity(arm), "processes": [],
+              "arm": arm, "scale": scale, "seed": seed})
+    record["processes"].append(round(float(hours), 5))
+    record["hours"] = round(float(sum(record["processes"])), 5)
     temporary = SPEND_LEDGER.with_name(SPEND_LEDGER.name + ".tmp")
     SPEND_LEDGER.parent.mkdir(parents=True, exist_ok=True)
     temporary.write_text(json.dumps(ledger, indent=2) + "\n")
@@ -1427,6 +1481,28 @@ def storage_gate(required_bytes: int, target_dir: Path) -> dict:
     return {"required_gib": round(required_bytes / 2 ** 30, 3),
             "free_gib": round(free / 2 ** 30, 3),
             "fires": required_bytes > free}
+
+
+def core_remaining_hours() -> tuple:
+    """Expected and worst-case E8B hours still to run, taken from the
+    governing projection and reduced by everything already charged to
+    the ledger. Feeds remaining_core_gate, which had no call site in the
+    execution path until 2026-08-07."""
+    projection = OUT_DIR / "core_resource_projection_20260807.json"
+    if not projection.exists():
+        raise AssertionError(
+            f"CORE GATE REFUSED: {projection.name} is absent, so the "
+            f"180-hour ceiling cannot be evaluated. Regenerate it with "
+            f"core_resource_projection.py.")
+    body = json.loads(projection.read_text())[
+        "e8b_core_resource_projection"]
+    gate = body["gates"]["e8b_remaining_vs_180h_core"]
+    ledger = read_spend_ledger()
+    charged = sum(float(sum(r["processes"]))
+                  for r in ledger["cells"].values())
+    expected = max(0.0, gate["e8b_remaining_hours"] - charged)
+    stress = max(0.0, gate["e8b_remaining_stress_hours"] - charged)
+    return expected, stress
 
 
 def remaining_core_gate(expected_remaining_hours: float,

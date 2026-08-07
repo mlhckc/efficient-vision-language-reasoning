@@ -959,6 +959,7 @@ def g8_overfit_gate(lm, train_loader, cache, device,
     optimizer = make_optimizer(model, 1e-3)
     e8b_run.enable_strict_determinism()   # build_* re-seeded internally
     gate_determinism = e8b_run.assert_strict_determinism()
+    record_determinism = {"verified_at_use": gate_determinism}
     reached = None
     for epoch in range(1, G8_MAX_EPOCHS + 1):
         model.train()
@@ -1006,7 +1007,8 @@ def g8_overfit_gate(lm, train_loader, cache, device,
             "subset_accuracy": round(reached[1], 5),
             "gate_treatment": ("halting" if arm != "B2"
                                else "recorded diagnostic (section 11)"),
-            "gate_settings": "lr 1e-3, dropout 0.0, 1000 examples"}
+            "gate_settings": "lr 1e-3, dropout 0.0, 1000 examples",
+            "determinism": record_determinism}
 
 
 def make_optimizer(model, lr):
@@ -1234,6 +1236,7 @@ def b1_overfit_gate(train_loader, device, run_name: str) -> dict:
     optimizer = make_optimizer(model, 1e-3)
     e8b_run.enable_strict_determinism()   # build_arm re-seeded internally
     gate_determinism = e8b_run.assert_strict_determinism()
+    record_determinism = {"verified_at_use": gate_determinism}
     reached, accuracy = None, 0.0
     for epoch in range(1, G8_MAX_EPOCHS + 1):
         model.train()
@@ -1266,7 +1269,8 @@ def b1_overfit_gate(train_loader, device, run_name: str) -> dict:
     return {"epochs_to_target": reached[0],
             "subset_accuracy": round(reached[1], 5),
             "gate_treatment": "halting",
-            "gate_settings": "lr 1e-3, dropout 0.0, 1000 examples"}
+            "gate_settings": "lr 1e-3, dropout 0.0, 1000 examples",
+            "determinism": record_determinism}
 
 
 # --- The executable 18-cell core trainer --------------------------------------
@@ -1324,6 +1328,17 @@ def train_core_cell(arm: str, scale: str, seed: int) -> int:
                           f"already charged plus {projected} h projected "
                           f"for this cell",
                           {"identity_gate": identity_gate})
+    # The 180 GPU-hour core ceiling, executable for the same reason the
+    # 35-hour one now is: it was a constant with no call site.
+    remaining = e8b_run.remaining_core_gate(
+        *e8b_run.core_remaining_hours())
+    if remaining["fires"]:
+        e8b_run.gate_halt(run_name, "G19_CORE",
+                          f"the 180 GPU-hour core ceiling would be "
+                          f"exceeded: "
+                          f"{remaining['expected_remaining_hours']} h "
+                          f"expected remaining",
+                          {"remaining_core_gate": remaining})
     storage = e8b_run.storage_gate(CORE_CELL_STORAGE_BYTES, OUT_DIR)
     if storage["fires"]:
         e8b_run.gate_halt(run_name, "G19_STORAGE",
@@ -1342,14 +1357,41 @@ def train_core_cell(arm: str, scale: str, seed: int) -> int:
     # lock means two processes training one cell.
     started = time.time()
     try:
-        return _train_core_locked(arm, scale, seed, recipe, run_name,
-                                  result_path, started)
+        return _train_core_locked(
+            arm, scale, seed, recipe, run_name, result_path,
+            started, identity_gate, storage, remaining)
     finally:
+        # H-1: charge THIS PROCESS's hours whatever happened. A cell
+        # that halts at a gate or dies mid-epoch burned those hours just
+        # as surely as one that completed, and the previous
+        # completion-path-only charge let them vanish from the ledger --
+        # which would have let the 35-hour ceiling green-light the next
+        # cell on an identity that had already spent the headroom.
+        # Charging per process is what makes this safe to run on every
+        # exit path without double-counting a resume.
+        e8b_run.charge_identity_hours(arm, scale, seed,
+                                      (time.time() - started) / 3600)
+        after = e8b_run.per_identity_gate(arm, 0.0)
+        print(f"[LEDGER] {after['identity']} identity now at "
+              f"{after['already_charged_hours']} h of "
+              f"{after['ceiling_hours']} h "
+              f"({after['headroom_hours']} h headroom)")
         lock_path.unlink(missing_ok=True)
+        if after["fires"]:
+            e8b_run.record_gate_halt(
+                run_name, "G19_IDENTITY",
+                f"the {after['identity']} identity has EXCEEDED its "
+                f"{after['ceiling_hours']} GPU-hour ceiling",
+                {"identity_gate": after})
+            sys.exit(f"G19_IDENTITY HALT: the {after['identity']} "
+                     f"identity is at {after['already_charged_hours']} h "
+                     f"of {after['ceiling_hours']} h; execution stops "
+                     f"and returns to the user")
 
 
 def _train_core_locked(arm, scale, seed, recipe, run_name, result_path,
-                       started) -> int:
+                       started, identity_gate, storage,
+                       remaining) -> int:
     # Independent fail-closed authorisation. This helper is private by
     # naming convention only and is callable by direct import, so it must
     # NOT rely on train_core_cell's wrapper checks.
@@ -1544,7 +1586,13 @@ def _train_core_locked(arm, scale, seed, recipe, run_name, result_path,
     # the hours its earlier processes already spent, restored from the
     # per-epoch record, so a cell that crashes at 7 h cannot be handed a
     # fresh 8 h by restarting.
-    prior_seconds = float(sum(train_times) + sum(eval_times))
+    # Every prior process of this cell, read from the append-only
+    # ledger: per-epoch train and eval time would omit store hashing,
+    # the LM load and promotion, G8 (up to 200 epochs) and G14
+    # pre-selection, so a crash-resume cycle could otherwise buy back
+    # hours the cell had already burned.
+    prior_seconds = 3600.0 * e8b_run.cell_hours(
+        e8b_run.read_spend_ledger(), arm, scale, seed)
     if prior_seconds:
         print(f"[WALL] {prior_seconds / 3600:.2f} h carried forward from "
               f"earlier processes of this cell")
@@ -1878,7 +1926,7 @@ def _train_core_locked(arm, scale, seed, recipe, run_name, result_path,
         "wall_hours_carried_from_earlier_processes": round(
             prior_seconds / 3600, 3),
         "identity_gate_before": identity_gate,
-        "identity_gate_after": None,   # replaced below, once charged
+        "remaining_core_gate": remaining,
         "storage_gate": storage,
         "gpu": fingerprint,
         "peak_memory": e8b_run.memory_gate(
@@ -1895,12 +1943,12 @@ def _train_core_locked(arm, scale, seed, recipe, run_name, result_path,
         "g10_collapse": g10,
         "g14_post_selection": g14_post,
         "clean_test_accessed": False}}
-    # Charge the MEASURED hours to this model identity, then re-check.
-    # Charging before writing the record means the ledger can never
-    # under-count a completed cell.
-    e8b_run.charge_identity_hours(arm, scale, seed, elapsed / 3600)
-    after = e8b_run.per_identity_gate(arm, 0.0)
-    record["e8b_core_cell"]["identity_gate_after"] = after
+    # The identity charge is made by train_core_cell's finally block, on
+    # EVERY exit path, so it is not repeated here. What is recorded here
+    # is the ledger position as it stands before this process's own
+    # charge lands.
+    record["e8b_core_cell"]["identity_gate_before_this_process_charge"] = \
+        e8b_run.per_identity_gate(arm, 0.0)
     e8b_run.atomic_write_json(result_path, record)
     print(f"[CORE DONE] {run_name}: canonical epoch {canonical_epoch}, "
           f"dev {primary_accuracy:.4f}, wall {elapsed / 3600:.2f} h")
