@@ -196,16 +196,16 @@ def test_registry_and_scope() -> None:
           e8b_run.MODEL_REPO == e8a.MODEL_REPO
           and e8b_run.MODEL_REVISION == e8a.MODEL_REVISION
           and e8b_run.RANDOM_INIT_SEED == e8a.RANDOM_INIT_SEED)
-    check("authorisation names exactly the B3/train_40k/seed0 search",
-          e8b_run.TRAINING_AUTHORIZED == "search-grid-b3-train40k-seed0"
+    check("no training is authorised under the frozen amendment",
+          e8b_run.TRAINING_AUTHORIZED == "core-matrix-frozen-pending-approval"
+          and e8b_run.SEARCH_ABANDONED is True
           and e8b_run.PILOT_CELL == ("B3", "train_40k", 0)
-          and e8b_run.SEARCH_CELL == ("B3", "train_40k", 0)
           and e8b_run.PILOT_HYPER == {"lr": 3e-4, "warmup_frac": 0.0,
                                       "dropout": 0.1})
-    check("the authorised search is the frozen eight-point grid only",
+    check("the abandoned eight-point grid is retained for audit only",
           len(e8b_run.SEARCH_GRID) == 8)
-    check("U4 is decided as PROMOTE with fail-closed validation",
-          e8b_run.U4_DECIDED == "promote")
+    check("U4 is withdrawn; no search checkpoint is promoted",
+          e8b_run.U4_DECIDED == "withdrawn-2026-08-07")
 
     registry_text = json.dumps(e8b_run.ARMS).lower()
     check("no 360M identity in the arm registry", "360" not in registry_text)
@@ -1232,16 +1232,11 @@ def test_search_grid_and_bindings() -> None:
           and training.run_name_for(3)
           == "e8b_B3_train_40k_seed0_search3")
 
-    # The authorisation guard confines training to the search cell.
-    must_fail("a core cell is refused",
-              lambda: e8b_run.train("B3", "train_250k", 0))
-    must_fail("another seed is refused",
-              lambda: e8b_run.train("B3", "train_40k", 1))
-    must_fail("B2 is refused", lambda: e8b_run.train("B2", "train_40k", 0))
-    must_fail("B1 is refused", lambda: e8b_run.train("B1", "train_40k", 0))
-    must_fail("a grid point outside the frozen eight is refused at the "
-              "entry point",
-              lambda: e8b_run.train("B3", "train_40k", 0, grid_point=9))
+    # Every training entry refuses under the frozen amendment; the
+    # per-cell and per-grid-point refusals are covered in
+    # test_fp32_amendment.
+    must_fail("training refuses entirely",
+              lambda: e8b_run.train("B3", "train_40k", 0))
 
     # G15 row counts are derived and asserted, never literals.
     src = (E8B_DIR / "training.py").read_text()
@@ -1301,6 +1296,223 @@ def test_search_grid_and_bindings() -> None:
                           out_of_range, answers, "demo3", "probe"))
     finally:
         e8b_run.OUT_DIR = original_out
+
+
+# --- 26d. The 2026-08-07 FP32 amendment ---------------------------------------
+
+def test_fp32_amendment() -> None:
+    """Point 11 of the amendment: model identity, recipe/hash separation,
+    old-checkpoint resume refusal, G14-FP32 sampling, resource gates and
+    the provenance transition."""
+    from experiments.e8b_readout_generation import training
+
+    # --- the search is abandoned and every training entry refuses ---
+    check("the eight-point search is recorded as abandoned",
+          e8b_run.SEARCH_ABANDONED is True)
+    check("the authorisation state does not authorise core training",
+          e8b_run.TRAINING_AUTHORIZED == "core-matrix-frozen-pending-approval")
+    check("U4 is withdrawn, so no search checkpoint is promoted",
+          e8b_run.U4_DECIDED == "withdrawn-2026-08-07")
+    for point in (1, 4, 8):
+        must_fail(f"grid point {point} is refused",
+                  lambda p=point: e8b_run.train("B3", "train_40k", 0,
+                                                grid_point=p))
+    for cell in (("B3", "train_40k", 0), ("B1", "train_250k", 2),
+                 ("B2", "train_40k", 1)):
+        must_fail(f"core cell {cell} refuses without approval",
+                  lambda c=cell: e8b_run.train(*c))
+    must_fail("a non-core cell is refused",
+              lambda: e8b_run.train("B4", "train_40k", 0))
+    must_fail("a non-core seed is refused",
+              lambda: e8b_run.train("B3", "train_40k", 7))
+
+    # --- the 18-cell matrix ---
+    check("the core matrix is the 18 pair-matched cells",
+          len(e8b_run.CORE_CELLS) == 18
+          and e8b_run.CORE_ARMS == ("B1", "B2", "B3")
+          and e8b_run.CORE_SCALES == ("train_40k", "train_250k")
+          and e8b_run.CORE_SEEDS == (0, 1, 2)
+          and len(set(e8b_run.CORE_CELLS)) == 18)
+    for arm in e8b_run.CORE_ARMS:
+        for scale in e8b_run.CORE_SCALES:
+            present = {s for a, sc, s in e8b_run.CORE_CELLS
+                       if a == arm and sc == scale}
+            check(f"{arm}/{scale} carries all three seeds",
+                  present == {0, 1, 2})
+
+    # --- recipe / hash family separation ---
+    core = {cell: training.build_core_recipe(*cell)
+            for cell in e8b_run.CORE_CELLS}
+    hashes = {training.recipe_sha256(r) for r in core.values()}
+    check("every core cell has a distinct recipe hash", len(hashes) == 18)
+    search_hashes = {training.recipe_sha256(training.build_recipe(i))
+                     for i in range(1, 9)}
+    check("no core recipe hash collides with the superseded search family",
+          not (hashes & search_hashes))
+    check("every core recipe carries the amended protocol family",
+          all(r["protocol_family"] == e8b_run.PROTOCOL_FAMILY
+              for r in core.values())
+          and e8b_run.PROTOCOL_FAMILY == "e8b-fp32-core-2026-08-07")
+    check("no superseded search recipe carries a protocol family",
+          all("protocol_family" not in training.build_recipe(i)
+              for i in range(1, 9)))
+    check("every core recipe names FP32 canonical evaluation",
+          all(r["canonical_evaluation_precision"] == "fp32"
+              and "CANONICAL FP32" in r["precision"]
+              for r in core.values()))
+
+    # --- the fixed pre-result recipe, and its recorded justification ---
+    for cell, r in core.items():
+        if cell[0] == "B1":
+            continue
+        check(f"{cell[0]}/{cell[1]}/seed{cell[2]} uses the fixed "
+              f"pre-result hyperparameters",
+              r["lr"] == 3e-4 and r["warmup_frac"] == 0.0
+              and r["dropout"] == 0.1)
+    check("the fixed recipe equals the original grid point 1 pilot",
+          training.CORE_FIXED_HYPER == {"lr": 3e-4, "warmup_frac": 0.0,
+                                        "dropout": 0.1}
+          and training.CORE_FIXED_HYPER["lr"]
+          == training.build_recipe(1)["lr"]
+          and training.CORE_FIXED_HYPER["dropout"]
+          == training.build_recipe(1)["dropout"])
+    check("the justification records PRE-RESULT retention, not a win",
+          "PRE-RESULT" in training.CORE_FIXED_JUSTIFICATION
+          and "not because it achieved the highest"
+          in training.CORE_FIXED_JUSTIFICATION)
+    check("B1 keeps the section 7.3 classifier recipe, not the "
+          "likelihood recipe",
+          all(core[c]["recipe_identifier"].startswith("7.3")
+              and core[c]["objective"].startswith("softmax cross-entropy")
+              for c in e8b_run.CORE_CELLS if c[0] == "B1"))
+    check("B2 and B3 keep the section 7.4 likelihood recipe",
+          all(core[c]["recipe_identifier"].startswith("7.4")
+              for c in e8b_run.CORE_CELLS if c[0] in ("B2", "B3")))
+
+    # --- A6: B2/B3 pairing is provable ---
+    for scale in e8b_run.CORE_SCALES:
+        for seed in e8b_run.CORE_SEEDS:
+            b2 = core[("B2", scale, seed)]
+            b3 = core[("B3", scale, seed)]
+            differing = [k for k in b2 if b2[k] != b3[k]]
+            check(f"B2/B3 at {scale}/seed{seed} differ only in the arm "
+                  f"label", differing == ["arm"], str(differing))
+            check(f"B2/B3 at {scale}/seed{seed} share a paired recipe "
+                  f"hash",
+                  training.paired_recipe_sha256(b2)
+                  == training.paired_recipe_sha256(b3))
+    check("the paired hash still separates scales and seeds",
+          len({training.paired_recipe_sha256(core[("B3", sc, sd)])
+               for sc in e8b_run.CORE_SCALES
+               for sd in e8b_run.CORE_SEEDS}) == 6)
+
+    # --- old-checkpoint resume refusal ---
+    original_out = e8b_run.OUT_DIR
+    try:
+        with tempfile.TemporaryDirectory() as tmp:
+            e8b_run.OUT_DIR = Path(tmp)
+            must_fail("a checkpoint with no protocol family is refused",
+                      lambda: e8b_run.assert_core_family(
+                          {"recipe_sha256": "x"}, "demo", Path("old.pt")))
+            must_fail("a foreign protocol family is refused",
+                      lambda: e8b_run.assert_core_family(
+                          {"protocol_family": "e8b-bf16-search"},
+                          "demo2", Path("old.pt")))
+            body = json.loads(
+                (Path(tmp) / "HALT_demo_FAMILY.json").read_text())
+            check("the family refusal is recorded atomically",
+                  body["gate_halt"]["gate"] == "FAMILY"
+                  and body["gate_halt"]["detail"]["required_family"]
+                  == e8b_run.PROTOCOL_FAMILY)
+            check("a matching family is accepted",
+                  e8b_run.assert_core_family(
+                      {"protocol_family": e8b_run.PROTOCOL_FAMILY},
+                      "demo3", Path("new.pt")) is None)
+    finally:
+        e8b_run.OUT_DIR = original_out
+
+    # --- G14-FP32 sampling rule ---
+    rng = np.random.default_rng(0)
+    margins = rng.random(7714) * 3.0
+    margins[100] = 1e-9
+    margins[200] = 5e-9
+    pre = training.g14_fp32_validation_rows(margins, 7714, "pre-selection")
+    post = training.g14_fp32_validation_rows(margins, 7714,
+                                             "post-selection")
+    check("the pre-selection stage uses the legacy pinned rows only",
+          len(pre["rows"]) == 64 and set(pre["strata"]) == {"P"}
+          and pre["rows"] == sorted(training.pinned_g14_rows(7714)))
+    check("the post-selection stage adds the lowest-margin and ordinary "
+          "strata", set(post["strata"]) == {"P", "L", "O"}
+          and len(post["strata"]["L"]) == 64
+          and len(post["rows"]) > 64)
+    check("the lowest-margin stratum really is the tightest region",
+          100 in post["strata"]["L"] and 200 in post["strata"]["L"]
+          and max(margins[r] for r in post["strata"]["L"])
+          <= min(margins[r] for r in range(7714)
+                 if r not in set(post["strata"]["L"])) + 1e-12)
+    check("the post-selection set is a deduplicated sorted union",
+          post["rows"] == sorted(set(post["rows"]))
+          and set(post["rows"]) == (set(post["strata"]["P"])
+                                    | set(post["strata"]["L"])
+                                    | set(post["strata"]["O"])))
+    again = training.g14_fp32_validation_rows(margins, 7714,
+                                              "post-selection")
+    check("the sampling rule is deterministic",
+          again["rows"] == post["rows"])
+    other = training.g14_fp32_validation_rows(
+        rng.random(7714) * 3.0, 7714, "post-selection")
+    check("the lowest-margin stratum adapts to the checkpoint",
+          other["strata"]["L"] != post["strata"]["L"]
+          and other["strata"]["P"] == post["strata"]["P"])
+    record = training.g14_fp32_strata_record(post)
+    check("the strata record carries sizes and hashes",
+          record["total_rows"] == len(post["rows"])
+          and set(record["strata_sizes"]) == {"P", "L", "O"}
+          and len(record["rows_sha256"]) == 64)
+
+    # --- resource gates still hold under the amendment ---
+    check("the resource ceilings are unchanged by the amendment",
+          e8b_run.WALL_CLOCK_HALT_HOURS == 8.0
+          and e8b_run.PER_IDENTITY_CEILING_HOURS == 35.0
+          and e8b_run.CORE_CEILING_HOURS == 180.0
+          and e8b_run.MEMORY_CEILING_FRACTION == 0.80)
+    split = e8b_run.memory_gate(int(0.70 * 20 * 2 ** 30), 20 * 2 ** 30,
+                                int(0.81 * 20 * 2 ** 30))
+    check("the hard memory gate is still reserved-based", split["fires"])
+
+    # --- provenance transition ---
+    amendment = (config.RESULTS_DIR / "experiments"
+                 / "e8b_readout_generation"
+                 / "protocol_amendment_20260807_fp32.json")
+    check("the amendment record exists and is tracked", amendment.exists())
+    body = json.loads(amendment.read_text())["e8b_protocol_amendment"]
+    superseded = " ".join(json.dumps(s) for s in body["supersedes"])
+    check("the amendment names the section-20 native-BF16 clause",
+          "section 20" in superseded and "never upcast" in superseded)
+    check("the amendment names the abandoned search and withdrawn U4",
+          "7.4" in superseded and "U4" in superseded)
+    check("the amendment records that BF16 is diagnostic only",
+          "secondary deployment" in json.dumps(body["amendment"]["A1_precision"]))
+    check("the amendment records the 18-cell matrix",
+          body["amendment"]["A5_final_matrix"]["cells"] == 18)
+    check("the amendment carries the open issues honestly",
+          {o["id"] for o in body["known_open_issues_carried_forward"]}
+          >= {"OI1", "OI2", "OI3", "OI4"})
+    check("the amendment does not claim G14-FP32 is a stricter clause",
+          "NOT correct to describe" in body["g14_fp32"]
+          ["honest_characterisation"])
+
+    src = (E8B_DIR / "run.py").read_text()
+    check("TF32 is pinned off for the canonical FP32 path",
+          "allow_tf32 = False" in src
+          and 'set_float32_matmul_precision("highest")' in src)
+    check("FP32 promotion refuses if it is not identity preserving",
+          "FP32 PROMOTION REFUSED" in src
+          and "round-trip to the frozen bfloat16 values" in src)
+    check("the core trainer refuses rather than dispatching to a "
+          "half-built runner",
+          "E8B CORE TRAINER NOT IMPLEMENTED" in src)
 
 
 # --- 27. E7b serial-extension contracts ---------------------------------------
@@ -1538,6 +1750,7 @@ def run() -> None:
     test_training_module()
     test_g10_prediction_entropy()
     test_search_grid_and_bindings()
+    test_fp32_amendment()
     test_serial_contract()
     test_serial_queries()
     test_provenance()

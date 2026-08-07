@@ -1,0 +1,176 @@
+{
+  "e8b_protocol_amendment": {
+    "dated_utc": "2026-08-07",
+    "status": "AUTHORISED BY THE USER; execution of core cells still requires a separate explicit approval",
+    "supersedes": [
+      {
+        "target": "master protocol section 20, the pre-registered native-BF16 evaluation clause",
+        "quoted": "The frozen language models are held in their native bfloat16 at all times, including during evaluation - they are never upcast. ... Pre-registered; any change is a stop-and-ask.",
+        "location": "e8-master-protocol-canonical.md:1615-1623",
+        "scope_of_supersession": "E8B only. The stop-and-ask required by that clause was raised and the user authorised the change on 2026-08-07.",
+        "note": "master protocol section 18's statement that the fp32 diagnostic is 'not a change to the authorised compute precision' is also superseded for E8B, because fp32 evaluation is now the operative path."
+      },
+      {
+        "target": "master protocol section 7.4, the eight-point E8B likelihood recipe search",
+        "scope_of_supersession": "the SEARCH is abandoned. The eight-point grid table itself is retained as the historical definition; no further grid point is run and no winner is claimed."
+      },
+      {
+        "target": "U4 (promote the winning search checkpoint into the matching core cell)",
+        "scope_of_supersession": "withdrawn entirely. No search checkpoint is promoted. Every core cell is trained fresh under this amendment."
+      },
+      {
+        "target": "G14 as implemented through commit 998be0c",
+        "scope_of_supersession": "replaced by G14-FP32, specified below."
+      }
+    ],
+    "amendment": {
+      "A1_precision": {
+        "training": "BF16 autocast on the training path only, unchanged",
+        "frozen_model_identity": "unchanged. The pinned SmolLM2-135M checkpoint at revision 93efa2f097d58c2a74874c7e644dbc9b0cee75a2 stores all 272 tensors as BF16 on disk. Canonical evaluation promotes those EXACT state values to FP32; BF16 is a truncated FP32 so the promotion is lossless and the values are bitwise unchanged. Verified: promotion equals a direct FP32 load bitwise, and the promoted state round-trips to BF16 exactly, including the non-persistent rotary inv_freq buffers.",
+        "canonical_evaluation": "FP32",
+        "canonical_applies_to": [
+          "per-epoch development evaluation",
+          "early stopping",
+          "best-checkpoint selection within a run",
+          "final R1, R2 and R3 evaluation",
+          "G14-FP32",
+          "every final E8B comparison, including B3 minus B2"
+        ],
+        "bf16_status": "may be reported ONLY as a secondary deployment or efficiency diagnostic, explicitly labelled; never as a scientific accuracy and never as a selection basis",
+        "provenance_caveat": "the frozen model's state_dict SHA-256 differs between dtypes (bf16 20add223..., fp32 d2f53e18...) because the hash covers serialised bytes. The VALUES are identical. Both hashes are recorded in every core record, and g2_provenance must record the EVALUATION dtype alongside the pinned load dtype."
+      },
+      "A2_search_abandoned": {
+        "decision": "the eight-point recipe search is permanently stopped",
+        "grid_4_to_8": "NOT RUN, and not authorised",
+        "grids_1_to_3": "preserved as EXPLORATORY / PROTOCOL-DIAGNOSTIC evidence only",
+        "prohibitions": [
+          "no grid point is a final core result",
+          "no hyperparameter winner is claimed",
+          "no between-grid difference is reported as evidence of recipe superiority"
+        ],
+        "reason_recorded": "the three completed points are statistically indistinguishable (McNemar p = 0.88, 0.44, 0.54; 95% paired half-width about 0.0119, some 92 development rows, against a total observed spread of 36 rows), the single-arm seed spread measured elsewhere in this project (45 rows) exceeds the whole grid spread, and the observed ranking is confounded by unequal epoch counts: plateau evaluation counts 23/14/9 with plateau means 0.53143/0.53222/0.53237, so the run-length-free ordering REVERSES the ordering by maximum."
+      },
+      "A3_fixed_recipe": {
+        "lr": 0.0003,
+        "warmup_frac": 0.0,
+        "dropout": 0.1,
+        "identical_to": "the originally preregistered grid point 1 pilot configuration",
+        "justification_recorded_explicitly": "retained because it was the PRE-RESULT pilot and default configuration, not because it achieved the highest observed development score. No selection was performed on any observed result. This wording is binding on every E8B report.",
+        "applies_to_arms": ["B2", "B3"],
+        "b1_recipe": "B1 keeps the stored v3_01 classifier recipe of master protocol section 7.3; the E8B likelihood recipe and its search never applied to B1"
+      },
+      "A4_u4_withdrawn": {
+        "decision": "no existing search checkpoint is promoted into the final core matrix",
+        "consequence": "all 18 core cells are trained fresh under this amendment",
+        "old_checkpoints": "the six search checkpoints are retained as exploratory evidence, archived and hash-recorded, and are structurally prevented from being resumed or reused (see A8)"
+      },
+      "A5_final_matrix": {
+        "arms": ["B1", "B2", "B3"],
+        "scales": ["train_40k", "train_250k"],
+        "seeds": [0, 1, 2],
+        "cells": 18,
+        "pair_preservation": "B1/B2/B3 all run at every scale and seed. No arm, scale or seed may be dropped automatically; if a gate fires, execution stops and returns to the user with pair-preserving alternatives."
+      },
+      "A6_paired_b2_b3": {
+        "requirement": "for a given (scale, seed), B2 and B3 must share bitwise-identical trainable initialisation, identical data ordering, the identical fixed recipe and the identical evaluation protocol",
+        "mechanism": "build_trunk_and_projection(seed, dropout) is called with the same seed for both arms, and the projection scale is taken from the same cached CPU copy of the pretrained embedding table for both, so the alpha buffer is bitwise identical across the pair; the training loader generator is seeded with the same seed; the recipe hash is identical for both arms",
+        "the_only_difference": "the frozen language model is the pinned pretrained SmolLM2-135M (B3) or the pinned-seed random initialisation (B2)",
+        "purpose": "B3 minus B2 is the primary causal pretrained-versus-random contrast and must remain a clean paired difference"
+      },
+      "A7_g14_fp32": "specified in the g14_fp32 block below; frozen before core execution",
+      "A8_family_separation": {
+        "requirement": "the new FP32 fixed-recipe family must not resume or reuse any BF16 search checkpoint",
+        "mechanisms": [
+          "the recipe dict carries protocol_family 'e8b-fp32-core-2026-08-07' and a precision string naming FP32 canonical evaluation, so every recipe hash in the new family differs from the search family (grid 1 was 8e94b4bf...)",
+          "verify_resume_checkpoint refuses on recipe-hash mismatch, so a search resume file cannot be loaded by a core run",
+          "core run names are e8b_{arm}_{scale}_seed{seed}, distinct from the search names e8b_B3_train_40k_seed0_search{n}, so no path collision exists",
+          "an explicit refusal check rejects any checkpoint whose recorded protocol_family is absent or different, with a recorded halt rather than an uncaught assertion"
+        ]
+      },
+      "A9_invalidated_evidence": {
+        "location": "/user/HS400/mc02623/backups/efficient-vision-language-reasoning/invalidated-evidence/",
+        "contents": "the confounded v1 numerical characterization summary, marked INVALIDATED and linked to its corrected replacement g14_numerical_characterization_v2.json",
+        "disclosure": "the raw v1 JSON was DELETED rather than quarantined, and its generating script was overwritten before commit; both are unrecoverable. This is recorded in full, including that it was a procedural failure and cost auditability, even though no surviving conclusion depends on it.",
+        "rule": "invalidated material stays outside results/experiments/ and is never cited, aggregated or used"
+      }
+    },
+    "g14_fp32": {
+      "status": "FROZEN before core execution",
+      "canonical_scorer": "the BATCHED R1 scorer with the frozen language model in FP32, at the evaluation batch size of 128, on the fp32 evaluation path",
+      "cached_scorer_status": "an optimised inference implementation; it must match the canonical argmax and never determines selection",
+      "prefix_rule": "one FP32 prefix tensor per row, SHARED by all scorers, so the gate isolates the scorer implementation and never confounds it with batch composition",
+      "validation_set": {
+        "rationale": "the old gate drew 64 random rows and could not see the region where a flip is arithmetically possible; measured tie density varies by an order of magnitude between checkpoints, so the set must adapt per checkpoint as well as retain a fixed component",
+        "stratum_P_pinned": {
+          "rule": "the 64 rows given by numpy default_rng(0).choice(n_dev, 64, replace=False), sorted",
+          "purpose": "continuity with the superseded gate; fixed and checkpoint-independent",
+          "size": 64
+        },
+        "stratum_L_lowest_margin": {
+          "rule": "the 64 rows with the smallest FP32 canonical top1-minus-top2 margin from THIS checkpoint's own canonical development pass, ties broken by lowest row index",
+          "purpose": "the only region where an ordering flip is arithmetically possible; adapts to each checkpoint",
+          "size": 64
+        },
+        "stratum_O_ordinary": {
+          "rule": "8 rows from each of the FP32 margin bands [1e-3,1e-2), [1e-2,1e-1), [1e-1,1), [1,inf), drawn with numpy default_rng(20260807 + band_index) from the sorted row list of that band",
+          "purpose": "confirms that ordinary margins never disagree",
+          "size": 32
+        },
+        "union": "P union L union O, deduplicated and sorted; expected about 160 rows",
+        "pre_selection_invocation": "stratum P only, because L and O are not meaningful at untrained initial weights",
+        "post_selection_invocation": "the full union"
+      },
+      "clauses": [
+        {"id": "C1", "requirement": "canonical (batched) argmax == brute-force argmax on EVERY row", "on_failure": "HARD HALT with an atomic JSON record"},
+        {"id": "C2", "requirement": "cached argmax == canonical argmax on EVERY row", "on_failure": "HARD HALT with an atomic JSON record"},
+        {"id": "C3", "requirement": "R2 brute-force constrained walk == R2 cached walk on EVERY row", "on_failure": "HARD HALT with an atomic JSON record"}
+      ],
+      "no_exemption": "no margin-based exemption, no tolerance band, no near-tie category. Any argmax disagreement halts.",
+      "score_deltas": "recorded as DIAGNOSTICS ONLY and can neither cause nor prevent a halt",
+      "honest_characterisation": "the halting clauses are SUBSTANTIVELY THE SAME as the superseded gate, which already required three-way argmax identity and already treated its 1e-4 score tolerance as informational. What changes is the substrate (FP32 instead of BF16) and the validation set (about 160 stratified rows instead of 64 random). The gate is expected to fire far less often, because the measured FP32 scorer deltas are about 2e-05 while the BF16 deltas reached 2.5e-01. It is NOT correct to describe G14-FP32 as a stricter clause.",
+      "per_run_recording": [
+        "strata sizes and the SHA-256 of each stratum's row list",
+        "minimum and quantile FP32 canonical margins over the development set",
+        "counts of development rows below 1e-5, 1e-4 and 1e-3 FP32 margin",
+        "delta quantiles across the validation set",
+        "on halt: questionId, imageId, both candidate strings, canonical/brute/cached scores, canonical margin and both perturbations"
+      ],
+      "measured_cost": {
+        "fp32_brute_ms_per_row": 3741.7,
+        "fp32_cached_ms_per_row": 1372.6,
+        "fp32_r2_brute_ms_per_row": 31.2,
+        "fp32_r2_cached_ms_per_row": 29.1,
+        "total_ms_per_row": 5174.6,
+        "pre_selection_64_rows_minutes": 5.5,
+        "post_selection_160_rows_minutes": 13.8,
+        "per_lm_run_minutes": 19.3,
+        "applies_to": "B2 and B3 only, 12 of the 18 cells; B1 has no language-model scorers"
+      }
+    },
+    "known_open_issues_carried_forward": [
+      {
+        "id": "OI1",
+        "issue": "training is NOT bitwise deterministic. All three completed console logs contain alertNotDeterministic warnings from attention_backward.cu, and utils.set_seed uses warn_only=True, so non-deterministic attention backward kernels execute.",
+        "consequence": "reruns are fresh samples, not reproductions; no claim of exact reproduction of any earlier run may be made",
+        "status": "must be probed and disclosed before core execution; a determinism probe is part of the next-step plan"
+      },
+      {
+        "id": "OI2",
+        "issue": "early stopping on a noisy metric makes epoch count endogenous, and the maximum over epochs is biased upward by run length",
+        "consequence": "cells with more epochs get an inflated maximum; this confounds any cross-cell comparison",
+        "status": "affects the 18-cell matrix and must be addressed before comparisons are reported"
+      },
+      {
+        "id": "OI3",
+        "issue": "no per-row predictions are retained per run, so no paired test between cells is possible from the records",
+        "status": "per-row prediction dumps should be added before core execution"
+      },
+      {
+        "id": "OI4",
+        "issue": "TF32 matmul is currently off and the path is true IEEE FP32, but nothing pins or records this; a library default change would silently degrade canonical FP32",
+        "status": "must be pinned explicitly and recorded in run metadata"
+      }
+    ],
+    "clean_test_accessed": false
+  }
+}

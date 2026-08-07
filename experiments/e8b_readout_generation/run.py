@@ -1,28 +1,34 @@
 """E8B runner: arms, gates, checkpoint format, locks, projections, preflight.
 
     python -B experiments/e8b_readout_generation/run.py --preflight
-    python -B experiments/e8b_readout_generation/run.py --search-point N
+    python -B experiments/e8b_readout_generation/run.py --core-cell ARM SCALE SEED
 
-Remaining-search phase (user decision of 2026-08-07, recorded in
-protocol_clarification_20260807.json). The authorised runs are the EIGHT
-B3/train_40k/seed0 search grid points of master protocol section 7.4, run
-sequentially. Grid point 1 already ran on 2026-08-06 as the G19 multiplier
-pilot; points 2-8 are now authorised. Every core cell, B1, B2, every other
-arm, scale and seed, E9, E10 or any 360M identity, F1, F2 and the clean
-test remain refused and require further explicit user authorisation.
-U4 is decided as PROMOTE with fail-closed validation (see
-u4_decision.json); promotion cannot occur until the full search has a
-winner and every U4 condition passes.
+Amended protocol phase (user decision of 2026-08-07, recorded in
+protocol_amendment_20260807_fp32.json).
 
-Binding user decisions: U1 B4/B4r deferred (no 360M registry entry or
-execution path exists here); U2 and P2 no automatic 250k-only fallback and
-no arm removal (resource projections stop and return, never descope);
-P3 the expected-epoch 15/22 basis is the GOVERNING remaining-program
-projection, the 100-epoch projection is a mandatory reported stress
-scenario that does not halt by itself, and the 8-hour per-run, 35-hour
-per-identity, 80-per-cent-RESERVED-memory, storage, provenance,
-determinism and G14 gates remain hard halts; P1 the G10 p_n is an
-E8B-specific pseudo-probability, never numerically compared with E8A.
+The eight-point recipe search is PERMANENTLY STOPPED. Grid points 4-8 are
+not authorised and will not run. Grid points 1-3 are retained as
+exploratory / protocol-diagnostic evidence only; none is a final core
+result and no hyperparameter winner is claimed. U4 is WITHDRAWN: no
+search checkpoint is promoted, and every core cell is trained fresh.
+
+The final recipe is fixed to the originally preregistered grid point 1
+pilot configuration, lr 3e-4, warmup 0, dropout 0.1, retained because it
+was the PRE-RESULT default and not because it scored highest.
+
+Canonical scientific evaluation is FP32: the pinned frozen SmolLM2-135M
+state values, which are BF16 on disk, are promoted losslessly to FP32 so
+the model identity is unchanged and only the forward-pass arithmetic
+differs. FP32 governs per-epoch development evaluation, early stopping,
+best-checkpoint selection, final R1/R2/R3 evaluation and G14-FP32. BF16
+figures may be reported only as a secondary deployment or efficiency
+diagnostic. Training remains BF16 autocast on the training path.
+
+The successor matrix is 18 core cells, B1/B2/B3 x train_40k/train_250k x
+seeds 0/1/2, pair-matched so that B3 minus B2 remains a clean paired
+contrast. Core execution requires a SEPARATE explicit user approval which
+has not been given, so every training entry currently refuses.
+E9, E10, F1, F2 and the clean test remain refused.
 
 Nothing here reads, resolves or names the embargoed clean-test target.
 """
@@ -64,14 +70,37 @@ OUT_DIR = config.RESULTS_DIR / "experiments" / "e8b_readout_generation"
 # Every core cell, every other arm, scale and seed, B1, B2, E9, E10, F1,
 # F2 and the clean test remain refused and require further explicit user
 # authorisation.
-TRAINING_AUTHORIZED = "search-grid-b3-train40k-seed0"
+# The eight-point search was permanently STOPPED by the user on
+# 2026-08-07 (protocol_amendment_20260807_fp32.json, A2). Grid points 4-8
+# are not authorised and will not run; grid points 1-3 are retained as
+# exploratory / protocol-diagnostic evidence only and no hyperparameter
+# winner is claimed. The successor is the 18-cell core matrix under the
+# fixed pre-result recipe and FP32 canonical evaluation. Core execution
+# requires a SEPARATE explicit user approval, which has not been given:
+# this state refuses every training entry.
+TRAINING_AUTHORIZED = "core-matrix-frozen-pending-approval"
+SEARCH_ABANDONED = True
+
+# The amended protocol family. Every recipe hash in this family differs
+# from the superseded BF16 search family, so a search checkpoint can
+# never be resumed or reused by a core run (A8).
+PROTOCOL_FAMILY = "e8b-fp32-core-2026-08-07"
+EVALUATION_PRECISION = "fp32"
+
+# The final pair-matched core matrix (A5): 3 arms x 2 scales x 3 seeds.
+CORE_ARMS = ("B1", "B2", "B3")
+CORE_SCALES = ("train_40k", "train_250k")
+CORE_SEEDS = (0, 1, 2)
+CORE_CELLS = tuple((arm, scale, seed) for arm in CORE_ARMS
+                   for scale in CORE_SCALES for seed in CORE_SEEDS)
 PILOT_CELL = ("B3", "train_40k", 0)
 PILOT_HYPER = {"lr": 3e-4, "warmup_frac": 0.0, "dropout": 0.1}
 
-# The frozen eight-point search grid, master protocol section 7.4,
-# transcribed verbatim. Nothing here may be added, removed or reordered
-# after results are observed. Grid point 1 ran on 2026-08-06 as the G19
-# multiplier pilot; the user authorised points 2-8 on 2026-08-07.
+# HISTORICAL ONLY. The frozen eight-point grid of master protocol
+# section 7.4, transcribed verbatim. The search was permanently stopped
+# on 2026-08-07; this table is retained so the abandoned design stays
+# auditable and so tests can assert it was never extended. No training
+# entry consumes it.
 SEARCH_GRID = (
     {"grid_point": 1, "lr": 3e-4, "warmup_frac": 0.0, "dropout": 0.1},
     {"grid_point": 2, "lr": 3e-4, "warmup_frac": 0.0, "dropout": 0.3},
@@ -88,15 +117,11 @@ SEARCH_CELL = PILOT_CELL
 SELECTION_METRIC = "development R1 accuracy, EOS included"
 SELECTION_TIE_BREAK = "lowest grid index, then the earlier epoch"
 
-# U4, decided by the user on 2026-08-06 and recorded verbatim in
-# results/experiments/e8b_readout_generation/u4_decision.json: PROMOTE.
-# The winning B3/train_40k/seed0 search checkpoint becomes the matching
-# core checkpoint ONLY if it satisfies the complete frozen recipe,
-# checkpoint, provenance and gate requirements; any validation failure
-# stops and returns to the user; no automatic rerun exists. Promotion can
-# only happen after the full eight-point search has selected its winner,
-# which this phase does not run.
-U4_DECIDED = "promote"
+# U4 is WITHDRAWN by the amendment of 2026-08-07 (A4). No search
+# checkpoint is promoted into the final core matrix; every core cell is
+# trained fresh under the amended protocol. The superseded decision is
+# preserved verbatim in u4_decision.json as historical record.
+U4_DECIDED = "withdrawn-2026-08-07"
 
 MODEL_REPO = e8a.MODEL_REPO
 MODEL_REVISION = e8a.MODEL_REVISION
@@ -697,6 +722,71 @@ def preflight(device) -> int:
 
 # --- G19 halt machinery (master protocol section 14) --------------------------
 
+def pin_fp32_precision() -> dict:
+    """Pin and record the FP32 matmul path (amendment OI4). Canonical
+    FP32 must be true IEEE fp32: TF32 carries a 10-bit mantissa and
+    would silently degrade the canonical path to roughly eight times
+    BF16's resolution while every gate still called itself FP32."""
+    torch.backends.cuda.matmul.allow_tf32 = False
+    torch.backends.cudnn.allow_tf32 = False
+    torch.set_float32_matmul_precision("highest")
+    return {"cuda_matmul_allow_tf32":
+                bool(torch.backends.cuda.matmul.allow_tf32),
+            "cudnn_allow_tf32": bool(torch.backends.cudnn.allow_tf32),
+            "float32_matmul_precision":
+                torch.get_float32_matmul_precision(),
+            "rule": "canonical FP32 is true IEEE fp32; TF32 is pinned off"}
+
+
+def promote_lm_to_fp32(lm) -> dict:
+    """Amendment A1: canonical evaluation promotes the EXACT frozen state
+    values to FP32. The pinned checkpoint stores BF16 on disk and BF16 is
+    a truncated FP32, so the promotion is lossless and the model identity
+    is unchanged -- only the arithmetic precision of the forward pass
+    changes. Returns the identity record that every core result must
+    carry, including both dtype hashes so the fp32 hash can never be
+    misread as a different model."""
+    before = {k: v.clone() for k, v in lm.state_dict().items()}
+    bf16_sha = e8a.sha256_state_dict(before)
+    lm = lm.to(torch.float32)
+    after = lm.state_dict()
+    round_trips = all(torch.equal(after[k].to(torch.bfloat16), before[k])
+                      for k in before)
+    if not round_trips:
+        sys.exit("FP32 PROMOTION REFUSED: the promoted state does not "
+                 "round-trip to the frozen bfloat16 values, so the "
+                 "promotion would not be identity-preserving")
+    for parameter in lm.parameters():
+        parameter.requires_grad_(False)
+    lm.eval()
+    assert not any(p.requires_grad for p in lm.parameters())
+    assert not lm.training
+    return {"evaluation_precision": "fp32",
+            "promotion": "the pinned frozen bfloat16 state values "
+                         "promoted to fp32; identity-preserving",
+            "round_trips_to_bf16_exactly": True,
+            "bf16_state_dict_sha256": bf16_sha,
+            "fp32_state_dict_sha256": e8a.sha256_state_dict(after),
+            "sha_note": "the two hashes differ only because the digest "
+                        "covers serialised bytes at different dtypes; "
+                        "the VALUES are bitwise identical"}
+
+
+def assert_core_family(state: dict, run_name: str, path: Path) -> None:
+    """Amendment A8: a core run must never resume or reuse a checkpoint
+    from the superseded BF16 search family. Recorded halt, not an
+    uncaught assertion."""
+    family = state.get("protocol_family")
+    if family != PROTOCOL_FAMILY:
+        gate_halt(run_name, "FAMILY",
+                  f"checkpoint belongs to protocol family "
+                  f"{family!r}, not {PROTOCOL_FAMILY!r}; the superseded "
+                  f"BF16 search checkpoints are exploratory evidence "
+                  f"and are never resumed or reused by a core run",
+                  {"checkpoint": str(path), "found_family": family,
+                   "required_family": PROTOCOL_FAMILY})
+
+
 def halt_record_path(run_name: str, gate: str) -> Path:
     """One atomic JSON per halt, never overwritten. The gate name is part
     of the filename so a second, different failure cannot silently
@@ -826,26 +916,44 @@ def remaining_core_gate(expected_remaining_hours: float,
 
 # --- Guarded training entry ---------------------------------------------------
 
-def train(arm: str, scale: str, seed: int, grid_point: int = 1) -> int:
-    """The only training entry. Refuses anything that is not one of the
-    eight authorised B3/train_40k/seed0 search grid points of section
-    7.4. B1, B2, every core cell, every other scale and seed, E9, E10,
-    F1 and F2 require further explicit user authorisation."""
-    if TRAINING_AUTHORIZED != "search-grid-b3-train40k-seed0":
-        sys.exit("E8B TRAINING IS NOT AUTHORISED: the recorded "
-                 "authorisation state does not name an authorised run")
-    if (arm, scale, seed) != SEARCH_CELL:
+def train(arm: str, scale: str, seed: int, grid_point: int | None = None
+          ) -> int:
+    """The only training entry.
+
+    The eight-point search is permanently abandoned (A2), so no grid
+    point runs under any circumstance. The successor is the 18-cell core
+    matrix under the fixed pre-result recipe and FP32 canonical
+    evaluation, and that matrix requires a SEPARATE explicit user
+    approval which has not been given. Every path therefore refuses."""
+    if grid_point is not None:
+        sys.exit(f"E8B SEARCH REFUSED: the eight-point recipe search was "
+                 f"permanently stopped on 2026-08-07. Grid points 4-8 "
+                 f"are not authorised, grid points 1-3 are exploratory "
+                 f"evidence only, and no hyperparameter winner is "
+                 f"claimed (protocol_amendment_20260807_fp32.json A2)")
+    if (arm, scale, seed) not in CORE_CELLS:
         sys.exit(f"E8B TRAINING REFUSED for {arm}/{scale}/seed{seed}: "
-                 f"only the search cell {SEARCH_CELL} is authorised. "
-                 f"Every core cell, B1, B2, every other scale and seed, "
-                 f"E9, E10, F1 and F2 require further explicit user "
-                 f"authorisation")
-    if grid_point not in {row["grid_point"] for row in SEARCH_GRID}:
-        sys.exit(f"E8B TRAINING REFUSED: grid point {grid_point} is not "
-                 f"one of the eight frozen section-7.4 points; no grid "
-                 f"point may be added after results are observed")
-    from experiments.e8b_readout_generation import training
-    return training.train_search_point(grid_point)
+                 f"not one of the {len(CORE_CELLS)} core cells "
+                 f"(B1/B2/B3 x train_40k/train_250k x seeds 0/1/2). "
+                 f"E9, E10, F1, F2 and the clean test remain refused.")
+    if TRAINING_AUTHORIZED != "core-matrix-approved":
+        sys.exit(f"E8B CORE TRAINING IS NOT AUTHORISED: the amended "
+                 f"protocol and the 18-cell matrix are frozen and under "
+                 f"review, and the recorded authorisation state is "
+                 f"{TRAINING_AUTHORIZED!r}. Core execution requires a "
+                 f"separate explicit user approval.")
+    # Reached only if a future approval flips TRAINING_AUTHORIZED. The
+    # core trainer is deliberately NOT implemented yet: three amendment
+    # open issues must be settled first (OI1 training determinism, OI2
+    # the epoch-budget confound, OI3 per-row prediction dumps), and B1
+    # needs its classifier training path. Refuse explicitly rather than
+    # dispatch to a half-built runner.
+    sys.exit("E8B CORE TRAINER NOT IMPLEMENTED: the amended protocol is "
+             "frozen but the core training path is not yet built. "
+             "Outstanding: the training-determinism probe (OI1), the "
+             "epoch-budget decision (OI2), per-row prediction dumps "
+             "(OI3), and the B1 classifier training path. Implement and "
+             "re-review before flipping the authorisation state.")
 
 
 def main() -> int:
@@ -854,21 +962,25 @@ def main() -> int:
     parser.add_argument("--pilot", action="store_true",
                         help="run the G19 pilot cell, search grid point 1")
     parser.add_argument("--search-point", type=int, default=None,
-                        metavar="N",
-                        help="run authorised search grid point N (1-8) "
-                             "at B3/train_40k/seed0")
+                        metavar="N", help="RETIRED; the search is stopped")
+    parser.add_argument("--core-cell", nargs=3,
+                        metavar=("ARM", "SCALE", "SEED"),
+                        help="run one of the 18 core cells (requires a "
+                             "separate explicit user approval)")
     args = parser.parse_args()
     utils.set_seed()
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     if args.preflight:
         return preflight(device)
-    if args.pilot:
-        return train(*SEARCH_CELL, grid_point=1)
-    if args.search_point is not None:
-        return train(*SEARCH_CELL, grid_point=args.search_point)
-    parser.error("this phase supports --preflight, --pilot and "
-                 "--search-point N only")
+    if args.pilot or args.search_point is not None:
+        sys.exit("the eight-point recipe search was permanently stopped "
+                 "on 2026-08-07; --pilot and --search-point are retired")
+    if args.core_cell:
+        arm, scale, seed = args.core_cell
+        return train(arm, scale, int(seed))
+    parser.error("this phase supports --preflight and "
+                 "--core-cell ARM SCALE SEED only")
 
 
 if __name__ == "__main__":

@@ -97,9 +97,157 @@ def build_recipe(grid_point: int) -> dict:
     }
 
 
+# --- The amended core recipe family (2026-08-07) -----------------------------
+
+CORE_FIXED_HYPER = {"lr": 3e-4, "warmup_frac": 0.0, "dropout": 0.1}
+CORE_FIXED_JUSTIFICATION = (
+    "retained because it was the PRE-RESULT preregistered pilot and "
+    "default configuration, not because it achieved the highest observed "
+    "development score; the eight-point search was abandoned and no "
+    "hyperparameter winner is claimed")
+
+
+def build_core_recipe(arm: str, scale: str, seed: int) -> dict:
+    """The frozen recipe for one of the 18 core cells.
+
+    B2 and B3 take the E8B likelihood recipe of section 7.4 with the
+    hyperparameters fixed to the pre-result pilot configuration. B1 keeps
+    the stored v3_01 classifier recipe of section 7.3, to which the
+    likelihood search never applied.
+
+    Every recipe in this family carries `protocol_family` and an FP32
+    canonical-evaluation precision string, so its hash necessarily
+    differs from the superseded BF16 search family and a search
+    checkpoint can never be resumed by a core run (A8)."""
+    if arm not in e8b_run.CORE_ARMS:
+        raise AssertionError(f"{arm} is not a core arm")
+    if scale not in e8b_run.CORE_SCALES:
+        raise AssertionError(f"{scale} is not a core scale")
+    if seed not in e8b_run.CORE_SEEDS:
+        raise AssertionError(f"{seed} is not a core seed")
+    common = {
+        "protocol_family": e8b_run.PROTOCOL_FAMILY,
+        "arm": arm, "scale": scale, "seed": seed,
+        "max_epochs": 100, "patience": 10, "batch_size": 128,
+        "grad_clip": 1.0,
+        "scheduler": "cosine after warmup, LambdaLR, horizon "
+                     "100 x steps_per_epoch, stepped per optimizer step",
+        "precision": "bf16 autocast on the training path only; CANONICAL "
+                     "FP32 evaluation, the pinned frozen state values "
+                     "promoted losslessly to fp32; TF32 pinned off",
+        "canonical_evaluation_precision": "fp32",
+        "wall_clock_halt_hours": 8.0,
+    }
+    if arm == "B1":
+        # Section 7.3: the stored v3_01 classifier recipe.
+        common.update({
+            "recipe_identifier": "7.3 stored v3_01 classifier recipe",
+            "lr": 1e-3, "warmup_frac": 0.0, "dropout": 0.1,
+            "weight_decay": 1e-4, "weight_decay_on": "all parameters",
+            "objective": "softmax cross-entropy over the 100-answer "
+                         "vocabulary",
+            "selection_metric": "development classification accuracy",
+            "fixed_hyperparameters_justification":
+                "inherited from v3_01; the E8B likelihood search never "
+                "applied to B1 (section 7.3)"})
+    else:
+        common.update({
+            "recipe_identifier": "7.4 E8B likelihood recipe, "
+                                 "hyperparameters fixed (amendment A3)",
+            "lr": CORE_FIXED_HYPER["lr"],
+            "warmup_frac": CORE_FIXED_HYPER["warmup_frac"],
+            "dropout": CORE_FIXED_HYPER["dropout"],
+            "weight_decay": 0.01,
+            "weight_decay_on": "parameters with ndim >= 2 only",
+            "objective": "teacher-forced mean token NLL over answer "
+                         "tokens plus EOS, per example, then mean over "
+                         "the batch",
+            "selection_metric": "development R1 accuracy, EOS included, "
+                                "under canonical FP32 evaluation",
+            "fixed_hyperparameters_justification":
+                CORE_FIXED_JUSTIFICATION})
+    common["tie_break"] = "earliest epoch attaining the best value"
+    return common
+
+
+def core_run_name(arm: str, scale: str, seed: int) -> str:
+    """Distinct from the superseded search names, so no path collides."""
+    return f"e8b_core_{arm}_{scale}_seed{seed}"
+
+
 def recipe_sha256(recipe: dict) -> str:
     return hashlib.sha256(
         json.dumps(recipe, sort_keys=True).encode()).hexdigest()
+
+
+def paired_recipe_sha256(recipe: dict) -> str:
+    """A6: B2 and B3 at the same (scale, seed) must share an identical
+    recipe apart from the arm label itself. Hashing the recipe with
+    `arm` removed makes that pairing provable in the record."""
+    stripped = {k: v for k, v in recipe.items() if k != "arm"}
+    return hashlib.sha256(
+        json.dumps(stripped, sort_keys=True).encode()).hexdigest()
+
+
+# --- G14-FP32 validation set (frozen 2026-08-07, amendment A7) ---------------
+
+G14_FP32_PINNED = 64        # stratum P, the legacy fixed rows
+G14_FP32_LOWEST = 64        # stratum L, the per-checkpoint risk region
+G14_FP32_ORDINARY_PER_BAND = 8      # stratum O
+G14_FP32_ORDINARY_BANDS = ((1e-3, 1e-2), (1e-2, 1e-1),
+                           (1e-1, 1.0), (1.0, float("inf")))
+G14_FP32_ORDINARY_SEED = 20260807
+
+
+def g14_fp32_validation_rows(margins, n_dev: int, stage: str) -> dict:
+    """The frozen G14-FP32 sampling rule.
+
+    Stratum P: the 64 legacy pinned rows, fixed and checkpoint
+    independent, for continuity with the superseded gate.
+    Stratum L: the 64 smallest FP32 canonical margins for THIS
+    checkpoint, ties broken by lowest row index. This is the only region
+    where an ordering flip is arithmetically possible, and measured tie
+    density varies by an order of magnitude between checkpoints, so it
+    must adapt per checkpoint.
+    Stratum O: 8 rows from each of four ordinary margin bands, drawn with
+    a pinned seed, confirming that ordinary margins never disagree.
+
+    At the pre-selection stage the weights are untrained, so L and O are
+    not meaningful and stratum P alone is used."""
+    pinned = pinned_g14_rows(n_dev)
+    if stage == "pre-selection":
+        return {"rows": sorted(pinned), "strata": {"P": sorted(pinned)}}
+    order = sorted(range(n_dev), key=lambda r: (float(margins[r]), r))
+    lowest = order[:G14_FP32_LOWEST]
+    ordinary = []
+    for index, (low, high) in enumerate(G14_FP32_ORDINARY_BANDS):
+        band = [r for r in range(n_dev) if low <= float(margins[r]) < high]
+        if not band:
+            continue
+        rng = np.random.default_rng(G14_FP32_ORDINARY_SEED + index)
+        take = rng.choice(np.array(sorted(band)),
+                          size=min(G14_FP32_ORDINARY_PER_BAND, len(band)),
+                          replace=False)
+        ordinary.extend(int(r) for r in take)
+    union = sorted(set(pinned) | set(lowest) | set(ordinary))
+    return {"rows": union,
+            "strata": {"P": sorted(pinned), "L": sorted(lowest),
+                       "O": sorted(set(ordinary))}}
+
+
+def g14_fp32_strata_record(selection: dict) -> dict:
+    def digest(rows):
+        return hashlib.sha256(json.dumps(sorted(rows)).encode()).hexdigest()
+    return {"total_rows": len(selection["rows"]),
+            "rows_sha256": digest(selection["rows"]),
+            "strata_sizes": {k: len(v)
+                             for k, v in selection["strata"].items()},
+            "strata_sha256": {k: digest(v)
+                              for k, v in selection["strata"].items()},
+            "rule": "P = 64 legacy pinned rows; L = 64 lowest FP32 "
+                    "canonical margins for this checkpoint; O = 8 rows "
+                    "from each of four ordinary margin bands at a pinned "
+                    "seed; union deduplicated"}
 
 
 def run_name_for(grid_point: int) -> str:
