@@ -1,0 +1,87 @@
+{
+  "metadata": {
+    "timestamp": "2026-08-07T14:02:49",
+    "git_commit": "8d0a559",
+    "git_dirty": true,
+    "open_clip_version": "3.3.0",
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "h5py_version": "3.16.0",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "deterministic": true,
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "embed_dim": 512,
+    "top_k_answers": 100,
+    "n_train": 40000,
+    "n_val": 8000,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "hidden_dim": 512,
+    "dropout": 0.3,
+    "weight_decay": 0.0001
+  },
+  "e8b_superseded_evidence": {
+    "purpose": "an explicit, dated map of every E8B analysis that has been superseded or invalidated, what replaced it, and why. History is preserved, not rewritten: no commit is amended and no incorrect analysis is erased.",
+    "records": [
+      {
+        "item": "commit 998be0c, message diagnosis of the grid point 3 G14 halt",
+        "status": "SUPERSEDED - numerically wrong, retained unchanged",
+        "claimed": "row 3101 margin 4.768e-07, brute-versus-cached difference 2.801e-06, and 'all three scorers agree on the scores'",
+        "actual": "under the corrected shared-prefix method the margin is 3.5167e-06 and the brute perturbation is 1.604e-04; the scorers do NOT agree",
+        "why_wrong": "the figures came from single-row prefixes while the canonical scores came from batch-128 prefixes, so batch composition was confounded with the scorer",
+        "replaced_by": "g14_numerical_characterization_v2.json",
+        "note": "the commit is left exactly as written; git history is not rewritten. This record is the correction."
+      },
+      {
+        "item": "g14_numerical_characterization.json (v1)",
+        "status": "INVALIDATED and DELETED, disclosed",
+        "why_wrong": "the same batch-composition confound",
+        "replaced_by": "g14_numerical_characterization_v2.json",
+        "quarantine": "/user/HS400/mc02623/backups/efficient-vision-language-reasoning/invalidated-evidence/",
+        "note": "the raw JSON was deleted rather than quarantined and is unrecoverable, as is its generating script. Recorded as a procedural failure that cost auditability."
+      },
+      {
+        "item": "the plateau 'run-length-free reversal' claim",
+        "status": "WITHDRAWN as unsound",
+        "why_wrong": "the statistic was the mean of each run's top n-minus-7 epochs, so its window depended on run length and it was not run-length free; it was also conditioned on the outcome variable and constructed after the results were seen",
+        "actual": "under a genuinely length-free statistic, the mean of the top 16 epochs for all three runs, the ordering is 0.53322, 0.53123 and 0.51205, the SAME as the ordering by maximum",
+        "replaced_by": "protocol_amendment_20260807_fp32.json, A2_search_abandoned.withdrawn_claim"
+      },
+      {
+        "item": "the unsourced McNemar figures (p 0.88, 0.44, 0.54)",
+        "status": "SUPERSEDED by real computation",
+        "why_wrong": "no generating code and no retained per-row data existed; the same document's OI3 said the data was not kept",
+        "actual": "exact binomial McNemar from persisted per-row vectors: p 0.9040, 0.4858, 0.5616 with discordant counts 2475, 2522 and 2327",
+        "replaced_by": "exploratory_fp32_correctness.npz"
+      },
+      {
+        "item": "the claim that identity verification covered the rotary buffers",
+        "status": "WITHDRAWN, and the underlying defect FIXED",
+        "why_wrong": "no code had ever inspected those buffers, and the claim was false for B3 whose fp32 inv_freq does not round-trip through bfloat16",
+        "actual": "B2 carried a bfloat16-truncated rotary table while B3 kept fp32, an uncontrolled difference inside the primary B3 minus B2 contrast",
+        "replaced_by": "restore_rotary_fp32 and assert_lm_buffer_parity; both arms now reconstruct the table in fp32 from the same pinned configuration, verified bitwise"
+      },
+      {
+        "item": "grid points 1, 2 and 3 (the abandoned search)",
+        "status": "EXPLORATORY / PROTOCOL-DIAGNOSTIC evidence only",
+        "why": "selected on BF16 development accuracy under a superseded evaluation rule, with unequal epoch counts (30, 21, 16) under patience-based early stopping",
+        "prohibition": "never a core result; no hyperparameter winner is claimed; no between-point difference is evidence of recipe superiority"
+      },
+      {
+        "item": "the BF16 64-row G14 and its 1e-4 informational tolerance",
+        "status": "SUPERSEDED by G14-FP32",
+        "replaced_by": "g14_fp32_gate with the frozen P + L + O construction"
+      }
+    ],
+    "clean_test_accessed": false
+  }
+}

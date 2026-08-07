@@ -1515,6 +1515,189 @@ def test_fp32_amendment() -> None:
           "E8B CORE TRAINER NOT IMPLEMENTED" in src)
 
 
+# --- 26e. The 2026-08-07 core-readiness closure (OI1/OI2/OI5/OI6/OI7) --------
+
+def test_core_readiness_closure() -> None:
+    from experiments.e8b_readout_generation import training
+
+    # --- OI5: rotary / non-persistent buffer pairing ---
+    src = (E8B_DIR / "run.py").read_text()
+    check("the rotary buffers are reconstructed in fp32 from the pinned "
+          "configuration for BOTH arms",
+          "def restore_rotary_fp32" in src
+          and "restore_rotary_fp32(lm, cfg)" in src
+          and "type(module)(config=cfg)" in src)
+    check("the pair check inventories buffers, not state_dict",
+          "def lm_buffer_inventory" in src
+          and "lm.named_buffers()" in src
+          and "state_dict alone is " in src)
+    good = {"model.rotary_emb.inv_freq":
+            {"dtype": "torch.float32", "shape": [32], "sha256": "a"}}
+    check("identical buffer inventories pass the pair check",
+          e8b_run.assert_lm_buffer_parity(good, dict(good))["all_identical"])
+    bad_dtype = {"model.rotary_emb.inv_freq":
+                 {"dtype": "torch.bfloat16", "shape": [32], "sha256": "a"}}
+    must_fail("a bfloat16-truncated rotary buffer fails the pair check",
+              lambda: e8b_run.assert_lm_buffer_parity(good, bad_dtype))
+    bad_value = {"model.rotary_emb.inv_freq":
+                 {"dtype": "torch.float32", "shape": [32], "sha256": "b"}}
+    must_fail("a differing buffer VALUE fails the pair check",
+              lambda: e8b_run.assert_lm_buffer_parity(good, bad_value))
+    must_fail("a missing buffer fails the pair check",
+              lambda: e8b_run.assert_lm_buffer_parity(good, {}))
+
+    # --- OI6: BF16-prefix rejection and true FP32 construction ---
+    check("the canonical evaluation dtype is fp32",
+          training.CANONICAL_EVAL_DTYPE == torch.float32)
+    ok = torch.zeros(2, 33, 8, dtype=torch.float32)
+    check("an fp32 tensor passes the dtype gate",
+          training.assert_canonical_dtype(ok, "probe") is None)
+    for bad in (torch.bfloat16, torch.float16):
+        must_fail(f"a {bad} tensor is rejected at the dtype gate",
+                  lambda d=bad: training.assert_canonical_dtype(
+                      torch.zeros(2, 3, dtype=d), "probe"))
+    must_fail("bfloat16 R1 scores are rejected",
+              lambda: training.assert_canonical_scores(
+                  torch.zeros(2, 100, dtype=torch.bfloat16)))
+    tsrc = (E8B_DIR / "training.py").read_text()
+    check("canonical_prefix refuses autocast",
+          "torch.is_autocast_enabled()" in tsrc
+          and "autocast is active on the canonical" in tsrc)
+    check("canonical_prefix asserts the trainable, frozen and cached "
+          "inputs are all fp32",
+          "trainable trunk/projection weights" in tsrc
+          and "frozen language-model weights" in tsrc
+          and "cached image tokens as stored" in tsrc)
+    check("a cast bfloat16 prefix is explicitly forbidden",
+          "computed in bfloat16 and cast to " in tsrc)
+    check("the canonical dev pass never casts to bfloat16",
+          "def canonical_dev_predictions" in tsrc
+          and "torch.bfloat16" not in tsrc[
+              tsrc.index("def canonical_dev_predictions"):
+              tsrc.index("# --- OI7: G14-FP32")])
+
+    # --- OI7: protocol family separation and resume refusal ---
+    check("protocol_family is a resume field and is written first",
+          e8b_run.RESUME_FIELDS[0] == "protocol_family"
+          and "\"protocol_family\": PROTOCOL_FAMILY," in src)
+    check("verify_resume_checkpoint enforces the family BY DEFAULT",
+          "protocol_family: str | None = PROTOCOL_FAMILY" in src)
+    old_ckpt = (config.RESULTS_DIR / "experiments"
+                / "e8b_readout_generation" / "checkpoints"
+                / "resume_e8b_B3_train_40k_seed0_search1.pt")
+    if old_ckpt.exists():
+        must_fail("a superseded BF16-search checkpoint cannot resume into "
+                  "the FP32 core family",
+                  lambda: e8b_run.verify_resume_checkpoint(old_ckpt))
+        state = e8b_run.verify_resume_checkpoint(
+            old_ckpt, protocol_family=None)
+        check("the old checkpoint is still readable for audit with the "
+              "family check explicitly disabled",
+              state["epoch"] == 30 and "protocol_family" not in state)
+
+    # --- OI2: fixed 22-epoch schedule, no patience ---
+    check("the LM arms carry a fixed 22-epoch budget",
+          training.CORE_EPOCHS == {"B2": 22, "B3": 22}
+          and training.core_epoch_budget("B2") == 22
+          and training.core_epoch_budget("B3") == 22)
+    check("early stopping is disabled for the LM arms only",
+          set(training.CORE_NO_EARLY_STOPPING) == {"B2", "B3"})
+    check("B1 is NOT given the 22-epoch budget and keeps section 7.3",
+          training.core_epoch_budget("B1") is None
+          and training.build_core_recipe("B1", "train_40k", 0)[
+              "recipe_identifier"].startswith("7.3"))
+    check("the 22-epoch choice is recorded as a dated post-diagnostic "
+          "amendment covering the observed best epochs",
+          "post-diagnostic amendment" in training.CORE_EPOCH_JUSTIFICATION
+          and "20, 11" in training.CORE_EPOCH_JUSTIFICATION
+          and "SAME 22 evaluation opportunities"
+          in training.CORE_EPOCH_JUSTIFICATION)
+    check("the core trainer is gated and not silently runnable",
+          "NotImplementedError" in tsrc
+          and "E8B CORE TRAINER NOT IMPLEMENTED" in src)
+
+    # --- G14-FP32 as the live gate ---
+    check("G14-FP32 is implemented with the three hard clauses",
+          "def g14_fp32_gate" in tsrc
+          and "C1 canonical-versus-brute" in tsrc
+          and "C2 cached-versus-canonical" in tsrc
+          and "C3 R2 brute-versus-cached" in tsrc)
+    check("G14-FP32 records deltas as diagnostics only",
+          '"score_deltas_are_diagnostic_only": True' in tsrc
+          and '"no_numerical_exemption": True' in tsrc)
+    check("G14-FP32 uses the shared canonical prefix",
+          "canonical_prefix(model, lm, batch[0].to(device)" in tsrc)
+    margins = np.full(7714, 0.5)
+    margins[5] = float("nan")
+    original_out = e8b_run.OUT_DIR
+    try:
+        with tempfile.TemporaryDirectory() as tmp:
+            e8b_run.OUT_DIR = Path(tmp)
+            must_fail("a non-finite canonical margin halts G14-FP32",
+                      lambda: training.g14_fp32_gate(
+                          None, None, range(7714), {}, {}, None,
+                          "post-selection", "demo", margins))
+            check("the non-finite halt is recorded",
+                  (Path(tmp) / "HALT_demo_G14.json").exists())
+    finally:
+        e8b_run.OUT_DIR = original_out
+    must_fail("an unknown G14 stage is refused",
+              lambda: training.g14_fp32_gate(None, None, range(10), {}, {},
+                                             None, "whenever", "demo"))
+    must_fail("post-selection without margins is refused",
+              lambda: training.g14_fp32_gate(None, None, range(10), {}, {},
+                                             None, "post-selection", "d"))
+
+    # --- OI1: strict determinism ---
+    check("strict determinism is available and is NOT warn_only",
+          "def enable_strict_determinism" in src
+          and "warn_only=False" in src
+          and "enable_flash_sdp(False)" in src
+          and "enable_mem_efficient_sdp(False)" in src)
+    probe_dir = config.RESULTS_DIR / "experiments" / "e8b_readout_generation"
+    comparison = probe_dir / "determinism_probe_comparison.json"
+    check("the determinism probe comparison exists", comparison.exists())
+    if comparison.exists():
+        body = json.loads(comparison.read_text())[
+            "determinism_probe_comparison"]
+        check("two independent probes agree bit-for-bit",
+              body["bitwise_identical"] is True
+              and all(body["run_level_checks"].values()))
+        check("every probe epoch matches on metric, predictions, model, "
+              "optimizer and step",
+              all(all(v for k, v in e.items() if k.endswith("identical"))
+                  for e in body["per_epoch_checks"]))
+        check("the probe is marked non-scientific and never promoted",
+              body["NON_SCIENTIFIC"] is True)
+
+    # --- provenance and resource gates ---
+    projection = probe_dir / "core_resource_projection_20260807.json"
+    check("the core resource projection exists", projection.exists())
+    if projection.exists():
+        pr = json.loads(projection.read_text())[
+            "e8b_core_resource_projection"]
+        check("no hard ceiling is weakened and none fires",
+              not any(g.get("fires") for g in pr["gates"].values()))
+        check("the projection charges already-spent search and diagnostic "
+              "compute to the pretrained identity",
+              "already spent" in pr["gates"][
+                  "pretrained_identity_35h"]["includes"])
+        check("the tight pretrained-identity headroom is flagged",
+              pr["gates"]["pretrained_identity_35h"]["headroom_hours"] < 3.0
+              and "WARNING" in pr["gates"]["pretrained_identity_35h"])
+        check("the projection uses the MEASURED strict-deterministic rate",
+              pr["measured_inputs"][
+                  "train_seconds_per_epoch_40k_strict_deterministic"] == 78.0)
+    superseded = probe_dir / "superseded_evidence_20260807.json"
+    check("the superseded-evidence map exists", superseded.exists())
+    if superseded.exists():
+        items = json.loads(superseded.read_text())[
+            "e8b_superseded_evidence"]["records"]
+        check("history is preserved rather than rewritten",
+              any("git history is not" in json.dumps(r) for r in items)
+              and len(items) >= 6)
+
+
 # --- 27. E7b serial-extension contracts ---------------------------------------
 
 def test_serial_contract() -> None:
@@ -1684,8 +1867,10 @@ def test_provenance() -> None:
         check(f"binding hash {key} matches the live file",
               hashes[key] == live, f"{hashes[key][:12]} vs {live[:12]}")
 
-    check("the resume format covers all nineteen required categories",
-          len(e8b_run.RESUME_FIELDS) == 19
+    check("the resume format covers the nineteen required categories "
+          "plus the protocol family (OI7)",
+          len(e8b_run.RESUME_FIELDS) == 20
+          and "protocol_family" in e8b_run.RESUME_FIELDS
           and set(e8b_run.RESUME_FIELDS) >= {
               "model_state", "optimizer_state", "scheduler_state", "epoch",
               "global_step", "best_model_state", "best_metric",
@@ -1697,10 +1882,12 @@ def test_provenance() -> None:
 
     u4_path = (config.RESULTS_DIR / "experiments"
                / "e8b_readout_generation" / "u4_decision.json")
-    check("the U4 decision record exists and says PROMOTE",
+    check("the historical U4 record is preserved verbatim as PROMOTE, "
+          "and the live constant records its withdrawal",
           u4_path.exists()
           and json.loads(u4_path.read_text())["u4_decision"]["decision"]
-          == "PROMOTE")
+          == "PROMOTE"
+          and e8b_run.U4_DECIDED == "withdrawn-2026-08-07")
     clar_path = (config.RESULTS_DIR / "experiments"
                  / "e8b_readout_generation"
                  / "parameter_clarification.json")
@@ -1751,6 +1938,7 @@ def run() -> None:
     test_g10_prediction_entropy()
     test_search_grid_and_bindings()
     test_fp32_amendment()
+    test_core_readiness_closure()
     test_serial_contract()
     test_serial_queries()
     test_provenance()

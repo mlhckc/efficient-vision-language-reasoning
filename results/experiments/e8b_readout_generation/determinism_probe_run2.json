@@ -1,0 +1,179 @@
+{
+  "metadata": {
+    "timestamp": "2026-08-07T13:59:56",
+    "git_commit": "8d0a559",
+    "git_dirty": true,
+    "open_clip_version": "3.3.0",
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "h5py_version": "3.16.0",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "deterministic": true,
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "embed_dim": 512,
+    "top_k_answers": 100,
+    "n_train": 40000,
+    "n_val": 8000,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "hidden_dim": 512,
+    "dropout": 0.3,
+    "weight_decay": 0.0001
+  },
+  "determinism_probe": {
+    "NON_SCIENTIFIC": true,
+    "never_promoted": "this probe is never promoted into the final 18-cell matrix and trains no core cell",
+    "run_index": 2,
+    "epochs": 3,
+    "cell": [
+      "B3",
+      "train_40k",
+      0
+    ],
+    "recipe_sha256": "947f0f49b67e3fe30ab3ebece60a5fd9038e277d860f7597f5ad6d19009415b3",
+    "protocol_family": "e8b-fp32-core-2026-08-07",
+    "determinism": {
+      "use_deterministic_algorithms": true,
+      "warn_only": false,
+      "cudnn_deterministic": true,
+      "cudnn_benchmark": false,
+      "cublas_workspace_config": ":4096:8",
+      "sdpa_backends": {
+        "flash_sdp": false,
+        "mem_efficient_sdp": false,
+        "math_sdp": true
+      },
+      "rule": "strict determinism; a non-deterministic op raises rather than warning (OI1)"
+    },
+    "fp32_precision": {
+      "cuda_matmul_allow_tf32": false,
+      "cudnn_allow_tf32": false,
+      "float32_matmul_precision": "highest",
+      "rule": "canonical FP32 is true IEEE fp32; TF32 is pinned off"
+    },
+    "model_identity": {
+      "evaluation_precision": "fp32",
+      "promotion": "the pinned frozen bfloat16 state values promoted to fp32; identity-preserving",
+      "round_trips_to_bf16_exactly": true,
+      "bf16_state_dict_sha256": "20add223ddf2bc38dfdf4ffa8833e3f62cce2c21807afb41cbb281b2435b8f3d",
+      "fp32_state_dict_sha256": "d2f53e186b17f65c98d13b9690d8a1106a825e5e8bafe41f51f3195080881ef1",
+      "sha_note": "the two hashes differ only because the digest covers serialised bytes at different dtypes; the VALUES are bitwise identical"
+    },
+    "rotary_restoration": {
+      "restored_buffers": {
+        "inv_freq": {
+          "dtype": "torch.float32",
+          "shape": [
+            32
+          ],
+          "sha256": "4dcfda84ce763abe24a92bbf6718c1b03753068a39a15aaf8ae5ac2fdc6ca266"
+        },
+        "original_inv_freq": {
+          "dtype": "torch.float32",
+          "shape": [
+            32
+          ],
+          "sha256": "4dcfda84ce763abe24a92bbf6718c1b03753068a39a15aaf8ae5ac2fdc6ca266"
+        }
+      },
+      "rule": "reconstructed in fp32 from the pinned configuration, identically for the pretrained and random arms (OI5)"
+    },
+    "buffer_inventory": {
+      "model.rotary_emb.inv_freq": {
+        "dtype": "torch.float32",
+        "shape": [
+          32
+        ],
+        "sha256": "8efa5ae72fba0f25a2d4509ab96d5e5ffe54ea4171882b879143484fa5cb3bf6"
+      },
+      "model.rotary_emb.original_inv_freq": {
+        "dtype": "torch.float32",
+        "shape": [
+          32
+        ],
+        "sha256": "8efa5ae72fba0f25a2d4509ab96d5e5ffe54ea4171882b879143484fa5cb3bf6"
+      }
+    },
+    "g13_projection_scale": {
+      "target_rms_s": 0.13466305,
+      "initial_projection_rms_r0": 0.5687579,
+      "alpha": 0.23676691,
+      "rule": "alpha = s / r0; identical alpha for both pair members; interface-initialisation parity, not native-embedding-distribution parity"
+    },
+    "vocabulary_sha256": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680",
+    "step_losses_sha256": "c8acb74dbc90b26effc99d08b25b31cb64c5c4f198acaeac976809622ca60a11",
+    "step_losses_first10": [
+      7.42222785949707,
+      7.433343887329102,
+      6.94995641708374,
+      6.311013698577881,
+      5.821223258972168,
+      4.895063877105713,
+      4.313669204711914,
+      4.187290668487549,
+      3.636461019515991,
+      3.6227705478668213
+    ],
+    "step_losses_last10": [
+      0.5149903893470764,
+      0.4861908555030823,
+      0.47773197293281555,
+      0.5290587544441223,
+      0.41023337841033936,
+      0.4781980514526367,
+      0.4484272003173828,
+      0.5006165504455566,
+      0.4384397268295288,
+      0.5412995219230652
+    ],
+    "total_steps": 939,
+    "epochs_detail": [
+      {
+        "epoch": 1,
+        "global_step": 313,
+        "canonical_fp32_dev_r1": 0.4375162043038631,
+        "predictions_sha256": "c7135d34ec2805594a19d4c2814b6f159c14b0b392672083e4a1dafc34342690",
+        "margins_sha256": "6ee552ed8831650080ba1a918176c8b99e13698a87406ea7e7592ac3ad0b1fe2",
+        "model_state_digest": "a76e1d6914dac728d0459243f980f07323b7576ef639f5b51e5bacd4782dbcea",
+        "optimizer_digest": "dae7c93c8662f544d6abdce18bae160d5e3a38fa8db2fb51d7ef848ec5373701",
+        "train_seconds": 78.4,
+        "eval_seconds": 108.6
+      },
+      {
+        "epoch": 2,
+        "global_step": 626,
+        "canonical_fp32_dev_r1": 0.4742027482499352,
+        "predictions_sha256": "2de44d99ea9009a02dd699fe2bcd639a77b89c8b1f2aeb40132167d2e14cdbfa",
+        "margins_sha256": "dbb43f1ea30f0afed71e435e50dbbe30c97d53e28460e34828507b85777aedfe",
+        "model_state_digest": "60d858d25ed5a7f00c0983d84d386b1581d80a75b1e8897ca751f91f518a189e",
+        "optimizer_digest": "d0474aa6f7e29aedb231372d695ca4c741b2b7e09045941a3ff1a6423dc7a6dd",
+        "train_seconds": 78.0,
+        "eval_seconds": 108.5
+      },
+      {
+        "epoch": 3,
+        "global_step": 939,
+        "canonical_fp32_dev_r1": 0.5049261083743842,
+        "predictions_sha256": "6b877c64ff858b0fed82794f598a982ca1d8d7518b22b05f96eac90c600eb4c0",
+        "margins_sha256": "cfbffaa207ac24d19d38516006c26cf7a5dedb1caac3548f9ad4e237075dd410",
+        "model_state_digest": "2e299c65612e59f46fd367abb9cce925d64ef4c9344f95a0cba0b969712813e7",
+        "optimizer_digest": "3e32cd558c4110d3b0178118c63e03e59acf5e928ed04df5cab2236c244e3f40",
+        "train_seconds": 78.0,
+        "eval_seconds": 108.5
+      }
+    ],
+    "peak_allocated_mib": 6000.5,
+    "peak_reserved_mib": 7608.0,
+    "wall_seconds": 565.0,
+    "clean_test_accessed": false
+  }
+}

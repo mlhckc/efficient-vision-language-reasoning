@@ -1,0 +1,81 @@
+{
+  "metadata": {
+    "timestamp": "2026-08-07T14:00:09",
+    "git_commit": "8d0a559",
+    "git_dirty": true,
+    "open_clip_version": "3.3.0",
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "h5py_version": "3.16.0",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "deterministic": true,
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "embed_dim": 512,
+    "top_k_answers": 100,
+    "n_train": 40000,
+    "n_val": 8000,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "hidden_dim": 512,
+    "dropout": 0.3,
+    "weight_decay": 0.0001
+  },
+  "determinism_probe_comparison": {
+    "NON_SCIENTIFIC": true,
+    "strict_determinism": "torch.use_deterministic_algorithms(True, warn_only=False) with the flash and mem-efficient SDPA backends disabled and the deterministic math backend enabled",
+    "run_level_checks": {
+      "step_losses": true,
+      "total_steps": true,
+      "recipe_sha256": true,
+      "buffer_inventory": true,
+      "projection_scale": true
+    },
+    "per_epoch_checks": [
+      {
+        "epoch": 1,
+        "dev_r1_identical": true,
+        "predictions_identical": true,
+        "margins_identical": true,
+        "model_state_identical": true,
+        "optimizer_identical": true,
+        "global_step_identical": true,
+        "run1_dev_r1": 0.4375162043038631,
+        "run2_dev_r1": 0.4375162043038631
+      },
+      {
+        "epoch": 2,
+        "dev_r1_identical": true,
+        "predictions_identical": true,
+        "margins_identical": true,
+        "model_state_identical": true,
+        "optimizer_identical": true,
+        "global_step_identical": true,
+        "run1_dev_r1": 0.4742027482499352,
+        "run2_dev_r1": 0.4742027482499352
+      },
+      {
+        "epoch": 3,
+        "dev_r1_identical": true,
+        "predictions_identical": true,
+        "margins_identical": true,
+        "model_state_identical": true,
+        "optimizer_identical": true,
+        "global_step_identical": true,
+        "run1_dev_r1": 0.5049261083743842,
+        "run2_dev_r1": 0.5049261083743842
+      }
+    ],
+    "bitwise_identical": true,
+    "verdict": "STRICT DETERMINISM CONFIRMED: two independently launched runs agree bit-for-bit on losses, canonical FP32 development R1, the full prediction vector, margins, model state, optimizer state and global steps",
+    "clean_test_accessed": false
+  }
+}

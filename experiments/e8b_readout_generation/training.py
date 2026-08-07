@@ -391,6 +391,218 @@ def mean_prediction_entropy_nats(scores: torch.Tensor) -> float:
                   ).sum(dim=-1).mean())
 
 
+# --- OI6: the canonical FP32 evaluation graph --------------------------------
+
+CANONICAL_EVAL_DTYPE = torch.float32
+
+
+def assert_canonical_dtype(tensor, where: str) -> None:
+    """Fail-closed dtype gate at a scientific evaluation boundary."""
+    if tensor.dtype != CANONICAL_EVAL_DTYPE:
+        raise AssertionError(
+            f"OI6 DTYPE GATE FAILED at {where}: canonical scientific "
+            f"evaluation requires {CANONICAL_EVAL_DTYPE}, found "
+            f"{tensor.dtype}. A prefix computed in bfloat16 and cast to "
+            f"fp32 is forbidden; the evaluation graph must be fp32 from "
+            f"the trainable trunk onward.")
+
+
+def canonical_prefix(model, lm, images, questions, mask):
+    """Build the soft prefix DIRECTLY in FP32, never by casting a
+    bfloat16 result.
+
+    The cached image and question token values are consumed exactly as
+    stored. The trunk and the projection run in fp32 because their
+    parameters are fp32 and autocast is refused here; the BOS embedding
+    is taken from the fp32-promoted frozen table; the prefix is therefore
+    fp32 by construction rather than by conversion. Every precondition is
+    asserted fail-closed, so a bfloat16 graph cannot masquerade as fp32."""
+    if torch.is_autocast_enabled() or torch.is_autocast_enabled("cuda"):
+        raise AssertionError(
+            "OI6 DTYPE GATE FAILED: autocast is active on the canonical "
+            "evaluation path; the prefix would be computed in bfloat16")
+    trainable = next(model.parameters())
+    assert_canonical_dtype(trainable, "trainable trunk/projection weights")
+    frozen = next(lm.parameters())
+    assert_canonical_dtype(frozen, "frozen language-model weights")
+    assert_canonical_dtype(images, "cached image tokens as stored")
+    assert_canonical_dtype(questions, "cached question tokens as stored")
+    prefix = model.prefix_embeddings(lm, images, questions, mask)
+    assert_canonical_dtype(prefix, "constructed soft prefix")
+    return prefix
+
+
+def assert_canonical_scores(scores) -> None:
+    assert_canonical_dtype(scores, "R1 candidate scores")
+
+
+@torch.no_grad()
+def canonical_dev_predictions(model, lm, loader, cache: dict, device
+                              ) -> tuple:
+    """The canonical FP32 development pass: predictions, labels, the fp32
+    score matrix and the per-row top1-minus-top2 canonical margin.
+
+    This is the ONE evaluation that drives early stopping, best-checkpoint
+    selection, the reported R1 accuracy and stratum L of G14-FP32. It is
+    fp32 from the trainable trunk onward; nothing here casts to bfloat16."""
+    model.eval()
+    predictions, labels, scores_all = [], [], []
+    for images, questions, _, mask, batch_labels in loader:
+        prefix = canonical_prefix(model, lm, images.to(device),
+                                  questions.to(device), mask.to(device))
+        scores = r1_scores_batched(lm, prefix, cache)
+        assert_canonical_scores(scores)
+        predictions.append(scores.argmax(dim=1).cpu())
+        scores_all.append(scores.cpu())
+        labels.append(batch_labels)
+    matrix = torch.cat(scores_all).numpy().astype(np.float64)
+    order = np.argsort(-matrix, axis=1, kind="stable")
+    index = np.arange(matrix.shape[0])
+    margins = matrix[index, order[:, 0]] - matrix[index, order[:, 1]]
+    return (torch.cat(predictions).numpy(), torch.cat(labels).numpy(),
+            matrix, margins)
+
+
+# --- OI7: G14-FP32, the live gate --------------------------------------------
+
+@torch.no_grad()
+def g14_fp32_gate(model, lm, dev_dataset, cache: dict, trie: dict, device,
+                  stage: str, run_name: str, margins=None) -> dict:
+    """The reviewed FP32 G14.
+
+    One FP32 prefix per row, SHARED by the canonical batched scorer, the
+    single-example cached scorer and the single-sequence unpadded uncached
+    brute force, so the gate isolates the scorer implementation and never
+    confounds it with batch composition. Three hard halts, no numerical
+    exemption of any kind; score deltas are recorded as diagnostics only.
+
+    Rows come from the frozen P + L + O construction: 64 legacy pinned
+    rows, the 64 lowest FP32 canonical margins for THIS checkpoint, and 8
+    rows from each of four ordinary margin bands. At the pre-selection
+    stage the weights are untrained, so stratum P alone is used."""
+    n_dev = len(dev_dataset)
+    if stage not in ("pre-selection", "post-selection"):
+        raise AssertionError(f"G14-FP32: unknown stage {stage!r}")
+    if stage == "post-selection":
+        if margins is None:
+            raise AssertionError(
+                "G14-FP32: post-selection requires this checkpoint's "
+                "canonical FP32 margins for stratum L")
+        if len(margins) != n_dev:
+            raise AssertionError(
+                f"G14-FP32: margins cover {len(margins)} rows, dev has "
+                f"{n_dev}")
+        finite = np.isfinite(np.asarray(margins, dtype=np.float64))
+        if not finite.all():
+            e8b_run.gate_halt(
+                run_name, "G14",
+                f"{int((~finite).sum())} non-finite canonical margins; a "
+                f"numerical failure must not escape stratum L",
+                {"stage": stage,
+                 "non_finite_rows": np.nonzero(~finite)[0][:20].tolist()})
+    selection = g14_fp32_validation_rows(
+        margins if margins is not None else np.zeros(n_dev), n_dev, stage)
+    rows = selection["rows"]
+    model.eval()
+
+    deltas_brute, deltas_cached, checked = [], [], 0
+    for start in range(0, len(rows), 64):
+        chunk = rows[start:start + 64]
+        batch = tokens_data.collate_tokens([dev_dataset[i] for i in chunk])
+        prefixes = canonical_prefix(model, lm, batch[0].to(device),
+                                    batch[1].to(device), batch[3].to(device))
+        batched = r1_scores_batched(lm, prefixes, cache)
+        assert_canonical_scores(batched)
+        batched_argmax = batched.argmax(dim=1).cpu().tolist()
+        for position, row in enumerate(chunk):
+            shared = prefixes[position:position + 1]
+            assert_canonical_dtype(shared, f"shared prefix, row {row}")
+            brute = readouts.r1_brute_force(lm, shared, cache)
+            cached = readouts.r1_cached(lm, shared, cache)
+            canonical = batched_argmax[position]
+            if brute["argmax"] != canonical:            # C1
+                e8b_run.gate_halt(
+                    run_name, "G14",
+                    f"C1 canonical-versus-brute R1 argmax disagreement "
+                    f"({stage}) at development row {row}",
+                    _g14_halt_detail(row, canonical, brute, cached,
+                                     batched[position], stage, cache,
+                                     margins))
+            if cached["argmax"] != canonical:           # C2
+                e8b_run.gate_halt(
+                    run_name, "G14",
+                    f"C2 cached-versus-canonical R1 argmax disagreement "
+                    f"({stage}) at development row {row}",
+                    _g14_halt_detail(row, canonical, brute, cached,
+                                     batched[position], stage, cache,
+                                     margins))
+            r2_brute = readouts.r2_brute_force(lm, shared, cache, trie)
+            r2_cached = readouts.r2_cached(lm, shared, cache, trie)
+            if r2_brute != r2_cached:                   # C3
+                e8b_run.gate_halt(
+                    run_name, "G14_R2",
+                    f"C3 R2 brute-versus-cached disagreement ({stage}) at "
+                    f"development row {row}",
+                    {"stage": stage, "row": int(row),
+                     "brute": r2_brute, "cached": r2_cached})
+            canon_scores = batched[position].cpu().numpy().astype(np.float64)
+            deltas_brute.append(float(np.abs(
+                np.asarray(brute["scores"], dtype=np.float64)
+                - canon_scores).max()))
+            deltas_cached.append(float(np.abs(
+                np.asarray(cached["scores"], dtype=np.float64)
+                - canon_scores).max()))
+            checked += 1
+
+    def quantiles(values):
+        arr = np.asarray(values, dtype=np.float64)
+        return {"max": float(arr.max()), "p99": float(np.quantile(arr, .99)),
+                "p50": float(np.quantile(arr, .50))}
+
+    record = {"gate": "G14-FP32", "stage": stage,
+              "evaluation_precision": "fp32",
+              "rows_checked": checked,
+              "clauses": {"C1_canonical_vs_brute": "all identical",
+                          "C2_cached_vs_canonical": "all identical",
+                          "C3_r2_brute_vs_cached": "all identical"},
+              "no_numerical_exemption": True,
+              "score_deltas_are_diagnostic_only": True,
+              "brute_delta_vs_canonical": quantiles(deltas_brute),
+              "cached_delta_vs_canonical": quantiles(deltas_cached)}
+    record.update(g14_fp32_strata_record(selection))
+    if margins is not None:
+        arr = np.asarray(margins, dtype=np.float64)
+        record["dev_margin_quantiles"] = {
+            q: float(np.quantile(arr, v))
+            for q, v in (("p01", .01), ("p05", .05), ("p50", .50))}
+        record["dev_rows_below_margin"] = {
+            f"{t:g}": int((arr < t).sum())
+            for t in (1e-5, 1e-4, 1e-3)}
+    return record
+
+
+def _g14_halt_detail(row, canonical, brute, cached, canon_row, stage,
+                     cache, margins) -> dict:
+    scores = canon_row.cpu().numpy().astype(np.float64)
+    order = np.argsort(-scores, kind="stable")
+    a, b = int(order[0]), int(order[1])
+    detail = {"stage": stage, "row": int(row),
+              "canonical_argmax": int(canonical),
+              "brute_argmax": int(brute["argmax"]),
+              "cached_argmax": int(cached["argmax"]),
+              "top2_candidates": {str(a): cache["answers"][a],
+                                  str(b): cache["answers"][b]},
+              "canonical_scores_top2": [float(scores[a]), float(scores[b])],
+              "brute_scores_top2": [float(brute["scores"][a]),
+                                    float(brute["scores"][b])],
+              "cached_scores_top2": [float(cached["scores"][a]),
+                                     float(cached["scores"][b])],
+              "canonical_margin": float(scores[a] - scores[b])}
+    if margins is not None:
+        detail["recorded_margin"] = float(margins[int(row)])
+    return detail
+
+
 # --- The binding 64-example G14 gate ------------------------------------------
 
 def pinned_g14_rows(n_dev: int) -> list:
@@ -1347,3 +1559,40 @@ def _train_locked(device, recipe, run_name, result_path, started) -> int:
                           f"{projection['fired']}"],
                          run_name, {"projection": projection})
     return 0
+
+
+# --- The 18-cell core matrix (amendment A5, OI2 fixed schedule) ---------------
+
+# OI2 fixes the LM-arm budget only. B1 retains its already-frozen
+# section 7.3 classifier recipe, including its own schedule; the user's
+# amendment applies the fixed 22-epoch budget to B2 and B3.
+CORE_EPOCHS = {"B2": 22, "B3": 22}
+CORE_NO_EARLY_STOPPING = ("B2", "B3")
+CORE_EPOCH_JUSTIFICATION = (
+    "Dated post-diagnostic amendment of 2026-08-07. Exactly 22 epochs, no "
+    "patience-based early stopping, for every B2 and B3 core cell. 22 was "
+    "chosen because it covers the observed diagnostic best epochs (20, 11 "
+    "and 6), because a fixed budget removes the endogenous run-length "
+    "differences that made the abandoned grid points incomparable (their "
+    "epoch counts were 30, 21 and 16 under patience), and because it "
+    "coincides with the previously registered 15/22 resource basis. Every "
+    "cell therefore has the SAME 22 evaluation opportunities, so the "
+    "maximum-over-epochs statistic is no longer biased by run length.")
+
+
+def core_epoch_budget(arm: str):
+    """22 for the LM arms; B1 keeps its inherited section 7.3 schedule."""
+    return CORE_EPOCHS.get(arm)
+
+
+def train_core_cell(arm: str, scale: str, seed: int) -> int:
+    """One of the 18 final core cells, under the amended protocol.
+
+    Refuses unless the runner's authorisation state names an approved core
+    matrix; `run.train` performs that check before dispatching here."""
+    raise NotImplementedError(
+        "train_core_cell is specified and gated but intentionally not "
+        "implemented: the amendment requires the determinism probe (OI1) "
+        "to pass under STRICT determinism and the B1 classifier path to "
+        "be built before any core cell is runnable. run.train refuses "
+        "before reaching this point.")

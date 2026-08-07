@@ -197,6 +197,7 @@ def load_frozen_causal_lm(pretrained: bool, device=None) -> tuple:
         lm = lm.to(torch.bfloat16)
         construction = ("utils.set_seed(20260802); from_config in float32; "
                         "cast to bfloat16; no pretrained weight loaded")
+    rotary = restore_rotary_fp32(lm, cfg)   # OI5, before any freeze
     for parameter in lm.parameters():
         parameter.requires_grad_(False)
     lm.eval()
@@ -233,8 +234,92 @@ def load_frozen_causal_lm(pretrained: bool, device=None) -> tuple:
         "transformers_version": transformers.__version__,
         "tokenizers_version": tokenizers.__version__,
         "loaded_dtype": str(next(lm.parameters()).dtype),
+        "rotary_fp32_restoration": rotary,
+        "buffer_inventory": lm_buffer_inventory(lm),
     }
     return lm, provenance
+
+
+def restore_rotary_fp32(lm, cfg) -> dict:
+    """OI5: the non-persistent rotary buffers must be FP32 and IDENTICAL
+    for B2 and B3.
+
+    `from_pretrained(dtype=bfloat16)` leaves `inv_freq` in fp32, but the
+    random control is built with `from_config` and then `.to(bfloat16)`,
+    and `nn.Module.to(dtype)` converts non-persistent buffers too. That
+    left B2 carrying a bfloat16-truncated rotary table (relative error
+    3.31e-3, up to 0.088 nats of log-probability) while B3 kept fp32 --
+    an uncontrolled difference inside the primary B3 minus B2 contrast,
+    invisible to `state_dict` hashing because these buffers are
+    non-persistent.
+
+    Both arms now take the table RECONSTRUCTED from the same pinned
+    configuration, which is bitwise identical to the value
+    `from_pretrained` produces."""
+    module = getattr(getattr(lm, "model", lm), "rotary_emb", None)
+    if module is None:
+        raise AssertionError("OI5: no rotary_emb module to normalise")
+    reference = type(module)(config=cfg)
+    restored = {}
+    for name, buffer in list(module.named_buffers(recurse=False)):
+        source = getattr(reference, name, None)
+        if source is None:
+            raise AssertionError(
+                f"OI5: rotary buffer {name!r} has no counterpart in a "
+                f"module reconstructed from the pinned configuration")
+        value = source.detach().to(torch.float32).clone()
+        module.register_buffer(name, value, persistent=False)
+        restored[name] = {"dtype": "torch.float32",
+                          "shape": list(value.shape),
+                          "sha256": hashlib.sha256(
+                              value.cpu().numpy().tobytes()).hexdigest()}
+    return {"restored_buffers": restored,
+            "rule": "reconstructed in fp32 from the pinned configuration, "
+                    "identically for the pretrained and random arms (OI5)"}
+
+
+def lm_buffer_inventory(lm) -> dict:
+    """Every buffer, persistent AND non-persistent, by name, dtype, shape
+    and value digest. `state_dict` omits non-persistent buffers, so a
+    pair check must not rely on it."""
+    inventory = {}
+    for name, buffer in lm.named_buffers():
+        tensor = buffer.detach().cpu()
+        inventory[name] = {
+            "dtype": str(tensor.dtype), "shape": list(tensor.shape),
+            "sha256": hashlib.sha256(
+                tensor.to(torch.float64).numpy().tobytes()).hexdigest()
+            if tensor.is_floating_point() else hashlib.sha256(
+                tensor.numpy().tobytes()).hexdigest()}
+    return inventory
+
+
+def assert_lm_buffer_parity(inventory_a: dict, inventory_b: dict,
+                            label_a: str = "B3",
+                            label_b: str = "B2") -> dict:
+    """Pair-integrity check beside G13: the two arms of a B2/B3 pair must
+    carry byte-identical buffers. Only the authorised pretrained-versus-
+    random PARAMETER state may differ."""
+    names_a, names_b = set(inventory_a), set(inventory_b)
+    if names_a != names_b:
+        raise AssertionError(
+            f"OI5 PAIR CHECK FAILED: buffer inventories differ. "
+            f"only in {label_a}: {sorted(names_a - names_b)}; "
+            f"only in {label_b}: {sorted(names_b - names_a)}")
+    mismatched = {n: {label_a: inventory_a[n], label_b: inventory_b[n]}
+                  for n in sorted(names_a)
+                  if inventory_a[n] != inventory_b[n]}
+    if mismatched:
+        raise AssertionError(
+            f"OI5 PAIR CHECK FAILED: {len(mismatched)} buffer(s) differ "
+            f"between {label_a} and {label_b}: {json.dumps(mismatched)}")
+    return {"buffers_compared": len(names_a),
+            "all_identical": True,
+            "names": sorted(names_a),
+            "note": "persistent AND non-persistent buffers compared by "
+                    "dtype, shape and value digest; state_dict alone is "
+                    "insufficient because rotary buffers are "
+                    "non-persistent"}
 
 
 def build_arm(arm: str, seed: int, dropout: float, lm) -> tuple:
@@ -310,6 +395,7 @@ def intervention_inputs(kind: str, image_tokens, question_tokens,
 # --- Resumable checkpoint format ----------------------------------------------
 
 RESUME_FIELDS = (
+    "protocol_family",
     "model_state", "optimizer_state", "scheduler_state", "epoch",
     "global_step", "best_model_state", "best_metric", "best_epoch",
     "python_rng", "numpy_rng", "torch_cpu_rng", "cuda_rng_all",
@@ -339,6 +425,7 @@ def save_resume_checkpoint(path: Path, *, model, optimizer, scheduler,
     entry is present by construction."""
     import random
     state = {
+        "protocol_family": PROTOCOL_FAMILY,
         "model_state": model.state_dict(),
         "optimizer_state": optimizer.state_dict(),
         "scheduler_state": scheduler.state_dict(),
@@ -364,16 +451,34 @@ def save_resume_checkpoint(path: Path, *, model, optimizer, scheduler,
 
 
 def verify_resume_checkpoint(path: Path, *, same_node_required: bool = False,
-                             recipe_sha256: str | None = None) -> dict:
+                             recipe_sha256: str | None = None,
+                             protocol_family: str | None = PROTOCOL_FAMILY
+                             ) -> dict:
     """Fail-closed verification: ANY missing field prohibits resume and the
-    seed must restart from scratch; partial states are never combined."""
+    seed must restart from scratch; partial states are never combined.
+
+    The protocol family is enforced by DEFAULT (A8/OI7): a superseded
+    BF16-search checkpoint carries no family and can never resume into the
+    FP32 core family, and a core checkpoint can never resume into the old
+    family. Pass protocol_family=None only to inspect a foreign
+    checkpoint deliberately."""
     state = torch.load(path, map_location="cpu", weights_only=False)
-    missing = [f for f in RESUME_FIELDS if f not in state]
+    required = [f for f in RESUME_FIELDS
+                if f != "protocol_family" or protocol_family is not None]
+    missing = [f for f in required if f not in state]
     if missing:
         raise AssertionError(
             f"RESUME PROHIBITED: checkpoint {path.name} is missing "
             f"{missing}; the seed restarts from scratch and partial states "
             f"are never combined")
+    if protocol_family is not None \
+            and state.get("protocol_family") != protocol_family:
+        raise AssertionError(
+            f"RESUME PROHIBITED: checkpoint {path.name} belongs to "
+            f"protocol family {state.get('protocol_family')!r}, not "
+            f"{protocol_family!r}. Superseded BF16-search checkpoints are "
+            f"exploratory evidence and never resume into the FP32 core "
+            f"family.")
     if recipe_sha256 is not None and state["recipe_sha256"] != recipe_sha256:
         raise AssertionError("RESUME PROHIBITED: recipe hash mismatch")
     here = environment_fingerprint()
@@ -721,6 +826,41 @@ def preflight(device) -> int:
 
 
 # --- G19 halt machinery (master protocol section 14) --------------------------
+
+
+def enable_strict_determinism() -> dict:
+    """OI1: strict deterministic execution, NOT warn_only.
+
+    `utils.set_seed` uses `warn_only=True`, under which non-deterministic
+    attention-backward kernels merely warn and still execute. For the
+    determinism probe and for core execution the requirement is strict:
+    any non-deterministic op must RAISE. The efficient and flash
+    attention backends are disabled because their backward kernels are
+    documented non-deterministic; the math backend is deterministic."""
+    os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
+    torch.use_deterministic_algorithms(True, warn_only=False)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+    backends = {}
+    try:
+        from torch.nn.attention import SDPBackend, sdpa_kernel  # noqa: F401
+        torch.backends.cuda.enable_flash_sdp(False)
+        torch.backends.cuda.enable_mem_efficient_sdp(False)
+        torch.backends.cuda.enable_math_sdp(True)
+        backends = {"flash_sdp": torch.backends.cuda.flash_sdp_enabled(),
+                    "mem_efficient_sdp":
+                        torch.backends.cuda.mem_efficient_sdp_enabled(),
+                    "math_sdp": torch.backends.cuda.math_sdp_enabled()}
+    except Exception as error:                      # pragma: no cover
+        backends = {"sdpa_control_error": str(error)}
+    return {"use_deterministic_algorithms": True, "warn_only": False,
+            "cudnn_deterministic": True, "cudnn_benchmark": False,
+            "cublas_workspace_config":
+                os.environ.get("CUBLAS_WORKSPACE_CONFIG"),
+            "sdpa_backends": backends,
+            "rule": "strict determinism; a non-deterministic op raises "
+                    "rather than warning (OI1)"}
+
 
 def pin_fp32_precision() -> dict:
     """Pin and record the FP32 matmul path (amendment OI4). Canonical
