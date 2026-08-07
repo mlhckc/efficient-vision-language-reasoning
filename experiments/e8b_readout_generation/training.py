@@ -1363,30 +1363,53 @@ def train_core_cell(arm: str, scale: str, seed: int) -> int:
     finally:
         # H-1: charge THIS PROCESS's hours whatever happened. A cell
         # that halts at a gate or dies mid-epoch burned those hours just
-        # as surely as one that completed, and the previous
-        # completion-path-only charge let them vanish from the ledger --
-        # which would have let the 35-hour ceiling green-light the next
-        # cell on an identity that had already spent the headroom.
-        # Charging per process is what makes this safe to run on every
-        # exit path without double-counting a resume.
-        e8b_run.charge_identity_hours(arm, scale, seed,
-                                      (time.time() - started) / 3600)
-        after = e8b_run.per_identity_gate(arm, 0.0)
-        print(f"[LEDGER] {after['identity']} identity now at "
-              f"{after['already_charged_hours']} h of "
-              f"{after['ceiling_hours']} h "
-              f"({after['headroom_hours']} h headroom)")
+        # as surely as one that completed, and a completion-path-only
+        # charge let them vanish from the ledger -- which would have let
+        # the 35-hour ceiling green-light the next cell on an identity
+        # that had already spent the headroom. Charging per process is
+        # what makes this safe to run on every exit path without
+        # double-counting a resume.
+        #
+        # M-1: this block must never destroy the failure that brought us
+        # here. read_spend_ledger is deliberately fail-closed and raises
+        # `from None`, so an unreadable ledger would otherwise replace a
+        # CUDA OOM with a JSONDecodeError and leave the cell lock held.
+        # The lock is released FIRST, and every accounting step is
+        # contained, with its own failure recorded rather than raised.
         lock_path.unlink(missing_ok=True)
-        if after["fires"]:
+        try:
+            e8b_run.charge_identity_hours(
+                arm, scale, seed, (time.time() - started) / 3600)
+            after = e8b_run.per_identity_gate(arm, 0.0)
+        except BaseException as accounting_error:   # noqa: BLE001
+            # Recorded, never raised: losing the accounting is bad, but
+            # masking why the cell actually stopped is worse.
             e8b_run.record_gate_halt(
-                run_name, "G19_IDENTITY",
-                f"the {after['identity']} identity has EXCEEDED its "
-                f"{after['ceiling_hours']} GPU-hour ceiling",
-                {"identity_gate": after})
-            sys.exit(f"G19_IDENTITY HALT: the {after['identity']} "
-                     f"identity is at {after['already_charged_hours']} h "
-                     f"of {after['ceiling_hours']} h; execution stops "
-                     f"and returns to the user")
+                run_name, "G19_LEDGER",
+                "the GPU-hour ledger could not be updated after this "
+                "process; the hours it burned are NOT recorded and the "
+                "identity ceiling is now under-counted until a human "
+                "repairs the ledger",
+                {"error": repr(accounting_error)})
+            print(f"[LEDGER] FAILED to charge this process: "
+                  f"{accounting_error!r}; a G19_LEDGER halt record was "
+                  f"written and the original failure, if any, is "
+                  f"preserved")
+        else:
+            print(f"[LEDGER] {after['identity']} identity now at "
+                  f"{after['already_charged_hours']} h of "
+                  f"{after['ceiling_hours']} h "
+                  f"({after['headroom_hours']} h headroom)")
+            if after["fires"]:
+                e8b_run.record_gate_halt(
+                    run_name, "G19_IDENTITY",
+                    f"the {after['identity']} identity has EXCEEDED "
+                    f"its {after['ceiling_hours']} GPU-hour ceiling",
+                    {"identity_gate": after})
+                print(f"[G19_IDENTITY] the {after['identity']} identity "
+                      f"is at {after['already_charged_hours']} h of "
+                      f"{after['ceiling_hours']} h; a halt record was "
+                      f"written and execution returns to the user")
 
 
 def _train_core_locked(arm, scale, seed, recipe, run_name, result_path,
@@ -1615,6 +1638,10 @@ def _train_core_locked(arm, scale, seed, recipe, run_name, result_path,
                               "was reached",
                               {"epoch": epoch, "step": step})
 
+    # L-2: a resumed cell that has already exhausted its wall must halt
+    # BEFORE the loop rather than after the LM load, the parity load,
+    # G8 and G14 pre-selection have run again.
+    wall_halt(start_epoch - 1, step_count)
     verified_at_use = e8b_run.assert_strict_determinism()
     torch.cuda.reset_peak_memory_stats()
     first_step_asserted = False

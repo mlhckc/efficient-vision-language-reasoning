@@ -2376,15 +2376,38 @@ def test_audit_known_negatives() -> None:
                   path, protocol_family=e8b_run.PROTOCOL_FAMILY)["epoch"]
               == 1)
         state = torch.load(path, map_location="cpu", weights_only=False)
-        for field, value in (("code_digest", "0" * 64),
-                             ("code_head", "deadbeef")):
-            tampered = dict(state)
-            tampered[field] = value
-            broken = Path(tmp) / f"changed_{field}.pt"
-            torch.save(tampered, broken)
-            must_fail(f"resume is prohibited when {field} differs",
-                      lambda p=broken: e8b_run.verify_resume_checkpoint(
-                          p, protocol_family=e8b_run.PROTOCOL_FAMILY))
+        # The DIGEST is the authority: it covers exactly the sources
+        # that can change a trajectory.
+        tampered = dict(state)
+        tampered["code_digest"] = "0" * 64
+        broken = Path(tmp) / "changed_digest.pt"
+        torch.save(tampered, broken)
+        must_fail("resume is prohibited when the trajectory sources "
+                  "differ",
+                  lambda: e8b_run.verify_resume_checkpoint(
+                      broken, protocol_family=e8b_run.PROTOCOL_FAMILY))
+        # code_head alone does NOT prohibit: requiring commit equality
+        # would kill every outstanding resume the moment any commit is
+        # made during a run, and with no retry allowance a needless
+        # restart is itself a ceiling risk. It is recorded and reported.
+        moved = dict(state)
+        moved["code_head"] = "deadbeef"
+        head_only = Path(tmp) / "changed_head.pt"
+        torch.save(moved, head_only)
+        check("a commit that leaves every trajectory source identical "
+              "does NOT prohibit resume, but is reported",
+              e8b_run.verify_resume_checkpoint(
+                  head_only,
+                  protocol_family=e8b_run.PROTOCOL_FAMILY)["code_head"]
+              == "deadbeef")
+        # The digest must cover the trunk architecture by name.
+        check("src/reasoner.py, which defines the trunk, is a "
+              "trajectory source",
+              ("src", "reasoner.py") in e8b_run.TRAJECTORY_SOURCES)
+        check("the trajectory source list is fixed, not a glob, so an "
+              "edit to a reporting script cannot force a restart",
+              isinstance(e8b_run.TRAJECTORY_SOURCES, tuple)
+              and len(e8b_run.TRAJECTORY_SOURCES) >= 10)
 
     # --- C-HIGH-1: the aggregate ceilings must be executable ---
     check("the per-identity gate exists and maps arms to identities",
@@ -2649,9 +2672,9 @@ def test_audit_known_negatives() -> None:
     gsrc2 = (E8B_DIR / "run.py").read_text()
     digest_body = gsrc2[gsrc2.index("def e8b_code_digest"):]
     digest_body = digest_body[:digest_body.index("\ndef ", 1)]
-    check("the code digest covers src/, where the trunk architecture "
-          "lives, not only the E8B directory",
-          '"src"' in digest_body and "glob" in digest_body)
+    check("the code digest covers the trunk architecture, not only the "
+          "E8B directory",
+          ("src", "reasoner.py") in e8b_run.TRAJECTORY_SOURCES)
     import src.reasoner as _reasoner
     covered = Path(_reasoner.__file__).read_bytes()
     check("src/reasoner.py exists and is inside the digest's scope",
@@ -2753,6 +2776,50 @@ def test_no_unbound_names() -> None:
           scanned > 100 and len(modules) == 11)
     check("no name on the E8B executable path is unbound",
           unbound == [], "; ".join(unbound[:4]))
+
+
+def test_call_arity_everywhere() -> None:
+    """Every internal call must bind against its callee's signature.
+
+    HIGH-1 of the third audit was preflight() calling
+    save_resume_checkpoint without four arguments that had become
+    required two commits earlier. Reading the call site did not reveal
+    it, and no test executed preflight. Binding each call against the
+    live signature does reveal it, statically and cheaply."""
+    import importlib
+    import types
+
+    problems = []
+    for path in sorted(E8B_DIR.glob("*.py")):
+        module = importlib.import_module(
+            f"experiments.e8b_readout_generation.{path.stem}")
+        for node in ast.walk(ast.parse(path.read_text())):
+            if not isinstance(node, ast.Call):
+                continue
+            target = None
+            if isinstance(node.func, ast.Name):
+                target = getattr(module, node.func.id, None)
+            elif isinstance(node.func, ast.Attribute) \
+                    and isinstance(node.func.value, ast.Name):
+                owner = getattr(module, node.func.value.id, None)
+                if isinstance(owner, types.ModuleType):
+                    target = getattr(owner, node.func.attr, None)
+            if not isinstance(target, types.FunctionType):
+                continue
+            # *args / **kwargs call sites cannot be bound statically.
+            if any(isinstance(a, ast.Starred) for a in node.args) \
+                    or any(k.arg is None for k in node.keywords):
+                continue
+            try:
+                inspect.signature(target).bind(
+                    *[None] * len(node.args),
+                    **{k.arg: None for k in node.keywords})
+            except TypeError as error:
+                problems.append(
+                    f"{path.name}:{node.lineno} {target.__name__}: "
+                    f"{error}")
+    check("every internal call binds against its callee's signature",
+          problems == [], "; ".join(problems[:3]))
 
 
 def test_core_call_signatures() -> None:
@@ -3044,6 +3111,7 @@ def run() -> None:
     test_audit_known_negatives()
     test_no_unbound_names()
     test_core_call_signatures()
+    test_call_arity_everywhere()
     test_serial_contract()
     test_serial_queries()
     test_provenance()

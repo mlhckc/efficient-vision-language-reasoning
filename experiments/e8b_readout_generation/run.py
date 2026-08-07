@@ -483,30 +483,55 @@ RESUME_FIELDS = (
     "history", "train_times", "eval_times")
 
 
+# The modules whose contents can change a trajectory. Deliberately a
+# FIXED LIST rather than a glob: hashing every file in these directories
+# would let an edit to a reporting script or a projection generator
+# invalidate a paused cell's resume, and with 1.5 hours of headroom and
+# no retry allowance, a needless full restart is itself a risk.
+TRAJECTORY_SOURCES = (
+    ("experiments/e8b_readout_generation", "run.py"),
+    ("experiments/e8b_readout_generation", "training.py"),
+    ("experiments/e8b_readout_generation", "latents.py"),
+    ("experiments/e8b_readout_generation", "readouts.py"),
+    ("src", "reasoner.py"),      # the trunk architecture itself
+    ("src", "utils.py"),
+    ("src", "tokens_data.py"),
+    ("src", "models.py"),
+    ("", "config.py"),
+    ("experiments/e8a_question_encoder", "e8a_common.py"),
+    ("experiments/e8a_question_encoder", "g21_scorer.py"),
+)
+
+
 def e8b_code_digest() -> str:
     """A digest of the implementation that produces a trajectory.
 
     code_head alone is not enough: a dirty worktree edit leaves the
     commit unchanged while changing the code, and every 2026-08-07
-    record was written with git_dirty true. This hashes the actual
-    sources on the training path, so a crash-edit-resume splice cannot
-    pass unnoticed."""
-    here = Path(__file__).parent
-    # src/reasoner.py defines the trunk architecture and was the single
-    # most important omission: a dirty-worktree edit to ReasonerBlock
-    # leaves the commit unchanged, which is exactly the splice this
-    # digest exists to catch. config.py and the E8A modules the core
-    # path imports are covered for the same reason.
-    files = sorted(here.glob("*.py"))
-    files += sorted((PROJECT_ROOT / "src").glob("*.py"))
-    files += [PROJECT_ROOT / "config.py"]
-    files += sorted((PROJECT_ROOT / "experiments"
-                     / "e8a_question_encoder").glob("*.py"))
+    record was written with git_dirty true.
+
+    Scope is the fixed TRAJECTORY_SOURCES list. src/reasoner.py is the
+    single most important entry -- it defines the trunk architecture, so
+    a dirty-worktree edit to ReasonerBlock between a crash and a resume
+    is precisely the splice this exists to catch. Files that cannot
+    affect a trajectory (reporting scripts, projection generators, the
+    probe) are excluded on purpose, so editing one does not force a
+    paused cell to restart from scratch."""
     digest = hashlib.sha256()
-    for path in files:
-        if path.exists():
-            digest.update(path.name.encode())
-            digest.update(hashlib.sha256(path.read_bytes()).digest())
+    missing = []
+    for directory, name in TRAJECTORY_SOURCES:
+        path = (PROJECT_ROOT / directory / name if directory
+                else PROJECT_ROOT / name)
+        if not path.exists():
+            missing.append(str(path))
+            continue
+        digest.update(name.encode())
+        digest.update(hashlib.sha256(path.read_bytes()).digest())
+    if missing:
+        raise AssertionError(
+            f"CODE DIGEST REFUSED: {missing} are listed as trajectory "
+            f"sources but are absent; the digest would silently cover "
+            f"less than it claims")
     return digest.hexdigest()
 
 
@@ -623,14 +648,17 @@ def verify_resume_checkpoint(path: Path, *, same_node_required: bool = False,
                 f"A trajectory spliced from two implementations is "
                 f"never a canonical result. Restart this cell from "
                 f"scratch, or restore the original sources.")
+        # The DIGEST is the authority on whether the implementation
+        # changed; code_head is recorded for provenance and reported on
+        # mismatch, but does not by itself prohibit a resume. Requiring
+        # commit equality would kill every outstanding resume checkpoint
+        # the moment any commit is made during a run -- including a
+        # commit to a report -- and with the recorded retry allowance of
+        # NONE, a needless restart is itself a ceiling risk.
         if written_head != here_head:
-            raise AssertionError(
-                f"RESUME PROHIBITED: checkpoint written at code_head "
-                f"{written_head}, resume attempted at {here_head}. The "
-                f"recipe hash covers configuration, not implementation; "
-                f"a mixed-code trajectory is never a canonical result. "
-                f"Restart this cell from scratch, or resume at the "
-                f"original commit.")
+            print(f"[RESUME] code_head differs ({written_head} -> "
+                  f"{here_head}) but every trajectory source is "
+                  f"byte-identical; continuing. Both are recorded.")
     here = environment_fingerprint()
     written = state["environment_fingerprint"]
     if same_node_required and written["hostname"] != here["hostname"]:
@@ -995,9 +1023,12 @@ def preflight(device) -> int:
         best_model_state=None, best_metric=0.0, best_epoch=-1,
         loader_generator=generator, epoch_permutation_counter=0,
         recipe_sha256="preflight-probe", vocabulary_sha256=
-        vocabulary["sha256"], store_sha256s={})
+        vocabulary["sha256"], store_sha256s={},
+        protocol_family=PROTOCOL_FAMILY,
+        history=[{"epoch": 0}], train_times=[0.0], eval_times=[0.0])
     state = verify_resume_checkpoint(checkpoint_path,
-                                     recipe_sha256="preflight-probe")
+                                     recipe_sha256="preflight-probe",
+                                     protocol_family=PROTOCOL_FAMILY)
     restored = restore_resume_state(state, model=models["B3"],
                                     optimizer=optimizer,
                                     scheduler=scheduler,
@@ -1460,18 +1491,47 @@ def charge_identity_hours(arm: str, scale: str, seed: int,
     Called once per process from a finally block, so a cell that halts
     at a gate or dies mid-epoch still charges what it burned. Appending
     per process is what makes that safe: a resumed cell adds its new
-    process rather than overwriting, and no process is counted twice."""
-    ledger = read_spend_ledger()
-    key = f"{arm}_{scale}_seed{seed}"
-    record = ledger["cells"].setdefault(
-        key, {"identity": model_identity(arm), "processes": [],
-              "arm": arm, "scale": scale, "seed": seed})
-    record["processes"].append(round(float(hours), 5))
-    record["hours"] = round(float(sum(record["processes"])), 5)
-    temporary = SPEND_LEDGER.with_name(SPEND_LEDGER.name + ".tmp")
+    process rather than overwriting, and no process is counted twice.
+
+    The ENTIRE read-modify-write happens under an exclusive lock. The
+    per-cell run locks allow two DIFFERENT cells to run at once and the
+    ledger deliberately lives on shared storage, so an unsynchronised
+    update could silently drop another cell's charge -- and a dropped
+    charge is exactly the under-count the 35-hour ceiling exists to
+    prevent."""
     SPEND_LEDGER.parent.mkdir(parents=True, exist_ok=True)
-    temporary.write_text(json.dumps(ledger, indent=2) + "\n")
-    os.replace(temporary, SPEND_LEDGER)
+    guard = SPEND_LEDGER.with_name(SPEND_LEDGER.name + ".lock")
+    descriptor = None
+    for _ in range(60):
+        try:
+            descriptor = os.open(guard,
+                                 os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+            break
+        except FileExistsError:
+            time.sleep(0.5)
+    if descriptor is None:
+        raise AssertionError(
+            f"GPU-HOUR LEDGER LOCKED: {guard.name} was held for 30 "
+            f"seconds. Execution refuses rather than write an "
+            f"unsynchronised ledger; remove the lock only after "
+            f"confirming no other cell is writing.")
+    try:
+        os.close(descriptor)
+        ledger = read_spend_ledger()          # read UNDER the lock
+        key = f"{arm}_{scale}_seed{seed}"
+        record = ledger["cells"].setdefault(
+            key, {"identity": model_identity(arm), "processes": [],
+                  "arm": arm, "scale": scale, "seed": seed})
+        record["processes"].append(round(float(hours), 5))
+        record["hours"] = round(float(sum(record["processes"])), 5)
+        # A unique staged name: a fixed one would let two writers
+        # clobber each other's staged file even under separate locks.
+        temporary = SPEND_LEDGER.with_name(
+            f"{SPEND_LEDGER.name}.{os.getpid()}.tmp")
+        temporary.write_text(json.dumps(ledger, indent=2) + "\n")
+        os.replace(temporary, SPEND_LEDGER)
+    finally:
+        guard.unlink(missing_ok=True)
     return ledger
 
 
@@ -1492,10 +1552,15 @@ def core_remaining_hours() -> tuple:
     execution path until 2026-08-07."""
     projection = OUT_DIR / "core_resource_projection_20260807.json"
     if not projection.exists():
+        record_gate_halt(
+            "e8b_core", "G19_CORE",
+            f"{projection.name} is absent, so the 180-hour core "
+            f"ceiling cannot be evaluated",
+            {"expected": str(projection)})
         raise AssertionError(
             f"CORE GATE REFUSED: {projection.name} is absent, so the "
-            f"180-hour ceiling cannot be evaluated. Regenerate it with "
-            f"core_resource_projection.py.")
+            f"180-hour ceiling cannot be evaluated. A halt record was "
+            f"written. Regenerate it with core_resource_projection.py.")
     body = json.loads(projection.read_text())[
         "e8b_core_resource_projection"]
     gate = body["gates"]["e8b_remaining_vs_180h_core"]

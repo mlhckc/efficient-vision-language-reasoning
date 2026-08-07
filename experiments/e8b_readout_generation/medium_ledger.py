@@ -427,6 +427,105 @@ REAUDIT_AC_20260807_ENTRIES = [
 ]
 
 
+# Findings from the executable-safety re-audit of 8ad573b.
+REAUDIT_B2_20260807_ENTRIES = [
+    {"id": "REAUDIT-B2-BLOCKER-1",
+     "lens": "B (executable safety, second re-audit)",
+     "issue": "A THIRD instance of the unbound-name defect, again "
+              "introduced by the previous fix: moving the ledger charge "
+              "into the caller's finally block left the trailing "
+              "[LEDGER] print and the post-charge halt behind, still "
+              "referencing a name that now lived in the caller. All 18 "
+              "cells would have trained to completion, written every "
+              "artefact, then died with NameError before returning.",
+     "classification": "execution-critical",
+     "disposition": "FIXED AT SOURCE",
+     "evidence": "the leftover block was removed and a bytecode binding "
+                 "sweep over every function, method, nested function and "
+                 "comprehension on the executable path now runs as a "
+                 "test. It found this instance; reading the code had "
+                 "missed the same class three times.",
+     "closed_by": "test_no_unbound_names"},
+    {"id": "REAUDIT-B2-HIGH-1",
+     "lens": "B (executable safety, second re-audit)",
+     "issue": "preflight() called save_resume_checkpoint without the "
+              "four arguments that had become required two commits "
+              "earlier, so --preflight would have died with a TypeError "
+              "after minutes of GPU work. The same block would then "
+              "have failed verification and restore for the same "
+              "reason. No test executed preflight.",
+     "classification": "execution-critical",
+     "disposition": "FIXED AT SOURCE",
+     "evidence": "the call site passes protocol_family, history, "
+                 "train_times and eval_times, and a static arity sweep "
+                 "now binds EVERY internal call against its callee's "
+                 "live signature.",
+     "closed_by": "test_call_arity_everywhere"},
+    {"id": "REAUDIT-B2-MEDIUM-1",
+     "lens": "B (executable safety, second re-audit)",
+     "issue": "The finally-block charge could destroy the failure that "
+              "brought execution there: read_spend_ledger is "
+              "fail-closed and raises `from None`, so an unreadable "
+              "ledger would replace a CUDA OOM with a JSONDecodeError, "
+              "leave the cell lock held, and write no artefact.",
+     "classification": "execution-critical",
+     "disposition": "FIXED AT SOURCE",
+     "evidence": "the lock is released FIRST, and every accounting step "
+                 "is contained: an accounting failure writes a "
+                 "G19_LEDGER halt record and is reported, never raised, "
+                 "so the original failure survives.",
+     "closed_by": "test_audit_known_negatives"},
+    {"id": "REAUDIT-B2-MEDIUM-2",
+     "lens": "B (executable safety, second re-audit)",
+     "issue": "The code digest hashed every file in src/, the E8A "
+              "directory and the E8B directory, most of which cannot "
+              "affect a trajectory, and code_head equality was ALSO "
+              "required. Any commit during a run -- including one to a "
+              "report -- would have invalidated every outstanding "
+              "resume, and since the ledger charges every process and "
+              "never refunds, one crash plus one commit on a 250k cell "
+              "could push the identity past its ceiling.",
+     "classification": "execution-critical",
+     "disposition": "FIXED AT SOURCE",
+     "evidence": "the digest covers a FIXED list of eleven trajectory "
+                 "sources, including src/reasoner.py, and refuses if "
+                 "any is absent rather than silently covering less than "
+                 "it claims. The digest is the authority; a differing "
+                 "code_head with byte-identical sources is reported and "
+                 "recorded, not treated as a prohibition.",
+     "closed_by": "test_audit_known_negatives, resume-contract checks"},
+    {"id": "REAUDIT-B2-MEDIUM-3",
+     "lens": "B (executable safety, second re-audit)",
+     "issue": "charge_identity_hours was an unsynchronised "
+              "read-modify-write to a shared ledger through a FIXED "
+              "temporary filename, so two concurrent cells could drop "
+              "each other's charge -- the exact under-count the ceiling "
+              "exists to prevent.",
+     "classification": "execution-critical",
+     "disposition": "FIXED AT SOURCE",
+     "evidence": "the whole read-modify-write runs under an exclusive "
+                 "ledger lock with a per-process staged filename, and "
+                 "refuses rather than writing unsynchronised if the "
+                 "lock is held too long. Verified with 24 concurrent "
+                 "charges: none lost.",
+     "closed_by": "test_audit_known_negatives"},
+    {"id": "REAUDIT-B2-LOW-1",
+     "lens": "B (executable safety, second re-audit)",
+     "issue": "Two halting paths raised bare AssertionErrors without "
+              "the halt artefact the protocol requires, and a resumed "
+              "cell did not check its wall budget until the first "
+              "training step, so an already-exhausted cell would re-run "
+              "the model load, the parity load, G8 and G14 "
+              "pre-selection before it could halt.",
+     "classification": "execution-critical",
+     "disposition": "FIXED AT SOURCE",
+     "evidence": "the core gate writes a halt record before raising, "
+                 "and the wall is checked before the loop on a resumed "
+                 "cell.",
+     "closed_by": "the training and run modules"},
+]
+
+
 def derive_summary(entries: list) -> dict:
     """Every count here is computed from entries[].disposition. Nothing
     is declared by hand, and no state is collapsed into another."""
@@ -468,7 +567,8 @@ def main() -> int:
     known = {e["id"] for e in entries}
     pending = (REVIEW_A_ENTRIES + AUDIT_20260807_ENTRIES
                + REAUDIT_20260807_ENTRIES
-               + REAUDIT_AC_20260807_ENTRIES)
+               + REAUDIT_AC_20260807_ENTRIES
+               + REAUDIT_B2_20260807_ENTRIES)
     appended = [e for e in pending if e["id"] not in known]
     for entry in appended:
         entry = dict(entry)
