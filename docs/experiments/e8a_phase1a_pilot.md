@@ -266,6 +266,23 @@ the E8B per-epoch multiplier, which remains the back-solved assumption 2.931
 to 8.004. Phase 1A reduces that uncertainty by nothing at all, because it ran
 no E8B code.
 
+> **Dated supersession note, 7 August 2026.** The E8B statements in the
+> paragraph(s) above are superseded and are retained here only as the
+> historical record of what was known when this report was written. E8B
+> HAS since run: search grid points 1 to 3 executed on 6-7 August 2026,
+> so B3 is no longer without measurement, and the per-epoch multiplier is
+> no longer an unresolved 2.931-to-8.004 assumption. It was measured at
+> 9.091 and 9.121 under the then-current BF16 design - **above** the
+> assumed 8.004 upper bound - and those figures are themselves now
+> superseded by the amended strict-deterministic FP32 core design. The
+> eight-point search was afterwards permanently abandoned and grid points
+> 1 to 3 are exploratory protocol-diagnostic evidence only. For the
+> current position see
+> `results/experiments/e8b_readout_generation/core_resource_projection_20260807.json`,
+> `protocol_amendment_20260807_fp32.json`,
+> `protocol_amendment_20260807_fixed22.json` and
+> `superseded_evidence_20260807.json`. Nothing above has been rewritten.
+
 ### The 426-costed versus 420-itemised discrepancy
 
 Resolved by arithmetic on the canonical's own tables. Section 13.1 counts

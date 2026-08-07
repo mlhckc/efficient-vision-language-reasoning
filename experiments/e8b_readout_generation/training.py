@@ -104,10 +104,19 @@ def build_recipe(grid_point: int) -> dict:
 
 CORE_FIXED_HYPER = {"lr": 3e-4, "warmup_frac": 0.0, "dropout": 0.1}
 CORE_FIXED_JUSTIFICATION = (
-    "retained because it was the PRE-RESULT preregistered pilot and "
-    "default configuration, not because it achieved the highest observed "
-    "development score; the eight-point search was abandoned and no "
-    "hyperparameter winner is claimed")
+    "retained SOLELY because it was the PRE-RESULT preregistered pilot "
+    "and default configuration, which is also the section 7.1 inherited "
+    "v3_01 configuration. The eight-point search was permanently "
+    "abandoned and NO hyperparameter winner is claimed. No statistic "
+    "from grid points 1-3 justifies this choice or supports a "
+    "superiority claim in EITHER direction. DISCLOSURE, exploratory and "
+    "NON-CANONICAL and SUPERSEDED, offered as support for nothing: this "
+    "configuration was also the grid point that showed the highest bf16 "
+    "development maximum of the three points that completed. That "
+    "observation is invalidated for ranking purposes (the pools it was "
+    "computed over differ in length) and the recipe would be frozen at "
+    "these values regardless of it, because the freeze is "
+    "outcome-independent by construction")
 
 
 def build_core_recipe(arm: str, scale: str, seed: int) -> dict:
@@ -467,6 +476,17 @@ def assert_canonical_scores(scores) -> None:
             "canonical evaluation path")
 
 
+def model_state_digest(model) -> str:
+    """A digest of the exact trainable state being evaluated, so a G14
+    record can be proven to belong to the model that produced it."""
+    parts = []
+    for key, value in sorted(model.state_dict().items()):
+        parts.append(f"{key}:" + hashlib.sha256(
+            value.detach().cpu().contiguous().numpy().tobytes()
+        ).hexdigest())
+    return hashlib.sha256("|".join(parts).encode()).hexdigest()
+
+
 @torch.no_grad()
 def canonical_dev_predictions(model, lm, loader, cache: dict, device
                               ) -> tuple:
@@ -494,12 +514,37 @@ def canonical_dev_predictions(model, lm, loader, cache: dict, device
             matrix, margins)
 
 
+def evaluation_binding(model, predictions, margins, recipe,
+                       recipe_hash: str) -> dict:
+    """B-L4: bind an evaluation's outputs to the exact state that
+    produced them. A G14 record carrying this binding can be proven to
+    belong to its evaluated model; one that cannot is refused."""
+    return {
+        "model_state_digest": model_state_digest(model),
+        "recipe_sha256": recipe_hash,
+        "protocol_family": recipe["protocol_family"],
+        "canonical_evaluation_precision":
+            recipe["canonical_evaluation_precision"],
+        "predictions_sha256": hashlib.sha256(
+            np.ascontiguousarray(predictions).tobytes()).hexdigest(),
+        "margins_sha256": hashlib.sha256(
+            np.ascontiguousarray(margins).tobytes()).hexdigest(),
+        "n_rows": int(len(predictions)),
+        "scorer": {"canonical": "r1_scores_batched at batch 128, fp32",
+                   "brute_force": "readouts.r1_brute_force",
+                   "cached": "readouts.r1_cached",
+                   "source_sha256": hashlib.sha256(
+                       (Path(__file__).read_text()
+                        + (Path(__file__).parent / "readouts.py").read_text()
+                        ).encode()).hexdigest()}}
+
+
 # --- OI7: G14-FP32, the live gate --------------------------------------------
 
 @torch.no_grad()
 def g14_fp32_gate(model, lm, dev_dataset, cache: dict, trie: dict, device,
                   stage: str, run_name: str, margins=None,
-                  dev_frame=None) -> dict:
+                  dev_frame=None, binding=None) -> dict:
     """The reviewed FP32 G14.
 
     One FP32 prefix per row, SHARED by the canonical batched scorer, the
@@ -532,6 +577,31 @@ def g14_fp32_gate(model, lm, dev_dataset, cache: dict, trie: dict, device,
                 f"numerical failure must not escape stratum L",
                 {"stage": stage,
                  "non_finite_rows": np.nonzero(~finite)[0][:20].tolist()})
+        # B-L4: the margins driving stratum L must be PROVEN to belong
+        # to the model about to be evaluated. Recompute the state digest
+        # and the margin digest and refuse on any mismatch.
+        if binding is None:
+            e8b_run.gate_halt(
+                run_name, "G14",
+                "post-selection G14 requires an evaluation binding "
+                "proving the margins belong to the evaluated state",
+                {"stage": stage})
+        live = model_state_digest(model)
+        if live != binding["model_state_digest"]:
+            e8b_run.gate_halt(
+                run_name, "G14",
+                "the supplied margins do not belong to the model being "
+                "evaluated (model state digest mismatch)",
+                {"stage": stage, "live_digest": live,
+                 "binding_digest": binding["model_state_digest"]})
+        live_margins = hashlib.sha256(
+            np.ascontiguousarray(margins).tobytes()).hexdigest()
+        if live_margins != binding["margins_sha256"]:
+            e8b_run.gate_halt(
+                run_name, "G14",
+                "the supplied margins do not match the binding's margin "
+                "digest", {"stage": stage, "live": live_margins,
+                           "binding": binding["margins_sha256"]})
     selection = g14_fp32_validation_rows(
         margins if margins is not None else np.zeros(n_dev), n_dev, stage)
     rows = selection["rows"]
@@ -604,6 +674,9 @@ def g14_fp32_gate(model, lm, dev_dataset, cache: dict, trie: dict, device,
               "brute_delta_vs_canonical": quantiles(deltas_brute),
               "cached_delta_vs_canonical": quantiles(deltas_cached)}
     record.update(g14_fp32_strata_record(selection))
+    record["evaluated_state_binding"] = binding if binding is not None else {
+        "model_state_digest": model_state_digest(model),
+        "note": "pre-selection stage: stratum P only, no margins consumed"}
     if margins is not None:
         arr = np.asarray(margins, dtype=np.float64)
         record["dev_margin_quantiles"] = {
@@ -837,7 +910,12 @@ def g8_overfit_gate(lm, train_loader, cache, device,
     target R1 accuracy >= 0.99.
 
     Internally re-seeds, which downgrades strict determinism; the caller
-    MUST re-impose enforcement afterwards (reseed_strict discipline)."""
+    MUST re-impose enforcement afterwards (reseed_strict discipline).
+
+    Public module-level optimizer path: carries its own fail-closed
+    authorisation rather than relying on its caller."""
+    e8b_run.authorize_optimizer_path("core-gate",
+                                     f"g8_overfit_gate {run_name}")
     utils.set_seed(0)
     subset = Subset(train_loader.dataset, list(range(G8_SUBSET)))
     loader = DataLoader(subset, batch_size=128,
@@ -1093,7 +1171,12 @@ def b1_overfit_gate(train_loader, device, run_name: str) -> dict:
     """B1's G8: tiny-subset overfit under the gate settings (lr 1e-3,
     dropout 0.0, 1,000 examples, target 0.99). HALTING for B1 (section
     11). Re-seeds internally; the caller must re-impose strict
-    determinism afterwards."""
+    determinism afterwards.
+
+    Public module-level optimizer path: carries its own fail-closed
+    authorisation."""
+    e8b_run.authorize_optimizer_path("core-gate",
+                                     f"b1_overfit_gate {run_name}")
     utils.set_seed(0)
     subset = Subset(train_loader.dataset, list(range(G8_SUBSET)))
     loader = DataLoader(subset, batch_size=128, shuffle=True,
@@ -1190,6 +1273,11 @@ def train_core_cell(arm: str, scale: str, seed: int) -> int:
 
 def _train_core_locked(arm, scale, seed, recipe, run_name, result_path,
                        started) -> int:
+    # Independent fail-closed authorisation. This helper is private by
+    # naming convention only and is callable by direct import, so it must
+    # NOT rely on train_core_cell's wrapper checks.
+    authorisation = e8b_run.authorize_optimizer_path(
+        "core-cell", f"_train_core_locked {run_name}")
     device = torch.device("cuda")
     recipe_hash = recipe_sha256(recipe)
     fingerprint = e8b_run.environment_fingerprint()
@@ -1330,6 +1418,18 @@ def _train_core_locked(arm, scale, seed, recipe, run_name, result_path,
     max_epochs = recipe["max_epochs"]
     fixed_budget = arm != "B1"
 
+    # M-2 PAIR INTEGRITY. The G8 gate trains to a convergence threshold,
+    # so it consumes a DIFFERENT number of RNG draws in B2 than in B3:
+    # the pretrained and random arms reach the threshold at different
+    # epochs. Without this re-seed the paired arms enter the training
+    # loop on divergent global RNG states, so their dropout masks and
+    # shuffles differ for reasons that have nothing to do with the
+    # pretrained-versus-random contrast that B3-B2 is supposed to
+    # isolate. Re-seed to the common recipe seed HERE, before the resume
+    # block, which legitimately overwrites RNG with the saved state.
+    e8b_run.reseed_strict(recipe["seed"])
+    train_loader.generator.manual_seed(recipe["seed"])
+
     best_accuracy, best_epoch, best_state = 0.0, -1, None
     epochs_without_improvement = 0
     history, train_times, eval_times = [], [], []
@@ -1357,6 +1457,9 @@ def _train_core_locked(arm, scale, seed, recipe, run_name, result_path,
         start_epoch = restored["epoch"] + 1
         epochs_without_improvement = restored["epoch"] - best_epoch
         resumed_from = restored["epoch"]
+        history = restored["history"]
+        train_times = restored["train_times"]
+        eval_times = restored["eval_times"]
         e8b_run.assert_strict_determinism()
         print(f"[RESUME] verified; continuing from epoch {start_epoch}")
 
@@ -1463,7 +1566,9 @@ def _train_core_locked(arm, scale, seed, recipe, run_name, result_path,
             store_sha256s={"image_tokens": g15["image_store_sha256"],
                            "question_tokens":
                                g15["question_store_sha256"]},
-            protocol_family=recipe["protocol_family"])
+            protocol_family=recipe["protocol_family"],
+            history=history, train_times=train_times,
+            eval_times=eval_times)
 
         memory_check = e8b_run.memory_gate(
             torch.cuda.max_memory_allocated(), device_total,
@@ -1483,6 +1588,21 @@ def _train_core_locked(arm, scale, seed, recipe, run_name, result_path,
 
     # --- Canonical checkpoint (the amended selection rule) ---
     if fixed_budget:
+        # M-5: an empty history means the loop body never ran, which
+        # happens when a resume checkpoint already sits at the final
+        # epoch. Halt with the reason stated rather than dying on an
+        # IndexError inside a resume loop that would then repeat.
+        if not history:
+            e8b_run.gate_halt(run_name, "SCHEDULE",
+                              f"no epoch ran in this process: the resume "
+                              f"checkpoint is already at epoch "
+                              f"{resumed_from} of the fixed "
+                              f"{max_epochs}-epoch budget, so there is no "
+                              f"per-epoch record to select from. Finalise "
+                              f"from the completed run's own record or "
+                              f"restart the cell from scratch.",
+                              {"resumed_from": resumed_from,
+                               "max_epochs": max_epochs})
         if history[-1]["epoch"] != max_epochs:
             e8b_run.gate_halt(run_name, "SCHEDULE",
                               f"the fixed budget requires exactly "
@@ -1577,6 +1697,8 @@ def _train_core_locked(arm, scale, seed, recipe, run_name, result_path,
         predictions_a, labels_np, scores_a, margins_a = \
             canonical_dev_predictions(model, lm, dev_loader, cache,
                                       device)
+        g14_binding = evaluation_binding(model, predictions_a, margins_a,
+                                         recipe, recipe_hash)
         predictions_b, _, _, _ = canonical_dev_predictions(
             model, lm, dev_loader, cache, device)
     if not np.array_equal(predictions_a, predictions_b):
@@ -1624,7 +1746,8 @@ def _train_core_locked(arm, scale, seed, recipe, run_name, result_path,
         g14_post = g14_fp32_gate(model, lm, dev_loader.dataset, cache,
                                  trie, device, stage="post-selection",
                                  run_name=run_name, margins=margins_a,
-                                 dev_frame=dev_frame)
+                                 dev_frame=dev_frame,
+                                 binding=g14_binding)
         print(f"[G14-FP32] post-selection: C1/C2/C3 identity on "
               f"{g14_post['rows_checked']} rows")
 
@@ -1645,6 +1768,7 @@ def _train_core_locked(arm, scale, seed, recipe, run_name, result_path,
         "recipe": recipe, "recipe_sha256": recipe_hash,
         "paired_recipe_sha256": paired_recipe_sha256(recipe),
         "gates": gates_record,
+        "optimizer_path_authorisation": authorisation,
         "determinism_verified_at_use": verified_at_use,
         "fp32_precision_pin": precision,
         "epochs_run": len(history),

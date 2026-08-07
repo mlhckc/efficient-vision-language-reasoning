@@ -1,0 +1,138 @@
+{
+  "metadata": {
+    "timestamp": "2026-08-07T17:56:50",
+    "git_commit": "f9a7918",
+    "git_dirty": true,
+    "open_clip_version": "3.3.0",
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "h5py_version": "3.16.0",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "deterministic": true,
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "embed_dim": 512,
+    "top_k_answers": 100,
+    "n_train": 40000,
+    "n_val": 8000,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "hidden_dim": 512,
+    "dropout": 0.3,
+    "weight_decay": 0.0001
+  },
+  "e8b_identity_reconciliation": {
+    "dated_utc": "2026-08-07",
+    "question": "why did the pretrained-identity projection move from 32.686 h to 31.96 h, and does the COMPLETE planned programme fit under the hard 35 h ceiling?",
+    "old_estimate_hours": 32.686,
+    "current_estimate_hours": 31.96,
+    "net_change_hours": -0.726,
+    "ceiling_hours": 35.0,
+    "headroom_hours": 3.04,
+    "reconciliation_old_to_current": [
+      {
+        "component": "B1 250k per-epoch rate",
+        "old": "step-scaled from the 40k rate (15.27 x 6.2428 = 95.33 s/epoch)",
+        "correction": "use the MEASURED v3_01/v3_03 250k rate of 86.36 s/epoch (protocol 13.2)",
+        "effect_on_identity_hours": 0.0,
+        "note": "B1 loads no language model, so this line never touched the pretrained identity; it changed the 18-cell total only"
+      },
+      {
+        "component": "B1 expected epochs",
+        "old": "15 epochs at both scales",
+        "correction": "15 at 40k and 22 at 250k per the section 7.1 planning basis, with a 100-epoch stress figure reported beside it",
+        "effect_on_identity_hours": 0.0
+      },
+      {
+        "component": "selection-sensitivity study (22 checkpoints x R2/R3 = 44 evaluation passes)",
+        "old": "costed as part of the evaluation total",
+        "correction": "VOID under the fixed-22 epoch-22-canonical rule: its object (sensitivity to max-over-epochs checkpoint selection) no longer exists, so it is removed, not merely re-priced",
+        "effect_on_identity_hours": "removed from the evaluation share"
+      },
+      {
+        "component": "final readouts and interventions",
+        "old": "an evaluation-share fraction (111/156) of a pooled evaluation total that included the selection-sensitivity passes",
+        "correction": "priced directly per LM cell: R2 and R3 as measured per-row walks over 7,714 rows plus three intervention passes, then attributed to the identity that owns the cells (six B3 cells)",
+        "effect_on_identity_hours": 1.476
+      },
+      {
+        "component": "already-spent compute",
+        "old": "search 3.20 h + diagnostics 2.56 h = 5.76 h, partly estimated",
+        "correction": "itemised from the artefacts' OWN recorded walls, including the halted grid 3 and determinism probes 1-4",
+        "effect_on_identity_hours": 6.89,
+        "detail": {
+          "search_grid1_pilot": 1.379,
+          "search_grid2": 1.035,
+          "search_grid3_halted": 0.84,
+          "bf16_characterization_v2": 1.912,
+          "fp32_validation": 0.847,
+          "determinism_probes_1_to_4": 0.627,
+          "paired_rescoring_and_micro_probes": 0.25,
+          "_total": 6.89
+        }
+      },
+      {
+        "component": "B3 core-cell cost",
+        "old": "22-epoch cells at the measured strict-deterministic rate",
+        "correction": "unchanged in method; the same 78.0 s train + 108.0 s FP32 eval per epoch, 22 epochs, plus G14-FP32 and the measured non-G14 gate overhead",
+        "effect_on_identity_hours": 17.634
+      }
+    ],
+    "summary_of_change": "the reduction from 32.686 to 31.96 h is NOT a relaxation. It comes from removing the selection-sensitivity study, whose object the fixed-endpoint rule eliminated, and from pricing the remaining readouts and interventions directly per cell instead of through a pooled evaluation-share fraction. Every other correction was neutral for this identity or increased it (the spent-compute line grew once itemised from the artefacts' own walls).",
+    "complete_programme_components": [
+      {
+        "component": "A1 measured baseline (E8A pretrained 135M)",
+        "hours": 2.29222
+      },
+      {
+        "component": "A4 (protocol 13.2b)",
+        "hours": 1.804
+      },
+      {
+        "component": "A7c (protocol 13.2b)",
+        "hours": 1.864
+      },
+      {
+        "component": "six B3 final core cells (fixed 22 epochs, FP32 eval, G14, gates)",
+        "hours": 17.634
+      },
+      {
+        "component": "B3 share of final R1/R2/R3 readouts + 3 interventions",
+        "hours": 1.476
+      },
+      {
+        "component": "already-spent search + diagnostics (incl. superseded probes 1/2)",
+        "hours": 6.89
+      }
+    ],
+    "component_sum_hours": 31.96,
+    "matches_generator": true,
+    "coverage_proof": {
+      "already_spent_search": "search_grid1_pilot, search_grid2, search_grid3_halted in spent_compute",
+      "already_spent_diagnostics": "bf16_characterization_v2, fp32_validation, determinism_probes_1_to_4 (INCLUDING the superseded runs 1 and 2), paired_rescoring_and_micro_probes",
+      "all_six_B3_core_cells": "3 x train_40k + 3 x train_250k inside the B3 arm total",
+      "fixed_22_epoch_execution": "LM_EPOCHS = 22 in the generator, and the recipe encodes max_epochs 22 with early_stopping false",
+      "structural_fp32_evaluation": "EVAL_FP32_S = 108.0 s per canonical dev pass, charged in every epoch of every cell",
+      "G14": "G14_ROWS (64 pre + 160 post) x G14_ROW_S 5.301 s per LM cell",
+      "final_R1_R2_R3": "R1 comes free from the epoch-22 canonical pass; R2 and R3 are charged as measured/assumed per-row walks over all 7,714 development rows",
+      "mandatory_interventions": "three intervention conditions per LM cell, each one canonical FP32 dev pass",
+      "other_gate_overhead": "GATE_OVERHEAD_H 0.223 h per run, MEASURED as the residual between the grid runs' recorded wall and their epoch time (G8, G9, G11, G13, G15, G1, the selection reproduction check)"
+    },
+    "verdict": "FITS: the complete planned pretrained-identity programme projects to 31.96 h against the hard 35 h ceiling, leaving 3.04 h. The ceiling is NOT weakened and NO component was dropped to achieve the fit.",
+    "retry_allowance": "NONE. The plan tolerates zero B3 retries; any retry or any additional B3-loading evaluation triggers a stop-and-ask BEFORE execution",
+    "residual_assumptions": [
+      "R3 per-row cost is ASSUMED at 1.5x the measured R2 rate; if R3 were 3x R2 instead, the B3 share would rise by about 0.19 h and the headroom would fall to about 2.85 h - still inside the ceiling",
+      "the 250k train rate is step-scaled from the measured 40k rate; no 250k E8B cell has ever run",
+      "B1's line is charged at an upper bound and touches neither identity"
+    ],
+    "clean_test_accessed": false
+  }
+}

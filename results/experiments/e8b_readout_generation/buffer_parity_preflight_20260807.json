@@ -1,0 +1,204 @@
+{
+  "metadata": {
+    "timestamp": "2026-08-07T17:53:55",
+    "git_commit": "f9a7918",
+    "git_dirty": true,
+    "open_clip_version": "3.3.0",
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "h5py_version": "3.16.0",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "deterministic": true,
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "embed_dim": 512,
+    "top_k_answers": 100,
+    "n_train": 40000,
+    "n_val": 8000,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "hidden_dim": 512,
+    "dropout": 0.3,
+    "weight_decay": 0.0001
+  },
+  "e8b_buffer_parity_preflight": {
+    "dated_utc": "2026-08-07",
+    "NON_TRAINING": true,
+    "optimizer_steps": 0,
+    "scope": "loads the two frozen arms, inventories and compares every buffer, and records the rotary reconstruction evidence. No optimizer, no backward pass, no parameter update, no checkpoint written.",
+    "determinism_verified_at_use": {
+      "deterministic_algorithms": true,
+      "warn_only": false,
+      "flash_sdp": false,
+      "mem_efficient_sdp": false,
+      "math_sdp": true,
+      "cudnn_deterministic": true,
+      "cublas_workspace_config": ":4096:8"
+    },
+    "arms": {
+      "B3": {
+        "arm_model": "pretrained",
+        "construction": "AutoModelForCausalLM.from_pretrained at the pinned revision",
+        "pinned_revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+        "parameter_count": 134515008,
+        "parameter_state_sha256": "20add223ddf2bc38dfdf4ffa8833e3f62cce2c21807afb41cbb281b2435b8f3d",
+        "config_sha256": "1d556eab73b69c7f11f64c557a2f9c6f440bd4c6b89bb2584a6b498c92603843",
+        "config_dtype_normalised": "torch.bfloat16",
+        "attn_implementation": "sdpa",
+        "rotary_fp32_restoration": {
+          "restored_buffers": {
+            "inv_freq": {
+              "dtype": "torch.float32",
+              "shape": [
+                32
+              ],
+              "sha256": "4dcfda84ce763abe24a92bbf6718c1b03753068a39a15aaf8ae5ac2fdc6ca266"
+            },
+            "original_inv_freq": {
+              "dtype": "torch.float32",
+              "shape": [
+                32
+              ],
+              "sha256": "4dcfda84ce763abe24a92bbf6718c1b03753068a39a15aaf8ae5ac2fdc6ca266"
+            }
+          },
+          "rule": "reconstructed in fp32 from the pinned configuration, identically for the pretrained and random arms (OI5)"
+        },
+        "buffer_inventory": {
+          "model.rotary_emb.inv_freq": {
+            "classification": "non-persistent",
+            "dtype": "torch.float32",
+            "shape": [
+              32
+            ],
+            "value_digest_float64": "8efa5ae72fba0f25a2d4509ab96d5e5ffe54ea4171882b879143484fa5cb3bf6",
+            "first_values": [
+              1.0,
+              0.6978305578231812,
+              0.486967533826828,
+              0.33982083201408386
+            ]
+          },
+          "model.rotary_emb.original_inv_freq": {
+            "classification": "non-persistent",
+            "dtype": "torch.float32",
+            "shape": [
+              32
+            ],
+            "value_digest_float64": "8efa5ae72fba0f25a2d4509ab96d5e5ffe54ea4171882b879143484fa5cb3bf6",
+            "first_values": [
+              1.0,
+              0.6978305578231812,
+              0.486967533826828,
+              0.33982083201408386
+            ]
+          }
+        }
+      },
+      "B2": {
+        "arm_model": "random",
+        "construction": "utils.set_seed(20260802); from_config in float32; cast to bfloat16; no pretrained weight loaded",
+        "pinned_revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+        "parameter_count": 134515008,
+        "parameter_state_sha256": "c6666d3ce0af64ae784d61562f9ea7e56e2b214220f26bbd2d6fd0999bce474b",
+        "config_sha256": "1d556eab73b69c7f11f64c557a2f9c6f440bd4c6b89bb2584a6b498c92603843",
+        "config_dtype_normalised": "torch.bfloat16",
+        "attn_implementation": "sdpa",
+        "rotary_fp32_restoration": {
+          "restored_buffers": {
+            "inv_freq": {
+              "dtype": "torch.float32",
+              "shape": [
+                32
+              ],
+              "sha256": "4dcfda84ce763abe24a92bbf6718c1b03753068a39a15aaf8ae5ac2fdc6ca266"
+            },
+            "original_inv_freq": {
+              "dtype": "torch.float32",
+              "shape": [
+                32
+              ],
+              "sha256": "4dcfda84ce763abe24a92bbf6718c1b03753068a39a15aaf8ae5ac2fdc6ca266"
+            }
+          },
+          "rule": "reconstructed in fp32 from the pinned configuration, identically for the pretrained and random arms (OI5)"
+        },
+        "buffer_inventory": {
+          "model.rotary_emb.inv_freq": {
+            "classification": "non-persistent",
+            "dtype": "torch.float32",
+            "shape": [
+              32
+            ],
+            "value_digest_float64": "8efa5ae72fba0f25a2d4509ab96d5e5ffe54ea4171882b879143484fa5cb3bf6",
+            "first_values": [
+              1.0,
+              0.6978305578231812,
+              0.486967533826828,
+              0.33982083201408386
+            ]
+          },
+          "model.rotary_emb.original_inv_freq": {
+            "classification": "non-persistent",
+            "dtype": "torch.float32",
+            "shape": [
+              32
+            ],
+            "value_digest_float64": "8efa5ae72fba0f25a2d4509ab96d5e5ffe54ea4171882b879143484fa5cb3bf6",
+            "first_values": [
+              1.0,
+              0.6978305578231812,
+              0.486967533826828,
+              0.33982083201408386
+            ]
+          }
+        }
+      }
+    },
+    "rotary_reconstruction_reference": {
+      "source": "LlamaRotaryEmbedding(config=<pinned config>), built independently of either arm from the SAME pinned configuration",
+      "config_sha256": "1d556eab73b69c7f11f64c557a2f9c6f440bd4c6b89bb2584a6b498c92603843",
+      "buffers": {
+        "inv_freq": {
+          "dtype": "torch.float32",
+          "value_digest_float64": "8efa5ae72fba0f25a2d4509ab96d5e5ffe54ea4171882b879143484fa5cb3bf6"
+        },
+        "original_inv_freq": {
+          "dtype": "torch.float32",
+          "value_digest_float64": "8efa5ae72fba0f25a2d4509ab96d5e5ffe54ea4171882b879143484fa5cb3bf6"
+        }
+      },
+      "both_arms_match_reference": true
+    },
+    "non_persistent_buffers": [
+      "model.rotary_emb.inv_freq",
+      "model.rotary_emb.original_inv_freq"
+    ],
+    "parity_verdict": {
+      "buffers_compared": 2,
+      "all_identical": true,
+      "names": [
+        "model.rotary_emb.inv_freq",
+        "model.rotary_emb.original_inv_freq"
+      ],
+      "note": "persistent AND non-persistent buffers compared by dtype, shape and value digest; state_dict alone is insufficient because rotary buffers are non-persistent"
+    },
+    "parameters_differ_as_intended": true,
+    "conclusion": "REPRODUCIBLE CLAIM: authorised B2/B3 construction differs ONLY in the intended pretrained-versus-random parameter state. Every buffer, persistent and non-persistent, is byte-identical across the pair by dtype, shape and float64 value digest; the rotary buffers of both arms reproduce a reference rebuilt from the same pinned configuration; and the parameter state digests differ, as they must.",
+    "code_hashes": {
+      "run.py": "9b98aabac8c0bb49b8fcb554731cb499c987683a720018f1a905a1f9e5be9d87",
+      "training.py": "1d50ab49fb0740b00b637ec3e8ccdd75480b47819a7883bd0519820b9adc5d72",
+      "this_module": "ae9709d9ba7e6b5a5724283f5c0c666b6f4154755dee64fbd0ea1bdf929a9ac0"
+    },
+    "protocol_family": "e8b-fp32-fixed22-core-2026-08-07",
+    "clean_test_accessed": false
+  }
+}

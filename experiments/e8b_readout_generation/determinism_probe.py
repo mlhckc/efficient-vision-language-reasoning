@@ -9,9 +9,17 @@ quantity: per-step losses, per-epoch canonical FP32 development R1
 accuracy, the full development prediction vector, the model state, the
 optimizer state and the global step counter.
 
-This probe is never promoted into the final matrix. It writes only
-`determinism_probe_run{N}.json` plus a scratch state digest, trains no
-core cell, and touches no core checkpoint path.
+PRECISE SCOPE. This probe DOES perform real training: three epochs and
+939 optimizer steps on the B3/train_40k/seed0 configuration under the
+CORE recipe. What it does NOT do is complete, write, or promote a
+scientific final-core cell or result: it writes only
+`determinism_probe_run{N}.json`, touches no core checkpoint path, and
+every artefact it writes carries NON_SCIENTIFIC true so the promotion
+guard refuses it.
+
+Its standing authorisation was REVOKED on 2026-08-07 after it completed
+its purpose; running it again requires a fresh explicit authorisation
+granted BEFORE any GPU work.
 
     python -B experiments/e8b_readout_generation/determinism_probe.py --run 1
     python -B experiments/e8b_readout_generation/determinism_probe.py --run 2
@@ -81,9 +89,8 @@ def probe(run_index: int) -> int:
     # The ONLY authorised non-scientific training (user authorisation of
     # 2026-08-07). Anything else refuses; the probe never writes to a
     # core or search path and is never promoted.
-    if e8b_run.NONSCIENTIFIC_PROBE_AUTHORIZED \
-            != "oi1-determinism-probe-2026-08-07":
-        sys.exit("DETERMINISM PROBE NOT AUTHORISED")
+    e8b_run.authorize_optimizer_path("nonscientific-probe",
+                                     f"determinism probe run {run_index}")
     from experiments.e8a_question_encoder import reinfer_g21
     reinfer_g21.assert_gpu_exclusive(f"e8b determinism probe {run_index}")
     started = time.time()
@@ -169,8 +176,14 @@ def probe(run_index: int) -> int:
     record = {"metadata": utils.run_metadata(),
               "determinism_probe": {
         "NON_SCIENTIFIC": True,
-        "never_promoted": "this probe is never promoted into the final "
-                          "18-cell matrix and trains no core cell",
+        "scope": "this probe DOES perform real training (3 epochs, 939 "
+                 "optimizer steps) on the B3/train_40k/seed0 "
+                 "configuration under the core recipe. It does not "
+                 "complete, write, or promote a scientific final-core "
+                 "cell or result.",
+        "never_promoted": "refused by assert_promotable at every final "
+                          "aggregation, core-result loading, freeze and "
+                          "promotion path, on the NON_SCIENTIFIC flag",
         "run_index": run_index, "epochs": PROBE_EPOCHS,
         "cell": [PROBE_ARM, PROBE_SCALE, PROBE_SEED],
         "recipe_sha256": e8b_training.recipe_sha256(recipe),

@@ -1,4 +1,18 @@
-"""READ-ONLY numerical characterization of the three R1 scorers.
+"""READ-ONLY SUPERSEDED DIAGNOSTIC - NOT AN ACTIVE SEARCH PATH.
+
+This tool reproduces a HISTORICAL exploratory diagnostic over the
+abandoned eight-point search checkpoints. The search itself was
+PERMANENTLY STOPPED on 2026-08-07; grid points 4-8 will never run and
+grid points 1-3 are exploratory protocol-diagnostic evidence only.
+
+It contains NO training path: no optimizer, no backward pass, no
+parameter update. It reads frozen historical checkpoints so their
+provenance can be reproduced, and nothing more. A fresh-context agent
+must NOT read the presence of build_recipe, SEARCH_GRID or
+search-checkpoint paths here as evidence that search execution is
+available or authorised - it is not, at any entry.
+
+READ-ONLY numerical characterization of the three R1 scorers.
 
 Motivation. Search grid point 3 halted on the binding G14 at pinned
 development row 3101, where the brute force and the batched scorer chose

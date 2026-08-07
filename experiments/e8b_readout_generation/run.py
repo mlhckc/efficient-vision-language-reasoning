@@ -91,11 +91,58 @@ SEARCH_ABANDONED = True
 PROTOCOL_FAMILY = "e8b-fp32-fixed22-core-2026-08-07"
 EVALUATION_PRECISION = "fp32"
 
-# The ONLY authorised non-scientific training: the OI1 strict-determinism
-# probe (user authorisation of 2026-08-07, "Run only a NON-SCIENTIFIC
-# 3-epoch 40k determinism probe"). The probe asserts this constant; every
-# scientific entry ignores it and refuses on TRAINING_AUTHORIZED.
-NONSCIENTIFIC_PROBE_AUTHORIZED = "oi1-determinism-probe-2026-08-07"
+# The OI1 strict-determinism probe's standing authorisation is REVOKED
+# (user decision of 2026-08-07): the probe has completed its purpose, its
+# evidence is recorded in determinism_probe_run3/run4 and the strict
+# comparison, and re-running it now requires a FRESH explicit
+# authorisation granted BEFORE any GPU work. None is a hard refusal.
+NONSCIENTIFIC_PROBE_AUTHORIZED = None
+NONSCIENTIFIC_PROBE_REVOKED_ON = "2026-08-07"
+
+# Every code path capable of calling optimizer.step() must declare its
+# execution class and pass this gate FIRST, before any GPU work. A public
+# wrapper is not sufficient: private helpers are callable by direct
+# import, and Python naming conventions are not access control.
+EXECUTION_CLASSES = {
+    # the 18 scientific final-core cells, and the gates that run inside a
+    # core cell's own execution (they update parameters of throwaway
+    # models but are still optimizer paths inside a scientific run)
+    "core-cell": "core-matrix-approved",
+    "core-gate": "core-matrix-approved",
+    # the non-scientific determinism probe; its standing grant is revoked
+    "nonscientific-probe": "oi1-determinism-probe-2026-08-07",
+}
+
+
+def authorize_optimizer_path(execution_class: str, context: str) -> dict:
+    """Fail-closed authorisation for ANY path that can reach
+    optimizer.step().
+
+    Refuses unless the recorded authorisation state for that exact
+    execution class matches its required token. Returns the granted
+    record so a run can record what authorised it."""
+    if execution_class not in EXECUTION_CLASSES:
+        sys.exit(f"OPTIMIZER PATH REFUSED ({context}): unknown execution "
+                 f"class {execution_class!r}; every optimizer path must "
+                 f"declare one of {sorted(EXECUTION_CLASSES)}")
+    required = EXECUTION_CLASSES[execution_class]
+    if execution_class == "nonscientific-probe":
+        granted = NONSCIENTIFIC_PROBE_AUTHORIZED
+        detail = ("the determinism probe's standing authorisation was "
+                  f"REVOKED on {NONSCIENTIFIC_PROBE_REVOKED_ON}; it has "
+                  "completed its purpose and re-running it requires a "
+                  "fresh explicit authorisation granted BEFORE any GPU "
+                  "work")
+    else:
+        granted = TRAINING_AUTHORIZED
+        detail = ("scientific core execution requires a separate explicit "
+                  "user approval; the recorded state is "
+                  f"{TRAINING_AUTHORIZED!r}")
+    if granted != required:
+        sys.exit(f"OPTIMIZER PATH REFUSED ({context}): execution class "
+                 f"{execution_class!r} is not authorised. {detail}")
+    return {"execution_class": execution_class, "context": context,
+            "authorised_by": required}
 
 # The final pair-matched core matrix (A5): 3 arms x 2 scales x 3 seeds.
 CORE_ARMS = ("B1", "B2", "B3")
@@ -428,7 +475,12 @@ RESUME_FIELDS = (
     "python_rng", "numpy_rng", "torch_cpu_rng", "cuda_rng_all",
     "loader_generator_state", "epoch_permutation_counter", "recipe_sha256",
     "vocabulary_sha256", "store_sha256s", "code_head",
-    "environment_fingerprint")
+    "environment_fingerprint",
+    # M-5: the per-epoch record must survive resume. The epoch-22
+    # canonical rule reads history[-1], so a resume that dropped the
+    # history would either crash or, worse, silently re-derive the
+    # canonical epoch from a truncated record.
+    "history", "train_times", "eval_times")
 
 
 def environment_fingerprint() -> dict:
@@ -448,7 +500,9 @@ def save_resume_checkpoint(path: Path, *, model, optimizer, scheduler,
                            loader_generator, epoch_permutation_counter: int,
                            recipe_sha256: str, vocabulary_sha256: str,
                            store_sha256s: dict,
-                           protocol_family: str) -> None:
+                           protocol_family: str,
+                           history: list, train_times: list,
+                           eval_times: list) -> None:
     """Atomic write of the complete resumable state. Every RESUME_FIELDS
     entry is present by construction."""
     import random
@@ -472,6 +526,9 @@ def save_resume_checkpoint(path: Path, *, model, optimizer, scheduler,
         "store_sha256s": store_sha256s,
         "code_head": utils.run_metadata()["git_commit"],
         "environment_fingerprint": environment_fingerprint(),
+        "history": list(history),
+        "train_times": list(train_times),
+        "eval_times": list(eval_times),
     }
     temporary = path.with_name(path.name + ".tmp")
     torch.save(state, temporary)
@@ -491,8 +548,18 @@ def verify_resume_checkpoint(path: Path, *, same_node_required: bool = False,
     family. Pass protocol_family=None only to inspect a foreign
     checkpoint deliberately."""
     state = torch.load(path, map_location="cpu", weights_only=False)
+    # The family field and the per-epoch record were both introduced by
+    # the 2026-08-07 amendments, so a superseded pre-amendment checkpoint
+    # cannot carry them. They are required whenever the family is
+    # ENFORCED, which is every resume path; the deliberate
+    # protocol_family=None inspection path drops them so that a legacy
+    # checkpoint stays READABLE FOR AUDIT. That path cannot be used to
+    # resume: restore_resume_state requires the full record and raises on
+    # a legacy state.
+    post_amendment = ("protocol_family", "history", "train_times",
+                      "eval_times")
     required = [f for f in RESUME_FIELDS
-                if f != "protocol_family" or protocol_family is not None]
+                if f not in post_amendment or protocol_family is not None]
     missing = [f for f in required if f not in state]
     if missing:
         raise AssertionError(
@@ -536,7 +603,10 @@ def restore_resume_state(state: dict, *, model, optimizer, scheduler,
             "best_metric": state["best_metric"],
             "best_epoch": state["best_epoch"],
             "epoch_permutation_counter":
-                state["epoch_permutation_counter"]}
+                state["epoch_permutation_counter"],
+            "history": list(state["history"]),
+            "train_times": list(state["train_times"]),
+            "eval_times": list(state["eval_times"])}
 
 
 # --- Locks and atomicity ------------------------------------------------------
@@ -638,6 +708,21 @@ def preflight(device) -> int:
     parameter update, no epoch, no G19 timing, no accuracy, no selection.
     Every output is labelled NON-SCIENTIFIC."""
     started = time.time()
+    # G17 defence in depth: the embargo scan runs HERE, in the safe
+    # non-training preflight, so the embargo condition has persisted
+    # evidence BEFORE any scientific authorisation. train_core_cell runs
+    # it again at execution time. Neither opens, lists, stats, hashes or
+    # resolves the embargoed target itself; both scan E8B SOURCE text.
+    scanned = []
+    for source in sorted(Path(__file__).parent.glob("*.py")):
+        e8a.assert_no_clean_test_path(source.read_text(), source.name)
+        scanned.append(source.name)
+    results_g17 = {"sources_scanned": scanned,
+                   "embargoed_path_referenced": False,
+                   "note": "source-text scan only; the embargoed file is "
+                           "never opened, listed, stat-ed, hashed or "
+                           "resolved"}
+    print(f"[G17] embargo scan clean over {len(scanned)} E8B sources")
     tokenizer = e8a.load_tokenizer()
     answers, vocabulary = g21.load_index_to_answer(
         config.DATA_DIR / "v2" / "answer_vocab_v2.json")
@@ -652,7 +737,8 @@ def preflight(device) -> int:
                                             "length_histogram",
                                             "strict_prefix_pairs",
                                             "sha256")},
-               "vocabulary_sha256": vocabulary["sha256"]}
+               "vocabulary_sha256": vocabulary["sha256"],
+               "g17_embargo_scan": results_g17}
 
     lms, inventories = {}, {}
     for arm in ("B2", "B3"):
@@ -1018,6 +1104,46 @@ def promote_lm_to_fp32(lm) -> dict:
             "sha_note": "the two hashes differ only because the digest "
                         "covers serialised bytes at different dtypes; "
                         "the VALUES are bitwise identical"}
+
+
+
+def assert_promotable(record: dict, source: str,
+                      context: str = "final aggregation") -> dict:
+    """HARD REFUSAL for any artefact that is not a scientific final-core
+    result.
+
+    Every final aggregation, core-result load, model freeze and promotion
+    path must call this. It refuses on the artefact's own CONTENT, not on
+    its filename: a record is promotable only if it carries no
+    NON_SCIENTIFIC flag anywhere and declares exactly the current
+    final-core protocol family. Determinism-probe artefacts, superseded
+    search records and anything from an earlier family are refused."""
+    body = record
+    if isinstance(record, dict) and len(record) <= 3:
+        for key in ("e8b_core_cell", "determinism_probe",
+                    "determinism_probe_comparison", "e8b_pilot_g19"):
+            if key in record:
+                body = record[key]
+                break
+    flat = json.dumps(record, default=str)
+    if '"NON_SCIENTIFIC": true' in flat.lower().replace(
+            '"non_scientific": true', '"NON_SCIENTIFIC": true'.lower()) \
+            or (isinstance(body, dict) and body.get("NON_SCIENTIFIC")):
+        sys.exit(f"PROMOTION REFUSED ({context}): {source} is marked "
+                 f"NON_SCIENTIFIC. Non-scientific probe artefacts are "
+                 f"never promoted into a scientific final-core result, "
+                 f"aggregation, freeze or clean-test checkpoint.")
+    family = body.get("protocol_family") if isinstance(body, dict) else None
+    if family != PROTOCOL_FAMILY:
+        sys.exit(f"PROMOTION REFUSED ({context}): {source} declares "
+                 f"protocol family {family!r}, not the final-core family "
+                 f"{PROTOCOL_FAMILY!r}. Superseded search and "
+                 f"pre-amendment artefacts are never promoted.")
+    if not isinstance(body, dict) or "e8b_core_cell" not in record:
+        sys.exit(f"PROMOTION REFUSED ({context}): {source} is not an "
+                 f"e8b_core_cell record.")
+    return {"source": source, "context": context, "promotable": True,
+            "protocol_family": family}
 
 
 def assert_core_family(state: dict, run_name: str, path: Path) -> None:

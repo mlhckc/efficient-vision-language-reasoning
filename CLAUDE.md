@@ -181,10 +181,13 @@ hash no longer matches the worktree.
      search could not support a meaningful winner claim, so the
      pre-result default recipe was frozen outcome-independently.
   2. The final B2/B3 recipe is FIXED at lr 3e-4, warmup 0, dropout 0.1,
-     retained because it was the pre-result pilot and default (it is
-     also the section 7.1 inherited v3_01 configuration), NOT because it
-     scored highest. It did also score highest of the three completed
-     points; that must be disclosed wherever the recipe choice is.
+     retained SOLELY because it was the pre-result pilot and default
+     configuration (it is also the section 7.1 inherited v3_01
+     configuration). NO statistic from Grids 1-3 may justify the recipe
+     choice or support a superiority claim in EITHER direction. The
+     historical observation that grid point 1 also showed the highest
+     BF16 maximum may be mentioned only as an exploratory,
+     NON-CANONICAL, superseded fact - never as support for the choice.
   3. U4 is WITHDRAWN. No search checkpoint is promoted. All 18 core
      cells (B1/B2/B3 x train_40k/train_250k x seeds 0/1/2) are trained
      fresh.

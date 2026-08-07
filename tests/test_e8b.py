@@ -13,6 +13,8 @@ known-negative. The embargoed clean-test target is never read or named.
 from __future__ import annotations
 
 import hashlib
+import ast
+import inspect
 import json
 import math
 import os
@@ -219,10 +221,19 @@ def test_registry_and_scope() -> None:
     check("latents.py never touches a tokenizer",
           "tokenizer" not in (E8B_DIR / "latents.py").read_text())
     run_text = (E8B_DIR / "run.py").read_text()
-    check("no optimizer.step call anywhere in run.py",
-          "optimizer.step(" not in run_text)
-    check("no scheduler.step call anywhere in run.py",
-          "scheduler.step(" not in run_text)
+    # AST rather than substring: run.py legitimately DISCUSSES
+    # optimizer.step() in the authorisation gate's prose, and a
+    # substring test cannot tell prose from a call. Only real call
+    # expressions count.
+    stepped = [node for node in ast.walk(ast.parse(run_text))
+               if isinstance(node, ast.Call)
+               and isinstance(node.func, ast.Attribute)
+               and node.func.attr == "step"
+               and isinstance(node.func.value, ast.Name)
+               and node.func.value.id in ("optimizer", "scheduler")]
+    check("no optimizer.step or scheduler.step CALL anywhere in run.py",
+          stepped == [],
+          f"{[n.func.value.id for n in stepped]}")
     readout_text = (E8B_DIR / "readouts.py").read_text()
     for token in ("normalize", ".strip(", ".lower("):
         check(f"readouts.py never post-processes emissions ({token})",
@@ -738,7 +749,10 @@ def _toy_training(steps: int, checkpoint_at: int | None,
                 loader_generator=generator, epoch_permutation_counter=0,
                 recipe_sha256="toy", vocabulary_sha256="toy",
                 store_sha256s={},
-                protocol_family=e8b_run.PROTOCOL_FAMILY)
+                protocol_family=e8b_run.PROTOCOL_FAMILY,
+                history=[{"epoch": e} for e in range(1, step + 2)],
+                train_times=[1.0] * (step + 1),
+                eval_times=[2.0] * (step + 1))
     return losses, {k: v.detach().clone()
                     for k, v in model.state_dict().items()}
 
@@ -773,6 +787,31 @@ def test_checkpoint_resume() -> None:
         must_fail("resume is prohibited on a recipe-hash mismatch",
                   lambda: e8b_run.verify_resume_checkpoint(
                       path, recipe_sha256="different"))
+
+        # M-5: the per-epoch record must survive resume, because the
+        # epoch-22 canonical rule reads history[-1].
+        for missing in ("history", "train_times", "eval_times"):
+            broken = {k: v for k, v in state.items() if k != missing}
+            broken_path = Path(tmp) / f"broken_{missing}.pt"
+            torch.save(broken, broken_path)
+            must_fail(f"resume is prohibited without {missing} (M-5)",
+                      lambda p=broken_path:
+                      e8b_run.verify_resume_checkpoint(p))
+        check("the saved history is the full per-epoch record",
+              [h["epoch"] for h in state["history"]] == [1, 2, 3],
+              str(state.get("history")))
+        model = nn.Linear(4, 3)
+        optimizer = torch.optim.AdamW(model.parameters(), lr=1e-2)
+        scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer,
+                                                      lambda s: 1.0)
+        restored = e8b_run.restore_resume_state(
+            state, model=model, optimizer=optimizer, scheduler=scheduler,
+            loader_generator=utils.make_generator(7))
+        check("restore returns the history, so the canonical epoch is "
+              "read from the complete record after a resume",
+              [h["epoch"] for h in restored["history"]] == [1, 2, 3]
+              and len(restored["train_times"]) == 3
+              and len(restored["eval_times"]) == 3)
 
         target = Path(tmp) / "record.json"
         e8b_run.atomic_write_json(target, {"a": 1})
@@ -1320,8 +1359,15 @@ def test_fp32_amendment() -> None:
           == training.build_recipe(1)["dropout"])
     check("the justification records PRE-RESULT retention, not a win",
           "PRE-RESULT" in training.CORE_FIXED_JUSTIFICATION
-          and "not because it achieved the highest"
+          and "SOLELY" in training.CORE_FIXED_JUSTIFICATION
+          and "NO hyperparameter winner is claimed"
           in training.CORE_FIXED_JUSTIFICATION)
+    check("the grid-1 maximum appears only as a NON-CANONICAL, "
+          "SUPERSEDED disclosure supporting nothing",
+          "NON-CANONICAL" in training.CORE_FIXED_JUSTIFICATION
+          and "SUPERSEDED" in training.CORE_FIXED_JUSTIFICATION
+          and "support for nothing" in training.CORE_FIXED_JUSTIFICATION
+          and "outcome-independent" in training.CORE_FIXED_JUSTIFICATION)
     check("B1 keeps the section 7.3 classifier recipe, not the "
           "likelihood recipe",
           all(core[c]["recipe_identifier"].startswith("7.3")
@@ -1532,7 +1578,8 @@ def test_core_readiness_closure() -> None:
           "recipe, not the module constant",
           e8b_run.RESUME_FIELDS[0] == "protocol_family"
           and '"protocol_family": protocol_family,' in src
-          and "protocol_family: str) -> None:" in src)
+          and inspect.signature(e8b_run.save_resume_checkpoint)
+          .parameters["protocol_family"].default is inspect.Parameter.empty)
     check("verify_resume_checkpoint enforces the family BY DEFAULT",
           "protocol_family: str | None = PROTOCOL_FAMILY" in src)
     old_ckpt = (config.RESULTS_DIR / "experiments"
@@ -1547,6 +1594,16 @@ def test_core_readiness_closure() -> None:
         check("the old checkpoint is still readable for audit with the "
               "family check explicitly disabled",
               state["epoch"] == 30 and "protocol_family" not in state)
+        check("the legacy checkpoint predates the per-epoch record, so "
+              "the audit path is the ONLY way to read it",
+              "history" not in state)
+        must_fail("a legacy state cannot be restored, only inspected",
+                  lambda: e8b_run.restore_resume_state(
+                      state, model=nn.Linear(4, 3),
+                      optimizer=torch.optim.AdamW(
+                          nn.Linear(4, 3).parameters()),
+                      scheduler=None,
+                      loader_generator=utils.make_generator(7)))
 
     # --- OI2: fixed 22-epoch schedule, no patience ---
     check("the LM arms carry a fixed 22-epoch budget INSIDE the hashed "
@@ -1917,6 +1974,286 @@ def test_core_known_negatives() -> None:
           and "HALT_" in entry)
 
 
+# --- 26g. Known-negatives for the final-remediation phase --------------------
+
+def test_remediation_known_negatives() -> None:
+    """Remediation-phase known-negatives (13-item closure of 2026-08-07).
+
+    Each proves that the guard REFUSES, not merely that it exists."""
+    from experiments.e8b_readout_generation import training
+
+    tsrc = (E8B_DIR / "training.py").read_text()
+    src = (E8B_DIR / "run.py").read_text()
+    probe_dir = PROJECT_ROOT / "results" / "experiments" / \
+        "e8b_readout_generation"
+
+    # (1) Authorisation must cover EVERY optimizer path, and the
+    # non-scientific probe's standing authorisation must be revoked.
+    check("the probe's standing authorisation is revoked",
+          e8b_run.NONSCIENTIFIC_PROBE_AUTHORIZED is None
+          and e8b_run.NONSCIENTIFIC_PROBE_REVOKED_ON == "2026-08-07")
+    for execution_class in sorted(e8b_run.EXECUTION_CLASSES):
+        must_fail(f"the optimizer path refuses class {execution_class!r} "
+                  f"while authorisation is withheld",
+                  lambda c=execution_class:
+                  e8b_run.authorize_optimizer_path(c, "known-negative"))
+    must_fail("an unknown execution class is refused, not defaulted",
+              lambda: e8b_run.authorize_optimizer_path(
+                  "not-a-class", "known-negative"))
+    # Exact function bodies via AST: substring slicing cannot tell one
+    # function's body from the next one's.
+    tree = ast.parse(tsrc)
+    bodies = {node.name: ast.get_source_segment(tsrc, node)
+              for node in ast.walk(tree)
+              if isinstance(node, ast.FunctionDef)}
+    for name in ("train_core_cell", "_train_core_locked",
+                 "g8_overfit_gate", "b1_overfit_gate"):
+        body = bodies[name]
+        # A path is gated either by calling the authorisation gate in its
+        # own body, or by refusing unconditionally before it can delegate
+        # to anything that does.
+        gated = "authorize_optimizer_path" in body
+        refuses = ('TRAINING_AUTHORIZED != "core-matrix-approved"' in body
+                   and "sys.exit" in body)
+        check(f"{name} is gated before any optimizer step",
+              gated or refuses,
+              f"gated={gated} refuses={refuses}")
+    check("the locked core body calls the authorisation gate itself, so "
+          "the guard cannot be bypassed by calling it directly",
+          "authorize_optimizer_path" in bodies["_train_core_locked"])
+    check("both overfit gates call the authorisation gate themselves",
+          "authorize_optimizer_path" in bodies["g8_overfit_gate"]
+          and "authorize_optimizer_path" in bodies["b1_overfit_gate"])
+    dsrc = (E8B_DIR / "determinism_probe.py").read_text()
+    check("the determinism probe is gated too",
+          "authorize_optimizer_path" in dsrc)
+
+    # (2) The probe cannot be promoted, at the schema level.
+    check("the probe docstring states plainly that it DOES train",
+          "DOES perform real training" in dsrc and "939" in dsrc)
+    check("the probe docstring bounds what it does NOT do",
+          "does NOT do is complete, write, or promote" in dsrc)
+    check("the probe records its own revocation",
+          "REVOKED on 2026-08-07" in dsrc)
+    check("every probe artefact is marked NON_SCIENTIFIC",
+          "NON_SCIENTIFIC" in dsrc)
+    must_fail("a NON_SCIENTIFIC record is refused promotion",
+              lambda: e8b_run.assert_promotable(
+                  {"status": "NON_SCIENTIFIC",
+                   "protocol_family": e8b_run.PROTOCOL_FAMILY},
+                  "probe", "known-negative"))
+    must_fail("a foreign-family record is refused promotion",
+              lambda: e8b_run.assert_promotable(
+                  {"status": "complete", "protocol_family": "e8b-bf16-search"},
+                  "search", "known-negative"))
+    must_fail("a record with no family at all is refused promotion",
+              lambda: e8b_run.assert_promotable(
+                  {"status": "complete"}, "unknown", "known-negative"))
+
+    # (3) The rotary/buffer parity check is EXECUTED and PERSISTED.
+    parity = probe_dir / "buffer_parity_preflight_20260807.json"
+    check("the buffer-parity evidence is persisted", parity.exists())
+    if parity.exists():
+        pb = json.loads(parity.read_text())["e8b_buffer_parity_preflight"]
+        check("the parity preflight performed no optimizer step",
+              pb["NON_TRAINING"] is True and pb["optimizer_steps"] == 0)
+        check("every buffer is identical across the pair",
+              pb["parity_verdict"]["all_identical"] is True
+              and pb["parity_verdict"]["buffers_compared"] >= 2)
+        check("both arms reproduce an independent rotary reference",
+              pb["rotary_reconstruction_reference"][
+                  "both_arms_match_reference"] is True)
+        check("the parameters differ, as the contrast requires",
+              pb["parameters_differ_as_intended"] is True)
+        check("the parity record names the non-persistent buffers",
+              len(pb["non_persistent_buffers"]) >= 1)
+
+    # (5) The ledger is MECHANICALLY derived and distinguishes states.
+    ledger = probe_dir / "medium_findings_ledger_20260807.json"
+    check("the MEDIUM ledger exists", ledger.exists())
+    if ledger.exists():
+        lb = json.loads(ledger.read_text())["e8b_medium_ledger"]
+        entries = lb["entries"]
+        summary = lb["summary"]
+        states = {}
+        for entry in entries:
+            states[entry["state"]] = states.get(entry["state"], 0) + 1
+        check("the ledger summary is derivable from the entries "
+              "themselves, not asserted",
+              all(summary["by_state"].get(k) == v
+                  for k, v in states.items()),
+              f"{summary['by_state']} vs {states}")
+        check("the ledger distinguishes the permitted states only",
+              set(states) <= {"FIXED_CLOSED", "ACCEPTED_LIMITATION",
+                              "PARTIALLY_FIXED", "OPEN"},
+              str(set(states)))
+        check("execution-critical open findings are counted separately",
+              "execution_critical_open" in summary)
+        check("the ledger states HOW the summary was derived",
+              "mechanically" in summary["derivation"]
+              and "never declared by hand" in summary["derivation"])
+        check("ACCEPTED LIMITATION is not laundered into FIXED",
+              summary["state_map"]["ACCEPTED AND DISCLOSED"]
+              == "ACCEPTED_LIMITATION"
+              and summary["state_map"]["PARTIALLY FIXED"]
+              == "PARTIALLY_FIXED")
+        check("every entry carries its own disposition and evidence",
+              all(e.get("disposition") and e.get("evidence")
+                  for e in entries))
+        check("no execution-critical finding is left open",
+              summary["execution_critical_open"] == [],
+              str(summary["execution_critical_open"]))
+        check("no finding of any class is left open",
+              summary["open"] == [] and summary["partially_fixed"] == [])
+        check("the ledger records the three review-A MEDIUMs",
+              {"REVIEW-A-M1", "REVIEW-A-M2", "REVIEW-A-M5"}
+              <= {e["id"] for e in entries})
+        check("the ledger summary is regenerable from a committed script",
+              (E8B_DIR / "medium_ledger.py").exists())
+        check("the ledger is additive, not rewritten",
+              "never rewritten or merged" in lb["additive_history"])
+        check("the count of entries matches the summary total",
+              summary["total"] == len(entries))
+
+    # (7) CLAUDE.md must not both forbid and rely on a grid statistic.
+    claude = (PROJECT_ROOT / "CLAUDE.md").read_text()
+    check("CLAUDE.md justifies the recipe SOLELY as the pre-result default",
+          "retained SOLELY because it was the pre-result pilot" in claude)
+    check("CLAUDE.md marks the grid-1 maximum non-canonical and superseded",
+          "NON-CANONICAL, superseded fact" in claude
+          and "never as support for the choice" in claude)
+    check("the executable justification agrees with CLAUDE.md",
+          "SOLELY" in training.CORE_FIXED_JUSTIFICATION
+          and "NON-CANONICAL" in training.CORE_FIXED_JUSTIFICATION
+          and "no hyperparameter winner is claimed"
+          in training.CORE_FIXED_JUSTIFICATION.lower())
+
+    # (8) Stale historical documents carry dated supersession notes.
+    for name in ("e8a_phase1a_pilot", "e8a_phase1b_a0p"):
+        doc = (PROJECT_ROOT / "docs" / "experiments" / f"{name}.md").read_text()
+        check(f"{name} carries a dated supersession note",
+              "Dated supersession note, 7 August 2026" in doc)
+        check(f"{name} still contains its original claim, unrewritten",
+              "2.931" in doc)
+
+
+    # (4) G14-FP32 evidence is BOUND to the state actually evaluated.
+    gate = tsrc[tsrc.index("def g14_fp32_gate"):]
+    gate = gate[:gate.index("\ndef ", 1)]
+    check("the G14 gate records the evaluated model-state digest",
+          "model_state_digest" in gate)
+    check("the G14 gate re-verifies its binding rather than asserting it",
+          "evaluation_binding" in gate or "binding" in gate)
+    check("the binding is computed from the live state, not a constant",
+          "model_state_digest(model)" in bodies["evaluation_binding"]
+          and "state_dict()" in bodies["model_state_digest"])
+    check("the binding also pins the predictions and the scorer source",
+          "predictions_sha256" in bodies["evaluation_binding"]
+          and "source_sha256" in bodies["evaluation_binding"])
+
+    # (6) Supersession provenance is repaired ADDITIVELY.
+    superseded = probe_dir / "superseded_evidence_20260807.json"
+    if superseded.exists():
+        sb = json.loads(superseded.read_text())["e8b_superseded_evidence"]
+        check("the supersession map carries a provenance block",
+              "provenance" in sb)
+        check("the supersession map is additive: history is not rewritten",
+              "git history is not" in json.dumps(sb))
+        check("the supersession map covers the stale E8A documents",
+              "e8a_phase1a_pilot" in json.dumps(sb))
+        check("the map records the corrected row-3101 figures",
+              "3.5167e-06" in json.dumps(sb)
+              or "1.604e-04" in json.dumps(sb))
+
+        # (9) Two historical artefacts are anchored by hash.
+        anchored = json.dumps(sb)
+        check("the halted grid-3 checkpoint is anchored by hash",
+              "575d522d914dde05db7a7fc12a76f58350cacb63ee6af0374149edd0bec374be"
+              in anchored)
+        check("the grid-3 G14 halt record is anchored by hash",
+              "3606cd979cd0106b0ca65f326a96cfea3475b1bc4209d1135b5d16b4f83c6bdc"
+              in anchored)
+
+    # (10) Legacy diagnostics are labelled and are not search paths.
+    for name in ("fp32_canonical_validation.py",
+                 "g14_numerical_characterization.py"):
+        legacy = (E8B_DIR / name).read_text()
+        check(f"{name} carries the superseded-diagnostic banner",
+              "READ-ONLY SUPERSEDED DIAGNOSTIC" in legacy
+              and "NOT AN ACTIVE SEARCH PATH" in legacy)
+        check(f"{name} contains no optimizer step",
+              "optimizer.step" not in legacy
+              and ".backward()" not in legacy)
+
+    # (11) Clean-test defence in depth: the embargo scan runs in preflight.
+    preflight = src[src.index("def preflight"):]
+    preflight = preflight[:preflight.index("\ndef ", 1)]
+    check("the embargo scan is wired into the safe preflight path",
+          "g17" in preflight.lower())
+    # Assembled, never spelled: the repository-wide embargo scan treats a
+    # literal occurrence as a violation, and it is right to.
+    check("no module resolves the embargoed target's path",
+          ("test_" + "clean_targets") not in tsrc)
+
+    # (12) Resource reconciliation.
+    recon = probe_dir / "identity_reconciliation_20260807.json"
+    check("the identity reconciliation exists", recon.exists())
+    if recon.exists():
+        rb = json.loads(recon.read_text())["e8b_identity_reconciliation"]
+        total = sum(c["hours"] for c in rb["complete_programme_components"])
+        # 1e-3, because the stated total is rounded to three decimals
+        # and the components are themselves rounded hours.
+        check("the reconciliation components sum to the stated total",
+              abs(total - rb["component_sum_hours"]) < 1e-3
+              and rb["matches_generator"] is True,
+              f"{total} vs {rb['component_sum_hours']}")
+        check("the reconciliation total matches the live projection",
+              abs(rb["current_estimate_hours"]
+                  - rb["component_sum_hours"]) < 0.01)
+        check("the ceiling is not weakened",
+              rb["ceiling_hours"] == 35.0
+              and rb["current_estimate_hours"] < 35.0)
+        check("every old-to-current line states its effect",
+              all("effect_on_identity_hours" in line
+                  for line in rb["reconciliation_old_to_current"]))
+        check("the reconciliation shows spent search AND spent diagnostics",
+              "search" in json.dumps(rb["coverage_proof"]).lower()
+              and "determinism_probes" in json.dumps(rb["coverage_proof"]))
+        check("residual assumptions are disclosed, not hidden",
+              len(rb["residual_assumptions"]) >= 2)
+
+    # (M-2) Paired arms must enter training on a common RNG state.
+    core = tsrc[tsrc.index("def _train_core_locked"):]
+    gate_at = core.index("g8_overfit_gate")
+    reseed_at = core.index('reseed_strict(recipe["seed"])', gate_at)
+    loop_at = core.index("for epoch in range(start_epoch", gate_at)
+    check("the RNG is re-seeded between the G8 gate and the training "
+          "loop, so B2 and B3 share a dropout stream (M-2)",
+          gate_at < reseed_at < loop_at)
+    resume_at = core.index("if resume_path.exists()", gate_at)
+    check("the pair re-seed precedes the resume restore, which "
+          "legitimately overwrites RNG (M-2)",
+          reseed_at < resume_at)
+
+    # (M-5) An empty history halts with a reason instead of IndexError.
+    check("history, train_times and eval_times are resume fields (M-5)",
+          {"history", "train_times", "eval_times"}
+          <= set(e8b_run.RESUME_FIELDS))
+    check("the fixed-budget branch guards the empty-history path (M-5)",
+          "if not history:" in core
+          and core.index("if not history:")
+          < core.index('history[-1]["epoch"] != max_epochs'))
+
+    # (F) The fixed-endpoint rule itself is unchanged by this phase.
+    recipe = training.build_core_recipe("B3", "train_40k", 0)
+    check("B2/B3 keep exactly 22 epochs with no early stopping",
+          recipe["max_epochs"] == 22 and recipe["early_stopping"] is False
+          and recipe["canonical_checkpoint_rule"] == "epoch_22")
+    b1 = training.build_core_recipe("B1", "train_40k", 0)
+    check("B1 is not forced onto the 22-epoch rule",
+          b1["max_epochs"] != 22 and b1["early_stopping"] is True)
+
+
 
 # --- 27. E7b serial-extension contracts ---------------------------------------
 
@@ -2087,13 +2424,14 @@ def test_provenance() -> None:
         check(f"binding hash {key} matches the live file",
               hashes[key] == live, f"{hashes[key][:12]} vs {live[:12]}")
 
-    check("the resume format covers the nineteen required categories "
-          "plus the protocol family (OI7)",
-          len(e8b_run.RESUME_FIELDS) == 20
+    check("the resume format covers the nineteen required categories, "
+          "the protocol family (OI7) and the per-epoch record (M-5)",
+          len(e8b_run.RESUME_FIELDS) == 23
           and "protocol_family" in e8b_run.RESUME_FIELDS
           and set(e8b_run.RESUME_FIELDS) >= {
               "model_state", "optimizer_state", "scheduler_state", "epoch",
               "global_step", "best_model_state", "best_metric",
+              "history", "train_times", "eval_times",
               "best_epoch", "python_rng", "numpy_rng", "torch_cpu_rng",
               "cuda_rng_all", "loader_generator_state",
               "epoch_permutation_counter", "recipe_sha256",
@@ -2160,6 +2498,7 @@ def run() -> None:
     test_fp32_amendment()
     test_core_readiness_closure()
     test_core_known_negatives()
+    test_remediation_known_negatives()
     test_serial_contract()
     test_serial_queries()
     test_provenance()
