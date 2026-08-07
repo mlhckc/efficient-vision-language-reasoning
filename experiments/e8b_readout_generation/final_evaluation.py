@@ -73,6 +73,10 @@ V2_DIR = PROJECT_ROOT / "data" / "v2"
 RAW_DEV = V2_DIR / "dev_raw.csv"
 
 CONDITIONS = ("normal", "fixed_image", "fixed_question", "shuffled_image")
+# The exact keys evaluate_condition reads. Asserted by the builder so a
+# caller cannot construct a context that is silently short a key.
+REQUIRED_CONTEXT = {"neutral_image", "neutral_question", "neutral_mask",
+                    "deranged_lookup", "prefix_fn"}
 READOUTS = ("R1", "R2", "R3")
 
 # The neutral inputs for the fixed-image and fixed-question conditions
@@ -80,6 +84,14 @@ READOUTS = ("R1", "R2", "R3")
 # by hash. A constant vector would be off-manifold; the mean is the
 # least-informative input that still looks like real data.
 NEUTRAL_BASIS = "mean over the evaluation set's cached token tensors"
+
+
+def _cache_length(prefix_state) -> int:
+    """Length of the KV cache in a prefix state, across cache types."""
+    past = prefix_state[0]
+    if hasattr(past, "get_seq_length"):
+        return int(past.get_seq_length())
+    return int(past[0][0].shape[2])
 
 
 def sha256_array(array) -> str:
@@ -114,15 +126,48 @@ def load_denominators() -> dict:
 
 # --- Interventions ------------------------------------------------------------
 
-def build_intervention_context(dataset, image_ids, device) -> dict:
-    """Neutral inputs and the pinned imageId-level derangement.
+def build_intervention_context(loader, frame, image_vector, device,
+                               prefix_fn) -> dict:
+    """THE context evaluate_condition consumes. One builder, one shape.
+
+    An earlier version returned only the derangement map, which
+    evaluate_condition cannot use: it needs the neutral inputs, a
+    deranged-image lookup and the prefix function. That mismatch left
+    the core seam unbuildable and the only working caller building its
+    context inline, so the validated path and the core path would have
+    been written twice and could diverge. This returns exactly the keys
+    evaluate_condition reads, and asserts so.
 
     The derangement is at IMAGE level, not row level: over 10,004 rows
     drawn from 777 images a row-level permutation would leave roughly
     thirteen rows holding their own image and dilute the intervention."""
-    mapping, provenance = e8a.imageid_level_derangement(image_ids)
+    mapping, provenance = e8a.imageid_level_derangement(
+        list(frame["imageId"]))
     e8a.assert_derangement(mapping)
-    return {"image_map": mapping, "derangement": provenance}
+    image_by_question = dict(zip(frame["questionId"], frame["imageId"]))
+
+    def deranged_lookup(question_ids):
+        return torch.stack([
+            torch.from_numpy(np.asarray(
+                image_vector(mapping[image_by_question[q]]),
+                dtype=np.float32)) for q in question_ids])
+
+    neutral_image, neutral_question, neutral_mask = neutral_inputs(
+        loader, device)
+    context = {"neutral_image": neutral_image,
+               "neutral_question": neutral_question,
+               "neutral_mask": neutral_mask,
+               "deranged_lookup": deranged_lookup,
+               "prefix_fn": prefix_fn,
+               "image_map": mapping,
+               "derangement": provenance,
+               "image_by_question": image_by_question}
+    missing = REQUIRED_CONTEXT - set(context)
+    if missing:
+        raise AssertionError(
+            f"CONTEXT INCOMPLETE: evaluate_condition requires "
+            f"{sorted(missing)}")
+    return context
 
 
 def neutral_inputs(loader, device) -> tuple:
@@ -228,14 +273,34 @@ def evaluate_condition(model, lm, loader, cache, trie, tokenizer, device,
 
         for index in range(prefix.shape[0]):
             single = prefix[index:index + 1]
-            state = readouts._prefix_cache(lm, single)
-            rows["r2_pred"].append(
-                int(readouts.r2_cached(lm, single, cache, trie,
-                                       prefix_state=state))
-                if "R2" in which else -1)
+            # R2 and R3 EACH GET THEIR OWN prefix state. readouts.py
+            # states the contract: "A supplied prefix_state is consumed:
+            # the walk extends its cache in place, so the caller must
+            # not reuse it afterwards." Sharing one state made R3 decode
+            # against a cache already holding R2's emitted answer
+            # tokens, which silently changed the generated text on most
+            # rows instead of raising. The extra prefix forward is the
+            # price of correctness and is inside the measured cost.
+            if "R2" in which:
+                r2_state = readouts._prefix_cache(lm, single)
+                rows["r2_pred"].append(
+                    int(readouts.r2_cached(lm, single, cache, trie,
+                                           prefix_state=r2_state)))
+            else:
+                rows["r2_pred"].append(-1)
             if "R3" in which:
+                r3_state = readouts._prefix_cache(lm, single)
+                before = _cache_length(r3_state)
                 emitted = readouts.r3_generate(lm, single, tokenizer,
-                                               prefix_state=state)
+                                               prefix_state=r3_state)
+                # The guard that would have caught the defect: R3 must
+                # start from a cache holding the prefix and nothing else.
+                if before != single.shape[1]:
+                    raise AssertionError(
+                        f"CACHE-INTEGRITY GUARD FAILED: R3 started from "
+                        f"a cache of length {before}, not the prefix "
+                        f"length {single.shape[1]}; a previous readout "
+                        f"consumed the state")
                 rows["r3_text"].append(emitted["text"])
                 rows["r3_overlong"].append(bool(emitted["overlong"]))
                 rows["r3_empty"].append(bool(emitted["empty"]))
@@ -245,8 +310,20 @@ def evaluate_condition(model, lm, loader, cache, trie, tokenizer, device,
                 rows["r3_empty"].append(False)
         rows["questionId"].extend(list(question_ids))
         rows["label"].extend([int(v) for v in labels])
+        lookup = context.get("image_by_question")
+        if lookup is not None:
+            rows["imageId"].extend([lookup[q] for q in question_ids])
     rows["seconds"] = round(time.time() - started, 3)
     rows["condition"] = condition
+    # Every per-row list must be the same length and in loader order.
+    # Scoring joins these against a frame by position, so a silent
+    # misalignment would score predictions against the wrong gold.
+    lengths = {key: len(value) for key, value in rows.items()
+               if isinstance(value, list) and value}
+    if len(set(lengths.values())) > 1:
+        raise AssertionError(
+            f"ROW ALIGNMENT FAILED: per-row lists disagree in length: "
+            f"{lengths}")
     return rows
 
 
@@ -254,9 +331,23 @@ def evaluate_condition(model, lm, loader, cache, trie, tokenizer, device,
 
 def score_closed(predicted, labels, index_to_answer) -> dict:
     """R1 and R2: closed over the vocabulary, so the prediction is an
-    index and both scores are computed from the decoded strings."""
+    index and both scores are computed from the decoded strings.
+
+    REFUSES out-of-vocabulary rows. Their gold label is -1, and
+    index_to_answer is a LIST, so index_to_answer[-1] silently returns
+    the last vocabulary answer and manufactures a spurious normalised
+    hit for every out-of-vocabulary row the model happened to predict
+    as index 99. Closed readouts are scored on the in-vocabulary rows
+    and their raw-denominator accuracy is derived by
+    raw_denominator_closed."""
     predicted = np.asarray(predicted)
     labels = np.asarray(labels)
+    if (labels < 0).any():
+        raise AssertionError(
+            f"SCORING REFUSED: {int((labels < 0).sum())} rows carry an "
+            f"out-of-vocabulary gold label (-1). A closed readout "
+            f"cannot be scored against them row by row; use "
+            f"raw_denominator_closed for the raw denominator.")
     raw_hits = predicted == labels
     normalised_hits = np.array([
         g21.normalized_exact(index_to_answer[int(p)],
@@ -281,20 +372,56 @@ def score_open(texts, gold_answers) -> dict:
             "raw_hits": raw_hits, "normalised_hits": normalised_hits}
 
 
+def assert_normalisation_disjoint(oov_gold, index_to_answer) -> dict:
+    """The coverage identity needs one fact checked, not assumed.
+
+    For STRICT RAW match the identity is a theorem: a closed readout
+    emits a vocabulary string, an out-of-vocabulary gold is by
+    definition not one, so those rows are always wrong. For the
+    NORMALISED match it is not a theorem -- an out-of-vocabulary gold
+    could normalise onto a vocabulary answer's normalised form (case,
+    articles, punctuation, "two" against "2"), and then a closed
+    readout COULD hit it. This checks that no such collision exists in
+    the data being scored, so the identity holds rather than being
+    presumed."""
+    vocabulary_forms = {g21.normalize_answer(a) for a in index_to_answer}
+    collisions = sorted({g for g in set(oov_gold)
+                         if g21.normalize_answer(g) in vocabulary_forms})
+    return {"distinct_oov_gold": len(set(oov_gold)),
+            "collisions_with_vocabulary_normal_form": collisions,
+            "identity_holds_for_normalised_match": not collisions,
+            "note": "if this ever fails, the normalised raw-denominator "
+                    "accuracy must be scored row by row instead of "
+                    "derived by coverage"}
+
+
 def raw_denominator_closed(in_vocab_score: dict, coverage: float,
-                           n_raw: int) -> dict:
+                           n_raw: int, normalisation_check=None) -> dict:
     """R1/R2 on the raw denominator, COMPUTED not approximated.
 
     A closed readout cannot emit an out-of-vocabulary answer, so every
     out-of-vocabulary row is wrong and raw accuracy is exactly
     in-vocabulary accuracy times coverage. Stated explicitly so nobody
     reads it as an estimate."""
+    if normalisation_check is not None \
+            and not normalisation_check["identity_holds_for_normalised_match"]:
+        raise AssertionError(
+            f"RAW DENOMINATOR REFUSED: "
+            f"{normalisation_check['collisions_with_vocabulary_normal_form']} "
+            f"normalise onto a vocabulary answer, so the coverage "
+            f"identity does NOT hold for the normalised metric and it "
+            f"must be scored row by row instead")
     return {
         "n": n_raw,
-        "basis": "EXACT, not estimated: a closed readout can never emit "
-                 "an out-of-vocabulary answer, so every out-of-vocabulary "
-                 "row is a failure and raw accuracy is in-vocabulary "
-                 "accuracy times coverage",
+        "basis": "EXACT for the RAW metric, by construction: a closed "
+                 "readout can never emit an out-of-vocabulary string, "
+                 "so every out-of-vocabulary row is a failure and raw "
+                 "accuracy is in-vocabulary accuracy times coverage. "
+                 "For the NORMALISED metric the same identity holds "
+                 "only while no out-of-vocabulary gold normalises onto "
+                 "a vocabulary answer, which is CHECKED rather than "
+                 "assumed; see normalisation_check.",
+        "normalisation_check": normalisation_check,
         "coverage": round(coverage, 6),
         "raw_exact": round(in_vocab_score["raw_exact"] * coverage, 6),
         "normalised_exact": round(

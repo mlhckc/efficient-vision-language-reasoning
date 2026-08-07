@@ -164,17 +164,23 @@ def main() -> int:
                 torch.cuda.synchronize()
                 timings["R1_cached"].append(time.perf_counter() - start)
 
+                # Each readout gets its OWN state: r2_cached consumes
+                # the one it is given, so timing R3 against R2's spent
+                # cache would time the wrong computation as well as
+                # producing the wrong text.
                 torch.cuda.synchronize()
                 start = time.perf_counter()
+                r2_state = readouts._prefix_cache(lm, single)
                 readouts.r2_cached(lm, single, cache, trie,
-                                   prefix_state=state)
+                                   prefix_state=r2_state)
                 torch.cuda.synchronize()
                 timings["R2"].append(time.perf_counter() - start)
 
                 torch.cuda.synchronize()
                 start = time.perf_counter()
+                r3_state = readouts._prefix_cache(lm, single)
                 emitted = readouts.r3_generate(lm, single, tokenizer,
-                                               prefix_state=state)
+                                               prefix_state=r3_state)
                 torch.cuda.synchronize()
                 timings["R3"].append(time.perf_counter() - start)
                 lengths.append(int(emitted["n_generated"]))

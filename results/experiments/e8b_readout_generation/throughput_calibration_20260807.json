@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-07T21:45:36",
-    "git_commit": "b933358",
+    "timestamp": "2026-08-07T22:25:40",
+    "git_commit": "30c9f88",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -74,6 +74,11 @@
           },
           "parameter_state_sha256": "c6666d3ce0af64ae784d61562f9ea7e56e2b214220f26bbd2d6fd0999bce474b"
         }
+      },
+      "additionally_verified_20260807": {
+        "optimizer_construction_arm_independent": true,
+        "forward_has_no_value_dependent_branch": true,
+        "why": "the conclusion ASSERTED both. Both are true, but asserting is not verifying, so both are now checked in code and recorded. A value-dependent branch would have to test tensor CONTENTS, which is what the tokens above look for."
       }
     },
     "empirical_equivalence": {
@@ -85,46 +90,75 @@
         "scale": "train_40k",
         "warmup_steps": 20,
         "measured_steps": 25,
-        "mean_s_per_step": 0.234282,
-        "median_s_per_step": 0.233904,
-        "p90_s_per_step": 0.240541,
-        "stdev_s_per_step": 0.003816,
+        "mean_s_per_step": 0.23513,
+        "median_s_per_step": 0.234878,
+        "p90_s_per_step": 0.241231,
+        "stdev_s_per_step": 0.003855,
         "peak_reserved_mib": 6824.0,
-        "total_s": 5.86
+        "total_s": 5.88
       },
       "B3": {
         "arm": "B3",
         "scale": "train_40k",
         "warmup_steps": 20,
         "measured_steps": 25,
-        "mean_s_per_step": 0.23483,
-        "median_s_per_step": 0.234598,
-        "p90_s_per_step": 0.241013,
-        "stdev_s_per_step": 0.003755,
+        "mean_s_per_step": 0.235588,
+        "median_s_per_step": 0.235401,
+        "p90_s_per_step": 0.24172,
+        "stdev_s_per_step": 0.003711,
         "peak_reserved_mib": 6842.0,
-        "total_s": 5.87
+        "total_s": 5.89
       },
-      "b3_over_b2_ratio": 1.0023,
+      "b3_over_b2_ratio": 1.0019,
       "within_noise": true,
-      "criterion": "the difference in mean step time is within three times the larger per-step standard deviation",
-      "verdict": "CONFIRMED: B2 and B3 train at the same rate, so B2 validly calibrates B3's throughput"
+      "criterion": "the difference in mean step time is within three standard errors OF THE DIFFERENCE. An earlier version compared it against three standard deviations of a single step, which is about fifteen times looser and would have accepted a genuine five per cent throughput gap. Recomputed here from the recorded per-step statistics; no new GPU work was needed, because the criterion is a function of numbers already measured.",
+      "verdict": "CONFIRMED under the STRICTER criterion: B2 and B3 train at the same rate, so B2 validly calibrates B3's throughput",
+      "difference_s": 0.000458,
+      "standard_error_of_difference_s": 0.00107,
+      "difference_over_se": 0.43
     },
     "calibration_250k": {
       "arm": "B2",
       "scale": "train_250k",
       "warmup_steps": 20,
       "measured_steps": 60,
-      "mean_s_per_step": 0.235672,
-      "median_s_per_step": 0.235907,
-      "p90_s_per_step": 0.242174,
-      "stdev_s_per_step": 0.003388,
+      "mean_s_per_step": 0.236435,
+      "median_s_per_step": 0.236679,
+      "p90_s_per_step": 0.242734,
+      "stdev_s_per_step": 0.003311,
       "peak_reserved_mib": 6920.0,
-      "total_s": 14.14
+      "total_s": 14.19
+    },
+    "same_scale_bias_correction": {
+      "why": "a steady-state step window is not an epoch. The real training loop also pays the scheduler step, the wall check and a per-step host synchronisation on the loss, and it pays the epoch's first and last steps at cold rates. Extrapolating steps to epochs therefore UNDER-predicts, and by how much can be measured at 40k, where twelve real full-epoch train times exist.",
+      "real_full_epoch_40k_seconds": [
+        77.5,
+        77.9,
+        78.0,
+        78.4,
+        78.0,
+        78.0,
+        77.5,
+        78.0,
+        78.0,
+        78.3,
+        77.9,
+        77.9
+      ],
+      "real_40k_mean": 77.95,
+      "real_40k_max": 78.4,
+      "extrapolated_40k_mean": 73.6,
+      "extrapolated_40k_p90": 75.51,
+      "under_prediction_mean_percent": 5.92,
+      "under_prediction_p90_percent": 3.83,
+      "corrected_250k_s_per_epoch": 492.5,
+      "basis_used_in_the_budget": "the P90 step time extrapolated and then corrected by the same-scale P90 bias, which is the conservative combination",
+      "consequence": "the CORRECTED 250k rate is at or slightly ABOVE the step-scaled assumption it replaced, not below it. An earlier version of this record concluded the assumption was CONSERVATIVE; that conclusion came from comparing an UNCORRECTED extrapolation against the assumption and was WRONG."
     },
     "measured_rates": {
-      "s_per_step_250k": 0.235672,
-      "s_per_epoch_250k_measured": 460.5,
-      "s_per_epoch_40k_measured": 73.33,
+      "s_per_step_250k": 0.236435,
+      "s_per_epoch_250k_measured": 461.99,
+      "s_per_epoch_40k_measured": 73.6,
       "steps_per_epoch": {
         "train_40k": 313,
         "train_250k": 1954
@@ -133,14 +167,16 @@
     "against_the_assumption": {
       "assumed_s_per_epoch_40k": 78.3,
       "assumed_s_per_epoch_250k_step_scaled": 488.81,
-      "measured_s_per_epoch_250k": 460.5,
-      "ratio_measured_over_assumed": 0.9421,
-      "verdict": "the step-scaled assumption was CONSERVATIVE"
+      "measured_s_per_epoch_250k": 461.99,
+      "ratio_measured_over_assumed": 0.9451,
+      "corrected_s_per_epoch_250k": 492.49,
+      "ratio_corrected_over_assumed": 1.0075,
+      "verdict": "after the same-scale bias correction the measured rate is ABOVE the step-scaled assumption: the assumption was OPTIMISTIC, not conservative. Comparing the UNCORRECTED extrapolation against it would have said the opposite, and did in an earlier version of this record."
     },
     "calibration_cost": {
-      "total_hours": 0.01598,
-      "charged_to_pretrained_identity_hours": 0.00163,
-      "charged_to_random_identity_hours": 0.00556,
+      "total_hours": 0.01597,
+      "charged_to_pretrained_identity_hours": 0.00164,
+      "charged_to_random_identity_hours": 0.00558,
       "note": "only the B3 cross-check touches the pretrained identity, and it is deliberately the smaller half of the smaller scale"
     },
     "bounded": {
@@ -158,6 +194,11 @@
       "cudnn_deterministic": true,
       "cublas_workspace_config": ":4096:8"
     },
-    "clean_test_accessed": false
+    "clean_test_accessed": false,
+    "authorisation_status": {
+      "state": "REVOKED on 2026-08-07, immediately after phase C completed",
+      "why": "the grant was open-ended in the gate -- no step cap, no scale bound -- so leaving it live would have left a real optimizer path open on the training path while scientific core execution is refused. Re-running this calibration now requires a fresh explicit authorisation.",
+      "verified": "run.THROUGHPUT_CALIBRATION_AUTHORIZED is None"
+    }
   }
 }

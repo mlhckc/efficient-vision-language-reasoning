@@ -773,7 +773,7 @@ FINAL_20260807_ENTRIES = [
               "and understated the risk by about 2.6 times: it quoted "
               "12 per cent per cell and 17 per cent on the training "
               "rate, both computed verbatim on the superseded 4.189 h "
-              "basis, while the current per-cell figure is 4.226 h. The "
+              "basis, while the per-cell figure at the time was 4.226 h (superseded again by measurement on 2026-08-07). The "
               "whole sensitivity block was hardcoded inside a generator "
               "whose docstring claims it recomputes every figure.",
      "classification": "scientific-validity",

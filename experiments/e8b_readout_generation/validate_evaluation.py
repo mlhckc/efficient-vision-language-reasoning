@@ -196,25 +196,14 @@ def main(rows: int = 64) -> int:
         RawRowDataset(subset, stores), batch_size=16, shuffle=False,
         collate_fn=collate)
 
-    neutral_image, neutral_question, neutral_mask = fe.neutral_inputs(
-        loader, device)
-    mapping, derangement = e8a.imageid_level_derangement(
-        list(subset["imageId"]))
-    e8a.assert_derangement(mapping)
-    by_qid = {q: i for q, i in zip(subset["questionId"],
-                                   subset["imageId"])}
-
-    def deranged_lookup(question_ids):
-        return torch.stack([
-            torch.from_numpy(np.asarray(
-                stores.image_vector(mapping[by_qid[q]]),
-                dtype=np.float32)) for q in question_ids])
-
-    context = {"neutral_image": neutral_image,
-               "neutral_question": neutral_question,
-               "neutral_mask": neutral_mask,
-               "deranged_lookup": deranged_lookup,
-               "prefix_fn": e8b_training.canonical_prefix}
+    # The SHARED builder, so the validated path and the core path are
+    # the same path.
+    context = fe.build_intervention_context(
+        loader, subset, stores.image_vector, device,
+        e8b_training.canonical_prefix)
+    neutral_image = context["neutral_image"]
+    neutral_question = context["neutral_question"]
+    derangement = context["derangement"]
 
     conditions = {}
     for condition in fe.CONDITIONS:

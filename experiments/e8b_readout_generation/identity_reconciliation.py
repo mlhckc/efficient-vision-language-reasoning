@@ -141,8 +141,8 @@ def derive(existing: dict, projection: dict) -> dict:
 
     # The residual assumptions are quoted from the projection, never
     # restated, so a correction there cannot fail to reach here.
-    step = residual["train_250k_step_scaling"]
-    rates = residual["r2_r3_per_row"]
+    step = residual["train_250k_MEASURED"]
+    rates = residual["evaluation_pass_MEASURED"]
     body["residual_assumptions"] = [
         "This list is DERIVED from core_resource_projection_20260807"
         ".json -> residual_assumptions_quantified, which is itself "
@@ -150,18 +150,12 @@ def derive(existing: dict, projection: dict) -> dict:
         "previously carried hand-written figures that went stale "
         "silently, and a withdrawn provenance that survived here after "
         "being corrected elsewhere in this same file.",
-        f"the 250k training rate is step-scaled from the measured 40k "
-        f"rate and no 250k E8B cell has ever run. It carries "
-        f"{step['carries_hours']} h, and the ceiling is reached at a "
-        f"{step['break_even_per_cell_percent']} per cent rise in "
-        f"per-cell cost ({step['break_even_on_training_rate_percent']} "
-        f"per cent on the training rate alone).",
-        f"NEITHER the R2 nor the R3 per-row cost is measured for E8B, "
-        f"and neither has a source; the previously claimed E7b "
-        f"provenance was FALSE. They carry {rates['carries_hours']} h; "
-        f"at 3x the assumed rate the identity rises by "
-        f"{rates['increase_at_3x_hours']} h and the headroom goes to "
-        f"{rates['headroom_after_3x_hours']} h, i.e. EXHAUSTED.",
+        f"the 250k training rate is now MEASURED and bias-corrected. "
+        f"It carries {step['carries_hours']} h. {step['basis']}",
+        f"the evaluation pass is now MEASURED and carries "
+        f"{rates['carries_hours']} h -- the largest single line in the "
+        f"programme and the one that drives the breach. "
+        f"{rates['residual_risk']}",
         residual["g14_row_cost"]["direction"],
         residual["a4_a7c_unrun"]["precedent"],
         residual["retained_a1_row"]["basis"],
@@ -173,18 +167,25 @@ def derive(existing: dict, projection: dict) -> dict:
 
     # Risks keep their authored text but their figures come from the
     # projection, and the counts come from the list.
+    # The two risks that phase C and B were run to close are CLOSED by
+    # measurement. They are rewritten rather than left standing with
+    # fresh numbers injected into stale "unmeasured" prose.
     for risk in body.get("open_risks", []):
         if "R2 and R3" in risk.get("risk", ""):
+            risk["risk"] = ("the evaluation pass cost, now MEASURED "
+                            "(was: R2/R3 unsourced)")
+            risk["detail"] = rates["basis"]
             risk["carries_hours"] = rates["carries_hours"]
-            risk["exposure"] = (
-                f"at 3x the assumed rate the headroom goes to "
-                f"{rates['headroom_after_3x_hours']} h")
+            risk["exposure"] = rates["residual_risk"]
+            risk["status"] = "CLOSED BY MEASUREMENT on 2026-08-07"
         if "250k" in risk.get("risk", ""):
+            risk["risk"] = ("the 250k training rate, now MEASURED and "
+                            "bias-corrected (was: unmeasured)")
+            risk["detail"] = step["basis"]
             risk["carries_hours"] = step["carries_hours"]
-            risk["exposure"] = (
-                f"the ceiling is reached at a "
-                f"{step['break_even_per_cell_percent']} per cent rise "
-                f"in per-cell cost")
+            risk["exposure"] = ("after correction it is ABOVE the "
+                                "assumption it replaced")
+            risk["status"] = "CLOSED BY MEASUREMENT on 2026-08-07"
         if "forced retry" in risk.get("risk", ""):
             risk["carries_hours"] = projection["per_cell_hours"][
                 "lm_train_250k"]
@@ -225,17 +226,21 @@ def derive(existing: dict, projection: dict) -> dict:
             f"rate overrun is detected on the first cell that shows it "
             f"rather than after most of the arm is burned.")
 
+    direction = ("rise" if gate["projected_hours"] > OLD_ESTIMATE_HOURS
+                 else "fall")
     body["summary_of_change"] = (
         f"the pretrained identity projects to {gate['projected_hours']} "
-        f"h with {gate['headroom_hours']} h of headroom. "
-        f"{len(OMISSIONS)} separate omissions have been found and "
-        f"corrected across seven review rounds, enumerated under "
-        f"omissions_found_and_corrected; every one of them raised the "
-        f"total. The fall from the original {OLD_ESTIMATE_HOURS} h is "
-        f"explained solely by removing the selection-sensitivity study, "
-        f"whose object the fixed-endpoint rule eliminated, and by "
-        f"pricing readouts per cell instead of through a pooled "
-        f"evaluation-share fraction.")
+        f"h against a {gate['ceiling_hours']} h ceiling "
+        f"({gate['headroom_hours']} h headroom). That is a "
+        f"{direction} of "
+        f"{abs(round(gate['projected_hours'] - OLD_ESTIMATE_HOURS, 3))} "
+        f"h from the original {OLD_ESTIMATE_HOURS} h. "
+        f"{len(OMISSIONS)} separate omissions were found and corrected "
+        f"across seven review rounds, every one of them raising the "
+        f"total; the measurement phase then raised it again. The one "
+        f"reduction in the whole history was removing the "
+        f"selection-sensitivity study, whose object the fixed-endpoint "
+        f"rule eliminated, and it is disclosed and costed separately.")
     breaches = gate["projected_hours"] >= gate["ceiling_hours"]
     body["ceiling_breached"] = bool(breaches)
     body["verdict"] = (
@@ -281,6 +286,54 @@ def derive(existing: dict, projection: dict) -> dict:
             "dropping any core cell or arm"],
         "note": "options and their measured costs are reported to the "
                 "user; none is applied here"} if breaches else None
+    # M7: the last step of the chain, itemised rather than left to the
+    # verdict's free text.
+    # Idempotent: the entry is replaced in place if it is already
+    # there, so re-running the generator cannot grow the chain.
+    chain = body.setdefault("reconciliation_old_to_current", [])
+    measurement_entry = {
+        "component": "the 2026-08-07 measurement phase (phases B and C)",
+        "old": "the evaluation was costed at 2.018 h per identity from "
+               "unsourced per-row R2/R3 rates, and the 250k training "
+               "rate was step-scaled from the 40k measurement",
+        "correction": "both are now MEASURED. The evaluation pass is "
+                      "timed end to end at batch 128 after a "
+                      "correctness fix (R2 and R3 each need their own "
+                      "prefix state, because r2_cached consumes the one "
+                      "it is given); the 250k rate is measured on the "
+                      "real loader through a proven B2 proxy and then "
+                      "corrected for the same-scale extrapolation bias. "
+                      "Training came in slightly ABOVE its assumption "
+                      "after correction; the evaluation came in far "
+                      "above it.",
+        "effect_on_identity_hours": round(
+            gate["projected_hours"] - 34.513, 3),
+        "raised_by": "the user's phase B/C instruction of 2026-08-07"}
+    chain[:] = [line for line in chain
+                if line.get("component") != measurement_entry["component"]]
+    chain.append(measurement_entry)
+    body["coverage_proof"]["final_R1_R2_R3"] = (
+        "MEASURED: one evaluation pass computes the prefix, then R1 "
+        "batched, R2 and R3 -- each of R2 and R3 building its own "
+        "prefix cache -- over the 10,004-row raw denominator, and the "
+        "plan requires four matched conditions on every trained "
+        "checkpoint")
+    body["coverage_proof"]["mandatory_interventions"] = (
+        "MEASURED: the three intervention conditions are three further "
+        "complete evaluation passes, not a cheaper R1-only pass")
+    for risk in body.get("open_risks", []):
+        if "NOT IMPLEMENTED" in risk.get("risk", ""):
+            risk["risk"] = ("the mandatory readout and intervention "
+                            "evaluation, now IMPLEMENTED (was: costed "
+                            "but not implemented)")
+            risk["detail"] = (
+                "implemented on 2026-08-07 in final_evaluation.py and "
+                "validated non-scientifically end to end against a "
+                "frozen exploratory checkpoint. The remaining gap is "
+                "the core caller itself, which cannot be written until "
+                "a core cell exists to evaluate.")
+            risk["status"] = "LARGELY CLOSED: the pipeline exists and "\
+                             "is validated; only its core caller remains"
     body["generator"] = ("experiments/e8b_readout_generation/"
                          "identity_reconciliation.py")
     body["clean_test_accessed"] = False

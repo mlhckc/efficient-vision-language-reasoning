@@ -65,10 +65,15 @@ RATIO_250K = STEPS["train_250k"] / STEPS["train_40k"]
 # BF16 path, after 20 warmup steps. B2 was used and its validity as a
 # proxy for B3 was proven both statically (identical compute graph) and
 # empirically (0.2343 against 0.2348 s/step at 40k, within noise).
-# The P90 step time is used rather than the mean, following the
-# project's convention of costing at the conservative end.
-TRAIN_S_250K_MEASURED = 1954 * 0.2422      # 473.3 s/epoch
-TRAIN_S_250K_MEAN = 1954 * 0.2357          # 460.5 s/epoch, reported
+# The P90 step time is used rather than the mean, and then CORRECTED by
+# the same-scale bias: extrapolating a steady-state step window to an
+# epoch under-predicts by 3.8 per cent measured against twelve real
+# full-epoch times at 40k, because the real loop also pays the scheduler
+# step, the wall check and a per-step host synchronisation. After
+# correction the measured 250k rate is ABOVE the step-scaled assumption
+# it replaces, not below it.
+TRAIN_S_250K_MEASURED = 492.5   # s/epoch, bias-corrected
+TRAIN_S_250K_MEAN = 461.99   # uncorrected, reported
 TRAIN_S_250K_ASSUMED_STEP_SCALED = 78.3 * RATIO_250K
 LM_EPOCHS = 22            # fixed budget, both scales (recipe-encoded)
 B1_S_40K = 15.27          # v3_01 measured, includes its dev pass
@@ -82,9 +87,11 @@ B1_STRESS = 100           # section 7.3 patience cap
 # timings, is what caught the real error here: the pipeline had been
 # costed with the per-row R1 cross-check scorer (1.42 s/row) instead of
 # the canonical batched one (0.093 s/row at batch 16, less at 128).
-EVAL_PASS_S_PER_ROW = 0.0603
-# The per-part warm figures, retained for reporting.
-R2_ROW_S_MEASURED, R3_ROW_S_MEASURED = 0.0161, 0.0158
+EVAL_PASS_S_PER_ROW = 0.075127
+# The per-part warm figures, retained for reporting. Each includes the
+# prefix-cache forward that readout must build for itself: r2_cached
+# CONSUMES the state it is given, so R2 and R3 cannot share one.
+R2_ROW_S_MEASURED, R3_ROW_S_MEASURED = 0.031099, 0.030677
 
 # SUPERSEDED. The per-row costs below were UNSOURCED. No E8B R2 or R3 readout has
 # ever been executed, so no per-row walk exists to measure.
@@ -416,10 +423,20 @@ def main() -> int:
                           "An earlier version hardcoded them, so they "
                           "silently went stale when the constants "
                           "changed and understated the exposure.",
-            "train_250k_step_scaling": {
+            "train_250k_MEASURED": {
                 "carries_hours": round(3 * lm_cell_250k, 3),
-                "basis": "step-scaled from the MEASURED 40k rate; no "
-                         "250k E8B cell has ever run",
+                "basis": "MEASURED on 2026-08-07 on the real "
+                         "train_250k loader and the real "
+                         "strict-deterministic BF16 path, then "
+                         "CORRECTED by the same-scale bias: a "
+                         "steady-state step window under-predicts a "
+                         "real epoch by 3.8 per cent, measured against "
+                         "twelve real full-epoch times at 40k. After "
+                         "correction the rate is ABOVE the step-scaled "
+                         "assumption it replaced. No full 250k E8B "
+                         "epoch has been run end to end; the residual "
+                         "is that the bias correction is itself "
+                         "measured at the other scale.",
                 "break_even_per_cell_percent": round(
                     100 * headroom / (3 * lm_cell_250k), 2),
                 "break_even_on_training_rate_percent": round(
@@ -429,23 +446,27 @@ def main() -> int:
                         "training-rate one because each cell also "
                         "carries a fixed G14 and gate overhead that "
                         "does not scale with the training rate"},
-            "r2_r3_per_row": {
-                "carries_hours": round(6 * hours(
-                    N_RAW * (R2_ROW_S + R3_ROW_S)), 3),
-                "basis": "UNSOURCED. Neither rate is measured for E8B, "
-                         "and the previously claimed E7b provenance was "
-                         "FALSE: the E7b S8_projection figure is 0.0291 "
-                         "MILLISECONDS for a LayerNorm-plus-Linear "
-                         "stage, a different operation in units 1000x "
-                         "apart. No replacement provenance was "
-                         "invented.",
-                "increase_at_3x_hours": round(12 * hours(
-                    N_RAW * (R2_ROW_S + R3_ROW_S)), 3),
-                "headroom_after_3x_hours": round(
-                    headroom - 12 * hours(
-                        N_RAW * (R2_ROW_S + R3_ROW_S)), 3),
-                "status": "OPEN RISK: close it with a measurement or "
-                          "accept it explicitly before core execution"},
+            "evaluation_pass_MEASURED": {
+                "carries_hours": round(6 * 4 * hours(
+                    N_RAW * EVAL_PASS_S_PER_ROW), 3),
+                "s_per_row": EVAL_PASS_S_PER_ROW,
+                "basis": "MEASURED end to end at batch 128 on "
+                         "2026-08-07, after the correctness fix that "
+                         "gave R2 and R3 their own prefix states. This "
+                         "REPLACES the unsourced R2/R3 assumption "
+                         "(0.0291 and 0.0437 s a row, whose claimed E7b "
+                         "provenance was FALSE -- that figure is "
+                         "MILLISECONDS for a different operation). The "
+                         "assumption no longer enters the budget.",
+                "residual_risk": "the measurement is at batch 128, the "
+                                 "project default everywhere. At batch "
+                                 "16 the same pass costs 0.1405 s a "
+                                 "row, which would roughly double this "
+                                 "line, so the batch size is pinned and "
+                                 "asserted rather than left to a "
+                                 "caller.",
+                "status": "MEASURED; the residual is the batch size, "
+                          "which is pinned"},
             "g14_row_cost": {
                 "carries_hours": round(12 * g14_h, 3),
                 "basis": f"pooled measurement "

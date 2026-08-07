@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-07T20:54:43",
-    "git_commit": "6e97ca0",
+    "timestamp": "2026-08-07T22:26:18",
+    "git_commit": "30c9f88",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -148,7 +148,7 @@
     "SUPERSEDED_FIGURES_20260807": {
       "status": "PARTIALLY SUPERSEDED - the verdicts stand, one figure does not",
       "figure": "entries[R3-C-B1].evidence cites '31.96 h vs 35 h, headroom 3.04 h'. That figure is SUPERSEDED. Two omissions were found afterwards: the mandatory section-19 efficiency pass, and the requirement that readouts run over the 10,004-row RAW denominator with a raw-distribution pass and B1 intervention conditions.",
-      "current": "the pretrained identity projects to 34.513 h with 0.487 h of headroom; the GOVERNING record is core_resource_projection_20260807.json and the derived reconciliation is identity_reconciliation_20260807.json. This line has been corrected repeatedly as further omissions were found (31.960 -> 32.960 -> 33.472 -> 34.423 -> 34.513), every time UPWARD. This record is maintained BY HAND and has no generator, so it is the one place a figure can still go stale; read the governing record if the two ever disagree.",
+      "current": "the pretrained identity projects to 37.744 h against a 35.0 h ceiling (-2.744 h headroom), so the ceiling is BREACHED and execution has halted. The GOVERNING record is core_resource_projection_20260807.json and the derived reconciliation is identity_reconciliation_20260807.json. This line has been corrected repeatedly as omissions were found and then as the assumptions were measured (31.960 -> 32.960 -> 33.472 -> 34.513 -> 37.744), every time UPWARD. This record is maintained BY HAND and has no generator, so it is the one place a figure can still go stale; read the governing record if the two ever disagree.",
       "direction": "the correction is UPWARD, against the ceiling. The re-verification verdicts themselves are unaffected."
     }
   }

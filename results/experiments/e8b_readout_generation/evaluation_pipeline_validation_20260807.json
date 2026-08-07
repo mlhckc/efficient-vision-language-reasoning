@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-07T21:21:56",
-    "git_commit": "b933358",
+    "timestamp": "2026-08-07T22:14:20",
+    "git_commit": "30c9f88",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -66,14 +66,16 @@
         },
         "R1_raw_denominator": {
           "n": 32,
-          "basis": "EXACT, not estimated: a closed readout can never emit an out-of-vocabulary answer, so every out-of-vocabulary row is a failure and raw accuracy is in-vocabulary accuracy times coverage",
+          "basis": "EXACT for the RAW metric, by construction: a closed readout can never emit an out-of-vocabulary string, so every out-of-vocabulary row is a failure and raw accuracy is in-vocabulary accuracy times coverage. For the NORMALISED metric the same identity holds only while no out-of-vocabulary gold normalises onto a vocabulary answer, which is CHECKED rather than assumed; see normalisation_check.",
+          "normalisation_check": null,
           "coverage": 0.5,
           "raw_exact": 0.28125,
           "normalised_exact": 0.28125
         },
         "R2_raw_denominator": {
           "n": 32,
-          "basis": "EXACT, not estimated: a closed readout can never emit an out-of-vocabulary answer, so every out-of-vocabulary row is a failure and raw accuracy is in-vocabulary accuracy times coverage",
+          "basis": "EXACT for the RAW metric, by construction: a closed readout can never emit an out-of-vocabulary string, so every out-of-vocabulary row is a failure and raw accuracy is in-vocabulary accuracy times coverage. For the NORMALISED metric the same identity holds only while no out-of-vocabulary gold normalises onto a vocabulary answer, which is CHECKED rather than assumed; see normalisation_check.",
+          "normalisation_check": null,
           "coverage": 0.5,
           "raw_exact": 0.28125,
           "normalised_exact": 0.28125
@@ -104,7 +106,7 @@
           },
           "note": "every emission stays in the denominator; invalid outputs are counted, never excluded"
         },
-        "seconds": 4.495
+        "seconds": 4.953
       },
       "fixed_image": {
         "R1_in_vocabulary": {
@@ -119,14 +121,16 @@
         },
         "R1_raw_denominator": {
           "n": 32,
-          "basis": "EXACT, not estimated: a closed readout can never emit an out-of-vocabulary answer, so every out-of-vocabulary row is a failure and raw accuracy is in-vocabulary accuracy times coverage",
+          "basis": "EXACT for the RAW metric, by construction: a closed readout can never emit an out-of-vocabulary string, so every out-of-vocabulary row is a failure and raw accuracy is in-vocabulary accuracy times coverage. For the NORMALISED metric the same identity holds only while no out-of-vocabulary gold normalises onto a vocabulary answer, which is CHECKED rather than assumed; see normalisation_check.",
+          "normalisation_check": null,
           "coverage": 0.5,
           "raw_exact": 0.28125,
           "normalised_exact": 0.28125
         },
         "R2_raw_denominator": {
           "n": 32,
-          "basis": "EXACT, not estimated: a closed readout can never emit an out-of-vocabulary answer, so every out-of-vocabulary row is a failure and raw accuracy is in-vocabulary accuracy times coverage",
+          "basis": "EXACT for the RAW metric, by construction: a closed readout can never emit an out-of-vocabulary string, so every out-of-vocabulary row is a failure and raw accuracy is in-vocabulary accuracy times coverage. For the NORMALISED metric the same identity holds only while no out-of-vocabulary gold normalises onto a vocabulary answer, which is CHECKED rather than assumed; see normalisation_check.",
+          "normalisation_check": null,
           "coverage": 0.5,
           "raw_exact": 0.28125,
           "normalised_exact": 0.28125
@@ -157,7 +161,7 @@
           },
           "note": "every emission stays in the denominator; invalid outputs are counted, never excluded"
         },
-        "seconds": 4.327
+        "seconds": 4.831
       },
       "fixed_question": {
         "R1_in_vocabulary": {
@@ -172,14 +176,16 @@
         },
         "R1_raw_denominator": {
           "n": 32,
-          "basis": "EXACT, not estimated: a closed readout can never emit an out-of-vocabulary answer, so every out-of-vocabulary row is a failure and raw accuracy is in-vocabulary accuracy times coverage",
+          "basis": "EXACT for the RAW metric, by construction: a closed readout can never emit an out-of-vocabulary string, so every out-of-vocabulary row is a failure and raw accuracy is in-vocabulary accuracy times coverage. For the NORMALISED metric the same identity holds only while no out-of-vocabulary gold normalises onto a vocabulary answer, which is CHECKED rather than assumed; see normalisation_check.",
+          "normalisation_check": null,
           "coverage": 0.5,
           "raw_exact": 0.0625,
           "normalised_exact": 0.0625
         },
         "R2_raw_denominator": {
           "n": 32,
-          "basis": "EXACT, not estimated: a closed readout can never emit an out-of-vocabulary answer, so every out-of-vocabulary row is a failure and raw accuracy is in-vocabulary accuracy times coverage",
+          "basis": "EXACT for the RAW metric, by construction: a closed readout can never emit an out-of-vocabulary string, so every out-of-vocabulary row is a failure and raw accuracy is in-vocabulary accuracy times coverage. For the NORMALISED metric the same identity holds only while no out-of-vocabulary gold normalises onto a vocabulary answer, which is CHECKED rather than assumed; see normalisation_check.",
+          "normalisation_check": null,
           "coverage": 0.5,
           "raw_exact": 0.0625,
           "normalised_exact": 0.0625
@@ -210,7 +216,7 @@
           },
           "note": "every emission stays in the denominator; invalid outputs are counted, never excluded"
         },
-        "seconds": 4.574
+        "seconds": 4.987
       },
       "shuffled_image": {
         "R1_in_vocabulary": {
@@ -225,14 +231,16 @@
         },
         "R1_raw_denominator": {
           "n": 32,
-          "basis": "EXACT, not estimated: a closed readout can never emit an out-of-vocabulary answer, so every out-of-vocabulary row is a failure and raw accuracy is in-vocabulary accuracy times coverage",
+          "basis": "EXACT for the RAW metric, by construction: a closed readout can never emit an out-of-vocabulary string, so every out-of-vocabulary row is a failure and raw accuracy is in-vocabulary accuracy times coverage. For the NORMALISED metric the same identity holds only while no out-of-vocabulary gold normalises onto a vocabulary answer, which is CHECKED rather than assumed; see normalisation_check.",
+          "normalisation_check": null,
           "coverage": 0.5,
           "raw_exact": 0.34375,
           "normalised_exact": 0.34375
         },
         "R2_raw_denominator": {
           "n": 32,
-          "basis": "EXACT, not estimated: a closed readout can never emit an out-of-vocabulary answer, so every out-of-vocabulary row is a failure and raw accuracy is in-vocabulary accuracy times coverage",
+          "basis": "EXACT for the RAW metric, by construction: a closed readout can never emit an out-of-vocabulary string, so every out-of-vocabulary row is a failure and raw accuracy is in-vocabulary accuracy times coverage. For the NORMALISED metric the same identity holds only while no out-of-vocabulary gold normalises onto a vocabulary answer, which is CHECKED rather than assumed; see normalisation_check.",
+          "normalisation_check": null,
           "coverage": 0.5,
           "raw_exact": 0.34375,
           "normalised_exact": 0.34375
@@ -263,7 +271,7 @@
           },
           "note": "every emission stays in the denominator; invalid outputs are counted, never excluded"
         },
-        "seconds": 4.741
+        "seconds": 5.221
       }
     },
     "paired_contrast_demo": {
@@ -300,7 +308,7 @@
     "neutral_inputs": {
       "basis": "mean over the evaluation set's cached token tensors",
       "image_sha256": "06d7dc32cde76c89fa963db3b7b32aa300f783bd510652209b8a3a3d74b76a49",
-      "question_sha256": "33d6ff39658aec3ed3ee7799c7d21f2bca4dc9a0a90f01fc0ec360bc4dd0d3a5"
+      "question_sha256": "502c3c0a0a1812df46399f0fe492458463725e044cf241988345578da7a95cf6"
     },
     "per_row_records": "results/experiments/e8b_readout_generation/validation_per_row_20260807.npz",
     "determinism_verified_at_use": {

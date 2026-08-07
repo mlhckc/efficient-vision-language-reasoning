@@ -39,6 +39,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import pathlib
 import statistics
 import sys
 import time
@@ -59,6 +60,7 @@ from experiments.e8a_question_encoder import g21_scorer as g21  # noqa: E402
 from experiments.e8b_readout_generation import run as e8b_run  # noqa: E402
 from experiments.e8b_readout_generation import readouts  # noqa: E402
 from experiments.e8b_readout_generation import training as e8b_training  # noqa: E402
+from experiments.e8b_readout_generation import latents as e8b_latents  # noqa: E402
 
 V2_DIR = PROJECT_ROOT / "data" / "v2"
 RECORD = e8b_run.OUT_DIR / "throughput_calibration_20260807.json"
@@ -100,6 +102,24 @@ def graph_equivalence(device) -> dict:
         models[arm] = (model, lm)
         del lm, model
 
+    # M5: the conclusion previously ASSERTED identical optimizer
+    # construction and the absence of data-dependent control flow.
+    # Both are true, but asserting is not verifying, so both are now
+    # checked.
+    import inspect
+    optimizer_source = inspect.getsource(e8b_training.make_optimizer)
+    optimizer_arm_independent = ("arm" not in
+                                 inspect.signature(
+                                     e8b_training.make_optimizer
+                                 ).parameters)
+    forward_source = inspect.getsource(
+        e8b_latents.E8BPrefixModel.prefix_embeddings)
+    # A value-dependent branch would have to test tensor CONTENTS.
+    value_branch_tokens = (".item()", "if torch.", "torch.any",
+                           "torch.all", "isnan", "isinf")
+    no_value_dependent_branch = not any(
+        token in forward_source for token in value_branch_tokens)
+
     b3, b2 = facts["B3"], facts["B2"]
     identical = {
         "architecture_config_hash": b3["config_sha256"] == b2["config_sha256"],
@@ -110,6 +130,10 @@ def graph_equivalence(device) -> dict:
         "trainable_names_and_shapes": (b3["trainable_parameters"]
                                        == b2["trainable_parameters"]),
         "trainable_count": b3["trainable_count"] == b2["trainable_count"],
+        "optimizer_construction_arm_independent":
+            optimizer_arm_independent,
+        "forward_has_no_value_dependent_branch":
+            no_value_dependent_branch,
     }
     differs = {
         "frozen_weight_values": (b3["parameter_state_sha256"]
@@ -236,10 +260,17 @@ def main() -> int:
              for arm in ("B2", "B3")}
     ratio = (cross["B3"]["mean_s_per_step"]
              / cross["B2"]["mean_s_per_step"])
-    spread = max(cross["B2"]["stdev_s_per_step"],
-                 cross["B3"]["stdev_s_per_step"])
-    within_noise = abs(cross["B3"]["mean_s_per_step"]
-                       - cross["B2"]["mean_s_per_step"]) <= 3 * spread
+    # The right comparison is against the standard error of the
+    # DIFFERENCE OF MEANS, not three standard deviations of a single
+    # step. The latter is about fifteen times looser and would accept a
+    # genuine five per cent throughput gap.
+    import math
+    se_difference = math.sqrt(
+        cross["B2"]["stdev_s_per_step"] ** 2 / EQUIVALENCE_STEPS
+        + cross["B3"]["stdev_s_per_step"] ** 2 / EQUIVALENCE_STEPS)
+    difference = abs(cross["B3"]["mean_s_per_step"]
+                     - cross["B2"]["mean_s_per_step"])
+    within_noise = difference <= 3 * se_difference
     print(f"  B2 {cross['B2']['mean_s_per_step']:.4f} s/step, "
           f"B3 {cross['B3']['mean_s_per_step']:.4f} s/step, "
           f"ratio {ratio:.4f}, within noise: {within_noise}")
@@ -251,11 +282,38 @@ def main() -> int:
     print(f"  {calibration['mean_s_per_step']:.4f} s/step "
           f"(p90 {calibration['p90_s_per_step']:.4f})")
 
+    # SAME-SCALE BIAS CORRECTION. A steady-state step window is not an
+    # epoch: the real loop also pays the scheduler step, the wall check
+    # and a per-step host synchronisation on the loss, and it pays the
+    # epoch's first and last steps at cold rates. Twelve real full-epoch
+    # train times exist at 40k from the determinism probes, so the
+    # extrapolation can be checked against ground truth AT THE SAME
+    # SCALE and corrected, rather than trusted.
+    import glob as _glob
+    real_40k = []
+    for path in sorted(_glob.glob(str(
+            e8b_run.OUT_DIR / "determinism_probe_run*.json"))):
+        body = json.loads(pathlib.Path(path).read_text()).get(
+            "determinism_probe")
+        if body:
+            real_40k += [e["train_seconds"]
+                         for e in body.get("epochs_detail", [])
+                         if "train_seconds" in e]
     steps_per_epoch = {"train_40k": 313, "train_250k": 1954}
     measured_epoch_250k = (calibration["mean_s_per_step"]
                            * steps_per_epoch["train_250k"])
     measured_epoch_40k = (cross["B2"]["mean_s_per_step"]
                           * steps_per_epoch["train_40k"])
+    extrapolated_p90_40k = (cross["B2"]["p90_s_per_step"]
+                            * steps_per_epoch["train_40k"])
+    extrapolated_p90_250k = (calibration["p90_s_per_step"]
+                             * steps_per_epoch["train_250k"])
+    bias_mean = (statistics.fmean(real_40k) / measured_epoch_40k
+                 if real_40k else None)
+    bias_p90 = (max(real_40k) / extrapolated_p90_40k
+                if real_40k else None)
+    corrected_250k = (extrapolated_p90_250k * bias_p90
+                      if bias_p90 else extrapolated_p90_250k)
     # The superseded basis: 78.3 s/epoch at 40k, step-scaled by the step
     # ratio to reach 250k.
     assumed_epoch_40k = 78.3
@@ -287,14 +345,51 @@ def main() -> int:
             "b3_over_b2_ratio": round(ratio, 4),
             "within_noise": bool(within_noise),
             "criterion": "the difference in mean step time is within "
-                         "three times the larger per-step standard "
-                         "deviation",
+                         "three standard errors OF THE DIFFERENCE. An "
+                         "earlier version compared it against three "
+                         "standard deviations of a single step, which "
+                         "is about fifteen times looser and would have "
+                         "accepted a genuine five per cent gap.",
+            "difference_s": round(difference, 6),
+            "standard_error_of_difference_s": round(se_difference, 6),
+            "difference_over_se": round(difference / se_difference, 2),
             "verdict": ("CONFIRMED: B2 and B3 train at the same rate, "
                         "so B2 validly calibrates B3's throughput"
                         if within_noise else
                         "NOT CONFIRMED: the arms differ measurably and "
                         "B2 must not be used as a proxy")},
         "calibration_250k": calibration,
+        "same_scale_bias_correction": {
+            "why": "a steady-state step window is not an epoch. The "
+                   "real training loop also pays the scheduler step, "
+                   "the wall check and a per-step host synchronisation "
+                   "on the loss, and it pays the epoch's first and last "
+                   "steps at cold rates. Extrapolating steps to epochs "
+                   "therefore UNDER-predicts, and by how much can be "
+                   "measured at 40k, where twelve real full-epoch train "
+                   "times exist.",
+            "real_full_epoch_40k_seconds": real_40k,
+            "real_40k_mean": round(statistics.fmean(real_40k), 2)
+            if real_40k else None,
+            "real_40k_max": max(real_40k) if real_40k else None,
+            "extrapolated_40k_mean": round(measured_epoch_40k, 2),
+            "extrapolated_40k_p90": round(extrapolated_p90_40k, 2),
+            "under_prediction_mean_percent": round(
+                (bias_mean - 1) * 100, 2) if bias_mean else None,
+            "under_prediction_p90_percent": round(
+                (bias_p90 - 1) * 100, 2) if bias_p90 else None,
+            "corrected_250k_s_per_epoch": round(corrected_250k, 1),
+            "basis_used_in_the_budget": "the P90 step time extrapolated "
+                                        "and then corrected by the "
+                                        "same-scale P90 bias, which is "
+                                        "the conservative combination",
+            "consequence": "the CORRECTED 250k rate is at or slightly "
+                           "ABOVE the step-scaled assumption it "
+                           "replaced, not below it. An earlier version "
+                           "of this record concluded the assumption was "
+                           "CONSERVATIVE; that conclusion came from "
+                           "comparing an UNCORRECTED extrapolation "
+                           "against the assumption and was WRONG."},
         "measured_rates": {
             "s_per_step_250k": calibration["mean_s_per_step"],
             "s_per_epoch_250k_measured": round(measured_epoch_250k, 2),
@@ -307,10 +402,19 @@ def main() -> int:
             "measured_s_per_epoch_250k": round(measured_epoch_250k, 2),
             "ratio_measured_over_assumed": round(
                 measured_epoch_250k / assumed_epoch_250k, 4),
-            "verdict": ("the step-scaled assumption was OPTIMISTIC"
-                        if measured_epoch_250k > assumed_epoch_250k
-                        else "the step-scaled assumption was "
-                             "CONSERVATIVE")},
+            "corrected_s_per_epoch_250k": round(corrected_250k, 2),
+            "ratio_corrected_over_assumed": round(
+                corrected_250k / assumed_epoch_250k, 4),
+            "verdict": ("after the same-scale bias correction the "
+                        "measured rate is ABOVE the step-scaled "
+                        "assumption: the assumption was OPTIMISTIC, not "
+                        "conservative. Comparing the UNCORRECTED "
+                        "extrapolation against it would have said the "
+                        "opposite, and did in an earlier version of "
+                        "this record."
+                        if corrected_250k > assumed_epoch_250k
+                        else "after correction the assumption remains "
+                             "conservative")},
         "calibration_cost": {
             "total_hours": round(total_hours, 5),
             "charged_to_pretrained_identity_hours": round(
@@ -333,7 +437,10 @@ def main() -> int:
 
     body = record["e8b_throughput_calibration"]
     print()
-    print(f"  measured 250k : {body['measured_rates']['s_per_epoch_250k_measured']} s/epoch")
+    print(f"  extrapolated  : {body['measured_rates']['s_per_epoch_250k_measured']} s/epoch (uncorrected)")
+    print(f"  same-scale bias: +{body['same_scale_bias_correction']['under_prediction_p90_percent']}% "
+          f"(p90 basis), measured against 12 real 40k epochs")
+    print(f"  CORRECTED 250k: {body['same_scale_bias_correction']['corrected_250k_s_per_epoch']} s/epoch")
     print(f"  assumed  250k : {body['against_the_assumption']['assumed_s_per_epoch_250k_step_scaled']} s/epoch")
     print(f"  ratio         : {body['against_the_assumption']['ratio_measured_over_assumed']} "
           f"({body['against_the_assumption']['verdict']})")

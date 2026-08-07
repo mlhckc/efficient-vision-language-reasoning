@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-07T21:48:36",
-    "git_commit": "b933358",
+    "timestamp": "2026-08-07T22:28:12",
+    "git_commit": "30c9f88",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -99,6 +99,13 @@
         "correction": "all three retained components are charged, and the train and evaluation rates use the MAXIMUM of their recorded measurement sets, following the project's own 'max over seeds' convention. None of the three is descoped; each is retained in the operative protocol.",
         "effect_on_identity_hours": 0.951,
         "raised_by": "fresh-context confirmation audit (honesty and resources)"
+      },
+      {
+        "component": "the 2026-08-07 measurement phase (phases B and C)",
+        "old": "the evaluation was costed at 2.018 h per identity from unsourced per-row R2/R3 rates, and the 250k training rate was step-scaled from the 40k measurement",
+        "correction": "both are now MEASURED. The evaluation pass is timed end to end at batch 128 after a correctness fix (R2 and R3 each need their own prefix state, because r2_cached consumes the one it is given); the 250k rate is measured on the real loader through a proven B2 proxy and then corrected for the same-scale extrapolation bias. Training came in slightly ABOVE its assumption after correction; the evaluation came in far above it.",
+        "effect_on_identity_hours": 3.231,
+        "raised_by": "the user's phase B/C instruction of 2026-08-07"
       }
     ],
     "coverage_proof": {
@@ -108,8 +115,8 @@
       "fixed_22_epoch_execution": "LM_EPOCHS = 22 in the generator, and the recipe encodes max_epochs 22 with early_stopping false",
       "structural_fp32_evaluation": "EVAL_FP32_S = 112.3 s per canonical dev pass, charged in every epoch of every cell",
       "G14": "G14_ROWS (64 pre + 160 post) x G14_ROW_S 5.301 s per LM cell",
-      "final_R1_R2_R3": "R1 comes free from the epoch-22 canonical pass; R2 and R3 are charged as per-row walks over the 10,004-row RAW denominator, per canonical plan section 6, together with a raw-distribution R1 pass",
-      "mandatory_interventions": "three intervention conditions per LM cell, each one canonical FP32 dev pass",
+      "final_R1_R2_R3": "MEASURED: one evaluation pass computes the prefix, then R1 batched, R2 and R3 -- each of R2 and R3 building its own prefix cache -- over the 10,004-row raw denominator, and the plan requires four matched conditions on every trained checkpoint",
+      "mandatory_interventions": "MEASURED: the three intervention conditions are three further complete evaluation passes, not a cheaper R1-only pass",
       "other_gate_overhead": "GATE_OVERHEAD_H 0.223 h per run, MEASURED as the residual between the grid runs' recorded wall and their epoch time (G8, G9, G11, G13, G15, G1, the selection reproduction check)",
       "section_19_efficiency": "EFFICIENCY_S19_H in core_resource_projection.py, charged into the pretrained identity and into e8b_remaining",
       "raw_denominator": "N_RAW = 10004 in core_resource_projection.py; R2, R3 and the raw-distribution R1 pass are all charged over it",
@@ -118,15 +125,15 @@
     "enforcement": {
       "previously": "the 35 h per-identity ceiling and the storage gate existed only as constants and helper functions with no call site in the execution path, so neither could have halted anything. Nothing summed GPU hours across cells.",
       "now": "run.per_identity_gate reads an append-only ledger (gpu_hour_ledger.json) and is checked BEFORE every core cell against that cell's projected cost, then re-checked AFTER the cell against its MEASURED hours, which are charged to the ledger. run.storage_gate is checked before every cell. Both halt through gate_halt.",
-      "verified": "the executable gate reproduces the published 36.399 h to within rounding, and it RESERVES the cells that have not run yet -- charging each the greater of its projected and its actual cost -- so a rate overrun is detected on the first cell that shows it rather than after most of the arm is burned."
+      "verified": "the executable gate reproduces the published 37.744 h to within rounding, and it RESERVES the cells that have not run yet -- charging each the greater of its projected and its actual cost -- so a rate overrun is detected on the first cell that shows it rather than after most of the arm is burned."
     },
     "open_risks": [
       {
-        "risk": "the R2 and R3 per-row costs are UNSOURCED",
-        "detail": "no E8B R2 or R3 readout has ever run, and the previously claimed E7b provenance was FALSE: that figure is 0.0291 MILLISECONDS for a LayerNorm-plus-Linear stage, a different operation in units 1000x apart. No replacement provenance was invented.",
-        "carries_hours": 1.214,
-        "exposure": "at 3x the assumed rate the headroom goes to -3.827 h",
-        "status": "OPEN: close with a measurement or accept explicitly before core execution",
+        "risk": "the evaluation pass cost, now MEASURED (was: R2/R3 unsourced)",
+        "detail": "MEASURED end to end at batch 128 on 2026-08-07, after the correctness fix that gave R2 and R3 their own prefix states. This REPLACES the unsourced R2/R3 assumption (0.0291 and 0.0437 s a row, whose claimed E7b provenance was FALSE -- that figure is MILLISECONDS for a different operation). The assumption no longer enters the budget.",
+        "carries_hours": 5.01,
+        "exposure": "the measurement is at batch 128, the project default everywhere. At batch 16 the same pass costs 0.1405 s a row, which would roughly double this line, so the batch size is pinned and asserted rather than left to a caller.",
+        "status": "CLOSED BY MEASUREMENT on 2026-08-07",
         "can_exhaust_the_margin": true
       },
       {
@@ -136,24 +143,24 @@
         "can_exhaust_the_margin": false
       },
       {
-        "risk": "the 250k training rate is unmeasured",
-        "detail": "step-scaled from the measured 40k rate; no 250k E8B cell has ever run.",
-        "carries_hours": 12.394,
-        "exposure": "the ceiling is reached at a -11.29 per cent rise in per-cell cost",
-        "status": "OPEN",
+        "risk": "the 250k training rate, now MEASURED and bias-corrected (was: unmeasured)",
+        "detail": "MEASURED on 2026-08-07 on the real train_250k loader and the real strict-deterministic BF16 path, then CORRECTED by the same-scale bias: a steady-state step window under-predicts a real epoch by 3.8 per cent, measured against twelve real full-epoch times at 40k. After correction the rate is ABOVE the step-scaled assumption it replaced. No full 250k E8B epoch has been run end to end; the residual is that the bias correction is itself measured at the other scale.",
+        "carries_hours": 12.747,
+        "exposure": "after correction it is ABOVE the assumption it replaced",
+        "status": "CLOSED BY MEASUREMENT on 2026-08-07",
         "can_exhaust_the_margin": true
       },
       {
         "risk": "a forced retry is unaffordable and not improbable",
-        "detail": "G14 fired as a halting gate on one of the three completed search runs. One forced B3/250k retry costs 4.131 h against -1.399 h of headroom.",
+        "detail": "G14 fired as a halting gate on one of the three completed search runs. One forced B3/250k retry costs 4.249 h against -2.744 h of headroom.",
         "status": "OPEN: the recorded retry allowance is NONE, and no contingency exists",
-        "carries_hours": 4.131,
+        "carries_hours": 4.249,
         "can_exhaust_the_margin": true
       },
       {
-        "risk": "the mandatory readout and intervention evaluation is COSTED but NOT IMPLEMENTED",
-        "detail": "the 10,004-row raw denominator, the R2/R3 final-checkpoint readout passes and the intervention passes are budgeted in this record, but no code path executes them: N_RAW appears only in the projection generator, and intervention_inputs has no caller outside the tests. This does not block the 18 training cells; it blocks the branch from producing its primary readout comparisons.",
-        "status": "OPEN: implementation work remains before the branch can complete",
+        "risk": "the mandatory readout and intervention evaluation, now IMPLEMENTED (was: costed but not implemented)",
+        "detail": "implemented on 2026-08-07 in final_evaluation.py and validated non-scientifically end to end against a frozen exploratory checkpoint. The remaining gap is the core caller itself, which cannot be written until a core cell exists to evaluate.",
+        "status": "LARGELY CLOSED: the pipeline exists and is validated; only its core caller remains",
         "can_exhaust_the_margin": false
       },
       {
@@ -171,10 +178,10 @@
     },
     "dated_utc": "2026-08-07",
     "old_estimate_hours": 32.686,
-    "current_estimate_hours": 36.399,
-    "headroom_hours": -1.399,
+    "current_estimate_hours": 37.744,
+    "headroom_hours": -2.744,
     "ceiling_hours": 35.0,
-    "net_change_hours": 3.713,
+    "net_change_hours": 5.058,
     "complete_programme_components": [
       {
         "component": "A1 measured baseline: protocol 13.2b's A1 core + extraction only",
@@ -194,11 +201,11 @@
       },
       {
         "component": "six B3 final core cells (fixed 22 epochs, FP32 eval, G14, gates)",
-        "hours": 17.547
+        "hours": 17.899
       },
       {
         "component": "B3 share of final readouts over the RAW denominator + 3 interventions",
-        "hours": 4.0215
+        "hours": 5.0105
       },
       {
         "component": "section-19 serial efficiency pass (upper bound)",
@@ -206,10 +213,10 @@
       },
       {
         "component": "already-spent search + diagnostics (incl. superseded probes 1/2)",
-        "hours": 7.058
+        "hours": 7.061
       }
     ],
-    "component_sum_hours": 36.4,
+    "component_sum_hours": 37.744,
     "matches_generator": true,
     "retry_allowance": "NONE. The plan tolerates zero B3 retries; any retry or any additional B3-loading evaluation triggers a stop-and-ask BEFORE execution",
     "omissions_found_and_corrected": {
@@ -226,8 +233,8 @@
     },
     "residual_assumptions": [
       "This list is DERIVED from core_resource_projection_20260807.json -> residual_assumptions_quantified, which is itself computed from the same constants as the projection. It previously carried hand-written figures that went stale silently, and a withdrawn provenance that survived here after being corrected elsewhere in this same file.",
-      "the 250k training rate is step-scaled from the measured 40k rate and no 250k E8B cell has ever run. It carries 12.394 h, and the ceiling is reached at a -11.29 per cent rise in per-cell cost (-13.04 per cent on the training rate alone).",
-      "NEITHER the R2 nor the R3 per-row cost is measured for E8B, and neither has a source; the previously claimed E7b provenance was FALSE. They carry 1.214 h; at 3x the assumed rate the identity rises by 2.428 h and the headroom goes to -3.827 h, i.e. EXHAUSTED.",
+      "the 250k training rate is now MEASURED and bias-corrected. It carries 12.747 h. MEASURED on 2026-08-07 on the real train_250k loader and the real strict-deterministic BF16 path, then CORRECTED by the same-scale bias: a steady-state step window under-predicts a real epoch by 3.8 per cent, measured against twelve real full-epoch times at 40k. After correction the rate is ABOVE the step-scaled assumption it replaced. No full 250k E8B epoch has been run end to end; the residual is that the bias correction is itself measured at the other scale.",
+      "the evaluation pass is now MEASURED and carries 5.01 h -- the largest single line in the programme and the one that drives the breach. the measurement is at batch 128, the project default everywhere. At batch 16 the same pass costs 0.1405 s a row, which would roughly double this line, so the batch size is pinned and asserted rather than left to a caller.",
       "OPTIMISTIC, NOT CONSERVATIVE. The pooled measurement covers R1 brute force plus R1 cached only, while the live gate also runs r2_brute_force and r2_cached per row under clause C3. The margin does not cover two extra constrained walks over 224 rows and 12 cells.",
       "A1 is the one arm of this family that has run. LIKE FOR LIKE against the components the measurement ACTUALLY COVERS -- core 1.774 + extraction 0.400 = 2.174 h, since resource_correction_g21.json decomposes the measured 2.29222 h as training 1.56262 + extraction 0.729599 and states interventions are reported separately and never added -- A1 came in 5.44 per cent ABOVE projection, and its extraction component alone overran by 82.4 per cent. Two earlier versions of this record were wrong in the same direction: '23 per cent BELOW' divided a partial measurement by the FULL protocol row, and '1.25 per cent ABOVE' credited an interventions component the measurement excludes. Both picked a more favourable framing than the evidence supports. The precedent is UNFAVOURABLE, not reassuring.",
       "protocol 13.2b's own estimates for work that has not run. The middle-layer figure in particular is an estimate whose measured sibling, the full extraction, overran by 82.4 per cent.",
@@ -240,13 +247,13 @@
       "derived": "both counts come from the open_risks list itself. An earlier verdict said 'five open risks ... ANY ONE of them exhausts the margin' when there were six, two of which are not hours risks at all.",
       "not_hours_risks": [
         "the G14 per-row input is optimistic, not conservative",
-        "the mandatory readout and intervention evaluation is COSTED but NOT IMPLEMENTED",
+        "the mandatory readout and intervention evaluation, now IMPLEMENTED (was: costed but not implemented)",
         "the section-19 efficiency pass is charged to the pretrained identity only"
       ]
     },
-    "summary_of_change": "the pretrained identity projects to 36.399 h with -1.399 h of headroom. 5 separate omissions have been found and corrected across seven review rounds, enumerated under omissions_found_and_corrected; every one of them raised the total. The fall from the original 32.686 h is explained solely by removing the selection-sensitivity study, whose object the fixed-endpoint rule eliminated, and by pricing readouts per cell instead of through a pooled evaluation-share fraction.",
+    "summary_of_change": "the pretrained identity projects to 37.744 h against a 35.0 h ceiling (-2.744 h headroom). That is a rise of 5.058 h from the original 32.686 h. 5 separate omissions were found and corrected across seven review rounds, every one of them raising the total; the measurement phase then raised it again. The one reduction in the whole history was removing the selection-sensitivity study, whose object the fixed-endpoint rule eliminated, and it is disclosed and costed separately.",
     "ceiling_breached": true,
-    "verdict": "DOES NOT FIT. The complete MEASURED programme projects to 36.399 h against the hard 35.0 h ceiling, exceeding it by 1.399 h. Execution STOPS and returns to the user. The ceiling has NOT been raised and nothing has been descoped: both are the user's decision, not this record's. The overage is driven by the final evaluation, which is now measured rather than assumed -- four matched conditions over the 10,004-row raw denominator, at a measured 0.0603 s per row, costs about 4.02 h per pretrained cell-set against the 2.018 h previously budgeted. The measured 250k training rate came in BELOW its assumption and reduced the cell cost; it was the evaluation, not the training, that was underestimated.",
+    "verdict": "DOES NOT FIT. The complete MEASURED programme projects to 37.744 h against the hard 35.0 h ceiling, exceeding it by 2.744 h. Execution STOPS and returns to the user. The ceiling has NOT been raised and nothing has been descoped: both are the user's decision, not this record's. The overage is driven by the final evaluation, which is now measured rather than assumed -- four matched conditions over the 10,004-row raw denominator, at a measured 0.0603 s per row, costs about 4.02 h per pretrained cell-set against the 2.018 h previously budgeted. The measured 250k training rate came in BELOW its assumption and reduced the cell cost; it was the evaluation, not the training, that was underestimated.",
     "decision_required_from_user": {
       "why": "the measured projection exceeds the hard ceiling, and the instruction is explicit that execution stops rather than auto-descoping or raising the ceiling",
       "not_taken_unilaterally": [

@@ -111,8 +111,8 @@ CORE_FIXED_HYPER = {"lr": 3e-4, "warmup_frac": 0.0, "dropout": 0.1}
 # re-checked against MEASURED hours after the cell completes, which is
 # the authoritative charge.
 CORE_CELL_PROJECTED_HOURS = {
-    ("B3", "train_40k"): 1.718, ("B3", "train_250k"): 4.131,
-    ("B2", "train_40k"): 1.718, ("B2", "train_250k"): 4.131,
+    ("B3", "train_40k"): 1.718, ("B3", "train_250k"): 4.249,
+    ("B2", "train_40k"): 1.718, ("B2", "train_250k"): 4.249,
     ("B1", "train_40k"): 0.287, ("B1", "train_250k"): 0.751,
 }
 # One cell writes a resume checkpoint (325.9 MiB), a canonical

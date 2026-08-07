@@ -2020,18 +2020,19 @@ def test_remediation_known_negatives() -> None:
     # deliberately open: the user authorised it on 2026-08-07 for the
     # bounded phase-C measurement, and it can neither complete a cell
     # nor write a checkpoint or result.
+    # EVERY class refuses again. The throughput-calibration grant was
+    # opened for phase C and REVOKED as soon as it completed, exactly as
+    # the determinism probe's was: the gate placed no step or scale
+    # bound on it, so a live grant would have left a real optimizer path
+    # open on the training path.
     for execution_class in sorted(e8b_run.EXECUTION_CLASSES):
-        if execution_class == "throughput-calibration":
-            check("the bounded calibration path is authorised, and only "
-                  "it",
-                  e8b_run.authorize_optimizer_path(
-                      execution_class, "check")["authorised_by"]
-                  == e8b_run.THROUGHPUT_CALIBRATION_AUTHORIZED)
-            continue
         must_fail(f"the optimizer path refuses class {execution_class!r} "
                   f"while authorisation is withheld",
                   lambda c=execution_class:
                   e8b_run.authorize_optimizer_path(c, "known-negative"))
+    check("the calibration grant is revoked, not left standing",
+          e8b_run.THROUGHPUT_CALIBRATION_AUTHORIZED is None
+          and e8b_run.THROUGHPUT_CALIBRATION_REVOKED_ON == "2026-08-07")
     must_fail("an unknown execution class is refused, not defaulted",
               lambda: e8b_run.authorize_optimizer_path(
                   "not-a-class", "known-negative"))
@@ -2642,10 +2643,18 @@ def test_audit_known_negatives() -> None:
                   and "WAS FALSE" not in a and "FALSE" not in a
                   for a in recon["residual_assumptions"]),
           str([a[:60] for a in recon["residual_assumptions"]]))
-    check("the residual assumptions withdraw the false claim explicitly",
-          any("was\n" not in a and "FALSE" in a
+    # The false E7b provenance is withdrawn where the assumption still
+    # lives -- in the projection's own basis text. The reconciliation's
+    # list no longer restates it, because the assumption it belonged to
+    # has been REPLACED by measurement.
+    check("the withdrawn false provenance is still recorded as false "
+          "where the superseded assumption lives",
+          "MILLISECONDS" in gsrc and "THAT WAS FALSE" in gsrc)
+    check("the reconciliation reports the measured basis, not the "
+          "withdrawn assumption",
+          any("now MEASURED" in a
               for a in recon["residual_assumptions"]),
-          str([a[:70] for a in recon["residual_assumptions"]]))
+          str([a[:60] for a in recon["residual_assumptions"]]))
     check("the residual assumptions declare themselves DERIVED, so a "
           "hand-written figure cannot go stale there again",
           "DERIVED" in recon["residual_assumptions"][0])
@@ -2661,11 +2670,23 @@ def test_audit_known_negatives() -> None:
           any("A1 row" in c["component"]
               for c in recon["complete_programme_components"]))
     check("the open risks are listed rather than buried",
-          len(recon["open_risks"]) >= 5
-          and any("UNSOURCED" in json.dumps(r)
-                  for r in recon["open_risks"])
-          and any("FALSE" in json.dumps(r)
-                  for r in recon["open_risks"]))
+          len(recon["open_risks"]) >= 5)
+    closed_by_measurement = [r for r in recon["open_risks"]
+                             if "CLOSED BY MEASUREMENT" in r["status"]]
+    check("the two risks phases B and C existed to close are recorded "
+          "as CLOSED BY MEASUREMENT, not left standing",
+          len(closed_by_measurement) == 2,
+          str([r["risk"][:40] for r in closed_by_measurement]))
+    # A "(was: ... unsourced)" parenthetical is history, not a live
+    # claim, so only the part before it is checked.
+    live_claims = [r["risk"].split("(was:")[0]
+                   for r in recon["open_risks"]]
+    check("no risk still PRESENTS a measured quantity as unmeasured",
+          not any("UNSOURCED" in claim.upper()
+                  or "is unmeasured" in claim for claim in live_claims),
+          str([c[:50] for c in live_claims]))
+    check("the measured risks say so in their own titles",
+          sum("MEASURED" in c for c in live_claims) >= 2)
     if recon.get("ceiling_breached"):
         check("a breached ceiling is stated as a breach, first word",
               recon["verdict"].startswith("DOES NOT FIT"))
@@ -3234,16 +3255,30 @@ def test_records_reproduce_from_generators() -> None:
           "DERIVATION" in residual)
     per_cell = published["per_cell_hours"]["lm_train_250k"]
     check("the 250k carried hours follow the CURRENT per-cell cost",
-          abs(residual["train_250k_step_scaling"]["carries_hours"]
+          abs(residual["train_250k_MEASURED"]["carries_hours"]
               - 3 * per_cell) < 0.01,
-          f"{residual['train_250k_step_scaling']['carries_hours']} vs "
+          f"{residual['train_250k_MEASURED']['carries_hours']} vs "
           f"{3 * per_cell}")
     headroom = published["gates"]["pretrained_identity_35h"][
         "headroom_hours"]
     check("the break-even follows the CURRENT headroom",
-          abs(residual["train_250k_step_scaling"][
+          abs(residual["train_250k_MEASURED"][
                   "break_even_per_cell_percent"]
               - 100 * headroom / (3 * per_cell)) < 0.05)
+    # The two quantities phases B and C measured must say MEASURED.
+    check("the 250k rate is recorded as measured and bias-corrected",
+          "MEASURED" in residual["train_250k_MEASURED"]["basis"]
+          and "same-scale bias"
+          in residual["train_250k_MEASURED"]["basis"])
+    check("the evaluation pass is recorded as measured, with its "
+          "residual stated",
+          "MEASURED end to end"
+          in residual["evaluation_pass_MEASURED"]["basis"]
+          and residual["evaluation_pass_MEASURED"]["residual_risk"])
+    check("the evaluation pass is the largest single line, and is "
+          "costed over four conditions",
+          residual["evaluation_pass_MEASURED"]["carries_hours"]
+          > residual["train_250k_MEASURED"]["carries_hours"] * 0.3)
     check("the G14 input is described as optimistic, not conservative",
           "OPTIMISTIC, NOT CONSERVATIVE"
           in residual["g14_row_cost"]["direction"])
@@ -3361,8 +3396,23 @@ def test_readiness_phase() -> None:
           str(sorted(called)))
     check("R2 and R3 still walk per row, as they must",
           "r2_cached" in called and "r3_generate" in called)
-    check("closed readouts derive raw accuracy EXACTLY, not by estimate",
-          "EXACT, not estimated" in esrc)
+    check("closed readouts derive raw accuracy EXACTLY for the raw "
+          "metric, and the normalised case is CHECKED not assumed",
+          "EXACT for the RAW metric" in esrc
+          and "def assert_normalisation_disjoint" in esrc)
+    check("an out-of-vocabulary gold label is REFUSED rather than "
+          "silently wrapping to the last vocabulary answer",
+          "SCORING REFUSED" in esrc)
+    check("R2 and R3 each build their OWN prefix state, because "
+          "r2_cached consumes the one it is given",
+          esrc.count("readouts._prefix_cache(lm, single)") >= 2
+          and "CACHE-INTEGRITY GUARD FAILED" in esrc)
+    check("per-row lists are checked for alignment before scoring",
+          "ROW ALIGNMENT FAILED" in esrc)
+    check("the context builder returns exactly what the evaluator "
+          "reads, so the seam cannot be built two ways",
+          "REQUIRED_CONTEXT" in esrc
+          and "CONTEXT INCOMPLETE" in esrc)
     check("nothing is renormalised away",
           "renormalised" in esrc.lower())
     # The padding-aware neutral input, which a naive mean gets wrong.
@@ -3491,11 +3541,11 @@ def test_readiness_phase() -> None:
                   "not_taken_unilaterally"])
 
     # --- the calibration path is the ONLY optimizer path open ---
-    check("only the throughput calibration is authorised",
-          e8b_run.EXECUTION_CLASSES["throughput-calibration"]
-          == e8b_run.THROUGHPUT_CALIBRATION_AUTHORIZED)
+    check("the calibration grant was revoked once phase C completed",
+          e8b_run.THROUGHPUT_CALIBRATION_AUTHORIZED is None)
     for execution_class in ("core-cell", "core-gate",
-                            "nonscientific-probe"):
+                            "nonscientific-probe",
+                            "throughput-calibration"):
         must_fail(f"{execution_class} is STILL refused",
                   lambda c=execution_class:
                   e8b_run.authorize_optimizer_path(c, "known-negative"))
