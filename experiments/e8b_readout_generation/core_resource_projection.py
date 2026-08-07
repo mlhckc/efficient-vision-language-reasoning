@@ -32,8 +32,15 @@ from src import utils  # noqa: E402
 D = PROJECT_ROOT / "results" / "experiments" / "e8b_readout_generation"
 
 # --- Measured inputs, with sources -------------------------------------------
-TRAIN_S_40K = 78.0        # s/epoch, strict-deterministic probe runs 3/4
-EVAL_FP32_S = 108.0       # s, canonical FP32 dev pass (probe runs 3/4)
+# MAX over the strict-deterministic probe runs, following the project's
+# own convention elsewhere ("max over three seeds"). Run 3 gives
+# 77.5/78.0/78.0 and run 4 gives 78.3; the earlier 78.0 was the low end.
+TRAIN_S_40K = 78.3        # s/epoch, MAX over probe runs 3 and 4
+# MAX over every recorded canonical FP32 dev pass. The probes give
+# 107.9 (run 3) and 109.2-109.4 (run 4); the only STANDALONE
+# measurements, in fp32_canonical_validation.json, are 112.0/112.2/112.3.
+# The earlier 108.0 was a rounded mid of the lowest set.
+EVAL_FP32_S = 112.3       # s, MAX over all recorded canonical FP32 passes
 EVAL_BF16_S = 85.7        # secondary deployment diagnostic only
 # G14 per-row cost. The measured per-row costs are 5.149 / 5.137 /
 # 5.135 s/row (fp32_canonical_validation.json, pooled 5.1387 over 478
@@ -85,7 +92,24 @@ N_DEV = 7714       # in-vocabulary development rows
 # costed.
 N_RAW = 10004      # raw development denominator (plan section 6)
 WALL_H, IDENT_H, CORE_H, MEM_FRACTION = 8.0, 35.0, 180.0, 0.80
-BASE = {"pretrained": 2.29222, "random": 1.95811}   # A1 / A1r measured
+BASE = {"pretrained": 2.29222, "random": 1.95811}   # A1 / A1r CORE measured
+# Protocol 13.2b's A1 row is 2.987 h = core 1.774 + secondary 0.509 +
+# ablation 0.127 + extraction 0.400 + mid 0.087 + interventions 0.090.
+# BASE above is the MEASURED CORE run only. Substituting it for the full
+# row silently dropped three retained, unrun components that load the
+# pinned pretrained SmolLM2-135M and are therefore charged to that
+# identity: the 7.1b secondary optimisation study (retained but demoted,
+# selects nothing), the bounded representation ablation, and the
+# middle-layer extraction. None is descoped, so all three are charged.
+RETAINED_A1_ROW = {
+    "secondary_optimisation_7_1b": 0.509,
+    "representation_ablation": 0.127,
+    "middle_layer_extraction": 0.087,
+}
+RETAINED_A1R_ROW = {          # the A1r row retains the same two
+    "representation_ablation": 0.127,
+    "middle_layer_extraction": 0.087,
+}
 A4_H, A7C_H = 1.804, 1.864                          # protocol 13.2b
 # Section 19 / protocol 13.2: the mandatory serial efficiency pass,
 # charged at its UPPER bound. Loads the frozen pretrained LM.
@@ -175,9 +199,11 @@ def main() -> int:
     # touches either identity ceiling).
     # Plan section 7: EVERY trained checkpoint, B1 included, is
     # evaluated under normal, matched fixed-image, matched
-    # fixed-question and shuffled-image conditions -- 90 intervention
-    # passes over the 30 core runs. Only six plain B1 passes were
-    # costed, omitting B1's 18 intervention passes and its raw pass.
+    # fixed-question and shuffled-image conditions. The plan's "90
+    # passes" figure is the pre-U1 basis of 30 core runs; the matrix is
+    # now 18 cells, so 54 passes. The arithmetic below is per cell and
+    # is unaffected. Only six plain B1 passes were costed before,
+    # omitting B1's 18 intervention passes and its raw pass.
     final_eval_b1 = 6 * (hours(EVAL_FP32_S) + raw_r1_per_cell
                          + 3 * hours(EVAL_FP32_S))
     # Section 19 mandates one E7a-protocol serial efficiency measurement
@@ -196,10 +222,12 @@ def main() -> int:
 
     spent = spent_compute()
     share = readouts_per_lm_cell + interventions_per_lm_cell
-    pretrained_identity = (BASE["pretrained"] + A4_H + A7C_H + b3_total
+    pretrained_identity = (BASE["pretrained"] + sum(RETAINED_A1_ROW.values())
+                           + A4_H + A7C_H + b3_total
                            + 6 * share + spent["_total"]
                            + efficiency_s19)
-    random_identity = BASE["random"] + b2_total + 6 * share
+    random_identity = (BASE["random"] + sum(RETAINED_A1R_ROW.values())
+                       + b2_total + 6 * share)
 
     storage_gib = ((12 * (LM_RESUME_MIB + 2 * LM_CKPT_MIB)
                     + 6 * (B1_RESUME_MIB + B1_CKPT_MIB)
@@ -230,11 +258,17 @@ def main() -> int:
         "e8b_remaining_vs_180h_core": {
             "e8b_remaining_hours": round(e8b_remaining, 3),
             "e8b_remaining_stress_hours": round(e8b_remaining_stress, 3),
-            "scope_note": "E8B cells and E8B evaluation only; the "
+            "scope_note": "E8B cells and E8B evaluation only. The "
                           "programme-wide 180 h ceiling also covers the "
-                          "remaining E8A arms (about 17.6-21.6 h "
-                          "expected per section 13.2), which leaves the "
-                          "combined expectation far below the ceiling",
+                          "remaining E8A arms. CORRECTED 2026-08-07: an "
+                          "earlier note cited 'about 17.6-21.6 h "
+                          "expected per section 13.2'. That range "
+                          "appears nowhere in the protocol. Section "
+                          "13.2's E8A rows total 20.413-21.968 h for "
+                          "ALL of E8A, of which 5.789 h is already "
+                          "spent, leaving about 14.6-16.2 h remaining. "
+                          "The combined expectation is still far below "
+                          "the ceiling.",
             "fires": e8b_remaining > CORE_H},
         "memory_80pct_reserved": {
             "peak_reserved_mib": PEAK_RESERVED_MIB,

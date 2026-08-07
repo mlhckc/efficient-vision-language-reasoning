@@ -371,13 +371,25 @@ REAUDIT_AC_20260807_ENTRIES = [
               "checkpoint, B1 included, and B1's 18 intervention passes "
               "were omitted.",
      "classification": "scientific-validity",
-     "disposition": "FIXED AT SOURCE",
-     "evidence": "N_RAW = 10004 is charged for R2, R3 and a "
-                 "raw-distribution R1 pass per cell, and B1 is charged "
-                 "its three intervention conditions. The pretrained "
-                 "identity rises from 32.960 to 33.472 h and the "
-                 "headroom falls to 1.528 h. A correction UPWARD.",
-     "closed_by": "identity_reconciliation_20260807.json"},
+     "disposition": "PARTIALLY FIXED",
+     "evidence": "BUDGET ONLY. N_RAW = 10004 is charged for R2, R3 and "
+                 "a raw-distribution R1 pass per cell, and B1 is "
+                 "charged its three intervention conditions, so the "
+                 "COSTING half is closed and the pretrained identity "
+                 "rose accordingly. The IMPLEMENTATION half is NOT "
+                 "done: N_RAW appears in no execution module, "
+                 "intervention_inputs has no caller outside the tests, "
+                 "and no code path performs a raw-denominator "
+                 "evaluation, an R2/R3 final-checkpoint readout or an "
+                 "intervention pass. An earlier disposition of FIXED AT "
+                 "SOURCE was WRONG: the finding said 'neither "
+                 "implemented nor budgeted' and only the budget was "
+                 "addressed. This does not block the 18 training cells; "
+                 "it blocks the branch from producing its primary "
+                 "readout comparisons.",
+     "closed_by": "NOT CLOSED - implementation work remains, and is "
+                  "recorded as an open risk in "
+                  "identity_reconciliation_20260807.json"},
     {"id": "REAUDIT-AC-MEDIUM-1",
      "lens": "A/C (honesty and resources, re-audit)",
      "issue": "The G14 per-row input was presented as conservative, but "
@@ -521,8 +533,201 @@ REAUDIT_B2_20260807_ENTRIES = [
      "disposition": "FIXED AT SOURCE",
      "evidence": "the core gate writes a halt record before raising, "
                  "and the wall is checked before the loop on a resumed "
-                 "cell.",
+                 "cell. CORRECTED 2026-08-07: this entry previously "
+                 "claimed the check runs 'before the LM load, the "
+                 "parity load, G8 and G14 pre-selection have run "
+                 "again'. THAT WAS FALSE -- all of those run earlier in "
+                 "the function and the check cannot precede them. It "
+                 "saves one batch, and it is now SKIPPED entirely when "
+                 "the loop will not run, so a completed 22-epoch "
+                 "trajectory resumed for finalisation is not destroyed.",
      "closed_by": "the training and run modules"},
+]
+
+
+# Findings from the confirmation audit of d404891.
+CONFIRM_20260807_ENTRIES = [
+    {"id": "CONFIRM-HIGH-1",
+     "lens": "A/C (confirmation audit)",
+     "issue": "The false E7b provenance survived VERBATIM in "
+              "identity_reconciliation's residual_assumptions, fifteen "
+              "lines below the open_risks entry declaring it false, "
+              "with no marker. Its exposure figures were also stale "
+              "(computed on the superseded 7,714-row basis and the "
+              "superseded headroom), understating the true exposure and "
+              "inverting its sign: the correct increase at 3x is "
+              "+2.428 h, which EXHAUSTS the headroom rather than "
+              "leaving 0.17 h.",
+     "classification": "scientific-validity",
+     "disposition": "FIXED BY DISCLOSURE",
+     "evidence": "residual_assumptions is rewritten: its first entry "
+                 "withdraws both the E7b claim and the stale figures by "
+                 "quoting them, and every remaining entry is derived "
+                 "from the current basis. The correction commit had "
+                 "fixed open_risks and missed this list entirely.",
+     "closed_by": "test_audit_known_negatives, provenance-survival "
+                  "checks"},
+    {"id": "CONFIRM-HIGH-2",
+     "lens": "A/C (confirmation audit)",
+     "issue": "The 'complete planned programme' claim was false for a "
+              "THIRD time. The identity substituted the MEASURED A1 "
+              "core run (2.292 h) for protocol 13.2b's full A1 row "
+              "(2.987 h), silently dropping 0.723 h of retained "
+              "pretrained-135M work: the 7.1b secondary optimisation "
+              "study, the bounded representation ablation and the "
+              "middle-layer extraction. All three are retained in the "
+              "operative protocol and none is descoped.",
+     "classification": "scientific-validity",
+     "disposition": "FIXED AT SOURCE",
+     "evidence": "all three are charged to the pretrained identity and "
+                 "the two that appear in the A1r row to the random one. "
+                 "With the per-epoch rates also moved to the MAXIMUM of "
+                 "their recorded sets, the pretrained identity rises "
+                 "from 33.472 to 34.423 h and the headroom falls to "
+                 "0.577 h.",
+     "closed_by": "identity_reconciliation_20260807.json"},
+    {"id": "CONFIRM-HIGH-3",
+     "lens": "A/C (confirmation audit)",
+     "issue": "REAUDIT-AC-HIGH-2 was disposed FIXED AT SOURCE on the "
+              "BUDGET alone, though the finding read 'neither "
+              "implemented nor budgeted'. No code path performs a "
+              "raw-denominator evaluation, an R2/R3 final-checkpoint "
+              "readout or an intervention pass, so the mechanically "
+              "derived summary reported zero open findings while a "
+              "mandatory evaluation remained unbuilt.",
+     "classification": "scientific-validity",
+     "disposition": "PARTIALLY FIXED",
+     "evidence": "the entry is re-dispositioned to PARTIALLY FIXED, "
+                 "which the ledger's own state map excludes from "
+                 "CLOSED, and the implementation gap is recorded as an "
+                 "open risk. The summary now reports one partially "
+                 "fixed finding rather than none.",
+     "closed_by": "NOT CLOSED - this entry records the correction of "
+                  "the disposition, not the completion of the work"},
+    {"id": "CONFIRM-MEDIUM-1",
+     "lens": "A/C (confirmation audit)",
+     "issue": "The 180-hour gate's scope note cited 'about 17.6-21.6 h "
+              "expected per section 13.2' for the remaining E8A arms. "
+              "That range appears nowhere in the protocol. An Aug-6 "
+              "implementation-audit record also lacked a marker though "
+              "several of its verdicts no longer describe HEAD, and "
+              "CLAUDE.md still stated the core ceiling as the min() "
+              "form that user decision P3 made non-halting.",
+     "classification": "provenance/reproducibility",
+     "disposition": "FIXED BY DISCLOSURE",
+     "evidence": "the citation is corrected to the protocol's actual "
+                 "figures with the spent hours deducted; the Aug-6 "
+                 "record carries a marker distinguishing what is stale "
+                 "from what still stands; and CLAUDE.md records P3's "
+                 "clarification that the expected-epoch comparison "
+                 "alone halts.",
+     "closed_by": "the corrected records and CLAUDE.md"},
+]
+
+
+# Findings from the executable-safety confirmation audit of d404891.
+CONFIRM_B_20260807_ENTRIES = [
+    {"id": "CONFIRM-B-MEDIUM-1",
+     "lens": "B (executable safety, confirmation audit)",
+     "issue": "The M-1 fix traded exception masking for resume "
+              "blocking. An accounting failure wrote "
+              "HALT_{run}_G19_LEDGER.json, and train_core_cell refuses "
+              "any cell with a HALT record, so a transient shared "
+              "-filesystem error during the finally block turned a "
+              "resumable trajectory into one needing manual repair -- "
+              "at 4.2 h a restart against 0.6 h of headroom.",
+     "classification": "execution-critical",
+     "disposition": "FIXED AT SOURCE",
+     "evidence": "an accounting failure now writes LEDGER_FAILURE_*, "
+                 "not HALT_*: an operational warning about the ledger, "
+                 "not a scientific halt about the cell. It is still "
+                 "recorded durably and still says the ceiling is "
+                 "under-counted until repaired, but it no longer blocks "
+                 "resume.",
+     "closed_by": "test_audit_known_negatives, halt-semantics checks"},
+    {"id": "CONFIRM-B-MEDIUM-2",
+     "lens": "B (executable safety, confirmation audit)",
+     "issue": "The pre-loop wall check destroyed a completed cell. A "
+              "cell resumed at epoch 22 skips the loop and needs only "
+              "finalising, but if its accumulated hours exceeded the "
+              "wall the check wrote both a FAILED record and a halt "
+              "record, so a complete 22-epoch trajectory was killed and "
+              "could never be re-entered, with no canonical checkpoint "
+              "ever written. The comment justifying the check was also "
+              "factually wrong about what it precedes.",
+     "classification": "execution-critical",
+     "disposition": "FIXED AT SOURCE",
+     "evidence": "the check is skipped when start_epoch exceeds "
+                 "max_epochs, and the false comment is corrected in "
+                 "place by quoting it.",
+     "closed_by": "test_audit_known_negatives, resume-at-final checks"},
+    {"id": "CONFIRM-B-MEDIUM-3",
+     "lens": "B (executable safety, confirmation audit)",
+     "issue": "A fired 35-hour ceiling on the completion path stamped a "
+              "COMPLETED, valid cell with a halt record reading "
+              "'FAILED: halting gate fired; this run's result is not "
+              "used', contradicting the cell's own valid result, and "
+              "returned exit code 0 so a driver would read success. "
+              "Replacing the sys.exit was correct in a finally block "
+              "but was done unconditionally and undocumented.",
+     "classification": "execution-critical",
+     "disposition": "FIXED AT SOURCE",
+     "evidence": "the ceiling now writes IDENTITY_EXHAUSTED_{identity}, "
+                 "which records that the IDENTITY is exhausted without "
+                 "asserting anything about this cell, and exits "
+                 "non-zero only when sys.exc_info() shows no exception "
+                 "already propagating.",
+     "closed_by": "test_audit_known_negatives, ceiling-semantics checks"},
+    {"id": "CONFIRM-B-MEDIUM-4",
+     "lens": "B (executable safety, confirmation audit)",
+     "issue": "Nothing sequenced B2 and B3 for a given scale and seed. "
+              "With under an hour of headroom, running the six B2 cells "
+              "first could exhaust the pretrained ceiling partway "
+              "through B3 and leave unpaired B2 results -- breaking a "
+              "pairing CLAUDE.md declares binding, by accident rather "
+              "than by decision. The halt message promised "
+              "'pair-preserving alternatives'; nothing computed any.",
+     "classification": "execution-critical",
+     "disposition": "FIXED AT SOURCE",
+     "evidence": "run.pair_preserving_order interleaves each pair, B2 "
+                 "immediately before its B3, so if the ceiling fires it "
+                 "fires BETWEEN pairs and every completed pair is "
+                 "whole. B1, charged to neither identity ceiling, runs "
+                 "last.",
+     "closed_by": "test_audit_known_negatives, pair-order checks"},
+    {"id": "CONFIRM-B-MEDIUM-5",
+     "lens": "B (executable safety, confirmation audit)",
+     "issue": "assert_promotable, the guard against promoting a "
+              "non-scientific probe artefact or a superseded search "
+              "record, had NO production call site -- the same "
+              "'constant with no caller' defect closed earlier for the "
+              "35-hour and 180-hour ceilings. Peak memory was also "
+              "measured only across the training loop, excluding the "
+              "gates and so excluding the one combination never "
+              "measured anywhere: the fp32-promoted model with a "
+              "non-autocast G7 backward.",
+     "classification": "execution-critical",
+     "disposition": "FIXED AT SOURCE",
+     "evidence": "run.load_core_result is now THE sanctioned reader and "
+                 "calls the guard; it has no caller today only because "
+                 "no aggregation script exists (F1 is unauthorised), "
+                 "and that is stated in its docstring. Peak memory is "
+                 "reset once at the start of the cell, so the gates are "
+                 "inside the measurement.",
+     "closed_by": "test_audit_known_negatives"},
+    {"id": "CONFIRM-B-LOW-1",
+     "lens": "B (executable safety, confirmation audit)",
+     "issue": "src/models.py was in TRAJECTORY_SOURCES but is imported "
+              "nowhere on the E8B path, so an unrelated V1/V2 edit "
+              "would have invalidated every outstanding E8B resume -- "
+              "the exact harm the fixed list exists to prevent. "
+              "reinfer_g21.py, which DOES execute on the core path and "
+              "enforces GPU exclusivity, was absent.",
+     "classification": "execution-critical",
+     "disposition": "FIXED AT SOURCE",
+     "evidence": "models.py removed with the reason recorded in place, "
+                 "reinfer_g21.py added.",
+     "closed_by": "test_audit_known_negatives, digest-scope checks"},
 ]
 
 
@@ -568,7 +773,9 @@ def main() -> int:
     pending = (REVIEW_A_ENTRIES + AUDIT_20260807_ENTRIES
                + REAUDIT_20260807_ENTRIES
                + REAUDIT_AC_20260807_ENTRIES
-               + REAUDIT_B2_20260807_ENTRIES)
+               + REAUDIT_B2_20260807_ENTRIES
+               + CONFIRM_20260807_ENTRIES
+               + CONFIRM_B_20260807_ENTRIES)
     appended = [e for e in pending if e["id"] not in known]
     for entry in appended:
         entry = dict(entry)

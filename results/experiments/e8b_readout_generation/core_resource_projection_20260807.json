@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-07T19:00:10",
-    "git_commit": "8ad573b",
+    "timestamp": "2026-08-07T19:31:52",
+    "git_commit": "d404891",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -34,8 +34,8 @@
     "design": "strict deterministic BF16 training; fixed 22 epochs for B2/B3, no early stopping, epoch-22 canonical; B1 under the stored section-7.3 recipe (15/22 expected, 100-epoch stress); full FP32 canonical evaluation; G14-FP32 on the LM arms; final R1/R2/R3 readouts and interventions; measured checkpoint footprint",
     "inputs_note": "NOT every entry below is measured. Keys ending ASSUMED or UNSOURCED are not measurements; the container name is retained for continuity with earlier records.",
     "measured_inputs": {
-      "train_s_per_epoch_40k_strict_det": 78.0,
-      "canonical_fp32_dev_pass_s": 108.0,
+      "train_s_per_epoch_40k_strict_det": 78.3,
+      "canonical_fp32_dev_pass_s": 112.3,
       "bf16_dev_pass_s_SECONDARY_DIAGNOSTIC_ONLY": 85.7,
       "g14_fp32_s_per_row_ASSUMED_pooled_plus_3pc": 5.301,
       "g14_rows_per_lm_cell": 224,
@@ -50,18 +50,18 @@
       "amended_design_cost_note": "the 78.0 versus 53.88 s/epoch difference is the TOTAL cost of the amended execution design relative to the superseded one; it bundles three simultaneous changes (strict-deterministic math SDPA backend, the fp32 frozen-model instance, and enforcement assertions) and is not attributed to any single one"
     },
     "per_cell_hours": {
-      "lm_train_40k": 1.69,
-      "lm_train_250k": 4.189,
+      "lm_train_40k": 1.718,
+      "lm_train_250k": 4.226,
       "b1_train_40k_expected": 0.287,
       "b1_train_250k_expected": 0.751
     },
     "arm_totals_hours": {
       "B1_expected": 3.112,
       "B1_stress_100_epoch": 9.807,
-      "B2": 17.634,
-      "B3": 17.634,
-      "final_readouts_and_interventions_lm": 3.975,
-      "final_b1_evaluations_upper_bound": 0.953
+      "B2": 17.832,
+      "B3": 17.832,
+      "final_readouts_and_interventions_lm": 4.036,
+      "final_b1_evaluations_upper_bound": 0.991
     },
     "spent_compute_hours_itemised": {
       "search_grid1_pilot": 1.379,
@@ -78,23 +78,23 @@
     },
     "gates": {
       "per_run_8h": {
-        "largest_cell_hours": 4.189,
+        "largest_cell_hours": 4.226,
         "fires": false
       },
       "pretrained_identity_35h": {
-        "projected_hours": 33.472,
-        "headroom_hours": 1.528,
+        "projected_hours": 34.423,
+        "headroom_hours": 0.577,
         "includes": "the COMPLETE planned pretrained-identity programme: A1 baseline, A4, A7c, all six B3 core cells, B3's final R2/R3 readouts and interventions, and every already-spent search, characterisation, validation and probe hour that loaded the pretrained checkpoint",
         "retry_allowance": "NONE. The plan tolerates zero B3 retries; any retry or any additional B3-loading evaluation triggers a stop-and-ask BEFORE execution",
         "fires": false
       },
       "random_identity_35h": {
-        "projected_hours": 21.58,
+        "projected_hours": 22.022,
         "fires": false
       },
       "e8b_remaining_vs_180h_core": {
-        "e8b_remaining_hours": 44.309,
-        "e8b_remaining_stress_hours": 51.004,
+        "e8b_remaining_hours": 44.803,
+        "e8b_remaining_stress_hours": 51.498,
         "scope_note": "E8B cells and E8B evaluation only; the programme-wide 180 h ceiling also covers the remaining E8A arms (about 17.6-21.6 h expected per section 13.2), which leaves the combined expectation far below the ceiling",
         "fires": false
       },

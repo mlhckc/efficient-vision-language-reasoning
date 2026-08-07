@@ -133,6 +133,13 @@ hash no longer matches the worktree.
   GPU memory; or storage above the project allocation. The core ceiling was
   raised from 150 to 180 GPU-hours by the user on 2 August 2026; the per-run,
   per-arm, memory and storage ceilings are unchanged.
+  Clarified by the user on 7 August 2026 (decision P3) and recorded here
+  because the sentence above no longer states the halting rule exactly: the
+  GOVERNING, halting comparison for the core ceiling is the expected-epoch
+  projection against 180 GPU-hours alone. The min(180, three times expected)
+  form is still computed and reported as a mandatory stress scenario, but it
+  is explicitly NON-HALTING on its own. The executable gate,
+  run.remaining_core_gate, implements exactly this.
   The clean test stays embargoed and no experiment code may resolve its path.
   F1 and F2 remain unauthorized and unstarted. The post-core research backlog
   is recorded but NOT authorized. Any new model, dependency or architectural

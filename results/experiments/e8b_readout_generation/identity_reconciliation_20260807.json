@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-07T19:01:12",
-    "git_commit": "8ad573b",
+    "timestamp": "2026-08-07T19:33:11",
+    "git_commit": "d404891",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -33,10 +33,10 @@
     "dated_utc": "2026-08-07",
     "question": "why did the pretrained-identity projection move from 32.686 h to 31.96 h, and does the COMPLETE planned programme fit under the hard 35 h ceiling?",
     "old_estimate_hours": 32.686,
-    "current_estimate_hours": 33.472,
+    "current_estimate_hours": 34.423,
     "net_change_hours": 0.786,
     "ceiling_hours": 35.0,
-    "headroom_hours": 1.528,
+    "headroom_hours": 0.577,
     "reconciliation_old_to_current": [
       {
         "component": "B1 250k per-epoch rate",
@@ -98,13 +98,24 @@
         "correction": "canonical plan section 6 requires every readout evaluation to run once over the 10,004-row RAW denominator, section 6.1 requires every final checkpoint to receive raw-distribution evaluation, and section 7 applies the three matched intervention conditions to EVERY trained checkpoint, B1 included (90 passes over 30 runs). HB3b was neither implemented nor budgeted.",
         "effect_on_identity_hours": 0.5115,
         "raised_by": "fresh-context re-audit (honesty and resources)"
+      },
+      {
+        "component": "the retained parts of protocol 13.2b's A1 row, and the per-epoch rates",
+        "old": "the identity substituted the MEASURED A1 core run (2.292 h) for protocol 13.2b's full A1 row (2.987 h), silently dropping 0.723 h of retained pretrained-135M work: the 7.1b secondary optimisation study, the bounded representation ablation and the middle-layer extraction. It also used the LOW end of the recorded per-epoch rates.",
+        "correction": "all three retained components are charged, and the train and evaluation rates use the MAXIMUM of their recorded measurement sets, following the project's own 'max over seeds' convention. None of the three is descoped; each is retained in the operative protocol.",
+        "effect_on_identity_hours": 0.951,
+        "raised_by": "fresh-context confirmation audit (honesty and resources)"
       }
     ],
-    "summary_of_change": "the pretrained identity now projects to 33.472 h. Two omissions were found after the first reconciliation, both of which made the earlier 'complete programme' claim false: the mandatory section-19 efficiency pass, and the canonical plan's requirement that readouts run over the 10,004-row raw denominator with a raw-distribution pass and with intervention conditions on every trained checkpoint including B1. Both corrections are UPWARD, against an unchanged ceiling. The remaining fall from 32.686 h is still explained by removing the selection-sensitivity study, whose object the fixed-endpoint rule eliminated.",
+    "summary_of_change": "the pretrained identity now projects to 34.423 h with 0.577 h of headroom. Four separate omissions have now been found and corrected, every one of them UPWARD against an unchanged ceiling: the section-19 efficiency pass; the 10,004-row raw denominator with its raw-distribution pass and B1's intervention conditions; the retained parts of protocol 13.2b's A1 row; and the use of the low end rather than the maximum of the recorded per-epoch rates. The repeated direction of these corrections is itself the finding: each review has moved the number toward the ceiling, so the remaining margin should be treated as an upper bound on the true margin, not an estimate of it.",
     "complete_programme_components": [
       {
-        "component": "A1 measured baseline (E8A pretrained 135M)",
+        "component": "A1 measured CORE baseline (E8A pretrained 135M)",
         "hours": 2.29222
+      },
+      {
+        "component": "retained but unrun parts of protocol 13.2b's A1 row (7.1b secondary 0.509, ablation 0.127, mid-layer 0.087)",
+        "hours": 0.723
       },
       {
         "component": "A4 (protocol 13.2b, projected, unrun)",
@@ -116,11 +127,11 @@
       },
       {
         "component": "six B3 final core cells (fixed 22 epochs, FP32 eval, G14, gates)",
-        "hours": 17.634
+        "hours": 17.832
       },
       {
         "component": "B3 share of final readouts over the RAW denominator + 3 interventions",
-        "hours": 1.9875
+        "hours": 2.018
       },
       {
         "component": "section-19 serial efficiency pass (upper bound)",
@@ -131,7 +142,7 @@
         "hours": 6.89
       }
     ],
-    "component_sum_hours": 33.472,
+    "component_sum_hours": 34.423,
     "matches_generator": true,
     "coverage_proof": {
       "already_spent_search": "search_grid1_pilot, search_grid2, search_grid3_halted in spent_compute",
@@ -147,15 +158,17 @@
       "raw_denominator": "N_RAW = 10004 in core_resource_projection.py; R2, R3 and the raw-distribution R1 pass are all charged over it",
       "b1_interventions": "final_eval_b1 charges each of the six B1 cells a normal pass, a raw pass and three intervention conditions"
     },
-    "verdict": "FITS, but the margin is now thin: 33.472 h against the hard 35 h ceiling leaves 1.528 h, with a recorded retry allowance of NONE. The ceiling is NOT weakened and NO component was dropped -- both corrections since the first reconciliation ADDED work. Three open risks are listed above, any one of which could exhaust the remaining headroom; they are the user's to accept or to close with a measurement before core execution is authorised.",
+    "verdict": "FITS, but only just, and on assumptions that keep moving the wrong way: 34.423 h against the hard 35 h ceiling leaves 0.577 h, with a recorded retry allowance of NONE. The ceiling is NOT weakened and NOTHING was descoped -- every correction across four review rounds ADDED work. Five open risks are listed above and ANY ONE of them exhausts the remaining margin. This is now a decision for the user rather than a reassurance: either accept the risks explicitly, or close the largest of them with a short measurement before core execution is authorised.",
     "retry_allowance": "NONE. The plan tolerates zero B3 retries; any retry or any additional B3-loading evaluation triggers a stop-and-ask BEFORE execution",
     "residual_assumptions": [
-      "the 250k training rate is step-scaled from the measured 40k rate; no 250k E8B cell has ever run. This single assumption carries 12.566 h of the total, and the identity reaches 35 h if the true rate is about 16 per cent above the step-scaled value.",
-      "NEITHER R2 nor R3 per-row cost is measured for E8B; R2 is carried over from the E7b S8 per-row cost and R3 assumed at 1.5x R2. If both cost 3x the assumed rate the identity rises by about 1.87 h and the headroom falls to about 0.17 h.",
-      "the G14 per-row cost 5.301 s is the pooled measurement 5.139 s plus a 3 per cent conservative margin; it is an assumption, not a measurement, and is labelled as one.",
-      "A4 and A7c (3.668 h) are expected-epoch projections for arms that have not run; their configured 100-epoch cap would cost 8.469 h each. The one arm of this family that has run, A1, came in 23 per cent below its projection.",
+      "CORRECTED 2026-08-07. An earlier version of this list stated that the R2 per-row cost was 'carried over from the E7b S8 per-row cost'. THAT WAS FALSE and is withdrawn: the E7b figure is S8_projection = 0.0291 MILLISECONDS for a LayerNorm-plus-Linear stage, a different operation in units 1000x apart. The same list also quoted an exposure of '+1.87 h, headroom about 0.17 h', which was computed on the superseded 7,714-row basis and the superseded headroom. Both figures are withdrawn. See open_risks for the current position, which this list must not contradict.",
+      "NEITHER the R2 nor the R3 per-row cost is measured for E8B, and neither has a source. Together they carry 1.214 h on the pretrained identity. At 3x the assumed rate the identity rises by 2.428 h and the 0.577 h headroom is EXHAUSTED.",
+      "the 250k training rate is step-scaled from the measured 40k rate; no 250k E8B cell has ever run. It carries about 12.7 h.",
+      "the G14 per-row cost is the pooled measurement 5.139 s plus a 3.15 per cent margin, and is OPTIMISTIC rather than conservative: the measurement covers the two R1 scorers only, while the live gate also runs both R2 walks per row.",
+      "A4 and A7c (3.668 h) are expected-epoch projections for arms that have not run; their configured 100-epoch cap would cost 8.469 h each. A1, the one arm of this family that has run, came in 23 per cent below its projection.",
+      "the retained parts of protocol 13.2b's A1 row (0.723 h) are that protocol's own estimates for work that has not run.",
       "the section-19 efficiency pass is charged at the upper bound of its 0.500-1.000 h range.",
-      "B1 is charged at an upper bound and touches neither identity."
+      "B1 is charged at an upper bound and touches neither identity's 35-hour ceiling, though it does count toward the 180-hour core ceiling."
     ],
     "clean_test_accessed": false,
     "enforcement": {
@@ -182,6 +195,16 @@
         "carries_hours": 12.566,
         "exposure": "the ceiling is reached at about a 12 per cent rise in per-cell cost",
         "status": "OPEN"
+      },
+      {
+        "risk": "a forced retry is unaffordable and not improbable",
+        "detail": "G14 fired as a halting gate on one of the three completed search runs. One forced B3/250k retry costs 4.226 h against 0.577 h of headroom.",
+        "status": "OPEN: the recorded retry allowance is NONE, and no contingency exists"
+      },
+      {
+        "risk": "the mandatory readout and intervention evaluation is COSTED but NOT IMPLEMENTED",
+        "detail": "the 10,004-row raw denominator, the R2/R3 final-checkpoint readout passes and the intervention passes are budgeted in this record, but no code path executes them: N_RAW appears only in the projection generator, and intervention_inputs has no caller outside the tests. This does not block the 18 training cells; it blocks the branch from producing its primary readout comparisons.",
+        "status": "OPEN: implementation work remains before the branch can complete"
       }
     ]
   }

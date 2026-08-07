@@ -111,8 +111,8 @@ CORE_FIXED_HYPER = {"lr": 3e-4, "warmup_frac": 0.0, "dropout": 0.1}
 # re-checked against MEASURED hours after the cell completes, which is
 # the authoritative charge.
 CORE_CELL_PROJECTED_HOURS = {
-    ("B3", "train_40k"): 1.690, ("B3", "train_250k"): 4.189,
-    ("B2", "train_40k"): 1.690, ("B2", "train_250k"): 4.189,
+    ("B3", "train_40k"): 1.718, ("B3", "train_250k"): 4.226,
+    ("B2", "train_40k"): 1.718, ("B2", "train_250k"): 4.226,
     ("B1", "train_40k"): 0.287, ("B1", "train_250k"): 0.751,
 }
 # One cell writes a resume checkpoint (325.9 MiB), a canonical
@@ -1384,16 +1384,25 @@ def train_core_cell(arm: str, scale: str, seed: int) -> int:
         except BaseException as accounting_error:   # noqa: BLE001
             # Recorded, never raised: losing the accounting is bad, but
             # masking why the cell actually stopped is worse.
-            e8b_run.record_gate_halt(
-                run_name, "G19_LEDGER",
-                "the GPU-hour ledger could not be updated after this "
-                "process; the hours it burned are NOT recorded and the "
-                "identity ceiling is now under-counted until a human "
-                "repairs the ledger",
+            # NOT a gate halt. record_gate_halt writes
+            # HALT_{run_name}_*.json, and train_core_cell refuses any
+            # cell for which such a file exists -- so recording an
+            # accounting failure that way would turn a transient NFS
+            # hiccup into a permanent block on a perfectly resumable
+            # trajectory, at 4.2 h a restart against 0.6 h of headroom.
+            # This is an operational warning about the LEDGER, not a
+            # scientific halt about the CELL, and it is filed as such.
+            e8b_run.record_ledger_failure(
+                run_name, "the GPU-hour ledger could not be updated "
+                          "after this process; the hours it burned are "
+                          "NOT recorded and the identity ceiling is "
+                          "under-counted until a human repairs the "
+                          "ledger",
                 {"error": repr(accounting_error)})
             print(f"[LEDGER] FAILED to charge this process: "
-                  f"{accounting_error!r}; a G19_LEDGER halt record was "
-                  f"written and the original failure, if any, is "
+                  f"{accounting_error!r}; a LEDGER_FAILURE record was "
+                  f"written (NOT a halt, so this cell can still "
+                  f"resume) and the original failure, if any, is "
                   f"preserved")
         else:
             print(f"[LEDGER] {after['identity']} identity now at "
@@ -1401,15 +1410,30 @@ def train_core_cell(arm: str, scale: str, seed: int) -> int:
                   f"{after['ceiling_hours']} h "
                   f"({after['headroom_hours']} h headroom)")
             if after["fires"]:
-                e8b_run.record_gate_halt(
-                    run_name, "G19_IDENTITY",
-                    f"the {after['identity']} identity has EXCEEDED "
-                    f"its {after['ceiling_hours']} GPU-hour ceiling",
-                    {"identity_gate": after})
+                # The ceiling is about the IDENTITY, not this cell. This
+                # cell may have completed correctly and written a valid
+                # result, so it is never stamped FAILED; what is
+                # recorded is that the identity is exhausted and the
+                # NEXT cell must not start. The next cell's own pre-gate
+                # enforces that independently.
+                e8b_run.record_identity_exhausted(
+                    run_name, after,
+                    f"the {after['identity']} identity has EXCEEDED its "
+                    f"{after['ceiling_hours']} GPU-hour ceiling. This "
+                    f"cell's own result stands or falls on its own "
+                    f"record; no further cell may start on this "
+                    f"identity without returning to the user.")
                 print(f"[G19_IDENTITY] the {after['identity']} identity "
                       f"is at {after['already_charged_hours']} h of "
-                      f"{after['ceiling_hours']} h; a halt record was "
-                      f"written and execution returns to the user")
+                      f"{after['ceiling_hours']} h. Recorded; no "
+                      f"further cell on this identity may start.")
+                # Exit non-zero ONLY if nothing is already propagating:
+                # a sys.exit inside finally would swallow the real
+                # failure.
+                if sys.exc_info()[0] is None:
+                    sys.exit(f"G19_IDENTITY: the {after['identity']} "
+                             f"identity is exhausted; execution stops "
+                             f"and returns to the user")
 
 
 def _train_core_locked(arm, scale, seed, recipe, run_name, result_path,
@@ -1456,6 +1480,10 @@ def _train_core_locked(arm, scale, seed, recipe, run_name, result_path,
             label_a=arm, label_b=("B2" if pretrained else "B3"))
         del counterpart
     e8b_run.assert_strict_determinism()
+    # Peak memory is measured across the WHOLE cell. Resetting after the
+    # gates would have excluded the one combination never measured
+    # elsewhere: the fp32-promoted LM with a non-autocast G7 backward.
+    torch.cuda.reset_peak_memory_stats()
 
     tokenizer = e8a.load_tokenizer() if arm != "B1" else None
     answers, vocabulary = g21.load_index_to_answer(
@@ -1638,12 +1666,26 @@ def _train_core_locked(arm, scale, seed, recipe, run_name, result_path,
                               "was reached",
                               {"epoch": epoch, "step": step})
 
-    # L-2: a resumed cell that has already exhausted its wall must halt
-    # BEFORE the loop rather than after the LM load, the parity load,
-    # G8 and G14 pre-selection have run again.
-    wall_halt(start_epoch - 1, step_count)
+    # A resumed cell that has already exhausted its wall halts here
+    # rather than one batch into the loop.
+    #
+    # CORRECTION of 2026-08-07: an earlier comment here claimed this
+    # halts "before the LM load, the parity load, G8 and G14
+    # pre-selection have run again". THAT WAS FALSE -- all of those run
+    # earlier in this function, and this check cannot precede them.
+    #
+    # It is SKIPPED when the loop will not execute. A cell resumed at
+    # the final epoch has already done its training; halting it here
+    # would destroy a complete 22-epoch trajectory that only needs
+    # finalising, and would leave both a FAILED record and a halt record
+    # blocking any re-entry.
+    if start_epoch <= max_epochs:
+        wall_halt(start_epoch - 1, step_count)
+    else:
+        print(f"[WALL] skipped: resuming at epoch {start_epoch} of "
+              f"{max_epochs}, so the loop will not run and this cell "
+              f"only needs finalising")
     verified_at_use = e8b_run.assert_strict_determinism()
-    torch.cuda.reset_peak_memory_stats()
     first_step_asserted = False
     for epoch in range(start_epoch, max_epochs + 1):
         model.train()

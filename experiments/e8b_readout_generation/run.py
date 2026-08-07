@@ -496,11 +496,17 @@ TRAJECTORY_SOURCES = (
     ("src", "reasoner.py"),      # the trunk architecture itself
     ("src", "utils.py"),
     ("src", "tokens_data.py"),
-    ("src", "models.py"),
     ("", "config.py"),
     ("experiments/e8a_question_encoder", "e8a_common.py"),
     ("experiments/e8a_question_encoder", "g21_scorer.py"),
+    # Executes on the core path: it enforces GPU exclusivity, so a
+    # change that neutered that gate must invalidate a resume.
+    ("experiments/e8a_question_encoder", "reinfer_g21.py"),
 )
+# src/models.py was previously listed but is NOT imported anywhere on
+# the E8B path, so an unrelated V1/V2 edit would have invalidated every
+# outstanding E8B resume -- exactly the harm the fixed list exists to
+# prevent. Removed 2026-08-07.
 
 
 def e8b_code_digest() -> str:
@@ -1321,6 +1327,106 @@ def record_gate_halt(run_name: str, gate: str, reason: str,
     return path
 
 
+def record_ledger_failure(run_name: str, reason: str,
+                          detail: dict | None = None) -> Path:
+    """An OPERATIONAL warning about the ledger, not a scientific halt.
+
+    Deliberately NOT named HALT_*: train_core_cell refuses any cell that
+    has a HALT record, so filing an accounting failure that way would
+    turn a transient shared-filesystem error into a permanent block on a
+    resumable trajectory. The failure is still recorded, loudly and
+    durably, because an uncharged process means the identity ceiling is
+    under-counted until a human repairs it."""
+    path = OUT_DIR / f"LEDGER_FAILURE_{run_name}_{int(time.time())}.json"
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps({
+        "metadata": utils.run_metadata(),
+        "e8b_ledger_failure": {
+            "run": run_name, "reason": reason, "detail": detail or {},
+            "blocks_resume": False,
+            "requires_human_repair": True,
+            "consequence": "this process's GPU hours are NOT in the "
+                           "ledger, so every per-identity gate from now "
+                           "on under-counts until the ledger is "
+                           "repaired by hand"}},
+        indent=2, default=str) + "\n")
+    return path
+
+
+def record_identity_exhausted(run_name: str, gate: dict,
+                              reason: str) -> Path:
+    """The per-identity ceiling has been crossed.
+
+    Also deliberately NOT a HALT_* record for this cell: the ceiling is
+    a property of the model IDENTITY, and the cell that happened to
+    cross it may have completed correctly. Stamping that cell FAILED
+    would contradict its own valid result. The next cell on the same
+    identity is stopped by its own pre-gate, which reads the ledger."""
+    path = OUT_DIR / f"IDENTITY_EXHAUSTED_{gate['identity']}.json"
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    if path.exists():
+        return path
+    path.write_text(json.dumps({
+        "metadata": utils.run_metadata(),
+        "e8b_identity_exhausted": {
+            "identity": gate["identity"], "crossed_during": run_name,
+            "reason": reason, "identity_gate": gate,
+            "this_cell_is_not_failed": True,
+            "next_action": "execution returns to the user; no further "
+                           "cell on this identity may start"}},
+        indent=2, default=str) + "\n")
+    return path
+
+
+def load_core_result(path: Path, context: str) -> dict:
+    """THE sanctioned way to read a core result. Never bypass it.
+
+    assert_promotable was written as the guard against a non-scientific
+    probe artefact or a superseded search record being treated as a core
+    result, but it had no production call site -- the same "a constant
+    with no caller" defect that was closed for the 35-hour and 180-hour
+    ceilings. This function is the choke point that gives it one.
+
+    It has no caller TODAY because no aggregation script exists: F1, the
+    model-list freeze, is unauthorised and unstarted. Its first caller
+    will be F1, and a test asserts that nothing reads a core result
+    around it."""
+    body = json.loads(path.read_text())
+    # assert_promotable takes the WRAPPED record and unwraps it itself,
+    # so it must be handed the whole document.
+    assert_promotable({k: v for k, v in body.items() if k != "metadata"},
+                      str(path), context)
+    return body
+
+
+def pair_preserving_order(cells=None) -> list:
+    """The order in which core cells must be run.
+
+    CLAUDE.md makes B3-with-B2 an inseparable pair, but nothing
+    sequenced them, and with the headroom now under an hour an operator
+    who ran all six B2 cells first could exhaust the pretrained ceiling
+    partway through B3 and leave unpaired B2 results -- a pair broken by
+    accident rather than by decision.
+
+    Interleaving each (scale, seed) pair, B2 immediately before its B3,
+    means that if the ceiling fires it fires between pairs and every
+    completed pair is whole. B1 is charged to neither identity ceiling
+    and runs last."""
+    cells = list(CORE_CELLS if cells is None else cells)
+    ordered = []
+    for scale in CORE_SCALES:
+        for seed in CORE_SEEDS:
+            for arm in ("B2", "B3"):
+                if (arm, scale, seed) in cells:
+                    ordered.append((arm, scale, seed))
+    ordered += [c for c in cells if c[0] == "B1"]
+    missing = [c for c in cells if c not in ordered]
+    if missing:
+        raise AssertionError(
+            f"PAIR ORDER INCOMPLETE: {missing} were not placed")
+    return ordered
+
+
 def gate_halt(run_name: str, gate: str, reason: str,
               detail: dict | None = None) -> None:
     """Record the halt atomically, then stop. Used by every halting gate
@@ -1381,19 +1487,27 @@ SPEND_LEDGER = EXECUTION_LOCK_DIR / "e8b_gpu_hour_ledger.json"
 # Sourced from core_resource_projection_20260807.json.
 SPENT_BEFORE_CORE_HOURS = {
     # Actually spent: the abandoned search, the diagnostics, the
-    # superseded determinism probes, and the measured A1 arm.
+    # superseded determinism probes, and the measured A1 core run.
     "pretrained": 6.890 + 2.29222,
     "random": 1.95811,
 }
 COMMITTED_NON_CELL_HOURS = {
-    # Committed but not yet spent: A4 and A7c (protocol 13.2b), the
-    # per-identity share of the final readouts (R2 and R3 over the
-    # 10,004-row RAW denominator per canonical plan section 6, plus the
-    # raw-distribution R1 pass) and the three intervention conditions,
-    # and the mandatory section-19 serial efficiency measurement, which
-    # loads the pretrained LM.
-    "pretrained": 1.804 + 1.864 + 1.9875 + 1.000,
-    "random": 1.9875,
+    # Committed but not yet spent, all charged to the identity whose
+    # frozen model they load:
+    #   A4 1.804 and A7c 1.864 (protocol 13.2b);
+    #   the per-identity share of the final readouts, 2.018 -- R2 and R3
+    #     over the 10,004-row RAW denominator per canonical plan section
+    #     6, the raw-distribution R1 pass, and three interventions;
+    #   the section-19 serial efficiency measurement, 1.000, which loads
+    #     the pretrained LM;
+    #   the RETAINED but unrun parts of protocol 13.2b's A1 row, 0.723 =
+    #     the 7.1b secondary optimisation study 0.509, the bounded
+    #     representation ablation 0.127 and the middle-layer extraction
+    #     0.087. BASE counts only the MEASURED A1 core run, so omitting
+    #     these silently dropped work that is retained, not descoped.
+    "pretrained": 1.804 + 1.864 + 2.018 + 1.000 + 0.723,
+    # A1r's row retains the ablation and the middle-layer extraction.
+    "random": 2.018 + 0.127 + 0.087,
 }
 
 

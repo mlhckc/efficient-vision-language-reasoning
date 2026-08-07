@@ -1,4 +1,12 @@
 {
+  "SUPERSEDED": {
+    "dated_utc": "2026-08-07",
+    "status": "PARTIALLY SUPERSEDED - several verdicts no longer describe the code",
+    "why": "this record was written on 2026-08-06 at commit 0ce49fc. At least three of its findings are now out of date: the section-14 remaining-core gate, the memory gate and the storage gate, which it reports as 'not implemented anywhere in the E8B code', are now wired into train_core_cell and the training loop and halt through gate_halt.",
+    "what_still_stands": "its verdicts on the readout, intervention and raw-denominator machinery DO still describe HEAD: that machinery is specified and now costed, but is still not implemented. That gap is recorded as an open risk in identity_reconciliation_20260807.json and as PARTIALLY FIXED in the findings ledger.",
+    "authoritative_record": "superseded_evidence_20260807.json",
+    "original_content_below": "unmodified"
+  },
   "metadata": {
     "timestamp": "2026-08-06T17:12:27",
     "git_commit": "0ce49fc",

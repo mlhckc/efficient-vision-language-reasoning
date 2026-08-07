@@ -1758,9 +1758,14 @@ def test_core_readiness_closure() -> None:
               and ident["headroom_hours"] > 0)
         check("a zero-retry allowance is recorded explicitly",
               "NONE" in ident["retry_allowance"])
-        check("the projection uses the MEASURED strict-deterministic rate",
+        # The MAXIMUM of the recorded set, per the project's own
+        # convention. 78.0 was the low end of probe runs 3 and 4.
+        check("the projection uses the MAXIMUM recorded "
+              "strict-deterministic train rate",
               pr["measured_inputs"][
-                  "train_s_per_epoch_40k_strict_det"] == 78.0)
+                  "train_s_per_epoch_40k_strict_det"] == 78.3)
+        check("the canonical FP32 pass uses the maximum recorded value",
+              pr["measured_inputs"]["canonical_fp32_dev_pass_s"] == 112.3)
         check("the 22-epoch LM budget drives the projection",
               pr["design"].startswith("strict deterministic BF16")
               and "22 epochs" in pr["design"])
@@ -2105,8 +2110,21 @@ def test_remediation_known_negatives() -> None:
         check("no execution-critical finding is left open",
               summary["execution_critical_open"] == [],
               str(summary["execution_critical_open"]))
-        check("no finding of any class is left open",
-              summary["open"] == [] and summary["partially_fixed"] == [])
+        check("no finding of any class is left OPEN",
+              summary["open"] == [])
+        # PARTIALLY FIXED is a real state and is NOT laundered into
+        # closed. REAUDIT-AC-HIGH-2 is budgeted but not implemented, and
+        # the ledger must keep saying so until it is.
+        check("partially fixed findings are reported as such, not as "
+              "closed",
+              set(summary["partially_fixed"])
+              == {"REAUDIT-AC-HIGH-2", "CONFIRM-HIGH-3"},
+              str(summary["partially_fixed"]))
+        partial = next(e for e in entries
+                       if e["id"] == "REAUDIT-AC-HIGH-2")
+        check("the partially fixed entry states which half is done",
+              "BUDGET ONLY" in partial["evidence"]
+              and "NOT CLOSED" in partial["closed_by"])
         check("the ledger records the three review-A MEDIUMs",
               {"REVIEW-A-M1", "REVIEW-A-M2", "REVIEW-A-M5"}
               <= {e["id"] for e in entries})
@@ -2416,15 +2434,26 @@ def test_audit_known_negatives() -> None:
     check("B1 is charged to neither identity ceiling",
           e8b_run.per_identity_gate("B1", 99.0)["applies"] is False
           and e8b_run.per_identity_gate("B1", 99.0)["fires"] is False)
-    full = {"cells": {
-        f"B3_{s}_{i}": {"identity": "pretrained", "processes": [h],
-                        "hours": h, "arm": "B3", "scale": s, "seed": i}
-        for i, (s, h) in enumerate([("train_40k", 1.690)] * 3
-                                   + [("train_250k", 4.189)] * 3)}}
-    gate = e8b_run.per_identity_gate("B3", 0.0, ledger=full)
     projection = json.loads(
         (probe_dir / "core_resource_projection_20260807.json").read_text()
     )["e8b_core_resource_projection"]
+    # Per-cell hours are READ from the published projection, never
+    # hard-coded here: a literal would let the gate and the record drift
+    # apart silently, which is exactly what this check exists to catch.
+    per_cell = projection["per_cell_hours"]
+    full = {"cells": {
+        f"B3_{s}_{i}": {"identity": "pretrained", "processes": [h],
+                        "hours": h, "arm": "B3", "scale": s, "seed": i}
+        for i, (s, h) in enumerate(
+            [("train_40k", per_cell["lm_train_40k"])] * 3
+            + [("train_250k", per_cell["lm_train_250k"])] * 3)}}
+    gate = e8b_run.per_identity_gate("B3", 0.0, ledger=full)
+    check("the runtime per-cell constants match the published "
+          "projection",
+          all(abs(training.CORE_CELL_PROJECTED_HOURS[("B3", scale)]
+                  - per_cell[key]) < 0.001
+              for scale, key in (("train_40k", "lm_train_40k"),
+                                 ("train_250k", "lm_train_250k"))))
     published = projection["gates"]["pretrained_identity_35h"][
         "projected_hours"]
     check("the EXECUTABLE ceiling reproduces the PUBLISHED projection, "
@@ -2437,14 +2466,22 @@ def test_audit_known_negatives() -> None:
     check("the gate counts committed-but-unspent work, or it would "
           "green-light a cell leaving no room for the readouts",
           gate["committed_not_yet_spent_hours"] > 0)
-    over = {"cells": {
-        k: dict(v, processes=[h * 1.17 if v["scale"] == "train_250k"
-                              else h for h in v["processes"]])
-        for k, v in full["cells"].items()}}
-    fired = e8b_run.per_identity_gate("B3", 0.0, ledger=over)
-    check("the ceiling FIRES on a 17 per cent overrun of the "
-          "never-measured 250k rate",
-          fired["fires"] is True, str(fired["projected_total_hours"]))
+    # Find the smallest 250k overrun that fires, and assert the ceiling
+    # bites somewhere sane rather than at a hard-coded percentage.
+    fired_at = None
+    for percent in range(1, 60):
+        over = {"cells": {
+            k: dict(v, processes=[h * (1 + percent / 100)
+                                  if v["scale"] == "train_250k" else h
+                                  for h in v["processes"]])
+            for k, v in full["cells"].items()}}
+        if e8b_run.per_identity_gate("B3", 0.0, ledger=over)["fires"]:
+            fired_at = percent
+            break
+    check("the ceiling FIRES on a modest overrun of the never-measured "
+          "250k rate, and the margin is thin enough to matter",
+          fired_at is not None and fired_at <= 20,
+          f"fires at +{fired_at}%")
     check("the storage gate is structurally capable of firing",
           e8b_run.storage_gate(10 ** 18, probe_dir)["fires"] is True
           and e8b_run.storage_gate(1, probe_dir)["fires"] is False)
@@ -2509,19 +2546,36 @@ def test_audit_known_negatives() -> None:
     total = sum(c["hours"] for c in recon["complete_programme_components"])
     check("the reconciliation still sums to the published projection",
           abs(total - published) < 1e-2, f"{total} vs {published}")
-    check("both corrections moved the total UP, against the ceiling, "
+    check("every correction moved the total UP, against the ceiling, "
           "and the ceiling itself is unchanged",
-          recon["current_estimate_hours"] > 32.96
+          recon["current_estimate_hours"] > 33.47
           and recon["ceiling_hours"] == 35.0)
+    check("the withdrawn E7b provenance does not survive anywhere in "
+          "the reconciliation as a live claim",
+          not any("carried over from the E7b" in a
+                  and "WAS FALSE" not in a and "FALSE" not in a
+                  for a in recon["residual_assumptions"]),
+          str([a[:60] for a in recon["residual_assumptions"]]))
+    check("the residual assumptions withdraw the false claim explicitly",
+          any("THAT WAS FALSE" in a
+              for a in recon["residual_assumptions"]))
+    check("the retained parts of the protocol A1 row are charged",
+          any("A1 row" in c["component"]
+              for c in recon["complete_programme_components"]))
     check("the open risks are listed rather than buried",
-          len(recon["open_risks"]) >= 3
+          len(recon["open_risks"]) >= 5
           and any("UNSOURCED" in json.dumps(r)
                   for r in recon["open_risks"])
           and any("FALSE" in json.dumps(r)
                   for r in recon["open_risks"]))
     check("the verdict states the margin is thin and names the risks",
-          "thin" in recon["verdict"]
-          and "retry allowance of NONE" in recon["verdict"])
+          "only just" in recon["verdict"]
+          and "retry allowance of NONE" in recon["verdict"]
+          and "ANY ONE of them exhausts" in recon["verdict"])
+    check("the verdict records that every correction added work, so the "
+          "margin reads as an upper bound",
+          "upper bound" in recon["summary_of_change"]
+          and "ADDED work" in recon["verdict"])
 
     # --- A-HIGH-1: the anchors must be verified, not string-matched ---
     superseded = json.loads(
@@ -2699,6 +2753,109 @@ def test_audit_known_negatives() -> None:
                   scheduler=None,
                   loader_generator=utils.make_generator(7)))
 
+    # --- Confirmation audit: halt semantics and pair ordering ---
+    # An accounting failure must not masquerade as a scientific halt,
+    # because train_core_cell refuses any cell with a HALT record.
+    check("a ledger failure is NOT recorded as a halt",
+          "record_ledger_failure" in src
+          and "LEDGER_FAILURE_" in src
+          and "record_ledger_failure" in bodies["train_core_cell"])
+    ledger_fn = src[src.index("def record_ledger_failure"):]
+    ledger_fn = ledger_fn[:ledger_fn.index("\ndef ", 1)]
+    check("the ledger-failure record says plainly that it does not "
+          "block resume, and that a human must repair it",
+          '"blocks_resume": False' in ledger_fn
+          and "requires_human_repair" in ledger_fn)
+    check("no HALT record is written for an accounting failure",
+          "G19_LEDGER" not in bodies["train_core_cell"])
+
+    # A fired identity ceiling must not stamp a completed cell FAILED.
+    check("the identity ceiling records the IDENTITY as exhausted, not "
+          "the cell as failed",
+          "record_identity_exhausted" in bodies["train_core_cell"]
+          and "IDENTITY_EXHAUSTED_" in src)
+    exhausted = src[src.index("def record_identity_exhausted"):]
+    exhausted = exhausted[:exhausted.index("\ndef ", 1)]
+    check("the exhaustion record states this cell is not failed",
+          '"this_cell_is_not_failed": True' in exhausted)
+    check("the ceiling exits non-zero only when no exception is already "
+          "propagating, so a finally-block exit cannot swallow the real "
+          "failure",
+          "sys.exc_info()[0] is None" in bodies["train_core_cell"])
+
+    # A completed trajectory resumed for finalisation must not be killed.
+    check("the pre-loop wall check is skipped when the loop will not "
+          "run",
+          "if start_epoch <= max_epochs:" in locked
+          and locked.index("if start_epoch <= max_epochs:")
+          < locked.index("for epoch in range(start_epoch"))
+    check("the false claim about what the wall check precedes is "
+          "corrected in place",
+          "THAT WAS FALSE" in locked)
+
+    # Pair preservation must be enforced, not merely promised.
+    order = e8b_run.pair_preserving_order()
+    check("the pair order covers every core cell exactly once",
+          sorted(order) == sorted(e8b_run.CORE_CELLS)
+          and len(order) == len(set(order)))
+    lm_pairs = [c for c in order if c[0] in ("B2", "B3")]
+    check("every B3 runs immediately after its own B2, so a fired "
+          "ceiling breaks BETWEEN pairs and never inside one",
+          all(lm_pairs[i][0] == "B2"
+              and lm_pairs[i + 1] == ("B3", lm_pairs[i][1], lm_pairs[i][2])
+              for i in range(0, len(lm_pairs), 2)))
+    check("B1, charged to neither identity ceiling, runs last",
+          all(c[0] == "B1" for c in order[len(lm_pairs):]))
+
+    # Peak memory must cover the gates, not just the training loop.
+    reset = locked.count("reset_peak_memory_stats")
+    check("peak memory is measured across the whole cell, gates "
+          "included",
+          reset == 1
+          and locked.index("reset_peak_memory_stats")
+          < locked.index("g8"))
+
+    # The promotion guard must have a sanctioned choke point.
+    check("a sanctioned core-result loader exists and calls the "
+          "promotion guard",
+          "def load_core_result" in src
+          and "assert_promotable" in src[
+              src.index("def load_core_result"):
+              src.index("def load_core_result") + 1200])
+    with tempfile.TemporaryDirectory() as tmp:
+        def write(name, record):
+            target = Path(tmp) / name
+            target.write_text(json.dumps({"metadata": {}, **record}))
+            return target
+        ok = write("ok.json", {"e8b_core_cell": {
+            "status": "complete",
+            "protocol_family": e8b_run.PROTOCOL_FAMILY}})
+        check("a valid core result loads through the choke point",
+              e8b_run.load_core_result(ok, "test") is not None)
+        for name, record, label in (
+                ("probe.json", {"e8b_core_cell": {
+                    "NON_SCIENTIFIC": True,
+                    "protocol_family": e8b_run.PROTOCOL_FAMILY}},
+                 "a probe artefact"),
+                ("old.json", {"e8b_core_cell": {"status": "complete"}},
+                 "a record with no family"),
+                ("foreign.json", {"e8b_core_cell": {
+                    "status": "complete",
+                    "protocol_family": "e8b-bf16-search"}},
+                 "a foreign-family record")):
+            must_fail(f"{label} is refused by the choke point",
+                      lambda p=write(name, record):
+                      e8b_run.load_core_result(p, "test"))
+
+    # The digest must list what the core path actually loads.
+    listed = {name for _, name in e8b_run.TRAJECTORY_SOURCES}
+    check("reinfer_g21.py, which enforces GPU exclusivity on the core "
+          "path, is a trajectory source",
+          "reinfer_g21.py" in listed)
+    check("src/models.py, which the E8B path never imports, is NOT a "
+          "trajectory source",
+          "models.py" not in listed)
+
     # --- The ledger records every audit finding ---
     ledger = json.loads(
         (probe_dir / "medium_findings_ledger_20260807.json").read_text()
@@ -2707,7 +2864,11 @@ def test_audit_known_negatives() -> None:
     check("every 2026-08-07 audit finding is on the ledger",
           {"AUDIT-B-BLOCKER-1", "AUDIT-B-HIGH-1", "AUDIT-B-MEDIUM-1",
            "AUDIT-C-HIGH-1", "AUDIT-C-HIGH-2", "AUDIT-C-HIGH-3",
-           "AUDIT-A-HIGH-1", "AUDIT-A-HIGH-2"} <= ids,
+           "AUDIT-A-HIGH-1", "AUDIT-A-HIGH-2",
+           "CONFIRM-HIGH-1", "CONFIRM-HIGH-2", "CONFIRM-HIGH-3",
+           "CONFIRM-B-MEDIUM-1", "CONFIRM-B-MEDIUM-2",
+           "CONFIRM-B-MEDIUM-3", "CONFIRM-B-MEDIUM-4",
+           "CONFIRM-B-MEDIUM-5"} <= ids,
           str(sorted(i for i in ids if i.startswith("AUDIT"))))
     check("nothing execution-critical remains open after the audits",
           ledger["summary"]["execution_critical_open"] == []
