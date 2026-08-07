@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-07T23:46:50",
-    "git_commit": "8ae9c3c",
+    "timestamp": "2026-08-08T00:50:18",
+    "git_commit": "247579b",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -142,7 +142,7 @@
         "carries_hours": 5.01,
         "exposure": "the measurement is at batch 128, the project default everywhere. At batch 16 the same pass costs 0.1405 s a row, which would roughly double this line, so the batch size is pinned and asserted rather than left to a caller.",
         "status": "CLOSED BY MEASUREMENT on 2026-08-07",
-        "can_exhaust_the_margin": true
+        "can_exhaust_the_margin": false
       },
       {
         "risk": "the G14 per-row input is optimistic, not conservative",
@@ -160,10 +160,10 @@
       },
       {
         "risk": "a forced retry is unaffordable and not improbable",
-        "detail": "G14 fired as a halting gate on one of the three completed search runs. One forced B3/250k retry costs 4.249 h against 0.197 h of headroom.",
+        "detail": "G14 fired as a halting gate on one of the three completed search runs. One forced B3/250k retry costs 4.249 h against 5.197 h of headroom.",
         "status": "OPEN: the recorded retry allowance is NONE, and no contingency exists",
         "carries_hours": 4.249,
-        "can_exhaust_the_margin": true
+        "can_exhaust_the_margin": false
       },
       {
         "risk": "the mandatory readout and intervention evaluation, now IMPLEMENTED (was: costed but not implemented)",
@@ -187,8 +187,8 @@
     "dated_utc": "2026-08-07",
     "old_estimate_hours": 32.686,
     "current_estimate_hours": 34.803,
-    "headroom_hours": 0.197,
-    "ceiling_hours": 35.0,
+    "headroom_hours": 5.197,
+    "ceiling_hours": 40.0,
     "net_change_hours": 2.117,
     "complete_programme_components": [
       {
@@ -251,30 +251,33 @@
     ],
     "open_risks_summary": {
       "total": 6,
-      "can_exhaust_the_remaining_margin": 3,
+      "can_exhaust_the_remaining_margin": 1,
       "derived": "both counts come from the open_risks list itself. An earlier verdict said 'five open risks ... ANY ONE of them exhausts the margin' when there were six, two of which are not hours risks at all.",
       "not_hours_risks": [
+        "the evaluation pass cost, now MEASURED (was: R2/R3 unsourced)",
         "the G14 per-row input is optimistic, not conservative",
+        "a forced retry is unaffordable and not improbable",
         "the mandatory readout and intervention evaluation, now IMPLEMENTED (was: costed but not implemented)",
         "the section-19 efficiency pass is charged to the pretrained identity only"
       ]
     },
-    "summary_of_change": "the pretrained identity projects to 34.803 h against a 35.0 h ceiling (0.197 h headroom). That is a rise of 2.117 h from the original 32.686 h. 5 separate omissions were found and corrected across seven review rounds, every one of them raising the total; the measurement phase then raised it again. The one reduction in the whole history was removing the selection-sensitivity study, whose object the fixed-endpoint rule eliminated, and it is disclosed and costed separately.",
+    "summary_of_change": "the pretrained identity projects to 34.803 h against a 40.0 h ceiling (5.197 h headroom). That is a rise of 2.117 h from the original 32.686 h. 5 separate omissions were found and corrected across seven review rounds, every one of them raising the total; the measurement phase then raised it again. The one reduction in the whole history was removing the selection-sensitivity study, whose object the fixed-endpoint rule eliminated, and it is disclosed and costed separately.",
+    "ceiling_amended_20260808": {
+      "from_hours": 35.0,
+      "to_hours": 40.0,
+      "type": "RESOURCE-GOVERNANCE, pre-result, authorised by the user on 2026-08-08",
+      "baseline_budget_hours": 34.803,
+      "contingency_reserve_hours": 4.25,
+      "contingency_is_for": "at most ONE worst-case forced retry, sized on the largest final 250k cell",
+      "ordinary_execution_is_gated_against": "the measured baseline, not the ceiling",
+      "record": "resource_governance_amendment_20260808.json"
+    },
     "ceiling_breached": false,
     "headroom_floor_hours": 1.0,
-    "headroom_below_floor": true,
-    "execution_may_start": false,
-    "verdict": "UNDER THE CEILING BUT NOT CLEARED TO RUN. The complete MEASURED programme projects to 34.803 h against the hard 35.0 h ceiling, leaving 0.197 h. That is below the 1.0 GPU-hour headroom floor the user set, so execution STOPS and returns to the user rather than starting training. This is NOT a pass: a projection that clears a hard ceiling by under half an hour, on a programme whose estimate has moved repeatedly, is not a margin worth committing six cells to. Both optimisations were proven EXACT and are adopted; the ceiling was not raised and no scientific condition, denominator or metric was removed.",
-    "decision_required_from_user": {
-      "why": "the measured projection is under the ceiling but leaves only 0.197 h, below the 1.0 h floor the user set, and the instruction is explicit that execution stops rather than auto-descoping or raising the ceiling",
-      "not_taken_unilaterally": [
-        "raising the 35-hour ceiling",
-        "reducing the number of matched conditions",
-        "evaluating interventions on the in-vocabulary denominator instead of the raw one",
-        "dropping any core cell or arm"
-      ],
-      "note": "options and their measured costs are reported to the user; none is applied here"
-    },
+    "headroom_below_floor": false,
+    "execution_may_start": true,
+    "verdict": "CLEARED ON RESOURCES, pending the user's final execution approval. The complete MEASURED programme projects to 34.803 h against the amended 40.0 h ceiling, leaving 5.197 h. Of that, 4.25 h is CONTINGENCY held for at most ONE worst-case forced retry and is not ordinary headroom: routine execution is gated against the 34.803 h measured baseline, so an estimate that merely drifts halts rather than quietly spending the recovery margin. The ceiling was raised on RESOURCE grounds before any cell ran and with no result in existence, and no scientific component was changed to obtain the margin. Of the 6 open risks listed above, 1 could still on its own consume the contingency. TRAINING_AUTHORIZED is unchanged: no core cell may start without a separate explicit approval.",
+    "decision_required_from_user": null,
     "generator": "experiments/e8b_readout_generation/identity_reconciliation.py",
     "clean_test_accessed": false
   }

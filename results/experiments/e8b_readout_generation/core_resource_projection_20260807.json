@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-07T23:46:33",
-    "git_commit": "8ae9c3c",
+    "timestamp": "2026-08-08T00:49:06",
+    "git_commit": "247579b",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -87,15 +87,15 @@
       },
       "pretrained_identity_35h": {
         "projected_hours": 34.803,
-        "ceiling_hours": 35.0,
-        "headroom_hours": 0.197,
+        "ceiling_hours": 40.0,
+        "headroom_hours": 5.197,
         "includes": "the COMPLETE planned pretrained-identity programme: A1 baseline, A4, A7c, all six B3 core cells, B3's final R2/R3 readouts and interventions, and every already-spent search, characterisation, validation and probe hour that loaded the pretrained checkpoint",
         "retry_allowance": "NONE. The plan tolerates zero B3 retries; any retry or any additional B3-loading evaluation triggers a stop-and-ask BEFORE execution",
         "fires": false
       },
       "random_identity_35h": {
         "projected_hours": 21.561,
-        "ceiling_hours": 35.0,
+        "ceiling_hours": 40.0,
         "fires": false
       },
       "e8b_remaining_vs_180h_core": {
@@ -123,8 +123,8 @@
       "train_250k_MEASURED": {
         "carries_hours": 12.747,
         "basis": "MEASURED on 2026-08-07 on the real train_250k loader and the real strict-deterministic BF16 path, then CORRECTED by the same-scale bias: a steady-state step window under-predicts a real epoch by 3.8 per cent, measured against twelve real full-epoch times at 40k. After correction the rate is ABOVE the step-scaled assumption it replaced. No full 250k E8B epoch has been run end to end; the residual is that the bias correction is itself measured at the other scale.",
-        "break_even_per_cell_percent": 1.54,
-        "break_even_on_training_rate_percent": 1.77,
+        "break_even_per_cell_percent": 40.77,
+        "break_even_on_training_rate_percent": 46.87,
         "note": "the per-cell break-even is smaller than the training-rate one because each cell also carries a fixed G14 and gate overhead that does not scale with the training rate"
       },
       "evaluation_pass_MEASURED": {

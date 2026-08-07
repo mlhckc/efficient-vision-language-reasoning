@@ -841,9 +841,13 @@ def test_checkpoint_resume() -> None:
 # --- 25-26, 30. Resource projections and stop-and-return ----------------------
 
 def test_resource_projections() -> None:
+    # The per-identity ceiling was amended 35 -> 40 h on 2026-08-08 by
+    # explicit user authorisation: a pre-result RESOURCE change, sized
+    # as the measured programme plus one worst-case forced retry. Every
+    # other ceiling is untouched.
     check("resource constants match the binding decisions",
           e8b_run.WALL_CLOCK_HALT_HOURS == 8.0
-          and e8b_run.PER_IDENTITY_CEILING_HOURS == 35.0
+          and e8b_run.PER_IDENTITY_CEILING_HOURS == 40.0
           and e8b_run.CORE_CEILING_HOURS == 180.0
           and e8b_run.MEMORY_CEILING_FRACTION == 0.80
           and e8b_run.EXPECTED_EPOCHS == {"train_40k": 15,
@@ -1461,12 +1465,20 @@ def test_fp32_amendment() -> None:
           and set(record["strata_sizes"]) == {"P", "L", "O"}
           and len(record["rows_sha256"]) == 64)
 
-    # --- resource gates still hold under the amendment ---
-    check("the resource ceilings are unchanged by the amendment",
+    # --- resource gates still hold under the FP32 amendment ---
+    # The FP32 amendment changed no ceiling. The per-identity ceiling
+    # was later amended separately, on 2026-08-08, by an explicit
+    # RESOURCE-GOVERNANCE decision recorded in its own artefact; that is
+    # asserted in test_governance_amendment, not here.
+    check("the FP32 amendment changed no resource ceiling",
           e8b_run.WALL_CLOCK_HALT_HOURS == 8.0
-          and e8b_run.PER_IDENTITY_CEILING_HOURS == 35.0
           and e8b_run.CORE_CEILING_HOURS == 180.0
           and e8b_run.MEMORY_CEILING_FRACTION == 0.80)
+    check("the per-identity ceiling changed only by the dated "
+          "governance amendment",
+          e8b_run.PER_IDENTITY_CEILING_HOURS == 40.0
+          and e8b_run.PER_IDENTITY_CEILING_AMENDED_ON == "2026-08-08"
+          and e8b_run.PER_IDENTITY_CEILING_PREVIOUS_HOURS == 35.0)
     split = e8b_run.memory_gate(int(0.70 * 20 * 2 ** 30), 20 * 2 ** 30,
                                 int(0.81 * 20 * 2 ** 30))
     check("the hard memory gate is still reserved-based", split["fires"])
@@ -1753,10 +1765,10 @@ def test_core_readiness_closure() -> None:
               "honestly rather than suppressed",
               set(fired) <= {"pretrained_identity_35h"}, str(fired))
         if fired:
-            check("a fired ceiling is reported at its true value with "
-                  "the ceiling unchanged at 35 h",
+            check("a fired ceiling is reported at its true value "
+                  "against the amended 40 h ceiling",
                   pr["gates"]["pretrained_identity_35h"][
-                      "ceiling_hours"] == 35.0
+                      "ceiling_hours"] == 40.0
                   and pr["gates"]["pretrained_identity_35h"][
                       "headroom_hours"] < 0)
         ident = pr["gates"]["pretrained_identity_35h"]
@@ -1768,11 +1780,11 @@ def test_core_readiness_closure() -> None:
               "programme, not merely training",
               "readouts" in ident["includes"]
               and "interventions" in ident["includes"])
-        check("the hard ceiling itself is unchanged at 35 h",
-              ident.get("ceiling_hours", 35.0) == 35.0)
+        check("the hard ceiling is the amended 40 h",
+              ident.get("ceiling_hours", 40.0) == 40.0)
         check("headroom is stated consistently with the projection",
               abs(ident["headroom_hours"]
-                  - (35.0 - ident["projected_hours"])) < 0.01)
+                  - (40.0 - ident["projected_hours"])) < 0.01)
         check("a zero-retry allowance is recorded explicitly",
               "NONE" in ident["retry_allowance"])
         # The MAXIMUM of the recorded set, per the project's own
@@ -2271,8 +2283,10 @@ def test_remediation_known_negatives() -> None:
         # projection happens to fit under it. The measured projection
         # now exceeds 35 h, and the correct response is to say so and
         # halt -- not to move the ceiling.
-        check("the ceiling is not weakened",
-              rb["ceiling_hours"] == 35.0)
+        # "Not weakened" now means: exactly the amended value, changed
+        # only by the dated governance decision and by nothing else.
+        check("the ceiling is exactly the amended 40 h",
+              rb["ceiling_hours"] == 40.0)
         if rb["current_estimate_hours"] >= 35.0:
             check("a breach halts and is escalated rather than absorbed",
                   rb["ceiling_breached"] is True
@@ -2511,14 +2525,21 @@ def test_audit_known_negatives() -> None:
     # The MEASURED programme breaches the ceiling. That is a real
     # result, not a test failure: the gate must report it and the
     # ceiling must stay at 35 h.
-    check("the ceiling itself is unchanged at 35 h",
-          gate["ceiling_hours"] == 35.0)
+    check("the ceiling is the amended 40 h",
+          gate["ceiling_hours"] == 40.0)
     # The gate fires on a breach OR on a margin under the floor: a
     # projection clearing a hard ceiling by minutes is not a clearance.
     check("the gate's verdict follows its own arithmetic",
-          gate["fires"] is (gate["projected_total_hours"] > 35.0
-                            or (35.0 - gate["projected_total_hours"])
-                            < e8b_run.HEADROOM_FLOOR_HOURS))
+          gate["fires"] is (
+              gate["projected_total_hours"]
+              > e8b_run.PER_IDENTITY_CEILING_HOURS
+              or (e8b_run.PER_IDENTITY_CEILING_HOURS
+                  - gate["projected_total_hours"])
+              < e8b_run.HEADROOM_FLOOR_HOURS
+              or (gate["projected_total_hours"]
+                  > e8b_run.BASELINE_BUDGET_HOURS
+                  + e8b_run.BASELINE_ROUNDING_TOLERANCE_HOURS
+                  and gate["forced_retries_taken"] == 0)))
     if gate["fires"]:
         check("the halt is caught at the FIRST cell, before any GPU "
               "work, because the gate reserves the unrun cells",
@@ -2644,7 +2665,7 @@ def test_audit_known_negatives() -> None:
     check("every correction moved the total UP, against the ceiling, "
           "and the ceiling itself is unchanged",
           recon["current_estimate_hours"] > 33.47
-          and recon["ceiling_hours"] == 35.0)
+          and recon["ceiling_hours"] == 40.0)
     check("the withdrawn E7b provenance does not survive anywhere in "
           "the reconciliation as a live claim",
           not any("carried over from the E7b" in a
@@ -2669,11 +2690,17 @@ def test_audit_known_negatives() -> None:
     check("the A1 precedent compares only what the measurement covers",
           "5.44 per cent ABOVE" in json.dumps(recon)
           and "UNFAVOURABLE" in json.dumps(recon))
+    # The one removed component is disclosed and costed. It was removed
+    # on SCIENTIFIC grounds -- the fixed-endpoint rule eliminated its
+    # object -- not to save hours, so whether its cost now happens to
+    # fit inside the amended headroom is beside the point.
     check("the removed component is disclosed beside the "
-          "nothing-descoped claim",
+          "nothing-descoped claim, with its cost",
           "one_component_was_removed" in recon
           and recon["one_component_was_removed"]["hours_if_reinstated"]
-          > recon["headroom_hours"])
+          > 0
+          and "fixed-endpoint"
+          in recon["one_component_was_removed"]["why"])
     check("the retained parts of the protocol A1 row are charged",
           any("A1 row" in c["component"]
               for c in recon["complete_programme_components"]))
@@ -2726,12 +2753,29 @@ def test_audit_known_negatives() -> None:
         check("the decision is escalated to the user",
               recon["decision_required_from_user"] is not None)
     else:
-        check("the verdict states the margin plainly and records the "
-              "zero retry allowance",
-              "under half an hour" in recon["verdict"]
-              and "retry allowance of NONE" in recon["verdict"])
-        check("the verdict leaves the decision with the user",
-              "the user's decision" in recon["verdict"])
+        # Cleared on resources under the amended ceiling. The verdict
+        # must still say plainly that the contingency is NOT ordinary
+        # headroom and that execution needs a separate approval.
+        check("the verdict reports clearance without implying "
+              "authorisation",
+              recon["verdict"].startswith("CLEARED ON RESOURCES")
+              and "pending the user's final execution approval"
+              in recon["verdict"])
+        check("the verdict separates contingency from headroom",
+              "CONTINGENCY held for at most ONE worst-case forced "
+              "retry" in recon["verdict"]
+              and "not ordinary headroom" in recon["verdict"])
+        check("the verdict says drift halts rather than spending the "
+              "reserve",
+              "rather than quietly spending the recovery margin"
+              in recon["verdict"])
+        check("the verdict records that the raise was pre-result and "
+              "changed nothing scientific",
+              "before any cell ran" in recon["verdict"]
+              and "no scientific component was changed"
+              in recon["verdict"])
+        check("the verdict states the authorisation is unchanged",
+              "TRAINING_AUTHORIZED is unchanged" in recon["verdict"])
     # Both counts must be DERIVED from the lists they describe: an
     # earlier verdict said five omissions above a list of four, and
     # five risks above a list of six.
@@ -2751,7 +2795,7 @@ def test_audit_known_negatives() -> None:
         check("the verdict's risk counts match the derived summary",
               f"{risks['total']} open risks" in recon["verdict"]
               and f"{risks['can_exhaust_the_remaining_margin']} could "
-                  f"each" in recon["verdict"])
+                  f"still" in recon["verdict"])
     check("every omission is recorded as having raised the total",
           "UPWARD" in omissions["direction"]
           and "upper bound" in omissions["direction"])
@@ -3331,9 +3375,15 @@ def test_records_reproduce_from_generators() -> None:
           and "23 per cent" in residual["a4_a7c_unrun"]["precedent"]
           and "1.25 per cent" in residual["a4_a7c_unrun"]["precedent"]
           and "UNFAVOURABLE" in residual["a4_a7c_unrun"]["precedent"])
+    # Costed and disclosed. It was removed on scientific grounds, so
+    # whether its cost fits inside the amended headroom is irrelevant to
+    # whether it is properly recorded.
     check("the one REMOVED component is costed and disclosed",
           residual["selection_sensitivity_REMOVED_NOT_UNCOSTED"][
-              "hours_if_reinstated"] > headroom)
+              "hours_if_reinstated"] > 0
+          and "REMOVED by the fixed-endpoint amendment"
+          in residual["selection_sensitivity_REMOVED_NOT_UNCOSTED"][
+              "status"])
 
 
 def test_core_call_signatures() -> None:
@@ -3573,8 +3623,10 @@ def test_readiness_phase() -> None:
           spent["readiness_and_optimisation_phase_20260807_CUMULATIVE"]
           > 0.5)
     gate = projection["gates"]["pretrained_identity_35h"]
-    check("the ceiling is UNCHANGED at exactly 35 hours",
-          gate["ceiling_hours"] == 35.0)
+    check("the ceiling is exactly the amended 40 hours, changed only "
+          "by the dated governance decision",
+          gate["ceiling_hours"] == 40.0
+          and e8b_run.PER_IDENTITY_CEILING_AMENDED_ON == "2026-08-08")
     check("the ceiling gate reports the measured position honestly",
           gate["fires"] is (gate["projected_hours"] > 35.0))
     reconciliation = json.loads(
@@ -3721,13 +3773,24 @@ def test_readiness_phase() -> None:
     # that.
     check("the headroom floor is executable in the gate",
           e8b_run.HEADROOM_FLOOR_HOURS == 1.0)
-    # The real pre-cell call charges the cell about to run, exactly as
-    # train_core_cell does; passing 0.0 would omit it and understate.
-    thin = e8b_run.per_identity_gate(
+    # Under the amended 40 h ceiling the real programme is no longer
+    # thin, so the floor is exercised on a CONSTRUCTED case: charge
+    # enough that only minutes remain and confirm it still halts.
+    real = e8b_run.per_identity_gate(
         "B3", e8b_run.CELL_PROJECTED_HOURS[("B3", "train_40k")],
         ledger={"cells": {}}, cell=("B3", "train_40k", 0))
-    check("a thin margin FIRES the gate exactly as a breach does",
-          thin["below_headroom_floor"] is True and thin["fires"] is True)
+    check("the real programme is no longer inside the headroom floor",
+          real["below_headroom_floor"] is False)
+    nearly_full = {"cells": {
+        f"B3_train_250k_seed{i}": {
+            "identity": "pretrained", "processes": [6.5], "hours": 6.5,
+            "arm": "B3", "scale": "train_250k", "seed": i}
+        for i in range(3)}}
+    thin = e8b_run.per_identity_gate(
+        "B3", 0.0, ledger=nearly_full, cell=("B3", "train_40k", 0))
+    check("a thin margin still FIRES the gate exactly as a breach does",
+          thin["below_headroom_floor"] is True and thin["fires"] is True,
+          f"projected {thin['projected_total_hours']}")
     check("the gate reports the floor it applied",
           thin["headroom_floor_hours"] == 1.0)
 
@@ -3735,6 +3798,195 @@ def test_readiness_phase() -> None:
     order = e8b_run.pair_preserving_order()
     check("the pair-preserving order covers all 18 cells",
           sorted(order) == sorted(e8b_run.CORE_CELLS))
+
+
+# --- 26l. The 2026-08-08 resource-governance amendment -----------------------
+
+def test_governance_amendment() -> None:
+    """The 35 -> 40 h ceiling, the two-level budget, and the frozen
+    retry policy."""
+    from experiments.e8b_readout_generation import training
+    from experiments.e8b_readout_generation import final_evaluation as fe
+
+    results = PROJECT_ROOT / "results" / "experiments" / \
+        "e8b_readout_generation"
+    amendment = json.loads(
+        (results / "resource_governance_amendment_20260808.json"
+         ).read_text())["e8b_resource_governance_amendment"]
+
+    # --- A. governance validity ---
+    check("the ceiling is amended from 35 to 40 hours",
+          e8b_run.PER_IDENTITY_CEILING_HOURS == 40.0
+          and e8b_run.PER_IDENTITY_CEILING_PREVIOUS_HOURS == 35.0
+          and amendment["change"]["from_hours"] == 35.0
+          and amendment["change"]["to_hours"] == 40.0)
+    check("it is recorded as a RESOURCE amendment, not a scientific one",
+          amendment["type"].startswith("RESOURCE-GOVERNANCE"))
+    check("it is PRE-RESULT: no cell has run and no result exists",
+          amendment["pre_result"]["no_final_core_cell_has_run"] is True
+          and amendment["pre_result"]["no_final_result_exists"] is True)
+    # Verified against the filesystem, not taken from the record.
+    core_results = sorted(results.glob("e8b_core_*.json"))
+    check("no core result file exists on disk",
+          core_results == [], str([p.name for p in core_results]))
+    check("TRAINING_AUTHORIZED is unchanged",
+          e8b_run.TRAINING_AUTHORIZED
+          == "core-matrix-frozen-pending-approval"
+          and amendment["pre_result"]["training_authorised"]
+          == e8b_run.TRAINING_AUTHORIZED)
+    for clause in ("34.803", "4.25", "40 h ceiling", "35-36 h"):
+        check(f"the recorded rationale contains {clause!r}",
+              any(clause in line
+                  for line in amendment["rationale_as_recorded"]))
+
+    # The scientific comparison must be untouched. Checked against the
+    # LIVE code, not the record's claim about it.
+    frozen = amendment["nothing_scientific_was_changed_to_obtain_the_margin"]
+    check("18 cells unchanged",
+          len(e8b_run.CORE_CELLS) == 18 == frozen["cells"])
+    recipe = training.build_core_recipe("B3", "train_250k", 1)
+    check("the recipe is unchanged",
+          (recipe["lr"], recipe["warmup_frac"], recipe["dropout"])
+          == (3e-4, 0.0, 0.1))
+    check("22 epochs, no early stopping, epoch-22 primary, unchanged",
+          recipe["max_epochs"] == 22
+          and recipe["early_stopping"] is False
+          and recipe["canonical_checkpoint_rule"] == "epoch_22")
+    check("bf16 training and structural fp32 evaluation unchanged",
+          "bf16" in recipe["training_precision"]
+          and recipe["canonical_evaluation_precision"] == "fp32")
+    check("B1 still keeps its own section-7.3 recipe",
+          training.build_core_recipe("B1", "train_40k", 0)["max_epochs"]
+          != 22)
+    import experiments.e8b_readout_generation.core_resource_projection \
+        as projection_module
+    check("the reported denominator is unchanged at 10,004",
+          projection_module.N_RAW == 10004)
+    check("all three readouts and all four conditions are retained",
+          set(fe.READOUTS) == {"R1", "R2", "R3"}
+          and len(fe.CONDITIONS) == 4)
+    check("no intervention was removed",
+          {"fixed_image", "fixed_question", "shuffled_image"}
+          <= set(fe.CONDITIONS))
+
+    # --- B. resource arithmetic ---
+    published = json.loads(
+        (results / "core_resource_projection_20260807.json").read_text()
+    )["e8b_core_resource_projection"]
+    gate_record = published["gates"]["pretrained_identity_35h"]
+    check("the published projection is the measured 34.803 h",
+          abs(gate_record["projected_hours"] - 34.803) < 0.01,
+          str(gate_record["projected_hours"]))
+    check("the ceiling in the projection is 40 h",
+          gate_record["ceiling_hours"] == 40.0)
+    check("headroom under the amended ceiling is about 5.2 h",
+          abs(gate_record["headroom_hours"] - 5.197) < 0.01)
+    largest = published["per_cell_hours"]["lm_train_250k"]
+    check("the largest final cell is about 4.25 h, the retry basis",
+          abs(largest - 4.25) < 0.05, str(largest))
+    check("the contingency reserve equals one worst-case cell",
+          abs(e8b_run.CONTINGENCY_RESERVE_HOURS - 4.25) < 0.01)
+    check("baseline plus contingency does not exceed the ceiling",
+          e8b_run.BASELINE_BUDGET_HOURS
+          + e8b_run.CONTINGENCY_RESERVE_HOURS
+          <= e8b_run.PER_IDENTITY_CEILING_HOURS + 0.06,
+          f"{e8b_run.BASELINE_BUDGET_HOURS} + "
+          f"{e8b_run.CONTINGENCY_RESERVE_HOURS}")
+
+    # --- the two-level gate ---
+    first = e8b_run.per_identity_gate(
+        "B3", e8b_run.CELL_PROJECTED_HOURS[("B3", "train_40k")],
+        ledger={"cells": {}}, cell=("B3", "train_40k", 0))
+    check("the executable gate agrees with the published projection",
+          abs(first["projected_total_hours"]
+              - gate_record["projected_hours"]) < 0.01)
+    check("the first cell now CLEARS the gate",
+          first["fires"] is False and first["fire_reason"] is None)
+    check("the contingency is reported SEPARATELY, not folded into the "
+          "baseline",
+          first["baseline_budget_hours"] == 34.803
+          and first["contingency_reserve_hours"] == 4.25
+          and first["contingency_unlocked"] is False)
+    # Drift must halt rather than eat the reserve.
+    drifted = {"cells": {
+        "B3_train_40k_seed0": {"identity": "pretrained",
+                               "processes": [2.5], "hours": 2.5,
+                               "arm": "B3", "scale": "train_40k",
+                               "seed": 0}}}
+    over = e8b_run.per_identity_gate(
+        "B3", e8b_run.CELL_PROJECTED_HOURS[("B3", "train_40k")],
+        ledger=drifted, cell=("B3", "train_40k", 1))
+    check("estimate drift past the baseline HALTS instead of spending "
+          "the contingency",
+          over["fires"] is True
+          and "drifted past the measured baseline" in over["fire_reason"]
+          and over["projected_total_hours"] < 40.0)
+
+    # --- C. retry enforcement ---
+    check("at most ONE forced retry per identity is authorised",
+          e8b_run.MAX_FORCED_RETRIES_PER_IDENTITY == 1)
+    check("the permitted grounds are objective execution failures only",
+          set(e8b_run.PERMITTED_RETRY_REASONS)
+          == {"node_failure", "corrupted_checkpoint",
+              "gate_requires_corrected_rerun"})
+    check("performance-driven grounds are named and forbidden",
+          {"accuracy_disappointing", "another_seed_looks_better",
+           "different_checkpoint_would_improve",
+           "statistically_inconvenient"}
+          == set(e8b_run.FORBIDDEN_RETRY_REASONS))
+    with tempfile.TemporaryDirectory() as tmp:
+        original = e8b_run.RETRY_LEDGER
+        try:
+            e8b_run.RETRY_LEDGER = Path(tmp) / "retries.json"
+            check("no retry is taken to begin with",
+                  e8b_run.retries_taken("pretrained") == 0)
+            for reason in sorted(e8b_run.FORBIDDEN_RETRY_REASONS):
+                must_fail(f"a retry for {reason!r} is REFUSED",
+                          lambda r=reason: e8b_run.record_forced_retry(
+                              "B3", "train_250k", 0, r, "n/a"))
+            must_fail("an unknown ground is refused, not defaulted",
+                      lambda: e8b_run.record_forced_retry(
+                          "B3", "train_250k", 0, "because", "n/a"))
+            check("no forbidden attempt was recorded",
+                  e8b_run.retries_taken("pretrained") == 0)
+            e8b_run.record_forced_retry(
+                "B3", "train_250k", 0, "node_failure",
+                "the node died mid-epoch")
+            check("one legitimate forced retry is accepted",
+                  e8b_run.retries_taken("pretrained") == 1)
+            must_fail("a SECOND forced retry is refused and returns to "
+                      "the user",
+                      lambda: e8b_run.record_forced_retry(
+                          "B3", "train_40k", 1, "corrupted_checkpoint",
+                          "truncated file"))
+            check("the second attempt did not increment the ledger",
+                  e8b_run.retries_taken("pretrained") == 1)
+            check("the recorded retry keeps its evidence and reason",
+                  e8b_run.read_retry_ledger()["retries"][0]["reason"]
+                  == "node_failure"
+                  and e8b_run.read_retry_ledger()["retries"][0][
+                      "evidence"])
+            # A corrupt ledger must refuse rather than assume none.
+            e8b_run.RETRY_LEDGER.write_text("{ not json")
+            must_fail("an unreadable retry ledger refuses rather than "
+                      "assuming no retry has been taken",
+                      e8b_run.read_retry_ledger)
+        finally:
+            e8b_run.RETRY_LEDGER = original
+
+    # --- the evaluation corrections survive the amendment ---
+    preserved = amendment["evaluation_corrections_preserved"]
+    check("batching is described as decision-equivalent, NOT bit-"
+          "identical",
+          "NOT bit-identical" in preserved["batching"])
+    check("the numerical-noise and margin evidence is retained",
+          "1.52e-04" in preserved["numerical_noise_evidence"]
+          and "24x" in preserved["numerical_noise_evidence"])
+    check("the denominator restriction stays REJECTED",
+          preserved["denominator_restriction"] == "REJECTED")
+    check("HB3b stays direct and no intervention was removed",
+          "DIRECTLY" in preserved["hb3b"]
+          and "none removed" in preserved["interventions"])
 
 
 
@@ -3991,6 +4243,7 @@ def run() -> None:
     test_call_arity_everywhere()
     test_records_reproduce_from_generators()
     test_readiness_phase()
+    test_governance_amendment()
     test_serial_contract()
     test_serial_queries()
     test_provenance()

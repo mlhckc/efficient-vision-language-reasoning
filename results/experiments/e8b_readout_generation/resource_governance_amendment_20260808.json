@@ -1,0 +1,122 @@
+{
+  "metadata": {
+    "timestamp": "2026-08-08T00:49:07",
+    "git_commit": "247579b",
+    "git_dirty": true,
+    "open_clip_version": "3.3.0",
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "h5py_version": "3.16.0",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "deterministic": true,
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "embed_dim": 512,
+    "top_k_answers": 100,
+    "n_train": 40000,
+    "n_val": 8000,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "hidden_dim": 512,
+    "dropout": 0.3,
+    "weight_decay": 0.0001
+  },
+  "e8b_resource_governance_amendment": {
+    "dated_utc": "2026-08-08",
+    "type": "RESOURCE-GOVERNANCE AMENDMENT, not a scientific amendment",
+    "authorised_by": "explicit user instruction of 2026-08-08",
+    "change": {
+      "constant": "per-identity hard ceiling for E8B",
+      "from_hours": 35.0,
+      "to_hours": 40.0
+    },
+    "pre_result": {
+      "no_final_core_cell_has_run": true,
+      "no_final_result_exists": true,
+      "training_authorised": "core-matrix-frozen-pending-approval",
+      "why_this_matters": "an outcome cannot have influenced a decision taken before any outcome exists. The 18 cells are unrun, no core checkpoint or result file exists, and the authorisation state is unchanged."
+    },
+    "rationale_as_recorded": [
+      "the complete programme is now measured at 34.803 GPU-hours",
+      "the largest final 250k cell is approximately 4.25 GPU-hours",
+      "therefore a 40 h ceiling provides capacity for the measured complete programme plus at most one worst-case forced retry",
+      "a ceiling close to 35-36 h would provide nominal PASS status but no meaningful operational recovery margin"
+    ],
+    "nothing_scientific_was_changed_to_obtain_the_margin": {
+      "verified_against_live_code": true,
+      "cells": 18,
+      "recipe": {
+        "lr": 0.0003,
+        "warmup": 0.0,
+        "dropout": 0.1
+      },
+      "epochs_b2_b3": 22,
+      "early_stopping": false,
+      "primary_checkpoint": "epoch_22",
+      "training_precision": "bf16 deterministic",
+      "canonical_evaluation": "structural fp32",
+      "reported_denominator": 10004,
+      "readouts": [
+        "R1",
+        "R2",
+        "R3"
+      ],
+      "interventions": [
+        "fixed_image",
+        "fixed_question",
+        "shuffled_image"
+      ],
+      "scorers": [
+        "raw exact",
+        "G21 normalised"
+      ],
+      "clean_test_embargo": "unchanged",
+      "abandoned_search": "grid 4-8 remain permanently stopped"
+    },
+    "two_level_budget": {
+      "hard_ceiling_hours": 40.0,
+      "measured_baseline_hours": 34.803,
+      "contingency_reserve_hours": 4.25,
+      "published_projection_hours": 34.803,
+      "headroom_under_ceiling_hours": 5.197,
+      "why_two_levels": "ordinary 18-cell execution is gated against the MEASURED BASELINE, not against the ceiling. The gap between them is contingency for one forced retry and is held visibly apart, so an estimate that merely drifts halts instead of silently spending the recovery margin.",
+      "rounding_tolerance_hours": 0.01,
+      "rounding_tolerance_note": "reconciles rounded per-cell constants against the unrounded projection, about eight seconds. Arithmetic, not slack."
+    },
+    "retry_policy_frozen": {
+      "max_forced_retries_per_identity": 1,
+      "permitted_grounds": {
+        "node_failure": "the node or the process died",
+        "corrupted_checkpoint": "a checkpoint is corrupt or incomplete",
+        "gate_requires_corrected_rerun": "a hard scientific or operational gate requires a corrected rerun"
+      },
+      "forbidden_grounds": [
+        "accuracy_disappointing",
+        "another_seed_looks_better",
+        "different_checkpoint_would_improve",
+        "statistically_inconvenient"
+      ],
+      "forbidden_grounds_meaning": "a retry is NOT permitted because accuracy is disappointing, another seed looks better, a different checkpoint would improve the result, or a result is statistically inconvenient. Each of these is refused by name in code, not merely written down, because a performance-driven rerun would invalidate the comparison.",
+      "second_retry": "REFUSED; execution stops and returns to the user for an explicit decision",
+      "ledger": "/user/HS400/mc02623/backups/efficient-vision-language-reasoning/e8b-locks/e8b_forced_retry_ledger.json"
+    },
+    "evaluation_corrections_preserved": {
+      "batching": "ACCEPTED, described as output/decision-equivalent and explicitly NOT bit-identical",
+      "numerical_noise_evidence": "retained: max logit noise 1.52e-04, thinnest real margin 3.59e-03, safety factor 24x",
+      "r3_fresh_state": "enforced in readouts.py; a consumed cache is refused",
+      "oov_label": "-1 never indexes the vocabulary; scoring refuses",
+      "hb3b": "computed DIRECTLY over every required row",
+      "denominator_restriction": "REJECTED",
+      "interventions": "none removed"
+    },
+    "clean_test_accessed": false
+  }
+}

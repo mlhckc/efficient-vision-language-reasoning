@@ -140,7 +140,13 @@ N_DEV = 7714       # in-vocabulary development rows
 # readouts at N_DEV understated them; HB3b was neither implemented nor
 # costed.
 N_RAW = 10004      # raw development denominator (plan section 6)
-WALL_H, IDENT_H, CORE_H, MEM_FRACTION = 8.0, 35.0, 180.0, 0.80
+# IDENT_H amended 2026-08-08 from 35.0 to 40.0 by explicit user
+# authorisation: a resource-governance change made before any core cell
+# ran, sized as the measured programme plus one worst-case forced retry.
+WALL_H, IDENT_H, CORE_H, MEM_FRACTION = 8.0, 40.0, 180.0, 0.80
+IDENT_H_PREVIOUS, IDENT_H_AMENDED_ON = 35.0, "2026-08-08"
+# The measured complete programme, and the retry capacity held above it.
+BASELINE_BUDGET_H, CONTINGENCY_RESERVE_H = 34.803, 4.25
 BASE = {"pretrained": 2.29222, "random": 1.95811}   # A1 / A1r CORE measured
 # Protocol 13.2b's A1 row is 2.987 h = core 1.774 + secondary 0.509 +
 # ablation 0.127 + extraction 0.400 + mid 0.087 + interventions 0.090.

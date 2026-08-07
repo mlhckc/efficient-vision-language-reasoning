@@ -249,6 +249,17 @@ def derive(existing: dict, projection: dict) -> dict:
     HEADROOM_FLOOR_HOURS = 1.0
     thin = (not breaches
             and gate["headroom_hours"] < HEADROOM_FLOOR_HOURS)
+    body["ceiling_amended_20260808"] = {
+        "from_hours": 35.0, "to_hours": gate["ceiling_hours"],
+        "type": "RESOURCE-GOVERNANCE, pre-result, authorised by the "
+                "user on 2026-08-08",
+        "baseline_budget_hours": 34.803,
+        "contingency_reserve_hours": 4.25,
+        "contingency_is_for": "at most ONE worst-case forced retry, "
+                              "sized on the largest final 250k cell",
+        "ordinary_execution_is_gated_against": "the measured baseline, "
+                                               "not the ceiling",
+        "record": "resource_governance_amendment_20260808.json"}
     body["ceiling_breached"] = bool(breaches)
     body["headroom_floor_hours"] = HEADROOM_FLOOR_HOURS
     body["headroom_below_floor"] = bool(thin)
@@ -282,22 +293,27 @@ def derive(existing: dict, projection: dict) -> dict:
         f"BELOW its assumption and reduced the cell cost; it was the "
         f"evaluation, not the training, that was underestimated."
         if breaches else
-        f"FITS, but the margin is now under half an hour: "
-        f"{gate['projected_hours']} h against the hard "
-        f"{gate['ceiling_hours']} h ceiling leaves "
-        f"{gate['headroom_hours']} h, with a recorded retry allowance "
-        f"of NONE. The ceiling is NOT weakened and no core arm or cell "
-        f"was descoped; the one component that WAS removed is disclosed "
-        f"and costed separately. Of the "
+        f"CLEARED ON RESOURCES, pending the user's final execution "
+        f"approval. The complete MEASURED programme projects to "
+        f"{gate['projected_hours']} h against the amended "
+        f"{gate['ceiling_hours']} h ceiling, leaving "
+        f"{gate['headroom_hours']} h. Of that, "
+        f"{body['ceiling_amended_20260808']['contingency_reserve_hours']} "
+        f"h is CONTINGENCY held for at most ONE worst-case forced "
+        f"retry and is not ordinary headroom: routine execution is "
+        f"gated against the "
+        f"{body['ceiling_amended_20260808']['baseline_budget_hours']} h "
+        f"measured baseline, so an estimate that merely drifts halts "
+        f"rather than quietly spending the recovery margin. The "
+        f"ceiling was raised on RESOURCE grounds before any cell ran "
+        f"and with no result in existence, and no scientific component "
+        f"was changed to obtain the margin. Of the "
         f"{len(body.get('open_risks', []))} open risks listed above, "
-        f"{len(exhausting)} could each on their own exhaust the "
-        f"remaining margin. Seven review rounds have each moved this "
-        f"number toward the ceiling and never away from it, so it "
-        f"should be treated as an upper bound. Whether to proceed on "
-        f"this margin, or to close the largest risk with a short "
-        f"measurement first, is the user's decision and not one this "
-        f"record can make.")
-    body["decision_required_from_user"] = {
+        f"{len(exhausting)} could still on its own consume the "
+        f"contingency. TRAINING_AUTHORIZED is unchanged: no core cell "
+        f"may start without a separate explicit approval.")
+    body["decision_required_from_user"] = None if (
+        not breaches and not thin) else {
         "why": ("the measured projection exceeds the hard ceiling"
                 if breaches else
                 f"the measured projection is under the ceiling but "

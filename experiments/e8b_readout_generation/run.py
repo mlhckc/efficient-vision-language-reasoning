@@ -222,11 +222,48 @@ SEEDS = (0, 1, 2)
 
 # Resource constants (canonical section 14 and the accepted design).
 WALL_CLOCK_HALT_HOURS = 8.0
-PER_IDENTITY_CEILING_HOURS = 35.0
+# AMENDED 2026-08-08 by explicit user authorisation, from 35.0 to 40.0.
+#
+# This is a RESOURCE-GOVERNANCE amendment, not a scientific one. It was
+# made BEFORE any final core cell ran and with no final result in
+# existence, so no outcome could have influenced it. The rationale, as
+# recorded:
+#
+#   * the complete programme is now MEASURED at 34.803 GPU-hours;
+#   * the largest final 250k cell is approximately 4.25 GPU-hours;
+#   * therefore a 40 h ceiling provides capacity for the measured
+#     complete programme plus AT MOST ONE worst-case forced retry;
+#   * a ceiling close to 35-36 h would provide nominal PASS status but
+#     no meaningful operational recovery margin.
+#
+# No scientific component was changed to obtain this margin. The 18
+# cells, the recipe, the 22-epoch endpoint, the denominator, the three
+# interventions and both scorers are all exactly as frozen.
+PER_IDENTITY_CEILING_HOURS = 40.0
+PER_IDENTITY_CEILING_AMENDED_ON = "2026-08-08"
+PER_IDENTITY_CEILING_PREVIOUS_HOURS = 35.0
+
+# The measured complete programme. Normal 18-cell execution is gated
+# against THIS, not against the ceiling: the gap between them is
+# contingency, and an estimate that merely drifts must not be allowed to
+# eat it silently.
+BASELINE_BUDGET_HOURS = 34.803
+# Capacity for AT MOST ONE worst-case forced retry, sized on the largest
+# final cell. Held separately and visibly, never folded into the
+# baseline projection.
+CONTINGENCY_RESERVE_HOURS = 4.25
+# The gate sums per-cell constants rounded to three decimals, while the
+# published baseline is computed from unrounded values, so the two
+# differ by a few thousandths of an hour. This reconciles that and
+# NOTHING ELSE: it is about eight seconds, it is arithmetic, and it is
+# not operational slack. Drift beyond it still halts.
+BASELINE_ROUNDING_TOLERANCE_HOURS = 0.01
 # The user's rule of 2026-08-07: a projection under the ceiling is NOT a
 # clearance to run if the margin is negligible. Under this much headroom
 # execution returns to the user. Enforced here rather than only stated
 # in a record, so flipping the authorisation state cannot bypass it.
+# Measured against the BASELINE budget, since the contingency above it
+# is reserved for a forced retry and is not ordinary headroom.
 HEADROOM_FLOOR_HOURS = 1.0
 CORE_CEILING_HOURS = 180.0
 MEMORY_CEILING_FRACTION = 0.80
@@ -1637,6 +1674,94 @@ CELL_PROJECTED_HOURS = {
     ("B2", "train_40k"): 1.718, ("B2", "train_250k"): 4.249,
     ("B1", "train_40k"): 0.287, ("B1", "train_250k"): 0.751,
 }
+# --- Forced-retry policy, frozen 2026-08-08 -----------------------------------
+
+RETRY_LEDGER = EXECUTION_LOCK_DIR / "e8b_forced_retry_ledger.json"
+MAX_FORCED_RETRIES_PER_IDENTITY = 1
+
+# The ONLY grounds on which a retry may be recorded. Every one of these
+# is an objective execution failure that can be pointed at.
+PERMITTED_RETRY_REASONS = {
+    "node_failure": "the node or the process died",
+    "corrupted_checkpoint": "a checkpoint is corrupt or incomplete",
+    "gate_requires_corrected_rerun": "a hard scientific or operational "
+                                     "gate requires a corrected rerun",
+}
+# Recorded so the prohibition is executable, not merely written down.
+# None of these is an execution failure; every one of them is a result
+# the experimenter did not like.
+FORBIDDEN_RETRY_REASONS = {
+    "accuracy_disappointing", "another_seed_looks_better",
+    "different_checkpoint_would_improve", "statistically_inconvenient",
+}
+
+
+def read_retry_ledger() -> dict:
+    if not RETRY_LEDGER.exists():
+        return {"retries": []}
+    try:
+        ledger = json.loads(RETRY_LEDGER.read_text())
+    except (json.JSONDecodeError, OSError) as error:
+        raise AssertionError(
+            f"RETRY LEDGER UNREADABLE: {RETRY_LEDGER} ({error}). "
+            f"Execution refuses rather than assume no retry has been "
+            f"taken.") from None
+    if not isinstance(ledger.get("retries"), list):
+        raise AssertionError(
+            f"RETRY LEDGER MALFORMED: {RETRY_LEDGER} has no 'retries' "
+            f"list. Execution refuses.")
+    return ledger
+
+
+def retries_taken(identity: str, ledger: dict | None = None) -> int:
+    ledger = read_retry_ledger() if ledger is None else ledger
+    return sum(1 for r in ledger["retries"]
+               if r.get("identity") == identity)
+
+
+def record_forced_retry(arm: str, scale: str, seed: int, reason: str,
+                        evidence: str) -> dict:
+    """Record ONE forced retry, or refuse.
+
+    The 40-hour ceiling authorises capacity for at most one forced retry
+    across the pretrained programme. A second requires a fresh user
+    decision, so it is refused here rather than absorbed."""
+    if reason in FORBIDDEN_RETRY_REASONS:
+        sys.exit(
+            f"RETRY REFUSED: {reason!r} is not an execution failure. A "
+            f"retry is permitted only for an objectively failed "
+            f"execution. Re-running because a result is disappointing, "
+            f"because another seed looks better, because a different "
+            f"checkpoint would improve the number, or because a result "
+            f"is statistically inconvenient is EXCLUDED BY PROTOCOL and "
+            f"would invalidate the comparison.")
+    if reason not in PERMITTED_RETRY_REASONS:
+        sys.exit(
+            f"RETRY REFUSED: unknown reason {reason!r}; permitted "
+            f"grounds are {sorted(PERMITTED_RETRY_REASONS)}")
+    identity = model_identity(arm)
+    ledger = read_retry_ledger()
+    already = retries_taken(identity, ledger)
+    if already >= MAX_FORCED_RETRIES_PER_IDENTITY:
+        sys.exit(
+            f"RETRY REFUSED: the {identity} identity has already used "
+            f"its {MAX_FORCED_RETRIES_PER_IDENTITY} authorised forced "
+            f"retry ({ledger['retries']}). A second retry needs an "
+            f"explicit user decision; execution stops and returns to "
+            f"the user.")
+    ledger["retries"].append({
+        "identity": identity, "arm": arm, "scale": scale, "seed": seed,
+        "reason": reason,
+        "reason_meaning": PERMITTED_RETRY_REASONS[reason],
+        "evidence": evidence,
+        "utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())})
+    RETRY_LEDGER.parent.mkdir(parents=True, exist_ok=True)
+    temporary = RETRY_LEDGER.with_name(RETRY_LEDGER.name + ".tmp")
+    temporary.write_text(json.dumps(ledger, indent=2) + "\n")
+    os.replace(temporary, RETRY_LEDGER)
+    return ledger
+
+
 def per_identity_gate(arm: str, additional_hours: float = 0.0,
                       ledger: dict | None = None,
                       cell: tuple | None = None) -> dict:
@@ -1689,17 +1814,56 @@ def per_identity_gate(arm: str, additional_hours: float = 0.0,
             "applies": identity != "none",
             "headroom_hours": round(PER_IDENTITY_CEILING_HOURS - total, 4),
             "headroom_floor_hours": HEADROOM_FLOOR_HOURS,
+            # --- the amended two-level structure (2026-08-08) ---
+            # The ceiling is 40 h, but ordinary execution is gated
+            # against the MEASURED BASELINE of 34.803 h. The gap between
+            # them is contingency for one forced retry, and it is
+            # visible here rather than folded into the projection, so a
+            # drifting estimate cannot quietly spend it.
+            "baseline_budget_hours": BASELINE_BUDGET_HOURS,
+            "contingency_reserve_hours": CONTINGENCY_RESERVE_HOURS,
+            "baseline_headroom_hours": round(
+                BASELINE_BUDGET_HOURS - total, 4),
+            "over_baseline": (
+                identity != "none"
+                and total > BASELINE_BUDGET_HOURS
+                + BASELINE_ROUNDING_TOLERANCE_HOURS),
+            "forced_retries_taken": (retries_taken(identity)
+                                     if identity != "none" else 0),
+            "contingency_unlocked": (
+                identity != "none"
+                and retries_taken(identity) > 0),
             "below_headroom_floor": (
                 identity != "none"
                 and total <= PER_IDENTITY_CEILING_HOURS
                 and (PER_IDENTITY_CEILING_HOURS - total)
                 < HEADROOM_FLOOR_HOURS),
-            # A thin margin halts exactly as a breach does. Clearing a
-            # hard ceiling by a few minutes is not a clearance.
+            # Fires on any of three conditions:
+            #   the hard 40 h ceiling is exceeded;
+            #   the margin under it is below the floor;
+            #   or ordinary execution has drifted past the measured
+            #   baseline WITHOUT a recorded forced retry, which is the
+            #   case the contingency must not silently absorb.
             "fires": identity != "none"
                      and (total > PER_IDENTITY_CEILING_HOURS
                           or (PER_IDENTITY_CEILING_HOURS - total)
-                          < HEADROOM_FLOOR_HOURS)}
+                          < HEADROOM_FLOOR_HOURS
+                          or (total > BASELINE_BUDGET_HOURS
+                              + BASELINE_ROUNDING_TOLERANCE_HOURS
+                              and retries_taken(identity) == 0)),
+            "fire_reason": (
+                "over the 40 h ceiling"
+                if total > PER_IDENTITY_CEILING_HOURS else
+                "under the headroom floor"
+                if (PER_IDENTITY_CEILING_HOURS - total)
+                < HEADROOM_FLOOR_HOURS else
+                "drifted past the measured baseline with no forced "
+                "retry recorded; the contingency is reserved for a "
+                "forced retry, not for estimate drift"
+                if (identity != "none"
+                    and total > BASELINE_BUDGET_HOURS
+                    + BASELINE_ROUNDING_TOLERANCE_HOURS
+                    and retries_taken(identity) == 0) else None)}
 
 
 def charge_identity_hours(arm: str, scale: str, seed: int,
