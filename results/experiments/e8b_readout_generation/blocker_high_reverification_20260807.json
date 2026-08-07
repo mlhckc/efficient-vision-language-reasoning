@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-07T15:37:58",
-    "git_commit": "c128e65",
+    "timestamp": "2026-08-07T19:00:37",
+    "git_commit": "8ad573b",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -144,6 +144,12 @@
       "closed": 13,
       "open": []
     },
-    "clean_test_accessed": false
+    "clean_test_accessed": false,
+    "SUPERSEDED_FIGURES_20260807": {
+      "status": "PARTIALLY SUPERSEDED - the verdicts stand, one figure does not",
+      "figure": "entries[R3-C-B1].evidence cites '31.96 h vs 35 h, headroom 3.04 h'. That figure is SUPERSEDED. Two omissions were found afterwards: the mandatory section-19 efficiency pass, and the requirement that readouts run over the 10,004-row RAW denominator with a raw-distribution pass and B1 intervention conditions.",
+      "current": "the pretrained identity projects to 33.472 h with 1.528 h of headroom; see core_resource_projection_20260807.json, which is the governing record.",
+      "direction": "the correction is UPWARD, against the ceiling. The re-verification verdicts themselves are unaffected."
+    }
   }
 }

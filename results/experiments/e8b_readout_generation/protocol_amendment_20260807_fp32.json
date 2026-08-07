@@ -230,15 +230,16 @@
     "clean_test_accessed": false,
     "AMENDMENT_STATUS_20260807": {
       "dated_utc": "2026-08-07",
-      "open_issues_status": "CLOSED. The header text below still reads 'SEVEN open issues must be closed and the amendment re-reviewed before any core cell runs'. That sentence is HISTORICAL and is left as written. All seven are now closed: OI1 by determinism probe runs 3 and 4 under verified strict enforcement; OI2 by the fixed-22 epoch-22 endpoint rule (protocol_amendment_20260807_fixed22.json); OI3, OI5, OI6 and OI7 by the records that close them by ID; OI4 by pin_fp32_precision in run.py. The mechanically derived ledger in medium_findings_ledger_20260807.json reports zero open and zero execution-critical open findings.",
+      "open_issues_status": "CLOSED. The header text ABOVE (the record's own header, near the top of this file) still reads 'SEVEN open issues must be closed and the amendment re-reviewed before any core cell runs'. That sentence is HISTORICAL and is left as written. All seven are now closed: OI1 by determinism probe runs 3 and 4 under verified strict enforcement; OI2 by the fixed-22 epoch-22 endpoint rule (protocol_amendment_20260807_fixed22.json); OI3, OI5, OI6 and OI7 by the records that close them by ID; OI4 by pin_fp32_precision in run.py. The mechanically derived ledger in medium_findings_ledger_20260807.json reports zero open and zero execution-critical open findings.",
       "ranking_statistic_withdrawn": "the text below states 'the ordering is grid1 0.53322 > grid2 0.53123 > grid3 0.51205, which is the SAME as the ordering by maximum. There is no reversal.' That statistic is the mean-of-top-16, which was INVALIDATED because the pools it was computed over differ in length. CLAUDE.md gate item 1 invalidates every grid 1-3 ranking statistic in either direction. No replacement statistic was invented. The sentence is left in place as the historical record and must not be quoted as a live ordering.",
       "re_review": "the amendment was re-reviewed by three fresh-context audits on 2026-08-07",
-      "authoritative_ledger": "medium_findings_ledger_20260807.json"
+      "authoritative_ledger": "medium_findings_ledger_20260807.json",
+      "placement_note": "this block sits at the END of the record, so 'below' would misdirect: both texts it corrects appear ABOVE it. Corrected 2026-08-07."
     }
   },
   "metadata": {
-    "timestamp": "2026-08-07T18:32:40",
-    "git_commit": "aaabe21",
+    "timestamp": "2026-08-07T19:00:37",
+    "git_commit": "8ad573b",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",

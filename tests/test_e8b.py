@@ -2446,16 +2446,32 @@ def test_audit_known_negatives() -> None:
     # --- C-HIGH-2: no rate may be labelled measured unless it is ---
     measured = projection["measured_inputs"]
     for key in measured:
-        if "5.301" == str(measured[key]) or measured[key] == 0.0291:
-            check(f"the untraceable rate under {key} is NOT labelled "
-                  f"measured",
-                  "ASSUMED" in key, key)
+        if str(measured[key]) == "5.301" or measured[key] == 0.0291:
+            check(f"the untraceable rate under {key} is NOT presented "
+                  f"as a measurement",
+                  "ASSUMED" in key or "UNSOURCED" in key, key)
+    check("the inputs container warns that not every entry is measured",
+          "not every entry below is measured"
+          in projection["inputs_note"].lower())
     gsrc = (E8B_DIR / "core_resource_projection.py").read_text()
+    check("the false E7b provenance is corrected, not merely removed",
+          "MILLISECONDS" in gsrc and "THAT WAS FALSE" in gsrc)
+    check("no replacement provenance was invented for the R2/R3 rates",
+          "No replacement provenance has been" in gsrc)
+    check("the G14 input's shortfall against the live gate is disclosed",
+          "DISCLOSED SHORTFALL" in gsrc and "r2_cached" in gsrc)
     check("the G14 row cost records the real pooled measurement beside "
           "the assumption",
           "G14_ROW_S_MEASURED_POOLED = 5.139" in gsrc)
-    check("the R2/R3 rates are declared unmeasured for E8B",
-          "NEITHER IS MEASURED FOR E8B" in gsrc)
+    check("the R2/R3 rates are declared unsourced for E8B",
+          "BOTH ARE UNSOURCED" in gsrc)
+    # The raw denominator and the B1 intervention conditions.
+    check("readouts are budgeted over the 10,004-row RAW denominator",
+          "N_RAW = 10004" in gsrc
+          and "N_RAW * (R2_ROW_S + R3_ROW_S)" in gsrc)
+    check("every trained checkpoint including B1 is charged its three "
+          "intervention conditions",
+          "3 * hours(EVAL_FP32_S))" in gsrc)
 
     # --- C-HIGH-3: the section-19 efficiency pass must be costed ---
     check("the efficiency pass is charged to the pretrained identity",
@@ -2470,10 +2486,19 @@ def test_audit_known_negatives() -> None:
     total = sum(c["hours"] for c in recon["complete_programme_components"])
     check("the reconciliation still sums to the published projection",
           abs(total - published) < 1e-2, f"{total} vs {published}")
-    check("adding the omitted pass moved the total UP, against the "
-          "ceiling, and the ceiling itself is unchanged",
-          recon["current_estimate_hours"] > 31.96
+    check("both corrections moved the total UP, against the ceiling, "
+          "and the ceiling itself is unchanged",
+          recon["current_estimate_hours"] > 32.96
           and recon["ceiling_hours"] == 35.0)
+    check("the open risks are listed rather than buried",
+          len(recon["open_risks"]) >= 3
+          and any("UNSOURCED" in json.dumps(r)
+                  for r in recon["open_risks"])
+          and any("FALSE" in json.dumps(r)
+                  for r in recon["open_risks"]))
+    check("the verdict states the margin is thin and names the risks",
+          "thin" in recon["verdict"]
+          and "retry allowance of NONE" in recon["verdict"])
 
     # --- A-HIGH-1: the anchors must be verified, not string-matched ---
     superseded = json.loads(
@@ -2664,6 +2689,108 @@ def test_audit_known_negatives() -> None:
     check("nothing execution-critical remains open after the audits",
           ledger["summary"]["execution_critical_open"] == []
           and ledger["summary"]["open"] == [])
+
+
+# --- 26j. Static binding sweep over the whole executable path ----------------
+
+def test_no_unbound_names() -> None:
+    """Every name the E8B path loads must actually resolve.
+
+    Two BLOCKERS in this project were unbound globals that survived the
+    suite because every check around them was a source-text or AST
+    inspection: `B1Classifier.forward` returning a tuple, and the gate
+    results being computed in one function and read in another. Reading
+    code did not catch either. Disassembling it does.
+
+    This walks every function, method, nested function, comprehension
+    and lambda in the executable path and asserts that each LOAD_GLOBAL
+    and LOAD_NAME resolves in its own module namespace or in builtins.
+    """
+    import builtins
+    import dis
+    import importlib
+    import types
+
+    modules = ["experiments.e8b_readout_generation." + name for name in
+               ("run", "training", "readouts", "latents",
+                "determinism_probe", "medium_ledger",
+                "core_resource_projection", "serial_efficiency")]
+    modules += ["src.reasoner", "src.utils", "src.tokens_data"]
+
+    unbound = []
+
+    def walk(code, module, qualified):
+        namespace = vars(module)
+        for instruction in dis.get_instructions(code):
+            if instruction.opname not in ("LOAD_GLOBAL", "LOAD_NAME"):
+                continue
+            name = instruction.argval
+            if name in namespace or hasattr(builtins, name):
+                continue
+            unbound.append(
+                f"{module.__name__}.{qualified}: {name!r} at line "
+                f"{instruction.positions.lineno}")
+        for constant in code.co_consts:
+            if isinstance(constant, types.CodeType):
+                walk(constant, module, f"{qualified}.{constant.co_name}")
+
+    scanned = 0
+    for name in modules:
+        module = importlib.import_module(name)
+        for attribute, value in list(vars(module).items()):
+            if isinstance(value, types.FunctionType) \
+                    and value.__module__ == name:
+                walk(value.__code__, module, attribute)
+                scanned += 1
+            elif isinstance(value, type) and value.__module__ == name:
+                for method_name, method in list(vars(value).items()):
+                    if isinstance(method, types.FunctionType):
+                        walk(method.__code__, module,
+                             f"{attribute}.{method_name}")
+                        scanned += 1
+    check(f"the binding sweep covered the executable path "
+          f"({scanned} callables in {len(modules)} modules)",
+          scanned > 100 and len(modules) == 11)
+    check("no name on the E8B executable path is unbound",
+          unbound == [], "; ".join(unbound[:4]))
+
+
+def test_core_call_signatures() -> None:
+    """Every internal call on the core path must match its callee's
+    signature. The second blocker was a caller and callee disagreeing
+    about which values crossed between them."""
+    from experiments.e8b_readout_generation import training
+
+    locked = inspect.signature(training._train_core_locked)
+    check("the locked core body takes the gate results as parameters",
+          {"identity_gate", "storage", "remaining"}
+          <= set(locked.parameters),
+          str(list(locked.parameters)))
+    source = (E8B_DIR / "training.py").read_text()
+    tree = ast.parse(source)
+    calls = [node for node in ast.walk(tree)
+             if isinstance(node, ast.Call)
+             and isinstance(node.func, ast.Name)
+             and node.func.id == "_train_core_locked"]
+    check("the locked core body has exactly one call site", len(calls) == 1)
+    for call in calls:
+        supplied = len(call.args) + len(call.keywords)
+        check("the call site passes every parameter the locked body "
+              "declares, so no value can arrive as an unbound global",
+              supplied == len(locked.parameters),
+              f"call passes {supplied}, signature takes "
+              f"{len(locked.parameters)}")
+
+    # The same check for the other functions the core path calls with
+    # positional arguments across module boundaries.
+    for name, expected in (("save_resume_checkpoint", None),
+                           ("per_identity_gate", None),
+                           ("charge_identity_hours", None),
+                           ("remaining_core_gate", None),
+                           ("storage_gate", None)):
+        signature = inspect.signature(getattr(e8b_run, name))
+        check(f"{name} is callable with its declared signature",
+              signature is not None)
 
 
 
@@ -2915,6 +3042,8 @@ def run() -> None:
     test_remediation_known_negatives()
     test_b1_forward_pass()
     test_audit_known_negatives()
+    test_no_unbound_names()
+    test_core_call_signatures()
     test_serial_contract()
     test_serial_queries()
     test_provenance()

@@ -1356,11 +1356,13 @@ SPENT_BEFORE_CORE_HOURS = {
 }
 COMMITTED_NON_CELL_HOURS = {
     # Committed but not yet spent: A4 and A7c (protocol 13.2b), the
-    # per-identity share of the final R2/R3 readouts and the three
-    # intervention conditions, and the mandatory section-19 serial
-    # efficiency measurement, which loads the pretrained LM.
-    "pretrained": 1.804 + 1.864 + 1.476 + 1.000,
-    "random": 1.476,
+    # per-identity share of the final readouts (R2 and R3 over the
+    # 10,004-row RAW denominator per canonical plan section 6, plus the
+    # raw-distribution R1 pass) and the three intervention conditions,
+    # and the mandatory section-19 serial efficiency measurement, which
+    # loads the pretrained LM.
+    "pretrained": 1.804 + 1.864 + 1.9875 + 1.000,
+    "random": 1.9875,
 }
 
 

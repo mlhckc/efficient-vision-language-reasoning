@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-07T18:33:55",
-    "git_commit": "aaabe21",
+    "timestamp": "2026-08-07T19:01:12",
+    "git_commit": "8ad573b",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -33,10 +33,10 @@
     "dated_utc": "2026-08-07",
     "question": "why did the pretrained-identity projection move from 32.686 h to 31.96 h, and does the COMPLETE planned programme fit under the hard 35 h ceiling?",
     "old_estimate_hours": 32.686,
-    "current_estimate_hours": 32.96,
-    "net_change_hours": 0.274,
+    "current_estimate_hours": 33.472,
+    "net_change_hours": 0.786,
     "ceiling_hours": 35.0,
-    "headroom_hours": 2.04,
+    "headroom_hours": 1.528,
     "reconciliation_old_to_current": [
       {
         "component": "B1 250k per-epoch rate",
@@ -91,9 +91,16 @@
         "correction": "master protocol section 19 mandates one E7a-protocol serial efficiency measurement on the final selected checkpoints, and serial_efficiency.py exists solely to run it. It loads the frozen PRETRAINED language model, so it is charged to that identity. Costed at the UPPER bound of the protocol 13.2 range (0.500-1.000 h).",
         "effect_on_identity_hours": 1.0,
         "raised_by": "fresh-context audit C (operational and resource integrity)"
+      },
+      {
+        "component": "readout denominator and B1 intervention conditions",
+        "old": "R2 and R3 budgeted over the 7,714 IN-VOCABULARY development rows, with no raw-distribution pass and no B1 intervention conditions",
+        "correction": "canonical plan section 6 requires every readout evaluation to run once over the 10,004-row RAW denominator, section 6.1 requires every final checkpoint to receive raw-distribution evaluation, and section 7 applies the three matched intervention conditions to EVERY trained checkpoint, B1 included (90 passes over 30 runs). HB3b was neither implemented nor budgeted.",
+        "effect_on_identity_hours": 0.5115,
+        "raised_by": "fresh-context re-audit (honesty and resources)"
       }
     ],
-    "summary_of_change": "the pretrained identity now projects to 32.960 h, not 31.960 h. The earlier figure was NOT wrong about the components it counted, but it omitted the mandatory section-19 efficiency pass, so the claim that it covered the COMPLETE planned programme was false. Adding it is a correction upward, against the ceiling, not a relaxation. The remaining fall from 32.686 h is still explained by removing the selection-sensitivity study, whose object the fixed-endpoint rule eliminated, and by pricing readouts per cell rather than through a pooled evaluation-share fraction.",
+    "summary_of_change": "the pretrained identity now projects to 33.472 h. Two omissions were found after the first reconciliation, both of which made the earlier 'complete programme' claim false: the mandatory section-19 efficiency pass, and the canonical plan's requirement that readouts run over the 10,004-row raw denominator with a raw-distribution pass and with intervention conditions on every trained checkpoint including B1. Both corrections are UPWARD, against an unchanged ceiling. The remaining fall from 32.686 h is still explained by removing the selection-sensitivity study, whose object the fixed-endpoint rule eliminated.",
     "complete_programme_components": [
       {
         "component": "A1 measured baseline (E8A pretrained 135M)",
@@ -112,8 +119,8 @@
         "hours": 17.634
       },
       {
-        "component": "B3 share of final R1/R2/R3 readouts + 3 interventions",
-        "hours": 1.476
+        "component": "B3 share of final readouts over the RAW denominator + 3 interventions",
+        "hours": 1.9875
       },
       {
         "component": "section-19 serial efficiency pass (upper bound)",
@@ -124,7 +131,7 @@
         "hours": 6.89
       }
     ],
-    "component_sum_hours": 32.96,
+    "component_sum_hours": 33.472,
     "matches_generator": true,
     "coverage_proof": {
       "already_spent_search": "search_grid1_pilot, search_grid2, search_grid3_halted in spent_compute",
@@ -136,9 +143,11 @@
       "final_R1_R2_R3": "R1 comes free from the epoch-22 canonical pass; R2 and R3 are charged as measured/assumed per-row walks over all 7,714 development rows",
       "mandatory_interventions": "three intervention conditions per LM cell, each one canonical FP32 dev pass",
       "other_gate_overhead": "GATE_OVERHEAD_H 0.223 h per run, MEASURED as the residual between the grid runs' recorded wall and their epoch time (G8, G9, G11, G13, G15, G1, the selection reproduction check)",
-      "section_19_efficiency": "EFFICIENCY_S19_H in core_resource_projection.py, charged into the pretrained identity and into e8b_remaining"
+      "section_19_efficiency": "EFFICIENCY_S19_H in core_resource_projection.py, charged into the pretrained identity and into e8b_remaining",
+      "raw_denominator": "N_RAW = 10004 in core_resource_projection.py; R2, R3 and the raw-distribution R1 pass are all charged over it",
+      "b1_interventions": "final_eval_b1 charges each of the six B1 cells a normal pass, a raw pass and three intervention conditions"
     },
-    "verdict": "FITS, with less margin than previously stated: the complete planned pretrained-identity programme, now INCLUDING the section-19 efficiency pass, projects to 32.96 h against the hard 35 h ceiling, leaving 2.04 h. The ceiling is NOT weakened, NO component was dropped, and the ceiling is now enforced in code rather than checked by hand. The headroom is thin: a 16 per cent overrun on the unmeasured 250k rate exhausts it, and the recorded retry allowance is NONE.",
+    "verdict": "FITS, but the margin is now thin: 33.472 h against the hard 35 h ceiling leaves 1.528 h, with a recorded retry allowance of NONE. The ceiling is NOT weakened and NO component was dropped -- both corrections since the first reconciliation ADDED work. Three open risks are listed above, any one of which could exhaust the remaining headroom; they are the user's to accept or to close with a measurement before core execution is authorised.",
     "retry_allowance": "NONE. The plan tolerates zero B3 retries; any retry or any additional B3-loading evaluation triggers a stop-and-ask BEFORE execution",
     "residual_assumptions": [
       "the 250k training rate is step-scaled from the measured 40k rate; no 250k E8B cell has ever run. This single assumption carries 12.566 h of the total, and the identity reaches 35 h if the true rate is about 16 per cent above the step-scaled value.",
@@ -152,7 +161,28 @@
     "enforcement": {
       "previously": "the 35 h per-identity ceiling and the storage gate existed only as constants and helper functions with no call site in the execution path, so neither could have halted anything. Nothing summed GPU hours across cells.",
       "now": "run.per_identity_gate reads an append-only ledger (gpu_hour_ledger.json) and is checked BEFORE every core cell against that cell's projected cost, then re-checked AFTER the cell against its MEASURED hours, which are charged to the ledger. run.storage_gate is checked before every cell. Both halt through gate_halt.",
-      "verified": "the executable gate reproduces the published 32.960 h exactly and fires between a 16 and 17 per cent overrun on the never-measured 250k training rate, which matches the documented break-even."
-    }
+      "verified": "the executable gate reproduces the published projection to within 0.003 h (33.4747 against 33.472, the difference being the rounded per-cell constants the gate uses), and fires above it."
+    },
+    "open_risks": [
+      {
+        "risk": "the R2 and R3 per-row costs are UNSOURCED",
+        "detail": "no E8B R2 or R3 readout has ever run, and the previously claimed E7b provenance was FALSE: that figure is 0.0291 MILLISECONDS for a LayerNorm-plus-Linear stage, a different operation in units 1000x apart. No replacement provenance was invented.",
+        "carries_hours": 1.214,
+        "exposure": "at 3x the assumed rate the headroom is exhausted",
+        "status": "OPEN: close with a measurement or accept explicitly before core execution"
+      },
+      {
+        "risk": "the G14 per-row input is optimistic, not conservative",
+        "detail": "the pooled 5.139 s/row measurement covers R1 brute force plus R1 cached only, while the live gate also runs r2_brute_force and r2_cached per row (clause C3). The 3.15 per cent margin does not cover two extra constrained walks over 224 rows x 12 cells.",
+        "status": "OPEN and unquantified"
+      },
+      {
+        "risk": "the 250k training rate is unmeasured",
+        "detail": "step-scaled from the measured 40k rate; no 250k E8B cell has ever run.",
+        "carries_hours": 12.566,
+        "exposure": "the ceiling is reached at about a 12 per cent rise in per-cell cost",
+        "status": "OPEN"
+      }
+    ]
   }
 }

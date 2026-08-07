@@ -1,4 +1,12 @@
 {
+  "SUPERSEDED": {
+    "dated_utc": "2026-08-07",
+    "status": "SUPERSEDED",
+    "why": "the G14 design it pre-registers was replaced by the FP32 canonical gate (clauses C1/C2/C3 computed directly in fp32 from the trainable trunk onward).",
+    "replaced_by": "protocol_amendment_20260807_fp32.json",
+    "authoritative_record": "superseded_evidence_20260807.json",
+    "original_content_below": "unmodified"
+  },
   "g14_v2_preregistration": {
     "status": "PROPOSED - awaiting user approval; NOT yet wired into the training path",
     "dated_utc": "2026-08-07",
@@ -50,10 +58,15 @@
       "no_exemption": "there is NO margin-based exemption, NO tolerance band and NO near-tie category. Any argmax disagreement is a hard halt. This is stricter than the superseded gate, which carried an informational 1e-4 score tolerance.",
       "score_deltas": "recorded as DIAGNOSTICS ONLY: per-row max absolute deltas over the top-2 candidates and over all 100 candidates, plus the canonical top1-minus-top2 margin. No delta value can cause or prevent a halt.",
       "recorded_per_row_on_halt": [
-        "questionId", "imageId", "canonical_argmax", "brute_argmax",
-        "cached_argmax", "candidate strings for the top-2",
+        "questionId",
+        "imageId",
+        "canonical_argmax",
+        "brute_argmax",
+        "cached_argmax",
+        "candidate strings for the top-2",
         "canonical, brute and cached scores for the top-2",
-        "canonical margin", "brute and cached perturbations",
+        "canonical margin",
+        "brute and cached perturbations",
         "pinned row index and its position in the pinned set"
       ],
       "recorded_always": [
@@ -87,9 +100,21 @@
     },
     "tie_structure_under_fp32": {
       "finding": "the BF16 near-tie cluster is largely a BF16 quantisation artefact rather than genuine model indecision",
-      "rows_below_1e-5_margin_bf16": {"grid1": 20, "grid2": 23, "grid3": 211},
-      "rows_below_1e-5_margin_fp32": {"grid1": 0, "grid2": 0, "grid3": 0},
-      "rows_below_1e-3_margin_fp32": {"grid1": 2, "grid2": 5, "grid3": 19}
+      "rows_below_1e-5_margin_bf16": {
+        "grid1": 20,
+        "grid2": 23,
+        "grid3": 211
+      },
+      "rows_below_1e-5_margin_fp32": {
+        "grid1": 0,
+        "grid2": 0,
+        "grid3": 0
+      },
+      "rows_below_1e-3_margin_fp32": {
+        "grid1": 2,
+        "grid2": 5,
+        "grid3": 19
+      }
     },
     "clean_test_accessed": false
   }

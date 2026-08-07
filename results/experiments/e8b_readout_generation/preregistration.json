@@ -1,4 +1,12 @@
 {
+  "SUPERSEDED": {
+    "dated_utc": "2026-08-07",
+    "status": "PARTIALLY SUPERSEDED",
+    "why": "this record carries U4_OPEN. U4 was WITHDRAWN on 2026-08-07; no checkpoint is promoted. The rest of the pre-registration, including the binding hashes, stands and is still the authority for what was fixed in advance.",
+    "replaced_by": "protocol_amendment_20260807_fixed22.json",
+    "authoritative_record": "superseded_evidence_20260807.json",
+    "original_content_below": "unmodified"
+  },
   "e8b_preregistration": {
     "recorded_utc": "2026-08-06T09:31:46Z",
     "git_head": "0ce49fc",

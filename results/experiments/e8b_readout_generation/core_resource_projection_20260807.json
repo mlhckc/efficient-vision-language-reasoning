@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-07T18:55:57",
-    "git_commit": "94d8792",
+    "timestamp": "2026-08-07T19:00:10",
+    "git_commit": "8ad573b",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -32,6 +32,7 @@
   "e8b_core_resource_projection": {
     "generator": "experiments/e8b_readout_generation/core_resource_projection.py",
     "design": "strict deterministic BF16 training; fixed 22 epochs for B2/B3, no early stopping, epoch-22 canonical; B1 under the stored section-7.3 recipe (15/22 expected, 100-epoch stress); full FP32 canonical evaluation; G14-FP32 on the LM arms; final R1/R2/R3 readouts and interventions; measured checkpoint footprint",
+    "inputs_note": "NOT every entry below is measured. Keys ending ASSUMED or UNSOURCED are not measurements; the container name is retained for continuity with earlier records.",
     "measured_inputs": {
       "train_s_per_epoch_40k_strict_det": 78.0,
       "canonical_fp32_dev_pass_s": 108.0,
@@ -43,7 +44,7 @@
         "train_40k": 15.27,
         "train_250k": 86.36
       },
-      "r2_s_per_row_ASSUMED_from_e7b_s8": 0.0291,
+      "r2_s_per_row_UNSOURCED_no_measurement_exists": 0.0291,
       "r3_s_per_row_ASSUMED_1p5x_r2": 0.0437,
       "step_ratio_250k_over_40k": 6.242812,
       "amended_design_cost_note": "the 78.0 versus 53.88 s/epoch difference is the TOTAL cost of the amended execution design relative to the superseded one; it bundles three simultaneous changes (strict-deterministic math SDPA backend, the fp32 frozen-model instance, and enforcement assertions) and is not attributed to any single one"
@@ -59,8 +60,8 @@
       "B1_stress_100_epoch": 9.807,
       "B2": 17.634,
       "B3": 17.634,
-      "final_readouts_and_interventions_lm": 2.952,
-      "final_b1_evaluations_upper_bound": 0.18
+      "final_readouts_and_interventions_lm": 3.975,
+      "final_b1_evaluations_upper_bound": 0.953
     },
     "spent_compute_hours_itemised": {
       "search_grid1_pilot": 1.379,
@@ -81,19 +82,19 @@
         "fires": false
       },
       "pretrained_identity_35h": {
-        "projected_hours": 32.96,
-        "headroom_hours": 2.04,
+        "projected_hours": 33.472,
+        "headroom_hours": 1.528,
         "includes": "the COMPLETE planned pretrained-identity programme: A1 baseline, A4, A7c, all six B3 core cells, B3's final R2/R3 readouts and interventions, and every already-spent search, characterisation, validation and probe hour that loaded the pretrained checkpoint",
         "retry_allowance": "NONE. The plan tolerates zero B3 retries; any retry or any additional B3-loading evaluation triggers a stop-and-ask BEFORE execution",
         "fires": false
       },
       "random_identity_35h": {
-        "projected_hours": 21.068,
+        "projected_hours": 21.58,
         "fires": false
       },
       "e8b_remaining_vs_180h_core": {
-        "e8b_remaining_hours": 42.513,
-        "e8b_remaining_stress_hours": 49.208,
+        "e8b_remaining_hours": 44.309,
+        "e8b_remaining_stress_hours": 51.004,
         "scope_note": "E8B cells and E8B evaluation only; the programme-wide 180 h ceiling also covers the remaining E8A arms (about 17.6-21.6 h expected per section 13.2), which leaves the combined expectation far below the ceiling",
         "fires": false
       },
@@ -115,12 +116,13 @@
       "train_250k_step_scaling": {
         "carries_hours": 12.566,
         "basis": "step-scaled from the MEASURED 40k rate; no 250k E8B cell has ever run",
-        "break_even": "the pretrained identity reaches 35 h if the true 250k training rate is about 16 per cent above the step-scaled value (4.86 h per cell instead of 4.189 h)"
+        "break_even": "the pretrained identity reaches 35 h if the per-CELL 250k cost rises about 12 per cent (4.70 h per cell instead of 4.189 h). Because each cell also carries a fixed G14 and gate overhead, the break-even on the TRAINING RATE alone is higher, about 17 per cent."
       },
       "r2_r3_per_row": {
-        "carries_hours": 1.556,
-        "basis": "NEITHER measured for E8B; R2 carried over from the E7b S8 per-row cost, R3 assumed at 1.5x R2",
-        "sensitivity": "if R2 and R3 each cost 3x the assumed rate, the pretrained identity rises by about 1.87 h and the headroom falls to about 0.17 h"
+        "carries_hours": 1.214,
+        "basis": "UNSOURCED. Neither rate is measured for E8B, and the previously claimed E7b provenance was FALSE: the E7b S8_projection figure is 0.0291 MILLISECONDS for a LayerNorm-plus-Linear stage, a different operation in units 1000x apart. No replacement provenance was invented.",
+        "sensitivity": "if R2 and R3 each cost 3x the assumed rate, the six pretrained cells cost 2.428 h more and the headroom is exhausted",
+        "status": "OPEN RISK: close it with a measurement or accept it explicitly before core execution"
       },
       "g14_row_cost": {
         "carries_hours": 1.979,

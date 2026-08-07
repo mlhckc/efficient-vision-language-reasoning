@@ -338,6 +338,95 @@ REAUDIT_20260807_ENTRIES = [
 ]
 
 
+# Findings from the honesty-and-resources re-audit of 94d8792.
+REAUDIT_AC_20260807_ENTRIES = [
+    {"id": "REAUDIT-AC-HIGH-1",
+     "lens": "A/C (honesty and resources, re-audit)",
+     "issue": "The fix for AUDIT-C-HIGH-2 replaced a mislabel with a "
+              "FALSE PROVENANCE. It claimed R2 0.0291 s/row was carried "
+              "over from the E7b S8-stage per-row cost. The E7b figure "
+              "is S8_projection = 0.0291 MILLISECONDS, a "
+              "LayerNorm-plus-Linear projection stage: a different "
+              "operation in units 1000x apart. The matching digits are "
+              "a coincidence, and R3 was derived from it.",
+     "classification": "scientific-validity",
+     "disposition": "FIXED BY DISCLOSURE",
+     "evidence": "both rates are declared UNSOURCED, the false claim is "
+                 "quoted and corrected in the generator and in the "
+                 "reconciliation, and NO replacement provenance was "
+                 "invented. The exposure is quantified and listed as an "
+                 "OPEN RISK for the user to accept or close with a "
+                 "measurement.",
+     "closed_by": "test_audit_known_negatives, rate-provenance checks"},
+    {"id": "REAUDIT-AC-HIGH-2",
+     "lens": "A/C (honesty and resources, re-audit)",
+     "issue": "The 'complete planned programme' claim was still false. "
+              "Canonical plan section 6 requires every readout "
+              "evaluation to run once over the 10,004-row RAW "
+              "denominator and section 6.1 requires every final "
+              "checkpoint to receive raw-distribution evaluation; the "
+              "projection budgeted 7,714 in-vocabulary rows and HB3b "
+              "was neither implemented nor budgeted. Section 7 applies "
+              "three matched intervention conditions to EVERY trained "
+              "checkpoint, B1 included, and B1's 18 intervention passes "
+              "were omitted.",
+     "classification": "scientific-validity",
+     "disposition": "FIXED AT SOURCE",
+     "evidence": "N_RAW = 10004 is charged for R2, R3 and a "
+                 "raw-distribution R1 pass per cell, and B1 is charged "
+                 "its three intervention conditions. The pretrained "
+                 "identity rises from 32.960 to 33.472 h and the "
+                 "headroom falls to 1.528 h. A correction UPWARD.",
+     "closed_by": "identity_reconciliation_20260807.json"},
+    {"id": "REAUDIT-AC-MEDIUM-1",
+     "lens": "A/C (honesty and resources, re-audit)",
+     "issue": "The G14 per-row input was presented as conservative, but "
+              "its measurement covers R1 brute force plus R1 cached "
+              "only, while the live gate also runs r2_brute_force and "
+              "r2_cached per row under clause C3. The 3.15 per cent "
+              "margin does not cover two extra constrained walks over "
+              "224 rows and 12 cells, so the input is optimistic.",
+     "classification": "provenance/reproducibility",
+     "disposition": "FIXED BY DISCLOSURE",
+     "evidence": "the shortfall is stated in the generator and listed "
+                 "as an OPEN, UNQUANTIFIED risk in the reconciliation "
+                 "rather than described as a conservative margin.",
+     "closed_by": "identity_reconciliation_20260807.json open_risks"},
+    {"id": "REAUDIT-AC-MEDIUM-2",
+     "lens": "A/C (honesty and resources, re-audit)",
+     "issue": "A live record still certified the superseded 31.96 h / "
+              "3.04 h headroom figure, and four further records the "
+              "project's own map treats as superseded carried no "
+              "in-file marker: u4_decision.json still reading PROMOTE, "
+              "protocol_clarification still authorising grid points 2 "
+              "to 8, g14_v2_preregistration, and preregistration.json "
+              "carrying U4_OPEN.",
+     "classification": "provenance/reproducibility",
+     "disposition": "FIXED BY DISCLOSURE",
+     "evidence": "all five carry in-place additive markers naming what "
+                 "is superseded, what still stands and what replaced "
+                 "it; original content is unmodified below each marker.",
+     "closed_by": "test_audit_known_negatives, marker checks"},
+    {"id": "REAUDIT-AC-MEDIUM-3",
+     "lens": "A/C (honesty and resources, re-audit)",
+     "issue": "The FP32 amendment's withdrawal block said 'the text "
+              "below states', but both texts it corrects appear ABOVE "
+              "it, so the correction misdirected the reader. Several "
+              "quantified sensitivities were also internally "
+              "inconsistent with their own carried-hours figures, and "
+              "the container key measured_inputs held four entries that "
+              "are not measurements.",
+     "classification": "reporting/documentation",
+     "disposition": "FIXED AT SOURCE",
+     "evidence": "the block states ABOVE and carries a placement note; "
+                 "the sensitivities are computed from the same "
+                 "constants they describe rather than hand-written; and "
+                 "the container carries an explicit note that not every "
+                 "entry is a measurement.",
+     "closed_by": "the regenerated projection and reconciliation"},
+]
+
+
 def derive_summary(entries: list) -> dict:
     """Every count here is computed from entries[].disposition. Nothing
     is declared by hand, and no state is collapsed into another."""
@@ -378,7 +467,8 @@ def main() -> int:
     entries = list(body["entries"])
     known = {e["id"] for e in entries}
     pending = (REVIEW_A_ENTRIES + AUDIT_20260807_ENTRIES
-               + REAUDIT_20260807_ENTRIES)
+               + REAUDIT_20260807_ENTRIES
+               + REAUDIT_AC_20260807_ENTRIES)
     appended = [e for e in pending if e["id"] not in known]
     for entry in appended:
         entry = dict(entry)

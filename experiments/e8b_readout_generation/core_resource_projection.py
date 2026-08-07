@@ -35,12 +35,18 @@ D = PROJECT_ROOT / "results" / "experiments" / "e8b_readout_generation"
 TRAIN_S_40K = 78.0        # s/epoch, strict-deterministic probe runs 3/4
 EVAL_FP32_S = 108.0       # s, canonical FP32 dev pass (probe runs 3/4)
 EVAL_BF16_S = 85.7        # secondary deployment diagnostic only
-# G14 per-row cost. The measured three-way per-row costs are 5.149 /
-# 5.137 / 5.135 s/row (fp32_canonical_validation.json, pooled 5.139 over
-# 478 rows). 5.301 is NOT one of those measurements: it is a deliberate
-# +3 per cent conservative margin over the pooled measurement, applied
-# because the recorded runs did not carry the strict-deterministic
-# backend the core cells will. It is an ASSUMPTION, labelled as such.
+# G14 per-row cost. The measured per-row costs are 5.149 / 5.137 /
+# 5.135 s/row (fp32_canonical_validation.json, pooled 5.1387 over 478
+# rows). 5.301 is NOT one of those measurements: it is the pooled figure
+# plus a 3.15 per cent margin. It is an ASSUMPTION, labelled as such.
+#
+# DISCLOSED SHORTFALL: the measurement covers R1 brute force plus R1
+# cached only, while the LIVE gate additionally runs r2_brute_force and
+# r2_cached per row (clause C3). A 3.15 per cent margin nominally
+# covering the deterministic backend does NOT cover two extra
+# constrained walks over 224 rows x 12 cells, so this input is
+# optimistic by an unquantified amount, not conservative. It is an open
+# risk alongside the unsourced R2/R3 rates.
 G14_ROW_S_MEASURED_POOLED = 5.139   # fp32_canonical_validation.json
 G14_ROW_S = 5.301         # ASSUMED: measured pooled + 3 per cent margin
 G14_ROWS = 64 + 160       # pre-selection P + post-selection P+L+O union
@@ -52,14 +58,32 @@ B1_S_40K = 15.27          # v3_01 measured, includes its dev pass
 B1_S_250K = 86.36         # v3_01/v3_03 MEASURED 250k rate (section 13.2)
 B1_EXPECTED = {"train_40k": 15, "train_250k": 22}   # section 7.1 planning
 B1_STRESS = 100           # section 7.3 patience cap
-# R2/R3 per-row costs. NEITHER IS MEASURED FOR E8B. No E8B R2 or R3
-# readout has ever been executed, so no per-row walk exists to measure.
-# R2 0.0291 s/row is carried over from the E7b S8-stage per-row cost of
-# the same trunk-and-projection forward and is an ASSUMPTION for the
-# trie-constrained decode; R3 is a further ASSUMPTION at 1.5x R2.
-# Sensitivity for both is reported in residual_assumptions.
+# R2/R3 per-row costs. BOTH ARE UNSOURCED. No E8B R2 or R3 readout has
+# ever been executed, so no per-row walk exists to measure.
+#
+# CORRECTION of 2026-08-07: an earlier version of this comment claimed
+# R2 0.0291 s/row was "carried over from the E7b S8-stage per-row cost
+# of the same trunk-and-projection forward". THAT WAS FALSE. The E7b
+# figure is S8_projection = 0.0291 MILLISECONDS (pilot_e8a_a1.json,
+# runs[2].stage_medians_ms), a LayerNorm-plus-Linear projection stage --
+# a different operation, in units 1000x apart. The matching digits are a
+# coincidence and are not a basis. No replacement provenance has been
+# invented: the number is retained only so the projection remains
+# comparable with its own history, and is declared UNSOURCED.
+#
+# A trie-constrained decode walks up to four sequential LM forwards per
+# row unbatched, so 29.1 ms/row is plausible in order of magnitude but
+# rests on nothing measured. The exposure is quantified in
+# residual_assumptions_quantified and is an OPEN RISK for the user to
+# accept or to close with a measurement before core execution.
 R2_ROW_S, R3_ROW_S = 0.0291, 0.0437
-N_DEV = 7714
+N_DEV = 7714       # in-vocabulary development rows
+# Canonical plan section 6: "Every readout evaluation runs once over the
+# 10,004-row raw denominator", and section 6.1 requires every final
+# checkpoint to receive raw-distribution evaluation. Budgeting the
+# readouts at N_DEV understated them; HB3b was neither implemented nor
+# costed.
+N_RAW = 10004      # raw development denominator (plan section 6)
 WALL_H, IDENT_H, CORE_H, MEM_FRACTION = 8.0, 35.0, 180.0, 0.80
 BASE = {"pretrained": 2.29222, "random": 1.95811}   # A1 / A1r measured
 A4_H, A7C_H = 1.804, 1.864                          # protocol 13.2b
@@ -137,14 +161,25 @@ def main() -> int:
     # Final readout passes on the 12 LM canonical checkpoints: R1 comes
     # free from the epoch-22 pass; R2 and R3 are per-row walks; the three
     # intervention conditions are one canonical R1 pass each.
-    readouts_per_lm_cell = hours(N_DEV * (R2_ROW_S + R3_ROW_S))
+    # R2 and R3 run over the RAW denominator, per plan section 6.
+    readouts_per_lm_cell = hours(N_RAW * (R2_ROW_S + R3_ROW_S))
+    # Each final checkpoint also receives a raw-distribution R1 pass, in
+    # addition to the in-vocabulary one that comes free from epoch 22.
+    raw_r1_per_cell = hours(EVAL_FP32_S * N_RAW / N_DEV)
+    readouts_per_lm_cell += raw_r1_per_cell
     interventions_per_lm_cell = 3 * hours(EVAL_FP32_S)
     final_eval_lm = 12 * (readouts_per_lm_cell + interventions_per_lm_cell)
     # B1 final classification evaluations: charged at the LM R1 pass
     # rate as a LABELLED UPPER BOUND (a classifier forward over dev costs
     # a few seconds, far below 108 s; B1 loads no LM so this line never
     # touches either identity ceiling).
-    final_eval_b1 = 6 * hours(EVAL_FP32_S)
+    # Plan section 7: EVERY trained checkpoint, B1 included, is
+    # evaluated under normal, matched fixed-image, matched
+    # fixed-question and shuffled-image conditions -- 90 intervention
+    # passes over the 30 core runs. Only six plain B1 passes were
+    # costed, omitting B1's 18 intervention passes and its raw pass.
+    final_eval_b1 = 6 * (hours(EVAL_FP32_S) + raw_r1_per_cell
+                         + 3 * hours(EVAL_FP32_S))
     # Section 19 mandates one E7a-protocol serial efficiency measurement
     # on the final selected checkpoints (serial_efficiency.py). Protocol
     # 13.2 costs it at 0.500-1.000 h; the UPPER bound is charged here.
@@ -232,6 +267,10 @@ def main() -> int:
                   "100-epoch stress); full FP32 canonical evaluation; "
                   "G14-FP32 on the LM arms; final R1/R2/R3 readouts and "
                   "interventions; measured checkpoint footprint",
+        "inputs_note": "NOT every entry below is measured. Keys ending "
+                       "ASSUMED or UNSOURCED are not measurements; the "
+                       "container name is retained for continuity with "
+                       "earlier records.",
         "measured_inputs": {
             "train_s_per_epoch_40k_strict_det": TRAIN_S_40K,
             "canonical_fp32_dev_pass_s": EVAL_FP32_S,
@@ -241,7 +280,7 @@ def main() -> int:
             "non_g14_gate_overhead_h": GATE_OVERHEAD_H,
             "b1_s_per_epoch": {"train_40k": B1_S_40K,
                                "train_250k": B1_S_250K},
-            "r2_s_per_row_ASSUMED_from_e7b_s8": R2_ROW_S,
+            "r2_s_per_row_UNSOURCED_no_measurement_exists": R2_ROW_S,
             "r3_s_per_row_ASSUMED_1p5x_r2": R3_ROW_S,
             "step_ratio_250k_over_40k": round(RATIO_250K, 6),
             "amended_design_cost_note":
@@ -277,18 +316,29 @@ def main() -> int:
                 "basis": "step-scaled from the MEASURED 40k rate; no "
                          "250k E8B cell has ever run",
                 "break_even": "the pretrained identity reaches 35 h if "
-                              "the true 250k training rate is about 16 "
-                              "per cent above the step-scaled value "
-                              "(4.86 h per cell instead of 4.189 h)"},
+                              "the per-CELL 250k cost rises about 12 "
+                              "per cent (4.70 h per cell instead of "
+                              "4.189 h). Because each cell also carries "
+                              "a fixed G14 and gate overhead, the "
+                              "break-even on the TRAINING RATE alone is "
+                              "higher, about 17 per cent."},
             "r2_r3_per_row": {
-                "carries_hours": 1.556,
-                "basis": "NEITHER measured for E8B; R2 carried over "
-                         "from the E7b S8 per-row cost, R3 assumed at "
-                         "1.5x R2",
+                "carries_hours": round(6 * hours(
+                    N_RAW * (R2_ROW_S + R3_ROW_S)), 3),
+                "basis": "UNSOURCED. Neither rate is measured for E8B, "
+                         "and the previously claimed E7b provenance was "
+                         "FALSE: the E7b S8_projection figure is 0.0291 "
+                         "MILLISECONDS for a LayerNorm-plus-Linear "
+                         "stage, a different operation in units 1000x "
+                         "apart. No replacement provenance was "
+                         "invented.",
                 "sensitivity": "if R2 and R3 each cost 3x the assumed "
-                               "rate, the pretrained identity rises by "
-                               "about 1.87 h and the headroom falls to "
-                               "about 0.17 h"},
+                               "rate, the six pretrained cells cost "
+                               + str(round(12 * hours(
+                                   N_RAW * (R2_ROW_S + R3_ROW_S)), 3))
+                               + " h more and the headroom is exhausted",
+                "status": "OPEN RISK: close it with a measurement or "
+                          "accept it explicitly before core execution"},
             "g14_row_cost": {
                 "carries_hours": 1.979,
                 "basis": "pooled measurement 5.139 s/row plus a 3 per "

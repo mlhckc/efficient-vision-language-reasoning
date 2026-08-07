@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-07T18:55:56",
-    "git_commit": "94d8792",
+    "timestamp": "2026-08-07T19:01:44",
+    "git_commit": "8ad573b",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -488,10 +488,60 @@
         "evidence": "restore validates the full field set before touching anything, and both gates record their verified determinism block in the gate record.",
         "closed_by": "test_audit_known_negatives",
         "state": "FIXED_CLOSED"
+      },
+      {
+        "id": "REAUDIT-AC-HIGH-1",
+        "lens": "A/C (honesty and resources, re-audit)",
+        "issue": "The fix for AUDIT-C-HIGH-2 replaced a mislabel with a FALSE PROVENANCE. It claimed R2 0.0291 s/row was carried over from the E7b S8-stage per-row cost. The E7b figure is S8_projection = 0.0291 MILLISECONDS, a LayerNorm-plus-Linear projection stage: a different operation in units 1000x apart. The matching digits are a coincidence, and R3 was derived from it.",
+        "classification": "scientific-validity",
+        "disposition": "FIXED BY DISCLOSURE",
+        "evidence": "both rates are declared UNSOURCED, the false claim is quoted and corrected in the generator and in the reconciliation, and NO replacement provenance was invented. The exposure is quantified and listed as an OPEN RISK for the user to accept or close with a measurement.",
+        "closed_by": "test_audit_known_negatives, rate-provenance checks",
+        "state": "FIXED_CLOSED"
+      },
+      {
+        "id": "REAUDIT-AC-HIGH-2",
+        "lens": "A/C (honesty and resources, re-audit)",
+        "issue": "The 'complete planned programme' claim was still false. Canonical plan section 6 requires every readout evaluation to run once over the 10,004-row RAW denominator and section 6.1 requires every final checkpoint to receive raw-distribution evaluation; the projection budgeted 7,714 in-vocabulary rows and HB3b was neither implemented nor budgeted. Section 7 applies three matched intervention conditions to EVERY trained checkpoint, B1 included, and B1's 18 intervention passes were omitted.",
+        "classification": "scientific-validity",
+        "disposition": "FIXED AT SOURCE",
+        "evidence": "N_RAW = 10004 is charged for R2, R3 and a raw-distribution R1 pass per cell, and B1 is charged its three intervention conditions. The pretrained identity rises from 32.960 to 33.472 h and the headroom falls to 1.528 h. A correction UPWARD.",
+        "closed_by": "identity_reconciliation_20260807.json",
+        "state": "FIXED_CLOSED"
+      },
+      {
+        "id": "REAUDIT-AC-MEDIUM-1",
+        "lens": "A/C (honesty and resources, re-audit)",
+        "issue": "The G14 per-row input was presented as conservative, but its measurement covers R1 brute force plus R1 cached only, while the live gate also runs r2_brute_force and r2_cached per row under clause C3. The 3.15 per cent margin does not cover two extra constrained walks over 224 rows and 12 cells, so the input is optimistic.",
+        "classification": "provenance/reproducibility",
+        "disposition": "FIXED BY DISCLOSURE",
+        "evidence": "the shortfall is stated in the generator and listed as an OPEN, UNQUANTIFIED risk in the reconciliation rather than described as a conservative margin.",
+        "closed_by": "identity_reconciliation_20260807.json open_risks",
+        "state": "FIXED_CLOSED"
+      },
+      {
+        "id": "REAUDIT-AC-MEDIUM-2",
+        "lens": "A/C (honesty and resources, re-audit)",
+        "issue": "A live record still certified the superseded 31.96 h / 3.04 h headroom figure, and four further records the project's own map treats as superseded carried no in-file marker: u4_decision.json still reading PROMOTE, protocol_clarification still authorising grid points 2 to 8, g14_v2_preregistration, and preregistration.json carrying U4_OPEN.",
+        "classification": "provenance/reproducibility",
+        "disposition": "FIXED BY DISCLOSURE",
+        "evidence": "all five carry in-place additive markers naming what is superseded, what still stands and what replaced it; original content is unmodified below each marker.",
+        "closed_by": "test_audit_known_negatives, marker checks",
+        "state": "FIXED_CLOSED"
+      },
+      {
+        "id": "REAUDIT-AC-MEDIUM-3",
+        "lens": "A/C (honesty and resources, re-audit)",
+        "issue": "The FP32 amendment's withdrawal block said 'the text below states', but both texts it corrects appear ABOVE it, so the correction misdirected the reader. Several quantified sensitivities were also internally inconsistent with their own carried-hours figures, and the container key measured_inputs held four entries that are not measurements.",
+        "classification": "reporting/documentation",
+        "disposition": "FIXED AT SOURCE",
+        "evidence": "the block states ABOVE and carries a placement note; the sensitivities are computed from the same constants they describe rather than hand-written; and the container carries an explicit note that not every entry is a measurement.",
+        "closed_by": "the regenerated projection and reconciliation",
+        "state": "FIXED_CLOSED"
       }
     ],
     "summary": {
-      "total": 45,
+      "total": 50,
       "derivation": "computed mechanically from entries[].disposition via the state map below; never declared by hand. ACCEPTED LIMITATION is NOT counted as FIXED, and PARTIALLY FIXED is NOT counted as CLOSED.",
       "state_map": {
         "FIXED": "FIXED_CLOSED",
@@ -504,14 +554,14 @@
         "OPEN": "OPEN"
       },
       "by_state": {
-        "FIXED_CLOSED": 44,
+        "FIXED_CLOSED": 49,
         "ACCEPTED_LIMITATION": 1
       },
       "by_classification": {
-        "scientific-validity": 9,
+        "scientific-validity": 11,
         "execution-critical": 20,
-        "provenance/reproducibility": 13,
-        "reporting/documentation": 3
+        "provenance/reproducibility": 15,
+        "reporting/documentation": 4
       },
       "fixed_closed": [
         "A-M1",
@@ -557,7 +607,12 @@
         "REAUDIT-B-MEDIUM-1",
         "REAUDIT-B-MEDIUM-2",
         "REAUDIT-B-MEDIUM-3",
-        "REAUDIT-B-LOW-1"
+        "REAUDIT-B-LOW-1",
+        "REAUDIT-AC-HIGH-1",
+        "REAUDIT-AC-HIGH-2",
+        "REAUDIT-AC-MEDIUM-1",
+        "REAUDIT-AC-MEDIUM-2",
+        "REAUDIT-AC-MEDIUM-3"
       ],
       "accepted_limitation": [
         "A-M5/B-M?"

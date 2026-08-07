@@ -1952,15 +1952,7 @@ def _train_core_locked(arm, scale, seed, recipe, run_name, result_path,
     e8b_run.atomic_write_json(result_path, record)
     print(f"[CORE DONE] {run_name}: canonical epoch {canonical_epoch}, "
           f"dev {primary_accuracy:.4f}, wall {elapsed / 3600:.2f} h")
-    print(f"[LEDGER] {after['identity']} identity now at "
-          f"{after['already_charged_hours']} h of "
-          f"{after['ceiling_hours']} h "
-          f"({after['headroom_hours']} h headroom)")
-    if after["fires"]:
-        e8b_run.gate_halt(run_name, "G19_IDENTITY",
-                          f"the {after['identity']} identity has "
-                          f"EXCEEDED its 35 GPU-hour ceiling after this "
-                          f"cell; execution stops and returns to the "
-                          f"user",
-                          {"identity_gate": after})
+    # The ledger charge and the post-charge ceiling re-check belong to
+    # train_core_cell's finally block, which runs on every exit path
+    # including this one. They are deliberately NOT repeated here.
     return 0

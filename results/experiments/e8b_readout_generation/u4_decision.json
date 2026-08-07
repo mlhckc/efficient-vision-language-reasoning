@@ -1,4 +1,12 @@
 {
+  "SUPERSEDED": {
+    "dated_utc": "2026-08-07",
+    "status": "WITHDRAWN - DO NOT ACT ON THE DECISION BELOW",
+    "why": "this record reads 'PROMOTE'. U4 was WITHDRAWN by the user on 2026-08-07: no search checkpoint is promoted and all 18 core cells are trained fresh (CLAUDE.md E8B gate item 3). The code records the withdrawal as run.U4_DECIDED = 'withdrawn-2026-08-07'.",
+    "replaced_by": "protocol_amendment_20260807_fixed22.json",
+    "authoritative_record": "superseded_evidence_20260807.json",
+    "original_content_below": "unmodified"
+  },
   "metadata": {
     "timestamp": "2026-08-06T17:27:55",
     "git_commit": "f03cced",

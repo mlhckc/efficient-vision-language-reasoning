@@ -1,4 +1,12 @@
 {
+  "SUPERSEDED": {
+    "dated_utc": "2026-08-07",
+    "status": "PARTIALLY SUPERSEDED",
+    "why": "this record still authorises search grid points 2 to 8. The eight-point search was PERMANENTLY ABANDONED on 2026-08-07 and grid points 4 to 8 must never run (CLAUDE.md E8B gate item 1). Its compute-ceiling clauses are unaffected and remain in force.",
+    "replaced_by": "protocol_amendment_20260807_fp32.json and superseded_evidence_20260807.json",
+    "authoritative_record": "superseded_evidence_20260807.json",
+    "original_content_below": "unmodified"
+  },
   "protocol_clarification": {
     "dated_utc": "2026-08-07",
     "status": "RATIFIED BY THE USER",
