@@ -1167,9 +1167,13 @@ def test_g10_prediction_entropy() -> None:
           and fires(4.0, 0.61) and not fires(0.31, 0.59))
 
     src = (E8B_DIR / "training.py").read_text()
+    # RETARGETED, not weakened: the call moved into g10_collapse_record
+    # when that branch was extracted so a test could execute it. The
+    # source pin is kept for the quantity it names, and
+    # test_g10_type_contract below now runs the real branch as well.
     check("G10 gates on the section-11 per-row quantity, not the "
           "argmax histogram",
-          "entropy = mean_prediction_entropy_nats(scores_a)" in src
+          "entropy = mean_prediction_entropy_nats(scores)" in src
           and "collapse = top1_share >= 0.60 or entropy <= 0.30" in src
           and "argmax_histogram" not in src)
     check("G10 halting treatment follows section 11: halting for the "
@@ -1179,6 +1183,126 @@ def test_g10_prediction_entropy() -> None:
     check("the record carries the P1 non-comparability statement",
           "pseudo-probability" in src.lower()
           and "never numerically comparable" in src)
+
+
+# --- 26b. The G10 producer-consumer type contract -----------------------------
+
+def test_g10_type_contract() -> None:
+    """The contract G10 crossed on 2026-08-08.
+
+    canonical_dev_predictions returns the B2/B3 score matrix as a numpy
+    float64 ndarray; mean_prediction_entropy_nats was annotated
+    torch.Tensor and called Tensor.double(). B3/train_40k/seed0 trained
+    all 22 epochs, passed G8, G14 pre-selection, G9, G11 and SELECTION,
+    and then died of AttributeError in G10 with no result artefact. The
+    suite did not catch it because it exercised the consumer with
+    torch.zeros and pinned the call site by source text, so nothing bound
+    the producer's OUTPUT TYPE to the consumer's INPUT TYPE. These checks
+    bind it, and run the real branch end to end."""
+    from experiments.e8b_readout_generation import training
+
+    entropy = training.mean_prediction_entropy_nats
+
+    # A. numpy float64 and the equivalent torch float64 agree EXACTLY.
+    # Not approximately: torch.from_numpy shares the buffer, so the same
+    # values go through the same operations in the same order.
+    torch.manual_seed(20260808)
+    reference = torch.randn(23, 100, dtype=torch.float64)
+    as_array = reference.numpy().copy()
+    check("numpy float64 scores give exactly the torch float64 entropy",
+          entropy(as_array) == entropy(reference),
+          f"{entropy(as_array)!r} vs {entropy(reference)!r}")
+    check("the numpy branch does not mutate its input",
+          np.array_equal(as_array, reference.numpy()))
+
+    # The producer's own final transformation, transcribed from
+    # canonical_dev_predictions: fp32 tensor -> ndarray -> float64.
+    fp32_scores = torch.randn(17, 100)
+    produced = torch.cat([fp32_scores]).numpy().astype(np.float64)
+    check("the producer's fp32 -> float64 ndarray transformation is "
+          "accepted and matches the tensor result",
+          entropy(produced) == entropy(torch.from_numpy(produced)))
+
+    # C. Anything else fails loudly rather than being coerced.
+    for bad in ([[0.5] * 100], (0.5,) * 100, None, 3.5, "scores",
+                {"scores": 1.0}):
+        must_fail(f"unsupported entropy input "
+                  f"{type(bad).__name__} fails loudly",
+                  lambda b=bad: entropy(b))
+
+    # D. The B1 tensor path is unchanged. The shared function must
+    # reproduce, bit for bit, the inline expression B1 used before the
+    # extraction -- recomputed here independently, not imported.
+    torch.manual_seed(5)
+    b1_logits = torch.randn(13, 100)
+    probs = torch.softmax(b1_logits.double(), dim=-1)
+    inline = float((-(probs * torch.log(probs.clamp_min(1e-300)))
+                    ).sum(dim=-1).mean())
+    check("the B1 tensor path is unchanged: the shared function "
+          "reproduces B1's previous inline expression exactly",
+          entropy(b1_logits) == inline,
+          f"{entropy(b1_logits)!r} vs {inline!r}")
+
+    # B + E. The REAL producer and the REAL G10 branch, end to end on
+    # CPU: a real E8BPrefixModel and the real canonical evaluation feed
+    # the real g10_collapse_record across the boundary that failed.
+    lm = tiny_lm()
+    cache = tiny_cache()
+    trunk, projection = e8b_latents.build_trunk_and_projection(
+        0, 0.0, d_lm=TINY_HIDDEN)
+    model = e8b_latents.E8BPrefixModel(trunk, projection).eval()
+    torch.manual_seed(77)
+    rows = 6
+    images = torch.randn(rows, 3, 512)
+    questions = torch.randn(rows, 4, 512)
+    mask = torch.zeros(rows, 4, dtype=torch.bool)
+    row_labels = torch.arange(rows, dtype=torch.long) % 5
+    loader = [(images[i:i + 2], questions[i:i + 2], None,
+               mask[i:i + 2], row_labels[i:i + 2])
+              for i in range(0, rows, 2)]
+    predictions, labels_np, scores_a, margins = \
+        training.canonical_dev_predictions(model, lm, loader, cache,
+                                           torch.device("cpu"))
+    check("canonical_dev_predictions really returns a numpy float64 "
+          "score matrix, which is what G10 must consume",
+          isinstance(scores_a, np.ndarray)
+          and scores_a.dtype == np.float64
+          and scores_a.shape == (rows, len(cache["sequences"])),
+          f"{type(scores_a).__name__} {getattr(scores_a, 'dtype', None)}")
+    g10 = training.g10_collapse_record("B3", predictions, scores_a)
+    check("the real B3 G10 branch executes across the producer-consumer "
+          "boundary and yields a finite entropy",
+          math.isfinite(g10["mean_prediction_entropy_nats"])
+          and 0.0 <= g10["top1_share"] <= 1.0
+          and isinstance(g10["fires"], bool)
+          and g10["gate_treatment"] == "halting")
+    check("the B2 record keeps its section-11 diagnostic treatment "
+          "through the same boundary",
+          training.g10_collapse_record(
+              "B2", predictions, scores_a)["gate_treatment"]
+          == "recorded scientific diagnostic (section 11)")
+    check("the extracted record reproduces the entropy of its own "
+          "score argument",
+          g10["mean_prediction_entropy_nats"]
+          == round(entropy(scores_a), 6))
+    # The B1 arm through the same extracted record, on a real tensor.
+    b1_record = training.g10_collapse_record(
+        "B1", predictions, torch.from_numpy(scores_a).float())
+    check("the B1 arm carries its own comparability wording, not the "
+          "E8B pseudo-probability one",
+          b1_record["comparability"] == "B1 classifier softmax entropy"
+          and b1_record["gate_treatment"] == "halting")
+
+    # The extraction is behaviour-preserving on the collapse rule.
+    collapsed_scores = np.full((11, 100), -1e3)
+    collapsed_scores[:, 3] = 0.0
+    collapsed = training.g10_collapse_record(
+        "B3", np.full(11, 3), collapsed_scores)
+    check("a collapsed distribution still fires G10 through the "
+          "extracted record",
+          collapsed["fires"] is True
+          and collapsed["top1_share"] == 1.0
+          and collapsed["distinct_answers"] == 1)
 
 
 # --- 26c. The frozen eight-point grid and the derived G1/G15 bindings ---------
@@ -5134,6 +5258,7 @@ def run() -> None:
     test_resource_projections()
     test_training_module()
     test_g10_prediction_entropy()
+    test_g10_type_contract()
     test_search_grid_and_bindings()
     test_fp32_amendment()
     test_core_readiness_closure()

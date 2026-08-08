@@ -427,7 +427,7 @@ def r1_scores_batched(lm, prefix, cache: dict) -> torch.Tensor:
     return scores
 
 
-def mean_prediction_entropy_nats(scores: torch.Tensor) -> float:
+def mean_prediction_entropy_nats(scores) -> float:
     """Master protocol section 11: `H = mean_n( - sum_k p_n[k] * ln
     p_n[k] )` in nats, where `p_n` is the model's predictive distribution
     over the 100 answers for development row `n`. For the R1 readout that
@@ -435,11 +435,67 @@ def mean_prediction_entropy_nats(scores: torch.Tensor) -> float:
     candidate scores whose argmax is the recorded prediction, so the
     entropy and the prediction describe one distribution. Accumulated in
     float64 over every development row, matching the E8A implementation
-    of the same clause (e8a_common.py:915-918)."""
-    probabilities = torch.softmax(scores.double(), dim=-1)
+    of the same clause (e8a_common.py:915-918).
+
+    ACCEPTS BOTH TYPES THE PIPELINE ACTUALLY PRODUCES. The two producers
+    disagree on container: b1_canonical_predictions returns its logits as
+    a torch.Tensor, while canonical_dev_predictions returns the B2/B3
+    score matrix as a numpy float64 ndarray. The annotation said Tensor
+    and the body called Tensor.double(), so every B2 and B3 cell reached
+    G10 and died with AttributeError after a complete 22-epoch training
+    run (B3/train_40k/seed0, 2026-08-08). The input is canonicalised to a
+    float64 torch tensor here and the entropy computation below is
+    unchanged; ndarray input converts through torch.from_numpy, which
+    shares the buffer and preserves every value bit for bit. Anything
+    else fails loudly rather than being coerced."""
+    if isinstance(scores, torch.Tensor):
+        canonical = scores.double()
+    elif isinstance(scores, np.ndarray):
+        canonical = torch.from_numpy(np.ascontiguousarray(scores)).double()
+    else:
+        raise TypeError(
+            f"mean_prediction_entropy_nats accepts torch.Tensor or "
+            f"numpy.ndarray scores, not {type(scores).__name__}. The "
+            f"scientific producers are b1_canonical_predictions "
+            f"(Tensor) and canonical_dev_predictions (ndarray); any "
+            f"other input is a contract error, not something to coerce.")
+    probabilities = torch.softmax(canonical, dim=-1)
     return float((-(probabilities
                     * torch.log(probabilities.clamp_min(1e-300)))
                   ).sum(dim=-1).mean())
+
+
+def g10_collapse_record(arm: str, predictions, scores) -> dict:
+    """The G10 collapse diagnostic of master protocol section 11.
+
+    Extracted from _train_core_locked so the branch that crosses the
+    producer-consumer type boundary is executable by a test instead of
+    being pinned by source text alone. The caller chooses the entropy
+    source per arm, exactly as before: B1 supplies its canonical
+    classifier logits tensor, B2 and B3 the canonical fp32 R1 score
+    matrix. Halting stays with the caller, which owns the run name and
+    the gate record; this function only computes.
+
+    The arithmetic is unchanged. B1's entropy previously used an inline
+    copy of the same softmax-then-mean-row-entropy expression and now
+    calls the shared function, which is the identical sequence of
+    operations on the identical tensor and is therefore bit-identical."""
+    counts = np.bincount(predictions, minlength=100)
+    shares = counts / counts.sum()
+    top1_share = float(shares.max())
+    distinct = int((counts > 0).sum())
+    entropy = mean_prediction_entropy_nats(scores)
+    collapse = top1_share >= 0.60 or entropy <= 0.30
+    return {"distinct_answers": distinct,
+            "top1_share": round(top1_share, 4),
+            "mean_prediction_entropy_nats": round(entropy, 6),
+            "comparability": "P1: an E8B-specific pseudo-probability "
+                             "diagnostic; never numerically comparable "
+                             "with an E8A entropy" if arm != "B1" else
+                             "B1 classifier softmax entropy",
+            "fires": bool(collapse),
+            "gate_treatment": ("recorded scientific diagnostic (section "
+                               "11)" if arm == "B2" else "halting")}
 
 
 # --- OI6: the canonical FP32 evaluation graph --------------------------------
@@ -2031,33 +2087,22 @@ def _train_core_locked(arm, scale, seed, recipe, run_name, result_path,
                           f"{canonical_accuracy:.5f}", {})
 
     # --- G10: collapse (halting for B1/B3; recorded for B2) ---
-    counts = np.bincount(predictions_a, minlength=100)
-    shares = counts / counts.sum()
-    top1_share = float(shares.max())
-    distinct = int((counts > 0).sum())
+    # The entropy source is arm-specific and the caller picks it: B1's
+    # canonical logits come from a second classifier pass, B2/B3 reuse
+    # the canonical R1 score matrix already computed above.
     if arm == "B1":
-        probs = torch.softmax(
-            b1_canonical_predictions(model, dev_loader, device)[2]
-            .double(), dim=-1)
-        entropy = float((-(probs * torch.log(probs.clamp_min(1e-300)))
-                         ).sum(dim=-1).mean())
+        entropy_scores = b1_canonical_predictions(model, dev_loader,
+                                                  device)[2]
     else:
-        entropy = mean_prediction_entropy_nats(scores_a)
-    collapse = top1_share >= 0.60 or entropy <= 0.30
-    g10 = {"distinct_answers": distinct,
-           "top1_share": round(top1_share, 4),
-           "mean_prediction_entropy_nats": round(entropy, 6),
-           "comparability": "P1: an E8B-specific pseudo-probability "
-                            "diagnostic; never numerically comparable "
-                            "with an E8A entropy" if arm != "B1" else
-                            "B1 classifier softmax entropy",
-           "fires": bool(collapse),
-           "gate_treatment": ("recorded scientific diagnostic (section "
-                              "11)" if arm == "B2" else "halting")}
+        entropy_scores = scores_a
+    g10 = g10_collapse_record(arm, predictions_a, entropy_scores)
+    collapse = g10["fires"]
     if collapse and arm != "B2":
         e8b_run.gate_halt(run_name, "G10",
-                          f"prediction collapse: top-1 {top1_share:.3f}, "
-                          f"entropy {entropy:.3f} nats", g10)
+                          f"prediction collapse: top-1 "
+                          f"{g10['top1_share']:.3f}, entropy "
+                          f"{g10['mean_prediction_entropy_nats']:.3f} "
+                          f"nats", g10)
 
     # --- Closing G14-FP32 on the canonical checkpoint ---
     g14_post = None
