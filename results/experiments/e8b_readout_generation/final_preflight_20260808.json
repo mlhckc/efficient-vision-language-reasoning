@@ -1,0 +1,255 @@
+{
+  "metadata": {
+    "timestamp": "2026-08-08T01:45:22",
+    "git_commit": "372e3cc",
+    "git_dirty": true,
+    "open_clip_version": "3.3.0",
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "h5py_version": "3.16.0",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "deterministic": true,
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "embed_dim": 512,
+    "top_k_answers": 100,
+    "n_train": 40000,
+    "n_val": 8000,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "hidden_dim": 512,
+    "dropout": 0.3,
+    "weight_decay": 0.0001
+  },
+  "e8b_final_preflight": {
+    "dated_utc": "2026-08-08",
+    "NON_TRAINING": true,
+    "optimizer_steps": 0,
+    "first_cell": [
+      "B3",
+      "train_40k",
+      0
+    ],
+    "run_name": "e8b_core_B3_train_40k_seed0",
+    "checks": {
+      "the first cell can ACQUIRE its execution lock": {
+        "passed": true,
+        "detail": "e8b_B3_train_40k_seed0.lock held by pid 1716820"
+      },
+      "a duplicate acquire is refused while held": {
+        "passed": true,
+        "detail": null
+      },
+      "the lock is RELEASED afterwards, leaving none behind": {
+        "passed": true,
+        "detail": "0 locks remain"
+      },
+      "no optimizer step was reached by this preflight": {
+        "passed": true,
+        "detail": "no optimizer is constructed in this module"
+      },
+      "the core recipe hashes, stably and distinctly per cell": {
+        "passed": true,
+        "detail": "e56510c3d4b8461f5746cee9b992de78..., B2 counterpart differs"
+      },
+      "recipe hyperparameters are the frozen ones": {
+        "passed": true,
+        "detail": "lr 0.0003, warmup 0.0, dropout 0.1"
+      },
+      "exactly 22 epochs, no early stopping, epoch-22 primary": {
+        "passed": true,
+        "detail": null
+      },
+      "across the matrix: B2/B3 fixed at 22, B1 at its own 7.3 rule": {
+        "passed": true,
+        "detail": null
+      },
+      "the protocol family is the FP32 fixed-22 core family": {
+        "passed": true,
+        "detail": "e8b-fp32-fixed22-core-2026-08-07"
+      },
+      "strict determinism is enforced, warn_only False": {
+        "passed": true,
+        "detail": "{'deterministic_algorithms': True, 'warn_only': False, 'flash_sdp': False, 'mem_efficient_sdp': False, 'math_sdp': True, 'cudnn_deterministic': True, 'cublas_workspace_config': ':4096:8'}"
+      },
+      "TF32 is pinned off": {
+        "passed": true,
+        "detail": null
+      },
+      "canonical evaluation precision is fp32": {
+        "passed": true,
+        "detail": null
+      },
+      "training precision is bf16 autocast on the training path": {
+        "passed": true,
+        "detail": null
+      },
+      "the canonical prefix refuses autocast and non-fp32 inputs": {
+        "passed": true,
+        "detail": null
+      },
+      "the buffer-parity gate is available and wired": {
+        "passed": true,
+        "detail": null
+      },
+      "the recorded parity evidence still shows all buffers identical": {
+        "passed": true,
+        "detail": null
+      },
+      "NO e8b_core_* result or checkpoint exists": {
+        "passed": true,
+        "detail": "[]"
+      },
+      "a prior result would refuse re-execution": {
+        "passed": true,
+        "detail": null
+      },
+      "atomic writes refuse to overwrite": {
+        "passed": true,
+        "detail": null
+      },
+      "the resource gate CLEARS the first cell": {
+        "passed": true,
+        "detail": "34.8052 h of 40.0 h"
+      },
+      "the ceiling, floor and derived margin are the authorised figures": {
+        "passed": true,
+        "detail": null
+      },
+      "the largest retry is recorded as NOT fitting automatically": {
+        "passed": true,
+        "detail": "largest 4.249 h against a 4.195 h margin"
+      },
+      "TRAINING_AUTHORIZED is still pending approval": {
+        "passed": true,
+        "detail": "core-matrix-frozen-pending-approval"
+      },
+      "EVERY optimizer path still refuses": {
+        "passed": true,
+        "detail": "['core-cell', 'core-gate', 'nonscientific-probe', 'throughput-calibration']"
+      },
+      "the embargo scan passes over every E8B source": {
+        "passed": true,
+        "detail": "23 modules scanned, none resolves the target"
+      },
+      "both denominators are present and the reported one is 10,004": {
+        "passed": true,
+        "detail": null
+      }
+    },
+    "checks_run": 26,
+    "failures": [],
+    "all_passed": true,
+    "execution_order": [
+      [
+        "B3",
+        "train_40k",
+        0
+      ],
+      [
+        "B2",
+        "train_40k",
+        0
+      ],
+      [
+        "B3",
+        "train_40k",
+        1
+      ],
+      [
+        "B2",
+        "train_40k",
+        1
+      ],
+      [
+        "B3",
+        "train_40k",
+        2
+      ],
+      [
+        "B2",
+        "train_40k",
+        2
+      ],
+      [
+        "B3",
+        "train_250k",
+        0
+      ],
+      [
+        "B2",
+        "train_250k",
+        0
+      ],
+      [
+        "B3",
+        "train_250k",
+        1
+      ],
+      [
+        "B2",
+        "train_250k",
+        1
+      ],
+      [
+        "B3",
+        "train_250k",
+        2
+      ],
+      [
+        "B2",
+        "train_250k",
+        2
+      ],
+      [
+        "B1",
+        "train_40k",
+        0
+      ],
+      [
+        "B1",
+        "train_40k",
+        1
+      ],
+      [
+        "B1",
+        "train_40k",
+        2
+      ],
+      [
+        "B1",
+        "train_250k",
+        0
+      ],
+      [
+        "B1",
+        "train_250k",
+        1
+      ],
+      [
+        "B1",
+        "train_250k",
+        2
+      ]
+    ],
+    "resource_position": {
+      "baseline_hours": 34.805,
+      "ceiling_hours": 40.0,
+      "floor_hours": 1.0,
+      "raw_headroom_hours": 5.195,
+      "enforceable_recovery_margin_hours": 4.195,
+      "largest_cell_retry_hours": 4.249,
+      "largest_retry_fits_automatically": false
+    },
+    "training_authorized": "core-matrix-frozen-pending-approval",
+    "clean_test_accessed": false
+  }
+}

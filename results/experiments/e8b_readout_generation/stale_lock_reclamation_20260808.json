@@ -1,0 +1,66 @@
+{
+  "metadata": {
+    "timestamp": "2026-08-08T01:41:51",
+    "git_commit": "372e3cc",
+    "git_dirty": false,
+    "open_clip_version": "3.3.0",
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "h5py_version": "3.16.0",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "deterministic": true,
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "embed_dim": 512,
+    "top_k_answers": 100,
+    "n_train": 40000,
+    "n_val": 8000,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "hidden_dim": 512,
+    "dropout": 0.3,
+    "weight_decay": 0.0001
+  },
+  "e8b_stale_lock_reclamation": {
+    "dated_utc": "2026-08-08T00:41:51Z",
+    "lock_path": "/user/HS400/mc02623/backups/efficient-vision-language-reasoning/e8b-locks/e8b_B3_train_40k_seed0.lock",
+    "lock_contents_verbatim": {
+      "host": "otter159.eps.surrey.ac.uk",
+      "pid": 1634466,
+      "utc": "2026-08-07T19:17:27Z"
+    },
+    "lock_sha256": "fb689f15950b16082818510827e80ef7abc8223360ca6224127e86491ed2e9a9",
+    "lock_bytes": 84,
+    "orphan_checks": {
+      "lock_readable": true,
+      "recorded_host": "otter159.eps.surrey.ac.uk",
+      "this_host": "otter159.eps.surrey.ac.uk",
+      "host_matches_so_pid_check_is_authoritative": true,
+      "recorded_pid": 1634466,
+      "pid_in_process_table": false,
+      "pid_in_proc_filesystem": false,
+      "any_e8b_process_running": false,
+      "gpu_compute_apps": "none",
+      "artefacts_for_this_cell": 0,
+      "system_boot_before_lock": "2026-07-30 19:43:33",
+      "locks_present_before_removal": [
+        "e8b_B3_train_40k_seed0.lock"
+      ]
+    },
+    "orphaned": true,
+    "why_the_pid_check_is_authoritative": "the lock records the host it was taken on, and this IS that host, so the absence of the pid here is decisive rather than merely local. On a different node it would prove nothing.",
+    "why_not_a_reboot_artefact": "the system booted before the lock was created, so the process genuinely exited rather than the machine restarting under it",
+    "provenance": "left by the unauthorised-optimizer-path execution of 2026-08-07, which was halted and whose artefacts were quarantined. No scientific cell has ever run.",
+    "action": "removed ONLY this lock; every other lock left untouched (there were none)",
+    "reclamation_is_manual_by_design": "automatic stale-lock reclaim is deliberately not implemented, because a wrongly reclaimed lock means two processes training one cell",
+    "clean_test_accessed": false
+  }
+}

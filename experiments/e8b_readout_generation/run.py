@@ -884,15 +884,32 @@ def project_resources(seconds_per_epoch_40k: float,
             "pretrained_identity_projection_hours":
                 round(pretrained_total, 3),
             "random_identity_projection_hours": round(random_total, 3),
+            # The two identity keys still read "35h". They are RETAINED
+            # for continuity with every prior record that refers to them
+            # by name, but the ceiling they enforce is the amended 40 h,
+            # so each carries ceiling_hours explicitly: a reader must
+            # never have to infer the ceiling from a stale key name.
             "gates": {
                 "per_run_8h": {"fires": largest_250k > WALL_CLOCK_HALT_HOURS,
-                               "value": round(largest_250k, 3)},
+                               "value": round(largest_250k, 3),
+                               "ceiling_hours": WALL_CLOCK_HALT_HOURS},
                 "pretrained_identity_35h": {
                     "fires": pretrained_total > PER_IDENTITY_CEILING_HOURS,
-                    "value": round(pretrained_total, 3)},
+                    "value": round(pretrained_total, 3),
+                    "ceiling_hours": PER_IDENTITY_CEILING_HOURS,
+                    "key_name_is_historical": (
+                        f"the key says 35h for continuity; the enforced "
+                        f"ceiling is {PER_IDENTITY_CEILING_HOURS} h, "
+                        f"amended from "
+                        f"{PER_IDENTITY_CEILING_PREVIOUS_HOURS} h on "
+                        f"{PER_IDENTITY_CEILING_AMENDED_ON}")},
                 "random_identity_35h": {
                     "fires": random_total > PER_IDENTITY_CEILING_HOURS,
-                    "value": round(random_total, 3)},
+                    "value": round(random_total, 3),
+                    "ceiling_hours": PER_IDENTITY_CEILING_HOURS,
+                    "key_name_is_historical": (
+                        f"the key says 35h for continuity; the enforced "
+                        f"ceiling is {PER_IDENTITY_CEILING_HOURS} h")},
             }}
     governing = projections["expected_epoch_15_22"]["gates"]
     any_fires = any(g["fires"] for g in governing.values())

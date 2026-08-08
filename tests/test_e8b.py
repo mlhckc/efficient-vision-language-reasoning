@@ -4428,6 +4428,160 @@ def test_provenance() -> None:
         check("preflight metadata is attached", "metadata" in record)
 
 
+def test_final_operational_closure() -> None:
+    """The stale-lock reclamation and the non-training final preflight.
+
+    Both are operational rather than scientific, so the thing worth
+    testing is that they did NOT touch anything scientific: no optimizer
+    step, no authorisation change, no core artefact, no other lock."""
+    import hashlib
+    from experiments.e8b_readout_generation import run as e8b_run
+    from experiments.e8b_readout_generation import training
+    from experiments.e8b_readout_generation import final_preflight
+
+    results = PROJECT_ROOT / "results" / "experiments" / \
+        "e8b_readout_generation"
+
+    # --- A. the stale lock was provably orphaned before removal ---
+    reclamation = json.loads(
+        (results / "stale_lock_reclamation_20260808.json").read_text()
+    )["e8b_stale_lock_reclamation"]
+    checks = reclamation["orphan_checks"]
+    check("reclamation: the lock's host is THIS host, so the absent pid "
+          "is decisive rather than merely local",
+          checks["host_matches_so_pid_check_is_authoritative"] is True)
+    check("reclamation: the pid was absent from both the process table "
+          "and /proc",
+          checks["pid_in_process_table"] is False
+          and checks["pid_in_proc_filesystem"] is False)
+    check("reclamation: no e8b process was running and the GPU had no "
+          "compute apps",
+          checks["any_e8b_process_running"] is False
+          and checks["gpu_compute_apps"] == "none")
+    check("reclamation: the cell had produced NO artefact",
+          checks["artefacts_for_this_cell"] == 0)
+    check("reclamation: only that one lock existed, so nothing else "
+          "could have been removed",
+          checks["locks_present_before_removal"]
+          == ["e8b_B3_train_40k_seed0.lock"])
+    # The evidence is self-verifying: rehashing the recorded contents
+    # must reproduce the recorded digest, otherwise the "verbatim"
+    # claim is unchecked.
+    replayed = json.dumps(
+        reclamation["lock_contents_verbatim"]).encode()
+    check("reclamation: rehashing the recorded contents reproduces the "
+          "recorded sha256, so 'verbatim' is verified not asserted",
+          hashlib.sha256(replayed).hexdigest()
+          == reclamation["lock_sha256"]
+          and len(replayed) == reclamation["lock_bytes"])
+    check("reclamation: the lock directory is now empty",
+          not list(e8b_run.EXECUTION_LOCK_DIR.glob("*.lock")))
+
+    # --- B. the preflight really is non-training ---
+    # Checked against the COMPILED module, not its text: the preflight
+    # discusses optimizer paths at length in prose, so a source grep
+    # would fail on its own documentation while still missing a real
+    # call reached through an alias.
+    source = Path(final_preflight.__file__).read_text()
+    reachable: set = set()
+
+    def walk(code):
+        reachable.update(code.co_names)
+        for constant in code.co_consts:
+            if hasattr(constant, "co_names"):
+                walk(constant)
+
+    walk(compile(source, final_preflight.__file__, "exec"))
+    for forbidden in ("backward", "step", "zero_grad", "AdamW", "Adam",
+                      "SGD", "train_core_cell", "_train_core_locked",
+                      "GradScaler", "autocast"):
+        check(f"preflight bytecode references no {forbidden!r}",
+              forbidden not in reachable)
+    check("preflight never assigns TRAINING_AUTHORIZED",
+          "TRAINING_AUTHORIZED =" not in source
+          and "TRAINING_AUTHORIZED=" not in source)
+
+    preflight = json.loads(
+        (results / "final_preflight_20260808.json").read_text()
+    )["e8b_final_preflight"]
+    check("preflight: every check passed",
+          preflight["all_passed"] is True and preflight["failures"] == []
+          and preflight["checks_run"] >= 26)
+    check("preflight: zero optimizer steps, clean test untouched",
+          preflight["optimizer_steps"] == 0
+          and preflight["clean_test_accessed"] is False)
+    check("preflight: the authorisation state is UNCHANGED",
+          preflight["training_authorized"]
+          == "core-matrix-frozen-pending-approval"
+          == e8b_run.TRAINING_AUTHORIZED)
+    check("preflight: the first cell is B3/train_40k/seed0, the "
+          "pair-preserving head",
+          preflight["first_cell"] == ["B3", "train_40k", 0]
+          and len(preflight["execution_order"]) == 18)
+    check("preflight: the recorded resource position is the Option-3 "
+          "one, with the largest retry NOT fitting automatically",
+          preflight["resource_position"]["ceiling_hours"] == 40.0
+          and preflight["resource_position"]["floor_hours"] == 1.0
+          and preflight["resource_position"]["baseline_hours"] == 34.805
+          and preflight["resource_position"][
+              "largest_retry_fits_automatically"] is False)
+    check("preflight: NO core artefact exists after it ran",
+          not list(e8b_run.OUT_DIR.glob("e8b_core_*")))
+
+    # --- C. the arm-aware epoch rule the preflight asserts ---
+    # A preflight that asserted 22 epochs on B1 would be asserting a
+    # VIOLATION of the fixed-22 amendment, which binds B2/B3 only.
+    b1 = training.build_core_recipe("B1", "train_40k", 0)
+    b3 = training.build_core_recipe("B3", "train_40k", 0)
+    check("the fixed-22 rule binds B2/B3 only; B1 keeps its stored 7.3 "
+          "classifier recipe",
+          b3["max_epochs"] == 22 and b3["early_stopping"] is False
+          and b1["max_epochs"] == 100 and b1["early_stopping"] is True)
+
+    # --- D. no gate states a stale ceiling as the current one ---
+    # Two gate keys still read "35h". They are kept for continuity with
+    # prior records, so the requirement is not that they be renamed but
+    # that NO reader can be left inferring the ceiling from the key: the
+    # enforced value must be stated explicitly beside it.
+    # project_resources is the SUPERSEDED diagnostic, but it is still
+    # callable and still writes gate dicts, so it must not be the one
+    # place a stale ceiling survives.
+    projected = e8b_run.project_resources(seconds_per_epoch_40k=120.0)
+    for basis, body in projected["projections"].items():
+        for name, gate in body["gates"].items():
+            check(f"gate {name!r} under {basis!r} states its ceiling "
+                  f"explicitly rather than in its key",
+                  "ceiling_hours" in gate)
+            if "identity" in name:
+                check(f"gate {name!r} under {basis!r} enforces the "
+                      f"amended 40 h, not the 35 h its key names",
+                      gate["ceiling_hours"] == 40.0
+                      and "key_name_is_historical" in gate)
+    published = json.loads(
+        (results / "core_resource_projection_20260807.json").read_text()
+    )["e8b_core_resource_projection"]
+    identity_gate = published["gates"]["pretrained_identity_35h"]
+    check("the published projection's identity gate also carries the "
+          "amended 40 h ceiling",
+          identity_gate["ceiling_hours"] == 40.0)
+
+    # --- E. known negatives ---
+    must_fail("a core cell is still refused at the optimizer gate",
+              lambda: e8b_run.authorize_optimizer_path(
+                  "core-cell", "closure test"))
+    must_fail("a lock cannot be double-acquired",
+              lambda: _double_acquire(e8b_run))
+
+
+def _double_acquire(e8b_run):
+    """Take a throwaway lock twice; the second must be refused. Uses a
+    NON-core identity so a failure here can never block a real cell."""
+    import tempfile
+    with tempfile.TemporaryDirectory() as directory:
+        e8b_run.acquire_run_lock("TEST", "scale", 0, Path(directory))
+        e8b_run.acquire_run_lock("TEST", "scale", 0, Path(directory))
+
+
 def run() -> None:
     _CHECKS.clear()
     test_registry_and_scope()
@@ -4457,6 +4611,7 @@ def run() -> None:
     test_records_reproduce_from_generators()
     test_readiness_phase()
     test_governance_amendment()
+    test_final_operational_closure()
     test_serial_contract()
     test_serial_queries()
     test_provenance()
