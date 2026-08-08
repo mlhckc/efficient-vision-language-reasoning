@@ -239,7 +239,12 @@ WALL_CLOCK_HALT_HOURS = 8.0
 #     hard ceiling                                40.000 h
 #     mandatory operational headroom floor         1.000 h
 #     usable capacity                             39.000 h
-#     measured baseline programme                 34.805 h
+#     baseline budget, the GATE BASIS             34.805 h
+#       (measured component sum 34.803 h; the two
+#        differ by rounding -- see below, and note
+#        that this line was once labelled "measured
+#        baseline programme" while holding the gate
+#        basis, which is how they came to be mixed)
 #     ENFORCEABLE automatic recovery margin        4.195 h
 #     largest measured B3/250k retry               4.249 h
 #     that retry crosses the floor by              0.054 h
@@ -258,7 +263,37 @@ PER_IDENTITY_CEILING_PREVIOUS_HOURS = 35.0
 # against THIS, not against the ceiling: the gap between them is
 # recovery margin, and an estimate that merely drifts must not be
 # allowed to eat it silently.
+#
+# TWO FIGURES, DELIBERATELY NAMED APART. They describe the same
+# programme by two arithmetics and differ by 0.002 h (7.2 s):
+#
+#   MEASURED_PROGRAMME_HOURS  34.803  the component sum over unrounded
+#                                     measurements. This is the figure
+#                                     the user cited when authorising
+#                                     the amendment, and what
+#                                     core_resource_projection reports.
+#   BASELINE_BUDGET_HOURS     34.805  what the EXECUTABLE gate actually
+#                                     computes, because it reserves
+#                                     per-cell constants each rounded to
+#                                     three decimals. Live gate total on
+#                                     an empty ledger: 34.8052.
+#
+# The gate basis governs, for two reasons. It is what the code really
+# sums, so gating against anything else would compare a total to a
+# number it can never equal; and it is the LARGER of the two, so it
+# halts marginally sooner. Every published margin derives from it, which
+# also makes the published margin the smaller and therefore the more
+# conservative of the two candidates.
+#
+# They were previously published interchangeably -- a single record
+# carried a 34.803 baseline three lines from a margin derived from
+# 34.805, and the reconciliation derived 4.197 while run.py derived
+# 4.195. One quantity, two numbers. Anything that needs the measured
+# figure must name MEASURED_PROGRAMME_HOURS explicitly.
+MEASURED_PROGRAMME_HOURS = 34.803
 BASELINE_BUDGET_HOURS = 34.805
+BASELINE_ARITHMETIC_GAP_HOURS = round(
+    BASELINE_BUDGET_HOURS - MEASURED_PROGRAMME_HOURS, 4)
 # The user's rule of 2026-08-07: a projection under the ceiling is NOT a
 # clearance to run if the margin is negligible. Under this much headroom
 # execution returns to the user. Enforced here rather than only stated
@@ -285,12 +320,16 @@ def largest_cell_retry_hours() -> float:
     constant, so it cannot drift from the cost the gate actually
     charges."""
     return max(CELL_PROJECTED_HOURS.values())
-# The gate sums per-cell constants rounded to three decimals while the
-# published baseline is computed from unrounded values. The ACTUAL gap
-# is 0.0022 h (7.9 s); this is set to 0.005 h so the reconciliation is
-# not itself a source of slack. It is arithmetic, not margin: about
-# eighteen seconds, 0.1 per cent of the contingency. Drift beyond it
-# still halts.
+# Slack for the rounding described at BASELINE_BUDGET_HOURS. Now that
+# the gate is compared against the GATE basis rather than the measured
+# component sum, the residual is 0.0002 h (0.7 s), not the 0.0022 h
+# (7.9 s) this tolerance was originally sized against -- that larger gap
+# was the distance to MEASURED_PROGRAMME_HOURS, and it is no longer the
+# comparand. Deliberately NOT retightened: 0.005 h is 18 s, it is
+# arithmetic rather than margin, and shrinking a tolerance to hug the
+# current number is how a gate starts firing on noise. What matters is
+# that it is far below anything operationally meaningful. Drift beyond
+# it still halts.
 BASELINE_ROUNDING_TOLERANCE_HOURS = 0.005
 CORE_CEILING_HOURS = 180.0
 MEMORY_CEILING_FRACTION = 0.80
@@ -2001,11 +2040,18 @@ def per_identity_gate(arm: str, additional_hours: float = 0.0,
             "headroom_floor_hours": HEADROOM_FLOOR_HOURS,
             # --- the amended two-level structure (2026-08-08) ---
             # The ceiling is 40 h, but ordinary execution is gated
-            # against the MEASURED BASELINE of 34.803 h. The gap between
-            # them is contingency for one forced retry, and it is
-            # visible here rather than folded into the projection, so a
-            # drifting estimate cannot quietly spend it.
+            # against the BASELINE BUDGET -- the gate basis, 34.805 h,
+            # not the 34.803 h measured component sum; see
+            # BASELINE_BUDGET_HOURS for why the two differ and why the
+            # gate basis governs. The gap to the ceiling is contingency
+            # for at most one forced retry, and it is visible here
+            # rather than folded into the projection, so a drifting
+            # estimate cannot quietly spend it. It is NOT a promise that
+            # any given retry fits; the largest one does not.
             "baseline_budget_hours": BASELINE_BUDGET_HOURS,
+            "measured_programme_hours": MEASURED_PROGRAMME_HOURS,
+            "baseline_arithmetic_gap_hours":
+                BASELINE_ARITHMETIC_GAP_HOURS,
             "enforceable_recovery_margin_hours":
                 ENFORCEABLE_RECOVERY_MARGIN_HOURS,
             "largest_cell_retry_hours": largest_cell_retry_hours(),

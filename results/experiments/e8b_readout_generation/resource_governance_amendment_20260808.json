@@ -85,12 +85,15 @@
     "two_level_budget": {
       "hard_ceiling_hours": 40.0,
       "measured_baseline_hours": 34.803,
-      "contingency_reserve_hours": 4.25,
       "published_projection_hours": 34.803,
       "headroom_under_ceiling_hours": 5.197,
-      "why_two_levels": "ordinary 18-cell execution is gated against the MEASURED BASELINE, not against the ceiling. The gap between them is contingency for one forced retry and is held visibly apart, so an estimate that merely drifts halts instead of silently spending the recovery margin.",
-      "rounding_tolerance_hours": 0.01,
-      "rounding_tolerance_note": "reconciles rounded per-cell constants against the unrounded projection, about eight seconds. Arithmetic, not slack."
+      "why_two_levels": "ordinary 18-cell execution is gated against the BASELINE BUDGET, not against the ceiling. The gap between them is contingency for at most one forced retry and is held visibly apart, so an estimate that merely drifts halts instead of silently spending the recovery margin. It is NOT a promise that any given retry fits.",
+      "rounding_tolerance_hours": 0.005,
+      "rounding_tolerance_note": "reconciles the rounded per-cell constants the gate sums against the unrounded projection. The enforced value is 0.005 h (18 s), read from run.py rather than restated; this field previously published 0.01 h while the code enforced 0.005 h. Arithmetic, not slack.",
+      "gate_basis_hours": 34.805,
+      "baseline_arithmetic_gap_hours": 0.002,
+      "which_basis_gates": "the GATE BASIS. The measured component sum is 34.803 h; the executable gate sums per-cell constants rounded to three decimals and therefore computes 34.805 h. The gate basis governs because it is what the code actually sums and because it is the larger of the two, so it halts marginally sooner. Every published margin derives from it, which makes the published margin the smaller and more conservative candidate.",
+      "contingency_reserve_hours_removed": "superseded 2026-08-08. The 4.25 h 'reserve' framing implied a capacity guarantee that option 3 withdrew. The quantity that replaces it is enforceable_automatic_recovery_margin_hours (4.195 h), deliberately SMALLER than the 4.249 h largest cell. The 4.25 h figure survives ONLY inside the user's verbatim authorisation rationale, which is quoted unaltered."
     },
     "retry_policy_frozen": {
       "max_forced_retries_per_identity": 1,
@@ -141,7 +144,9 @@
       "decided_on": "2026-08-08",
       "decision": "OPTION 3: accept that a worst-case retry halts for a fresh decision. The ceiling was NOT raised further and the floor was NOT waived.",
       "figures": {
-        "baseline_measured_programme_hours": 34.805,
+        "baseline_gate_basis_hours": 34.805,
+        "measured_programme_hours": 34.803,
+        "basis_naming_note": "this field was named baseline_measured_programme_hours while holding 34.805, the GATE BASIS -- the measured component sum is 34.803. The two are now named apart.",
         "hard_pretrained_identity_ceiling_hours": 40.0,
         "mandatory_operational_headroom_floor_hours": 1.0,
         "enforceable_automatic_recovery_margin_hours": 4.195,
@@ -164,6 +169,8 @@
         "why": "it ignored the 1.000 h headroom floor; the enforceable margin is 4.195 h against a 4.249 h worst-case cell",
         "replaced_by": "authorised_policy"
       }
-    ]
+    ],
+    "corrected_on": "2026-08-08 (single-basis correction)",
+    "correction_note": "one quantity was published as two numbers in three places: the enforceable margin as 4.195 and 4.197, the baseline as 34.803 and 34.805, and the rounding tolerance as 0.005 and 0.01. Every figure here is now read from the constants in run.py. No authorised value changed: the ceiling is 40.0 h, the floor 1.0 h, the enforceable margin 4.195 h and the worst-case shortfall 0.054 h, exactly as ratified."
   }
 }

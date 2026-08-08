@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-08T01:35:12",
-    "git_commit": "2075dc9",
+    "timestamp": "2026-08-08T01:59:36",
+    "git_commit": "af3a36a",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -143,14 +143,14 @@
         "exposure": "the measurement is at batch 128, the project default everywhere. At batch 16 the same pass costs 0.1405 s a row, which would roughly double this line, so the batch size is pinned and asserted rather than left to a caller.",
         "status": "CLOSED BY MEASUREMENT on 2026-08-07",
         "can_exhaust_the_margin": true,
-        "judged_against": "the ENFORCEABLE margin (4.197 h), which is the headroom less the 1.0 h floor"
+        "judged_against": "the ENFORCEABLE margin (4.195 h), which is the headroom less the 1.0 h floor"
       },
       {
         "risk": "the G14 per-row input is optimistic, not conservative",
         "detail": "the pooled 5.139 s/row measurement covers R1 brute force plus R1 cached only, while the live gate also runs r2_brute_force and r2_cached per row (clause C3). The 3.15 per cent margin does not cover two extra constrained walks over 224 rows x 12 cells.",
         "status": "OPEN and unquantified",
         "can_exhaust_the_margin": false,
-        "judged_against": "the ENFORCEABLE margin (4.197 h), which is the headroom less the 1.0 h floor"
+        "judged_against": "the ENFORCEABLE margin (4.195 h), which is the headroom less the 1.0 h floor"
       },
       {
         "risk": "the 250k training rate, now MEASURED and bias-corrected (was: unmeasured)",
@@ -159,29 +159,29 @@
         "exposure": "after correction it is ABOVE the assumption it replaced",
         "status": "CLOSED BY MEASUREMENT on 2026-08-07",
         "can_exhaust_the_margin": true,
-        "judged_against": "the ENFORCEABLE margin (4.197 h), which is the headroom less the 1.0 h floor"
+        "judged_against": "the ENFORCEABLE margin (4.195 h), which is the headroom less the 1.0 h floor"
       },
       {
         "risk": "a forced retry is unaffordable and not improbable",
-        "detail": "G14 fired as a halting gate on one of the three completed search runs. A forced B3/250k retry costs 4.249 h against an ENFORCEABLE recovery margin of 4.197 h -- the headroom less the 1.0 h floor -- so it does NOT fit automatically and MUST stop for a fresh explicit user decision. That is the authorised policy of 2026-08-08 (option 3), not a defect: the ceiling was not raised further and the floor was not waived. A retry of any cheaper cell does fit.",
+        "detail": "G14 fired as a halting gate on one of the three completed search runs. A forced B3/250k retry costs 4.249 h against an ENFORCEABLE recovery margin of 4.195 h -- the headroom less the 1.0 h floor -- so it does NOT fit automatically and MUST stop for a fresh explicit user decision. That is the authorised policy of 2026-08-08 (option 3), not a defect: the ceiling was not raised further and the floor was not waived. A retry of any cheaper cell does fit.",
         "status": "GATE-CONTROLLED: recovery is not guaranteed by spare raw capacity",
         "carries_hours": 4.249,
         "can_exhaust_the_margin": true,
-        "judged_against": "the ENFORCEABLE margin (4.197 h), which is the headroom less the 1.0 h floor"
+        "judged_against": "the ENFORCEABLE margin (4.195 h), which is the headroom less the 1.0 h floor"
       },
       {
         "risk": "the mandatory readout and intervention evaluation, now IMPLEMENTED (was: costed but not implemented)",
         "detail": "implemented on 2026-08-07 in final_evaluation.py and validated non-scientifically end to end against a frozen exploratory checkpoint. The remaining gap is the core caller itself, which cannot be written until a core cell exists to evaluate.",
         "status": "LARGELY CLOSED: the pipeline exists and is validated; only its core caller remains",
         "can_exhaust_the_margin": false,
-        "judged_against": "the ENFORCEABLE margin (4.197 h), which is the headroom less the 1.0 h floor"
+        "judged_against": "the ENFORCEABLE margin (4.195 h), which is the headroom less the 1.0 h floor"
       },
       {
         "risk": "the section-19 efficiency pass is charged to the pretrained identity only",
         "detail": "section 19 specifies the protocol per arm, so B2's share is missing from the random identity. Immaterial there (about 13 h of headroom), and over-charging the pretrained identity is the conservative direction.",
         "status": "DISCLOSED, immaterial",
         "can_exhaust_the_margin": false,
-        "judged_against": "the ENFORCEABLE margin (4.197 h), which is the headroom less the 1.0 h floor"
+        "judged_against": "the ENFORCEABLE margin (4.195 h), which is the headroom less the 1.0 h floor"
       }
     ],
     "one_component_was_removed": {
@@ -255,7 +255,8 @@
       "protocol 13.2 range 0.500-1.000 h, charged at the upper bound",
       "B1 is charged at an upper bound and touches neither identity's 35-hour ceiling, though it counts toward the 180-hour core ceiling."
     ],
-    "enforceable_margin_hours": 4.197,
+    "enforceable_margin_hours": 4.195,
+    "enforceable_margin_basis": "ceiling 40.0 h less the 1.0 h operational floor less the 34.805 h GATE BASIS. The gate basis is 0.002 h above the 34.803 h measured component sum because the gate reserves per-cell constants rounded to three decimals; deriving from the gate basis yields the smaller and therefore more conservative margin.",
     "open_risks_summary": {
       "total": 6,
       "can_exhaust_the_remaining_margin": 3,
@@ -270,11 +271,13 @@
     "ceiling_amended_20260808": {
       "from_hours": 35.0,
       "to_hours": 40.0,
-      "guarantee_withdrawn": "an earlier version said the 40 h ceiling buys one worst-case forced retry. It does not: the 1.0 h floor leaves an enforceable margin of 4.195 h against a 4.249 h worst-case cell. The programme is authorised on its MEASURED BASELINE; recovery is gate-controlled and may need a new decision.",
+      "guarantee_withdrawn": "an earlier version said the 40.0 h ceiling buys one worst-case forced retry. It does not: the 1.0 h floor leaves an enforceable margin of 4.195 h against a 4.249 h worst-case cell, a shortfall of 0.054 h. The programme is authorised on its MEASURED BASELINE; recovery is gate-controlled and may need a new decision.",
       "authorised_policy": "option 3 of 2026-08-08: the worst-case retry halts for a fresh decision, intentionally",
       "type": "RESOURCE-GOVERNANCE, pre-result, authorised by the user on 2026-08-08",
-      "baseline_budget_hours": 34.803,
-      "contingency_reserve_hours": 4.25,
+      "baseline_budget_hours": 34.805,
+      "measured_programme_hours": 34.803,
+      "baseline_arithmetic_gap_hours": 0.002,
+      "contingency_reserve_hours_removed": "superseded on 2026-08-08. The reserve framing implied a capacity guarantee that was withdrawn under option 3. The quantity that replaces it is enforceable_recovery_margin_hours, which is deliberately SMALLER than the largest cell.",
       "recovery_margin_is_for": "at most ONE forced retry, and only if that retry fits the unchanged ceiling and floor when recomputed from actual charged usage. The largest cell does NOT fit.",
       "largest_cell_retry_hours": 4.249,
       "enforceable_recovery_margin_hours": 4.195,
@@ -288,7 +291,7 @@
     "resource_gate_cleared": true,
     "execution_may_start": false,
     "execution_may_start_note": "ALWAYS false in this record. Clearing the resource gate is not authorisation to run; TRAINING_AUTHORIZED is the only thing that starts a cell, and it is unchanged.",
-    "verdict": "CLEARED ON RESOURCES, pending the user's final execution approval. The complete MEASURED programme projects to 34.803 h against the amended 40.0 h ceiling, leaving 5.197 h of raw headroom. The 1.0 h operational floor is enforced against the ceiling, so the ENFORCEABLE automatic recovery margin is 4.197 h -- LESS than the 4.249 h largest cell. A worst-case retry therefore does NOT fit automatically and halts for a fresh decision; that is the authorised policy of 2026-08-08, not a defect. Routine execution is gated against the 34.803 h measured baseline, so an estimate that merely drifts halts rather than quietly spending the recovery margin. The ceiling was raised on RESOURCE grounds before any cell ran and with no result in existence, and no scientific component was changed to obtain the margin. Of the 6 open risks listed above, 3 could still on its own consume the contingency. TRAINING_AUTHORIZED is unchanged: no core cell may start without a separate explicit approval.",
+    "verdict": "CLEARED ON RESOURCES, pending the user's final execution approval. The complete MEASURED programme projects to 34.803 h against the amended 40.0 h ceiling, leaving 5.197 h of raw headroom. The 1.0 h operational floor is enforced against the ceiling, so the ENFORCEABLE automatic recovery margin is 4.195 h -- LESS than the 4.249 h largest cell. A worst-case retry therefore does NOT fit automatically and halts for a fresh decision; that is the authorised policy of 2026-08-08, not a defect. Routine execution is gated against the 34.805 h measured baseline, so an estimate that merely drifts halts rather than quietly spending the recovery margin. The ceiling was raised on RESOURCE grounds before any cell ran and with no result in existence, and no scientific component was changed to obtain the margin. Of the 6 open risks listed above, 3 could still on its own consume the contingency. TRAINING_AUTHORIZED is unchanged: no core cell may start without a separate explicit approval.",
     "decision_required_from_user": null,
     "generator": "experiments/e8b_readout_generation/identity_reconciliation.py",
     "clean_test_accessed": false

@@ -28,6 +28,7 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from src import utils  # noqa: E402
+from experiments.e8b_readout_generation import run as e8b_run  # noqa: E402
 
 D = PROJECT_ROOT / "results" / "experiments" / "e8b_readout_generation"
 
@@ -143,13 +144,35 @@ N_RAW = 10004      # raw development denominator (plan section 6)
 # IDENT_H amended 2026-08-08 from 35.0 to 40.0 by explicit user
 # authorisation: a resource-governance change made before any core cell
 # ran. It is NOT sized to guarantee a worst-case retry -- that claim was
-# withdrawn. The 1.0 h operational floor leaves an enforceable margin of
-# 4.195 h against a 4.249 h largest cell, so the worst-case retry halts
-# for a fresh decision, intentionally.
-WALL_H, IDENT_H, CORE_H, MEM_FRACTION = 8.0, 40.0, 180.0, 0.80
-IDENT_H_PREVIOUS, IDENT_H_AMENDED_ON = 35.0, "2026-08-08"
-# The measured complete programme, and the retry capacity held above it.
-BASELINE_BUDGET_H, CONTINGENCY_RESERVE_H = 34.803, 4.25
+# withdrawn. The 1.0 h operational floor leaves an enforceable margin
+# smaller than the largest cell, so the worst-case retry halts for a
+# fresh decision, intentionally. The two figures are not restated here
+# in prose: they are ENFORCEABLE_RECOVERY_MARGIN_HOURS and
+# largest_cell_retry_hours() in run.py, and a prose copy is exactly how
+# they drifted apart before.
+#
+# The ceilings are IMPORTED, not re-declared. A local 40.0 was a second
+# copy of a governed constant that an amendment would have to find.
+WALL_H = e8b_run.WALL_CLOCK_HALT_HOURS
+IDENT_H = e8b_run.PER_IDENTITY_CEILING_HOURS
+CORE_H = e8b_run.CORE_CEILING_HOURS
+MEM_FRACTION = e8b_run.MEMORY_CEILING_FRACTION
+IDENT_H_PREVIOUS = e8b_run.PER_IDENTITY_CEILING_PREVIOUS_HOURS
+IDENT_H_AMENDED_ON = e8b_run.PER_IDENTITY_CEILING_AMENDED_ON
+# The measured complete programme. Imported rather than restated: this
+# module previously hand-wrote 34.803 while run.py's gate used 34.805,
+# publishing one quantity as two numbers.
+#
+# CONTINGENCY_RESERVE_H (4.25) is DELETED, not moved. It was the
+# retired "reserve sized to a worst-case retry" framing whose constant
+# was already removed from run.py when that guarantee was withdrawn;
+# leaving a second copy here republished the withdrawn claim. The
+# quantity that replaces it is ENFORCEABLE_RECOVERY_MARGIN_HOURS
+# (4.195 h), which is smaller than the 4.249 h worst-case cell on
+# purpose. Both constants were dead -- neither had a reader in this
+# file -- so nothing downstream changes.
+MEASURED_PROGRAMME_H = e8b_run.MEASURED_PROGRAMME_HOURS
+BASELINE_BUDGET_H = e8b_run.BASELINE_BUDGET_HOURS
 BASE = {"pretrained": 2.29222, "random": 1.95811}   # A1 / A1r CORE measured
 # Protocol 13.2b's A1 row is 2.987 h = core 1.774 + secondary 0.509 +
 # ablation 0.127 + extraction 0.400 + mid 0.087 + interventions 0.090.
@@ -350,11 +373,19 @@ def main() -> int:
                         "interventions, and every already-spent search, "
                         "characterisation, validation and probe hour "
                         "that loaded the pretrained checkpoint",
-            "retry_allowance": "AMENDED 2026-08-08, then CORRECTED the "
+            # Figures interpolated from the live constants. Typed
+            # copies here are what let this record's margin drift from
+            # run.py's.
+            "retry_allowance": ("AMENDED 2026-08-08, then CORRECTED the "
                                "same day: at most ONE forced retry, and "
                                "NOT guaranteed. The enforceable margin "
-                               "is 4.195 h after the 1.0 h operational "
-                               "floor, against a 4.249 h largest cell, "
+                               f"is "
+                               f"{e8b_run.ENFORCEABLE_RECOVERY_MARGIN_HOURS}"
+                               f" h after the "
+                               f"{e8b_run.HEADROOM_FLOOR_HOURS} h "
+                               f"operational floor, against a "
+                               f"{e8b_run.largest_cell_retry_hours()} h "
+                               "largest cell, "
                                "so a worst-case retry does not fit and "
                                "halts for a fresh decision. A retry of "
                                "a cheaper cell does fit. Permitted only "
@@ -364,7 +395,7 @@ def main() -> int:
                                "returns to the user. The previous "
                                "wording, 'NONE, the plan tolerates zero "
                                "B3 retries', described the 35 h ceiling "
-                               "and is superseded.",
+                               "and is superseded."),
             "fires": pretrained_identity > IDENT_H},
         "random_identity_35h": {
             "projected_hours": round(random_identity, 3),

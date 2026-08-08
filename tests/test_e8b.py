@@ -842,8 +842,11 @@ def test_checkpoint_resume() -> None:
 
 def test_resource_projections() -> None:
     # The per-identity ceiling was amended 35 -> 40 h on 2026-08-08 by
-    # explicit user authorisation: a pre-result RESOURCE change, sized
-    # as the measured programme plus one worst-case forced retry. Every
+    # explicit user authorisation: a pre-result RESOURCE change. The
+    # earlier wording here said it was sized as the measured programme
+    # plus one worst-case forced retry. THAT CLAIM IS WITHDRAWN -- the
+    # 1.0 h floor leaves an enforceable margin smaller than the largest
+    # cell, so a worst-case retry halts for a fresh decision. Every
     # other ceiling is untouched.
     check("resource constants match the binding decisions",
           e8b_run.WALL_CLOCK_HALT_HOURS == 8.0
@@ -3993,19 +3996,44 @@ def test_governance_amendment() -> None:
     check("the headroom floor is exactly 1.000 and was NOT waived",
           figures["mandatory_operational_headroom_floor_hours"] == 1.000
           and e8b_run.HEADROOM_FLOOR_HOURS == 1.0)
-    check("the recorded arithmetic is internally consistent",
-          abs((figures["hard_pretrained_identity_ceiling_hours"]
-               - figures["mandatory_operational_headroom_floor_hours"]
-               - figures["baseline_measured_programme_hours"])
-              - figures[
-                  "enforceable_automatic_recovery_margin_hours"]) < 0.01)
-    check("the shortfall is the difference between the worst-case "
-          "retry and the enforceable margin",
-          abs((figures["largest_measured_b3_250k_retry_hours"]
-               - figures[
-                   "enforceable_automatic_recovery_margin_hours"])
-              - figures["that_retry_crosses_the_floor_by_hours"])
-          < 0.002)
+    # EXACT, not within 0.01. The old tolerance was wide enough to hide
+    # the very defect it should have caught: the field then named
+    # baseline_measured_programme_hours held 34.805 (the gate basis)
+    # while the record elsewhere published 34.803 (the measured
+    # component sum), and a 0.01 window swallowed the 0.002 difference.
+    # With one basis the arithmetic closes exactly.
+    check("the recorded arithmetic closes EXACTLY on the gate basis",
+          round(figures["hard_pretrained_identity_ceiling_hours"]
+                - figures["mandatory_operational_headroom_floor_hours"]
+                - figures["baseline_gate_basis_hours"], 4)
+          == figures["enforceable_automatic_recovery_margin_hours"]
+          == e8b_run.ENFORCEABLE_RECOVERY_MARGIN_HOURS)
+    check("the two bases are named apart and differ by the recorded "
+          "rounding gap",
+          figures["baseline_gate_basis_hours"]
+          == e8b_run.BASELINE_BUDGET_HOURS
+          and figures["measured_programme_hours"]
+          == e8b_run.MEASURED_PROGRAMME_HOURS
+          and round(figures["baseline_gate_basis_hours"]
+                    - figures["measured_programme_hours"], 4)
+          == e8b_run.BASELINE_ARITHMETIC_GAP_HOURS)
+    check("the shortfall is EXACTLY the worst-case retry less the "
+          "enforceable margin",
+          round(figures["largest_measured_b3_250k_retry_hours"]
+                - figures[
+                    "enforceable_automatic_recovery_margin_hours"], 4)
+          == figures["that_retry_crosses_the_floor_by_hours"]
+          and figures["largest_measured_b3_250k_retry_hours"]
+          == e8b_run.largest_cell_retry_hours())
+    check("the retired 4.25 h contingency reserve is gone from the "
+          "two-level budget and recorded as superseded",
+          "contingency_reserve_hours"
+          not in amendment["two_level_budget"]
+          and "contingency_reserve_hours_removed"
+          in amendment["two_level_budget"])
+    check("the published rounding tolerance equals the enforced one",
+          amendment["two_level_budget"]["rounding_tolerance_hours"]
+          == e8b_run.BASELINE_ROUNDING_TOLERANCE_HOURS)
     check("the halt is recorded as INTENTIONAL, not as a defect",
           "INTENTIONAL" in policy["consequence"])
     check("the programme is authorised on its MEASURED BASELINE, with "
@@ -4035,8 +4063,8 @@ def test_governance_amendment() -> None:
     def flatten(text):
         return " ".join(text.replace("#", " ").split())
 
-    scanned, offenders = [], []
-    WITHDRAWAL_CONTEXT = "THAT CLAIM IS WITHDRAWN"
+    # GUARD-PHRASE-TABLE-START  (this span is excised before scanning;
+    # it is the guard's own vocabulary, not a claim the project makes)
     GUARANTEE_PHRASES = (
         "capacity for at most one forced retry",
         "capacity for AT MOST ONE forced retry",
@@ -4045,30 +4073,69 @@ def test_governance_amendment() -> None:
         "CONTINGENCY held for at most ONE worst-case forced retry",
         "sized as the measured programme plus one worst-case forced "
         "retry")
-    for source in ("run.py", "core_resource_projection.py",
-                   "identity_reconciliation.py", "training.py"):
-        flat = flatten((E8B_DIR / source).read_text())
-        scanned.append(source)
+    # GUARD-PHRASE-TABLE-END
+
+    # PER-OCCURRENCE, not per-file. The previous exemption asked whether
+    # the word "withdraw" appeared ANYWHERE in the file, which made the
+    # guard close to vacuous: 5 of its 7 targets contain a withdrawal
+    # note somewhere and were therefore wholly exempt, so a fresh
+    # guarantee could be reintroduced anywhere in them and still pass.
+    # Each occurrence must now carry its own withdrawal within
+    # PROXIMITY characters.
+    PROXIMITY = 300
+
+    def offences(flat, label):
+        found = []
         for phrase in GUARANTEE_PHRASES:
-            if phrase in flat and WITHDRAWAL_CONTEXT not in flat \
-                    and "withdraw" not in flat.lower():
-                offenders.append(f"{source}: {phrase!r}")
-    for record in ("resource_governance_amendment_20260808",
-                   "core_resource_projection_20260807",
-                   "identity_reconciliation_20260807"):
-        flat = flatten(json.dumps(json.loads(
-            (results / f"{record}.json").read_text())))
-        scanned.append(record)
-        for phrase in GUARANTEE_PHRASES:
-            # Case-insensitive: the withdrawal appears both as prose
-            # ("WITHDRAWN") and as a field name ("guarantee_withdrawn").
-            if phrase in flat and "withdraw" not in flat.lower():
-                offenders.append(f"{record}: {phrase!r}")
+            start = 0
+            while True:
+                at = flat.find(phrase, start)
+                if at < 0:
+                    break
+                window = flat[max(0, at - PROXIMITY):
+                              at + len(phrase) + PROXIMITY].lower()
+                if "withdraw" not in window and "superseded" not in window:
+                    found.append(f"{label}: {phrase!r} at {at}")
+                start = at + 1
+        return found
+
+    scanned, offenders = [], []
+    # EVERY e8b source, not a hand-listed four. A guard with a manual
+    # target list silently stops covering each new module.
+    for source in sorted(E8B_DIR.glob("*.py")):
+        scanned.append(source.name)
+        offenders += offences(flatten(source.read_text()), source.name)
+    # This test file too. The claim survived here precisely because the
+    # guard did not scan itself.
+    own = Path(__file__).read_text()
+    head, _, rest = own.partition("GUARD-PHRASE-TABLE-START")
+    _, _, tail = rest.partition("GUARD-PHRASE-TABLE-END")
+    scanned.append("tests/test_e8b.py")
+    offenders += offences(flatten(head + tail), "tests/test_e8b.py")
+    for record in sorted(results.glob("*.json")):
+        scanned.append(record.name)
+        try:
+            flat = flatten(json.dumps(json.loads(record.read_text())))
+        except json.JSONDecodeError:
+            continue
+        offenders += offences(flat, record.name)
     check(f"the withdrawn guarantee survives nowhere "
           f"({len(scanned)} sources and records scanned)",
           offenders == [], "; ".join(offenders[:4]))
-    check("the guard scans the generated records, not only run.py",
-          len(scanned) >= 7)
+    check("the guard scans every e8b source, this test file and every "
+          "record, not a hand-listed few",
+          len(scanned) >= 30 and "tests/test_e8b.py" in scanned
+          and "run.py" in scanned)
+    # The guard must actually be capable of failing. A file-level
+    # exemption made the old one pass regardless of content.
+    check("the guard catches a guarantee planted next to a withdrawal "
+          "elsewhere in the same file",
+          offences("the ceiling was WITHDRAWN. " + "x" * 800
+                   + " it buys one worst-case forced retry", "synthetic")
+          != [])
+    check("the guard still exempts a genuine local withdrawal",
+          offences("one worst-case forced retry -- THAT CLAIM IS "
+                   "WITHDRAWN", "synthetic") == [])
     run_flat = flatten((E8B_DIR / "run.py").read_text())
     check("the correct enforceable arithmetic is stated in the code",
           "ENFORCEABLE automatic recovery margin" in run_flat
@@ -4565,7 +4632,100 @@ def test_final_operational_closure() -> None:
           "amended 40 h ceiling",
           identity_gate["ceiling_hours"] == 40.0)
 
-    # --- E. known negatives ---
+    # --- E. one quantity, one number, everywhere ---
+    # The defect this guards was found three times in one round: the
+    # enforceable margin published as both 4.195 and 4.197, the baseline
+    # as 34.803 and 34.805, and the rounding tolerance as 0.005 and
+    # 0.01. Prose can restate a figure historically; a FIELD may not.
+    AUTHORITATIVE = {
+        "enforceable_recovery_margin_hours":
+            e8b_run.ENFORCEABLE_RECOVERY_MARGIN_HOURS,
+        "enforceable_automatic_recovery_margin_hours":
+            e8b_run.ENFORCEABLE_RECOVERY_MARGIN_HOURS,
+        "enforceable_margin_hours":
+            e8b_run.ENFORCEABLE_RECOVERY_MARGIN_HOURS,
+        "baseline_budget_hours": e8b_run.BASELINE_BUDGET_HOURS,
+        "baseline_gate_basis_hours": e8b_run.BASELINE_BUDGET_HOURS,
+        "gate_basis_hours": e8b_run.BASELINE_BUDGET_HOURS,
+        "measured_programme_hours": e8b_run.MEASURED_PROGRAMME_HOURS,
+        "measured_baseline_hours": e8b_run.MEASURED_PROGRAMME_HOURS,
+        "rounding_tolerance_hours":
+            e8b_run.BASELINE_ROUNDING_TOLERANCE_HOURS,
+        "largest_cell_retry_hours": e8b_run.largest_cell_retry_hours(),
+        "largest_measured_b3_250k_retry_hours":
+            e8b_run.largest_cell_retry_hours(),
+        "headroom_floor_hours": e8b_run.HEADROOM_FLOOR_HOURS,
+    }
+    RETIRED = ("contingency_reserve_hours",)
+    disagreements, retired_found, fields_checked = [], [], 0
+
+    def audit(node, path, origin):
+        nonlocal fields_checked
+        if isinstance(node, dict):
+            for key, value in node.items():
+                if key in RETIRED:
+                    retired_found.append(f"{origin}{path}.{key}")
+                if key in AUTHORITATIVE and isinstance(
+                        value, (int, float)) and not isinstance(
+                        value, bool):
+                    fields_checked += 1
+                    if abs(value - AUTHORITATIVE[key]) > 1e-9:
+                        disagreements.append(
+                            f"{origin}{path}.{key} = {value}, "
+                            f"authoritative {AUTHORITATIVE[key]}")
+                audit(value, f"{path}.{key}", origin)
+        elif isinstance(node, list):
+            for index, value in enumerate(node):
+                audit(value, f"{path}[{index}]", origin)
+
+    records_audited = 0
+    for record in sorted(results.glob("*.json")):
+        try:
+            audit(json.loads(record.read_text()), "", record.name)
+        except json.JSONDecodeError:
+            continue
+        records_audited += 1
+    check(f"no governed quantity is published as two numbers "
+          f"({fields_checked} fields across {records_audited} records)",
+          disagreements == [], "; ".join(disagreements[:5]))
+    check("the retired contingency-reserve field appears in no record",
+          retired_found == [], "; ".join(retired_found[:5]))
+    # Floors set from the MEASURED surface (15 governed numeric fields
+    # across 37 parsed records), not from a round number: a threshold
+    # above the real count fails spuriously, and one far below it lets
+    # the audit silently stop covering anything.
+    check("the audit actually inspected the governed fields",
+          fields_checked >= 15 and records_audited >= 35,
+          f"{fields_checked} fields, {records_audited} records")
+    # The audit must be able to fail.
+    planted = []
+    audit({"enforceable_margin_hours": 4.197}, "", "synthetic")
+    check("the audit catches a planted second value",
+          any("4.197" in d for d in disagreements[-1:])
+          or any("synthetic" in d for d in disagreements))
+    disagreements.clear()
+    del planted
+    # And the retired constant must not come back in code either.
+    from experiments.e8b_readout_generation import \
+        core_resource_projection as crp
+    check("the retired CONTINGENCY_RESERVE_H constant is gone from the "
+          "projection module",
+          not hasattr(crp, "CONTINGENCY_RESERVE_H"))
+    check("the projection module imports the ceilings rather than "
+          "re-declaring them",
+          crp.IDENT_H == e8b_run.PER_IDENTITY_CEILING_HOURS
+          and crp.BASELINE_BUDGET_H == e8b_run.BASELINE_BUDGET_HOURS
+          and crp.MEASURED_PROGRAMME_H
+          == e8b_run.MEASURED_PROGRAMME_HOURS)
+    # Identity, not equality: two dicts that merely agree today can be
+    # edited apart tomorrow, and the gate's reservation and the retry
+    # sizing would then rest on different tables.
+    check("the training module aliases the ONE per-cell cost table "
+          "rather than holding a second copy",
+          training.CORE_CELL_PROJECTED_HOURS
+          is e8b_run.CELL_PROJECTED_HOURS)
+
+    # --- F. known negatives ---
     must_fail("a core cell is still refused at the optimizer gate",
               lambda: e8b_run.authorize_optimizer_path(
                   "core-cell", "closure test"))

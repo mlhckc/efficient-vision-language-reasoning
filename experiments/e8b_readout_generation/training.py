@@ -110,11 +110,15 @@ CORE_FIXED_HYPER = {"lr": 3e-4, "warmup_frac": 0.0, "dropout": 0.1}
 # and the published projection cannot drift apart. The ceiling is
 # re-checked against MEASURED hours after the cell completes, which is
 # the authoritative charge.
-CORE_CELL_PROJECTED_HOURS = {
-    ("B3", "train_40k"): 1.718, ("B3", "train_250k"): 4.249,
-    ("B2", "train_40k"): 1.718, ("B2", "train_250k"): 4.249,
-    ("B1", "train_40k"): 0.287, ("B1", "train_250k"): 0.751,
-}
+#
+# ALIASED, not re-declared. This was a second literal copy of run.py's
+# CELL_PROJECTED_HOURS. The values agreed, but two tables mean two
+# sources: the pre-cell gate here reserved from this copy while
+# largest_cell_retry_hours() sized retries from run.py's, so a single
+# edit to one of them would have silently put the reservation and the
+# retry sizing on different numbers -- the same "one quantity, two
+# values" defect that the margin and the baseline already showed.
+CORE_CELL_PROJECTED_HOURS = e8b_run.CELL_PROJECTED_HOURS
 # One cell writes a resume checkpoint (325.9 MiB), a canonical
 # checkpoint (81.5 MiB), a secondary best-of-22 checkpoint and a per-row
 # npz. Rounded up to 1 GiB, checked against the space actually free.
@@ -1409,11 +1413,26 @@ def train_core_cell(arm: str, scale: str, seed: int) -> int:
             f"received signal {signum}; charging this process's hours "
             f"before exiting")
 
-    previous_handlers = {}
+    # Installed for the remaining life of the process, NOT saved for
+    # restoration. An earlier version stored the previous handlers in a
+    # dict that nothing ever read, next to a comment promising they were
+    # restored at the end -- a claim the code did not implement.
+    #
+    # Not restoring is the deliberate choice, and the reason is
+    # measured: restoring before the charge leaves a window in which a
+    # second SIGTERM kills the process with nothing written, because the
+    # charge can wait up to 30 s on the ledger lock. Restoring after the
+    # charge would need the whole accounting block wrapped in another
+    # try/finally, and the charge is the last thing this process does
+    # that matters.
+    #
+    # Residual, disclosed: the handler outlives this call, so a later
+    # SIGTERM in the same process surfaces as KeyboardInterrupt rather
+    # than a default termination. Cells are run one per process, so in
+    # practice nothing follows the charge.
     for _sig in (_signal.SIGTERM, _signal.SIGINT, _signal.SIGHUP):
         try:
-            previous_handlers[_sig] = _signal.signal(_sig,
-                                                     _charge_on_signal)
+            _signal.signal(_sig, _charge_on_signal)
         except (ValueError, OSError):
             pass
     try:
@@ -1421,10 +1440,9 @@ def train_core_cell(arm: str, scale: str, seed: int) -> int:
             arm, scale, seed, recipe, run_name, result_path,
             started, identity_gate, storage, remaining)
     finally:
-        # The handlers stay installed until AFTER the charge. Restoring
-        # them first left a window -- the charge can wait up to 30 s on
-        # the ledger lock -- in which a second SIGTERM would kill the
-        # process with nothing written. They are restored at the end.
+        # The handlers stay installed THROUGH the charge and are never
+        # restored; see the installation site for why, and for the
+        # disclosed residual.
         # H-1: charge THIS PROCESS's hours whatever happened. A cell
         # that halts at a gate or dies mid-epoch burned those hours just
         # as surely as one that completed, and a completion-path-only

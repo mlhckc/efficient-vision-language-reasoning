@@ -170,9 +170,26 @@ def derive(existing: dict, projection: dict) -> dict:
     # Judged against the ENFORCEABLE margin, not the raw headroom: the
     # 1.0 h floor is deducted, because a projection that reaches it
     # halts just as surely as one that reaches the ceiling.
-    enforceable = (gate["headroom_hours"]
-                   - e8b_run.HEADROOM_FLOOR_HOURS)
-    body["enforceable_margin_hours"] = round(enforceable, 4)
+    #
+    # TAKEN FROM run.py, not recomputed. This line previously derived
+    # the margin from the projection's own headroom, which rests on the
+    # 34.803 h measured component sum and yields 4.197, while run.py
+    # derives 4.195 from the 34.805 h gate basis. Both were then
+    # published in this one record -- 4.197 in the verdict and all six
+    # judged_against fields, 4.195 in ceiling_amended_20260808 -- so a
+    # reader could not tell which number the gate would actually
+    # enforce. There is now one source, and it is the one the gate uses.
+    enforceable = e8b_run.ENFORCEABLE_RECOVERY_MARGIN_HOURS
+    body["enforceable_margin_hours"] = enforceable
+    body["enforceable_margin_basis"] = (
+        f"ceiling {e8b_run.PER_IDENTITY_CEILING_HOURS} h less the "
+        f"{e8b_run.HEADROOM_FLOOR_HOURS} h operational floor less the "
+        f"{e8b_run.BASELINE_BUDGET_HOURS} h GATE BASIS. The gate basis "
+        f"is {e8b_run.BASELINE_ARITHMETIC_GAP_HOURS} h above the "
+        f"{e8b_run.MEASURED_PROGRAMME_HOURS} h measured component sum "
+        f"because the gate reserves per-cell constants rounded to three "
+        f"decimals; deriving from the gate basis yields the smaller and "
+        f"therefore more conservative margin.")
 
     # The two risks that phase C and B were run to close are CLOSED by
     # measurement. They are rewritten rather than left standing with
@@ -274,21 +291,44 @@ def derive(existing: dict, projection: dict) -> dict:
             and gate["headroom_hours"] < HEADROOM_FLOOR_HOURS)
     body["ceiling_amended_20260808"] = {
         "from_hours": 35.0, "to_hours": gate["ceiling_hours"],
-        "guarantee_withdrawn": "an earlier version said the 40 h "
-                               "ceiling buys one worst-case forced "
-                               "retry. It does not: the 1.0 h floor "
-                               "leaves an enforceable margin of 4.195 h "
-                               "against a 4.249 h worst-case cell. The "
-                               "programme is authorised on its MEASURED "
-                               "BASELINE; recovery is gate-controlled "
-                               "and may need a new decision.",
+        # Figures interpolated from the live constants, never typed: a
+        # prose "4.195 h" here is how this record came to disagree with
+        # itself in the first place.
+        "guarantee_withdrawn": (
+            f"an earlier version said the "
+            f"{e8b_run.PER_IDENTITY_CEILING_HOURS} h ceiling buys one "
+            f"worst-case forced retry. It does not: the "
+            f"{e8b_run.HEADROOM_FLOOR_HOURS} h floor leaves an "
+            f"enforceable margin of "
+            f"{e8b_run.ENFORCEABLE_RECOVERY_MARGIN_HOURS} h against a "
+            f"{e8b_run.largest_cell_retry_hours()} h worst-case cell, a "
+            f"shortfall of "
+            f"{round(e8b_run.largest_cell_retry_hours() - e8b_run.ENFORCEABLE_RECOVERY_MARGIN_HOURS, 4)}"
+            f" h. The programme is authorised on its MEASURED BASELINE; "
+            f"recovery is gate-controlled and may need a new decision."),
         "authorised_policy": "option 3 of 2026-08-08: the worst-case "
                              "retry halts for a fresh decision, "
                              "intentionally",
         "type": "RESOURCE-GOVERNANCE, pre-result, authorised by the "
                 "user on 2026-08-08",
-        "baseline_budget_hours": 34.803,
-        "contingency_reserve_hours": 4.25,
+        # Both bases, named apart, from the single source in run.py.
+        # This field used to hand-write 34.803 three lines above a
+        # margin derived from 34.805.
+        "baseline_budget_hours": e8b_run.BASELINE_BUDGET_HOURS,
+        "measured_programme_hours": e8b_run.MEASURED_PROGRAMME_HOURS,
+        "baseline_arithmetic_gap_hours":
+            e8b_run.BASELINE_ARITHMETIC_GAP_HOURS,
+        # contingency_reserve_hours (4.25) is REMOVED, not renamed. It
+        # was the retired "reserve sized to a worst-case retry" framing;
+        # its constant was deleted from run.py when that guarantee was
+        # withdrawn, and republishing it here kept the withdrawn claim
+        # alive in the record the amendment names as authoritative.
+        "contingency_reserve_hours_removed": (
+            "superseded on 2026-08-08. The reserve framing implied a "
+            "capacity guarantee that was withdrawn under option 3. The "
+            "quantity that replaces it is "
+            "enforceable_recovery_margin_hours, which is deliberately "
+            "SMALLER than the largest cell."),
         "recovery_margin_is_for": "at most ONE forced retry, and only "
                                   "if that retry fits the unchanged "
                                   "ceiling and floor when recomputed "
