@@ -1,0 +1,112 @@
+{
+  "metadata": {
+    "timestamp": "2026-08-08T10:17:02",
+    "git_commit": "d18a5c6",
+    "git_dirty": true,
+    "open_clip_version": "3.3.0",
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "h5py_version": "3.16.0",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "deterministic": true,
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "embed_dim": 512,
+    "top_k_answers": 100,
+    "n_train": 40000,
+    "n_val": 8000,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "hidden_dim": 512,
+    "dropout": 0.3,
+    "weight_decay": 0.0001
+  },
+  "e8b_failed_attempt": {
+    "dated_utc": "2026-08-08",
+    "cell": [
+      "B3",
+      "train_40k",
+      0
+    ],
+    "run_name": "e8b_core_B3_train_40k_seed0",
+    "attempt": 1,
+    "status": "FAILED_AFTER_TRAINING_BEFORE_FINALISATION",
+    "counts_as_a_completed_scientific_cell": false,
+    "what_happened": {
+      "training_epochs_completed": 22,
+      "training_epochs_required": 22,
+      "training_loop_ran_to_completion": true,
+      "gates_passed_before_the_failure": [
+        "G8 tiny-subset overfit (0.9980 at epoch 40)",
+        "G14-FP32 pre-selection, 64 rows, C1/C2/C3 identity",
+        "G9 reloaded-checkpoint score identity",
+        "G11 repeated canonical evaluation identity",
+        "SELECTION: canonical accuracy reproduced the in-loop value"
+      ],
+      "failure_stage": "post-training G10 collapse diagnostic",
+      "failure_type": "AttributeError",
+      "failure_cause": "producer-consumer type contract mismatch: canonical_dev_predictions returns the B2/B3 score matrix as a numpy.ndarray of dtype float64, while mean_prediction_entropy_nats was annotated torch.Tensor and called Tensor.double(). Repaired at commit d18a5c6.",
+      "gpu_hours_consumed": 1.31659,
+      "gpu_hours_charged_to_the_pretrained_identity": true,
+      "identity_total_after_this_attempt_hours": 11.3398
+    },
+    "artefacts": {
+      "validated_final_result_artefact": null,
+      "result_json_written": false,
+      "per_row_npz_written": false,
+      "halt_record_written": false,
+      "failed_status_record_written_by_the_runner": false,
+      "console_log": "core_B3_train_40k_seed0_console.log",
+      "checkpoints_written_and_preserved": {
+        "e8b_core_B3_train_40k_seed0_canonical_ep22.pt": "09f1e1ffd4f33106e64a3824a4e60a577b30518f3baab34defac7550fec47ad4",
+        "e8b_core_B3_train_40k_seed0_secondary_best_of22.pt": "020f91a9fc1196a26f66af2872c897fdffd531ab26f4f47cf5409d9ed1f276d1",
+        "resume_e8b_core_B3_train_40k_seed0.pt": "d1c9663035567a0d4c6b73dd66f4fed31ce64f8031cfe49e24f9207975b4d406"
+      },
+      "archive": {
+        "directory": "results/experiments/e8b_readout_generation/attempt1_archive_B3_train_40k_seed0",
+        "moved_out_of_checkpoint_dir_utc": "2026-08-08",
+        "why": "attempt 1's checkpoints were MOVED out of CHECKPOINT_DIR before the authorised from-scratch retry. The canonical and secondary paths are written with os.replace and would have been overwritten in place; the resume checkpoint had to leave the directory entirely, because _train_core_locked verifies any resume file it finds and the source-digest gate would abort the retry. Hashes were re-verified after the move and the copies are read-only.",
+        "files": {
+          "e8b_core_B3_train_40k_seed0_canonical_ep22.pt": {
+            "sha256": "09f1e1ffd4f33106e64a3824a4e60a577b30518f3baab34defac7550fec47ad4",
+            "bytes": 85417467,
+            "archived_to": "results/experiments/e8b_readout_generation/attempt1_archive_B3_train_40k_seed0/e8b_core_B3_train_40k_seed0_canonical_ep22.pt",
+            "hash_verified_after_move": true,
+            "mode": "read-only (0444)"
+          },
+          "e8b_core_B3_train_40k_seed0_secondary_best_of22.pt": {
+            "sha256": "020f91a9fc1196a26f66af2872c897fdffd531ab26f4f47cf5409d9ed1f276d1",
+            "bytes": 85418151,
+            "archived_to": "results/experiments/e8b_readout_generation/attempt1_archive_B3_train_40k_seed0/e8b_core_B3_train_40k_seed0_secondary_best_of22.pt",
+            "hash_verified_after_move": true,
+            "mode": "read-only (0444)"
+          },
+          "resume_e8b_core_B3_train_40k_seed0.pt": {
+            "sha256": "d1c9663035567a0d4c6b73dd66f4fed31ce64f8031cfe49e24f9207975b4d406",
+            "bytes": 341719867,
+            "archived_to": "results/experiments/e8b_readout_generation/attempt1_archive_B3_train_40k_seed0/resume_e8b_core_B3_train_40k_seed0.pt",
+            "hash_verified_after_move": true,
+            "mode": "read-only (0444)"
+          }
+        }
+      }
+    },
+    "console_only_observation": {
+      "epoch_22_dev_value_seen_in_the_log": 0.5312,
+      "status": "NOT A RESULT. It exists only in a console log, in no validated artefact, and must not be promoted. The canonical FP32 figure is whatever the finalise-only re-entry writes into a validated record.",
+      "may_be_promoted": false
+    },
+    "disposition": "The trained state is complete and preserved in the epoch-22 and resume checkpoints above. The authorised recovery is a FINALISE-ONLY re-entry that reuses those checkpoints, runs zero training epochs and zero optimizer steps, and completes the interrupted finalisation. Retraining from scratch is NOT authorised. This attempt is not rewritten as though it never occurred, and its 1.31659 h stays charged.",
+    "clean_test_accessed": false,
+    "amended_utc": "2026-08-08",
+    "amendment_note": "archive binding added when the user authorised recovery option (b), a from-scratch retry. Nothing else in this record changed; the attempt-1 facts and hashes stand as first written."
+  }
+}

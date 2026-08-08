@@ -1,0 +1,50 @@
+{
+  "metadata": {
+    "timestamp": "2026-08-08T07:34:30",
+    "git_commit": "5228f7e",
+    "git_dirty": true,
+    "open_clip_version": "3.3.0",
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "h5py_version": "3.16.0",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "deterministic": true,
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "embed_dim": 512,
+    "top_k_answers": 100,
+    "n_train": 40000,
+    "n_val": 8000,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "hidden_dim": 512,
+    "dropout": 0.3,
+    "weight_decay": 0.0001
+  },
+  "e8b_deferred_cleanup_addendum": {
+    "dated_utc": "2026-08-08",
+    "purpose": "One further non-blocking finding, deferred by the user in the same instruction that authorised the 18-cell E8B core matrix. It is recorded separately because deferred_cleanup_20260808.json is hash-pinned by results/cross_e8_ceiling_supersession_20260808.json, and editing a pinned historical record to add a note would break the manifest it is pinned by. The gating rule and the eight items of that record are unchanged and remain authoritative for DEFER-1 to DEFER-8.",
+    "extends": "results/experiments/e8b_readout_generation/deferred_cleanup_20260808.json",
+    "count": 1,
+    "items": [
+      {
+        "id": "DEFER-9",
+        "source": "final core execution authorisation, 2026-08-08",
+        "finding": "blocker_high_reverification_20260807.json -> ACTIVE_RESOURCE_STATE_20260808.derived_not_typed states that EVERY figure in that block is read from config.py and experiments/e8b_readout_generation/run.py at generation time. The guarantee is worded more broadly than the generator delivers: not every figure in the block is obtained from those two modules at generation time, so the sentence overstates the derivation property for part of the block.",
+        "reason_non_blocking": "does not affect training correctness, evaluation correctness, active resource gating, scientific validity, result provenance or the clean-test embargo. Every figure in the block is correct and agrees with config.py, run.py and the governing records; the live gates read the authoritative config constant whatever this record says, and the record is evidence rather than a gate. What is wrong is the scope of a prose guarantee, not a number.",
+        "intended_cleanup_point": "post-E8B, in the same pass as DEFER-3 and DEFER-5: either narrow the wording to the figures actually derived at generation time, or widen the generator until the claim is true.",
+        "explicitly_not_repaired_before_execution": "The user decided on 2026-08-08 that this must not interrupt execution and must not modify the certified state the 18-cell core matrix runs from. It is repaired after the scientific matrix is complete."
+      }
+    ],
+    "training_authorized": "core-matrix-approved",
+    "clean_test_accessed": false
+  }
+}
