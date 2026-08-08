@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-08T01:10:45",
-    "git_commit": "5456a12",
+    "timestamp": "2026-08-08T01:16:15",
+    "git_commit": "432f42d",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -47,8 +47,9 @@
     "rationale_as_recorded": [
       "the complete programme is now measured at 34.803 GPU-hours",
       "the largest final 250k cell is approximately 4.25 GPU-hours",
-      "therefore a 40 h ceiling provides capacity for the measured complete programme plus at most one worst-case forced retry",
-      "a ceiling close to 35-36 h would provide nominal PASS status but no meaningful operational recovery margin"
+      "a 40 h ceiling was raised to provide operational recovery capacity above the measured programme",
+      "a ceiling close to 35-36 h would provide nominal PASS status but no meaningful operational recovery margin",
+      "WITHDRAWN on 2026-08-08 after review: the original third bullet read 'therefore a 40 h ceiling provides capacity for the measured complete programme plus at most one worst-case forced retry'. That guarantee does NOT hold, because the 1.000 h operational headroom floor is enforced unconditionally against the ceiling. See authorised_policy below, which is what governs."
     ],
     "nothing_scientific_was_changed_to_obtain_the_margin": {
       "verified_against_live_code": true,
@@ -106,7 +107,25 @@
       ],
       "forbidden_grounds_meaning": "a retry is NOT permitted because accuracy is disappointing, another seed looks better, a different checkpoint would improve the result, or a result is statistically inconvenient. Each of these is refused by name in code, not merely written down, because a performance-driven rerun would invalidate the comparison.",
       "second_retry": "REFUSED; execution stops and returns to the user for an explicit decision",
-      "ledger": "/user/HS400/mc02623/backups/efficient-vision-language-reasoning/e8b-locks/e8b_forced_retry_ledger.json"
+      "ledger": "/user/HS400/mc02623/backups/efficient-vision-language-reasoning/e8b-locks/e8b_forced_retry_ledger.json",
+      "after_an_objectively_failed_execution": [
+        "charge all measurable spent compute",
+        "recompute actual identity usage",
+        "recompute remaining mandatory programme cost",
+        "apply the UNCHANGED 40 h ceiling and UNCHANGED 1 h floor",
+        "if it fits every gate, it may proceed under the frozen forced-retry policy",
+        "if it does not fit, STOP and request explicit user approval"
+      ],
+      "never_done_automatically": [
+        "raise the ceiling",
+        "waive the headroom floor",
+        "drop a cell",
+        "drop an intervention",
+        "remove a seed",
+        "change a scale"
+      ],
+      "executable_admissibility_check": "run.retry_admissible(arm, scale, seed)",
+      "performance_driven_retries": "REMAIN FORBIDDEN, refused by name in code before any file is written"
     },
     "evaluation_corrections_preserved": {
       "batching": "ACCEPTED, described as output/decision-equivalent and explicitly NOT bit-identical",
@@ -118,33 +137,33 @@
       "interventions": "none removed"
     },
     "clean_test_accessed": false,
-    "CORRECTION_the_ceiling_does_not_quite_buy_what_was_intended": {
-      "dated_utc": "2026-08-08",
-      "raised_by": "the narrow governance review",
-      "the_claim_as_recorded": "a 40 h ceiling provides capacity for the measured complete programme plus at most one worst-case forced retry",
-      "why_it_does_not_hold": "the amendment did not account for the project's own 1.0 GPU-hour headroom floor, which per_identity_gate enforces unconditionally against the ceiling. Usable capacity is therefore 39.0 h, not 40.0 h.",
-      "arithmetic": {
-        "ceiling_hours": 40.0,
-        "headroom_floor_hours": 1.0,
-        "usable_capacity_hours": 39.0,
-        "gate_baseline_hours": 34.8052,
-        "enforceable_retry_margin_hours": 4.1948,
-        "worst_case_cell_hours": 4.249,
-        "shortfall_hours": 0.0542,
-        "shortfall_minutes": 3.3
+    "authorised_policy": {
+      "decided_on": "2026-08-08",
+      "decision": "OPTION 3: accept that a worst-case retry halts for a fresh decision. The ceiling was NOT raised further and the floor was NOT waived.",
+      "figures": {
+        "baseline_measured_programme_hours": 34.805,
+        "hard_pretrained_identity_ceiling_hours": 40.0,
+        "mandatory_operational_headroom_floor_hours": 1.0,
+        "enforceable_automatic_recovery_margin_hours": 4.195,
+        "largest_measured_b3_250k_retry_hours": 4.249,
+        "that_retry_crosses_the_floor_by_hours": 0.054
       },
-      "verified_by_execution": "a worst-case B3/train_250k retry, with the retry properly recorded, halts at 39.0542 h with fire_reason 'under the headroom floor'",
-      "direction_of_failure": "SAFE. It halts and returns to the user; it does not over-spend and it causes no scientific harm. But the halt arrives exactly where the contingency was meant to remove the need for a fresh decision, which is the one thing the raise was authorised to buy.",
-      "options_for_the_user_NONE_TAKEN": [
-        "raise the ceiling to about 40.1 h so the floor and one worst-case retry both fit",
-        "exempt a RECORDED forced retry from the headroom floor, on the grounds that the floor exists to stop a programme STARTING with no recovery margin, not to block the recovery itself",
-        "accept that a worst-case retry halts for a fresh decision, which costs one round trip and nothing else"
-      ],
-      "not_decided_here": "the ceiling was not moved and the floor was not weakened. Both are the user's to set.",
-      "affected_downstream_claims_corrected": [
-        "the rationale text in run.py and in this record now carries this correction beside it",
-        "the forced-retry risk row is re-derived against the ENFORCEABLE margin rather than the raw headroom"
-      ]
-    }
+      "consequence": "the largest B3/250k retry MUST stop for a fresh explicit user decision. THIS IS INTENTIONAL, not a defect and not an oversight.",
+      "what_the_programme_is_authorised_on": "its MEASURED BASELINE BUDGET. Recovery from an execution failure is gate-controlled and may require a new decision.",
+      "no_guarantee": "a retry is NEVER guaranteed merely because the ceiling has spare raw capacity."
+    },
+    "operational_protections_preserved": {
+      "contingency_sized_to_the_actual_cell": "run.contingency_unlocked_hours sums the projected cost of the cells actually retried; a binary unlock would have let a 1.718 h retry release the whole reserve",
+      "signals_charge_before_exit": "SIGTERM, SIGINT and SIGHUP are converted to exceptions so the finally block charges this process's hours",
+      "sigkill_residual": "SIGKILL cannot be caught by anything, so a hard kill still loses its charge. Disclosed, not papered over: after any unexplained termination, reconcile the ledger against the scheduler's own accounting before starting the next cell."
+    },
+    "superseded_claims": [
+      {
+        "claim": "the 40 h ceiling guarantees capacity for one worst-case forced B3/250k retry",
+        "status": "WITHDRAWN 2026-08-08",
+        "why": "it ignored the 1.000 h headroom floor; the enforceable margin is 4.195 h against a 4.249 h worst-case cell",
+        "replaced_by": "authorised_policy"
+      }
+    ]
   }
 }

@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-08T01:10:46",
-    "git_commit": "5456a12",
+    "timestamp": "2026-08-08T01:16:56",
+    "git_commit": "432f42d",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -163,8 +163,8 @@
       },
       {
         "risk": "a forced retry is unaffordable and not improbable",
-        "detail": "G14 fired as a halting gate on one of the three completed search runs. One forced B3/250k retry costs 4.249 h against 5.197 h of headroom.",
-        "status": "OPEN: the recorded retry allowance is NONE, and no contingency exists",
+        "detail": "G14 fired as a halting gate on one of the three completed search runs. A forced B3/250k retry costs 4.249 h against an ENFORCEABLE recovery margin of 4.197 h -- the headroom less the 1.0 h floor -- so it does NOT fit automatically and MUST stop for a fresh explicit user decision. That is the authorised policy of 2026-08-08 (option 3), not a defect: the ceiling was not raised further and the floor was not waived. A retry of any cheaper cell does fit.",
+        "status": "GATE-CONTROLLED: recovery is not guaranteed by spare raw capacity",
         "carries_hours": 4.249,
         "can_exhaust_the_margin": true,
         "judged_against": "the ENFORCEABLE margin (4.197 h), which is the headroom less the 1.0 h floor"
@@ -270,10 +270,12 @@
     "ceiling_amended_20260808": {
       "from_hours": 35.0,
       "to_hours": 40.0,
+      "guarantee_withdrawn": "an earlier version said the 40 h ceiling buys one worst-case forced retry. It does not: the 1.0 h floor leaves an enforceable margin of 4.195 h against a 4.249 h worst-case cell. The programme is authorised on its MEASURED BASELINE; recovery is gate-controlled and may need a new decision.",
+      "authorised_policy": "option 3 of 2026-08-08: the worst-case retry halts for a fresh decision, intentionally",
       "type": "RESOURCE-GOVERNANCE, pre-result, authorised by the user on 2026-08-08",
       "baseline_budget_hours": 34.803,
       "contingency_reserve_hours": 4.25,
-      "contingency_is_for": "at most ONE worst-case forced retry, sized on the largest final 250k cell",
+      "recovery_margin_is_for": "at most ONE forced retry, and only if that retry fits the unchanged ceiling and floor when recomputed from actual charged usage",
       "ordinary_execution_is_gated_against": "the measured baseline, not the ceiling",
       "record": "resource_governance_amendment_20260808.json"
     },

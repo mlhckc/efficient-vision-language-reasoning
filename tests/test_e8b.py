@@ -3974,58 +3974,155 @@ def test_governance_amendment() -> None:
         finally:
             e8b_run.RETRY_LEDGER = original
 
-    # --- the shortfall the narrow review found, recorded not hidden ---
-    correction = amendment[
-        "CORRECTION_the_ceiling_does_not_quite_buy_what_was_intended"]
-    arithmetic = correction["arithmetic"]
-    check("the headroom floor is deducted from usable capacity",
-          abs(arithmetic["usable_capacity_hours"]
-              - (e8b_run.PER_IDENTITY_CEILING_HOURS
-                 - e8b_run.HEADROOM_FLOOR_HOURS)) < 1e-9)
-    check("the enforceable retry margin is SHORT of the worst-case cell",
-          arithmetic["shortfall_hours"] > 0
-          and arithmetic["enforceable_retry_margin_hours"]
-          < arithmetic["worst_case_cell_hours"])
-    check("the shortfall is quantified in minutes, not hand-waved",
-          arithmetic["shortfall_minutes"] > 0)
-    check("the failure direction is stated as SAFE",
-          correction["direction_of_failure"].startswith("SAFE"))
-    check("options are offered and NONE is taken",
-          len(correction["options_for_the_user_NONE_TAKEN"]) >= 3
-          and "was not moved" in correction["not_decided_here"])
-    # The ceiling and the floor must NOT have been quietly adjusted to
-    # make the arithmetic work.
-    check("the ceiling is still exactly the authorised 40 h",
-          e8b_run.PER_IDENTITY_CEILING_HOURS == 40.0)
-    check("the headroom floor is still 1.0 h",
-          e8b_run.HEADROOM_FLOOR_HOURS == 1.0)
-    # Verified by execution: a worst-case recorded retry still halts.
-    import tempfile as _tempfile
-    with _tempfile.TemporaryDirectory() as tmp:
+    # --- OPTION 3: the guarantee is withdrawn, the halt is intended ---
+    policy = amendment["authorised_policy"]
+    figures = policy["figures"]
+    check("the ceiling is exactly 40.000 and was NOT raised further",
+          figures["hard_pretrained_identity_ceiling_hours"] == 40.000
+          and e8b_run.PER_IDENTITY_CEILING_HOURS == 40.0)
+    check("the headroom floor is exactly 1.000 and was NOT waived",
+          figures["mandatory_operational_headroom_floor_hours"] == 1.000
+          and e8b_run.HEADROOM_FLOOR_HOURS == 1.0)
+    check("the recorded arithmetic is internally consistent",
+          abs((figures["hard_pretrained_identity_ceiling_hours"]
+               - figures["mandatory_operational_headroom_floor_hours"]
+               - figures["baseline_measured_programme_hours"])
+              - figures[
+                  "enforceable_automatic_recovery_margin_hours"]) < 0.01)
+    check("the shortfall is the difference between the worst-case "
+          "retry and the enforceable margin",
+          abs((figures["largest_measured_b3_250k_retry_hours"]
+               - figures[
+                   "enforceable_automatic_recovery_margin_hours"])
+              - figures["that_retry_crosses_the_floor_by_hours"])
+          < 0.002)
+    check("the halt is recorded as INTENTIONAL, not as a defect",
+          "INTENTIONAL" in policy["consequence"])
+    check("the programme is authorised on its MEASURED BASELINE, with "
+          "recovery gate-controlled",
+          "MEASURED BASELINE" in policy[
+              "what_the_programme_is_authorised_on"]
+          and "gate-controlled" in policy[
+              "what_the_programme_is_authorised_on"])
+    check("no retry is guaranteed by spare raw capacity",
+          "NEVER guaranteed" in policy["no_guarantee"])
+
+    # The withdrawn guarantee must not survive anywhere.
+    withdrawn = amendment["superseded_claims"][0]
+    check("the guarantee claim is recorded as WITHDRAWN",
+          "WITHDRAWN" in withdrawn["status"]
+          and "guarantees capacity" in withdrawn["claim"]
+          or "guarantee" in withdrawn["claim"])
+    # Comment text wraps across lines, so compare on a flattened form.
+    run_source = (E8B_DIR / "run.py").read_text()
+    flat = " ".join(run_source.replace("#", " ").split())
+    check("the guarantee wording survives ONLY inside its own explicit "
+          "withdrawal",
+          "THAT CLAIM IS WITHDRAWN" in flat
+          and flat.count("worst-case forced retry")
+          == flat.count('"provides capacity for the measured complete '
+                        'programme plus at most one worst-case forced '
+                        'retry". THAT CLAIM IS WITHDRAWN'),
+          f"{flat.count('worst-case forced retry')} mentions")
+    check("the correct enforceable arithmetic is stated in the code",
+          "ENFORCEABLE automatic recovery margin" in flat
+          and "4.195" in flat and "4.249" in flat and "0.054" in flat)
+    reconciliation = json.loads(
+        (results / "identity_reconciliation_20260807.json").read_text()
+    )["e8b_identity_reconciliation"]
+    check("the risk ledger no longer implies a guaranteed retry",
+          "guarantee_withdrawn"
+          in reconciliation["ceiling_amended_20260808"])
+    retry_row = next(r for r in reconciliation["open_risks"]
+                     if "retry" in r["risk"])
+    check("the forced-retry row is GATE-CONTROLLED and can still "
+          "exhaust the enforceable margin",
+          "GATE-CONTROLLED" in retry_row["status"]
+          and retry_row["can_exhaust_the_margin"] is True)
+
+    # --- the admissibility check, proven by execution ---
+    with tempfile.TemporaryDirectory() as tmp:
         original = e8b_run.RETRY_LEDGER
         try:
             e8b_run.RETRY_LEDGER = Path(tmp) / "r.json"
             worst = e8b_run.CELL_PROJECTED_HOURS[("B3", "train_250k")]
-            e8b_run.record_forced_retry("B3", "train_250k", 0,
-                                        "node_failure", "node died")
             burned = {"cells": {"B3_train_250k_seed0": {
                 "identity": "pretrained", "processes": [worst],
                 "hours": worst, "arm": "B3", "scale": "train_250k",
                 "seed": 0}}}
-            retry_gate = e8b_run.per_identity_gate(
+            e8b_run.record_forced_retry("B3", "train_250k", 0,
+                                        "node_failure", "node died")
+            worst_retry = e8b_run.retry_admissible(
+                "B3", "train_250k", 0, ledger=burned)
+            check("the WORST-CASE retry is NOT admissible and says why",
+                  worst_retry["admissible"] is False
+                  and "headroom floor"
+                  in worst_retry["blocking_reason"])
+            check("an inadmissible retry stops and asks, and relaxes "
+                  "nothing",
+                  "STOP and request explicit user approval"
+                  in worst_retry["if_not_admissible"]
+                  and "raise the ceiling"
+                  in worst_retry["if_not_admissible"])
+            check("spare raw capacity is not by itself permission",
+                  worst_retry["projected_total_hours"]
+                  < worst_retry["ceiling_hours"]
+                  and worst_retry["admissible"] is False)
+            # The contingency released is sized to the cell retried.
+            gate_after = e8b_run.per_identity_gate(
                 "B3", worst, ledger=burned,
                 cell=("B3", "train_250k", 0))
-            check("a worst-case recorded retry HALTS under the floor, "
-                  "as the correction states",
-                  retry_gate["fires"] is True
-                  and "headroom floor" in retry_gate["fire_reason"])
-            # And the unlock is SIZED, not binary.
-            check("the contingency released matches the retried cell, "
-                  "not the whole reserve",
-                  abs(retry_gate["contingency_unlocked_hours"] - worst)
+            check("the recovery allowance is sized to the actual cell, "
+                  "never a binary unlock",
+                  abs(gate_after["contingency_unlocked_hours"] - worst)
                   < 0.01)
         finally:
             e8b_run.RETRY_LEDGER = original
+    with tempfile.TemporaryDirectory() as tmp:
+        original = e8b_run.RETRY_LEDGER
+        try:
+            e8b_run.RETRY_LEDGER = Path(tmp) / "r2.json"
+            cheap = e8b_run.CELL_PROJECTED_HOURS[("B3", "train_40k")]
+            burned = {"cells": {"B3_train_40k_seed1": {
+                "identity": "pretrained", "processes": [cheap],
+                "hours": cheap, "arm": "B3", "scale": "train_40k",
+                "seed": 1}}}
+            e8b_run.record_forced_retry("B3", "train_40k", 1,
+                                        "node_failure", "node died")
+            check("a retry that DOES fit the unchanged gates is "
+                  "admissible, so the policy is not simply a blanket "
+                  "refusal",
+                  e8b_run.retry_admissible(
+                      "B3", "train_40k", 1,
+                      ledger=burned)["admissible"] is True)
+        finally:
+            e8b_run.RETRY_LEDGER = original
+
+    # --- signal handling and the disclosed residual ---
+    training_source = (E8B_DIR / "training.py").read_text()
+    check("SIGTERM, SIGINT and SIGHUP charge consumed compute before "
+          "exit",
+          all(sig in training_source
+              for sig in ("SIGTERM", "SIGINT", "SIGHUP"))
+          and "_charge_on_signal" in training_source)
+    check("SIGKILL is disclosed as an uncatchable residual",
+          "SIGKILL cannot be caught" in training_source)
+    protections = amendment["operational_protections_preserved"]
+    check("both operational protections are recorded",
+          "sized to the actual cell" in json.dumps(protections).lower()
+          or "contingency_sized_to_the_actual_cell" in protections)
+    check("the SIGKILL residual is recorded, not papered over",
+          "not papered over" in protections["sigkill_residual"])
+
+    # --- no automatic scope reduction, anywhere ---
+    for forbidden in ("drop a cell", "drop an intervention",
+                      "remove a seed", "change a scale",
+                      "waive the headroom floor", "raise the ceiling"):
+        check(f"the policy forbids automatically doing: {forbidden}",
+              forbidden in amendment["retry_policy_frozen"][
+                  "never_done_automatically"])
+    check("the 18 cells are all still present after the policy change",
+          len(e8b_run.CORE_CELLS) == 18)
 
     # --- the evaluation corrections survive the amendment ---
     preserved = amendment["evaluation_corrections_preserved"]

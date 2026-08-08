@@ -167,6 +167,13 @@ def derive(existing: dict, projection: dict) -> dict:
 
     # Risks keep their authored text but their figures come from the
     # projection, and the counts come from the list.
+    # Judged against the ENFORCEABLE margin, not the raw headroom: the
+    # 1.0 h floor is deducted, because a projection that reaches it
+    # halts just as surely as one that reaches the ceiling.
+    enforceable = (gate["headroom_hours"]
+                   - body.get("headroom_floor_hours", 1.0))
+    body["enforceable_margin_hours"] = round(enforceable, 4)
+
     # The two risks that phase C and B were run to close are CLOSED by
     # measurement. They are rewritten rather than left standing with
     # fresh numbers injected into stale "unmeasured" prose.
@@ -187,22 +194,24 @@ def derive(existing: dict, projection: dict) -> dict:
                                 "assumption it replaced")
             risk["status"] = "CLOSED BY MEASUREMENT on 2026-08-07"
         if "forced retry" in risk.get("risk", ""):
-            risk["carries_hours"] = projection["per_cell_hours"][
-                "lm_train_250k"]
+            worst = projection["per_cell_hours"]["lm_train_250k"]
+            risk["carries_hours"] = worst
             risk["detail"] = (
                 f"G14 fired as a halting gate on one of the three "
-                f"completed search runs. One forced B3/250k retry costs "
-                f"{projection['per_cell_hours']['lm_train_250k']} h "
-                f"against {gate['headroom_hours']} h of headroom.")
+                f"completed search runs. A forced B3/250k retry costs "
+                f"{worst} h against an ENFORCEABLE recovery margin of "
+                f"{round(enforceable, 3)} h -- the headroom less the "
+                f"{body.get('headroom_floor_hours', 1.0)} h floor -- so "
+                f"it does NOT fit automatically and MUST stop for a "
+                f"fresh explicit user decision. That is the authorised "
+                f"policy of 2026-08-08 (option 3), not a defect: the "
+                f"ceiling was not raised further and the floor was not "
+                f"waived. A retry of any cheaper cell does fit.")
+            risk["status"] = ("GATE-CONTROLLED: recovery is not "
+                              "guaranteed by spare raw capacity")
     # Classified explicitly, then counted: a risk can exhaust the margin
     # if the hours it carries exceed the headroom. Two of the six are
     # not hours risks at all and must not be counted as if they were.
-    # Judged against the ENFORCEABLE margin, not the raw headroom: the
-    # 1.0 h floor is deducted, because a projection that reaches it
-    # halts just as surely as one that reaches the ceiling.
-    enforceable = (gate["headroom_hours"]
-                   - body.get("headroom_floor_hours", 1.0))
-    body["enforceable_margin_hours"] = round(enforceable, 4)
     for risk in body.get("open_risks", []):
         carried = risk.get("carries_hours")
         risk["can_exhaust_the_margin"] = bool(
@@ -262,12 +271,25 @@ def derive(existing: dict, projection: dict) -> dict:
             and gate["headroom_hours"] < HEADROOM_FLOOR_HOURS)
     body["ceiling_amended_20260808"] = {
         "from_hours": 35.0, "to_hours": gate["ceiling_hours"],
+        "guarantee_withdrawn": "an earlier version said the 40 h "
+                               "ceiling buys one worst-case forced "
+                               "retry. It does not: the 1.0 h floor "
+                               "leaves an enforceable margin of 4.195 h "
+                               "against a 4.249 h worst-case cell. The "
+                               "programme is authorised on its MEASURED "
+                               "BASELINE; recovery is gate-controlled "
+                               "and may need a new decision.",
+        "authorised_policy": "option 3 of 2026-08-08: the worst-case "
+                             "retry halts for a fresh decision, "
+                             "intentionally",
         "type": "RESOURCE-GOVERNANCE, pre-result, authorised by the "
                 "user on 2026-08-08",
         "baseline_budget_hours": 34.803,
         "contingency_reserve_hours": 4.25,
-        "contingency_is_for": "at most ONE worst-case forced retry, "
-                              "sized on the largest final 250k cell",
+        "recovery_margin_is_for": "at most ONE forced retry, and only "
+                                  "if that retry fits the unchanged "
+                                  "ceiling and floor when recomputed "
+                                  "from actual charged usage",
         "ordinary_execution_is_gated_against": "the measured baseline, "
                                                "not the ceiling",
         "record": "resource_governance_amendment_20260808.json"}

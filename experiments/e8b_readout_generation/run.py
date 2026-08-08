@@ -222,48 +222,53 @@ SEEDS = (0, 1, 2)
 
 # Resource constants (canonical section 14 and the accepted design).
 WALL_CLOCK_HALT_HOURS = 8.0
-# AMENDED 2026-08-08 by explicit user authorisation, from 35.0 to 40.0.
+# AMENDED 2026-08-08 by explicit user authorisation, from 35.0 to 40.0,
+# and CORRECTED the same day after review.
 #
 # This is a RESOURCE-GOVERNANCE amendment, not a scientific one. It was
 # made BEFORE any final core cell ran and with no final result in
-# existence, so no outcome could have influenced it. The rationale, as
-# recorded:
+# existence, so no outcome could have influenced it. No scientific
+# component was changed to obtain the margin.
 #
-#   * the complete programme is now MEASURED at 34.803 GPU-hours;
-#   * the largest final 250k cell is approximately 4.25 GPU-hours;
-#   * therefore a 40 h ceiling provides capacity for the measured
-#     complete programme plus AT MOST ONE worst-case forced retry;
-#   * a ceiling close to 35-36 h would provide nominal PASS status but
-#     no meaningful operational recovery margin.
+# WHAT THE CEILING DOES AND DOES NOT BUY. An earlier version of this
+# comment claimed the 40 h ceiling "provides capacity for the measured
+# complete programme plus at most one worst-case forced retry". THAT
+# CLAIM IS WITHDRAWN. It ignored the 1.000 h operational headroom floor
+# below, which this same gate enforces unconditionally, so:
 #
-# CORRECTION, same day, raised by the narrow governance review: the
-# third bullet does NOT hold as written. The 1.0 h headroom floor below
-# is enforced unconditionally against the ceiling, so usable capacity is
-# 39.0 h and the enforceable retry margin is about 4.195 h against a
-# 4.249 h worst-case cell -- short by roughly three minutes. A
-# worst-case retry therefore halts under the floor instead of
-# proceeding. The failure is SAFE (it stops and asks) but it lands
-# exactly where the contingency was supposed to avoid asking. Neither
-# the ceiling nor the floor was moved to paper over this; it is recorded
-# in resource_governance_amendment_20260808.json for the user to
-# decide.
+#     hard ceiling                                40.000 h
+#     mandatory operational headroom floor         1.000 h
+#     usable capacity                             39.000 h
+#     measured baseline programme                 34.805 h
+#     ENFORCEABLE automatic recovery margin        4.195 h
+#     largest measured B3/250k retry               4.249 h
+#     that retry crosses the floor by              0.054 h
 #
-# No scientific component was changed to obtain this margin. The 18
-# cells, the recipe, the 22-epoch endpoint, the denominator, the three
-# interventions and both scorers are all exactly as frozen.
+# So the worst-case retry does NOT fit automatically, and the user's
+# decision of 2026-08-08 is that this is INTENTIONAL: it must stop for a
+# fresh explicit decision rather than be accommodated by moving a
+# number. The programme is authorised on its MEASURED BASELINE BUDGET.
+# Recovery from an execution failure is gate-controlled and may require
+# a new decision; it is not guaranteed by spare raw capacity.
 PER_IDENTITY_CEILING_HOURS = 40.0
 PER_IDENTITY_CEILING_AMENDED_ON = "2026-08-08"
 PER_IDENTITY_CEILING_PREVIOUS_HOURS = 35.0
 
 # The measured complete programme. Normal 18-cell execution is gated
 # against THIS, not against the ceiling: the gap between them is
-# contingency, and an estimate that merely drifts must not be allowed to
-# eat it silently.
+# recovery margin, and an estimate that merely drifts must not be
+# allowed to eat it silently.
 BASELINE_BUDGET_HOURS = 34.803
-# Capacity for AT MOST ONE worst-case forced retry, sized on the largest
-# final cell. Held separately and visibly, never folded into the
-# baseline projection.
+# The recovery margin that is ACTUALLY ENFORCEABLE, after the floor:
+# ceiling minus floor minus baseline. This is NOT a promise that any
+# particular retry fits -- the largest one does not. It is the amount a
+# retry may automatically consume before the gate stops and asks.
+ENFORCEABLE_RECOVERY_MARGIN_HOURS = 4.195
+# Retained as the SIZE OF THE LARGEST CELL, which is what a retry of it
+# would cost. Deliberately no longer called a guaranteed reserve: it
+# exceeds the enforceable margin above by 0.054 h.
 CONTINGENCY_RESERVE_HOURS = 4.25
+LARGEST_CELL_RETRY_HOURS = 4.249
 # The gate sums per-cell constants rounded to three decimals while the
 # published baseline is computed from unrounded values. The ACTUAL gap
 # is 0.0022 h (7.9 s); this is set to 0.005 h so the reconciliation is
@@ -1829,6 +1834,44 @@ def record_forced_retry(arm: str, scale: str, seed: int, reason: str,
     finally:
         guard.unlink(missing_ok=True)
     return ledger
+
+
+def retry_admissible(arm: str, scale: str, seed: int,
+                     ledger: dict | None = None) -> dict:
+    """May a retry of this cell proceed automatically?
+
+    A retry is NEVER guaranteed merely because the ceiling has spare raw
+    capacity. After an objectively failed execution the question is
+    re-asked from scratch: charge what was actually spent, recompute the
+    identity's usage, recompute what the mandatory programme still
+    costs, and apply the UNCHANGED 40 h ceiling and UNCHANGED 1 h floor.
+
+    If it fits, it proceeds under the already frozen forced-retry
+    policy. If it does not, execution STOPS and asks. Nothing is
+    automatically relaxed to make it fit: not the ceiling, not the
+    floor, not a cell, not an intervention, not a seed, not a scale."""
+    identity = model_identity(arm)
+    projected = CELL_PROJECTED_HOURS.get((arm, scale), 0.0)
+    gate = per_identity_gate(arm, projected, ledger=ledger,
+                             cell=(arm, scale, seed))
+    fits = not gate["fires"]
+    return {
+        "arm": arm, "scale": scale, "seed": seed, "identity": identity,
+        "retry_cost_hours": projected,
+        "projected_total_hours": gate["projected_total_hours"],
+        "ceiling_hours": PER_IDENTITY_CEILING_HOURS,
+        "headroom_floor_hours": HEADROOM_FLOOR_HOURS,
+        "enforceable_recovery_margin_hours":
+            ENFORCEABLE_RECOVERY_MARGIN_HOURS,
+        "admissible": bool(fits),
+        "blocking_reason": gate["fire_reason"],
+        "if_not_admissible": "STOP and request explicit user approval. "
+                             "Do NOT raise the ceiling, waive the "
+                             "floor, drop a cell, drop an intervention, "
+                             "remove a seed or change a scale.",
+        "note": "recomputed from actual charged usage against the "
+                "unchanged gates; spare raw capacity under the ceiling "
+                "is not by itself permission"}
 
 
 def per_identity_gate(arm: str, additional_hours: float = 0.0,
