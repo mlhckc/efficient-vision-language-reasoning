@@ -2715,10 +2715,14 @@ def test_audit_known_negatives() -> None:
               or (e8b_run.PER_IDENTITY_CEILING_HOURS
                   - gate["projected_total_hours"])
               < e8b_run.HEADROOM_FLOOR_HOURS
+              # The real rule subtracts the SIZED contingency, not a
+              # retry count. Re-deriving it from "no retry taken" only
+              # agreed while nothing was unlocked, so it approximated
+              # the gate instead of checking it.
               or (gate["projected_total_hours"]
                   > e8b_run.BASELINE_BUDGET_HOURS
                   + e8b_run.BASELINE_ROUNDING_TOLERANCE_HOURS
-                  and gate["forced_retries_taken"] == 0)))
+                  + gate["contingency_unlocked_hours"])))
     if gate["fires"]:
         check("the halt is caught at the FIRST cell, before any GPU "
               "work, because the gate reserves the unrun cells",
@@ -4113,22 +4117,65 @@ def test_governance_amendment() -> None:
           == e8b_run.BASELINE_BUDGET_HOURS
           and first["enforceable_recovery_margin_hours"]
           == e8b_run.ENFORCEABLE_RECOVERY_MARGIN_HOURS
-          and first["largest_retry_fits_automatically"] is False
-          and first["contingency_unlocked"] is False)
-    # Drift must halt rather than eat the reserve.
+          and first["largest_retry_fits_automatically"] is False)
+    # Bound to the LIVE retry ledger rather than to a moment in the
+    # programme. This clause asserted `is False`, which held only while
+    # no forced retry existed; the one authorised retry of 2026-08-08
+    # (B3/train_40k/seed0, gate_requires_corrected_rerun) then failed
+    # it. The property that must hold in both worlds is the field's own
+    # derivation: contingency is unlocked by a recorded forced retry and
+    # by nothing else, and the hours it releases follow the same fact.
+    check("contingency is unlocked by a recorded forced retry and by "
+          "nothing else",
+          first["contingency_unlocked"]
+          is (e8b_run.retries_taken("pretrained") > 0)
+          and (first["contingency_unlocked_hours"] > 0.0)
+          == (e8b_run.retries_taken("pretrained") > 0),
+          f"unlocked={first['contingency_unlocked']}, "
+          f"hours={first['contingency_unlocked_hours']}, "
+          f"retries={e8b_run.retries_taken('pretrained')}")
+    # Drift must halt rather than eat the reserve. The spend ledger is
+    # synthetic, so the RETRY ledger has to be isolated too: it is read
+    # from disk, and once the one authorised retry of 2026-08-08 was
+    # recorded its 1.718 h of sized contingency absorbed this scenario's
+    # drift and quietly turned the known-negative into a pass. The
+    # scenario means "drift with NO contingency unlocked", so it now
+    # says so, the way the enforcement checks below already do.
     drifted = {"cells": {
         "B3_train_40k_seed0": {"identity": "pretrained",
                                "processes": [2.5], "hours": 2.5,
                                "arm": "B3", "scale": "train_40k",
                                "seed": 0}}}
-    over = e8b_run.per_identity_gate(
-        "B3", e8b_run.CELL_PROJECTED_HOURS[("B3", "train_40k")],
-        ledger=drifted, cell=("B3", "train_40k", 1))
-    check("estimate drift past the baseline HALTS instead of spending "
-          "the contingency",
-          over["fires"] is True
-          and "drifted past the measured baseline" in over["fire_reason"]
-          and over["projected_total_hours"] < 40.0)
+    with tempfile.TemporaryDirectory() as tmp:
+        original = e8b_run.RETRY_LEDGER
+        try:
+            e8b_run.RETRY_LEDGER = Path(tmp) / "no_retries.json"
+            over = e8b_run.per_identity_gate(
+                "B3", e8b_run.CELL_PROJECTED_HOURS[("B3", "train_40k")],
+                ledger=drifted, cell=("B3", "train_40k", 1))
+            check("estimate drift past the baseline HALTS instead of "
+                  "spending the contingency",
+                  over["fires"] is True
+                  and "drifted past the measured baseline"
+                  in over["fire_reason"]
+                  and over["projected_total_hours"] < 40.0
+                  and over["contingency_unlocked_hours"] == 0.0)
+            # The complement: a recorded retry releases contingency
+            # SIZED to its own cell, not the whole reserve.
+            e8b_run.record_forced_retry(
+                "B3", "train_40k", 0, "gate_requires_corrected_rerun",
+                "known-positive for the sizing rule")
+            absorbed = e8b_run.per_identity_gate(
+                "B3", e8b_run.CELL_PROJECTED_HOURS[("B3", "train_40k")],
+                ledger=drifted, cell=("B3", "train_40k", 1))
+            check("a recorded retry releases contingency sized to its "
+                  "own cell, not the whole reserve",
+                  absorbed["contingency_unlocked_hours"]
+                  == e8b_run.CELL_PROJECTED_HOURS[("B3", "train_40k")]
+                  and absorbed["contingency_unlocked_hours"]
+                  < e8b_run.ENFORCEABLE_RECOVERY_MARGIN_HOURS)
+        finally:
+            e8b_run.RETRY_LEDGER = original
 
     # --- C. retry enforcement ---
     check("at most ONE forced retry per identity is authorised",
