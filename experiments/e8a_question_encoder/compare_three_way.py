@@ -37,8 +37,14 @@ from experiments.e8a_question_encoder import e8a_common as e8a  # noqa: E402
 CANONICAL_EXTRACTION_ASSUMPTION = (0.200, 0.400)
 V3_SCALE_RATIO = 86.36 / 15.27          # v3_03 measured 250k/40k seconds ratio
 ROW_SCALE_RATIO = 250_000 / 40_000      # the conservative basis
-PER_RUN_CEILING = 8.0
-PER_MODEL_CEILING = 35.0
+# AMENDED 40.0 <- 35.0 programme-wide on 2026-08-08 by explicit user
+# decision, and IMPORTED rather than declared. This module enforced a
+# local 35.0 against the very aggregate E8B had already been amended to
+# 40.0 -- the same cross-E8 pretrained SmolLM2-135M total -- so one
+# governed quantity carried two live values in two directories and the
+# amendment could not reach this copy. config.py is the single source.
+PER_RUN_CEILING = config.PER_RUN_WALL_CLOCK_HOURS
+PER_MODEL_CEILING = config.PER_MODEL_IDENTITY_CEILING_HOURS
 CONTINGENCY = 1.2
 
 
@@ -307,8 +313,12 @@ def resource_update(runs, extraction) -> dict:
             "not_resolved_by_this_phase": [
                 "the E8B per-epoch multiplier, still the back-solved "
                 "assumption 2.931 to 8.004; no E8B code has ever run",
-                "the 35 GPU-hour cross-E8 per-model aggregate, which for "
-                "pretrained SmolLM2-135M sums A1 + A4 + A7c + B3 and needs B3",
+                f"the {PER_MODEL_CEILING} GPU-hour cross-E8 per-model "
+                f"aggregate, which for pretrained SmolLM2-135M sums "
+                f"A1 + A4 + A7c + B3 and needs B3 (amended programme-wide "
+                f"from "
+                f"{config.PER_MODEL_IDENTITY_CEILING_PREVIOUS_HOURS} h on "
+                f"{config.PER_MODEL_IDENTITY_CEILING_AMENDED_ON})",
                 "the min(180, 3 x expected) publication-programme gate, which "
                 "is dominated by the same E8B unknown",
             ],

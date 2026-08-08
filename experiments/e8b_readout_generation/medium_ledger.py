@@ -1179,6 +1179,18 @@ def main() -> int:
         "entries accumulate and are never rewritten or merged; the "
         "summary is recomputed from them on every run, so a hand-edited "
         "count cannot survive")
+    # M5. The metadata stamp names the tree this record was GENERATED
+    # from, which is necessarily the tree before the commit that carries
+    # it -- a record cannot know its own commit. Chasing the stamp by
+    # regenerating after each commit only moves the lag by one. Stated
+    # rather than chased: this is a NARRATIVE governance record, not an
+    # attestation that a particular code state passed a check. Records
+    # that DO attest to a code state (final_preflight) are re-stamped on
+    # a clean tree so the only later change is the record itself.
+    body["provenance_note"] = (
+        "narrative governance record. Its metadata stamps the tree it "
+        "was generated from, not the commit that carries it. It is not "
+        "an attestation that a code state passed a check.")
     record = {"metadata": utils.run_metadata(),
               "e8b_medium_ledger": body}
     if LEDGER.exists():

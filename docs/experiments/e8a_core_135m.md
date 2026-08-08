@@ -407,6 +407,16 @@ SmolLM2 2.29222, A1r/random SmolLM2 1.95811 GPU-hours, each far inside the
 E8B. The scratch storage gate is recorded UNRESOLVED: free space exists but
 no authoritative per-project quota does.
 
+> **Dated supersession note, 8 August 2026.** The "35 GPU-hour" cross-E8
+> per-model aggregate named above was the ceiling ACTIVE WHEN THIS REPORT
+> WAS WRITTEN. It was superseded programme-wide by a **40 GPU-hour**
+> per-model-identity ceiling on 8 August 2026, by explicit user decision.
+> The sentence above is preserved unchanged as historical evidence and is
+> correct as of its date; it does not state the current ceiling. The single
+> authoritative constant is `config.PER_MODEL_IDENTITY_CEILING_HOURS`. See
+> `results/cross_e8_ceiling_supersession_20260808.json`. No measured hour,
+> result or scientific conclusion in this report changes.
+
 The legacy correctness_*.npz files are correctness vectors, not prediction
 artefacts; the terminology corrections in this report, the results README
 and the artefact manifest are part of this addendum. The pre-G21 frozen

@@ -266,6 +266,16 @@ the E8B per-epoch multiplier, which remains the back-solved assumption 2.931
 to 8.004. Phase 1A reduces that uncertainty by nothing at all, because it ran
 no E8B code.
 
+> **Dated supersession note, 8 August 2026.** The "35-hour" per-model
+> ceiling named above was the ceiling ACTIVE WHEN THIS REPORT WAS WRITTEN.
+> It was superseded programme-wide by a **40 GPU-hour** per-model-identity
+> ceiling on 8 August 2026, by explicit user decision. The paragraph above
+> is preserved unchanged as historical evidence and is correct as of its
+> date; it does not state the current ceiling. The aggregate it describes
+> (A1 + A4 + A7c + B3) is exactly the one the 40 h ceiling governs. The
+> single authoritative constant is `config.PER_MODEL_IDENTITY_CEILING_HOURS`.
+> See `results/cross_e8_ceiling_supersession_20260808.json`.
+
 > **Dated supersession note, 7 August 2026.** The E8B statements in the
 > paragraph(s) above are superseded and are retained here only as the
 > historical record of what was known when this report was written. E8B
@@ -391,3 +401,10 @@ compute gates remain unevaluable.
 > and the 35-hour per-model-identity ceiling is now enforced in code by
 > `run.per_identity_gate` rather than checked by hand. Nothing above has
 > been rewritten.
+>
+> **Amended 8 August 2026.** That ceiling is now **40 GPU-hours**, not 35,
+> superseded programme-wide by explicit user decision and read from the
+> single authoritative constant `config.PER_MODEL_IDENTITY_CEILING_HOURS`.
+> `run.per_identity_gate` still enforces it; only the value changed. The
+> line above states the ceiling active when this note was written. See
+> `results/cross_e8_ceiling_supersession_20260808.json`.

@@ -522,6 +522,7 @@
     },
     "wall_seconds": 16.0,
     "optimizer_step_count": 0,
-    "clean_test_accessed": false
+    "clean_test_accessed": false,
+    "ceiling_supersession_note_20260808": "This record is a DATED, SUPERSEDED artefact and is preserved unchanged. Its gate keys 'pretrained_identity_35h' / 'random_identity_35h' name a 35 GPU-hour ceiling and carry no explicit ceiling_hours, so the key is the only ceiling statement in them. That ceiling was superseded programme-wide on 2026-08-08 by 40.0 GPU-hours. Read the key as a historical name, never as the live ceiling. The single authoritative constant is config.PER_MODEL_IDENTITY_CEILING_HOURS. See results/cross_e8_ceiling_supersession_20260808.json."
   }
 }

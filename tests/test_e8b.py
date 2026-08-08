@@ -2290,7 +2290,7 @@ def test_remediation_known_negatives() -> None:
         # only by the dated governance decision and by nothing else.
         check("the ceiling is exactly the amended 40 h",
               rb["ceiling_hours"] == 40.0)
-        if rb["current_estimate_hours"] >= 35.0:
+        if rb["current_estimate_hours"] >= rb["ceiling_hours"]:
             check("a breach halts and is escalated rather than absorbed",
                   rb["ceiling_breached"] is True
                   and rb["decision_required_from_user"] is not None)
@@ -3634,7 +3634,8 @@ def test_readiness_phase() -> None:
           gate["ceiling_hours"] == 40.0
           and e8b_run.PER_IDENTITY_CEILING_AMENDED_ON == "2026-08-08")
     check("the ceiling gate reports the measured position honestly",
-          gate["fires"] is (gate["projected_hours"] > 35.0))
+          gate["fires"] is (gate["projected_hours"]
+                            > gate["ceiling_hours"]))
     reconciliation = json.loads(
         (results / "identity_reconciliation_20260807.json").read_text()
     )["e8b_identity_reconciliation"]
@@ -3647,9 +3648,10 @@ def test_readiness_phase() -> None:
               and reconciliation["verdict"].startswith("DOES NOT FIT"))
         check("nothing was descoped and the ceiling was not raised",
               reconciliation["decision_required_from_user"] is not None
-              and "raising the 35-hour ceiling"
-              in reconciliation["decision_required_from_user"][
-                  "not_taken_unilaterally"])
+              and any("raising the per-identity ceiling" in item
+                      for item in reconciliation[
+                          "decision_required_from_user"][
+                          "not_taken_unilaterally"]))
 
     # --- the calibration path is the ONLY optimizer path open ---
     check("the calibration grant was revoked once phase C completed",
@@ -4756,86 +4758,150 @@ def test_final_operational_closure() -> None:
           training.CORE_CELL_PROJECTED_HOURS
           is e8b_run.CELL_PROJECTED_HOURS)
 
-    # --- F. no live source states the superseded ceiling as current ---
-    # A review found nine "35 GPU-hour / 35-hour ceiling" statements in
-    # live source AFTER the ceiling became 40 h, five of them present
-    # tense and beside the code that enforces 40 -- including
-    # per_identity_gate's own docstring and an operator-facing refusal
-    # message. An earlier sweep missed them all because it scanned
-    # records only.
-    #
-    # An exact ALLOWLIST rather than tense-detection. Every surviving
-    # mention is historical narrative -- a dated ledger entry, or a
-    # comment explaining a past defect -- and rewriting those would
-    # falsify the record. Counts are pinned so a NEW mention anywhere
-    # fails and has to be justified by a human, which is the only
-    # reliable way to tell "describing the past" from "wrong about the
-    # present".
-    STALE_CEILING_ALLOWED = {
-        # Dated findings-ledger entries, describing each finding as it
-        # was recorded when the ceiling was 35 h. Two of the seven are
-        # CLOSURE-MEDIUM-3's own text, which has to quote the stale
-        # wording in order to record that it was found and removed --
-        # and this allowlist caught them when they were added, which is
-        # the behaviour it exists for.
-        "medium_ledger.py": 7,
-        # a past "constant with no caller" defect. per_identity_gate's
-        # own docstring no longer names the superseded figure at all --
-        # a docstring beside the enforcing code is the one place a
-        # stale number is most likely to be believed.
-        "run.py": 1,
-        # narrates the defect where a dropped charge would have let the
-        # then-35-hour ceiling green-light the next cell
-        "training.py": 1,
-        # records what the identity carried at the time it was measured
-        "calibrate_throughput.py": 1,
-        # the amendment note: "described the 35 h ceiling, superseded"
-        "core_resource_projection.py": 1,
+    # --- F. the cross-E8 ceiling policy, repository-wide ---
+    # SCOPE. The previous version of this guard scanned
+    # experiments/e8b_readout_generation/*.py only -- 23 files. That is
+    # exactly how the governed quantity came to carry two live values:
+    # E8B was amended to 40 h while three E8A modules went on enforcing
+    # 35.0 against the SAME cross-E8 aggregate, one directory away and
+    # outside the guard's reach. The surface is now the whole
+    # resource-policy surface: every experiment and src and test module,
+    # every doc, the governance markdown, and every tracked record.
+    check("config holds THE authoritative programme-wide ceiling",
+          config.PER_MODEL_IDENTITY_CEILING_HOURS == 40.0
+          and config.PER_MODEL_IDENTITY_CEILING_PREVIOUS_HOURS == 35.0
+          and config.PER_MODEL_IDENTITY_CEILING_AMENDED_ON == "2026-08-08")
+    # Identity of value, checked at every live gate. A gate that merely
+    # happens to equal 40.0 today is the defect, not the fix.
+    from experiments.e8a_question_encoder import (
+        efficiency_resources as e8a_eff,
+        resource_correction_g21 as e8a_rc,
+        compare_three_way as e8a_ctw)
+    gates_reading_config = {
+        "e8b run.PER_IDENTITY_CEILING_HOURS":
+            e8b_run.PER_IDENTITY_CEILING_HOURS,
+        "e8a efficiency_resources.PER_MODEL_CEILING_HOURS":
+            e8a_eff.PER_MODEL_CEILING_HOURS,
+        "e8a resource_correction_g21.PER_MODEL_CEILING_HOURS":
+            e8a_rc.PER_MODEL_CEILING_HOURS,
+        "e8a compare_three_way.PER_MODEL_CEILING":
+            e8a_ctw.PER_MODEL_CEILING,
     }
-    stale = re.compile(r"35 GPU-hour|35-hour|35 h ceiling")
-    actual, unexpected = {}, []
-    for source in sorted(E8B_DIR.glob("*.py")):
-        hits = len(stale.findall(source.read_text()))
-        if hits:
-            actual[source.name] = hits
-            if hits != STALE_CEILING_ALLOWED.get(source.name):
-                unexpected.append(
-                    f"{source.name}: {hits} "
-                    f"(allowed {STALE_CEILING_ALLOWED.get(source.name, 0)})")
-    check("no live source gained a superseded-ceiling statement",
-          unexpected == [], "; ".join(unexpected))
-    check("every allowlisted file still exists and still matches",
-          set(actual) == set(STALE_CEILING_ALLOWED),
-          f"actual {sorted(actual)} vs allowed "
-          f"{sorted(STALE_CEILING_ALLOWED)}")
-    # The ceiling the gate enforces is never a literal beside the code.
-    gate_doc = e8b_run.per_identity_gate.__doc__ or ""
-    check("per_identity_gate's docstring does not name a stale ceiling",
-          not stale.search(gate_doc))
-    # RENDERED, not grepped. The message interpolates the constant, so
-    # the live number appears only at runtime -- and what an operator
-    # actually reads during a refusal is the rendered text. Redirected
-    # to a temp path so no real ledger is touched.
-    import tempfile
-    original_ledger = e8b_run.SPEND_LEDGER
-    try:
-        with tempfile.TemporaryDirectory() as directory:
-            corrupt = Path(directory) / "ledger.json"
-            corrupt.write_text("{ not json")
-            e8b_run.SPEND_LEDGER = corrupt
-            try:
-                e8b_run.read_spend_ledger()
-                message = ""
-            except AssertionError as refusal:
-                message = str(refusal)
-    finally:
-        e8b_run.SPEND_LEDGER = original_ledger
-    check("the operator-facing ledger refusal RENDERS the live ceiling, "
-          "not the superseded one",
-          f"{e8b_run.PER_IDENTITY_CEILING_HOURS}-hour" in message
-          and not stale.search(message), message[:160])
-    check("the ledger refusal is fail-closed, not a silent zero",
-          "refuses" in message and "UNREADABLE" in message)
+    disagreeing = {name: value for name, value in
+                   gates_reading_config.items()
+                   if value != config.PER_MODEL_IDENTITY_CEILING_HOURS}
+    check(f"every live per-model gate reads the authoritative ceiling "
+          f"({len(gates_reading_config)} gates)",
+          disagreeing == {}, str(disagreeing))
+    check("the programme-wide wall and core ceiling are shared too",
+          e8b_run.WALL_CLOCK_HALT_HOURS == config.PER_RUN_WALL_CLOCK_HOURS
+          and e8b_run.CORE_CEILING_HOURS
+          == config.CORE_PROGRAMME_CEILING_HOURS
+          and e8a_eff.CORE_CEILING_HOURS
+          == config.CORE_PROGRAMME_CEILING_HOURS)
+    # No module may re-declare the ceiling as its own literal.
+    redeclared = []
+    for module in sorted(PROJECT_ROOT.glob("experiments/**/*.py")):
+        for line in module.read_text().split("\n"):
+            stripped = line.strip()
+            if stripped.startswith("#"):
+                continue
+            if re.match(r"^[A-Z_]*(CEILING|CEILING_HOURS)[A-Z_]*\s*=\s*"
+                        r"(35|40)(\.\d+)?\s*$", stripped):
+                redeclared.append(
+                    f"{module.relative_to(PROJECT_ROOT)}: {stripped}")
+    check("no module re-declares the per-model ceiling as a literal",
+          redeclared == [], "; ".join(redeclared))
+
+    # The supersession record: historical evidence is marked, not rewritten.
+    supersession = json.loads(
+        (PROJECT_ROOT / config.PER_MODEL_IDENTITY_CEILING_SUPERSESSION_RECORD
+         ).read_text())["cross_e8_ceiling_supersession"]
+    check("the supersession record states the programme-wide decision",
+          supersession["active_hours"] == 40.0
+          and supersession["supersedes_hours"] == 35.0
+          and supersession["dated_utc"] == "2026-08-08"
+          and "NOT E8B-only" in supersession["decision"])
+    preserved = supersession["historical_records_preserved"]["records"]
+    check("every preserved historical record still exists and is "
+          "UNCHANGED since supersession",
+          all((PROJECT_ROOT / entry["record"]).exists()
+              and hashlib.sha256(
+                  (PROJECT_ROOT / entry["record"]).read_bytes()).hexdigest()
+              == entry["sha256_at_supersession"] for entry in preserved),
+          f"{len(preserved)} records fingerprinted")
+
+    # --- the repository-wide sweep ---
+    CLAIM = re.compile(r"(?<![.\d])35[ -]GPU-hour[s]?|(?<![.\d])35-hour|"
+                       r"(?<![.\d])35 h ceiling|per_model_35_hours")
+    # Dict KEYS retained for continuity with prior records. They are
+    # identifiers, not claims, and each DEFINITION carries an explicit
+    # ceiling_hours plus a historical-name note (asserted separately).
+    IDENTIFIER = re.compile(r"pretrained_identity_35h|random_identity_35h|"
+                            r"per_model_gate_35h|per_model_35_gpu_hours")
+    MARKER = re.compile(
+        r"supersed|historical|amended|previous|no call site|described the|"
+        r"for a day|raised from|preserved unchanged|was the ceiling|"
+        r"then-active|at the time|was then|prior|earlier|continuity|"
+        r"key_name_is_historical|once ", re.I)
+    ALLOWLIST = {
+        # Every entry in the findings ledger is a dated record of a
+        # finding as it stood when it was found: historical by
+        # construction, and rewriting one would falsify the ledger.
+        "experiments/e8b_readout_generation/medium_ledger.py":
+            "dated findings ledger, historical by construction",
+    }
+    covered_records = {Path(entry["record"]).name for entry in preserved}
+
+    def policy_surface():
+        for pattern in ("experiments/**/*.py", "src/*.py", "tests/*.py",
+                        "docs/**/*.md", "collab/**/*.md"):
+            yield from PROJECT_ROOT.glob(pattern)
+        for name in ("config.py", "CLAUDE.md", "AGENTS.md", "README.md"):
+            if (PROJECT_ROOT / name).exists():
+                yield PROJECT_ROOT / name
+        yield from PROJECT_ROOT.glob("results/*.json")
+        yield from PROJECT_ROOT.glob("results/experiments/*/*.json")
+
+    ambiguous, scanned_files, claims = [], 0, 0
+    for path in sorted({p for p in policy_surface() if p.is_file()}):
+        relative = str(path.relative_to(PROJECT_ROOT))
+        flat = re.sub(r"\s+", " ", path.read_text())
+        scanned_files += 1
+        hits = list(CLAIM.finditer(flat))
+        claims += len(hits)
+        if relative in ALLOWLIST:
+            continue
+        if path.suffix == ".json" and path.name in covered_records:
+            continue          # classified historical by the supersession record
+        window = 900 if path.suffix == ".md" else 400
+        for hit in hits:
+            context = flat[max(0, hit.start() - window):
+                           hit.end() + window]
+            if not MARKER.search(context):
+                ambiguous.append(f"{relative}: {hit.group(0)!r}")
+    check(f"no ambiguous current 35 h statement survives anywhere "
+          f"({scanned_files} files, {claims} claim-form occurrences)",
+          ambiguous == [], "; ".join(ambiguous[:6]))
+    check("the sweep really covers the cross-E8 surface, not just E8B",
+          scanned_files >= 250
+          and any("e8a_question_encoder" in str(p)
+                  for p in policy_surface())
+          and (PROJECT_ROOT / "CLAUDE.md").exists(),
+          f"{scanned_files} files scanned")
+    # The sweep must be able to fail. The sample is ASSEMBLED from the
+    # constant, never written literally: a literal here is itself an
+    # unmarked present-tense claim and the sweep would flag its own
+    # known-negative -- which is exactly what happened when it was.
+    planted = (f"the active ceiling is "
+               f"{int(config.PER_MODEL_IDENTITY_CEILING_PREVIOUS_HOURS)} "
+               f"GPU-hours and applies today")
+    check("the sweep catches an unmarked present-tense claim",
+          CLAIM.search(planted) is not None
+          and not MARKER.search(planted))
+    check("the sweep does not fire on a decimal like 0.35 GPU-hours",
+          CLAIM.search("under 0.35 GPU-hours of wall occupancy") is None)
+
 
     # --- G. known negatives ---
     must_fail("a core cell is still refused at the optimizer gate",

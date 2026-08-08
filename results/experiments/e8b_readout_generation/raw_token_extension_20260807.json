@@ -58,7 +58,8 @@
       "image_seconds": 0.09,
       "total_seconds": 2.81,
       "total_hours": 0.00078,
-      "charged_to": "no frozen-LM identity: this uses the frozen CLIP encoders only and loads neither SmolLM2 model, so it touches neither 35-hour ceiling. It IS charged to the 180-hour core ceiling as spent compute."
+      "charged_to": "no frozen-LM identity: this uses the frozen CLIP encoders only and loads neither SmolLM2 model, so it touches neither per-model-identity ceiling. It IS charged to the 180-hour core ceiling as spent compute.",
+      "charged_to_corrected_20260808": "the label 'neither 35-hour ceiling' was corrected to 'neither per-model-identity ceiling'. Its generator extend_raw_tokens.py was fixed on 2026-08-08 and this record was not regenerated, so the two disagreed. NO MEASURED VALUE CHANGED -- only the ceiling label, which is now 40.0 h programme-wide. See results/cross_e8_ceiling_supersession_20260808.json."
     },
     "encoder": "frozen CLIP ViT-B/32, eval mode, no_grad, the same instance and preprocessing as the v3_00 stores",
     "clean_test_accessed": false

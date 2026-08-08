@@ -221,7 +221,7 @@ SCALES = ("train_40k", "train_250k")
 SEEDS = (0, 1, 2)
 
 # Resource constants (canonical section 14 and the accepted design).
-WALL_CLOCK_HALT_HOURS = 8.0
+WALL_CLOCK_HALT_HOURS = config.PER_RUN_WALL_CLOCK_HOURS
 # AMENDED 2026-08-08 by explicit user authorisation, from 35.0 to 40.0,
 # and CORRECTED the same day after review.
 #
@@ -255,9 +255,20 @@ WALL_CLOCK_HALT_HOURS = 8.0
 # number. The programme is authorised on its MEASURED BASELINE BUDGET.
 # Recovery from an execution failure is gate-controlled and may require
 # a new decision; it is not guaranteed by spare raw capacity.
-PER_IDENTITY_CEILING_HOURS = 40.0
-PER_IDENTITY_CEILING_AMENDED_ON = "2026-08-08"
-PER_IDENTITY_CEILING_PREVIOUS_HOURS = 35.0
+#
+# IMPORTED, not declared. The ceiling is PROGRAMME-WIDE (user decision of
+# 2026-08-08): it governs the cross-E8 aggregate for one frozen model
+# identity, which for pretrained SmolLM2-135M sums the E8A arms A1, A4
+# and A7c together with this B3 programme. Declaring it here made it an
+# E8B constant, and three E8A modules went on enforcing 35.0 against the
+# SAME aggregate -- one governed quantity, two live values, in different
+# directories. config.py is the single source both sides read.
+PER_IDENTITY_CEILING_HOURS = config.PER_MODEL_IDENTITY_CEILING_HOURS
+PER_IDENTITY_CEILING_AMENDED_ON = \
+    config.PER_MODEL_IDENTITY_CEILING_AMENDED_ON
+PER_IDENTITY_CEILING_PREVIOUS_HOURS = \
+    config.PER_MODEL_IDENTITY_CEILING_PREVIOUS_HOURS
+PER_IDENTITY_CEILING_SCOPE = config.PER_MODEL_IDENTITY_CEILING_SCOPE
 
 # The measured complete programme. Normal 18-cell execution is gated
 # against THIS, not against the ceiling: the gap between them is
@@ -331,7 +342,7 @@ def largest_cell_retry_hours() -> float:
 # that it is far below anything operationally meaningful. Drift beyond
 # it still halts.
 BASELINE_ROUNDING_TOLERANCE_HOURS = 0.005
-CORE_CEILING_HOURS = 180.0
+CORE_CEILING_HOURS = config.CORE_PROGRAMME_CEILING_HOURS
 MEMORY_CEILING_FRACTION = 0.80
 IDENTITY_BASELINE_HOURS = {"pretrained_smollm2_135m": 2.29222,
                            "random_smollm2_135m": 1.95811}

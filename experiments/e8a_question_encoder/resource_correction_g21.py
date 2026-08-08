@@ -19,7 +19,9 @@ Corrects the resource story without re-timing training:
     (frozen CLIP question tokens), A1 (pretrained SmolLM2-135M) and A1r
     (random-initialised SmolLM2-135M) — because pooling unlike frozen models
     into one per-model gate figure answers no gate. Each identity is placed
-    against the 35 GPU-hour per-model ceiling on its own, with the E8B
+    against the per-model ceiling on its own (40 GPU-hours since the
+    programme-wide amendment of 2026-08-08; read from
+    config.PER_MODEL_IDENTITY_CEILING_HOURS), with the E8B
     caveat where it applies.
   * storage is measured and placed against an actual quota where one
     exists. /scratch carries no per-project allocation this session could
@@ -45,6 +47,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+import config  # noqa: E402
 from src import utils  # noqa: E402
 from experiments.e8a_question_encoder import e8a_common as e8a  # noqa: E402
 from experiments.e8a_question_encoder import cell_validator  # noqa: E402
@@ -61,7 +64,13 @@ FROZEN_IDENTITY = {
     "A1": "pretrained SmolLM2-135M, pinned revision",
     "A1r": "random-initialised SmolLM2-135M, pinned seed 20260802",
 }
-PER_MODEL_CEILING_HOURS = 35.0
+# AMENDED 40.0 <- 35.0 programme-wide on 2026-08-08 by explicit user
+# decision, and IMPORTED rather than declared. This module enforced a
+# local 35.0 against the very aggregate E8B had already been amended to
+# 40.0 -- the same cross-E8 pretrained SmolLM2-135M total -- so one
+# governed quantity carried two live values in two directories and the
+# amendment could not reach this copy. config.py is the single source.
+PER_MODEL_CEILING_HOURS = config.PER_MODEL_IDENTITY_CEILING_HOURS
 
 BACKUP_FILESYSTEM_ROOT = Path("/user/HS400/mc02623")
 
@@ -140,7 +149,16 @@ def main() -> int:
             "extraction_gpu_hours": extraction.get(arm) or 0.0,
             "identity_total_gpu_hours": identity_hours,
             "per_model_gate_35h": {
+                "ceiling": PER_MODEL_CEILING_HOURS,
                 "fires": identity_hours >= PER_MODEL_CEILING_HOURS,
+                "key_name_is_historical": (
+                    f"the key says 35 for continuity with records "
+                    f"written before 2026-08-08; the enforced ceiling is "
+                    f"{PER_MODEL_CEILING_HOURS} h, amended programme-wide "
+                    f"from "
+                    f"{config.PER_MODEL_IDENTITY_CEILING_PREVIOUS_HOURS} h "
+                    f"on {config.PER_MODEL_IDENTITY_CEILING_AMENDED_ON}. "
+                    f"See {config.PER_MODEL_IDENTITY_CEILING_SUPERSESSION_RECORD}."),
                 "margin_hours": round(PER_MODEL_CEILING_HOURS
                                       - identity_hours, 5)},
             "caveat": ("the canonical SmolLM2-135M aggregate would also "

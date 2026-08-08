@@ -528,6 +528,20 @@ def derive(existing: dict, projection: dict) -> dict:
                              "is validated; only its core caller remains"
     body["generator"] = ("experiments/e8b_readout_generation/"
                          "identity_reconciliation.py")
+    # M5. The metadata stamp names the tree this record was GENERATED
+    # from, which is necessarily the tree before the commit that carries
+    # it -- a record cannot know its own commit. Chasing the stamp by
+    # regenerating after each commit only moves the lag by one. Stated
+    # rather than chased: this is a NARRATIVE governance record, not an
+    # attestation that a particular code state passed a check. Records
+    # that DO attest to a code state (final_preflight) are re-stamped on
+    # a clean tree so the only later change is the record itself.
+    body["provenance_note"] = (
+        "narrative governance record. Its metadata stamps the tree it "
+        "was generated from, not the commit that carries it; a record "
+        "cannot name its own commit. It is not an attestation that a "
+        "code state passed a check -- final_preflight_20260808.json is "
+        "that, and is re-stamped on a clean tree.")
     body["clean_test_accessed"] = False
     return body
 

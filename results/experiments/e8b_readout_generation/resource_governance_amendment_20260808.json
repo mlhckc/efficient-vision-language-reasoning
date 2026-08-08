@@ -173,6 +173,7 @@
       }
     ],
     "corrected_on": "2026-08-08 (single-basis correction)",
-    "correction_note": "one quantity was published as two numbers in three places: the enforceable margin as 4.195 and 4.197, the baseline as 34.803 and 34.805, and the rounding tolerance as 0.005 and 0.01. Every figure here is now read from the constants in run.py. No authorised value changed: the ceiling is 40.0 h, the floor 1.0 h, the enforceable margin 4.195 h and the worst-case shortfall 0.054 h, exactly as ratified."
+    "correction_note": "one quantity was published as two numbers in three places: the enforceable margin as 4.195 and 4.197, the baseline as 34.803 and 34.805, and the rounding tolerance as 0.005 and 0.01. Every figure here is now read from the constants in run.py. No authorised value changed: the ceiling is 40.0 h, the floor 1.0 h, the enforceable margin 4.195 h and the worst-case shortfall 0.054 h, exactly as ratified.",
+    "provenance_note": "narrative governance record, maintained by hand: it has no generator. Its metadata stamps the tree it was written from, not the commit that carries it; a record cannot name its own commit. It is not an attestation that a code state passed a check -- final_preflight_20260808.json is that, and is re-stamped on a clean tree so the only later change is the record itself."
   }
 }

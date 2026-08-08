@@ -1,9 +1,11 @@
 """Measure the train_250k training rate instead of extrapolating it.
 
 The 250k per-cell cost was step-scaled from the measured 40k rate and
-carried about 12.7 GPU-hours of a 35-hour ceiling with well under an
-hour of headroom, where a 4.55 per cent per-cell overrun exhausts the
-margin. No 250k E8B cell has ever run, so that extrapolation was the
+carried about 12.7 GPU-hours of what was then a 35-hour ceiling with
+well under an hour of headroom, where a 4.55 per cent per-cell overrun
+exhausts the margin. (That ceiling was superseded programme-wide by 40
+hours on 2026-08-08; the sentence records the position at the time this
+calibration was run.) No 250k E8B cell has ever run, so that extrapolation was the
 single largest unmeasured quantity in the plan.
 
 WHICH ARM CALIBRATES. The pretrained identity is the binding one, so

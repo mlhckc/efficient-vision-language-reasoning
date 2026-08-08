@@ -227,7 +227,11 @@ def main() -> int:
                             "The canonical figure is conservative and no "
                             "storage gate is at risk.",
                 },
-                "per_model_35_hours": "NOT recomputable from Phase-1A "
+                "per_model_ceiling_hours_note": "the key was once "
+                                      "per_model_35_hours; the ceiling is "
+                                      "40 h programme-wide since "
+                                      "2026-08-08. NOT recomputable from "
+                                      "Phase-1A "
                                       "evidence: the SmolLM2-135M aggregate "
                                       "is A1 + A4 + A7c + B3, and B3 is an "
                                       "E8B arm with no measurement. The E8A "

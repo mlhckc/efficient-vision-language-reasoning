@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-08T02:24:07",
-    "git_commit": "5a0b074",
+    "timestamp": "2026-08-08T03:07:11",
+    "git_commit": "938c370",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -296,6 +296,7 @@
     "verdict": "CLEARED ON RESOURCES, pending the user's final execution approval. The complete MEASURED programme projects to 34.803 h against the amended 40.0 h ceiling, leaving 5.197 h of raw headroom. The 1.0 h operational floor is enforced against the ceiling, so the ENFORCEABLE automatic recovery margin is 4.195 h -- LESS than the 4.249 h largest cell. A worst-case retry therefore does NOT fit automatically and halts for a fresh decision; that is the authorised policy of 2026-08-08, not a defect. Routine execution is gated against the 34.805 h BASELINE BUDGET, the gate basis -- NOT the 34.803 h measured component sum, which differs by rounding -- so an estimate that merely drifts halts rather than quietly spending the recovery margin. The ceiling was raised on RESOURCE grounds before any cell ran and with no result in existence, and no scientific component was changed to obtain the margin. Of the 6 open risks listed above, 3 could still on its own consume the contingency. TRAINING_AUTHORIZED is unchanged: no core cell may start without a separate explicit approval.",
     "decision_required_from_user": null,
     "generator": "experiments/e8b_readout_generation/identity_reconciliation.py",
+    "provenance_note": "narrative governance record. Its metadata stamps the tree it was generated from, not the commit that carries it; a record cannot name its own commit. It is not an attestation that a code state passed a check -- final_preflight_20260808.json is that, and is re-stamped on a clean tree.",
     "clean_test_accessed": false
   }
 }

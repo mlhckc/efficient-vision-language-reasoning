@@ -126,13 +126,29 @@ hash no longer matches the worktree.
   Stopping is condition-based, with no calendar cutoff. Numeric compute gates
   halt execution and return to the user if a pilot projects any of: one
   principal run above 8 GPU-hours (a hard operational wall-clock halt with a
-  recorded failure status); one model aggregate above 35 GPU-hours, raised from
-  30 by the user on 2 August 2026; the worst-case remaining-core projection
+  recorded failure status); one model aggregate above 40 GPU-hours (see the
+  cross-E8 ceiling entry below); the worst-case remaining-core projection
   above min(180 GPU-hours, three times
   the revised expected projection); peak memory above 80 per cent of usable
   GPU memory; or storage above the project allocation. The core ceiling was
   raised from 150 to 180 GPU-hours by the user on 2 August 2026; the per-run,
-  per-arm, memory and storage ceilings are unchanged.
+  memory and storage ceilings are unchanged.
+  CROSS-E8 PER-MODEL-IDENTITY CEILING, amended by the user on 8 August 2026
+  and BINDING: the per-model-identity aggregate ceiling is 40 GPU-hours,
+  PROGRAMME-WIDE. It supersedes the previous active 35 GPU-hour cross-E8
+  ceiling from 8 August 2026 onward and is NOT E8B-only. The aggregate is
+  per frozen model identity; for pretrained SmolLM2-135M it sums the E8A
+  arms A1, A4 and A7c together with the final E8B B3 programme, its
+  readouts and interventions, and every already-spent hour that loaded the
+  pinned pretrained checkpoint. The single authoritative constant is
+  config.PER_MODEL_IDENTITY_CEILING_HOURS; every executable gate imports
+  it and no module may declare its own copy. Any 35 GPU-hour figure in a
+  record or comment is HISTORICAL: it states the ceiling active when that
+  text was written and is superseded. See
+  results/cross_e8_ceiling_supersession_20260808.json. This was a
+  pre-result resource-governance amendment: no final core cell had run,
+  and no scientific result, model, seed, scale, intervention, denominator,
+  precision rule, fixed-22 rule or execution matrix changed.
   Clarified by the user on 7 August 2026 (decision P3) and recorded here
   because the sentence above no longer states the halting rule exactly: the
   GOVERNING, halting comparison for the core ceiling is the expected-epoch

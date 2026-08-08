@@ -11,6 +11,10 @@ embeddings/*
 !embeddings/.gitkeep
 results/*
 !results/.gitkeep
+# The cross-E8 ceiling supersession record is programme-wide
+# governance, not an experiment output, so it lives at the results
+# root and is tracked. Every gate and doc references it by path.
+!results/cross_e8_ceiling_supersession_*.json
 
 # E8A SmolLM2-135M core: the small auditable JSON records are tracked so every
 # reported number can be checked from a clone. The binaries are not: see

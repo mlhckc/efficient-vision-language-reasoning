@@ -7,7 +7,8 @@
     "never_do_this": "do not place this number in a results table beside an FP32 epoch-22 core figure, and do not use it to rank recipes.",
     "promotion": "refused by run.assert_promotable: this record carries no protocol_family, so it can never resume or promote into the core family.",
     "authoritative_record": "superseded_evidence_20260807.json",
-    "original_content_below": "unmodified"
+    "original_content_below": "unmodified",
+    "ceiling_supersession_note_20260808": "This record is a DATED, SUPERSEDED artefact and is preserved unchanged. Its gate keys 'pretrained_identity_35h' / 'random_identity_35h' name a 35 GPU-hour ceiling and carry no explicit ceiling_hours, so the key is the only ceiling statement in them. That ceiling was superseded programme-wide on 2026-08-08 by 40.0 GPU-hours. Read the key as a historical name, never as the live ceiling. The single authoritative constant is config.PER_MODEL_IDENTITY_CEILING_HOURS. See results/cross_e8_ceiling_supersession_20260808.json."
   },
   "metadata": {
     "timestamp": "2026-08-07T01:48:33",

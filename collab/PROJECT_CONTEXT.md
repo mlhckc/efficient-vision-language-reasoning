@@ -607,14 +607,29 @@ to gold answers, and to classifiers and generative systems alike.
 Stopping is condition-based with no calendar cutoff. Numeric compute gates halt
 execution and return to the user if a pilot projects any of: one principal run
 above 8 GPU-hours, a hard operational wall-clock halt with a recorded failure
-status; one model aggregate above 35 GPU-hours, raised from 30 by the user on
-2 August 2026; the worst-case remaining-core projection above min(180
+status; one model aggregate above 40 GPU-hours (the cross-E8
+per-model-identity ceiling, amended programme-wide on 8 August 2026; see
+below); the worst-case remaining-core projection above min(180
 GPU-hours, three times the
 revised expected projection); peak memory above 80 per cent of usable GPU
 memory; or storage above the project allocation. The core ceiling was raised
-from 150 to 180 GPU-hours by the user on 2 August 2026; the per-run, per-arm,
-memory and storage ceilings and the condition-based stopping policy are
-unchanged. Beyond those numeric gates,
+from 150 to 180 GPU-hours by the user on 2 August 2026; the per-run, memory
+and storage ceilings and the condition-based stopping policy are
+unchanged.
+
+The cross-E8 per-model-identity ceiling is 40 GPU-hours, PROGRAMME-WIDE,
+amended by the user on 8 August 2026. It supersedes the previous active 35
+GPU-hour cross-E8 ceiling from that date and is not E8B-only. For
+pretrained SmolLM2-135M the aggregate sums the E8A arms A1, A4 and A7c
+with the final E8B B3 programme, its readouts and interventions, and every
+already-spent hour that loaded the pinned pretrained checkpoint. The one
+authoritative constant is config.PER_MODEL_IDENTITY_CEILING_HOURS; every
+executable gate imports it. A 35 GPU-hour figure anywhere in the
+repository is historical and superseded, never current. Recorded in
+results/cross_e8_ceiling_supersession_20260808.json. Pre-result: no final
+core cell had run and nothing scientific changed.
+
+Beyond those numeric gates,
 work continues only while it is directly relevant to the P2607 questions, the
 core programme is progressing under the reviewed protocol, F1/F2 and
 dissertation writing are not at material risk, no unresolved blocker remains,

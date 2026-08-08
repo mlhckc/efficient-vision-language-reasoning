@@ -56,8 +56,14 @@ SEEDS = (0, 1, 2)
 # runner's own constants; the per-model aggregate and the core ceiling are the
 # figures the user set on 2 August 2026.
 PER_RUN_CEILING_HOURS = e8a.WALL_CLOCK_HALT_HOURS
-PER_MODEL_CEILING_HOURS = 35.0
-CORE_CEILING_HOURS = 180.0
+# AMENDED 40.0 <- 35.0 programme-wide on 2026-08-08 by explicit user
+# decision, and IMPORTED rather than declared. This module enforced a
+# local 35.0 against the very aggregate E8B had already been amended to
+# 40.0 -- the same cross-E8 pretrained SmolLM2-135M total -- so one
+# governed quantity carried two live values in two directories and the
+# amendment could not reach this copy. config.py is the single source.
+PER_MODEL_CEILING_HOURS = config.PER_MODEL_IDENTITY_CEILING_HOURS
+CORE_CEILING_HOURS = config.CORE_PROGRAMME_CEILING_HOURS
 MEMORY_CEILING_FRACTION = e8a.MEMORY_CEILING_FRACTION
 
 # The three quantities the E8A record spells differently between Phase 1A and
@@ -283,6 +289,14 @@ def resource_audit(cells: dict, stores: dict) -> dict:
                 "margin_hours": round(PER_RUN_CEILING_HOURS - longest[1], 5)},
             "per_model_35_gpu_hours": {
                 "ceiling": PER_MODEL_CEILING_HOURS,
+                "key_name_is_historical": (
+                    f"the key says 35 for continuity with records "
+                    f"written before 2026-08-08; the enforced ceiling is "
+                    f"{PER_MODEL_CEILING_HOURS} h, amended programme-wide "
+                    f"from "
+                    f"{config.PER_MODEL_IDENTITY_CEILING_PREVIOUS_HOURS} h "
+                    f"on {config.PER_MODEL_IDENTITY_CEILING_AMENDED_ON}. "
+                    f"See {config.PER_MODEL_IDENTITY_CEILING_SUPERSESSION_RECORD}."),
                 "measured_135m_aggregate": total,
                 "fires": total >= PER_MODEL_CEILING_HOURS,
                 "margin_hours": round(PER_MODEL_CEILING_HOURS - total, 5),

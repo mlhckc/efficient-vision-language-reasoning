@@ -77,3 +77,45 @@ VAL_EMB_PATH = EMBEDDINGS_DIR / "val.h5"
 
 # --- Device ------------------------------------------------------------------
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+
+# --- Cross-E8 resource policy (programme-wide, binding) ----------------------
+# THE authoritative per-model-identity GPU-hour ceiling. It lives here, in
+# shared configuration, because it is NOT an E8B constant: it governs the
+# cross-E8 aggregate for a single frozen model identity, which for pretrained
+# SmolLM2-135M sums the E8A arms (A1, A4, A7c) and the final E8B B3 programme.
+#
+# Amended 40.0 <- 35.0 by explicit user decision on 2026-08-08, PROGRAMME-WIDE
+# and pre-result: no final core cell has run. The decision resolved a real
+# conflict rather than relaxing a bound. E8B had been amended to 40.0 while
+# three E8A modules still declared 35.0 for the SAME aggregate, so one governed
+# quantity carried two live values and neither side referenced the other.
+#
+# Every executable gate must read THIS constant. Duplicating the literal is
+# what produced the conflict: the E8B amendment could not reach a number
+# written independently in another directory.
+#
+# Scope note: the gate applies to any single model identity. The pretrained
+# SmolLM2-135M aggregate is the binding case and the one the amendment was
+# sized against; the random-initialised identity projects far below either
+# value, so the change is not load-bearing for it.
+#
+# Historical records that recorded 35.0 as the then-active ceiling are
+# PRESERVED unchanged as evidence. They are marked superseded by dated
+# supersession records, never rewritten.
+PER_MODEL_IDENTITY_CEILING_HOURS = 40.0
+PER_MODEL_IDENTITY_CEILING_PREVIOUS_HOURS = 35.0
+PER_MODEL_IDENTITY_CEILING_AMENDED_ON = "2026-08-08"
+PER_MODEL_IDENTITY_CEILING_SCOPE = (
+    "programme-wide, cross-E8, per frozen model identity. For pretrained "
+    "SmolLM2-135M the aggregate sums the E8A arms A1, A4 and A7c together "
+    "with the final E8B B3 core programme, its readouts and interventions, "
+    "and every already-spent search, characterisation and probe hour that "
+    "loaded the pinned pretrained checkpoint.")
+PER_MODEL_IDENTITY_CEILING_SUPERSESSION_RECORD = (
+    "results/cross_e8_ceiling_supersession_20260808.json")
+
+# The per-run operational wall and the whole-programme core ceiling are
+# UNCHANGED by the 2026-08-08 amendment. Named here so a gate never has to
+# reach into an experiment module for a programme-wide bound.
+PER_RUN_WALL_CLOCK_HOURS = 8.0
+CORE_PROGRAMME_CEILING_HOURS = 180.0

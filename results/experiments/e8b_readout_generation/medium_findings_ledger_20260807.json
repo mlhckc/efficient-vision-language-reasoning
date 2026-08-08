@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-08T02:28:28",
-    "git_commit": "5a0b074",
+    "timestamp": "2026-08-08T03:07:12",
+    "git_commit": "938c370",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -1038,6 +1038,7 @@
       ]
     },
     "clean_test_accessed": false,
-    "additive_history": "entries accumulate and are never rewritten or merged; the summary is recomputed from them on every run, so a hand-edited count cannot survive"
+    "additive_history": "entries accumulate and are never rewritten or merged; the summary is recomputed from them on every run, so a hand-edited count cannot survive",
+    "provenance_note": "narrative governance record. Its metadata stamps the tree it was generated from, not the commit that carries it. It is not an attestation that a code state passed a check."
   }
 }
