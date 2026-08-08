@@ -1758,8 +1758,12 @@ def test_core_readiness_closure() -> None:
               (E8B_DIR / "core_resource_projection.py").exists()
               and "core_resource_projection.py" in pr["generator"])
         # A firing ceiling is a CORRECT outcome, not a test failure:
-        # the measured projection exceeds 35 h and the protocol is that
-        # execution stops and returns to the user. What must hold is
+        # if the measured projection exceeds the ceiling, the protocol
+        # is that execution stops and returns to the user. (It does not
+        # today: 34.803 against the amended 40.0. The earlier wording
+        # asserted a breach as fact and went stale twice over, once
+        # when the projection was measured down and again when the
+        # ceiling was superseded.) What must hold is
         # that the gate reports it honestly and that nothing was
         # descoped or relaxed to make it pass.
         fired = [name for name, gate in pr["gates"].items()
@@ -2283,9 +2287,10 @@ def test_remediation_known_negatives() -> None:
               abs(rb["current_estimate_hours"]
                   - rb["component_sum_hours"]) < 0.01)
         # "Not weakened" is about the CEILING, not about whether the
-        # projection happens to fit under it. The measured projection
-        # now exceeds 35 h, and the correct response is to say so and
-        # halt -- not to move the ceiling.
+        # projection happens to fit under it. If the projection ever
+        # exceeds the ceiling the correct response is to say so and
+        # halt, not to move the ceiling. (The previous wording stated
+        # the breach as current fact; it is superseded on both figures.)
         # "Not weakened" now means: exactly the amended value, changed
         # only by the dated governance decision and by nothing else.
         check("the ceiling is exactly the amended 40 h",
@@ -2525,9 +2530,11 @@ def test_audit_known_negatives() -> None:
           "so the gate and the record cannot drift apart",
           abs(gate["projected_total_hours"] - published) < 0.01,
           f"{gate['projected_total_hours']} vs {published}")
-    # The MEASURED programme breaches the ceiling. That is a real
-    # result, not a test failure: the gate must report it and the
-    # ceiling must stay at 35 h.
+    # If the MEASURED programme ever breaches the ceiling that is a
+    # real result, not a test failure: the gate must report it and
+    # the ceiling must not move to accommodate it. (The previous
+    # wording asserted a live breach and a 35 h ceiling; both are
+    # superseded -- 34.803 against the amended 40.0.)
     check("the ceiling is the amended 40 h",
           gate["ceiling_hours"] == 40.0)
     # The gate fires on a breach OR on a margin under the floor: a
@@ -4822,23 +4829,112 @@ def test_final_operational_closure() -> None:
           and supersession["supersedes_hours"] == 35.0
           and supersession["dated_utc"] == "2026-08-08"
           and "NOT E8B-only" in supersession["decision"])
-    preserved = supersession["historical_records_preserved"]["records"]
-    check("every preserved historical record still exists and is "
-          "UNCHANGED since supersession",
-          all((PROJECT_ROOT / entry["record"]).exists()
-              and hashlib.sha256(
-                  (PROJECT_ROOT / entry["record"]).read_bytes()).hexdigest()
-              == entry["sha256_at_supersession"] for entry in preserved),
-          f"{len(preserved)} records fingerprinted")
+    entries = supersession["historical_records"]["records"]
+    check("the manifest is GENERATED, not hand-maintained",
+          supersession["generator"].endswith("ceiling_supersession.py")
+          and supersession["classification_is_mechanical"][
+              "baseline_commit"] == "938c370")
+    # 1. Every current hash still matches the file on disk.
+    drifted = [entry["record"] for entry in entries
+               if not (PROJECT_ROOT / entry["record"]).exists()
+               or hashlib.sha256((PROJECT_ROOT / entry["record"]
+                                  ).read_bytes()).hexdigest()
+               != entry["sha256_current"]]
+    check("every listed record still matches its recorded hash",
+          drifted == [], "; ".join(drifted[:4]))
+    # 2. THE CHECK THE HAND-MAINTAINED MANIFEST LACKED. Correct hashes
+    # beside false labels is worse than a plain mismatch: a reviewer who
+    # verifies the hashes is reassured by the wrong thing. Three records
+    # changed during the amendment were labelled PRESERVED UNCHANGED
+    # while the manifest asserted in its own text that such a label
+    # "would be false". Each label is now re-derived from the two hashes
+    # and must agree.
+    mislabelled = []
+    for entry in entries:
+        unchanged = (entry["sha256_at_baseline"] is not None
+                     and entry["sha256_at_baseline"]
+                     == entry["sha256_current"])
+        expected = ("PRESERVED_UNCHANGED" if unchanged
+                    else "ADDED_BY_THE_AMENDMENT"
+                    if entry["sha256_at_baseline"] is None
+                    else "ANNOTATED")
+        if entry["classification"] != expected:
+            mislabelled.append(
+                f"{entry['record']}: says {entry['classification']}, "
+                f"hashes say {expected}")
+    check(f"every classification agrees with its own hashes "
+          f"({len(entries)} records)",
+          mislabelled == [], "; ".join(mislabelled[:4]))
+    # 3. The three records the certification review caught.
+    by_name = {Path(entry["record"]).name: entry for entry in entries}
+    for name in ("identity_reconciliation_20260807.json",
+                 "medium_findings_ledger_20260807.json",
+                 "resource_governance_amendment_20260808.json"):
+        check(f"{name} is no longer mislabelled PRESERVED_UNCHANGED",
+              by_name[name]["classification"] == "ANNOTATED"
+              and by_name[name]["changed_since_baseline"] is True)
+    # 4. Membership is discovered: the record that held a live-looking
+    # 35.0 h breach statement, and was absent from the hand-written list,
+    # is now in the manifest.
+    check("the previously-omitted reverification record is now listed",
+          "blocker_high_reverification_20260807.json" in by_name)
+    # 5. HIGH-1: that record can no longer be read as the active state.
+    reverification = json.loads(
+        (results / "blocker_high_reverification_20260807.json").read_text()
+    )["e8b_blocker_high_reverification"]
+    historical = reverification["SUPERSEDED_FIGURES_20260807"]
+    active = reverification["ACTIVE_RESOURCE_STATE_20260808"]
+    check("no key named 'current' holds the superseded figures",
+          "current" not in historical
+          and "state_as_of_20260807_SUPERSEDED" in historical)
+    check("the superseded text is preserved verbatim, not rewritten",
+          "37.744" in historical["state_as_of_20260807_SUPERSEDED"]
+          and "BREACHED" in historical[
+              "state_as_of_20260807_SUPERSEDED"])
+    check("the active state beside it is correct and derived",
+          active["ceiling_hours"]
+          == config.PER_MODEL_IDENTITY_CEILING_HOURS
+          and active["gate_baseline_hours"]
+          == e8b_run.BASELINE_BUDGET_HOURS
+          and active["measured_component_sum_hours"]
+          == e8b_run.MEASURED_PROGRAMME_HOURS
+          and active["gate_fires"] is False
+          and active["ceiling_breached"] is False
+          and active["execution_halted"] is False
+          and active["raw_headroom_gate_basis_hours"] == 5.195
+          and active["mandatory_floor_hours"] == 1.0
+          and active["enforceable_recovery_margin_hours"] == 4.195
+          and active["largest_b3_250k_retry_hours"] == 4.249
+          and active["worst_case_retry_shortfall_hours"] == 0.054
+          and active["worst_case_retry_fits_automatically"] is False)
 
     # --- the repository-wide sweep ---
-    CLAIM = re.compile(r"(?<![.\d])35[ -]GPU-hour[s]?|(?<![.\d])35-hour|"
-                       r"(?<![.\d])35 h ceiling|per_model_35_hours")
+    # The SAME pattern the supersession generator uses, imported rather
+    # than restated -- a second copy of a pattern is how the previous one
+    # came to miss a form the generator would have caught. It recognises
+    # 35 h, 35.0 h, 35 GPU-h, 35 GPU-hour, 35 GPU-hours and 35-hour. The
+    # earlier version matched only the hyphenated and GPU- forms, so a
+    # live-looking "35.0 h ceiling ... BREACHED" statement sat unseen in a
+    # field named `current`.
+    from experiments.e8b_readout_generation import (
+        ceiling_supersession as supersession)
+    CLAIM = supersession.CEILING_PROSE
+    # Fixtures imported, never written here: a literal "35 h" in this
+    # file is itself an unmarked present-tense claim, and the sweep
+    # flagged its own fixture when they were inline.
+    for variant in supersession.RECOGNISED_VARIANTS:
+        check(f"the sweep recognises variant {variant!r}",
+              CLAIM.search(variant) is not None)
+    for benign in supersession.MUST_NOT_MATCH:
+        check(f"the sweep does not fire on {benign!r}",
+              CLAIM.search(benign) is None)
+    check("prose forms and retained identifiers are kept apart",
+          supersession.CEILING_IDENTIFIER.search("per_model_gate_35h")
+          and not CLAIM.search("per_model_gate_35h"))
     # Dict KEYS retained for continuity with prior records. They are
     # identifiers, not claims, and each DEFINITION carries an explicit
     # ceiling_hours plus a historical-name note (asserted separately).
-    IDENTIFIER = re.compile(r"pretrained_identity_35h|random_identity_35h|"
-                            r"per_model_gate_35h|per_model_35_gpu_hours")
+    IDENTIFIER = supersession.CEILING_IDENTIFIER
     MARKER = re.compile(
         r"supersed|historical|amended|previous|no call site|described the|"
         r"for a day|raised from|preserved unchanged|was the ceiling|"
@@ -4850,8 +4946,17 @@ def test_final_operational_closure() -> None:
         # construction, and rewriting one would falsify the ledger.
         "experiments/e8b_readout_generation/medium_ledger.py":
             "dated findings ledger, historical by construction",
+        # The pattern definition and its own fixtures. Every variant it
+        # recognises must appear here to be asserted, so the file is a
+        # vocabulary, not a claim -- the same reason the guarantee
+        # guard's phrase table is excised from its own scan.
+        "experiments/e8b_readout_generation/ceiling_supersession.py":
+            "the sweep's own pattern and fixture table",
     }
-    covered_records = {Path(entry["record"]).name for entry in preserved}
+    # Manifest membership exempts a record from the prose sweep, but only
+    # because check 1 above pins every listed record by sha256: a NEW
+    # claim added inside one changes its bytes and fails there instead.
+    covered_records = {Path(entry["record"]).name for entry in entries}
 
     def policy_surface():
         for pattern in ("experiments/**/*.py", "src/*.py", "tests/*.py",
@@ -4880,14 +4985,38 @@ def test_final_operational_closure() -> None:
                            hit.end() + window]
             if not MARKER.search(context):
                 ambiguous.append(f"{relative}: {hit.group(0)!r}")
-    check(f"no ambiguous current 35 h statement survives anywhere "
+    # WHAT THIS VERIFIES, EXACTLY -- and nothing beyond it.
+    #
+    #   Surface: *.py under experiments/, src/ and tests/; *.md under
+    #   docs/ and collab/; config.py, CLAUDE.md, AGENTS.md, README.md;
+    #   and tracked *.json under results/ and results/experiments/*/.
+    #   NOT scanned: untracked files, notebooks, data/, embeddings/,
+    #   .agent-bridge/, git history, or any file outside those globs.
+    #
+    #   Detection: the regex variants asserted above. It is a LEXICAL
+    #   test, not a semantic one -- a claim phrased without any of those
+    #   forms ("the per-model cap is thirty-five hours") is not caught.
+    #
+    #   Exemption: a marker word within 400 characters (900 in prose), a
+    #   per-file allowlist, or membership of the supersession manifest,
+    #   where every entry is additionally pinned by sha256 so a new claim
+    #   inside a listed record breaks the fingerprint instead.
+    #
+    # This is a REGRESSION GUARD over a stated surface. It is not proof
+    # that no such statement exists anywhere in the repository, and the
+    # previous version of this comment claimed a "complete repository
+    # sweep" while scanning 23 files in one directory.
+    check(f"no ambiguous current 35 h statement on the scanned surface "
           f"({scanned_files} files, {claims} claim-form occurrences)",
           ambiguous == [], "; ".join(ambiguous[:6]))
-    check("the sweep really covers the cross-E8 surface, not just E8B",
+    check("the scanned surface really spans E8A, E8B, docs and "
+          "governance, not one experiment directory",
           scanned_files >= 250
           and any("e8a_question_encoder" in str(p)
                   for p in policy_surface())
-          and (PROJECT_ROOT / "CLAUDE.md").exists(),
+          and any("e8b_readout_generation" in str(p)
+                  for p in policy_surface())
+          and any(str(p).endswith("CLAUDE.md") for p in policy_surface()),
           f"{scanned_files} files scanned")
     # The sweep must be able to fail. The sample is ASSEMBLED from the
     # constant, never written literally: a literal here is itself an

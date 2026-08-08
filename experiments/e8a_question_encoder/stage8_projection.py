@@ -227,10 +227,15 @@ def main() -> int:
                             "The canonical figure is conservative and no "
                             "storage gate is at risk.",
                 },
-                "per_model_ceiling_hours_note": "the key was once "
-                                      "per_model_35_hours; the ceiling is "
-                                      "40 h programme-wide since "
-                                      "2026-08-08. NOT recomputable from "
+                # DERIVED. Hard-typing "40 h" here reintroduced the
+                # very literal-duplication the amendment removed.
+                "per_model_ceiling_hours_note":
+                    f"the key was once per_model_35_hours; the "
+                    f"ceiling is "
+                    f"{config.PER_MODEL_IDENTITY_CEILING_HOURS} h "
+                    f"programme-wide since "
+                    f"{config.PER_MODEL_IDENTITY_CEILING_AMENDED_ON}"
+                    f". NOT recomputable from "
                                       "Phase-1A "
                                       "evidence: the SmolLM2-135M aggregate "
                                       "is A1 + A4 + A7c + B3, and B3 is an "

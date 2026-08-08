@@ -148,8 +148,35 @@
     "SUPERSEDED_FIGURES_20260807": {
       "status": "PARTIALLY SUPERSEDED - the verdicts stand, one figure does not",
       "figure": "entries[R3-C-B1].evidence cites '31.96 h vs 35 h, headroom 3.04 h'. That figure is SUPERSEDED. Two omissions were found afterwards: the mandatory section-19 efficiency pass, and the requirement that readouts run over the 10,004-row RAW denominator with a raw-distribution pass and B1 intervention conditions.",
-      "current": "the pretrained identity projects to 37.744 h against a 35.0 h ceiling (-2.744 h headroom), so the ceiling is BREACHED and execution has halted. The GOVERNING record is core_resource_projection_20260807.json and the derived reconciliation is identity_reconciliation_20260807.json. This line has been corrected repeatedly as omissions were found and then as the assumptions were measured (31.960 -> 32.960 -> 33.472 -> 34.513 -> 37.744), every time UPWARD. This record is maintained BY HAND and has no generator, so it is the one place a figure can still go stale; read the governing record if the two ever disagree.",
-      "direction": "the correction is UPWARD, against the ceiling. The re-verification verdicts themselves are unaffected."
-    }
+      "state_as_of_20260807_SUPERSEDED": "the pretrained identity projects to 37.744 h against a 35.0 h ceiling (-2.744 h headroom), so the ceiling is BREACHED and execution has halted. The GOVERNING record is core_resource_projection_20260807.json and the derived reconciliation is identity_reconciliation_20260807.json. This line has been corrected repeatedly as omissions were found and then as the assumptions were measured (31.960 -> 32.960 -> 33.472 -> 34.513 -> 37.744), every time UPWARD. This record is maintained BY HAND and has no generator, so it is the one place a figure can still go stale; read the governing record if the two ever disagree.",
+      "direction": "the correction is UPWARD, against the ceiling. The re-verification verdicts themselves are unaffected.",
+      "why_the_key_was_renamed": "this text was stored under a key named 'current'. It states a 35.0 h ceiling, a 37.744 h projection and a BREACHED, halted state. All three were true on 2026-08-07 and all three are FALSE now. A certification review found it under that key, where a reader checking whether prior blockers were closed would naturally look. The text is preserved verbatim; only the key changed, and the live state is stated separately below and is DERIVED, never typed."
+    },
+    "ACTIVE_RESOURCE_STATE_20260808": {
+      "as_of": "2026-08-08",
+      "supersedes": "state_as_of_20260807_SUPERSEDED, immediately above",
+      "ceiling_hours": 40.0,
+      "ceiling_scope": "programme-wide, cross-E8, per frozen model identity. For pretrained SmolLM2-135M the aggregate sums the E8A arms A1, A4 and A7c together with the final E8B B3 core programme, its readouts and interventions, and every already-spent search, characterisation and probe hour that loaded the pinned pretrained checkpoint.",
+      "gate_baseline_hours": 34.805,
+      "measured_component_sum_hours": 34.803,
+      "projected_identity_total_hours": 34.8052,
+      "gate_fires": false,
+      "ceiling_breached": false,
+      "raw_headroom_gate_basis_hours": 5.195,
+      "mandatory_floor_hours": 1.0,
+      "enforceable_recovery_margin_hours": 4.195,
+      "largest_b3_250k_retry_hours": 4.249,
+      "worst_case_retry_shortfall_hours": 0.054,
+      "worst_case_retry_fits_automatically": false,
+      "worst_case_retry_behaviour": "does NOT automatically fit; it halts and returns to the user for a fresh decision. That is the authorised policy of 2026-08-08, not a defect.",
+      "execution_halted": false,
+      "derived_not_typed": "every figure above is read from config.py and experiments/e8b_readout_generation/run.py at generation time, so this block cannot go stale the way the superseded one did.",
+      "governing_records": [
+        "results/cross_e8_ceiling_supersession_20260808.json",
+        "results/experiments/e8b_readout_generation/core_resource_projection_20260807.json",
+        "results/experiments/e8b_readout_generation/identity_reconciliation_20260807.json"
+      ]
+    },
+    "reading_order": "SUPERSEDED_FIGURES_20260807 is HISTORICAL. ACTIVE_RESOURCE_STATE_20260808 is CURRENT. Where they disagree the active block governs, and the live gate governs over both."
   }
 }

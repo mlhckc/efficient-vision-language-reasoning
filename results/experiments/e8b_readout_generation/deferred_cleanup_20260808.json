@@ -1,0 +1,117 @@
+{
+  "metadata": {
+    "timestamp": "2026-08-08T06:32:46",
+    "git_commit": "0676c16",
+    "git_dirty": true,
+    "open_clip_version": "3.3.0",
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "h5py_version": "3.16.0",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "deterministic": true,
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "embed_dim": 512,
+    "top_k_answers": 100,
+    "n_train": 40000,
+    "n_val": 8000,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "hidden_dim": 512,
+    "dropout": 0.3,
+    "weight_decay": 0.0001
+  },
+  "e8b_deferred_cleanup": {
+    "dated_utc": "2026-08-08",
+    "purpose": "Non-blocking findings from the certification reviews of 2026-08-08 that were NOT remediated in the targeted pass, recorded so they cannot silently disappear. None of them reopens scientific readiness.",
+    "gating_rule": "an item belongs here only if it does NOT affect execution correctness, scientific validity, active resource policy, result provenance or the clean-test embargo. Anything that does is remediated immediately, not deferred.",
+    "count": 8,
+    "items": [
+      {
+        "id": "DEFER-1",
+        "source": "certification review 2026-08-08, MEDIUM-2",
+        "finding": "Four E8A generators were pointed at the authoritative ceiling constant, but their published records were deliberately not regenerated. efficiency_resources.json still holds ceiling 35.0 / margin 29.21073 where its generator would now emit 40.0 / 34.21073; resource_correction_g21.json holds 35-derived margins; stage8_projection.json keeps the old per_model_35_hours key; three_way_comparison.json keeps the old prose. No test asserts E8A record reproduction, so the divergence is silent.",
+        "reason_non_blocking": "does not affect execution correctness, scientific validity, active resource policy, result provenance or the clean-test embargo. These are DATED E8A evidence records for completed work, preserved deliberately under the user's instruction that historical records not be rewritten. Every one is listed and hash-pinned in the supersession manifest, so the divergence is now disclosed rather than silent, and no live gate reads them: all four gates read config.",
+        "intended_cleanup_point": "post-E8B, when the E8A records are next regenerated for the dissertation write-up. Regenerating them now would restate completed measurements under a ceiling that did not exist when they were made."
+      },
+      {
+        "id": "DEFER-2",
+        "source": "certification review 2026-08-08, MEDIUM-3",
+        "finding": "The supersession manifest reported numeric_35_ceiling_fields: [] for resource_correction_g21.json, omitting three 35-derived margin_hours values, contrary to the manifest's own scan rule which counts keys naming a margin.",
+        "reason_non_blocking": "does not affect execution correctness, scientific validity, active resource policy, result provenance or the clean-test embargo. The manifest is now GENERATED and the field is computed by one published rule; the record is listed either way, so membership and hash-pinning are unaffected. Only the itemised field list is incomplete, and margins are derived values, not declared ceilings.",
+        "intended_cleanup_point": "alongside DEFER-1, when the E8A records are regenerated"
+      },
+      {
+        "id": "DEFER-3",
+        "source": "certification review 2026-08-08, LOW-7/8",
+        "finding": "The derivation guard checks value equality plus an assignment-line regex, weaker than its comment claims; the sweep's known-negative exercises the regex rather than the file walk.",
+        "reason_non_blocking": "does not affect execution correctness, scientific validity, active resource policy, result provenance or the clean-test embargo. Derivation itself was proved independently by the certification review with a sentinel probe: all four gates tracked a monkeypatched config value, so the property holds at HEAD. Only the in-suite proof of it is weaker than stated.",
+        "intended_cleanup_point": "post-E8B test hardening; replace the equality check with a sentinel-import probe of the kind the reviewer used"
+      },
+      {
+        "id": "DEFER-4",
+        "source": "certification review 2026-08-08, LOW-9",
+        "finding": "The sweep's MARKER word list (prior, earlier, once, continuity, at the time) within 400/900 characters is a weak tense discriminator and could exempt a real claim sitting near unrelated historical prose.",
+        "reason_non_blocking": "does not affect execution correctness, scientific validity, active resource policy, result provenance or the clean-test embargo. No live false negative exists at HEAD: every exempted occurrence was classified by hand in this pass. The guard is a regression backstop, and its documented scope now says so explicitly rather than claiming semantic completeness.",
+        "intended_cleanup_point": "post-E8B, if the guard ever exempts something it should not"
+      },
+      {
+        "id": "DEFER-5",
+        "source": "certification review 2026-08-08, LOW-10/11",
+        "finding": "resource_correction_g21.py's docstring hard-names '40 GPU-hours', and run.py's retry fire_reason strings hard-type 'over the 40 h ceiling', rather than interpolating the constant.",
+        "reason_non_blocking": "does not affect execution correctness, scientific validity, active resource policy, result provenance or the clean-test embargo. Both are correct at HEAD and neither is read by a gate; they are prose. They are the same literal-duplication class the amendment removed from executable paths, which is why they are recorded rather than dismissed.",
+        "intended_cleanup_point": "post-E8B, in the same pass as DEFER-3"
+      },
+      {
+        "id": "DEFER-6",
+        "source": "certification review 2026-08-08, LOW-12",
+        "finding": "efficiency_resources.PER_RUN_CEILING_HOURS derives from e8a_common.WALL_CLOCK_HALT_HOURS rather than config.PER_RUN_WALL_CLOCK_HOURS. Same value (8.0), two sources.",
+        "reason_non_blocking": "does not affect execution correctness, scientific validity, active resource policy, result provenance or the clean-test embargo. The per-run wall was NOT amended, so there is no conflict to resolve; both sources agree and always have. Recorded because two sources for one governed quantity is exactly the shape of the defect that caused this whole sequence.",
+        "intended_cleanup_point": "post-E8B; fold e8a_common's copy into config the way the ceiling was"
+      },
+      {
+        "id": "DEFER-7",
+        "source": "certification review 2026-08-08, LOW-13",
+        "finding": "identity_reconciliation.py embeds a literal newline and 13 spaces inside a string emitted to JSON.",
+        "reason_non_blocking": "does not affect execution correctness, scientific validity, active resource policy, result provenance or the clean-test embargo. Cosmetic; the field is emitted on the halt path only, which is not currently reachable.",
+        "intended_cleanup_point": "post-E8B cosmetic pass"
+      },
+      {
+        "id": "DEFER-8",
+        "source": "certification review 2026-08-08, LOW-14",
+        "finding": "A commit message stated 49 claim-form occurrences where the measured figure with that pattern was 48.",
+        "reason_non_blocking": "does not affect execution correctness, scientific validity, active resource policy, result provenance or the clean-test embargo. A commit message is immutable history and is corrected by the record, not by rewriting it. The live count is now emitted by the guard itself on every run.",
+        "intended_cleanup_point": "none required; recorded for completeness"
+      }
+    ],
+    "what_was_remediated_instead": [
+      "HIGH-1: the reverification record's 'current' field, which stated a superseded 35.0 h ceiling and a BREACHED state",
+      "HIGH-2: the supersession manifest's hand-written labels, three of which contradicted their own hashes",
+      "MEDIUM-1 (3A): the e8a_core_135m gate table row",
+      "MEDIUM-4 (3B): the hard-typed 40 h in stage8_projection.py",
+      "MEDIUM-5 (3C): the manifest's own provenance treatment",
+      "the ceiling-language guard's pattern and its scope claim",
+      "three stale comments in test code asserting a live 35 h breach"
+    ],
+    "active_position_unchanged": {
+      "ceiling_hours": 40.0,
+      "gate_baseline_hours": 34.805,
+      "measured_component_sum_hours": 34.803,
+      "raw_headroom_gate_basis_hours": 5.195,
+      "floor_hours": 1.0,
+      "enforceable_recovery_margin_hours": 4.195,
+      "largest_retry_hours": 4.249,
+      "worst_case_shortfall_hours": 0.054
+    },
+    "training_authorized": "core-matrix-frozen-pending-approval",
+    "clean_test_accessed": false
+  }
+}

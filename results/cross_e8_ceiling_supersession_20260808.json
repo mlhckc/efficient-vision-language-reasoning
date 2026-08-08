@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-08T03:07:26",
-    "git_commit": "938c370",
+    "timestamp": "2026-08-08T06:32:56",
+    "git_commit": "0676c16",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -43,21 +43,210 @@
       "the final E8B B3 core programme, its R1/R2/R3 readouts and its matched interventions",
       "every already-spent search, characterisation, validation and probe hour that loaded the pinned pretrained checkpoint"
     ],
-    "why_this_was_needed": "A certification review found the SAME aggregate governed by two live values: E8B had been amended to 40.0 while three E8A modules still declared 35.0 for the identical cross-E8 total, and neither side referenced the other. E8A's own words describe its gate as 'the 35 GPU-hour cross-E8 per-model aggregate, which for pretrained SmolLM2-135M sums A1 + A4 + A7c + B3' -- exactly the components the E8B identity already charges. One governed quantity, two numbers, one directory apart.",
     "single_authoritative_source": {
       "constant": "config.PER_MODEL_IDENTITY_CEILING_HOURS",
       "value": 40.0,
       "why_here": "the ceiling is not an E8B constant. Declaring it inside experiments/e8b_readout_generation/run.py is what let the amendment miss three E8A modules. It now lives in shared configuration and every executable gate imports it.",
-      "live_gates_now_reading_it": [
+      "live_gates_reading_it": [
         "experiments/e8b_readout_generation/run.py PER_IDENTITY_CEILING_HOURS",
         "experiments/e8a_question_encoder/efficiency_resources.py PER_MODEL_CEILING_HOURS",
         "experiments/e8a_question_encoder/resource_correction_g21.py PER_MODEL_CEILING_HOURS",
         "experiments/e8a_question_encoder/compare_three_way.py PER_MODEL_CEILING"
       ]
     },
+    "classification_is_mechanical": {
+      "baseline_commit": "938c370",
+      "rule": "classification is a pure function of sha256(record at the baseline commit) against sha256(record now). Equal is PRESERVED_UNCHANGED, different is ANNOTATED, absent at baseline is ADDED_BY_THE_AMENDMENT. No label is written by hand.",
+      "baseline_read_from": "the git object store, never the working tree",
+      "membership": "DISCOVERED, not enumerated: every tracked record under the searched areas that mentions the superseded ceiling is included. A hand-written list is how a record holding a live-looking 35.0 h breach statement stayed outside the manifest.",
+      "searched_areas": [
+        "results/experiments/e8a_question_encoder",
+        "results/experiments/e8b_readout_generation",
+        "results"
+      ],
+      "generator_refuses_if": "any emitted label disagrees with its own hashes",
+      "why": "the previous manifest carried correct hashes beside three false labels, and asserted in its own text that such labels would be false. A reviewer who checked the hashes was reassured by the wrong thing."
+    },
+    "historical_records": {
+      "policy": "records that recorded 35 h as the then-active ceiling are PRESERVED as historical evidence. No measured value is ever rewritten. Records marked ANNOTATED received labels, notes or provenance during the amendment; their measurements are untouched.",
+      "counts": {
+        "PRESERVED_UNCHANGED": 7,
+        "ANNOTATED": 8,
+        "ADDED_BY_THE_AMENDMENT": 1
+      },
+      "total": 16,
+      "records": [
+        {
+          "record": "results/experiments/e8a_question_encoder/efficiency_resources.json",
+          "classification": "PRESERVED_UNCHANGED",
+          "sha256_at_baseline": "bcabe43e7cddc3e95a4b830086ff80710c84ae91bc57c4c20c892e9e0c60284c",
+          "sha256_current": "bcabe43e7cddc3e95a4b830086ff80710c84ae91bc57c4c20c892e9e0c60284c",
+          "changed_since_baseline": false,
+          "ceiling_mentions": 1,
+          "numeric_35_ceiling_fields": [
+            ".e8a_efficiency_and_resources.resource_audit.gates.per_model_35_gpu_hours.ceiling"
+          ],
+          "meaning": "byte-identical to the pre-amendment tree; historical evidence, untouched"
+        },
+        {
+          "record": "results/experiments/e8a_question_encoder/resource_correction_g21.json",
+          "classification": "PRESERVED_UNCHANGED",
+          "sha256_at_baseline": "0f3ca5eab468f941b7e67fab9ddde872b4e40aebe238ba7afb5a5f589a960e1c",
+          "sha256_current": "0f3ca5eab468f941b7e67fab9ddde872b4e40aebe238ba7afb5a5f589a960e1c",
+          "changed_since_baseline": false,
+          "ceiling_mentions": 3,
+          "numeric_35_ceiling_fields": [],
+          "meaning": "byte-identical to the pre-amendment tree; historical evidence, untouched"
+        },
+        {
+          "record": "results/experiments/e8a_question_encoder/stage8_projection.json",
+          "classification": "PRESERVED_UNCHANGED",
+          "sha256_at_baseline": "ea3ec0ec87ecfd96c99aadb3694943d6e4a5cd8298cc3d7f29f6b1be66ca2d58",
+          "sha256_current": "ea3ec0ec87ecfd96c99aadb3694943d6e4a5cd8298cc3d7f29f6b1be66ca2d58",
+          "changed_since_baseline": false,
+          "ceiling_mentions": 1,
+          "numeric_35_ceiling_fields": [],
+          "meaning": "byte-identical to the pre-amendment tree; historical evidence, untouched"
+        },
+        {
+          "record": "results/experiments/e8a_question_encoder/three_way_comparison.json",
+          "classification": "PRESERVED_UNCHANGED",
+          "sha256_at_baseline": "39e823a3f3676d825813c918d3893c01a0570ffcd778a266591a70f63813ec32",
+          "sha256_current": "39e823a3f3676d825813c918d3893c01a0570ffcd778a266591a70f63813ec32",
+          "changed_since_baseline": false,
+          "ceiling_mentions": 1,
+          "numeric_35_ceiling_fields": [],
+          "meaning": "byte-identical to the pre-amendment tree; historical evidence, untouched"
+        },
+        {
+          "record": "results/experiments/e8b_readout_generation/blocker_high_reverification_20260807.json",
+          "classification": "ANNOTATED",
+          "sha256_at_baseline": "75cf00b72db14cc385ca6ecd4187a2a0f798a0b9bdf76627cbeae53f67e8a6e6",
+          "sha256_current": "93dcbcc5dfbc620e67510b81507a98e13c206324fc9e34a19d9393189eb62a26",
+          "changed_since_baseline": true,
+          "ceiling_mentions": 5,
+          "numeric_35_ceiling_fields": [],
+          "meaning": "changed during the amendment. Labels, notes or provenance were added; NO measured value was rewritten"
+        },
+        {
+          "record": "results/experiments/e8b_readout_generation/core_resource_projection_20260807.json",
+          "classification": "PRESERVED_UNCHANGED",
+          "sha256_at_baseline": "e3fb86863a6260d468d9c636f8df54d8a49a4349515d4009958523a7fb9baa50",
+          "sha256_current": "e3fb86863a6260d468d9c636f8df54d8a49a4349515d4009958523a7fb9baa50",
+          "changed_since_baseline": false,
+          "ceiling_mentions": 3,
+          "numeric_35_ceiling_fields": [],
+          "meaning": "byte-identical to the pre-amendment tree; historical evidence, untouched"
+        },
+        {
+          "record": "results/experiments/e8b_readout_generation/deferred_cleanup_20260808.json",
+          "classification": "ADDED_BY_THE_AMENDMENT",
+          "sha256_at_baseline": null,
+          "sha256_current": "4f2c054063afc24017087b93c58af80f7c030ad37c2020c4e702f82a904e8198",
+          "changed_since_baseline": true,
+          "ceiling_mentions": 3,
+          "numeric_35_ceiling_fields": [],
+          "meaning": "did not exist before the amendment"
+        },
+        {
+          "record": "results/experiments/e8b_readout_generation/identity_reconciliation_20260807.json",
+          "classification": "ANNOTATED",
+          "sha256_at_baseline": "e0d2cea3b151a976ff48387f0e88ed91a46ebb9f189754c48fee4e106007c34a",
+          "sha256_current": "dc3e21552ef15f988054a3aa3e7e6b6f437a1fbf867e45fa03c19a7536e6c204",
+          "changed_since_baseline": true,
+          "ceiling_mentions": 3,
+          "numeric_35_ceiling_fields": [
+            ".e8b_identity_reconciliation.ceiling_amended_20260808.from_hours"
+          ],
+          "meaning": "changed during the amendment. Labels, notes or provenance were added; NO measured value was rewritten"
+        },
+        {
+          "record": "results/experiments/e8b_readout_generation/implementation_audit_verdicts.json",
+          "classification": "PRESERVED_UNCHANGED",
+          "sha256_at_baseline": "6fe29521906dcd226b00ef68d3d3572867d0c0e69c83f7748bb7c96f822b81e4",
+          "sha256_current": "6fe29521906dcd226b00ef68d3d3572867d0c0e69c83f7748bb7c96f822b81e4",
+          "changed_since_baseline": false,
+          "ceiling_mentions": 3,
+          "numeric_35_ceiling_fields": [],
+          "meaning": "byte-identical to the pre-amendment tree; historical evidence, untouched"
+        },
+        {
+          "record": "results/experiments/e8b_readout_generation/medium_findings_ledger_20260807.json",
+          "classification": "ANNOTATED",
+          "sha256_at_baseline": "08eccc487a160b192e5815143d9c58847f6ec1d8fde25c400fb4e9e8db92505f",
+          "sha256_current": "2ffc25dca1b9f360ca1f20cebb316e6e012dddf7bdfe67b24b57c6841f37d44a",
+          "changed_since_baseline": true,
+          "ceiling_mentions": 8,
+          "numeric_35_ceiling_fields": [],
+          "meaning": "changed during the amendment. Labels, notes or provenance were added; NO measured value was rewritten"
+        },
+        {
+          "record": "results/experiments/e8b_readout_generation/pilot_e8b_B3_train_40k_seed0_search1.json",
+          "classification": "ANNOTATED",
+          "sha256_at_baseline": "fec563b208fe1e5996a9ad88735b90323a5511b4bb5caddf9b8ac58c76b17559",
+          "sha256_current": "bdf19f3f68ccf8591447ff9ddf30a2799c60a3764314659fb0f18e52f3508049",
+          "changed_since_baseline": true,
+          "ceiling_mentions": 5,
+          "numeric_35_ceiling_fields": [],
+          "meaning": "changed during the amendment. Labels, notes or provenance were added; NO measured value was rewritten"
+        },
+        {
+          "record": "results/experiments/e8b_readout_generation/pilot_e8b_B3_train_40k_seed0_search2.json",
+          "classification": "ANNOTATED",
+          "sha256_at_baseline": "d581900de1ca3608d62ea9f1da54c5937efe9ded81ace88bdd1149c04cdd8c98",
+          "sha256_current": "b5caec84d7f678c439fb8dd7d320a0b8972c2b27f8b72fb11c7833ce5aa3dba2",
+          "changed_since_baseline": true,
+          "ceiling_mentions": 5,
+          "numeric_35_ceiling_fields": [],
+          "meaning": "changed during the amendment. Labels, notes or provenance were added; NO measured value was rewritten"
+        },
+        {
+          "record": "results/experiments/e8b_readout_generation/preflight_nonscientific.json",
+          "classification": "ANNOTATED",
+          "sha256_at_baseline": "0ff054f4a517bdad45f3357fd38681c68b4d5913029bc4bf1b332f269f6daa5c",
+          "sha256_current": "d9032b59ebe5434b86681c07c07406ec5dbda72473c101d96a4d0b1a61a4574c",
+          "changed_since_baseline": true,
+          "ceiling_mentions": 7,
+          "numeric_35_ceiling_fields": [],
+          "meaning": "changed during the amendment. Labels, notes or provenance were added; NO measured value was rewritten"
+        },
+        {
+          "record": "results/experiments/e8b_readout_generation/protocol_clarification_20260807.json",
+          "classification": "PRESERVED_UNCHANGED",
+          "sha256_at_baseline": "af4f403824d2239154ad97a8dad6a24886bc8d57a675135da014beeee7b95d2e",
+          "sha256_current": "af4f403824d2239154ad97a8dad6a24886bc8d57a675135da014beeee7b95d2e",
+          "changed_since_baseline": false,
+          "ceiling_mentions": 2,
+          "numeric_35_ceiling_fields": [],
+          "meaning": "byte-identical to the pre-amendment tree; historical evidence, untouched"
+        },
+        {
+          "record": "results/experiments/e8b_readout_generation/raw_token_extension_20260807.json",
+          "classification": "ANNOTATED",
+          "sha256_at_baseline": "07110218b6e1e97788aa7ed44ee7d1680ef8056df1aed9e19d111a0317e20fb2",
+          "sha256_current": "2917c846169b39c35b69810ce822434bece8ef095ec60b1ec7f2f66ac34ba3a3",
+          "changed_since_baseline": true,
+          "ceiling_mentions": 1,
+          "numeric_35_ceiling_fields": [],
+          "meaning": "changed during the amendment. Labels, notes or provenance were added; NO measured value was rewritten"
+        },
+        {
+          "record": "results/experiments/e8b_readout_generation/resource_governance_amendment_20260808.json",
+          "classification": "ANNOTATED",
+          "sha256_at_baseline": "1a0e434b276ca09350bccf38228c5eba3ad42ba88670bb8772df7bf2c1f654b9",
+          "sha256_current": "26ebf1f934011397755cc1561befe9d5a0b19f83fb92b48b36664642edd76b73",
+          "changed_since_baseline": true,
+          "ceiling_mentions": 0,
+          "numeric_35_ceiling_fields": [
+            ".e8b_resource_governance_amendment.change.from_hours"
+          ],
+          "meaning": "changed during the amendment. Labels, notes or provenance were added; NO measured value was rewritten"
+        }
+      ]
+    },
+    "how_to_read_an_old_record": "a 35 h ceiling in any record dated before 2026-08-08 states the ceiling that was active when that record was written. It is correct as of its date and superseded now. The live ceiling is always config.PER_MODEL_IDENTITY_CEILING_HOURS.",
     "pre_result": {
       "no_final_core_cell_has_run": true,
-      "e8b_core_artefacts": 0,
       "training_authorized": "core-matrix-frozen-pending-approval",
       "why_this_matters": "an outcome cannot have influenced a decision taken before any outcome exists. This is a resource-governance amendment, not a scientific one."
     },
@@ -65,130 +254,14 @@
       "no result, model, seed, scale, intervention, denominator, precision rule, fixed-22 rule or execution matrix changes",
       "the 18-cell matrix, the B2/B3 recipe and the epoch-22 canonical rule are untouched, and the B3/train_40k/seed0 recipe hash is unchanged"
     ],
-    "historical_records_preserved": {
-      "policy": "records that recorded 35 h as the then-active ceiling are PRESERVED UNCHANGED as historical evidence. Their original values are never rewritten. This record supersedes them by reference, with a fingerprint of each at the moment of supersession so preservation is checkable rather than asserted.",
-      "count": 14,
-      "records": [
-        {
-          "record": "results/experiments/e8a_question_encoder/efficiency_resources.json",
-          "sha256_at_supersession": "bcabe43e7cddc3e95a4b830086ff80710c84ae91bc57c4c20c892e9e0c60284c",
-          "ceiling_prose_mentions": 1,
-          "numeric_35_ceiling_fields": [
-            ".e8a_efficiency_and_resources.resource_audit.gates.per_model_35_gpu_hours.ceiling"
-          ],
-          "status": "PRESERVED UNCHANGED as historical evidence"
-        },
-        {
-          "record": "results/experiments/e8a_question_encoder/resource_correction_g21.json",
-          "sha256_at_supersession": "0f3ca5eab468f941b7e67fab9ddde872b4e40aebe238ba7afb5a5f589a960e1c",
-          "ceiling_prose_mentions": 3,
-          "numeric_35_ceiling_fields": [],
-          "status": "PRESERVED UNCHANGED as historical evidence"
-        },
-        {
-          "record": "results/experiments/e8a_question_encoder/stage8_projection.json",
-          "sha256_at_supersession": "ea3ec0ec87ecfd96c99aadb3694943d6e4a5cd8298cc3d7f29f6b1be66ca2d58",
-          "ceiling_prose_mentions": 1,
-          "numeric_35_ceiling_fields": [],
-          "status": "PRESERVED UNCHANGED as historical evidence"
-        },
-        {
-          "record": "results/experiments/e8a_question_encoder/three_way_comparison.json",
-          "sha256_at_supersession": "39e823a3f3676d825813c918d3893c01a0570ffcd778a266591a70f63813ec32",
-          "ceiling_prose_mentions": 1,
-          "numeric_35_ceiling_fields": [],
-          "status": "PRESERVED UNCHANGED as historical evidence"
-        },
-        {
-          "record": "results/experiments/e8b_readout_generation/core_resource_projection_20260807.json",
-          "sha256_at_supersession": "e3fb86863a6260d468d9c636f8df54d8a49a4349515d4009958523a7fb9baa50",
-          "ceiling_prose_mentions": 3,
-          "numeric_35_ceiling_fields": [],
-          "status": "PRESERVED UNCHANGED as historical evidence"
-        },
-        {
-          "record": "results/experiments/e8b_readout_generation/identity_reconciliation_20260807.json",
-          "sha256_at_supersession": "dc3e21552ef15f988054a3aa3e7e6b6f437a1fbf867e45fa03c19a7536e6c204",
-          "ceiling_prose_mentions": 2,
-          "numeric_35_ceiling_fields": [
-            ".e8b_identity_reconciliation.ceiling_amended_20260808.from_hours"
-          ],
-          "status": "PRESERVED UNCHANGED as historical evidence"
-        },
-        {
-          "record": "results/experiments/e8b_readout_generation/implementation_audit_verdicts.json",
-          "sha256_at_supersession": "6fe29521906dcd226b00ef68d3d3572867d0c0e69c83f7748bb7c96f822b81e4",
-          "ceiling_prose_mentions": 1,
-          "numeric_35_ceiling_fields": [],
-          "status": "PRESERVED UNCHANGED as historical evidence"
-        },
-        {
-          "record": "results/experiments/e8b_readout_generation/medium_findings_ledger_20260807.json",
-          "sha256_at_supersession": "2ffc25dca1b9f360ca1f20cebb316e6e012dddf7bdfe67b24b57c6841f37d44a",
-          "ceiling_prose_mentions": 8,
-          "numeric_35_ceiling_fields": [],
-          "status": "PRESERVED UNCHANGED as historical evidence"
-        },
-        {
-          "record": "results/experiments/e8b_readout_generation/pilot_e8b_B3_train_40k_seed0_search1.json",
-          "sha256_at_supersession": "bdf19f3f68ccf8591447ff9ddf30a2799c60a3764314659fb0f18e52f3508049",
-          "ceiling_prose_mentions": 5,
-          "numeric_35_ceiling_fields": [],
-          "status": "ANNOTATED on 2026-08-08, then preserved. Values unchanged.",
-          "annotation": "M3: a dated supersession note was appended. No value changed."
-        },
-        {
-          "record": "results/experiments/e8b_readout_generation/pilot_e8b_B3_train_40k_seed0_search2.json",
-          "sha256_at_supersession": "b5caec84d7f678c439fb8dd7d320a0b8972c2b27f8b72fb11c7833ce5aa3dba2",
-          "ceiling_prose_mentions": 5,
-          "numeric_35_ceiling_fields": [],
-          "status": "ANNOTATED on 2026-08-08, then preserved. Values unchanged.",
-          "annotation": "M3: a dated supersession note was appended. No value changed."
-        },
-        {
-          "record": "results/experiments/e8b_readout_generation/preflight_nonscientific.json",
-          "sha256_at_supersession": "d9032b59ebe5434b86681c07c07406ec5dbda72473c101d96a4d0b1a61a4574c",
-          "ceiling_prose_mentions": 7,
-          "numeric_35_ceiling_fields": [],
-          "status": "ANNOTATED on 2026-08-08, then preserved. Values unchanged.",
-          "annotation": "M3: a dated supersession note was appended. Its gate keys name a ceiling and carry no explicit ceiling_hours. No value changed."
-        },
-        {
-          "record": "results/experiments/e8b_readout_generation/protocol_clarification_20260807.json",
-          "sha256_at_supersession": "af4f403824d2239154ad97a8dad6a24886bc8d57a675135da014beeee7b95d2e",
-          "ceiling_prose_mentions": 2,
-          "numeric_35_ceiling_fields": [],
-          "status": "PRESERVED UNCHANGED as historical evidence"
-        },
-        {
-          "record": "results/experiments/e8b_readout_generation/raw_token_extension_20260807.json",
-          "sha256_at_supersession": "2917c846169b39c35b69810ce822434bece8ef095ec60b1ec7f2f66ac34ba3a3",
-          "ceiling_prose_mentions": 1,
-          "numeric_35_ceiling_fields": [],
-          "status": "ANNOTATED on 2026-08-08, then preserved. Values unchanged.",
-          "annotation": "M1: its generator was corrected on 2026-08-08 and this record was not regenerated, so the two disagreed. The ceiling LABEL was corrected in place and a dated note added. No measured value changed."
-        },
-        {
-          "record": "results/experiments/e8b_readout_generation/resource_governance_amendment_20260808.json",
-          "sha256_at_supersession": "26ebf1f934011397755cc1561befe9d5a0b19f83fb92b48b36664642edd76b73",
-          "ceiling_prose_mentions": 0,
-          "numeric_35_ceiling_fields": [
-            ".e8b_resource_governance_amendment.change.from_hours"
-          ],
-          "status": "PRESERVED UNCHANGED as historical evidence"
-        }
-      ],
-      "scan_note": "ceiling-RELEVANT matches only: a numeric 35.0 counts only under a key naming a ceiling, hours, gate, margin or budget. An earlier pass matched any 35.0 and swept in answer labels and argmax indices from the G14 numerical characterisation, which have nothing to do with a ceiling. A supersession record that overstates its reach is the defect it exists to fix.",
-      "annotated_not_untouched": "4 of these received a dated annotation as part of this amendment -- one label correction (M1) and three supersession notes (M3). They are listed with status ANNOTATED, not PRESERVED UNCHANGED, because claiming otherwise would be false. No measured value changed in any of them. Their fingerprints are taken AFTER the annotation, so from this record onward they are immutable."
-    },
-    "how_to_read_an_old_record": "a 35 h ceiling in any record dated before 2026-08-08 states the ceiling that was active when that record was written. It is correct as of its date and superseded now. The live ceiling is always config.PER_MODEL_IDENTITY_CEILING_HOURS.",
     "unchanged_by_this_amendment": {
       "per_run_wall_clock_hours": 8.0,
       "core_programme_ceiling_hours": 180.0,
       "memory_ceiling_fraction": 0.8,
       "storage": "project allocation, unchanged"
     },
-    "clean_test_accessed": false,
-    "fingerprints_taken": "after every edit of this amendment, so a later change to any listed record breaks the check rather than passing silently"
+    "provenance_note": "GENERATED, not hand-maintained: rerun experiments/e8b_readout_generation/ceiling_supersession.py to reproduce it. Its metadata stamps the tree it was generated from, not the commit that carries it; a record cannot name its own commit. It is not an attestation that a code state passed a check -- final_preflight_20260808.json is that, and is re-stamped on a clean tree so the only later change is the record itself.",
+    "generator": "experiments/e8b_readout_generation/ceiling_supersession.py",
+    "clean_test_accessed": false
   }
 }

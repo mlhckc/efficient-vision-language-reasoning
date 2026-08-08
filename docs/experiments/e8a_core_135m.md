@@ -244,9 +244,16 @@ double-counted and cannot be reported separately.
 | gate | ceiling | measured | fires |
 | --- | --- | --- | --- |
 | per run | 8 GPU-h | 0.59183 (A1/250k/seed2) | no, margin 7.408 h |
-| per model | 35 GPU-h | 5.78927 | no, margin 29.211 h |
+| per model (ceiling SUPERSEDED, see below) | 35 GPU-h at the time | 5.78927 | no, margin 29.211 h |
 | memory | 80 per cent, 16,014 MiB | 1274.1 MiB | no |
 | storage | project allocation | 6.757 GiB written, 331.2 GiB free | no |
+
+The per-model ceiling in the row above is **superseded**. It was 35 GPU-hours
+when this table was measured; a programme-wide amendment of 8 August 2026 set
+it to **40 GPU-hours** for the cross-E8 pretrained SmolLM2-135M identity. The
+measured 5.78927 h and the gate verdict are unaffected; only the ceiling and the
+quoted margin change (against 40 h the margin is 34.211 h). The live constant is
+`config.PER_MODEL_IDENTITY_CEILING_HOURS`. See `results/cross_e8_ceiling_supersession_20260808.json`.
 
 No matrix cell failed, was interrupted or was retried. One unrelated
 FAILED_gates.json remains in the output directory from an aborted Phase-1A
