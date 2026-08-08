@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-08T01:59:36",
-    "git_commit": "af3a36a",
+    "timestamp": "2026-08-08T02:24:07",
+    "git_commit": "5a0b074",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -253,7 +253,7 @@
       "A1 is the one arm of this family that has run. LIKE FOR LIKE against the components the measurement ACTUALLY COVERS -- core 1.774 + extraction 0.400 = 2.174 h, since resource_correction_g21.json decomposes the measured 2.29222 h as training 1.56262 + extraction 0.729599 and states interventions are reported separately and never added -- A1 came in 5.44 per cent ABOVE projection, and its extraction component alone overran by 82.4 per cent. Two earlier versions of this record were wrong in the same direction: '23 per cent BELOW' divided a partial measurement by the FULL protocol row, and '1.25 per cent ABOVE' credited an interventions component the measurement excludes. Both picked a more favourable framing than the evidence supports. The precedent is UNFAVOURABLE, not reassuring.",
       "protocol 13.2b's own estimates for work that has not run. The middle-layer figure in particular is an estimate whose measured sibling, the full extraction, overran by 82.4 per cent.",
       "protocol 13.2 range 0.500-1.000 h, charged at the upper bound",
-      "B1 is charged at an upper bound and touches neither identity's 35-hour ceiling, though it counts toward the 180-hour core ceiling."
+      "B1 is charged at an upper bound and touches neither identity's per-model-identity ceiling, though it counts toward the 180-hour core ceiling."
     ],
     "enforceable_margin_hours": 4.195,
     "enforceable_margin_basis": "ceiling 40.0 h less the 1.0 h operational floor less the 34.805 h GATE BASIS. The gate basis is 0.002 h above the 34.803 h measured component sum because the gate reserves per-cell constants rounded to three decimals; deriving from the gate basis yields the smaller and therefore more conservative margin.",
@@ -281,17 +281,19 @@
       "recovery_margin_is_for": "at most ONE forced retry, and only if that retry fits the unchanged ceiling and floor when recomputed from actual charged usage. The largest cell does NOT fit.",
       "largest_cell_retry_hours": 4.249,
       "enforceable_recovery_margin_hours": 4.195,
-      "ordinary_execution_is_gated_against": "the measured baseline, not the ceiling",
+      "ordinary_execution_is_gated_against": "the BASELINE BUDGET (34.805 h, the gate basis), not the ceiling and not the 34.803 h measured component sum",
       "record": "resource_governance_amendment_20260808.json"
     },
     "ceiling_breached": false,
     "headroom_floor_hours": 1.0,
-    "enforceable_margin_note": "headroom under the ceiling is NOT all usable: the 1.0 h floor halts execution before the ceiling is reached, so the margin that can actually be spent is the headroom less the floor.",
+    "headroom_basis": "measured component sum",
+    "headroom_gate_basis_hours": 5.195,
+    "enforceable_margin_note": "headroom under the ceiling is NOT all usable: the 1.0 h floor halts execution before the ceiling is reached, so the margin that can actually be spent is the headroom less the floor -- computed on the GATE BASIS: 5.195 - 1.0 = 4.195 h. Applying the same rule to headroom_hours (5.197 h, measured basis) gives 4.197 h; that is the arithmetic of a different basis, not a second value for this quantity.",
     "headroom_below_floor": false,
     "resource_gate_cleared": true,
     "execution_may_start": false,
     "execution_may_start_note": "ALWAYS false in this record. Clearing the resource gate is not authorisation to run; TRAINING_AUTHORIZED is the only thing that starts a cell, and it is unchanged.",
-    "verdict": "CLEARED ON RESOURCES, pending the user's final execution approval. The complete MEASURED programme projects to 34.803 h against the amended 40.0 h ceiling, leaving 5.197 h of raw headroom. The 1.0 h operational floor is enforced against the ceiling, so the ENFORCEABLE automatic recovery margin is 4.195 h -- LESS than the 4.249 h largest cell. A worst-case retry therefore does NOT fit automatically and halts for a fresh decision; that is the authorised policy of 2026-08-08, not a defect. Routine execution is gated against the 34.805 h measured baseline, so an estimate that merely drifts halts rather than quietly spending the recovery margin. The ceiling was raised on RESOURCE grounds before any cell ran and with no result in existence, and no scientific component was changed to obtain the margin. Of the 6 open risks listed above, 3 could still on its own consume the contingency. TRAINING_AUTHORIZED is unchanged: no core cell may start without a separate explicit approval.",
+    "verdict": "CLEARED ON RESOURCES, pending the user's final execution approval. The complete MEASURED programme projects to 34.803 h against the amended 40.0 h ceiling, leaving 5.197 h of raw headroom. The 1.0 h operational floor is enforced against the ceiling, so the ENFORCEABLE automatic recovery margin is 4.195 h -- LESS than the 4.249 h largest cell. A worst-case retry therefore does NOT fit automatically and halts for a fresh decision; that is the authorised policy of 2026-08-08, not a defect. Routine execution is gated against the 34.805 h BASELINE BUDGET, the gate basis -- NOT the 34.803 h measured component sum, which differs by rounding -- so an estimate that merely drifts halts rather than quietly spending the recovery margin. The ceiling was raised on RESOURCE grounds before any cell ran and with no result in existence, and no scientific component was changed to obtain the margin. Of the 6 open risks listed above, 3 could still on its own consume the contingency. TRAINING_AUTHORIZED is unchanged: no core cell may start without a separate explicit approval.",
     "decision_required_from_user": null,
     "generator": "experiments/e8b_readout_generation/identity_reconciliation.py",
     "clean_test_accessed": false

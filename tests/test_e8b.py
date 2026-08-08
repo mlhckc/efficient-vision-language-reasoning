@@ -4108,10 +4108,40 @@ def test_governance_amendment() -> None:
     # This test file too. The claim survived here precisely because the
     # guard did not scan itself.
     own = Path(__file__).read_text()
-    head, _, rest = own.partition("GUARD-PHRASE-TABLE-START")
-    _, _, tail = rest.partition("GUARD-PHRASE-TABLE-END")
+    # Both markers asserted present. Losing only the END marker makes
+    # partition return empty strings, which would silently drop ~34,000
+    # characters -- the whole tail of this file -- from the scan while
+    # the file-count floor below still passed.
+    # Assembled, not written literally: a literal here would itself be
+    # a second occurrence and the count below could never be 1.
+    MARK = "GUARD-PHRASE" + "-TABLE-"
+    check("both self-scan markers are present exactly once, so no span "
+          "is silently excluded",
+          own.count(MARK + "START") == 1 and own.count(MARK + "END") == 1,
+          f"{own.count(MARK + 'START')} start, "
+          f"{own.count(MARK + 'END')} end")
+    head, _, rest = own.partition(MARK + "START")
+    _, _, tail = rest.partition(MARK + "END")
+    check("the excised span is only the phrase table, not the file",
+          len(head) + len(tail) > 0.9 * len(own),
+          f"{len(head) + len(tail)} of {len(own)} chars scanned")
     scanned.append("tests/test_e8b.py")
     offenders += offences(flatten(head + tail), "tests/test_e8b.py")
+    # docs/ and collab/ too. Nothing there states the guarantee today --
+    # there is no E8B report yet -- but that is precisely where it will
+    # be written for the dissertation, and the guard should already be
+    # watching when it is.
+    for area in ("docs", "collab"):
+        for prose in sorted((PROJECT_ROOT / area).rglob("*.md")):
+            scanned.append(str(prose.relative_to(PROJECT_ROOT)))
+            offenders += offences(
+                flatten(prose.read_text()),
+                str(prose.relative_to(PROJECT_ROOT)))
+    for note in ("CLAUDE.md", "AGENTS.md"):
+        path = PROJECT_ROOT / note
+        if path.exists():
+            scanned.append(note)
+            offenders += offences(flatten(path.read_text()), note)
     for record in sorted(results.glob("*.json")):
         scanned.append(record.name)
         try:
@@ -4502,6 +4532,7 @@ def test_final_operational_closure() -> None:
     testing is that they did NOT touch anything scientific: no optimizer
     step, no authorisation change, no core artefact, no other lock."""
     import hashlib
+    import re
     from experiments.e8b_readout_generation import run as e8b_run
     from experiments.e8b_readout_generation import training
     from experiments.e8b_readout_generation import final_preflight
@@ -4725,7 +4756,88 @@ def test_final_operational_closure() -> None:
           training.CORE_CELL_PROJECTED_HOURS
           is e8b_run.CELL_PROJECTED_HOURS)
 
-    # --- F. known negatives ---
+    # --- F. no live source states the superseded ceiling as current ---
+    # A review found nine "35 GPU-hour / 35-hour ceiling" statements in
+    # live source AFTER the ceiling became 40 h, five of them present
+    # tense and beside the code that enforces 40 -- including
+    # per_identity_gate's own docstring and an operator-facing refusal
+    # message. An earlier sweep missed them all because it scanned
+    # records only.
+    #
+    # An exact ALLOWLIST rather than tense-detection. Every surviving
+    # mention is historical narrative -- a dated ledger entry, or a
+    # comment explaining a past defect -- and rewriting those would
+    # falsify the record. Counts are pinned so a NEW mention anywhere
+    # fails and has to be justified by a human, which is the only
+    # reliable way to tell "describing the past" from "wrong about the
+    # present".
+    STALE_CEILING_ALLOWED = {
+        # Dated findings-ledger entries, describing each finding as it
+        # was recorded when the ceiling was 35 h. Two of the seven are
+        # CLOSURE-MEDIUM-3's own text, which has to quote the stale
+        # wording in order to record that it was found and removed --
+        # and this allowlist caught them when they were added, which is
+        # the behaviour it exists for.
+        "medium_ledger.py": 7,
+        # a past "constant with no caller" defect. per_identity_gate's
+        # own docstring no longer names the superseded figure at all --
+        # a docstring beside the enforcing code is the one place a
+        # stale number is most likely to be believed.
+        "run.py": 1,
+        # narrates the defect where a dropped charge would have let the
+        # then-35-hour ceiling green-light the next cell
+        "training.py": 1,
+        # records what the identity carried at the time it was measured
+        "calibrate_throughput.py": 1,
+        # the amendment note: "described the 35 h ceiling, superseded"
+        "core_resource_projection.py": 1,
+    }
+    stale = re.compile(r"35 GPU-hour|35-hour|35 h ceiling")
+    actual, unexpected = {}, []
+    for source in sorted(E8B_DIR.glob("*.py")):
+        hits = len(stale.findall(source.read_text()))
+        if hits:
+            actual[source.name] = hits
+            if hits != STALE_CEILING_ALLOWED.get(source.name):
+                unexpected.append(
+                    f"{source.name}: {hits} "
+                    f"(allowed {STALE_CEILING_ALLOWED.get(source.name, 0)})")
+    check("no live source gained a superseded-ceiling statement",
+          unexpected == [], "; ".join(unexpected))
+    check("every allowlisted file still exists and still matches",
+          set(actual) == set(STALE_CEILING_ALLOWED),
+          f"actual {sorted(actual)} vs allowed "
+          f"{sorted(STALE_CEILING_ALLOWED)}")
+    # The ceiling the gate enforces is never a literal beside the code.
+    gate_doc = e8b_run.per_identity_gate.__doc__ or ""
+    check("per_identity_gate's docstring does not name a stale ceiling",
+          not stale.search(gate_doc))
+    # RENDERED, not grepped. The message interpolates the constant, so
+    # the live number appears only at runtime -- and what an operator
+    # actually reads during a refusal is the rendered text. Redirected
+    # to a temp path so no real ledger is touched.
+    import tempfile
+    original_ledger = e8b_run.SPEND_LEDGER
+    try:
+        with tempfile.TemporaryDirectory() as directory:
+            corrupt = Path(directory) / "ledger.json"
+            corrupt.write_text("{ not json")
+            e8b_run.SPEND_LEDGER = corrupt
+            try:
+                e8b_run.read_spend_ledger()
+                message = ""
+            except AssertionError as refusal:
+                message = str(refusal)
+    finally:
+        e8b_run.SPEND_LEDGER = original_ledger
+    check("the operator-facing ledger refusal RENDERS the live ceiling, "
+          "not the superseded one",
+          f"{e8b_run.PER_IDENTITY_CEILING_HOURS}-hour" in message
+          and not stale.search(message), message[:160])
+    check("the ledger refusal is fail-closed, not a silent zero",
+          "refuses" in message and "UNREADABLE" in message)
+
+    # --- G. known negatives ---
     must_fail("a core cell is still refused at the optimizer gate",
               lambda: e8b_run.authorize_optimizer_path(
                   "core-cell", "closure test"))

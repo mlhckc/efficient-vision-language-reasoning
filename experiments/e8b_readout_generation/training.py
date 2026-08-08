@@ -104,7 +104,7 @@ def build_recipe(grid_point: int) -> dict:
 
 CORE_FIXED_HYPER = {"lr": 3e-4, "warmup_frac": 0.0, "dropout": 0.1}
 
-# Projected cost of one cell, used ONLY to check the 35 GPU-hour
+# Projected cost of one cell, used ONLY to check the per-identity
 # per-identity ceiling BEFORE a cell starts. Sourced verbatim from
 # core_resource_projection_20260807.json -> per_cell_hours, so the gate
 # and the published projection cannot drift apart. The ceiling is
@@ -1342,7 +1342,7 @@ def train_core_cell(arm: str, scale: str, seed: int) -> int:
         sys.exit(f"a recorded gate halt exists for this cell "
                  f"({halts[0].name}); execution returns to the user")
 
-    # The 35 GPU-hour per-model-identity ceiling, checked BEFORE any GPU
+    # The per-model-identity GPU-hour ceiling, checked BEFORE any GPU
     # work: the projected cost of this cell is added to everything
     # already charged to the same frozen-model identity. Previously the
     # ceiling existed only as a constant inside a projection helper, so
@@ -1447,7 +1447,7 @@ def train_core_cell(arm: str, scale: str, seed: int) -> int:
         # that halts at a gate or dies mid-epoch burned those hours just
         # as surely as one that completed, and a completion-path-only
         # charge let them vanish from the ledger -- which would have let
-        # the 35-hour ceiling green-light the next cell on an identity
+        # the per-identity ceiling green-light the next cell on an identity
         # that had already spent the headroom. Charging per process is
         # what makes this safe to run on every exit path without
         # double-counting a resume.

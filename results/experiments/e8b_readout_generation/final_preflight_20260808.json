@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-08T02:06:44",
-    "git_commit": "af3a36a",
+    "timestamp": "2026-08-08T02:29:20",
+    "git_commit": "5a0b074",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -42,7 +42,7 @@
     "checks": {
       "the first cell can ACQUIRE its execution lock": {
         "passed": true,
-        "detail": "e8b_B3_train_40k_seed0.lock held by pid 1725794"
+        "detail": "e8b_B3_train_40k_seed0.lock held by pid 1734264"
       },
       "a duplicate acquire is refused while held": {
         "passed": true,

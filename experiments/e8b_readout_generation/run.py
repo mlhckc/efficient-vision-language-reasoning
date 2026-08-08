@@ -1693,7 +1693,7 @@ def model_identity(arm: str) -> str:
 
     B3 uses the pretrained SmolLM2-135M; B2 uses the pinned-seed random
     model of the same architecture; B1 loads no language model at all
-    and is charged to neither identity's 35-hour ceiling."""
+    and is charged to neither identity's per-model-identity ceiling."""
     return {"B3": "pretrained", "B2": "random", "B1": "none"}[arm]
 
 
@@ -1712,7 +1712,7 @@ def read_spend_ledger() -> dict:
         raise AssertionError(
             f"GPU-HOUR LEDGER UNREADABLE: {SPEND_LEDGER} ({error}). "
             f"Execution refuses rather than assume zero hours spent "
-            f"against the 35-hour ceiling.") from None
+            f"against the {PER_IDENTITY_CEILING_HOURS}-hour ceiling.") from None
     if not isinstance(ledger.get("cells"), dict):
         raise AssertionError(
             f"GPU-HOUR LEDGER MALFORMED: {SPEND_LEDGER} has no 'cells' "
@@ -1989,7 +1989,11 @@ def retry_admissible(arm: str, scale: str, seed: int,
 def per_identity_gate(arm: str, additional_hours: float = 0.0,
                       ledger: dict | None = None,
                       cell: tuple | None = None) -> dict:
-    """The 35 GPU-hour per-model-identity ceiling, as an EXECUTABLE gate.
+    """The per-model-identity GPU-hour ceiling, as an EXECUTABLE gate.
+
+    The ceiling is PER_IDENTITY_CEILING_HOURS. It is deliberately NOT
+    restated as a number here: this docstring named the superseded
+    figure for a day after the gate began enforcing the amended one.
 
     The ceiling was re-ratified by the user on 2026-08-07 as a hard
     halt, but nothing in the execution path summed hours across cells,
@@ -2119,8 +2123,8 @@ def charge_identity_hours(arm: str, scale: str, seed: int,
     per-cell run locks allow two DIFFERENT cells to run at once and the
     ledger deliberately lives on shared storage, so an unsynchronised
     update could silently drop another cell's charge -- and a dropped
-    charge is exactly the under-count the 35-hour ceiling exists to
-    prevent."""
+    charge is exactly the under-count the per-identity ceiling exists
+    to prevent."""
     SPEND_LEDGER.parent.mkdir(parents=True, exist_ok=True)
     guard = SPEND_LEDGER.with_name(SPEND_LEDGER.name + ".lock")
     descriptor = None

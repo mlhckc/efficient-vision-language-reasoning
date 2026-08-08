@@ -161,7 +161,7 @@ def derive(existing: dict, projection: dict) -> dict:
         residual["retained_a1_row"]["basis"],
         residual["efficiency_s19"]["basis"],
         "B1 is charged at an upper bound and touches neither identity's "
-        "35-hour ceiling, though it counts toward the 180-hour core "
+        "per-model-identity ceiling, though it counts toward the 180-hour core "
         "ceiling.",
     ]
 
@@ -337,15 +337,36 @@ def derive(existing: dict, projection: dict) -> dict:
         "largest_cell_retry_hours": e8b_run.largest_cell_retry_hours(),
         "enforceable_recovery_margin_hours":
             e8b_run.ENFORCEABLE_RECOVERY_MARGIN_HOURS,
-        "ordinary_execution_is_gated_against": "the measured baseline, "
-                                               "not the ceiling",
+        "ordinary_execution_is_gated_against": (
+            f"the BASELINE BUDGET ({e8b_run.BASELINE_BUDGET_HOURS} h, "
+            f"the gate basis), not the ceiling and not the "
+            f"{e8b_run.MEASURED_PROGRAMME_HOURS} h measured component "
+            f"sum"),
         "record": "resource_governance_amendment_20260808.json"}
     body["ceiling_breached"] = bool(breaches)
     body["headroom_floor_hours"] = HEADROOM_FLOOR_HOURS
+    # Both headrooms, named. headroom_hours is measured-basis (ceiling
+    # less the 34.803 h component sum). The margin derives from the GATE
+    # basis, so a reader applying "headroom less floor" to the
+    # measured-basis figure got 4.197 and concluded the published 4.195
+    # was a second value for the same quantity -- the very defect this
+    # record was corrected for. The gate-basis headroom is published
+    # alongside so the stated rule closes exactly.
+    body["headroom_basis"] = "measured component sum"
+    body["headroom_gate_basis_hours"] = round(
+        e8b_run.PER_IDENTITY_CEILING_HOURS
+        - e8b_run.BASELINE_BUDGET_HOURS, 4)
     body["enforceable_margin_note"] = (
-        "headroom under the ceiling is NOT all usable: the 1.0 h floor "
-        "halts execution before the ceiling is reached, so the margin "
-        "that can actually be spent is the headroom less the floor.")
+        f"headroom under the ceiling is NOT all usable: the "
+        f"{e8b_run.HEADROOM_FLOOR_HOURS} h floor halts execution before "
+        f"the ceiling is reached, so the margin that can actually be "
+        f"spent is the headroom less the floor -- computed on the GATE "
+        f"BASIS: {body['headroom_gate_basis_hours']} - "
+        f"{e8b_run.HEADROOM_FLOOR_HOURS} = "
+        f"{e8b_run.ENFORCEABLE_RECOVERY_MARGIN_HOURS} h. Applying the "
+        f"same rule to headroom_hours ({body['headroom_hours']} h, "
+        f"measured basis) gives 4.197 h; that is the arithmetic of a "
+        f"different basis, not a second value for this quantity.")
     body["headroom_below_floor"] = bool(thin)
     # Named for exactly what it is. It says the RESOURCE gate cleared;
     # it does not authorise anything. Authorisation is
@@ -399,7 +420,10 @@ def derive(existing: dict, projection: dict) -> dict:
         f"authorised policy of 2026-08-08, not a defect. Routine "
         f"execution is gated against the "
         f"{body['ceiling_amended_20260808']['baseline_budget_hours']} h "
-        f"measured baseline, so an estimate that merely drifts halts "
+        f"BASELINE BUDGET, the gate basis -- NOT the "
+        f"{body['ceiling_amended_20260808']['measured_programme_hours']}"
+        f" h measured component sum, which differs by rounding -- so an "
+        f"estimate that merely drifts halts "
         f"rather than quietly spending the recovery margin. The "
         f"ceiling was raised on RESOURCE grounds before any cell ran "
         f"and with no result in existence, and no scientific component "
@@ -418,7 +442,7 @@ def derive(existing: dict, projection: dict) -> dict:
                ", and the instruction is explicit that execution stops "
                "rather than auto-descoping or raising the ceiling",
         "not_taken_unilaterally": [
-            "raising the 35-hour ceiling",
+            "raising the per-identity ceiling unilaterally (it was later\n             raised from 35 to 40 h, but by explicit user authorisation)",
             "reducing the number of matched conditions",
             "evaluating interventions on the in-vocabulary denominator "
             "instead of the raw one",

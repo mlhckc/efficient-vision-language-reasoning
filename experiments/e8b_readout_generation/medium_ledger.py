@@ -1010,6 +1010,111 @@ VERIFY_20260807_ENTRIES = [
                  "earlier ones in the order. The stale entry text is "
                  "corrected in place by quotation.",
      "closed_by": "test_audit_known_negatives, pair-order checks"},
+
+    # --- Final operational closure, 2026-08-08. Two fresh-context
+    # reviews of the corrected state; the first REJECTED it. Recorded
+    # here so this ledger's "0 open" summary stays truthful.
+    {"id": "CLOSURE-BLOCKER-1",
+     "lens": "C (fresh-context narrow review, 2026-08-08)",
+     "issue": "One governed quantity was published as two numbers, in "
+              "three places at once. The enforceable recovery margin "
+              "was 4.195 in run.py and 4.197 in "
+              "identity_reconciliation.py, which re-derived it from the "
+              "projection's headroom on a different baseline; the "
+              "reconciliation record carried 4.197 in its verdict and "
+              "all six judged_against fields while carrying 4.195 three "
+              "lines away. The baseline was 34.803 in the projection "
+              "and 34.805 in the gate, and the rounding tolerance was "
+              "0.005 in code against 0.01 in the amendment record. A "
+              "comment in run.py described this defect as already "
+              "fixed; it had been fixed on one side only.",
+     "classification": "execution-critical",
+     "disposition": "FIXED AT SOURCE",
+     "evidence": "the two baselines are real and are now named apart -- "
+                 "MEASURED_PROGRAMME_HOURS (34.803, component sum) and "
+                 "BASELINE_BUDGET_HOURS (34.805, what the gate sums "
+                 "from per-cell constants rounded to 3dp). The gate "
+                 "basis governs and every consumer derives from it. No "
+                 "authorised value moved and the B3 recipe hash is "
+                 "byte-identical.",
+     "closed_by": "test_final_operational_closure, the record audit "
+                  "over 15 governed fields in 37 records"},
+    {"id": "CLOSURE-HIGH-1",
+     "lens": "C (fresh-context narrow review, 2026-08-08)",
+     "issue": "The guard against the withdrawn retry guarantee was "
+              "near-vacuous. Its exemption asked whether 'withdraw' "
+              "appeared ANYWHERE in the file, so 5 of its 7 targets "
+              "were wholly exempt and a fresh guarantee could be "
+              "reintroduced in them and still pass. It scanned a "
+              "hand-listed four sources and three records, and not the "
+              "test file, where the withdrawn wording was in fact still "
+              "standing as current fact.",
+     "classification": "not execution-critical",
+     "disposition": "FIXED AT SOURCE",
+     "evidence": "the exemption is per-occurrence within 300 "
+                 "characters; the surface is every e8b source, every "
+                 "record, this test file, docs/, collab/, CLAUDE.md and "
+                 "AGENTS.md; both self-scan markers are asserted "
+                 "present; and two synthetic cases prove the guard can "
+                 "fail and can still exempt a genuine local withdrawal.",
+     "closed_by": "test_governance_amendment, synthetic offend/exempt "
+                  "pair"},
+    {"id": "CLOSURE-MEDIUM-1",
+     "lens": "C (fresh-context narrow review, 2026-08-08)",
+     "issue": "training.py stored the previous SIGTERM/SIGINT/SIGHUP "
+              "handlers in a dict that nothing ever read, beside a "
+              "comment promising they were restored at the end.",
+     "classification": "not execution-critical",
+     "disposition": "FIXED BY DISCLOSURE",
+     "evidence": "not restoring is correct and measured: restoring "
+                 "before the charge leaves a window in which a second "
+                 "SIGTERM kills the process with nothing written, "
+                 "because the charge can wait up to 30 s on the ledger "
+                 "lock. The dead state is removed and the residual -- "
+                 "the handler outlives the call -- is disclosed.",
+     "closed_by": "test_final_operational_closure"},
+    {"id": "CLOSURE-MEDIUM-2",
+     "lens": "D (confirmation review of the remediation, 2026-08-08)",
+     "issue": "The BLOCKER fix MOVED the mislabel rather than removing "
+              "it. The reconciliation's concluding verdict came to read "
+              "'gated against the 34.805 h measured baseline' -- the "
+              "right number under the wrong label, where before it had "
+              "been the wrong number under the right one. In the same "
+              "record the note 'the margin is the headroom less the "
+              "floor' no longer closed, because headroom_hours is "
+              "measured-basis: 5.197 - 1.0 = 4.197, not the published "
+              "4.195.",
+     "classification": "not execution-critical",
+     "disposition": "FIXED AT SOURCE",
+     "evidence": "the verdict now names the BASELINE BUDGET and "
+                 "contrasts it with the measured component sum; both "
+                 "headrooms are published and named "
+                 "(headroom_gate_basis_hours 5.195), and the note "
+                 "states the rule on the gate basis so it closes "
+                 "exactly, while explaining why the measured basis "
+                 "gives 4.197.",
+     "closed_by": "test_final_operational_closure"},
+    {"id": "CLOSURE-MEDIUM-3",
+     "lens": "D (confirmation review of the remediation, 2026-08-08)",
+     "issue": "Nine '35 GPU-hour / 35-hour ceiling' statements survived "
+              "in LIVE source after the ceiling became 40 h, five of "
+              "them present tense beside the code enforcing 40 -- "
+              "including per_identity_gate's own docstring and the "
+              "operator-facing message shown when the ledger is "
+              "unreadable and execution refuses. The earlier sweep "
+              "claimed to have covered this and had scanned records "
+              "only.",
+     "classification": "not execution-critical",
+     "disposition": "FIXED AT SOURCE",
+     "evidence": "every present-tense mention now names the constant or "
+                 "the ceiling generically; the gate docstring names no "
+                 "figure at all; the refusal message interpolates "
+                 "PER_IDENTITY_CEILING_HOURS and is verified by "
+                 "RENDERING it, not by grepping. An exact per-file "
+                 "allowlist pins the surviving historical mentions so "
+                 "any new one fails.",
+     "closed_by": "test_final_operational_closure, stale-ceiling "
+                  "allowlist and rendered-refusal check"},
 ]
 
 

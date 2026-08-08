@@ -208,8 +208,8 @@ def main() -> int:
             "total_hours": round(total_seconds / 3600, 5),
             "charged_to": "no frozen-LM identity: this uses the frozen "
                           "CLIP encoders only and loads neither "
-                          "SmolLM2 model, so it touches neither 35-hour "
-                          "ceiling. It IS charged to the 180-hour core "
+                          "SmolLM2 model, so it touches neither "
+                          "per-model-identity ceiling. It IS charged to the 180-hour core "
                           "ceiling as spent compute."},
         "encoder": "frozen CLIP ViT-B/32, eval mode, no_grad, the same "
                    "instance and preprocessing as the v3_00 stores",
