@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-08T01:16:56",
-    "git_commit": "432f42d",
+    "timestamp": "2026-08-08T01:35:12",
+    "git_commit": "2075dc9",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -232,7 +232,7 @@
     ],
     "component_sum_hours": 34.803,
     "matches_generator": true,
-    "retry_allowance": "AMENDED 2026-08-08: capacity for AT MOST ONE forced retry, sized on the largest final cell and held as a separate contingency reserve above the measured baseline. Permitted only for an objectively failed execution; a performance-driven rerun is refused by name in code. A second retry stops and returns to the user. The previous wording, 'NONE, the plan tolerates zero B3 retries', described the 35 h ceiling and is superseded.",
+    "retry_allowance": "AMENDED 2026-08-08, then CORRECTED the same day: at most ONE forced retry, and NOT guaranteed. The enforceable margin is 4.195 h after the 1.0 h operational floor, against a 4.249 h largest cell, so a worst-case retry does not fit and halts for a fresh decision. A retry of a cheaper cell does fit. Permitted only an objectively failed execution; a performance-driven rerun is refused by name in code. A second retry stops and returns to the user. The previous wording, 'NONE, the plan tolerates zero B3 retries', described the 35 h ceiling and is superseded.",
     "omissions_found_and_corrected": {
       "count": 5,
       "derived": "this count comes from the list below, not from a sentence written beside it. An earlier version said 'five' above a list of four.",
@@ -275,7 +275,9 @@
       "type": "RESOURCE-GOVERNANCE, pre-result, authorised by the user on 2026-08-08",
       "baseline_budget_hours": 34.803,
       "contingency_reserve_hours": 4.25,
-      "recovery_margin_is_for": "at most ONE forced retry, and only if that retry fits the unchanged ceiling and floor when recomputed from actual charged usage",
+      "recovery_margin_is_for": "at most ONE forced retry, and only if that retry fits the unchanged ceiling and floor when recomputed from actual charged usage. The largest cell does NOT fit.",
+      "largest_cell_retry_hours": 4.249,
+      "enforceable_recovery_margin_hours": 4.195,
       "ordinary_execution_is_gated_against": "the measured baseline, not the ceiling",
       "record": "resource_governance_amendment_20260808.json"
     },
@@ -286,7 +288,7 @@
     "resource_gate_cleared": true,
     "execution_may_start": false,
     "execution_may_start_note": "ALWAYS false in this record. Clearing the resource gate is not authorisation to run; TRAINING_AUTHORIZED is the only thing that starts a cell, and it is unchanged.",
-    "verdict": "CLEARED ON RESOURCES, pending the user's final execution approval. The complete MEASURED programme projects to 34.803 h against the amended 40.0 h ceiling, leaving 5.197 h. Of that, 4.25 h is CONTINGENCY held for at most ONE worst-case forced retry and is not ordinary headroom: routine execution is gated against the 34.803 h measured baseline, so an estimate that merely drifts halts rather than quietly spending the recovery margin. The ceiling was raised on RESOURCE grounds before any cell ran and with no result in existence, and no scientific component was changed to obtain the margin. Of the 6 open risks listed above, 3 could still on its own consume the contingency. TRAINING_AUTHORIZED is unchanged: no core cell may start without a separate explicit approval.",
+    "verdict": "CLEARED ON RESOURCES, pending the user's final execution approval. The complete MEASURED programme projects to 34.803 h against the amended 40.0 h ceiling, leaving 5.197 h of raw headroom. The 1.0 h operational floor is enforced against the ceiling, so the ENFORCEABLE automatic recovery margin is 4.197 h -- LESS than the 4.249 h largest cell. A worst-case retry therefore does NOT fit automatically and halts for a fresh decision; that is the authorised policy of 2026-08-08, not a defect. Routine execution is gated against the 34.803 h measured baseline, so an estimate that merely drifts halts rather than quietly spending the recovery margin. The ceiling was raised on RESOURCE grounds before any cell ran and with no result in existence, and no scientific component was changed to obtain the margin. Of the 6 open risks listed above, 3 could still on its own consume the contingency. TRAINING_AUTHORIZED is unchanged: no core cell may start without a separate explicit approval.",
     "decision_required_from_user": null,
     "generator": "experiments/e8b_readout_generation/identity_reconciliation.py",
     "clean_test_accessed": false

@@ -1421,11 +1421,10 @@ def train_core_cell(arm: str, scale: str, seed: int) -> int:
             arm, scale, seed, recipe, run_name, result_path,
             started, identity_gate, storage, remaining)
     finally:
-        for _sig, _handler in previous_handlers.items():
-            try:
-                _signal.signal(_sig, _handler)
-            except (ValueError, OSError):
-                pass
+        # The handlers stay installed until AFTER the charge. Restoring
+        # them first left a window -- the charge can wait up to 30 s on
+        # the ledger lock -- in which a second SIGTERM would kill the
+        # process with nothing written. They are restored at the end.
         # H-1: charge THIS PROCESS's hours whatever happened. A cell
         # that halts at a gate or dies mid-epoch burned those hours just
         # as surely as one that completed, and a completion-path-only

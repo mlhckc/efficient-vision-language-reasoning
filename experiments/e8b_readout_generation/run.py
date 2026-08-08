@@ -258,24 +258,7 @@ PER_IDENTITY_CEILING_PREVIOUS_HOURS = 35.0
 # against THIS, not against the ceiling: the gap between them is
 # recovery margin, and an estimate that merely drifts must not be
 # allowed to eat it silently.
-BASELINE_BUDGET_HOURS = 34.803
-# The recovery margin that is ACTUALLY ENFORCEABLE, after the floor:
-# ceiling minus floor minus baseline. This is NOT a promise that any
-# particular retry fits -- the largest one does not. It is the amount a
-# retry may automatically consume before the gate stops and asks.
-ENFORCEABLE_RECOVERY_MARGIN_HOURS = 4.195
-# Retained as the SIZE OF THE LARGEST CELL, which is what a retry of it
-# would cost. Deliberately no longer called a guaranteed reserve: it
-# exceeds the enforceable margin above by 0.054 h.
-CONTINGENCY_RESERVE_HOURS = 4.25
-LARGEST_CELL_RETRY_HOURS = 4.249
-# The gate sums per-cell constants rounded to three decimals while the
-# published baseline is computed from unrounded values. The ACTUAL gap
-# is 0.0022 h (7.9 s); this is set to 0.005 h so the reconciliation is
-# not itself a source of slack. It is arithmetic, not margin: about
-# eighteen seconds, 0.1 per cent of the contingency. Drift beyond it
-# still halts.
-BASELINE_ROUNDING_TOLERANCE_HOURS = 0.005
+BASELINE_BUDGET_HOURS = 34.805
 # The user's rule of 2026-08-07: a projection under the ceiling is NOT a
 # clearance to run if the margin is negligible. Under this much headroom
 # execution returns to the user. Enforced here rather than only stated
@@ -283,6 +266,32 @@ BASELINE_ROUNDING_TOLERANCE_HOURS = 0.005
 # Measured against the BASELINE budget, since the contingency above it
 # is reserved for a forced retry and is not ordinary headroom.
 HEADROOM_FLOOR_HOURS = 1.0
+
+# DERIVED, never hand-written: ceiling minus floor minus baseline. An
+# earlier version hard-coded 4.195 while the reconciliation derived
+# 4.197 from a different baseline, publishing one quantity as two
+# numbers. This is NOT a promise that any particular retry fits -- the
+# largest one does not. It is what a retry may automatically consume
+# before the gate stops and asks.
+ENFORCEABLE_RECOVERY_MARGIN_HOURS = round(
+    PER_IDENTITY_CEILING_HOURS - HEADROOM_FLOOR_HOURS
+    - BASELINE_BUDGET_HOURS, 4)
+
+
+def largest_cell_retry_hours() -> float:
+    """What a retry of the most expensive cell would cost.
+
+    Read from the live per-cell table rather than duplicated as a
+    constant, so it cannot drift from the cost the gate actually
+    charges."""
+    return max(CELL_PROJECTED_HOURS.values())
+# The gate sums per-cell constants rounded to three decimals while the
+# published baseline is computed from unrounded values. The ACTUAL gap
+# is 0.0022 h (7.9 s); this is set to 0.005 h so the reconciliation is
+# not itself a source of slack. It is arithmetic, not margin: about
+# eighteen seconds, 0.1 per cent of the contingency. Drift beyond it
+# still halts.
+BASELINE_ROUNDING_TOLERANCE_HOURS = 0.005
 CORE_CEILING_HOURS = 180.0
 MEMORY_CEILING_FRACTION = 0.80
 IDENTITY_BASELINE_HOURS = {"pretrained_smollm2_135m": 2.29222,
@@ -1753,19 +1762,38 @@ def contingency_unlocked_hours(identity: str,
     for retry in retry_ledger["retries"]:
         if retry.get("identity") != identity:
             continue
-        released += CELL_PROJECTED_HOURS.get(
-            (retry.get("arm"), retry.get("scale")),
-            CONTINGENCY_RESERVE_HOURS)
-    return min(released, CONTINGENCY_RESERVE_HOURS)
+        key = (retry.get("arm"), retry.get("scale"))
+        if key not in CELL_PROJECTED_HOURS:
+            raise AssertionError(
+                f"RETRY LEDGER UNSIZEABLE: {key} is not a known cell, "
+                f"so the recovery allowance it releases cannot be "
+                f"determined. Refusing rather than falling back to the "
+                f"full reserve.")
+        released += CELL_PROJECTED_HOURS[key]
+    # Capped at the ENFORCEABLE margin. Releasing more than the gate
+    # will tolerate would be a number with no effect, and naming a
+    # larger "reserve" is what produced the withdrawn guarantee.
+    return min(released, ENFORCEABLE_RECOVERY_MARGIN_HOURS)
 
 
 def record_forced_retry(arm: str, scale: str, seed: int, reason: str,
                         evidence: str) -> dict:
     """Record ONE forced retry, or refuse.
 
-    The 40-hour ceiling authorises capacity for at most one forced retry
-    across the pretrained programme. A second requires a fresh user
-    decision, so it is refused here rather than absorbed."""
+    At most one per identity, and even that is NOT guaranteed to be
+    runnable: whether it may proceed is decided separately by
+    retry_admissible against the unchanged ceiling and floor, and the
+    largest cell does not fit. A second retry requires a fresh user
+    decision, so it is refused here rather than absorbed.
+
+    Validates the cell, because an unrecognised (arm, scale) would make
+    the sizing lookup fall back to the whole reserve -- the binary
+    unlock that sizing exists to prevent."""
+    if (arm, scale, seed) not in CORE_CELLS:
+        sys.exit(
+            f"RETRY REFUSED: {arm}/{scale}/seed{seed} is not one of the "
+            f"18 core cells, so its cost cannot be sized and the "
+            f"recovery allowance would fall back to the full reserve.")
     if reason in FORBIDDEN_RETRY_REASONS:
         sys.exit(
             f"RETRY REFUSED: {reason!r} is not an execution failure. A "
@@ -1852,9 +1880,31 @@ def retry_admissible(arm: str, scale: str, seed: int,
     floor, not a cell, not an intervention, not a seed, not a scale."""
     identity = model_identity(arm)
     projected = CELL_PROJECTED_HOURS.get((arm, scale), 0.0)
-    gate = per_identity_gate(arm, projected, ledger=ledger,
-                             cell=(arm, scale, seed))
-    fits = not gate["fires"]
+    # PROSPECTIVE. This answers "may this retry proceed?", which must be
+    # answerable BEFORE the retry is recorded -- an operator asks it to
+    # decide, and recording first would be recording a retry that might
+    # then be refused. So the allowance the retry would release is added
+    # here rather than read from a ledger entry that does not exist yet.
+    # Without this the check returned a false negative on exactly the
+    # cheap retry the policy intends to admit.
+    prospective = per_identity_gate(arm, projected, ledger=ledger,
+                                    cell=(arm, scale, seed))
+    already_recorded = retries_taken(identity) > 0
+    would_release = 0.0 if already_recorded else projected
+    total = prospective["projected_total_hours"]
+    over_ceiling = total > PER_IDENTITY_CEILING_HOURS
+    under_floor = (PER_IDENTITY_CEILING_HOURS - total) < HEADROOM_FLOOR_HOURS
+    over_baseline = (total > BASELINE_BUDGET_HOURS
+                     + BASELINE_ROUNDING_TOLERANCE_HOURS
+                     + contingency_unlocked_hours(identity)
+                     + would_release)
+    fits = not (over_ceiling or under_floor or over_baseline)
+    gate = dict(prospective)
+    gate["fire_reason"] = (
+        "over the 40 h ceiling" if over_ceiling else
+        "under the headroom floor" if under_floor else
+        "drifted past the measured baseline beyond what this retry "
+        "releases" if over_baseline else None)
     return {
         "arm": arm, "scale": scale, "seed": seed, "identity": identity,
         "retry_cost_hours": projected,
@@ -1865,6 +1915,12 @@ def retry_admissible(arm: str, scale: str, seed: int,
             ENFORCEABLE_RECOVERY_MARGIN_HOURS,
         "admissible": bool(fits),
         "blocking_reason": gate["fire_reason"],
+        "cap_allows_another_retry": (
+            retries_taken(identity) < MAX_FORCED_RETRIES_PER_IDENTITY),
+        "evaluated_prospectively": True,
+        "prospective_note": "answered BEFORE the retry is recorded, so "
+                            "an operator can decide without first "
+                            "committing a retry that might be refused",
         "if_not_admissible": "STOP and request explicit user approval. "
                              "Do NOT raise the ceiling, waive the "
                              "floor, drop a cell, drop an intervention, "
@@ -1933,7 +1989,12 @@ def per_identity_gate(arm: str, additional_hours: float = 0.0,
             # visible here rather than folded into the projection, so a
             # drifting estimate cannot quietly spend it.
             "baseline_budget_hours": BASELINE_BUDGET_HOURS,
-            "contingency_reserve_hours": CONTINGENCY_RESERVE_HOURS,
+            "enforceable_recovery_margin_hours":
+                ENFORCEABLE_RECOVERY_MARGIN_HOURS,
+            "largest_cell_retry_hours": largest_cell_retry_hours(),
+            "largest_retry_fits_automatically": (
+                largest_cell_retry_hours()
+                <= ENFORCEABLE_RECOVERY_MARGIN_HOURS),
             "baseline_headroom_hours": round(
                 BASELINE_BUDGET_HOURS - total, 4),
             "over_baseline": (

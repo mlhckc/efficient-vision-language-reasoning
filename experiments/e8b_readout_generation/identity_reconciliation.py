@@ -171,7 +171,7 @@ def derive(existing: dict, projection: dict) -> dict:
     # 1.0 h floor is deducted, because a projection that reaches it
     # halts just as surely as one that reaches the ceiling.
     enforceable = (gate["headroom_hours"]
-                   - body.get("headroom_floor_hours", 1.0))
+                   - e8b_run.HEADROOM_FLOOR_HOURS)
     body["enforceable_margin_hours"] = round(enforceable, 4)
 
     # The two risks that phase C and B were run to close are CLOSED by
@@ -201,7 +201,7 @@ def derive(existing: dict, projection: dict) -> dict:
                 f"completed search runs. A forced B3/250k retry costs "
                 f"{worst} h against an ENFORCEABLE recovery margin of "
                 f"{round(enforceable, 3)} h -- the headroom less the "
-                f"{body.get('headroom_floor_hours', 1.0)} h floor -- so "
+                f"{e8b_run.HEADROOM_FLOOR_HOURS} h floor -- so "
                 f"it does NOT fit automatically and MUST stop for a "
                 f"fresh explicit user decision. That is the authorised "
                 f"policy of 2026-08-08 (option 3), not a defect: the "
@@ -219,7 +219,7 @@ def derive(existing: dict, projection: dict) -> dict:
         risk["judged_against"] = ("the ENFORCEABLE margin "
                                   f"({round(enforceable, 3)} h), which "
                                   f"is the headroom less the "
-                                  f"{body.get('headroom_floor_hours', 1.0)}"
+                                  f"{e8b_run.HEADROOM_FLOOR_HOURS}"
                                   f" h floor")
     exhausting = [r for r in body.get("open_risks", [])
                   if r["can_exhaust_the_margin"]]
@@ -266,7 +266,10 @@ def derive(existing: dict, projection: dict) -> dict:
     # ceiling is NOT a pass if the margin is negligible. Under one
     # GPU-hour of headroom returns to the user rather than starting
     # training.
-    HEADROOM_FLOOR_HOURS = 1.0
+    # Read from the single definition rather than duplicated, so a
+    # change to the floor cannot leave this record deriving from a
+    # stale value for a generation cycle.
+    HEADROOM_FLOOR_HOURS = e8b_run.HEADROOM_FLOOR_HOURS
     thin = (not breaches
             and gate["headroom_hours"] < HEADROOM_FLOOR_HOURS)
     body["ceiling_amended_20260808"] = {
@@ -289,7 +292,11 @@ def derive(existing: dict, projection: dict) -> dict:
         "recovery_margin_is_for": "at most ONE forced retry, and only "
                                   "if that retry fits the unchanged "
                                   "ceiling and floor when recomputed "
-                                  "from actual charged usage",
+                                  "from actual charged usage. The "
+                                  "largest cell does NOT fit.",
+        "largest_cell_retry_hours": e8b_run.largest_cell_retry_hours(),
+        "enforceable_recovery_margin_hours":
+            e8b_run.ENFORCEABLE_RECOVERY_MARGIN_HOURS,
         "ordinary_execution_is_gated_against": "the measured baseline, "
                                                "not the ceiling",
         "record": "resource_governance_amendment_20260808.json"}
@@ -342,11 +349,15 @@ def derive(existing: dict, projection: dict) -> dict:
         f"approval. The complete MEASURED programme projects to "
         f"{gate['projected_hours']} h against the amended "
         f"{gate['ceiling_hours']} h ceiling, leaving "
-        f"{gate['headroom_hours']} h. Of that, "
-        f"{body['ceiling_amended_20260808']['contingency_reserve_hours']} "
-        f"h is CONTINGENCY held for at most ONE worst-case forced "
-        f"retry and is not ordinary headroom: routine execution is "
-        f"gated against the "
+        f"{gate['headroom_hours']} h of raw headroom. The 1.0 h "
+        f"operational floor is enforced against the ceiling, so the "
+        f"ENFORCEABLE automatic recovery margin is "
+        f"{round(enforceable, 3)} h -- LESS than the "
+        f"{body['ceiling_amended_20260808']['largest_cell_retry_hours']} "
+        f"h largest cell. A worst-case retry therefore does NOT fit "
+        f"automatically and halts for a fresh decision; that is the "
+        f"authorised policy of 2026-08-08, not a defect. Routine "
+        f"execution is gated against the "
         f"{body['ceiling_amended_20260808']['baseline_budget_hours']} h "
         f"measured baseline, so an estimate that merely drifts halts "
         f"rather than quietly spending the recovery margin. The "

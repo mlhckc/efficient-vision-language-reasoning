@@ -142,7 +142,10 @@ N_DEV = 7714       # in-vocabulary development rows
 N_RAW = 10004      # raw development denominator (plan section 6)
 # IDENT_H amended 2026-08-08 from 35.0 to 40.0 by explicit user
 # authorisation: a resource-governance change made before any core cell
-# ran, sized as the measured programme plus one worst-case forced retry.
+# ran. It is NOT sized to guarantee a worst-case retry -- that claim was
+# withdrawn. The 1.0 h operational floor leaves an enforceable margin of
+# 4.195 h against a 4.249 h largest cell, so the worst-case retry halts
+# for a fresh decision, intentionally.
 WALL_H, IDENT_H, CORE_H, MEM_FRACTION = 8.0, 40.0, 180.0, 0.80
 IDENT_H_PREVIOUS, IDENT_H_AMENDED_ON = 35.0, "2026-08-08"
 # The measured complete programme, and the retry capacity held above it.
@@ -347,11 +350,14 @@ def main() -> int:
                         "interventions, and every already-spent search, "
                         "characterisation, validation and probe hour "
                         "that loaded the pretrained checkpoint",
-            "retry_allowance": "AMENDED 2026-08-08: capacity for AT "
-                               "MOST ONE forced retry, sized on the "
-                               "largest final cell and held as a "
-                               "separate contingency reserve above the "
-                               "measured baseline. Permitted only for "
+            "retry_allowance": "AMENDED 2026-08-08, then CORRECTED the "
+                               "same day: at most ONE forced retry, and "
+                               "NOT guaranteed. The enforceable margin "
+                               "is 4.195 h after the 1.0 h operational "
+                               "floor, against a 4.249 h largest cell, "
+                               "so a worst-case retry does not fit and "
+                               "halts for a fresh decision. A retry of "
+                               "a cheaper cell does fit. Permitted only "
                                "an objectively failed execution; a "
                                "performance-driven rerun is refused by "
                                "name in code. A second retry stops and "

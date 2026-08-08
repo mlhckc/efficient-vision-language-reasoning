@@ -2761,10 +2761,13 @@ def test_audit_known_negatives() -> None:
               recon["verdict"].startswith("CLEARED ON RESOURCES")
               and "pending the user's final execution approval"
               in recon["verdict"])
-        check("the verdict separates contingency from headroom",
-              "CONTINGENCY held for at most ONE worst-case forced "
-              "retry" in recon["verdict"]
-              and "not ordinary headroom" in recon["verdict"])
+        check("the verdict distinguishes raw headroom from the "
+              "ENFORCEABLE margin, and says the largest retry does not "
+              "fit",
+              "raw headroom" in recon["verdict"]
+              and "ENFORCEABLE automatic recovery margin"
+              in recon["verdict"]
+              and "does NOT fit" in recon["verdict"])
         check("the verdict says drift halts rather than spending the "
               "reserve",
               "rather than quietly spending the recovery margin"
@@ -3884,14 +3887,17 @@ def test_governance_amendment() -> None:
     largest = published["per_cell_hours"]["lm_train_250k"]
     check("the largest final cell is about 4.25 h, the retry basis",
           abs(largest - 4.25) < 0.05, str(largest))
-    check("the contingency reserve equals one worst-case cell",
-          abs(e8b_run.CONTINGENCY_RESERVE_HOURS - 4.25) < 0.01)
-    check("baseline plus contingency does not exceed the ceiling",
-          e8b_run.BASELINE_BUDGET_HOURS
-          + e8b_run.CONTINGENCY_RESERVE_HOURS
-          <= e8b_run.PER_IDENTITY_CEILING_HOURS + 0.06,
-          f"{e8b_run.BASELINE_BUDGET_HOURS} + "
-          f"{e8b_run.CONTINGENCY_RESERVE_HOURS}")
+    check("the largest cell is read live, not duplicated as a constant",
+          abs(e8b_run.largest_cell_retry_hours() - 4.249) < 0.01)
+    check("the enforceable margin is DERIVED, on one basis only",
+          abs(e8b_run.ENFORCEABLE_RECOVERY_MARGIN_HOURS
+              - (e8b_run.PER_IDENTITY_CEILING_HOURS
+                 - e8b_run.HEADROOM_FLOOR_HOURS
+                 - e8b_run.BASELINE_BUDGET_HOURS)) < 1e-9)
+    check("the largest retry does NOT fit the enforceable margin, and "
+          "the code says so rather than implying otherwise",
+          e8b_run.largest_cell_retry_hours()
+          > e8b_run.ENFORCEABLE_RECOVERY_MARGIN_HOURS)
 
     # --- the two-level gate ---
     first = e8b_run.per_identity_gate(
@@ -3902,10 +3908,14 @@ def test_governance_amendment() -> None:
               - gate_record["projected_hours"]) < 0.01)
     check("the first cell now CLEARS the gate",
           first["fires"] is False and first["fire_reason"] is None)
-    check("the contingency is reported SEPARATELY, not folded into the "
-          "baseline",
-          first["baseline_budget_hours"] == 34.803
-          and first["contingency_reserve_hours"] == 4.25
+    check("the recovery margin is reported SEPARATELY from the "
+          "baseline, and the gate states outright that the largest "
+          "retry does not fit it",
+          first["baseline_budget_hours"]
+          == e8b_run.BASELINE_BUDGET_HOURS
+          and first["enforceable_recovery_margin_hours"]
+          == e8b_run.ENFORCEABLE_RECOVERY_MARGIN_HOURS
+          and first["largest_retry_fits_automatically"] is False
           and first["contingency_unlocked"] is False)
     # Drift must halt rather than eat the reserve.
     drifted = {"cells": {
@@ -4009,24 +4019,69 @@ def test_governance_amendment() -> None:
 
     # The withdrawn guarantee must not survive anywhere.
     withdrawn = amendment["superseded_claims"][0]
+    # Parenthesised: `A and B or C` bound as `(A and B) or C` and let the
+    # status assertion be skipped whenever the claim mentioned a
+    # guarantee.
     check("the guarantee claim is recorded as WITHDRAWN",
-          "WITHDRAWN" in withdrawn["status"]
-          and "guarantees capacity" in withdrawn["claim"]
-          or "guarantee" in withdrawn["claim"])
-    # Comment text wraps across lines, so compare on a flattened form.
-    run_source = (E8B_DIR / "run.py").read_text()
-    flat = " ".join(run_source.replace("#", " ").split())
-    check("the guarantee wording survives ONLY inside its own explicit "
-          "withdrawal",
-          "THAT CLAIM IS WITHDRAWN" in flat
-          and flat.count("worst-case forced retry")
-          == flat.count('"provides capacity for the measured complete '
-                        'programme plus at most one worst-case forced '
-                        'retry". THAT CLAIM IS WITHDRAWN'),
-          f"{flat.count('worst-case forced retry')} mentions")
+          ("WITHDRAWN" in withdrawn["status"]
+           and "guarantee" in withdrawn["claim"]))
+    # The withdrawn guarantee must not survive ANYWHERE. An earlier
+    # version of this guard scanned run.py only, and the claim was
+    # meanwhile standing as the concluding verdict of the authoritative
+    # reconciliation record and in the projection generator's rationale.
+    # Every governance source and every generated record body is
+    # scanned now, on a whitespace-flattened form because the text
+    # wraps.
+    def flatten(text):
+        return " ".join(text.replace("#", " ").split())
+
+    scanned, offenders = [], []
+    WITHDRAWAL_CONTEXT = "THAT CLAIM IS WITHDRAWN"
+    GUARANTEE_PHRASES = (
+        "capacity for at most one forced retry",
+        "capacity for AT MOST ONE forced retry",
+        "at most ONE worst-case forced retry",
+        "one worst-case forced retry",
+        "CONTINGENCY held for at most ONE worst-case forced retry",
+        "sized as the measured programme plus one worst-case forced "
+        "retry")
+    for source in ("run.py", "core_resource_projection.py",
+                   "identity_reconciliation.py", "training.py"):
+        flat = flatten((E8B_DIR / source).read_text())
+        scanned.append(source)
+        for phrase in GUARANTEE_PHRASES:
+            if phrase in flat and WITHDRAWAL_CONTEXT not in flat \
+                    and "withdraw" not in flat.lower():
+                offenders.append(f"{source}: {phrase!r}")
+    for record in ("resource_governance_amendment_20260808",
+                   "core_resource_projection_20260807",
+                   "identity_reconciliation_20260807"):
+        flat = flatten(json.dumps(json.loads(
+            (results / f"{record}.json").read_text())))
+        scanned.append(record)
+        for phrase in GUARANTEE_PHRASES:
+            # Case-insensitive: the withdrawal appears both as prose
+            # ("WITHDRAWN") and as a field name ("guarantee_withdrawn").
+            if phrase in flat and "withdraw" not in flat.lower():
+                offenders.append(f"{record}: {phrase!r}")
+    check(f"the withdrawn guarantee survives nowhere "
+          f"({len(scanned)} sources and records scanned)",
+          offenders == [], "; ".join(offenders[:4]))
+    check("the guard scans the generated records, not only run.py",
+          len(scanned) >= 7)
+    run_flat = flatten((E8B_DIR / "run.py").read_text())
     check("the correct enforceable arithmetic is stated in the code",
-          "ENFORCEABLE automatic recovery margin" in flat
-          and "4.195" in flat and "4.249" in flat and "0.054" in flat)
+          "ENFORCEABLE automatic recovery margin" in run_flat
+          and "4.195" in run_flat and "4.249" in run_flat
+          and "0.054" in run_flat)
+    # And the concluding verdict must state the negative outright.
+    verdict = json.loads(
+        (results / "identity_reconciliation_20260807.json").read_text()
+    )["e8b_identity_reconciliation"]["verdict"]
+    check("the reconciliation's own verdict says the worst-case retry "
+          "does NOT fit",
+          "does NOT fit" in verdict
+          and "halts for a fresh decision" in verdict)
     reconciliation = json.loads(
         (results / "identity_reconciliation_20260807.json").read_text()
     )["e8b_identity_reconciliation"]
@@ -4072,10 +4127,18 @@ def test_governance_amendment() -> None:
             gate_after = e8b_run.per_identity_gate(
                 "B3", worst, ledger=burned,
                 cell=("B3", "train_250k", 0))
-            check("the recovery allowance is sized to the actual cell, "
-                  "never a binary unlock",
-                  abs(gate_after["contingency_unlocked_hours"] - worst)
-                  < 0.01)
+            # Sized to the cell, then capped at the enforceable
+            # margin: releasing more than the gate tolerates would be a
+            # number with no effect.
+            expected = min(worst,
+                           e8b_run.ENFORCEABLE_RECOVERY_MARGIN_HOURS)
+            check("the recovery allowance is sized to the actual cell "
+                  "and capped at the enforceable margin, never a "
+                  "binary unlock",
+                  abs(gate_after["contingency_unlocked_hours"]
+                      - expected) < 0.01,
+                  f"{gate_after['contingency_unlocked_hours']} vs "
+                  f"{expected}")
         finally:
             e8b_run.RETRY_LEDGER = original
     with tempfile.TemporaryDirectory() as tmp:
