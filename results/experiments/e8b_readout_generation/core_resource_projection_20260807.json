@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-08T00:49:06",
-    "git_commit": "247579b",
+    "timestamp": "2026-08-08T01:10:03",
+    "git_commit": "5456a12",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -90,7 +90,7 @@
         "ceiling_hours": 40.0,
         "headroom_hours": 5.197,
         "includes": "the COMPLETE planned pretrained-identity programme: A1 baseline, A4, A7c, all six B3 core cells, B3's final R2/R3 readouts and interventions, and every already-spent search, characterisation, validation and probe hour that loaded the pretrained checkpoint",
-        "retry_allowance": "NONE. The plan tolerates zero B3 retries; any retry or any additional B3-loading evaluation triggers a stop-and-ask BEFORE execution",
+        "retry_allowance": "AMENDED 2026-08-08: capacity for AT MOST ONE forced retry, sized on the largest final cell and held as a separate contingency reserve above the measured baseline. Permitted only for an objectively failed execution; a performance-driven rerun is refused by name in code. A second retry stops and returns to the user. The previous wording, 'NONE, the plan tolerates zero B3 retries', described the 35 h ceiling and is superseded.",
         "fires": false
       },
       "random_identity_35h": {

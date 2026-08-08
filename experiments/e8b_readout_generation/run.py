@@ -236,6 +236,18 @@ WALL_CLOCK_HALT_HOURS = 8.0
 #   * a ceiling close to 35-36 h would provide nominal PASS status but
 #     no meaningful operational recovery margin.
 #
+# CORRECTION, same day, raised by the narrow governance review: the
+# third bullet does NOT hold as written. The 1.0 h headroom floor below
+# is enforced unconditionally against the ceiling, so usable capacity is
+# 39.0 h and the enforceable retry margin is about 4.195 h against a
+# 4.249 h worst-case cell -- short by roughly three minutes. A
+# worst-case retry therefore halts under the floor instead of
+# proceeding. The failure is SAFE (it stops and asks) but it lands
+# exactly where the contingency was supposed to avoid asking. Neither
+# the ceiling nor the floor was moved to paper over this; it is recorded
+# in resource_governance_amendment_20260808.json for the user to
+# decide.
+#
 # No scientific component was changed to obtain this margin. The 18
 # cells, the recipe, the 22-epoch endpoint, the denominator, the three
 # interventions and both scorers are all exactly as frozen.
@@ -252,12 +264,13 @@ BASELINE_BUDGET_HOURS = 34.803
 # final cell. Held separately and visibly, never folded into the
 # baseline projection.
 CONTINGENCY_RESERVE_HOURS = 4.25
-# The gate sums per-cell constants rounded to three decimals, while the
-# published baseline is computed from unrounded values, so the two
-# differ by a few thousandths of an hour. This reconciles that and
-# NOTHING ELSE: it is about eight seconds, it is arithmetic, and it is
-# not operational slack. Drift beyond it still halts.
-BASELINE_ROUNDING_TOLERANCE_HOURS = 0.01
+# The gate sums per-cell constants rounded to three decimals while the
+# published baseline is computed from unrounded values. The ACTUAL gap
+# is 0.0022 h (7.9 s); this is set to 0.005 h so the reconciliation is
+# not itself a source of slack. It is arithmetic, not margin: about
+# eighteen seconds, 0.1 per cent of the contingency. Drift beyond it
+# still halts.
+BASELINE_ROUNDING_TOLERANCE_HOURS = 0.005
 # The user's rule of 2026-08-07: a projection under the ceiling is NOT a
 # clearance to run if the margin is negligible. Under this much headroom
 # execution returns to the user. Enforced here rather than only stated
@@ -1719,6 +1732,28 @@ def retries_taken(identity: str, ledger: dict | None = None) -> int:
                if r.get("identity") == identity)
 
 
+def contingency_unlocked_hours(identity: str,
+                               retry_ledger: dict | None = None
+                               ) -> float:
+    """How much contingency a recorded retry actually releases.
+
+    SIZED to the retried cell, not binary. An earlier version unlocked
+    the whole reserve the moment any retry existed, so retrying the
+    cheapest cell (1.718 h) would have released about 4.19 h of
+    unchecked estimate drift -- defeating the baseline gate that is the
+    only thing standing between drift and the recovery margin."""
+    retry_ledger = (read_retry_ledger() if retry_ledger is None
+                    else retry_ledger)
+    released = 0.0
+    for retry in retry_ledger["retries"]:
+        if retry.get("identity") != identity:
+            continue
+        released += CELL_PROJECTED_HOURS.get(
+            (retry.get("arm"), retry.get("scale")),
+            CONTINGENCY_RESERVE_HOURS)
+    return min(released, CONTINGENCY_RESERVE_HOURS)
+
+
 def record_forced_retry(arm: str, scale: str, seed: int, reason: str,
                         evidence: str) -> dict:
     """Record ONE forced retry, or refuse.
@@ -1755,10 +1790,44 @@ def record_forced_retry(arm: str, scale: str, seed: int, reason: str,
         "reason_meaning": PERMITTED_RETRY_REASONS[reason],
         "evidence": evidence,
         "utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())})
+    # Written under the SAME lock discipline as the spend ledger, and
+    # for the same reason: it lives on shared storage, so an
+    # unsynchronised read-modify-write through a fixed staging name lets
+    # two writers clobber each other and a ledger showing one retry
+    # could hide two.
     RETRY_LEDGER.parent.mkdir(parents=True, exist_ok=True)
-    temporary = RETRY_LEDGER.with_name(RETRY_LEDGER.name + ".tmp")
-    temporary.write_text(json.dumps(ledger, indent=2) + "\n")
-    os.replace(temporary, RETRY_LEDGER)
+    guard = RETRY_LEDGER.with_name(RETRY_LEDGER.name + ".lock")
+    descriptor = None
+    for _ in range(60):
+        try:
+            descriptor = os.open(guard,
+                                 os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+            break
+        except FileExistsError:
+            time.sleep(0.5)
+    if descriptor is None:
+        raise AssertionError(
+            f"RETRY LEDGER LOCKED: {guard.name} was held for 30 "
+            f"seconds; refusing to write unsynchronised.")
+    try:
+        os.close(descriptor)
+        # Re-read under the lock and re-check the cap: another writer
+        # may have recorded the one permitted retry in the meantime.
+        current = read_retry_ledger()
+        if retries_taken(identity, current) \
+                >= MAX_FORCED_RETRIES_PER_IDENTITY:
+            sys.exit(
+                f"RETRY REFUSED: another process recorded the "
+                f"{identity} identity's one authorised retry while this "
+                f"one waited. Execution stops and returns to the user.")
+        current["retries"].append(ledger["retries"][-1])
+        temporary = RETRY_LEDGER.with_name(
+            f"{RETRY_LEDGER.name}.{os.getpid()}.tmp")
+        temporary.write_text(json.dumps(current, indent=2) + "\n")
+        os.replace(temporary, RETRY_LEDGER)
+        ledger = current
+    finally:
+        guard.unlink(missing_ok=True)
     return ledger
 
 
@@ -1830,6 +1899,9 @@ def per_identity_gate(arm: str, additional_hours: float = 0.0,
                 + BASELINE_ROUNDING_TOLERANCE_HOURS),
             "forced_retries_taken": (retries_taken(identity)
                                      if identity != "none" else 0),
+            "contingency_unlocked_hours": (
+                round(contingency_unlocked_hours(identity), 4)
+                if identity != "none" else 0.0),
             "contingency_unlocked": (
                 identity != "none"
                 and retries_taken(identity) > 0),
@@ -1850,7 +1922,7 @@ def per_identity_gate(arm: str, additional_hours: float = 0.0,
                           < HEADROOM_FLOOR_HOURS
                           or (total > BASELINE_BUDGET_HOURS
                               + BASELINE_ROUNDING_TOLERANCE_HOURS
-                              and retries_taken(identity) == 0)),
+                              + contingency_unlocked_hours(identity))),
             "fire_reason": (
                 "over the 40 h ceiling"
                 if total > PER_IDENTITY_CEILING_HOURS else
@@ -1863,7 +1935,8 @@ def per_identity_gate(arm: str, additional_hours: float = 0.0,
                 if (identity != "none"
                     and total > BASELINE_BUDGET_HOURS
                     + BASELINE_ROUNDING_TOLERANCE_HOURS
-                    and retries_taken(identity) == 0) else None)}
+                    + contingency_unlocked_hours(identity))
+                else None)}
 
 
 def charge_identity_hours(arm: str, scale: str, seed: int,

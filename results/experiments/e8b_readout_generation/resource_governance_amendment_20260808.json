@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-08T00:49:07",
-    "git_commit": "247579b",
+    "timestamp": "2026-08-08T01:10:45",
+    "git_commit": "5456a12",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -117,6 +117,34 @@
       "denominator_restriction": "REJECTED",
       "interventions": "none removed"
     },
-    "clean_test_accessed": false
+    "clean_test_accessed": false,
+    "CORRECTION_the_ceiling_does_not_quite_buy_what_was_intended": {
+      "dated_utc": "2026-08-08",
+      "raised_by": "the narrow governance review",
+      "the_claim_as_recorded": "a 40 h ceiling provides capacity for the measured complete programme plus at most one worst-case forced retry",
+      "why_it_does_not_hold": "the amendment did not account for the project's own 1.0 GPU-hour headroom floor, which per_identity_gate enforces unconditionally against the ceiling. Usable capacity is therefore 39.0 h, not 40.0 h.",
+      "arithmetic": {
+        "ceiling_hours": 40.0,
+        "headroom_floor_hours": 1.0,
+        "usable_capacity_hours": 39.0,
+        "gate_baseline_hours": 34.8052,
+        "enforceable_retry_margin_hours": 4.1948,
+        "worst_case_cell_hours": 4.249,
+        "shortfall_hours": 0.0542,
+        "shortfall_minutes": 3.3
+      },
+      "verified_by_execution": "a worst-case B3/train_250k retry, with the retry properly recorded, halts at 39.0542 h with fire_reason 'under the headroom floor'",
+      "direction_of_failure": "SAFE. It halts and returns to the user; it does not over-spend and it causes no scientific harm. But the halt arrives exactly where the contingency was meant to remove the need for a fresh decision, which is the one thing the raise was authorised to buy.",
+      "options_for_the_user_NONE_TAKEN": [
+        "raise the ceiling to about 40.1 h so the floor and one worst-case retry both fit",
+        "exempt a RECORDED forced retry from the headroom floor, on the grounds that the floor exists to stop a programme STARTING with no recovery margin, not to block the recovery itself",
+        "accept that a worst-case retry halts for a fresh decision, which costs one round trip and nothing else"
+      ],
+      "not_decided_here": "the ceiling was not moved and the floor was not weakened. Both are the user's to set.",
+      "affected_downstream_claims_corrected": [
+        "the rationale text in run.py and in this record now carries this correction beside it",
+        "the forced-retry risk row is re-derived against the ENFORCEABLE margin rather than the raw headroom"
+      ]
+    }
   }
 }

@@ -197,10 +197,21 @@ def derive(existing: dict, projection: dict) -> dict:
     # Classified explicitly, then counted: a risk can exhaust the margin
     # if the hours it carries exceed the headroom. Two of the six are
     # not hours risks at all and must not be counted as if they were.
+    # Judged against the ENFORCEABLE margin, not the raw headroom: the
+    # 1.0 h floor is deducted, because a projection that reaches it
+    # halts just as surely as one that reaches the ceiling.
+    enforceable = (gate["headroom_hours"]
+                   - body.get("headroom_floor_hours", 1.0))
+    body["enforceable_margin_hours"] = round(enforceable, 4)
     for risk in body.get("open_risks", []):
         carried = risk.get("carries_hours")
         risk["can_exhaust_the_margin"] = bool(
-            carried is not None and carried > gate["headroom_hours"])
+            carried is not None and carried > enforceable)
+        risk["judged_against"] = ("the ENFORCEABLE margin "
+                                  f"({round(enforceable, 3)} h), which "
+                                  f"is the headroom less the "
+                                  f"{body.get('headroom_floor_hours', 1.0)}"
+                                  f" h floor")
     exhausting = [r for r in body.get("open_risks", [])
                   if r["can_exhaust_the_margin"]]
     body["open_risks_summary"] = {
@@ -262,8 +273,20 @@ def derive(existing: dict, projection: dict) -> dict:
         "record": "resource_governance_amendment_20260808.json"}
     body["ceiling_breached"] = bool(breaches)
     body["headroom_floor_hours"] = HEADROOM_FLOOR_HOURS
+    body["enforceable_margin_note"] = (
+        "headroom under the ceiling is NOT all usable: the 1.0 h floor "
+        "halts execution before the ceiling is reached, so the margin "
+        "that can actually be spent is the headroom less the floor.")
     body["headroom_below_floor"] = bool(thin)
-    body["execution_may_start"] = bool(not breaches and not thin)
+    # Named for exactly what it is. It says the RESOURCE gate cleared;
+    # it does not authorise anything. Authorisation is
+    # TRAINING_AUTHORIZED and is a separate, explicit user act.
+    body["resource_gate_cleared"] = bool(not breaches and not thin)
+    body["execution_may_start"] = False
+    body["execution_may_start_note"] = (
+        "ALWAYS false in this record. Clearing the resource gate is not "
+        "authorisation to run; TRAINING_AUTHORIZED is the only thing "
+        "that starts a cell, and it is unchanged.")
     body["verdict"] = (
         f"UNDER THE CEILING BUT NOT CLEARED TO RUN. The complete "
         f"MEASURED programme projects to {gate['projected_hours']} h "

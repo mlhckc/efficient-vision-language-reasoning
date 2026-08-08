@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-08T00:50:18",
-    "git_commit": "247579b",
+    "timestamp": "2026-08-08T01:10:46",
+    "git_commit": "5456a12",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -142,13 +142,15 @@
         "carries_hours": 5.01,
         "exposure": "the measurement is at batch 128, the project default everywhere. At batch 16 the same pass costs 0.1405 s a row, which would roughly double this line, so the batch size is pinned and asserted rather than left to a caller.",
         "status": "CLOSED BY MEASUREMENT on 2026-08-07",
-        "can_exhaust_the_margin": false
+        "can_exhaust_the_margin": true,
+        "judged_against": "the ENFORCEABLE margin (4.197 h), which is the headroom less the 1.0 h floor"
       },
       {
         "risk": "the G14 per-row input is optimistic, not conservative",
         "detail": "the pooled 5.139 s/row measurement covers R1 brute force plus R1 cached only, while the live gate also runs r2_brute_force and r2_cached per row (clause C3). The 3.15 per cent margin does not cover two extra constrained walks over 224 rows x 12 cells.",
         "status": "OPEN and unquantified",
-        "can_exhaust_the_margin": false
+        "can_exhaust_the_margin": false,
+        "judged_against": "the ENFORCEABLE margin (4.197 h), which is the headroom less the 1.0 h floor"
       },
       {
         "risk": "the 250k training rate, now MEASURED and bias-corrected (was: unmeasured)",
@@ -156,26 +158,30 @@
         "carries_hours": 12.747,
         "exposure": "after correction it is ABOVE the assumption it replaced",
         "status": "CLOSED BY MEASUREMENT on 2026-08-07",
-        "can_exhaust_the_margin": true
+        "can_exhaust_the_margin": true,
+        "judged_against": "the ENFORCEABLE margin (4.197 h), which is the headroom less the 1.0 h floor"
       },
       {
         "risk": "a forced retry is unaffordable and not improbable",
         "detail": "G14 fired as a halting gate on one of the three completed search runs. One forced B3/250k retry costs 4.249 h against 5.197 h of headroom.",
         "status": "OPEN: the recorded retry allowance is NONE, and no contingency exists",
         "carries_hours": 4.249,
-        "can_exhaust_the_margin": false
+        "can_exhaust_the_margin": true,
+        "judged_against": "the ENFORCEABLE margin (4.197 h), which is the headroom less the 1.0 h floor"
       },
       {
         "risk": "the mandatory readout and intervention evaluation, now IMPLEMENTED (was: costed but not implemented)",
         "detail": "implemented on 2026-08-07 in final_evaluation.py and validated non-scientifically end to end against a frozen exploratory checkpoint. The remaining gap is the core caller itself, which cannot be written until a core cell exists to evaluate.",
         "status": "LARGELY CLOSED: the pipeline exists and is validated; only its core caller remains",
-        "can_exhaust_the_margin": false
+        "can_exhaust_the_margin": false,
+        "judged_against": "the ENFORCEABLE margin (4.197 h), which is the headroom less the 1.0 h floor"
       },
       {
         "risk": "the section-19 efficiency pass is charged to the pretrained identity only",
         "detail": "section 19 specifies the protocol per arm, so B2's share is missing from the random identity. Immaterial there (about 13 h of headroom), and over-charging the pretrained identity is the conservative direction.",
         "status": "DISCLOSED, immaterial",
-        "can_exhaust_the_margin": false
+        "can_exhaust_the_margin": false,
+        "judged_against": "the ENFORCEABLE margin (4.197 h), which is the headroom less the 1.0 h floor"
       }
     ],
     "one_component_was_removed": {
@@ -226,7 +232,7 @@
     ],
     "component_sum_hours": 34.803,
     "matches_generator": true,
-    "retry_allowance": "NONE. The plan tolerates zero B3 retries; any retry or any additional B3-loading evaluation triggers a stop-and-ask BEFORE execution",
+    "retry_allowance": "AMENDED 2026-08-08: capacity for AT MOST ONE forced retry, sized on the largest final cell and held as a separate contingency reserve above the measured baseline. Permitted only for an objectively failed execution; a performance-driven rerun is refused by name in code. A second retry stops and returns to the user. The previous wording, 'NONE, the plan tolerates zero B3 retries', described the 35 h ceiling and is superseded.",
     "omissions_found_and_corrected": {
       "count": 5,
       "derived": "this count comes from the list below, not from a sentence written beside it. An earlier version said 'five' above a list of four.",
@@ -249,14 +255,13 @@
       "protocol 13.2 range 0.500-1.000 h, charged at the upper bound",
       "B1 is charged at an upper bound and touches neither identity's 35-hour ceiling, though it counts toward the 180-hour core ceiling."
     ],
+    "enforceable_margin_hours": 4.197,
     "open_risks_summary": {
       "total": 6,
-      "can_exhaust_the_remaining_margin": 1,
+      "can_exhaust_the_remaining_margin": 3,
       "derived": "both counts come from the open_risks list itself. An earlier verdict said 'five open risks ... ANY ONE of them exhausts the margin' when there were six, two of which are not hours risks at all.",
       "not_hours_risks": [
-        "the evaluation pass cost, now MEASURED (was: R2/R3 unsourced)",
         "the G14 per-row input is optimistic, not conservative",
-        "a forced retry is unaffordable and not improbable",
         "the mandatory readout and intervention evaluation, now IMPLEMENTED (was: costed but not implemented)",
         "the section-19 efficiency pass is charged to the pretrained identity only"
       ]
@@ -274,9 +279,12 @@
     },
     "ceiling_breached": false,
     "headroom_floor_hours": 1.0,
+    "enforceable_margin_note": "headroom under the ceiling is NOT all usable: the 1.0 h floor halts execution before the ceiling is reached, so the margin that can actually be spent is the headroom less the floor.",
     "headroom_below_floor": false,
-    "execution_may_start": true,
-    "verdict": "CLEARED ON RESOURCES, pending the user's final execution approval. The complete MEASURED programme projects to 34.803 h against the amended 40.0 h ceiling, leaving 5.197 h. Of that, 4.25 h is CONTINGENCY held for at most ONE worst-case forced retry and is not ordinary headroom: routine execution is gated against the 34.803 h measured baseline, so an estimate that merely drifts halts rather than quietly spending the recovery margin. The ceiling was raised on RESOURCE grounds before any cell ran and with no result in existence, and no scientific component was changed to obtain the margin. Of the 6 open risks listed above, 1 could still on its own consume the contingency. TRAINING_AUTHORIZED is unchanged: no core cell may start without a separate explicit approval.",
+    "resource_gate_cleared": true,
+    "execution_may_start": false,
+    "execution_may_start_note": "ALWAYS false in this record. Clearing the resource gate is not authorisation to run; TRAINING_AUTHORIZED is the only thing that starts a cell, and it is unchanged.",
+    "verdict": "CLEARED ON RESOURCES, pending the user's final execution approval. The complete MEASURED programme projects to 34.803 h against the amended 40.0 h ceiling, leaving 5.197 h. Of that, 4.25 h is CONTINGENCY held for at most ONE worst-case forced retry and is not ordinary headroom: routine execution is gated against the 34.803 h measured baseline, so an estimate that merely drifts halts rather than quietly spending the recovery margin. The ceiling was raised on RESOURCE grounds before any cell ran and with no result in existence, and no scientific component was changed to obtain the margin. Of the 6 open risks listed above, 3 could still on its own consume the contingency. TRAINING_AUTHORIZED is unchanged: no core cell may start without a separate explicit approval.",
     "decision_required_from_user": null,
     "generator": "experiments/e8b_readout_generation/identity_reconciliation.py",
     "clean_test_accessed": false

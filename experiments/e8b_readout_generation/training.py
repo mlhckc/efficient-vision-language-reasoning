@@ -1348,12 +1348,18 @@ def train_core_cell(arm: str, scale: str, seed: int) -> int:
         arm, projected, cell=(arm, scale, seed))
     if identity_gate["fires"]:
         e8b_run.gate_halt(run_name, "G19_IDENTITY",
-                          f"the 35 GPU-hour ceiling for the "
-                          f"{identity_gate['identity']} model identity "
-                          f"would be exceeded: "
+                          f"resource gate fired for the "
+                          f"{identity_gate['identity']} identity: "
+                          f"{identity_gate['fire_reason']}. "
                           f"{identity_gate['already_charged_hours']} h "
-                          f"already charged plus {projected} h projected "
-                          f"for this cell",
+                          f"already charged, {projected} h projected "
+                          f"for this cell, "
+                          f"{identity_gate['projected_total_hours']} h "
+                          f"total against a "
+                          f"{identity_gate['ceiling_hours']} h ceiling "
+                          f"and a "
+                          f"{identity_gate['baseline_budget_hours']} h "
+                          f"baseline",
                           {"identity_gate": identity_gate})
     # The 180 GPU-hour core ceiling, executable for the same reason the
     # 35-hour one now is: it was a constant with no call site.
@@ -1383,11 +1389,43 @@ def train_core_cell(arm: str, scale: str, seed: int) -> int:
     # -lock reclamation is not implemented, because a wrongly reclaimed
     # lock means two processes training one cell.
     started = time.time()
+    # M2: a node or process failure is the FIRST permitted retry ground,
+    # and until now it was the one failure that charged nothing. The
+    # finally block below runs on a normal exception but not on a
+    # signal, so a SIGTERM -- what a scheduler sends when it evicts a
+    # job -- would have left a multi-hour burn recorded as zero, kept
+    # the identity at baseline, and let the drift clause pass a re-run
+    # it should have caught. Signals are now converted into ordinary
+    # exceptions so the finally block runs and the hours are charged.
+    #
+    # SIGKILL cannot be caught by anything, so a hard kill still loses
+    # its charge. That residual is disclosed rather than papered over:
+    # after any unexplained termination, compare the ledger against the
+    # scheduler's own accounting before starting the next cell.
+    import signal as _signal
+
+    def _charge_on_signal(signum, frame):
+        raise KeyboardInterrupt(
+            f"received signal {signum}; charging this process's hours "
+            f"before exiting")
+
+    previous_handlers = {}
+    for _sig in (_signal.SIGTERM, _signal.SIGINT, _signal.SIGHUP):
+        try:
+            previous_handlers[_sig] = _signal.signal(_sig,
+                                                     _charge_on_signal)
+        except (ValueError, OSError):
+            pass
     try:
         return _train_core_locked(
             arm, scale, seed, recipe, run_name, result_path,
             started, identity_gate, storage, remaining)
     finally:
+        for _sig, _handler in previous_handlers.items():
+            try:
+                _signal.signal(_sig, _handler)
+            except (ValueError, OSError):
+                pass
         # H-1: charge THIS PROCESS's hours whatever happened. A cell
         # that halts at a gate or dies mid-epoch burned those hours just
         # as surely as one that completed, and a completion-path-only

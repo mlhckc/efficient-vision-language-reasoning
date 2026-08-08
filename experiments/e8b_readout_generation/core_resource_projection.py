@@ -335,6 +335,8 @@ def main() -> int:
         "per_run_8h": {
             "largest_cell_hours": round(lm_cell_250k, 3),
             "fires": lm_cell_250k > WALL_H},
+        # Key retained for continuity with every prior record that
+        # refers to it; the ceiling it carries is the amended 40 h.
         "pretrained_identity_35h": {
             "projected_hours": round(pretrained_identity, 3),
             "ceiling_hours": IDENT_H,
@@ -345,10 +347,18 @@ def main() -> int:
                         "interventions, and every already-spent search, "
                         "characterisation, validation and probe hour "
                         "that loaded the pretrained checkpoint",
-            "retry_allowance": "NONE. The plan tolerates zero B3 "
-                               "retries; any retry or any additional "
-                               "B3-loading evaluation triggers a "
-                               "stop-and-ask BEFORE execution",
+            "retry_allowance": "AMENDED 2026-08-08: capacity for AT "
+                               "MOST ONE forced retry, sized on the "
+                               "largest final cell and held as a "
+                               "separate contingency reserve above the "
+                               "measured baseline. Permitted only for "
+                               "an objectively failed execution; a "
+                               "performance-driven rerun is refused by "
+                               "name in code. A second retry stops and "
+                               "returns to the user. The previous "
+                               "wording, 'NONE, the plan tolerates zero "
+                               "B3 retries', described the 35 h ceiling "
+                               "and is superseded.",
             "fires": pretrained_identity > IDENT_H},
         "random_identity_35h": {
             "projected_hours": round(random_identity, 3),

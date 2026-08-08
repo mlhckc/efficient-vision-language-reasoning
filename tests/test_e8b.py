@@ -3974,6 +3974,59 @@ def test_governance_amendment() -> None:
         finally:
             e8b_run.RETRY_LEDGER = original
 
+    # --- the shortfall the narrow review found, recorded not hidden ---
+    correction = amendment[
+        "CORRECTION_the_ceiling_does_not_quite_buy_what_was_intended"]
+    arithmetic = correction["arithmetic"]
+    check("the headroom floor is deducted from usable capacity",
+          abs(arithmetic["usable_capacity_hours"]
+              - (e8b_run.PER_IDENTITY_CEILING_HOURS
+                 - e8b_run.HEADROOM_FLOOR_HOURS)) < 1e-9)
+    check("the enforceable retry margin is SHORT of the worst-case cell",
+          arithmetic["shortfall_hours"] > 0
+          and arithmetic["enforceable_retry_margin_hours"]
+          < arithmetic["worst_case_cell_hours"])
+    check("the shortfall is quantified in minutes, not hand-waved",
+          arithmetic["shortfall_minutes"] > 0)
+    check("the failure direction is stated as SAFE",
+          correction["direction_of_failure"].startswith("SAFE"))
+    check("options are offered and NONE is taken",
+          len(correction["options_for_the_user_NONE_TAKEN"]) >= 3
+          and "was not moved" in correction["not_decided_here"])
+    # The ceiling and the floor must NOT have been quietly adjusted to
+    # make the arithmetic work.
+    check("the ceiling is still exactly the authorised 40 h",
+          e8b_run.PER_IDENTITY_CEILING_HOURS == 40.0)
+    check("the headroom floor is still 1.0 h",
+          e8b_run.HEADROOM_FLOOR_HOURS == 1.0)
+    # Verified by execution: a worst-case recorded retry still halts.
+    import tempfile as _tempfile
+    with _tempfile.TemporaryDirectory() as tmp:
+        original = e8b_run.RETRY_LEDGER
+        try:
+            e8b_run.RETRY_LEDGER = Path(tmp) / "r.json"
+            worst = e8b_run.CELL_PROJECTED_HOURS[("B3", "train_250k")]
+            e8b_run.record_forced_retry("B3", "train_250k", 0,
+                                        "node_failure", "node died")
+            burned = {"cells": {"B3_train_250k_seed0": {
+                "identity": "pretrained", "processes": [worst],
+                "hours": worst, "arm": "B3", "scale": "train_250k",
+                "seed": 0}}}
+            retry_gate = e8b_run.per_identity_gate(
+                "B3", worst, ledger=burned,
+                cell=("B3", "train_250k", 0))
+            check("a worst-case recorded retry HALTS under the floor, "
+                  "as the correction states",
+                  retry_gate["fires"] is True
+                  and "headroom floor" in retry_gate["fire_reason"])
+            # And the unlock is SIZED, not binary.
+            check("the contingency released matches the retried cell, "
+                  "not the whole reserve",
+                  abs(retry_gate["contingency_unlocked_hours"] - worst)
+                  < 0.01)
+        finally:
+            e8b_run.RETRY_LEDGER = original
+
     # --- the evaluation corrections survive the amendment ---
     preserved = amendment["evaluation_corrections_preserved"]
     check("batching is described as decision-equivalent, NOT bit-"
