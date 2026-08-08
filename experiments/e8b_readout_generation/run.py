@@ -75,10 +75,25 @@ OUT_DIR = config.RESULTS_DIR / "experiments" / "e8b_readout_generation"
 # are not authorised and will not run; grid points 1-3 are retained as
 # exploratory / protocol-diagnostic evidence only and no hyperparameter
 # winner is claimed. The successor is the 18-cell core matrix under the
-# fixed pre-result recipe and FP32 canonical evaluation. Core execution
-# requires a SEPARATE explicit user approval, which has not been given:
-# this state refuses every training entry.
-TRAINING_AUTHORIZED = "core-matrix-frozen-pending-approval"
+# fixed pre-result recipe and FP32 canonical evaluation.
+#
+# APPROVED by the user on 2026-08-08 at HEAD 5228f7e, on the targeted
+# certification of that state: ACCEPT, 0 BLOCKER, 0 HIGH, 0 unresolved
+# execution-critical MEDIUM, 946 checks, divergence 0 0, clean worktree,
+# zero core artefacts, zero execution locks, active resource gate fires
+# false.
+#
+# The grant covers EXACTLY the 18 frozen cells of CORE_CELLS and their
+# mandatory frozen evaluations, run in the pair_preserving_order()
+# sequence under the frozen recipe and PROTOCOL_FAMILY below. It
+# authorises nothing else. The abandoned grid, E9, E10, F1, F2 and the
+# clean test remain refused; the scientific design is unchanged; and a
+# retry that does not fit the frozen ceiling and floor policy still
+# halts and returns to the user rather than spending the margin.
+TRAINING_AUTHORIZED = "core-matrix-approved"
+TRAINING_AUTHORIZED_PREVIOUS = "core-matrix-frozen-pending-approval"
+TRAINING_AUTHORIZED_ON = "2026-08-08"
+TRAINING_AUTHORIZED_AT_COMMIT = "5228f7e"
 SEARCH_ABANDONED = True
 
 # The amended protocol family. Every recipe hash in this family differs

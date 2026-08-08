@@ -75,6 +75,27 @@ def must_fail(name: str, thunk) -> None:
         raise AssertionError(f"KNOWN-NEGATIVE DID NOT FAIL: {name}")
 
 
+class unauthorised:
+    """Pin the pre-approval authorisation state for a known-negative.
+
+    The 18-cell core matrix was approved on 2026-08-08, so a refusal
+    test that read the live state would stop testing the refusal path --
+    and, for the several known-negatives that call e8b_run.train on what
+    is now an authorised cell, would start a real multi-hour run from
+    the test suite. Each such test pins the superseded state for its own
+    duration and restores the live grant afterwards, so it proves the
+    refusal whatever the live state is."""
+
+    def __enter__(self):
+        self._saved = e8b_run.TRAINING_AUTHORIZED
+        e8b_run.TRAINING_AUTHORIZED = e8b_run.TRAINING_AUTHORIZED_PREVIOUS
+        return self
+
+    def __exit__(self, *exc_info):
+        e8b_run.TRAINING_AUTHORIZED = self._saved
+        return False
+
+
 # --- Shared fixtures ----------------------------------------------------------
 
 TINY_VOCAB = 64
@@ -200,8 +221,12 @@ def test_registry_and_scope() -> None:
           e8b_run.MODEL_REPO == e8a.MODEL_REPO
           and e8b_run.MODEL_REVISION == e8a.MODEL_REVISION
           and e8b_run.RANDOM_INIT_SEED == e8a.RANDOM_INIT_SEED)
-    check("no training is authorised under the frozen amendment",
-          e8b_run.TRAINING_AUTHORIZED == "core-matrix-frozen-pending-approval"
+    check("the 18-cell core matrix is authorised, and nothing else",
+          e8b_run.TRAINING_AUTHORIZED == "core-matrix-approved"
+          and e8b_run.TRAINING_AUTHORIZED_PREVIOUS
+          == "core-matrix-frozen-pending-approval"
+          and e8b_run.TRAINING_AUTHORIZED_ON == "2026-08-08"
+          and e8b_run.TRAINING_AUTHORIZED_AT_COMMIT == "5228f7e"
           and e8b_run.SEARCH_ABANDONED is True
           and e8b_run.PILOT_CELL == ("B3", "train_40k", 0)
           and e8b_run.PILOT_HYPER == {"lr": 3e-4, "warmup_frac": 0.0,
@@ -241,23 +266,26 @@ def test_registry_and_scope() -> None:
         check(f"readouts.py never post-processes emissions ({token})",
               token not in readout_text)
 
-    must_fail("a non-pilot arm refuses (B2/40k/seed0)",
-              lambda: e8b_run.train("B2", "train_40k", 0))
-    must_fail("a non-pilot seed refuses (B3/40k/seed1)",
-              lambda: e8b_run.train("B3", "train_40k", 1))
-    must_fail("a non-pilot scale refuses (B3/250k/seed0)",
-              lambda: e8b_run.train("B3", "train_250k", 0))
-    must_fail("B1 refuses entirely",
-              lambda: e8b_run.train("B1", "train_40k", 0))
+    # All four of these are now AUTHORISED core cells, so the state is
+    # pinned to the superseded one for the duration: a bare call would
+    # start a real run from the test suite.
+    with unauthorised():
+        for cell in (("B2", "train_40k", 0), ("B3", "train_40k", 1),
+                     ("B3", "train_250k", 0), ("B1", "train_40k", 0)):
+            must_fail(f"core cell {cell} refuses without the grant",
+                      lambda c=cell: e8b_run.train(*c))
+        must_fail("even the first cell refuses without the grant",
+                  lambda: e8b_run.train(*e8b_run.PILOT_CELL))
 
     original = e8b_run.TRAINING_AUTHORIZED
     try:
         e8b_run.TRAINING_AUTHORIZED = False
-        must_fail("even the pilot cell refuses without the recorded "
-                  "authorisation state",
+        must_fail("an unrecognised authorisation value refuses",
                   lambda: e8b_run.train(*e8b_run.PILOT_CELL))
     finally:
         e8b_run.TRAINING_AUTHORIZED = original
+    check("the live grant is restored after the known-negatives",
+          e8b_run.TRAINING_AUTHORIZED == "core-matrix-approved")
 
 
 # --- 2-6. Latent trunk, projection, prefix, G13 -------------------------------
@@ -1215,11 +1243,11 @@ def test_search_grid_and_bindings() -> None:
           and training.run_name_for(3)
           == "e8b_B3_train_40k_seed0_search3")
 
-    # Every training entry refuses under the frozen amendment; the
-    # per-cell and per-grid-point refusals are covered in
-    # test_fp32_amendment.
-    must_fail("training refuses entirely",
-              lambda: e8b_run.train("B3", "train_40k", 0))
+    # The training entry refuses without the grant; the per-cell and
+    # per-grid-point refusals are covered in test_fp32_amendment.
+    with unauthorised():
+        must_fail("the training entry refuses without the grant",
+                  lambda: e8b_run.train("B3", "train_40k", 0))
 
     # G15 row counts are derived and asserted, never literals.
     src = (E8B_DIR / "training.py").read_text()
@@ -1292,18 +1320,22 @@ def test_fp32_amendment() -> None:
     # --- the search is abandoned and every training entry refuses ---
     check("the eight-point search is recorded as abandoned",
           e8b_run.SEARCH_ABANDONED is True)
-    check("the authorisation state does not authorise core training",
-          e8b_run.TRAINING_AUTHORIZED == "core-matrix-frozen-pending-approval")
+    check("the core matrix is authorised and the superseded state is "
+          "still named",
+          e8b_run.TRAINING_AUTHORIZED == "core-matrix-approved"
+          and e8b_run.TRAINING_AUTHORIZED_PREVIOUS
+          == "core-matrix-frozen-pending-approval")
     check("U4 is withdrawn, so no search checkpoint is promoted",
           e8b_run.U4_DECIDED == "withdrawn-2026-08-07")
     for point in (1, 4, 8):
         must_fail(f"grid point {point} is refused",
                   lambda p=point: e8b_run.train("B3", "train_40k", 0,
                                                 grid_point=p))
-    for cell in (("B3", "train_40k", 0), ("B1", "train_250k", 2),
-                 ("B2", "train_40k", 1)):
-        must_fail(f"core cell {cell} refuses without approval",
-                  lambda c=cell: e8b_run.train(*c))
+    with unauthorised():
+        for cell in (("B3", "train_40k", 0), ("B1", "train_250k", 2),
+                     ("B2", "train_40k", 1)):
+            must_fail(f"core cell {cell} refuses without approval",
+                      lambda c=cell: e8b_run.train(*c))
     must_fail("a non-core cell is refused",
               lambda: e8b_run.train("B4", "train_40k", 0))
     must_fail("a non-core seed is refused",
@@ -2044,9 +2076,22 @@ def test_remediation_known_negatives() -> None:
     # the determinism probe's was: the gate placed no step or scale
     # bound on it, so a live grant would have left a real optimizer path
     # open on the training path.
-    for execution_class in sorted(e8b_run.EXECUTION_CLASSES):
-        must_fail(f"the optimizer path refuses class {execution_class!r} "
-                  f"while authorisation is withheld",
+    # The two core classes were opened by the 2026-08-08 grant, so the
+    # refusal is proved against the state that grant superseded. The
+    # non-scientific classes must refuse under the LIVE state as well:
+    # nothing about the core grant may reopen them.
+    with unauthorised():
+        for execution_class in sorted(e8b_run.EXECUTION_CLASSES):
+            must_fail(f"the optimizer path refuses class "
+                      f"{execution_class!r} while authorisation is "
+                      f"withheld",
+                      lambda c=execution_class:
+                      e8b_run.authorize_optimizer_path(
+                          c, "known-negative"))
+    for execution_class in ("nonscientific-probe",
+                            "throughput-calibration"):
+        must_fail(f"class {execution_class!r} stays refused under the "
+                  f"live core grant",
                   lambda c=execution_class:
                   e8b_run.authorize_optimizer_path(c, "known-negative"))
     check("the calibration grant is revoked, not left standing",
@@ -3660,17 +3705,30 @@ def test_readiness_phase() -> None:
                           "decision_required_from_user"][
                           "not_taken_unilaterally"]))
 
-    # --- the calibration path is the ONLY optimizer path open ---
+    # --- the two core classes are open; every other path is shut ---
     check("the calibration grant was revoked once phase C completed",
           e8b_run.THROUGHPUT_CALIBRATION_AUTHORIZED is None)
-    for execution_class in ("core-cell", "core-gate",
-                            "nonscientific-probe",
+    for execution_class in ("nonscientific-probe",
                             "throughput-calibration"):
         must_fail(f"{execution_class} is STILL refused",
                   lambda c=execution_class:
                   e8b_run.authorize_optimizer_path(c, "known-negative"))
-    check("core training authorisation is UNCHANGED",
-          e8b_run.TRAINING_AUTHORIZED
+    for execution_class in ("core-cell", "core-gate"):
+        granted = e8b_run.authorize_optimizer_path(
+            execution_class, "the 2026-08-08 core-matrix grant")
+        check(f"{execution_class} is open under the core grant",
+              granted["authorised_by"] == "core-matrix-approved")
+    with unauthorised():
+        for execution_class in ("core-cell", "core-gate"):
+            must_fail(f"{execution_class} refuses without the grant",
+                      lambda c=execution_class:
+                      e8b_run.authorize_optimizer_path(
+                          c, "known-negative"))
+    check("the core grant is the 2026-08-08 one and names the state it "
+          "superseded",
+          e8b_run.TRAINING_AUTHORIZED == "core-matrix-approved"
+          and e8b_run.TRAINING_AUTHORIZED_ON == "2026-08-08"
+          and e8b_run.TRAINING_AUTHORIZED_PREVIOUS
           == "core-matrix-frozen-pending-approval")
 
     # --- the two lossless optimisations ---
@@ -3840,15 +3898,19 @@ def test_governance_amendment() -> None:
     check("it is PRE-RESULT: no cell has run and no result exists",
           amendment["pre_result"]["no_final_core_cell_has_run"] is True
           and amendment["pre_result"]["no_final_result_exists"] is True)
-    # Verified against the filesystem, not taken from the record.
+    # Verified against the filesystem for as long as the filesystem can
+    # witness the claim. Once the core matrix starts running, an empty
+    # results directory is no longer evidence either way, so what is
+    # asserted from then on is the ordering: the amendment recorded the
+    # PRE-approval authorisation state, hence it pre-dates the grant.
     core_results = sorted(results.glob("e8b_core_*.json"))
-    check("no core result file exists on disk",
-          core_results == [], str([p.name for p in core_results]))
-    check("TRAINING_AUTHORIZED is unchanged",
-          e8b_run.TRAINING_AUTHORIZED
-          == "core-matrix-frozen-pending-approval"
-          and amendment["pre_result"]["training_authorised"]
-          == e8b_run.TRAINING_AUTHORIZED)
+    if e8b_run.TRAINING_AUTHORIZED == e8b_run.TRAINING_AUTHORIZED_PREVIOUS:
+        check("no core result file exists on disk",
+              core_results == [], str([p.name for p in core_results]))
+    check("the amendment recorded the pre-approval state, so it "
+          "pre-dates the core grant",
+          amendment["pre_result"]["training_authorised"]
+          == e8b_run.TRAINING_AUTHORIZED_PREVIOUS)
     for clause in ("34.803", "4.25", "40 h ceiling", "35-36 h"):
         check(f"the recorded rationale contains {clause!r}",
               any(clause in line
@@ -4617,10 +4679,9 @@ def test_final_operational_closure() -> None:
     check("preflight: zero optimizer steps, clean test untouched",
           preflight["optimizer_steps"] == 0
           and preflight["clean_test_accessed"] is False)
-    check("preflight: the authorisation state is UNCHANGED",
+    check("preflight: it attests to the pre-approval state it ran under",
           preflight["training_authorized"]
-          == "core-matrix-frozen-pending-approval"
-          == e8b_run.TRAINING_AUTHORIZED)
+          == e8b_run.TRAINING_AUTHORIZED_PREVIOUS)
     check("preflight: the first cell is B3/train_40k/seed0, the "
           "pair-preserving head",
           preflight["first_cell"] == ["B3", "train_40k", 0]
@@ -4632,8 +4693,14 @@ def test_final_operational_closure() -> None:
           and preflight["resource_position"]["baseline_hours"] == 34.805
           and preflight["resource_position"][
               "largest_retry_fits_automatically"] is False)
-    check("preflight: NO core artefact exists after it ran",
-          not list(e8b_run.OUT_DIR.glob("e8b_core_*")))
+    # Read from the preflight's own record rather than from the live
+    # directory: the claim is about the state the preflight observed and
+    # left behind, and the core matrix populates that directory later.
+    check("preflight: NO core artefact existed when it ran, and it "
+          "created none",
+          preflight["checks"][
+              "NO e8b_core_* result or checkpoint exists"]["passed"]
+          is True)
 
     # --- C. the arm-aware epoch rule the preflight asserts ---
     # A preflight that asserted 22 epochs on B1 would be asserting a
@@ -5033,9 +5100,11 @@ def test_final_operational_closure() -> None:
 
 
     # --- G. known negatives ---
-    must_fail("a core cell is still refused at the optimizer gate",
-              lambda: e8b_run.authorize_optimizer_path(
-                  "core-cell", "closure test"))
+    with unauthorised():
+        must_fail("a core cell is refused at the optimizer gate without "
+                  "the grant",
+                  lambda: e8b_run.authorize_optimizer_path(
+                      "core-cell", "closure test"))
     must_fail("a lock cannot be double-acquired",
               lambda: _double_acquire(e8b_run))
 

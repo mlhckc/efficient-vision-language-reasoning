@@ -235,9 +235,24 @@ hash no longer matches the worktree.
      unconditionally sets warn_only=True, and build_arm re-seeds because
      G13 requires it. Enforcement must be re-imposed after EVERY
      reseeding point and asserted at the point of use.
-  7. Scientific core execution is REFUSED until the user flips the
-     recorded authorisation state. Non-scientific probes are separate
-     and are never promoted. The clean-test embargo is unchanged.
+  7. Scientific core execution was AUTHORISED by the user on 8 August
+     2026 at HEAD 5228f7e, on the targeted certification of that state
+     (ACCEPT; 0 BLOCKER, 0 HIGH, 0 unresolved execution-critical
+     MEDIUM, 946 checks, divergence 0 0, clean worktree, zero core
+     artefacts, zero execution locks, active resource gate fires
+     false). run.TRAINING_AUTHORIZED is now "core-matrix-approved".
+     The grant covers exactly the 18 frozen core cells and their
+     mandatory frozen evaluations, run in the pair-preserving order
+     that run.pair_preserving_order() prints, under the frozen recipe
+     of point 2 and the fixed-22 rule of point 5. It broadens nothing:
+     grid points 4-8, E9, E10, F1, F2 and the clean test remain
+     refused, the scientific design is unchanged, and the matrix is
+     fixed regardless of what early results look like.
+     Performance-driven retries are forbidden, a failed execution
+     grants no automatic retry, and any retry that does not fit the
+     frozen ceiling and floor policy halts and returns to the user.
+     Non-scientific probes are separate and are never promoted. The
+     clean-test embargo is unchanged.
   Authoritative records: results/experiments/e8b_readout_generation/
   protocol_amendment_20260807_fp32.json, protocol_amendment_20260807_
   fixed22.json, superseded_evidence_20260807.json.
