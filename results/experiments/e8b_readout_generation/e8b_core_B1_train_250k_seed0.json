@@ -1,0 +1,537 @@
+{
+  "metadata": {
+    "timestamp": "2026-08-09T21:49:41",
+    "git_commit": "c47bd6d",
+    "git_dirty": false,
+    "open_clip_version": "3.3.0",
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "h5py_version": "3.16.0",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "deterministic": true,
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "embed_dim": 512,
+    "top_k_answers": 100,
+    "n_train": 40000,
+    "n_val": 8000,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "hidden_dim": 512,
+    "dropout": 0.3,
+    "weight_decay": 0.0001
+  },
+  "e8b_core_cell": {
+    "run": "e8b_core_B1_train_250k_seed0",
+    "cell": [
+      "B1",
+      "train_250k",
+      0
+    ],
+    "protocol_family": "e8b-fp32-fixed22-core-2026-08-07",
+    "recipe": {
+      "protocol_family": "e8b-fp32-fixed22-core-2026-08-07",
+      "arm": "B1",
+      "scale": "train_250k",
+      "seed": 0,
+      "batch_size": 128,
+      "grad_clip": 1.0,
+      "lr": 0.0003,
+      "warmup_frac": 0.0,
+      "dropout": 0.1,
+      "weight_decay": 0.01,
+      "weight_decay_on": "parameters with ndim >= 2 only",
+      "scheduler": "cosine after warmup, LambdaLR, horizon 100 x steps_per_epoch, stepped per optimizer step (the inherited v3_01 horizon; training covers only the FIRST part of it, so the learning-rate trajectory is the pre-result one)",
+      "training_precision": "bf16 autocast on the training path only; fp32 master weights for the trainable modules",
+      "frozen_lm_instance_dtype": "not applicable: B1 has no frozen language model",
+      "canonical_evaluation_precision": "fp32",
+      "strict_determinism": true,
+      "deterministic_backend": {
+        "use_deterministic_algorithms": true,
+        "warn_only": false,
+        "flash_sdp": false,
+        "mem_efficient_sdp": false,
+        "math_sdp": true,
+        "cudnn_deterministic": true,
+        "cudnn_benchmark": false,
+        "cublas_workspace_config": ":4096:8",
+        "tf32": "pinned off; canonical fp32 is true IEEE fp32"
+      },
+      "deterministic_execution": "STRICT: use_deterministic_algorithms(True, warn_only=False); flash and mem-efficient SDPA disabled; math SDPA only; cudnn deterministic, no benchmark; CUBLAS_WORKSPACE_CONFIG :4096:8; TF32 pinned off; enforcement re-imposed after every reseeding point and asserted at the point of use",
+      "wall_clock_halt_hours": 8.0,
+      "recipe_identifier": "7.3 stored v3_01 classifier recipe",
+      "max_epochs": 100,
+      "early_stopping": true,
+      "patience": 10,
+      "primary_checkpoint_selection": "best_dev_accuracy (section 7.3 inherited rule; the fixed-endpoint rule applies to B2/B3 only)",
+      "objective": "softmax cross-entropy over the 100-answer vocabulary",
+      "selection_metric": "development classification accuracy under canonical FP32 evaluation",
+      "canonical_checkpoint_rule": "best development accuracy, earliest epoch on ties (the v3_01 selection rule)",
+      "tie_break": "earliest epoch attaining the best value",
+      "fixed_hyperparameters_justification": "inherited verbatim from the stored v3_01 recipe (section 7.3); the E8B likelihood treatment and the fixed-22 rule never applied to B1"
+    },
+    "recipe_sha256": "6f92fe0a10040e2c3962f01e29ac38a1e2096cd37103cbf3b159d66161842cd9",
+    "paired_recipe_sha256": "5438f1553e9536b4349aaf53a7373d963e16d36d21487d5474342aace31e55e5",
+    "gates": {
+      "g0_recipe": {
+        "protocol_family": "e8b-fp32-fixed22-core-2026-08-07",
+        "arm": "B1",
+        "scale": "train_250k",
+        "seed": 0,
+        "batch_size": 128,
+        "grad_clip": 1.0,
+        "lr": 0.0003,
+        "warmup_frac": 0.0,
+        "dropout": 0.1,
+        "weight_decay": 0.01,
+        "weight_decay_on": "parameters with ndim >= 2 only",
+        "scheduler": "cosine after warmup, LambdaLR, horizon 100 x steps_per_epoch, stepped per optimizer step (the inherited v3_01 horizon; training covers only the FIRST part of it, so the learning-rate trajectory is the pre-result one)",
+        "training_precision": "bf16 autocast on the training path only; fp32 master weights for the trainable modules",
+        "frozen_lm_instance_dtype": "not applicable: B1 has no frozen language model",
+        "canonical_evaluation_precision": "fp32",
+        "strict_determinism": true,
+        "deterministic_backend": {
+          "use_deterministic_algorithms": true,
+          "warn_only": false,
+          "flash_sdp": false,
+          "mem_efficient_sdp": false,
+          "math_sdp": true,
+          "cudnn_deterministic": true,
+          "cudnn_benchmark": false,
+          "cublas_workspace_config": ":4096:8",
+          "tf32": "pinned off; canonical fp32 is true IEEE fp32"
+        },
+        "deterministic_execution": "STRICT: use_deterministic_algorithms(True, warn_only=False); flash and mem-efficient SDPA disabled; math SDPA only; cudnn deterministic, no benchmark; CUBLAS_WORKSPACE_CONFIG :4096:8; TF32 pinned off; enforcement re-imposed after every reseeding point and asserted at the point of use",
+        "wall_clock_halt_hours": 8.0,
+        "recipe_identifier": "7.3 stored v3_01 classifier recipe",
+        "max_epochs": 100,
+        "early_stopping": true,
+        "patience": 10,
+        "primary_checkpoint_selection": "best_dev_accuracy (section 7.3 inherited rule; the fixed-endpoint rule applies to B2/B3 only)",
+        "objective": "softmax cross-entropy over the 100-answer vocabulary",
+        "selection_metric": "development classification accuracy under canonical FP32 evaluation",
+        "canonical_checkpoint_rule": "best development accuracy, earliest epoch on ties (the v3_01 selection rule)",
+        "tie_break": "earliest epoch attaining the best value",
+        "fixed_hyperparameters_justification": "inherited verbatim from the stored v3_01 recipe (section 7.3); the E8B likelihood treatment and the fixed-22 rule never applied to B1"
+      },
+      "g0_recipe_sha256": "6f92fe0a10040e2c3962f01e29ac38a1e2096cd37103cbf3b159d66161842cd9",
+      "recipe_identifier": "7.3 stored v3_01 classifier recipe",
+      "g1_label_binding": {
+        "train": {
+          "manifest": "/scratch/Efficient Vision-Language Reasoning with Small Language Models/data/v2/train_250k.csv",
+          "rows_checked": 250000,
+          "mismatches": 0,
+          "out_of_range": 0,
+          "vocabulary_size": 100
+        },
+        "dev": {
+          "manifest": "/scratch/Efficient Vision-Language Reasoning with Small Language Models/data/v2/dev.csv",
+          "rows_checked": 7714,
+          "mismatches": 0,
+          "out_of_range": 0,
+          "vocabulary_size": 100
+        }
+      },
+      "g13_projection_scale": {
+        "not_applicable": "B1 has no projection scale"
+      },
+      "g13_trainable_init_sha256": "b7bd0d38c9057729ad072be49f9cbd63045bdce35eff9f8ffaa65e70514c99fa",
+      "g15": {
+        "train_manifest": {
+          "path": "/scratch/Efficient Vision-Language Reasoning with Small Language Models/data/v2/train_250k.csv",
+          "rows": 250000,
+          "rows_source": "measured from the live dataset and asserted",
+          "sha256": "be7d867afd2757a631145bc1c56c3b1a4dcf43784c1a6abf1c3b75452b865074"
+        },
+        "dev_manifest": {
+          "path": "/scratch/Efficient Vision-Language Reasoning with Small Language Models/data/v2/dev.csv",
+          "rows": 7714,
+          "rows_source": "measured from the live dataset and asserted",
+          "sha256": "95d1b504dcc4deb7d69ba0c9e293d1c00bae93df4b6907174a1dd615cb93cdc9"
+        },
+        "image_store_sha256": "c852811a4e3393387012a099d3ad8d494fe4be0f3d95f70b4a1328db4ad59588",
+        "question_store_sha256": "503f33827f25202b979076333a4a5258b31808f674b31d521b4b43e098732037"
+      },
+      "g18_vocabulary_sha256": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680",
+      "g4": {
+        "logit_shape": [
+          128,
+          100
+        ],
+        "finite": true
+      },
+      "g7": {
+        "trainable_with_grad": "all",
+        "frozen_modules": "none"
+      },
+      "g8": {
+        "epochs_to_target": 10,
+        "subset_accuracy": 0.996,
+        "gate_treatment": "halting",
+        "gate_settings": "lr 1e-3, dropout 0.0, 1000 examples",
+        "determinism": {
+          "verified_at_use": {
+            "deterministic_algorithms": true,
+            "warn_only": false,
+            "flash_sdp": false,
+            "mem_efficient_sdp": false,
+            "math_sdp": true,
+            "cudnn_deterministic": true,
+            "cublas_workspace_config": ":4096:8"
+          }
+        }
+      }
+    },
+    "optimizer_path_authorisation": {
+      "execution_class": "core-cell",
+      "context": "_train_core_locked e8b_core_B1_train_250k_seed0",
+      "authorised_by": "core-matrix-approved"
+    },
+    "determinism_verified_at_use": {
+      "deterministic_algorithms": true,
+      "warn_only": false,
+      "flash_sdp": false,
+      "mem_efficient_sdp": false,
+      "math_sdp": true,
+      "cudnn_deterministic": true,
+      "cublas_workspace_config": ":4096:8"
+    },
+    "fp32_precision_pin": {
+      "cuda_matmul_allow_tf32": false,
+      "cudnn_allow_tf32": false,
+      "float32_matmul_precision": "highest",
+      "rule": "canonical FP32 is true IEEE fp32; TF32 is pinned off"
+    },
+    "epochs_run": 28,
+    "resumed_from_epoch": null,
+    "canonical_checkpoint_rule": "best development accuracy, earliest epoch on ties (the v3_01 selection rule)",
+    "canonical_epoch": 18,
+    "primary_canonical_fp32_dev_accuracy": 0.58841,
+    "secondary_diagnostic": null,
+    "history": [
+      {
+        "epoch": 1,
+        "train_loss": 1.01423,
+        "canonical_fp32_dev_accuracy": 0.55406,
+        "train_seconds": 107.3,
+        "eval_seconds": 2.0
+      },
+      {
+        "epoch": 2,
+        "train_loss": 0.84538,
+        "canonical_fp32_dev_accuracy": 0.57726,
+        "train_seconds": 107.5,
+        "eval_seconds": 2.0
+      },
+      {
+        "epoch": 3,
+        "train_loss": 0.78109,
+        "canonical_fp32_dev_accuracy": 0.58634,
+        "train_seconds": 107.6,
+        "eval_seconds": 2.0
+      },
+      {
+        "epoch": 4,
+        "train_loss": 0.72074,
+        "canonical_fp32_dev_accuracy": 0.58297,
+        "train_seconds": 107.5,
+        "eval_seconds": 2.0
+      },
+      {
+        "epoch": 5,
+        "train_loss": 0.65752,
+        "canonical_fp32_dev_accuracy": 0.5866,
+        "train_seconds": 107.7,
+        "eval_seconds": 2.0
+      },
+      {
+        "epoch": 6,
+        "train_loss": 0.59276,
+        "canonical_fp32_dev_accuracy": 0.58815,
+        "train_seconds": 107.6,
+        "eval_seconds": 2.0
+      },
+      {
+        "epoch": 7,
+        "train_loss": 0.53125,
+        "canonical_fp32_dev_accuracy": 0.58387,
+        "train_seconds": 107.6,
+        "eval_seconds": 2.0
+      },
+      {
+        "epoch": 8,
+        "train_loss": 0.47355,
+        "canonical_fp32_dev_accuracy": 0.5818,
+        "train_seconds": 107.7,
+        "eval_seconds": 2.0
+      },
+      {
+        "epoch": 9,
+        "train_loss": 0.42338,
+        "canonical_fp32_dev_accuracy": 0.58673,
+        "train_seconds": 107.6,
+        "eval_seconds": 2.0
+      },
+      {
+        "epoch": 10,
+        "train_loss": 0.37766,
+        "canonical_fp32_dev_accuracy": 0.58673,
+        "train_seconds": 107.7,
+        "eval_seconds": 2.0
+      },
+      {
+        "epoch": 11,
+        "train_loss": 0.34101,
+        "canonical_fp32_dev_accuracy": 0.58193,
+        "train_seconds": 107.8,
+        "eval_seconds": 2.0
+      },
+      {
+        "epoch": 12,
+        "train_loss": 0.31414,
+        "canonical_fp32_dev_accuracy": 0.58426,
+        "train_seconds": 107.7,
+        "eval_seconds": 2.0
+      },
+      {
+        "epoch": 13,
+        "train_loss": 0.28402,
+        "canonical_fp32_dev_accuracy": 0.57519,
+        "train_seconds": 107.5,
+        "eval_seconds": 2.0
+      },
+      {
+        "epoch": 14,
+        "train_loss": 0.25798,
+        "canonical_fp32_dev_accuracy": 0.58348,
+        "train_seconds": 107.7,
+        "eval_seconds": 2.0
+      },
+      {
+        "epoch": 15,
+        "train_loss": 0.23347,
+        "canonical_fp32_dev_accuracy": 0.58828,
+        "train_seconds": 107.6,
+        "eval_seconds": 2.0
+      },
+      {
+        "epoch": 16,
+        "train_loss": 0.20943,
+        "canonical_fp32_dev_accuracy": 0.58828,
+        "train_seconds": 107.8,
+        "eval_seconds": 2.0
+      },
+      {
+        "epoch": 17,
+        "train_loss": 0.18646,
+        "canonical_fp32_dev_accuracy": 0.58258,
+        "train_seconds": 107.6,
+        "eval_seconds": 2.0
+      },
+      {
+        "epoch": 18,
+        "train_loss": 0.1667,
+        "canonical_fp32_dev_accuracy": 0.58841,
+        "train_seconds": 107.6,
+        "eval_seconds": 2.0
+      },
+      {
+        "epoch": 19,
+        "train_loss": 0.15095,
+        "canonical_fp32_dev_accuracy": 0.57843,
+        "train_seconds": 107.6,
+        "eval_seconds": 2.0
+      },
+      {
+        "epoch": 20,
+        "train_loss": 0.13697,
+        "canonical_fp32_dev_accuracy": 0.57791,
+        "train_seconds": 107.8,
+        "eval_seconds": 2.0
+      },
+      {
+        "epoch": 21,
+        "train_loss": 0.12483,
+        "canonical_fp32_dev_accuracy": 0.58348,
+        "train_seconds": 107.8,
+        "eval_seconds": 2.1
+      },
+      {
+        "epoch": 22,
+        "train_loss": 0.11757,
+        "canonical_fp32_dev_accuracy": 0.58297,
+        "train_seconds": 107.8,
+        "eval_seconds": 2.1
+      },
+      {
+        "epoch": 23,
+        "train_loss": 0.10745,
+        "canonical_fp32_dev_accuracy": 0.5866,
+        "train_seconds": 107.8,
+        "eval_seconds": 2.0
+      },
+      {
+        "epoch": 24,
+        "train_loss": 0.10242,
+        "canonical_fp32_dev_accuracy": 0.5805,
+        "train_seconds": 107.8,
+        "eval_seconds": 2.0
+      },
+      {
+        "epoch": 25,
+        "train_loss": 0.09304,
+        "canonical_fp32_dev_accuracy": 0.57947,
+        "train_seconds": 107.7,
+        "eval_seconds": 2.0
+      },
+      {
+        "epoch": 26,
+        "train_loss": 0.0896,
+        "canonical_fp32_dev_accuracy": 0.57597,
+        "train_seconds": 107.8,
+        "eval_seconds": 2.0
+      },
+      {
+        "epoch": 27,
+        "train_loss": 0.08246,
+        "canonical_fp32_dev_accuracy": 0.5783,
+        "train_seconds": 107.7,
+        "eval_seconds": 2.0
+      },
+      {
+        "epoch": 28,
+        "train_loss": 0.07671,
+        "canonical_fp32_dev_accuracy": 0.5818,
+        "train_seconds": 107.8,
+        "eval_seconds": 2.0
+      }
+    ],
+    "train_seconds_per_epoch": 107.67,
+    "eval_seconds_per_epoch": 2.04,
+    "wall_hours": 0.86,
+    "wall_hours_this_process": 0.86,
+    "wall_hours_carried_from_earlier_processes": 0.0,
+    "identity_gate_before": {
+      "identity": "none",
+      "already_charged_hours": 0.273,
+      "committed_not_yet_spent_hours": 0.0,
+      "reserved_for_unrun_cells_hours": 2.09,
+      "additional_hours": 0.751,
+      "projected_total_hours": 3.114,
+      "ceiling_hours": 40.0,
+      "applies": false,
+      "headroom_hours": 36.886,
+      "headroom_floor_hours": 1.0,
+      "baseline_budget_hours": 34.805,
+      "measured_programme_hours": 34.803,
+      "baseline_arithmetic_gap_hours": 0.002,
+      "enforceable_recovery_margin_hours": 4.195,
+      "largest_cell_retry_hours": 4.249,
+      "largest_retry_fits_automatically": false,
+      "baseline_headroom_hours": 31.691,
+      "over_baseline": false,
+      "forced_retries_taken": 0,
+      "contingency_unlocked_hours": 0.0,
+      "contingency_unlocked": false,
+      "below_headroom_floor": false,
+      "fires": false,
+      "fire_reason": null
+    },
+    "remaining_core_gate": {
+      "governing_basis": "expected epochs 15/22 (U3 as clarified 2026-08-07, P3)",
+      "expected_remaining_hours": 8.75,
+      "core_ceiling_hours": 180.0,
+      "rule": "governing expected remaining core > 180",
+      "fires": false,
+      "stress_scenario": {
+        "worst_case_remaining_hours": 15.445,
+        "threshold_hours": 26.249,
+        "rule": "worst case > min(180, 3 x expected)",
+        "exceeds_threshold": false,
+        "halting": false,
+        "note": "mandatory reported stress scenario; does not halt by itself (P3)"
+      }
+    },
+    "storage_gate": {
+      "required_gib": 1.0,
+      "free_gib": 315.379,
+      "fires": false
+    },
+    "gpu": {
+      "hostname": "otter159.eps.surrey.ac.uk",
+      "gpu": "NVIDIA RTX 4000 Ada Generation",
+      "driver": "580.126.09",
+      "cuda": "13.0",
+      "python": "3.12.3",
+      "torch": "2.12.1+cu130"
+    },
+    "peak_memory": {
+      "peak_allocated_mib": 1529.7,
+      "peak_reserved_mib": 1680.0,
+      "device_total_mib": 20017.4,
+      "allocated_fraction": 0.0764,
+      "reserved_fraction": 0.0839,
+      "fraction_used": 0.0839,
+      "gate_basis": "peak reserved / device total (P3)",
+      "ceiling_fraction": 0.8,
+      "fires": false
+    },
+    "checkpoints": {
+      "canonical": {
+        "path": "/scratch/Efficient Vision-Language Reasoning with Small Language Models/results/experiments/e8b_readout_generation/checkpoints/e8b_core_B1_train_250k_seed0_canonical_best.pt",
+        "sha256": "dd61db92a4bbf9311aa37565407b8b6d36bd406609c7dde406d10f7d8f3a15eb"
+      },
+      "resume": {
+        "path": "/scratch/Efficient Vision-Language Reasoning with Small Language Models/results/experiments/e8b_readout_generation/checkpoints/resume_e8b_core_B1_train_250k_seed0.pt",
+        "sha256": "b9adb97ac25ffa5866b337170f807bd44cbb2a75afc0aec9c62079058b85ab5b"
+      }
+    },
+    "per_row_dump": "/scratch/Efficient Vision-Language Reasoning with Small Language Models/results/experiments/e8b_readout_generation/e8b_core_B1_train_250k_seed0_per_row.npz",
+    "g9_reload_identical": true,
+    "g11_repeat_identical": true,
+    "g10_collapse": {
+      "distinct_answers": 100,
+      "top1_share": 0.2594,
+      "mean_prediction_entropy_nats": 0.30165,
+      "comparability": "B1 classifier softmax entropy",
+      "fires": false,
+      "gate_treatment": "halting"
+    },
+    "g14_post_selection": null,
+    "clean_test_accessed": false,
+    "identity_gate_before_this_process_charge": {
+      "identity": "none",
+      "already_charged_hours": 0.273,
+      "committed_not_yet_spent_hours": 0.0,
+      "reserved_for_unrun_cells_hours": 2.841,
+      "additional_hours": 0.0,
+      "projected_total_hours": 3.114,
+      "ceiling_hours": 40.0,
+      "applies": false,
+      "headroom_hours": 36.886,
+      "headroom_floor_hours": 1.0,
+      "baseline_budget_hours": 34.805,
+      "measured_programme_hours": 34.803,
+      "baseline_arithmetic_gap_hours": 0.002,
+      "enforceable_recovery_margin_hours": 4.195,
+      "largest_cell_retry_hours": 4.249,
+      "largest_retry_fits_automatically": false,
+      "baseline_headroom_hours": 31.691,
+      "over_baseline": false,
+      "forced_retries_taken": 0,
+      "contingency_unlocked_hours": 0.0,
+      "contingency_unlocked": false,
+      "below_headroom_floor": false,
+      "fires": false,
+      "fire_reason": null
+    }
+  }
+}
