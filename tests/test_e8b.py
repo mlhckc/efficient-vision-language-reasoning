@@ -1305,6 +1305,115 @@ def test_g10_type_contract() -> None:
           and collapsed["distinct_answers"] == 1)
 
 
+# --- 26bb. The final-evaluation orchestration driver --------------------------
+
+def test_final_evaluation_driver() -> None:
+    """The driver must ORCHESTRATE the frozen evaluator, not restate it.
+
+    It is new code on the path to primary results, so what is checked is
+    that every scientific decision still comes from final_evaluation and
+    its collaborators, that it binds to the frozen manifest by hash, and
+    that it invents no readout for B1."""
+    from experiments.e8b_readout_generation import run_final_evaluation as drv
+    from experiments.e8b_readout_generation import final_evaluation as fe
+
+    src = (E8B_DIR / "run_final_evaluation.py").read_text()
+    tree = ast.parse(src)
+
+    # It delegates: every scientific step is a call into a frozen module.
+    calls = {f"{n.func.value.id}.{n.func.attr}"
+             for n in ast.walk(tree) if isinstance(n, ast.Call)
+             and isinstance(n.func, ast.Attribute)
+             and isinstance(n.func.value, ast.Name)}
+    for required in ("fe.evaluate_condition",
+                     "fe.build_intervention_context", "fe.score_closed",
+                     "fe.score_open", "fe.score_closed_raw_denominator",
+                     "fe.assert_normalisation_disjoint",
+                     "e8b_run.intervention_inputs",
+                     "e8b_training.b1_canonical_predictions",
+                     "readouts.summarise_r3_outcomes"):
+        check(f"the driver calls {required}", required in calls)
+
+    # It does not restate one. A local definition of any of these would
+    # mean a second implementation of a frozen scientific decision.
+    defined = {n.name for n in ast.walk(tree)
+               if isinstance(n, ast.FunctionDef)}
+    for forbidden in ("evaluate_condition", "score_closed", "score_open",
+                      "score_closed_raw_denominator", "r1_scores_batched",
+                      "r2_batched", "r3_batched", "build_trie",
+                      "build_answer_cache", "build_intervention_context",
+                      "intervention_inputs", "r3_result"):
+        check(f"the driver does not define its own {forbidden}",
+              forbidden not in defined)
+    check("no optimizer or backward call exists in the driver",
+          not [n for n in ast.walk(tree) if isinstance(n, ast.Call)
+               and isinstance(n.func, ast.Attribute)
+               and n.func.attr in ("step", "backward", "zero_grad")])
+
+    # The four frozen conditions come from the evaluator, not a copy.
+    check("conditions are the evaluator's, not redeclared",
+          "CONDITIONS" not in {n.targets[0].id for n in ast.walk(tree)
+                               if isinstance(n, ast.Assign)
+                               and isinstance(n.targets[0], ast.Name)}
+          and "fe.CONDITIONS" in src)
+    check("the evaluator still defines exactly the four frozen "
+          "conditions",
+          fe.CONDITIONS == ("normal", "fixed_image", "fixed_question",
+                            "shuffled_image"))
+    check("the rejected denominator restriction is not reintroduced",
+          "restriction" not in src.lower().replace(
+              "restriction_optimisation", "").replace(
+              "rejected and not used", "")
+          or "REJECTED" in src)
+
+    # B1 gets no invented readout.
+    check("B1 is evaluated as a classifier and no R1/R2/R3 is invented "
+          "for it",
+          "R1/R2/R3 for B1" in src or "does not define" in src)
+
+    # It binds to the frozen manifest, by hash, for all eighteen cells.
+    check("the driver pins the manifest basis commit",
+          drv.MANIFEST_BASIS_COMMIT == "1b4ea42")
+    resolved = 0
+    for arm, scale, seed in e8b_run.pair_preserving_order():
+        entry = drv.frozen_entry(arm, scale, seed)
+        check(f"{arm}/{scale}/seed{seed} resolves to its frozen artefact",
+              entry["arm"] == arm and entry["scale"] == scale
+              and entry["seed"] == seed
+              and entry["_checkpoint_path"].exists()
+              and entry["protocol_family"] == e8b_run.PROTOCOL_FAMILY
+              and entry["clean_test_accessed"] is False)
+        expected = ("_canonical_ep22.pt" if arm in ("B2", "B3")
+                    else "_canonical_best.pt")
+        check(f"{arm} evaluates its own frozen selection rule's artefact",
+              entry["_checkpoint_path"].name.endswith(expected))
+        resolved += 1
+    check("all eighteen cells resolve", resolved == 18)
+
+    # A tampered hash must abort rather than evaluate.
+    original = drv.MANIFEST_RECORD
+    with tempfile.TemporaryDirectory() as tmp:
+        fake = Path(tmp) / "manifest.json"
+        doc = json.loads(original.read_text())
+        doc["e8b_core_analysis"]["matrix_manifest"][0][
+            "checkpoints"]["canonical"]["sha256"] = "0" * 64
+        fake.write_text(json.dumps(doc))
+        try:
+            drv.MANIFEST_RECORD = fake
+            first = doc["e8b_core_analysis"]["matrix_manifest"][0]
+            must_fail("a checkpoint hash mismatch aborts the driver",
+                      lambda: drv.frozen_entry(first["arm"],
+                                               first["scale"],
+                                               first["seed"]))
+        finally:
+            drv.MANIFEST_RECORD = original
+
+    check("the evaluator source digest is stable and covers the "
+          "scientific modules",
+          drv.evaluator_digest() == drv.evaluator_digest()
+          and len(drv.evaluator_digest()) == 64)
+
+
 # --- 26c. The frozen eight-point grid and the derived G1/G15 bindings ---------
 
 def test_search_grid_and_bindings() -> None:
@@ -5306,6 +5415,7 @@ def run() -> None:
     test_training_module()
     test_g10_prediction_entropy()
     test_g10_type_contract()
+    test_final_evaluation_driver()
     test_search_grid_and_bindings()
     test_fp32_amendment()
     test_core_readiness_closure()

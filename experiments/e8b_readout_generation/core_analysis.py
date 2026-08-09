@@ -61,10 +61,13 @@ B1_SELECTION_CAVEAT = (
     "B1 selects its primary checkpoint by the frozen section-7.3 rule "
     "(best development accuracy over a 100-epoch budget with early "
     "stopping, earliest epoch on ties), whereas B2 and B3 use the frozen "
-    "epoch-22 rule with no early stopping. A B1-versus-B2/B3 difference "
-    "therefore confounds architecture with checkpoint selection and is "
-    "NOT a clean causal architecture comparison. B3 minus B2 is the only "
-    "contrast in this matrix whose two arms share a selection rule.")
+    "epoch-22 rule with no early stopping. The differing "
+    "checkpoint-selection rules MAY FAVOUR B1 relative to fixed-epoch "
+    "systems, so a B1-versus-B2/B3 difference is a SYSTEM-LEVEL "
+    "comparison of two complete configurations rather than a clean "
+    "causal architecture contrast; architecture and selection rule are "
+    "not separable in it. B3 minus B2 is the only contrast in this "
+    "matrix whose two arms share a selection rule.")
 
 INTERVAL_CAVEAT = (
     "the 95 per cent interval is image-clustered over the development "
@@ -346,18 +349,30 @@ def resources(cells, manifest) -> dict:
     resume_bytes = sum(
         entry["checkpoints"]["resume"]["bytes"] for entry in manifest)
     return {
-        "accounting_rule": "A is scientific successful-run compute; B is "
-                           "operational charged compute and includes "
-                           "every failed attempt. The failed first "
-                           "attempt of B3/train_40k/seed0 is charged in "
-                           "B and excluded from A. Nothing is netted "
-                           "out.",
-        "A_scientific_successful_run_hours": round(scientific, 5),
-        "B_operational_charged_hours": round(operational, 5),
+        "accounting_rule": "Three DIFFERENT scopes, which must not be "
+                           "mixed. A and B are E8B-ONLY and cover the "
+                           "eighteen core cells. C is PROGRAMME-WIDE per "
+                           "frozen model identity and includes E8A, the "
+                           "abandoned search, characterisation and probe "
+                           "hours spent long before this matrix. A and B "
+                           "differ only by the failed first attempt of "
+                           "B3/train_40k/seed0, which is charged in B "
+                           "and excluded from A and is never netted out. "
+                           "The identity totals in C DO NOT SUM to B and "
+                           "were never intended to: they answer a "
+                           "different question, namely how much each "
+                           "frozen model identity has cost across the "
+                           "whole programme against its 40 h ceiling.",
+        "A_e8b_only_scientific_successful_run_hours": round(scientific, 5),
+        "B_e8b_only_operational_charged_hours": round(operational, 5),
         "difference_failed_attempts_hours":
             round(operational - scientific, 5),
+        "A_and_B_scope": "the eighteen E8B core cells only",
+        "C_scope": "programme-wide, per frozen model identity, "
+                   "including all pre-E8B spend on that identity",
+        "C_does_not_sum_to_B": True,
         "by_cell": by_cell,
-        "per_identity": per_identity,
+        "C_per_identity_programme_wide": per_identity,
         "parameters": trainable,
         "storage_bytes": {
             "canonical_checkpoints": checkpoint_bytes,
