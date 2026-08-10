@@ -33,6 +33,45 @@ from experiments.e10_capacity_360m import science  # noqa: E402
 
 TASK_ID = e10.PHASE2_TASK_ID
 
+# Revision 2, the repair of the two blocking findings from the independent
+# Phase-2 review of HEAD 20cd5bf. Both Phase-2 records bind the live source
+# digest, which the repair moves, so they are regenerated inside this same open,
+# unapproved revision rather than a second amendment being chained onto an
+# amendment. The superseded bytes remain in git history at 20cd5bf and are
+# pinned here and in the regenerated record.
+PHASE2_REVISION = 2
+PHASE2_REPAIRED_FROM_HEAD = "20cd5bfa35768b1e83d5d8b1d23fc68eff13c8bb"
+PHASE2_SUPERSEDED_RECORD_SHA256 = {
+    "phase2_binding_amendment_20260810.json":
+        "8dcce832b0f1d6a1f6edd4155600eca69d7a2e4aee08531bbadeb73580b48f43",
+    "phase2_scientific_pipeline_20260810.json":
+        "a7648596c471aaa49ad10ffd6d5acc198b93b2b5d1e8f4a84b15dddc6b54922a",
+}
+
+# The reviewer's non-blocking resource observation, recorded exactly rather than
+# glossed. G11 repeats the final canonical development pass to prove the
+# evaluation is reproducible, so a cell performs one more full-development
+# prediction pass than the Gate-1 projection budgeted. This is disclosed, not
+# reconciled away, and it is not a claim that the counts agree.
+EVALUATION_PASS_ACCOUNTING = {
+    "projected_full_development_passes_per_cell": 13,
+    "implemented_full_development_passes_per_cell": 14,
+    "composition": (
+        "twelve pinned development evaluations, one final canonical R1 "
+        "evaluation, and one G11 repeat of that evaluation"
+    ),
+    "counts_identical": False,
+    "approximate_extra_gpu_hours_per_cell": 0.063,
+    "approximate_extra_gpu_hours_over_the_matrix": 0.75,
+    "wall_consequence": "none",
+    "identity_ceiling_consequence": "none",
+    "disposition": (
+        "judged NON-BLOCKING by the independent Phase-2 review; to be "
+        "reconciled in final execution and resource reporting rather than by "
+        "changing the scientific implementation or the resource constants"
+    ),
+}
+
 # The E10-specific differences from the frozen E8B B2/B3 behaviour, stated
 # once, so a reviewer never has to infer them from a diff.
 DELIBERATE_DIFFERENCES = {
@@ -267,6 +306,7 @@ def pipeline_contract() -> dict:
         "analysis_refuses_incomplete_matrix": assert_analysis_refuses_incomplete(),
         "scientific_core": phase1.assert_scientific_core_refused(),
         "no_scientific_execution": e10.assert_no_scientific_cells(),
+        "evaluation_pass_accounting": EVALUATION_PASS_ACCOUNTING,
         "data_contract": {
             "manifests": {key: e10.MANIFEST_SHA256[key]
                           for key in sorted(e10.MANIFEST_SHA256)},
@@ -354,6 +394,26 @@ def write_phase2_records() -> dict:
         "git_commit": e10.current_git_commit(),
         "binding": e10.binding_record(),
         "reviewed_phase1_base_head": "231ad3bdfa3efc7e3caee3137987739b43d3193a",
+        "revision": {
+            "revision": PHASE2_REVISION,
+            "reason": (
+                "repair of the two blocking findings from the independent "
+                "Phase-2 review: strict determinism was not in force before "
+                "the guard's first stage, so a fresh-process cell could not "
+                "open setup; and the difference in differences was reported at "
+                "half its magnitude because the composite contrast averaged "
+                "its two sides"
+            ),
+            "review_verdict_repaired": "CHANGES_REQUIRED",
+            "repaired_from_head": PHASE2_REPAIRED_FROM_HEAD,
+            "regenerated_within_open_revision": True,
+            "superseded_records": PHASE2_SUPERSEDED_RECORD_SHA256,
+            "scientific_recipe_changed": False,
+            "core_matrix_changed": False,
+            "dev_evaluation_cadence_changed": False,
+            "resource_constants_changed": False,
+            "scientific_authorization_granted": False,
+        },
         "contract": pipeline_contract(),
         "artefact_tree": {
             "scientific_results": _relative(e10.CORE_OUT_DIR),

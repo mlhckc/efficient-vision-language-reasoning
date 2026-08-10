@@ -219,9 +219,19 @@ def _paired_interval(matrix: dict, metric: str, positive, negative) -> dict:
     """One contrast: per-seed differences, clustered interval, directional rule.
 
     `positive` and `negative` are lists of (arm, scale) sides. The per-seed
-    difference is the mean over the positive sides minus the mean over the
+    difference is the SUM over the positive sides minus the SUM over the
     negative sides, so a simple contrast and a difference in differences use
     exactly the same resampling and the same rule.
+
+    The sum, not the mean, is what makes the composite contrast the quantity its
+    description names. Averaging the two positive and the two negative terms
+    reports half of
+
+        (B4 - B4r) at train_250k  minus  (B4 - B4r) at train_40k,
+
+    because each of the four terms is halved. For the three one-element
+    contrasts a sum and a mean over a single value are identical, so their point
+    estimates, intervals and directional outcomes are unchanged.
     """
     reference = matrix["reference"]
     cells = matrix["cells"]
@@ -232,7 +242,7 @@ def _paired_interval(matrix: dict, metric: str, positive, negative) -> dict:
             correct = cells[(arm, scale, seed)]["correct"][metric]
             values.append(correct.mean() if rows is None
                           else correct[rows].mean())
-        return float(np.mean(values))
+        return float(np.sum(values))
 
     per_seed = [round(side(positive, seed) - side(negative, seed), 5)
                 for seed in e10.CORE_SEEDS]
@@ -249,6 +259,9 @@ def _paired_interval(matrix: dict, metric: str, positive, negative) -> dict:
         "metric": metric,
         "positive": [list(side) for side in positive],
         "negative": [list(side) for side in negative],
+        "aggregation": ("sum over the positive sides minus the sum over the "
+                        "negative sides; identical to a mean for the "
+                        "one-element contrasts"),
         "per_seed_differences": per_seed,
         "mean_difference": round(float(np.mean(per_seed)), 5),
         "sd_difference": round(float(np.std(per_seed, ddof=1)), 5),

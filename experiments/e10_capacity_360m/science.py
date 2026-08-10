@@ -77,6 +77,10 @@ CELL_STORAGE_BYTES = 1 * 2 ** 30
 CELL_LOCK_DIR = e10.SHARED_STATE_DIR / "e10-cell-locks"
 CANONICAL_EVAL_BATCH = 128
 G14_CELL_STAGES = ("pre-selection", "post-selection")
+# The scientific device. Every real cell runs on the single CUDA device. The
+# value is a module constant only so the contract harness can drive this exact
+# runner end to end on CPU; no production path reads or writes it otherwise.
+SCIENTIFIC_DEVICE = "cuda"
 
 # Every artefact a cell must have durably on disk before it may be called
 # complete. A cell missing any one of these is never published as a result.
@@ -991,6 +995,15 @@ def run_core_cell(arm: str, scale: str, seed: int) -> int:
     run_name = preflight["run_name"]
     lock_path = _acquire_cell_lock(run_name)
     try:
+        # Strict determinism must be in force BEFORE the guard's first stage.
+        # ScientificCellGuard.stage() checks the permit on entry, and that check
+        # asserts strict determinism, so a fresh process whose first
+        # determinism-enabling call sits inside the setup stage cannot open that
+        # stage at all. This is the single reviewed E10 mechanism, called once
+        # here at the narrowest production entry that every authorised cell
+        # passes through; the setup stage still re-imposes it after seeding,
+        # because utils.set_seed downgrades warn_only on every reseed.
+        preflight["determinism_at_entry"] = e10.enable_strict_determinism()
         with phase1.ScientificCellGuard(arm, scale, seed) as guard:
             _execute_cell(guard, arm, scale, seed, run_name, preflight)
     finally:
@@ -1015,7 +1028,7 @@ def _execute_cell(guard, arm: str, scale: str, seed: int, run_name: str,
         e10.assert_no_embargo_reference()
         contract = assert_recipe_contract(recipe, arm, scale, seed, run_name)
         exclusivity = e10.gpu_exclusivity_preflight()
-        device = torch.device("cuda")
+        device = torch.device(SCIENTIFIC_DEVICE)
         e10.reseed_strict(recipe["seed"])
         precision = e10.pin_fp32_precision()
         identity = assert_model_identity(arm, run_name)
@@ -1053,6 +1066,7 @@ def _execute_cell(guard, arm: str, scale: str, seed: int, run_name: str,
             "g1_label_binding": label_binding,
             "implementation_gates": gates,
             "fp32_precision_pin": precision,
+            "determinism_at_entry": preflight["determinism_at_entry"],
             "determinism_verified_at_use": determinism,
             "storage": {"free_bytes": preflight["free_bytes"],
                         "required_bytes": preflight["storage_required_bytes"]},
@@ -1241,8 +1255,12 @@ def final_r1_evaluation(model, lm, dev_loader, cache, device, recipe,
     e10.assert_strict_determinism()
     reloaded.load_state_dict(canonical_state)
     reloaded = reloaded.to(device).eval()
+    # The G9 comparison batch. Bounded by the dataset so the check is defined
+    # for any development set; for the frozen 7,714-row split this is 32, the
+    # inherited size, so production behaviour is unchanged.
+    g9_rows = min(32, len(dev_loader.dataset))
     batch = tokens_data.collate_tokens(
-        [dev_loader.dataset[i] for i in range(32)])
+        [dev_loader.dataset[i] for i in range(g9_rows)])
     with torch.no_grad():
         prefix_a = canonical_prefix(model.eval(), lm, batch[0].to(device),
                                     batch[1].to(device), batch[3].to(device))
@@ -1415,6 +1433,12 @@ def publish_cell(arm, scale, seed, run_name, recipe, contract, cell_record, *,
                 "elapsed_seconds_at_publication": guard.elapsed_seconds(),
                 "guarded_stages_completed": list(guard.stages_completed),
                 "required_stages": list(phase1.CELL_STAGES),
+                "note": (
+                    "the stage list is taken while result_publication is still "
+                    "open, so that stage is necessarily absent here; the "
+                    "guard's own cell-outcome record carries the complete set "
+                    "and a cell cannot be charged as completed without it"
+                ),
             },
             "resource_policy": guard.policy,
             "automatic_retry_available": False,

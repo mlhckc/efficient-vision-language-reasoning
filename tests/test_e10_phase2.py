@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import ast
 import json
+import os
 import sys
 import tempfile
 from contextlib import ExitStack
@@ -29,13 +30,19 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+from experiments.e8a_question_encoder import analyse_core as e8a_stats
 from experiments.e10_capacity_360m import analysis
 from experiments.e10_capacity_360m import e10_common as e10
 from experiments.e10_capacity_360m import phase1
 from experiments.e10_capacity_360m import phase2
 from experiments.e10_capacity_360m import run as e10_run
 from experiments.e10_capacity_360m import science
-from tests.test_e10 import _must_raise, _temporary_shared_paths, _write_ledgers
+from tests.test_e10 import (
+    _must_raise,
+    _strict_state_restored,
+    _temporary_shared_paths,
+    _write_ledgers,
+)
 
 
 FROZEN_ORDER = [
@@ -47,8 +54,9 @@ FROZEN_ORDER = [
     ("B4", "train_250k", 2), ("B4r", "train_250k", 2),
 ]
 FROZEN_CADENCE = (1, 2, 3, 4, 5, 6, 8, 10, 13, 16, 19, 22)
-SYNTHETIC_ROWS = 24
-SYNTHETIC_IMAGES = 6
+SYNTHETIC_ROWS = 20
+SYNTHETIC_IMAGES = 5
+AUTH = "e10-core-matrix-approved"
 
 
 # --- helpers ------------------------------------------------------------------
@@ -793,6 +801,531 @@ def test_phase2_pipeline_contract_reports_the_real_state() -> None:
     assert "g8_overfit_gate" in contract["deliberate_e10_differences"]
 
 
+# --- B1: strict determinism before the first guard stage ----------------------
+
+def _non_strict_process_state() -> None:
+    """Put the process in the state a freshly started real cell starts in."""
+    torch.use_deterministic_algorithms(False)
+    torch.backends.cudnn.benchmark = True
+    os.environ.pop("CUBLAS_WORKSPACE_CONFIG", None)
+
+
+def _authorized(stack: ExitStack) -> None:
+    stack.enter_context(mock.patch.object(
+        e10, "E10_TRAINING_AUTHORIZED", AUTH))
+    stack.enter_context(mock.patch.object(
+        e10, "assert_shared_state_healthy", lambda **_: {}))
+
+
+def test_first_stage_refuses_without_strict_determinism() -> None:
+    """The defect B1 names: the guard's first stage check asserts determinism.
+
+    This is the mechanism, exercised directly and without stubbing, so the
+    repair below is pinned to a real requirement rather than to a comment.
+    """
+    with tempfile.TemporaryDirectory() as directory, ExitStack() as stack, \
+            _strict_state_restored():
+        root = Path(directory)
+        paths = stack.enter_context(_temporary_shared_paths(root))
+        _write_ledgers(paths["SPEND_LEDGER"], paths["RETRY_LEDGER"])
+        governance = root / "governance"
+        governance.mkdir()
+        stack.enter_context(mock.patch.object(e10, "OUT_DIR", governance))
+        _authorized(stack)
+        _non_strict_process_state()
+        _must_raise(AssertionError, e10.assert_strict_determinism,
+                    "strict determinism is not in force")
+        error = None
+        try:
+            with phase1.ScientificCellGuard("B4", "train_40k", 0) as guard:
+                with guard.stage("setup"):
+                    pass
+        except AssertionError as raised:
+            error = raised
+        assert error is not None, "the first stage opened without determinism"
+        assert "strict determinism is not in force" in str(error)
+
+
+def test_production_entry_enables_determinism_before_the_first_stage() -> None:
+    """B1 regression: the production runner, from a non-strict fresh state.
+
+    Nothing here stubs assert_strict_determinism. The process is put into the
+    state a freshly started real cell starts in, the real production entry
+    sequence runs, and the real guard's first setup stage must then open.
+    """
+    observed: dict = {}
+
+    def _only_setup(guard, arm, scale, seed, run_name, preflight):
+        observed["at_entry"] = preflight["determinism_at_entry"]
+        with guard.stage("setup"):
+            observed["inside_setup"] = e10.assert_strict_determinism()
+        observed["permit"] = guard.permit
+        observed["stages"] = guard.stages_completed
+
+    with tempfile.TemporaryDirectory() as directory, ExitStack() as stack, \
+            _strict_state_restored():
+        root = Path(directory)
+        paths = stack.enter_context(_temporary_shared_paths(root))
+        _write_ledgers(paths["SPEND_LEDGER"], paths["RETRY_LEDGER"])
+        governance = root / "governance"
+        governance.mkdir()
+        stack.enter_context(mock.patch.object(e10, "OUT_DIR", governance))
+        _patched_core_tree(stack, root)
+        _authorized(stack)
+        stack.enter_context(mock.patch.object(science, "_execute_cell",
+                                              _only_setup))
+        _non_strict_process_state()
+        _must_raise(AssertionError, e10.assert_strict_determinism,
+                    "strict determinism is not in force")
+
+        assert science.run_core_cell("B4", "train_40k", 0) == 0
+
+        # The production entry established it, and the first stage opened.
+        assert observed["at_entry"]["deterministic_algorithms"] is True
+        assert observed["at_entry"]["warn_only"] is False
+        assert observed["inside_setup"]["deterministic_algorithms"] is True
+        assert observed["stages"] == ("setup",)
+        # The permit is not poisoned and the wall semantics are untouched.
+        permit = observed["permit"]
+        assert permit.per_cell_wall_hours == 12.0
+        assert permit.effective_identity_ceiling_hours == 40.0
+        assert permit.deadline_monotonic_ns - permit.started_monotonic_ns == \
+            12 * 3600 * 1_000_000_000
+        # Exactly one charge, and it is the harness stopping after setup, not a
+        # determinism failure and not a wall halt.
+        ledger = e10.read_json_mapping(paths["SPEND_LEDGER"])
+        entries = [entry for entry in ledger["entries"]
+                   if entry["context"] == "e10_core_cell"]
+        assert len(entries) == 1
+        assert entries[0]["outcome"] == "terminated"
+        record = json.loads(next(governance.glob("cell_*.json")).read_text())
+        assert record["scientific_success"] is False
+        assert "unguarded scientific stages" in record["detail"]
+        assert "determinism" not in record["detail"]
+        assert record["wall_reached_before_finalisation"] is False
+
+
+# --- the production synthetic end-to-end harness ------------------------------
+
+HARNESS_TOKENS = {
+    "yes": [1], "no": [2], "left": [3, 4], "right": [5, 6],
+    "blue": [7, 8, 9], "green": [10, 11, 12],
+    "table": [13, 14, 15, 1], "chair": [2, 3, 4, 5],
+}
+HARNESS_ANSWERS = list(HARNESS_TOKENS)
+HARNESS_VOCAB = 16
+HARNESS_IMAGE_TOKENS = 8
+HARNESS_G14_ROWS = 8
+
+
+class _HarnessDeviceProperties:
+    """Stand-in for the single-device properties the cell reads."""
+
+    total_memory = 20 * 2 ** 30
+    major = 8
+    minor = 9
+    name = "harness"
+
+
+class _HarnessTokenizer:
+    """A deterministic reverse-lookup tokenizer for the synthetic support.
+
+    The real answer cache and trie builders run over it unchanged, so the G1
+    round-trip, duplicate-sequence and prefix inventory are the production ones.
+    """
+
+    def __call__(self, answer, add_special_tokens=False):
+        return {"input_ids": list(HARNESS_TOKENS[answer])}
+
+    def decode(self, ids, skip_special_tokens=False,
+               clean_up_tokenization_spaces=False):
+        for answer, sequence in HARNESS_TOKENS.items():
+            if list(sequence) == list(ids):
+                return answer
+        raise AssertionError(f"unknown ids {ids}")
+
+
+def _harness_lm():
+    from transformers import LlamaConfig, LlamaForCausalLM
+
+    configuration = LlamaConfig(
+        hidden_size=e10.D_LM, num_hidden_layers=1, num_attention_heads=15,
+        num_key_value_heads=5, head_dim=64, intermediate_size=64,
+        vocab_size=HARNESS_VOCAB, tie_word_embeddings=True,
+        rope_theta=100000.0, rms_norm_eps=1e-5, max_position_embeddings=512)
+    torch.manual_seed(0)
+    model = LlamaForCausalLM(configuration).to(torch.bfloat16)
+    for parameter in model.parameters():
+        parameter.requires_grad_(False)
+    model.eval()
+    return model
+
+
+def _write_harness_inputs(root: Path) -> dict:
+    """Synthetic manifests, token stores and vocabulary in the real formats."""
+    import h5py
+    import pandas as pd
+
+    data = root / "v2"
+    tokens = root / "tokens"
+    data.mkdir(parents=True)
+    tokens.mkdir(parents=True)
+    rng = np.random.default_rng(0)
+
+    images = [f"i{index}" for index in range(SYNTHETIC_IMAGES)]
+    with h5py.File(tokens / "image_tokens.h5", "w") as store:
+        store.create_dataset("ids", data=np.array(images, dtype="S8"))
+        store.create_dataset(
+            "tokens",
+            data=rng.normal(size=(len(images), HARNESS_IMAGE_TOKENS, 512)
+                            ).astype(np.float16))
+
+    question_ids, lengths = [], []
+    for index in range(2 * SYNTHETIC_ROWS):
+        question_ids.append(f"q{index:04d}")
+        lengths.append(3 + index % 4)
+    offsets = np.cumsum([0] + lengths[:-1]).astype("int64")
+    with h5py.File(tokens / "question_tokens.h5", "w") as store:
+        store.create_dataset("ids", data=np.array(question_ids, dtype="S8"))
+        store.create_dataset(
+            "tokens",
+            data=rng.normal(size=(int(sum(lengths)), 512)).astype(np.float16))
+        store.create_dataset("offsets", data=offsets)
+        store.create_dataset("lengths", data=np.array(lengths, dtype="int64"))
+
+    def frame(start):
+        rows = []
+        for index in range(SYNTHETIC_ROWS):
+            label = index % len(HARNESS_ANSWERS)
+            rows.append({"questionId": question_ids[start + index],
+                         "imageId": images[index % len(images)],
+                         "label": label, "answer": HARNESS_ANSWERS[label]})
+        return pd.DataFrame(rows)
+
+    frame(0).to_csv(data / "dev.csv", index=False)
+    frame(SYNTHETIC_ROWS).to_csv(data / "train_40k.csv", index=False)
+    vocabulary = data / "answer_vocab_v2.json"
+    vocabulary.write_text(json.dumps(
+        {"answer_to_index": {answer: index
+                             for index, answer in enumerate(HARNESS_ANSWERS)}}))
+    return {
+        "v2": data,
+        "tokens": tokens,
+        "vocabulary": vocabulary,
+        "manifest_sha256": {
+            "train_40k": e10.sha256_file(data / "train_40k.csv"),
+            "train_250k": e10.sha256_file(data / "train_40k.csv"),
+            "dev": e10.sha256_file(data / "dev.csv"),
+        },
+        "store_sha256": {
+            "image_tokens": e10.sha256_file(tokens / "image_tokens.h5"),
+            "question_tokens": e10.sha256_file(tokens / "question_tokens.h5"),
+        },
+        "vocabulary_sha256": e10.sha256_file(vocabulary),
+    }
+
+
+def _harness_answer_cache(run_name: str):
+    from experiments.e8b_readout_generation import readouts
+
+    cache = readouts.build_answer_cache(_HarnessTokenizer(), HARNESS_ANSWERS)
+    if cache["sha256"] != e10.ANSWER_CACHE_SHA256:
+        raise AssertionError("harness answer-support tokenisation drifted")
+    return (None, list(HARNESS_ANSWERS),
+            {"path": "harness", "sha256": e10.V2_VOCAB_SHA256,
+             "n_classes": len(HARNESS_ANSWERS)},
+            cache, readouts.build_trie(cache))
+
+
+def _install_harness(stack: ExitStack, root: Path, inputs: dict) -> dict:
+    """Point the production runner at synthetic inputs on CPU.
+
+    Everything patched here is an INPUT, a device or a machine measurement.
+    No rule, gate, threshold, cadence, budget, selection rule, accounting path
+    or publication step is replaced; those all run as production code.
+    """
+    from experiments.e8b_readout_generation import readouts
+    from experiments.e8b_readout_generation import training as e8b_training
+
+    ledgers = {
+        "SPEND_LEDGER": root / "spend.json",
+        "RETRY_LEDGER": root / "retry.json",
+        "GOVERNANCE_LOCK": root / "governance.lock",
+        "INITIALIZATION_PENDING": root / "initialization-pending.json",
+        "LEDGER_FAILURE_PATH": root / "ledger-failure.json",
+    }
+    for name, path in ledgers.items():
+        stack.enter_context(mock.patch.object(e10, name, path))
+    _write_ledgers(ledgers["SPEND_LEDGER"], ledgers["RETRY_LEDGER"])
+    # The guard writes its cell outcome into OUT_DIR, so OUT_DIR is redirected;
+    # the immutable governance records the production validators read are
+    # mirrored into it byte for byte rather than being stubbed away.
+    import shutil
+
+    governance = root / "governance"
+    governance.mkdir()
+    for record in sorted(e10.OUT_DIR.glob("*.json")):
+        shutil.copy2(record, governance / record.name)
+    stack.enter_context(mock.patch.object(e10, "OUT_DIR", governance))
+    # The embargo scan reports paths relative to the project root, which the
+    # mirrored copies under a temporary directory are not. It is re-pointed at
+    # the REAL E10 sources, so the scan itself still runs for real.
+    real_scan = e10.assert_no_embargo_reference
+    real_sources = list(Path(e10.__file__).parent.rglob("*.py"))
+    stack.enter_context(mock.patch.object(
+        e10, "assert_no_embargo_reference",
+        lambda paths=None: real_scan(real_sources)))
+    _patched_core_tree(stack, root)
+    _authorized(stack)
+
+    cache = readouts.build_answer_cache(_HarnessTokenizer(), HARNESS_ANSWERS)
+    replacements = {
+        # inputs
+        (e10, "V2_DIR"): inputs["v2"],
+        (e10, "VOCAB_PATH"): inputs["vocabulary"],
+        (e10, "V2_VOCAB_SHA256"): inputs["vocabulary_sha256"],
+        (e10, "MANIFEST_SHA256"): inputs["manifest_sha256"],
+        (e10, "TOKEN_STORE_SHA256"): inputs["store_sha256"],
+        (e10, "EXPECTED_MANIFEST_ROWS"): {"train_40k": SYNTHETIC_ROWS,
+                                          "train_250k": SYNTHETIC_ROWS,
+                                          "dev": SYNTHETIC_ROWS},
+        (e10, "STEPS_PER_EPOCH"): {"train_40k": 1, "train_250k": 1},
+        (e10, "ANSWER_CACHE_SHA256"): cache["sha256"],
+        (e10, "ANSWER_CACHE_FACTS"): {"answers": len(HARNESS_ANSWERS)},
+        (science.tokens_data, "TOKEN_DIR"): inputs["tokens"],
+        (science, "build_answer_cache"): _harness_answer_cache,
+        # frozen model identity: a two-layer-free stand-in at the real width
+        (e10, "load_frozen_causal_lm"):
+            lambda arm, device=None: (_harness_lm(), {"arm": arm,
+                                                      "harness": True}),
+        (e10, "pretrained_embed_weight"):
+            lambda: torch.full((HARNESS_VOCAB, e10.D_LM), 0.02),
+        (science, "assert_model_identity"):
+            lambda arm, run_name: {"harness": True, "arm": arm,
+                                   "d_lm": e10.D_LM},
+        (e10, "MODEL_PARAMETERS"): sum(p.numel() for p in _harness_lm().parameters()),
+        # device and machine measurements
+        (science, "SCIENTIFIC_DEVICE"): "cpu",
+        (e10, "gpu_exclusivity_preflight"):
+            lambda: {"exclusive_at_preflight": True, "harness": True},
+        # G14 row counts scale to the synthetic development set; the P/L/O
+        # construction, the C1/C2/C3 clauses and the halting rule are unchanged
+        (e8b_training, "G14_N_EXAMPLES"): HARNESS_G14_ROWS,
+        (e8b_training, "G14_FP32_LOWEST"): HARNESS_G14_ROWS,
+        (e8b_training, "G14_FP32_ORDINARY_PER_BAND"): 2,
+    }
+    for (module, name), value in replacements.items():
+        stack.enter_context(mock.patch.object(module, name, value))
+
+    for name in ("reset_peak_memory_stats", "empty_cache"):
+        stack.enter_context(mock.patch.object(torch.cuda, name, lambda: None))
+    stack.enter_context(mock.patch.object(
+        torch.cuda, "max_memory_allocated", lambda: 2 * 2 ** 30))
+    stack.enter_context(mock.patch.object(
+        torch.cuda, "max_memory_reserved", lambda: 4 * 2 ** 30))
+    stack.enter_context(mock.patch.object(
+        torch.cuda, "get_device_properties",
+        lambda index=0: _HarnessDeviceProperties()))
+
+    # The synthetic model cannot be expected to spread its predictions over the
+    # answer support, so the collapse diagnostic still RUNS and is still
+    # recorded in full; only its halting outcome is neutralised for the harness.
+    real_collapse = e8b_training.g10_collapse_record
+
+    def _recorded_collapse(arm, predictions, scores):
+        record = real_collapse(arm, predictions, scores)
+        return {**record, "fires": False,
+                "harness_note": "computed in full; halt neutralised because a "
+                                "synthetic model's answer distribution is not "
+                                "a scientific observation"}
+
+    stack.enter_context(mock.patch.object(
+        e8b_training, "g10_collapse_record", _recorded_collapse))
+    return {"ledgers": ledgers, "governance": governance}
+
+
+def test_production_synthetic_cell_reaches_complete() -> None:
+    """End to end through the real runner: setup to a reconciled COMPLETE cell.
+
+    This drives experiments.e10_capacity_360m.science.run_core_cell itself. The
+    determinism repair is NOT compensated for anywhere: the process is left in
+    a non-strict state and only the production entry establishes it.
+    """
+    with tempfile.TemporaryDirectory() as directory, ExitStack() as stack, \
+            _strict_state_restored():
+        root = Path(directory)
+        inputs = _write_harness_inputs(root)
+        installed = _install_harness(stack, root, inputs)
+        _non_strict_process_state()
+        _must_raise(AssertionError, e10.assert_strict_determinism,
+                    "strict determinism is not in force")
+
+        assert science.run_core_cell("B4", "train_40k", 0) == 0
+
+        paths = e10.core_cell_paths("B4", "train_40k", 0)
+        record = e10.read_json_mapping(paths["result"])["e10_core_cell"]
+        # the frozen budget and cadence
+        assert record["epochs_run"] == 22
+        assert record["canonical_epoch"] == 22
+        assert record["canonical_checkpoint_rule"] == "epoch_22"
+        assert record["early_stopping"] is False
+        assert record["resumed"] is False
+        assert record["dev_evaluation_epochs"] == list(FROZEN_CADENCE)
+        assert record["scheduler_horizon_epochs"] == 100
+        evaluated = [row["epoch"] for row in record["history"] if row["evaluated"]]
+        assert evaluated == list(FROZEN_CADENCE)
+        assert [row["epoch"] for row in record["history"]] == list(range(1, 23))
+        assert record["history"][-1]["canonical_fp32_dev_accuracy"] == \
+            record["primary_canonical_fp32_dev_accuracy"]
+        # the frozen diagnostics
+        assert record["g14_pre_selection"]["stage"] == "pre-selection"
+        assert record["g14_post_selection"]["stage"] == "post-selection"
+        for stage in ("g14_pre_selection", "g14_post_selection"):
+            assert record[stage]["clauses"] == {
+                "C1_canonical_vs_brute": "all identical",
+                "C2_cached_vs_canonical": "all identical",
+                "C3_r2_brute_vs_cached": "all identical"}
+        final = record["final_r1_evaluation"]
+        assert final["condition"] == "normal"
+        assert final["g9_reload_identical"] and final["g11_repeat_identical"]
+        assert final["canonical_epoch"] == 22
+        assert 0.0 <= final["g21_normalized_exact_accuracy"] <= 1.0
+        # all six Phase-1 stages, inside the wall. The cell record is written
+        # while result_publication is still open, so the complete set lives in
+        # the guard's own outcome record, which is what gates the charge.
+        assert set(record["wall"]["guarded_stages_completed"]) == set(
+            phase1.CELL_STAGES) - {"result_publication"}
+        outcome = json.loads(
+            next(installed["governance"].glob("cell_completed_*.json")
+                 ).read_text())
+        assert outcome["scientific_success"] is True
+        assert set(outcome["guarded_stages_completed"]) == set(
+            phase1.CELL_STAGES)
+        assert outcome["wall_reached_before_finalisation"] is False
+        assert outcome["automatic_retry_available"] is False
+        assert record["wall"]["per_cell_wall_clock_hours"] == 12.0
+        assert record["resource_policy"]["effective_identity_ceiling_hours"] == 40.0
+        # atomic publication and reconciliation
+        for name in science.REQUIRED_CELL_ARTEFACTS:
+            assert paths[name].exists(), name
+        for reference in record["checkpoints"].values():
+            assert e10.sha256_file(PROJECT_ROOT / reference["path"]) == \
+                reference["sha256"]
+        assert e10.sha256_file(PROJECT_ROOT / record["per_row"]["path"]) == \
+            record["per_row"]["sha256"]
+        assert science.reconcile_cell("B4", "train_40k", 0,
+                                      record["run"])["reconciled"] is True
+        # completed accounting, inside the wall, charged once
+        ledger = e10.read_json_mapping(installed["ledgers"]["SPEND_LEDGER"])
+        entries = [entry for entry in ledger["entries"]
+                   if entry["context"] == "e10_core_cell"]
+        assert len(entries) == 1
+        assert entries[0]["outcome"] == "completed"
+        assert entries[0]["cell"] == ["B4", "train_40k", 0]
+        assert entries[0]["gpu_occupancy_ns"] < 12 * 3600 * 1_000_000_000
+        assert not list(installed["governance"].glob("cell_terminated*.json"))
+        # a completed cell is immutable and is never overwritten
+        _must_raise(SystemExit,
+                    lambda: science.run_core_cell("B4", "train_40k", 0),
+                    "already exists")
+
+
+# --- B2: the difference in differences is on the full scale -------------------
+
+def _did_matrix(stack: ExitStack, root: Path, frame, masks: dict) -> dict:
+    _patched_core_tree(stack, root)
+    stack.enter_context(mock.patch.object(
+        analysis, "_dev_reference", lambda: _synthetic_reference(frame)))
+    ledgers = {"SPEND_LEDGER": root / "spend.json",
+               "RETRY_LEDGER": root / "retry.json",
+               "GOVERNANCE_LOCK": root / "governance.lock",
+               "INITIALIZATION_PENDING": root / "initialization-pending.json",
+               "LEDGER_FAILURE_PATH": root / "ledger-failure.json"}
+    for name, path in ledgers.items():
+        stack.enter_context(mock.patch.object(e10, name, path))
+    _write_ledgers(ledgers["SPEND_LEDGER"], ledgers["RETRY_LEDGER"])
+    ledger = e10.read_json_mapping(ledgers["SPEND_LEDGER"])
+    for arm, scale, seed in FROZEN_ORDER:
+        _synthetic_cell_record(arm, scale, seed, masks[(arm, scale)], frame,
+                               root)
+        ledger["entries"].append(_core_spend_entry(arm, scale, seed))
+    e10.atomic_replace_json(ledgers["SPEND_LEDGER"], ledger)
+    return analysis.load_matrix()
+
+
+def test_difference_in_differences_is_on_the_full_scale() -> None:
+    """B2 regression: a fixture whose true DiD is independently known to be 0.2.
+
+    B4 is right everywhere. B4r is right on 90 per cent at train_40k and on 70
+    per cent at train_250k, so the pretraining effect is 0.1 and 0.3 and the
+    difference in differences is exactly 0.2. The halved implementation
+    returned 0.1.
+    """
+    frame = _synthetic_dev_frame()
+    index = np.arange(SYNTHETIC_ROWS)
+    masks = {
+        ("B4", "train_40k"): np.ones(SYNTHETIC_ROWS, dtype=bool),
+        ("B4", "train_250k"): np.ones(SYNTHETIC_ROWS, dtype=bool),
+        ("B4r", "train_40k"): index % 10 != 0,
+        ("B4r", "train_250k"): index % 10 >= 3,
+    }
+    with tempfile.TemporaryDirectory() as directory, ExitStack() as stack:
+        matrix = _did_matrix(stack, Path(directory), frame, masks)
+        correct = {cell: payload["correct"]["canonical_r1_correct"]
+                   for cell, payload in matrix["cells"].items()}
+        # Independently computed from the arrays, without touching analysis.py.
+        effect_40k = float(correct[("B4", "train_40k", 0)].mean()
+                           - correct[("B4r", "train_40k", 0)].mean())
+        effect_250k = float(correct[("B4", "train_250k", 0)].mean()
+                            - correct[("B4r", "train_250k", 0)].mean())
+        assert round(effect_40k, 10) == 0.1
+        assert round(effect_250k, 10) == 0.3
+        true_did = effect_250k - effect_40k
+        assert round(true_did, 10) == 0.2
+
+        definitions = analysis._frozen_contrasts()
+        did = analysis._paired_interval(
+            matrix, "canonical_r1_correct",
+            definitions["pretraining_by_scale_difference_in_differences"][
+                "positive"],
+            definitions["pretraining_by_scale_difference_in_differences"][
+                "negative"])
+        assert did["per_seed_differences"] == [0.2, 0.2, 0.2]
+        assert abs(did["mean_difference"] - 0.2) < 1e-9
+        assert abs(did["mean_difference"] - 0.5 * true_did) > 1e-9
+
+        # The interval is on the same full scale: recompute it here with an
+        # explicit two-term statistic and require exact agreement.
+        reference = matrix["reference"]
+
+        def statistic(rows):
+            return float(np.mean([
+                (correct[("B4", "train_250k", seed)][rows].mean()
+                 - correct[("B4r", "train_250k", seed)][rows].mean())
+                - (correct[("B4", "train_40k", seed)][rows].mean()
+                   - correct[("B4r", "train_40k", seed)][rows].mean())
+                for seed in e10.CORE_SEEDS]))
+
+        expected = e8a_stats.percentile_interval(e8a_stats.clustered_draws(
+            statistic, reference["image_index"], reference["n_images"]))
+        assert did["interval_95"] == list(expected)
+        assert did["aggregation"].startswith("sum")
+
+        # The three one-element contrasts are numerically identical to a direct
+        # computation, so the repair changed nothing outside the composite.
+        simple = analysis._paired_interval(
+            matrix, "canonical_r1_correct",
+            definitions["pretraining_effect_train_250k"]["positive"],
+            definitions["pretraining_effect_train_250k"]["negative"])
+        assert simple["per_seed_differences"] == [0.3, 0.3, 0.3]
+        assert abs(simple["mean_difference"] - effect_250k) < 1e-9
+        scale_effect = analysis._paired_interval(
+            matrix, "canonical_r1_correct",
+            definitions["scale_effect_B4r"]["positive"],
+            definitions["scale_effect_B4r"]["negative"])
+        assert abs(scale_effect["mean_difference"] - (0.7 - 0.9)) < 1e-9
+
+
 TESTS = (
     test_frozen_twelve_cell_order_is_unchanged,
     test_b4_b4r_pair_identity_is_provable,
@@ -816,9 +1349,13 @@ TESTS = (
     test_stale_artefacts_and_completed_cells_fail_closed,
     test_partial_cell_cannot_reconcile_as_complete,
     test_missing_required_artefact_prevents_completion,
+    test_first_stage_refuses_without_strict_determinism,
+    test_production_entry_enables_determinism_before_the_first_stage,
+    test_production_synthetic_cell_reaches_complete,
     test_analysis_refuses_an_incomplete_matrix,
     test_analysis_refuses_a_matrix_that_is_not_pair_preserved,
     test_analysis_reproduces_expected_arithmetic_on_fixtures,
+    test_difference_in_differences_is_on_the_full_scale,
     test_analysis_refuses_when_accounting_does_not_reconcile,
     test_analysis_refuses_tampered_per_row_evidence,
     test_twelve_hour_wall_and_forty_hour_ceiling_are_unchanged,

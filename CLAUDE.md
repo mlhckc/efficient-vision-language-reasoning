@@ -199,10 +199,20 @@ hash no longer matches the worktree.
   an optimizer step. Three deliberate differences from E8B are recorded: the
   pinned cadence, no G8 overfit gate (the frozen Gate-1 per-cell budget does
   not fund it), and no resume (a leftover training state is a hard refusal).
-  One item is flagged for the user rather than resolved: the frozen per-cell
-  budget's single extra full-development pass is implemented as the final
-  normal-condition R1 evaluation, and no visual-reliance intervention is
-  implemented because no E10 record registers one. Development-set work only,
+  The independent Phase-2 review confirmed as non-blocking and
+  contract-consistent that G8 is not part of the frozen E10 protocol, that
+  final R1 means one normal-condition final R1 evaluation, that no executable
+  E10 visual-intervention set is registered or funded, and that E10 produces
+  no new visual-reliance evidence. It returned CHANGES_REQUIRED on two
+  blocking defects, both repaired in revision 2: strict determinism was not in
+  force before the guard's first stage, so a fresh-process cell could not open
+  setup, and the difference in differences was reported at half its magnitude
+  because the composite contrast averaged its two sides. A real end-to-end run
+  of the production runner on synthetic inputs now reaches a reconciled
+  COMPLETE cell from a non-strict process state. Disclosed and non-blocking:
+  G11 repeats the final development pass, so a cell makes 14 full-development
+  passes against the 13 the Gate-1 projection budgeted, about 0.75 GPU-hours
+  over the matrix, with no wall or ceiling consequence. Development-set work only,
   and nothing scientific ran: `E10_TRAINING_AUTHORIZED` is still `None`,
   `run core-cell B4 train_40k 0` still refuses, zero optimizer steps, zero
   checkpoints, zero GPU-hours charged to any core cell. See

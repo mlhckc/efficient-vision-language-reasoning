@@ -136,21 +136,19 @@ because continuing an interrupted trajectory is a retry and no retry exists
 without a fresh explicit authorization record. A durability checkpoint is still
 written each evaluated epoch, labelled for forensics only.
 
-One further point is flagged rather than resolved. The frozen Gate-1 per-cell
-budget carries a single line for one full-development pass beyond the twelve
-evaluations. The published Phase-0 table names that line "final R1", and the
-guarded stage is named `final_r1_evaluation`, but the field in the projection
-source is named `final_r1_intervention_seconds`. The pipeline implements it as
-one canonical R1 pass on the epoch-22 checkpoint under the normal condition,
-which is what the stage name and the published table state and what the primary
-result requires. No visual-reliance intervention pass is implemented, because no
-E10 record registers an executable intervention set or a target-cell subset, and
-inventing one would both broaden the frozen design and add roughly three
-unbudgeted full-development passes per cell. The analysis module's
-visual-reliance summary therefore reports the conditions the published cells
-actually contain and refuses to estimate anything else. If the intended reading
-was an intervention pass, that is a design question for the user, not a gap to
-fill silently.
+One further point was flagged rather than resolved at revision 1. The frozen
+Gate-1 per-cell budget carries a single line for one full-development pass
+beyond the twelve evaluations. The published Phase-0 table names that line
+"final R1", and the guarded stage is named `final_r1_evaluation`, but the field
+in the projection source is named `final_r1_intervention_seconds`. The pipeline
+implements it as one canonical R1 pass on the epoch-22 checkpoint under the
+normal condition. No visual-reliance intervention pass is implemented, because
+no E10 record registers an executable intervention set or a target-cell subset.
+The independent Phase-2 review resolved this as non-blocking and
+contract-consistent: final R1 means one normal-condition final R1 evaluation,
+and E10 produces no new visual-reliance evidence under the frozen contract. The
+analysis module's visual-reliance summary therefore reports the conditions the
+published cells actually contain and estimates nothing.
 
 A defect was introduced and repaired during implementation. Making the Phase-1
 repair record consume the amendment chain, which adding a newer Phase-2 link
@@ -165,3 +163,65 @@ whenever a source changed during this open, unapproved revision, exactly as the
 Phase-1 repair record was. Nothing approved was rewritten: the amendment carries
 all four Phase-1 records forward byte for byte and re-checks their hashes on
 every read.
+
+## Revision 2: the two blocking review findings
+
+The independent Phase-2 review of HEAD `20cd5bf` returned CHANGES_REQUIRED with
+two blocking defects. Both are repaired here, and nothing else in the design
+changed.
+
+The first was fatal to execution. `ScientificCellGuard.stage()` checks the
+permit on entry, and that check asserts strict determinism, but the first
+determinism-enabling call sat inside the setup stage. A freshly started real
+cell could therefore never open its first stage. The repair enables the existing
+E10 mechanism, `e10_common.enable_strict_determinism`, exactly once in
+`science.run_core_cell`, after the authorisation and entry refusals and the cell
+lock and before the guard is entered. It is not a second implementation and it
+does not relax the assertion; the setup stage still re-imposes determinism after
+seeding, because `utils.set_seed` downgrades `warn_only` on every reseed. The
+observed state at that entry is recorded in the cell record as
+`determinism_at_entry`.
+
+The second was a scientific arithmetic error. The composite contrast averaged
+its positive and negative sides, so the reported difference in differences was
+exactly half of the quantity its own description named. On a fixture whose true
+difference in differences is 0.2 by construction, the superseded implementation
+returned 0.1. The repair replaces the mean over sides with a sum over sides,
+which is the minimum change: for the four one-element contrasts a sum and a mean
+over a single value are identical, so `pretraining_effect_train_40k` 0.1,
+`pretraining_effect_train_250k` 0.3, `scale_effect_B4` 0.0 and
+`scale_effect_B4r` -0.2 are unchanged, while the difference in differences moves
+from 0.1 to 0.2 and its interval from the halved scale to `[0.0, 0.4]`. No
+contrast definition, bootstrap design, seed, pairing, clustering unit,
+directional rule, metric or interval method changed.
+
+Two further changes were needed to make the repairs provable and are otherwise
+inert in production. `science.SCIENTIFIC_DEVICE` is a module constant so the
+contract harness can drive the real runner on CPU; production still resolves to
+the single CUDA device. The G9 comparison batch is bounded by the development
+set size, which is 32 for the frozen 7,714-row split and therefore unchanged.
+
+The regression evidence is a real end-to-end run of
+`science.run_core_cell` on synthetic inputs, from a deliberately non-strict
+process state and with no manual compensation for the determinism defect. It
+reaches a reconciled COMPLETE cell in about 18 seconds: 22 epochs, evaluations
+at exactly 1, 2, 3, 4, 5, 6, 8, 10, 13, 16, 19 and 22, scheduler horizon 100,
+epoch 22 as the primary, G14 at both stages with C1, C2 and C3 all identical,
+the final R1 evaluation with G9 and G11 reproducing, all six guarded stages,
+atomic publication with every digest reconciled from disk, and one completed
+spend entry inside the wall. Everything patched in that harness is an input, a
+device or a machine measurement; no rule, gate, threshold, cadence, budget,
+selection rule, accounting path or publication step is replaced.
+
+The reviewer's non-blocking resource observation is recorded rather than
+smoothed over. G11 repeats the final canonical development pass, so a cell makes
+14 full-development prediction passes where the Gate-1 projection budgeted 13,
+about 0.063 GPU-hours per cell and about 0.75 over the matrix, with no
+consequence for the 12-hour wall or the 40-hour identity ceiling. The Phase-2
+pipeline record states the counts are not identical and leaves the reconciliation
+to final execution reporting; the scientific implementation and the resource
+constants are unchanged.
+
+The Phase-2 test module now passes 38 checks, and the Phase-0 and Phase-1
+suites, the full repository runner, `phase1-verify` and `phase2-verify` are all
+unchanged and passing. The scientific core is still closed.
