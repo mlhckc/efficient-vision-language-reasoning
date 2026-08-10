@@ -1,0 +1,427 @@
+{
+  "schema_version": 1,
+  "record_type": "e10_gate1_projection",
+  "task_id": "e10-phase0-calibration",
+  "status": "GATE1_READY_FOR_USER_DECISION_WITH_UNQUANTIFIED_A5_A8C_RESERVE",
+  "NON_SCIENTIFIC": true,
+  "utc": "2026-08-10T16:49:20Z",
+  "git_commit": "6592f2f5d30899ca9474426de08a14043fc18b70",
+  "binding": {
+    "source_digest": "06f5583ae847cdc327b4099599895619af8d3350a2c0a88c89ff6aac0c6f323a",
+    "source_files": {
+      "experiments/e10_capacity_360m/e10_common.py": "8e0cc51e140bf4d308b8884648022c2c47563fef690c82dd68ddcb28f60cad1d",
+      "experiments/e10_capacity_360m/run.py": "6c790b8f754ab3ae145276a7277aac7a31493195a4d5d04c8b8ac4d999b4899d",
+      "experiments/e10_capacity_360m/calibration.py": "8280a161bcd829521f660379f2f0dafc6fe04c7a8ab0ba75a1f6dcd544428b49",
+      "experiments/e10_capacity_360m/projection.py": "7f339ef7ad5eee6027d40833821e5940468a889c368fd73bb2347a112f038e4a",
+      "experiments/e8b_readout_generation/latents.py": "051604b60d1c8fce65e1fa2e9ec53b155fb4af41b7fe9377d009f39f04f0502f",
+      "experiments/e8b_readout_generation/readouts.py": "28acdf21c87b286c78dcc2ff2be24a4834dd21b265f4420b4014f8a9d1254ca6",
+      "experiments/e8b_readout_generation/training.py": "5ec731105db87b6b5aa16bca02e9c2e3705050a59ef297a4956480fccec44ce3",
+      "experiments/e8b_readout_generation/run.py": "d05c79a749f6c4dc17e37d81f4f7598ea7f74d2e6573c4feae8243c2253e1430",
+      "experiments/e8a_question_encoder/e8a_common.py": "cd6c8ce0f0f9d93ec367d9e4c9ec611e5768e334964fe6d7c18bb3a04a70ba20",
+      "experiments/e8a_question_encoder/g21_scorer.py": "22ea9c59082840a60568d7b804a3cb66ac0daccb7b503a6c50305d1354f2f40d",
+      "src/reasoner.py": "3faafcd25e3f9e233c5173b71c1e1bbdd92859047d7b701d97ee16049892062c",
+      "src/tokens_data.py": "9e24a76e177ca8d8145995d1224d611d7de9303d0ea2b79552b3e106c01caf05",
+      "src/utils.py": "3e9af4431b68f96c10d1d6d7842a82ffe34e9100c09e1206d05bbb112c01d3ee",
+      "tests/test_e10.py": "58771a04baaaebb0043d13f1ef296d174bee16cfb9bc9d853fba39c0c1060a80",
+      "tests/run_all.py": "8469c6d9193b617a5f22754bed8f13d00f6423f792349fd5171c74c8994cad2d"
+    },
+    "config_digest": "5573d9cacdd796b8d6cecc06f2c3bce0c4e3d3f08d732031fc513409f591b401",
+    "config_files": {
+      "config.py": "f525271ac8259eba76aa675c1cff34a3a7b1f44ac19f8ebf405f33fac650f899",
+      "requirements.lock.txt": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be"
+    },
+    "protocol_family": "e10-fp32-fixed22-core-360m-2026-08-10"
+  },
+  "inputs": {
+    "governance": {
+      "e10_a5_a8c_disposition": {
+        "path": "results/experiments/e10_capacity_360m/a5_a8c_disposition_20260810.json",
+        "sha256": "31b70d4f8f44c8ca86e76431e9ebba487f18102d33eccb81be5b7f47001c8167"
+      },
+      "e10_u1_discharge": {
+        "path": "results/experiments/e10_capacity_360m/u1_discharge_20260810.json",
+        "sha256": "2371d67ad33f9684357f0e7b130ffb88031ae5a8a1fbd70fe394ed8a80af04cc"
+      },
+      "e10_recipe_contract": {
+        "path": "results/experiments/e10_capacity_360m/recipe_contract_20260810.json",
+        "sha256": "dc0523e292df91f1ce761dbfc0ac9cd4042db688a2e1102334e0494f6acd00a9"
+      },
+      "e10_frozen_artifact_baseline": {
+        "path": "results/experiments/e10_capacity_360m/frozen_artifact_baseline_20260810.json",
+        "sha256": "5a945fade1f75a05095e5e6805dde64ced3a23a7ff268b809bd26b0ef564417b"
+      },
+      "e10_source_correction": {
+        "path": "results/experiments/e10_capacity_360m/source_correction_20260810.json",
+        "sha256": "3ebe07e364e61805b3131d87baa28dc13cd2e8c1ffcdd4eec62f559bd671b526",
+        "status": "VALIDATOR_CORRECTION_RECORDED"
+      }
+    },
+    "model_verification": {
+      "path": "results/experiments/e10_capacity_360m/model_verification_20260810.json",
+      "sha256": "3c058d0ced8aa4dbf50a318d76f8fc355d5ba611a4e04d9eb8e9c31e2eaad74a"
+    },
+    "calibration": {
+      "path": "results/experiments/e10_capacity_360m/calibration_20260810.json",
+      "sha256": "70fb4391f56f34dd3ce0c2a97603f821cd1dcfb516e39b5834b8d671cc1dc304"
+    },
+    "validation": {
+      "path": "results/experiments/e10_capacity_360m/validation_20260810.json",
+      "sha256": "aa1ac220f708ea06991cd0f1cb64fee6ffe0b139e04fb5c79ba16c07f204ad42"
+    },
+    "shared_spend_ledger": {
+      "path": "/user/HS400/mc02623/backups/efficient-vision-language-reasoning/e10-locks/e10_gpu_hour_ledger.json",
+      "sha256": "e97e1410bef1cb83e6f8710c8c26e2b9dca747d2e59ced15658cb5ac55460c1a",
+      "phase0_entry_id": "7365db746d0c906842689275010e31608657f03cec4c150e2731c04b8f78b655",
+      "entries": 1
+    },
+    "shared_calibration_completion": {
+      "path": "/user/HS400/mc02623/backups/efficient-vision-language-reasoning/e10-locks/e10-calibration-completion-20260810.json",
+      "sha256": "a8cb23f6fafc31c484b62227487d0476c883e2df7ed4b3179a99e90f7c6f4ddb"
+    },
+    "e8b_calibration": {
+      "path": "results/experiments/e8b_readout_generation/throughput_calibration_20260807.json",
+      "sha256": "f95eba9f295e9f63e70d5f7c3dc7a5d1c20255dbe564fe21f92756c89a17d8a2"
+    }
+  },
+  "implementation_status": {
+    "phase0_modules": "implemented",
+    "final_test_status": "PASS",
+    "scientific_cells_executed": 0
+  },
+  "model_identity": {
+    "repo_id": "HuggingFaceTB/SmolLM2-360M",
+    "revision": "f8027fd0eaeea54caa13c31d31b9fdc459c38b49",
+    "weight_sha256": "7aaff6661428bed033abba9522bec81938678642cca3181fe752b6ca9e1e540f",
+    "weight_bytes": 723674912,
+    "parameter_count": 361821120,
+    "verified_config": {
+      "architectures": [
+        "LlamaForCausalLM"
+      ],
+      "hidden_size": 960,
+      "num_hidden_layers": 32,
+      "num_attention_heads": 15,
+      "num_key_value_heads": 5,
+      "head_dim": 64,
+      "head_dim_source": "derived_from_hidden_size_and_attention_heads",
+      "intermediate_size": 2560,
+      "vocab_size": 49152,
+      "tie_word_embeddings": true,
+      "rope_theta": 100000,
+      "rms_norm_eps": 1e-05,
+      "max_position_embeddings": 8192,
+      "initializer_range": 0.02,
+      "dtype_on_disk": "bfloat16"
+    },
+    "verified_blob_files": {
+      "config.json": {
+        "git_blob_sha1": "2c111af0f7d9845b3b9910d3d18f7cdd94bf16c4",
+        "sha256": "34f7801487078de7e434e19162c497e5cc6ff397080e40e8586627cb68a5168a",
+        "bytes": 689
+      },
+      "generation_config.json": {
+        "git_blob_sha1": "0fce861c328ff24830f3037d91ce773254447bf7",
+        "sha256": "2056c988e990b0d13670f63f2f3b87b3b6d07edaf7a3416998ba27dab2d8a059",
+        "bytes": 111
+      },
+      "tokenizer.json": {
+        "git_blob_sha1": "f922b1797f0c88e71addc8393787831f2477a4bd",
+        "sha256": "9ca9acddb6525a194ec8ac7a87f24fbba7232a9a15ffa1af0c1224fcd888e47c",
+        "bytes": 2104556
+      },
+      "merges.txt": {
+        "git_blob_sha1": "69503b13f727ba3812b6803e97442a6de05ef5eb",
+        "sha256": "0b54e8aa4e53d5383e2e4bc635a56b43f9647f7b13832d5d9ecd8f82dac4f510",
+        "bytes": 466391
+      },
+      "vocab.json": {
+        "git_blob_sha1": "0ad5ecc2035b7031b88afb544ee95e2d49baa484",
+        "sha256": "82b84012e3add4d01d12ba14442026e49b8cbbaead1f79ecf3d919784f82dc79",
+        "bytes": 800662
+      }
+    },
+    "tokenizer_artifacts_vs_135m": {
+      "tokenizer.json": {
+        "byte_identical": true,
+        "sha256": "9ca9acddb6525a194ec8ac7a87f24fbba7232a9a15ffa1af0c1224fcd888e47c",
+        "bytes": 2104556
+      },
+      "merges.txt": {
+        "byte_identical": true,
+        "sha256": "0b54e8aa4e53d5383e2e4bc635a56b43f9647f7b13832d5d9ecd8f82dac4f510",
+        "bytes": 466391
+      },
+      "vocab.json": {
+        "byte_identical": true,
+        "sha256": "82b84012e3add4d01d12ba14442026e49b8cbbaead1f79ecf3d919784f82dc79",
+        "bytes": 800662
+      }
+    },
+    "v2_vocabulary": {
+      "path": "data/v2/answer_vocab_v2.json",
+      "sha256": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680",
+      "n_classes": 100
+    },
+    "frozen_e8b_answer_contract": {
+      "sha256": "08f56d16b2f28a139248415cb633113e034ee23bf3d826b3f37d3eeb4d3e3e1c",
+      "answers": 100,
+      "max_answer_tokens": 4,
+      "length_histogram": {
+        "1": 63,
+        "2": 31,
+        "3": 5,
+        "4": 1
+      },
+      "strict_prefix_pairs": 0
+    },
+    "tokenizer_has_no_cross_size_confound": true
+  },
+  "a5_a8c_disposition": {
+    "status": "scientifically owed and re-deferred behind E10",
+    "charged_to_actual_e10_usage": false
+  },
+  "throughput": {
+    "E8B_reference_seconds_per_step": {
+      "train_40k": 0.23513,
+      "train_250k": 0.236435
+    },
+    "E10_measured_seconds_per_step": {
+      "train_40k": 0.4260626770136878,
+      "train_250k": 0.4299732816211569
+    },
+    "E10_over_E8B_ratio": {
+      "train_40k": 1.8120302684203962,
+      "train_250k": 1.8185686620896098
+    }
+  },
+  "canonical_fp32_development_timing": {
+    "raw_full_dev_projection_seconds": 212.13402093450685,
+    "allowanced_full_dev_projection_seconds": 226.13486631618431,
+    "allowance_multiplier": 1.066
+  },
+  "g14_cost": {
+    "status": "INFERRED_FROM_MEASURED_S3_S4",
+    "measured_sample_rows": 6,
+    "measured_sample_total_seconds": 33.761932916007936,
+    "measured_r3_mean_seconds": 0.02862875402206555,
+    "future_schedule": {
+      "pre_selection_rows": 64,
+      "post_selection_max_union_rows": 160,
+      "maximum_rows_per_cell": 224,
+      "invocations_per_cell": 2
+    },
+    "canonical_batched_component_seconds": 6.566529693391922,
+    "r1_r2_reference_component_seconds": 1253.2709410327175,
+    "future_per_cell_seconds": 1259.8374707261094,
+    "qualification": "inferred upper-bound proxy: inherited P64 pre-selection plus at most P64/L64/O32 post-selection; S4 R3 is correctness evidence and is not charged into the inherited R1/R2 G14 schedule"
+  },
+  "memory": {
+    "training_40k": {
+      "peak_allocated_bytes": 10342932480,
+      "peak_reserved_bytes": 10737418240,
+      "device_total_bytes": 20989804544,
+      "reserved_fraction": 0.5115539888659575,
+      "ceiling_fraction": 0.8,
+      "fires": false,
+      "gate_basis": "peak reserved / device total; equality halts"
+    },
+    "training_250k": {
+      "peak_allocated_bytes": 10318352384,
+      "peak_reserved_bytes": 11121197056,
+      "device_total_bytes": 20989804544,
+      "reserved_fraction": 0.5298380474523775,
+      "ceiling_fraction": 0.8,
+      "fires": false,
+      "gate_basis": "peak reserved / device total; equality halts"
+    },
+    "canonical_fp32_evaluation": {
+      "peak_allocated_bytes": 3845645824,
+      "peak_reserved_bytes": 4456448000,
+      "device_total_bytes": 20989804544,
+      "reserved_fraction": 0.21231488795706244,
+      "ceiling_fraction": 0.8,
+      "fires": false,
+      "gate_basis": "peak reserved / device total; equality halts"
+    },
+    "fp32_lm_residency": {
+      "peak_allocated_bytes": 1452053504,
+      "peak_reserved_bytes": 1470103552,
+      "device_total_bytes": 20989804544,
+      "reserved_fraction": 0.070038934803718,
+      "ceiling_fraction": 0.8,
+      "fires": false,
+      "gate_basis": "peak reserved / device total; equality halts"
+    },
+    "g14_sample": {
+      "peak_allocated_bytes": 1627773952,
+      "peak_reserved_bytes": 4460642304,
+      "device_total_bytes": 20989804544,
+      "reserved_fraction": 0.2125147137339632,
+      "ceiling_fraction": 0.8,
+      "fires": false,
+      "gate_basis": "peak reserved / device total; equality halts"
+    }
+  },
+  "per_cell_fixed_overhead_basis": {
+    "cpu_setup_seconds": 9.390324871987104,
+    "fp32_lm_promotion_cpu_seconds_included_in_cpu_setup": 0.09753510192967951,
+    "gpu_transfer_seconds": 0.20091188000515103,
+    "gpu_cleanup_seconds": 0.15601371903903782
+  },
+  "per_cell_projections": {
+    "train_40k": {
+      "scale": "train_40k",
+      "components": {
+        "training_seconds": 2933.8675939162545,
+        "pinned_12_development_evaluations_seconds": 2713.6183957942117,
+        "g14_seconds_inferred": 1259.8374707261094,
+        "other_fixed_overhead_seconds": 9.959258969058283,
+        "final_r1_intervention_seconds": 226.13486631618431
+      },
+      "expected_seconds": 7143.417585721818,
+      "expected_hours": 1.984282662700505,
+      "measured_times_1_25_stress_hours": 2.4803533283756316,
+      "flat_3x_context_hours": 5.952847988101515,
+      "evidence_class": "INFERRED_FROM_PHASE0_MEASUREMENTS",
+      "future_scientific_execution_authorized": false
+    },
+    "train_250k": {
+      "scale": "train_250k",
+      "components": {
+        "training_seconds": 18483.69143033029,
+        "pinned_12_development_evaluations_seconds": 2713.6183957942117,
+        "g14_seconds_inferred": 1259.8374707261094,
+        "other_fixed_overhead_seconds": 9.89290229708422,
+        "final_r1_intervention_seconds": 226.13486631618431
+      },
+      "expected_seconds": 22693.17506546388,
+      "expected_hours": 6.3036597404066335,
+      "measured_times_1_25_stress_hours": 7.879574675508292,
+      "flat_3x_context_hours": 18.910979221219904,
+      "evidence_class": "INFERRED_FROM_PHASE0_MEASUREMENTS",
+      "future_scientific_execution_authorized": false
+    }
+  },
+  "recommended_per_cell_wall_hours": 8.194757662528623,
+  "candidate_wall_analysis": {
+    "12": {
+      "fits_expected": true,
+      "fits_1_25_stress": true,
+      "expected_margin_hours": 5.6963402595933665,
+      "stress_margin_hours": 4.120425324491708
+    },
+    "13": {
+      "fits_expected": true,
+      "fits_1_25_stress": true,
+      "expected_margin_hours": 6.6963402595933665,
+      "stress_margin_hours": 5.120425324491708
+    },
+    "14": {
+      "fits_expected": true,
+      "fits_1_25_stress": true,
+      "expected_margin_hours": 7.6963402595933665,
+      "stress_margin_hours": 6.120425324491708
+    }
+  },
+  "identity_budgets": {
+    "pretrained_smollm2_360m": {
+      "projected_e10_hours": 24.863827209321414,
+      "stress_hours": 31.079784011651768,
+      "phase0_hours_already_charged": 0.0,
+      "headroom_floor_hours": 1.0,
+      "largest_cell_forced_retry_stress_hours": 7.879574675508292,
+      "margin_after_retry_and_floor_hours": 0.04064131283994055,
+      "one_largest_cell_forced_retry_fits_recommendation": true
+    },
+    "random_smollm2_360m": {
+      "projected_e10_hours": 24.89654139259475,
+      "stress_hours": 31.112498194925102,
+      "phase0_hours_already_charged": 0.032714183273333336,
+      "headroom_floor_hours": 1.0,
+      "largest_cell_forced_retry_stress_hours": 7.879574675508292,
+      "margin_after_retry_and_floor_hours": 0.007927129566605906,
+      "one_largest_cell_forced_retry_fits_recommendation": true
+    }
+  },
+  "recommended_future_per_identity_ceiling_hours": 40,
+  "recommended_ceiling_scope": "conditional E10-only recommendation; excludes the unquantified future A5/A8c reserve and is not written to config",
+  "view_1_e10_only": {
+    "expected_total_gpu_hours": 49.76036860191616,
+    "stress_total_gpu_hours": 62.19228220657687,
+    "includes_phase0_calibration_charge": true
+  },
+  "view_2_e10_plus_reserved_a5_a8c": {
+    "e10_expected_gpu_hours": 49.76036860191616,
+    "e10_stress_gpu_hours": 62.19228220657687,
+    "reserved_a5_a8c_gpu_hours": null,
+    "combined_total_gpu_hours": null,
+    "decision_status": "OPEN_UNQUANTIFIED_RESERVE",
+    "reason": "no authoritative tracked numeric A5/A8c projection exists; the reserve is explicit but not fabricated from E10"
+  },
+  "storage": {
+    "phase0_model_snapshot_bytes_actual": 727059952,
+    "phase0_result_records_bytes_actual": 72057,
+    "central_checkpoint_estimate": {
+      "E8B_resume_mib": 325.9,
+      "E8B_each_canonical_or_secondary_mib": 81.5,
+      "E10_over_E8B_trainable_ratio": 1.0092294683310494,
+      "per_cell_bytes": 517380283,
+      "twelve_cells_bytes": 6208563396
+    },
+    "conservative_future_core_reservation_bytes": 12884901888,
+    "one_retained_retry_per_identity_reservation_bytes": 2147483648,
+    "future_additional_scratch_bytes_required": 15032385536,
+    "projected_total_retained_e10_bytes": 15759517545,
+    "scratch_free_bytes": 335095447552,
+    "shared_state_free_bytes": 6570205184,
+    "shared_ledger_allowance_bytes": 1048576,
+    "physical_fit": true,
+    "formal_project_allocation": "no established project allocation",
+    "qualification": "free filesystem space is a physical-fit observation, not evidence of an approved project storage allocation"
+  },
+  "hard_gates": {
+    "implementation_and_tests": "PASS",
+    "model_identity_and_hashes": "PASS",
+    "tokenizer_byte_identity": "PASS",
+    "shared_ledger_reconciled": "PASS",
+    "calibration_outcome_acceptable": "PASS",
+    "calibration_cap_enforced": "PASS",
+    "training_reserved_memory_below_0_80": "PASS",
+    "evaluation_reserved_memory_below_0_80": "PASS",
+    "fp32_lm_residency_reserved_memory_below_0_80": "PASS",
+    "g14_reserved_memory_below_0_80": "PASS",
+    "g14_reference_equality": "PASS",
+    "resource_projection_complete": "PASS",
+    "zero_complete_epochs": "PASS",
+    "zero_checkpoints": "PASS",
+    "calibration_authorization_revoked": "PASS",
+    "scientific_authorization_unset": "PASS",
+    "scientific_budget_constants_unset": "PASS",
+    "storage_physical_fit": "PASS"
+  },
+  "resource_decision": {
+    "recommendations_only": true,
+    "config_identity_ceiling_remains": null,
+    "config_cell_wall_remains": null,
+    "e10_training_authorized_remains": null,
+    "open_decisions": [
+      "user/Claude decision on E10 scientific resource constants",
+      "authoritative numeric reserve for future A5/A8c work",
+      "formal project storage allocation remains unestablished"
+    ],
+    "next_action": "review Gate 1; do not start scientific cell 1"
+  },
+  "clean_test_accessed": false,
+  "repository_state_at_generation": {
+    "branch": "v2-protocol",
+    "head": "6592f2f5d30899ca9474426de08a14043fc18b70",
+    "worktree_porcelain": "M .gitignore\n M config.py\n M tests/run_all.py\n?? experiments/e10_capacity_360m/\n?? results/experiments/e10_capacity_360m/\n?? tests/test_e10.py",
+    "local_vs_origin": "0\t0",
+    "scope": "state at Gate-1 generation; final pushed state is recorded in the collaboration implementation manifest"
+  },
+  "final_repository_state_evidence": {
+    "path": ".agent-bridge/tasks/e10-phase0-calibration/30-implementation.json",
+    "timing": "written after the final non-force push",
+    "qualification": "an artefact committed inside a Git tree cannot contain its own final commit identity without a circular self-reference"
+  }
+}

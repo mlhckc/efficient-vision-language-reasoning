@@ -69,6 +69,13 @@ results/experiments/e9_compact_vlm/*
 results/experiments/e9_compact_vlm/timing/*
 !results/experiments/e9_compact_vlm/timing/*.json
 
+# E10 360M Phase-0 records: only small auditable JSON governance,
+# provenance, calibration and Gate-1 records are tracked. Model weights stay
+# in the project cache, and checkpoints/arrays/logs remain ignored.
+!results/experiments/e10_capacity_360m/
+results/experiments/e10_capacity_360m/*
+!results/experiments/e10_capacity_360m/*.json
+
 # Python bytecode
 __pycache__/
 *.pyc

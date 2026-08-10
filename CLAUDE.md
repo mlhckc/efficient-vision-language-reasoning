@@ -132,6 +132,15 @@ hash no longer matches the worktree.
   and output format all differ, and SmolVLM-256M's text backbone is the
   Instruct checkpoint where E8A and E8B use base. Development results only;
   see docs/experiments/e9_compact_vlm.md.
+- E10 Phase 0 (completed 10 August 2026) implemented the registered B4/B4r
+  SmolLM2-360M answer-readout family, verified the exact pinned base model and
+  ran one bounded non-scientific B4r calibration. It charged 0.032714 GPU-hours
+  to `random_smollm2_360m`, completed no epoch or scientific cell, produced no
+  checkpoint or performance result, and passed every Gate-1 hard gate. The
+  12-cell B4/B4r core remains unauthorised. `E10_TRAINING_AUTHORIZED` and both
+  E10 scientific budget constants remain `None`; the one-time calibration
+  authorisation is revoked. See
+  docs/experiments/e10_phase0_calibration.md.
 - Current gate, updated 2 August 2026 (E8A/E8B/E9 programme). The user
   authorized the E8A frozen-SLM question-encoder branch, the E8B frozen-SLM
   readout and bounded-generation branch, and the E9 evaluation-only compact-VLM

@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "record_type": "e10_calibration_revocation",
+  "task_id": "e10-phase0-calibration",
+  "status": "REVOKED",
+  "utc": "2026-08-10T16:47:50Z",
+  "binding": {
+    "source_digest": "06f5583ae847cdc327b4099599895619af8d3350a2c0a88c89ff6aac0c6f323a",
+    "source_files": {
+      "experiments/e10_capacity_360m/e10_common.py": "8e0cc51e140bf4d308b8884648022c2c47563fef690c82dd68ddcb28f60cad1d",
+      "experiments/e10_capacity_360m/run.py": "6c790b8f754ab3ae145276a7277aac7a31493195a4d5d04c8b8ac4d999b4899d",
+      "experiments/e10_capacity_360m/calibration.py": "8280a161bcd829521f660379f2f0dafc6fe04c7a8ab0ba75a1f6dcd544428b49",
+      "experiments/e10_capacity_360m/projection.py": "7f339ef7ad5eee6027d40833821e5940468a889c368fd73bb2347a112f038e4a",
+      "experiments/e8b_readout_generation/latents.py": "051604b60d1c8fce65e1fa2e9ec53b155fb4af41b7fe9377d009f39f04f0502f",
+      "experiments/e8b_readout_generation/readouts.py": "28acdf21c87b286c78dcc2ff2be24a4834dd21b265f4420b4014f8a9d1254ca6",
+      "experiments/e8b_readout_generation/training.py": "5ec731105db87b6b5aa16bca02e9c2e3705050a59ef297a4956480fccec44ce3",
+      "experiments/e8b_readout_generation/run.py": "d05c79a749f6c4dc17e37d81f4f7598ea7f74d2e6573c4feae8243c2253e1430",
+      "experiments/e8a_question_encoder/e8a_common.py": "cd6c8ce0f0f9d93ec367d9e4c9ec611e5768e334964fe6d7c18bb3a04a70ba20",
+      "experiments/e8a_question_encoder/g21_scorer.py": "22ea9c59082840a60568d7b804a3cb66ac0daccb7b503a6c50305d1354f2f40d",
+      "src/reasoner.py": "3faafcd25e3f9e233c5173b71c1e1bbdd92859047d7b701d97ee16049892062c",
+      "src/tokens_data.py": "9e24a76e177ca8d8145995d1224d611d7de9303d0ea2b79552b3e106c01caf05",
+      "src/utils.py": "3e9af4431b68f96c10d1d6d7842a82ffe34e9100c09e1206d05bbb112c01d3ee",
+      "tests/test_e10.py": "58771a04baaaebb0043d13f1ef296d174bee16cfb9bc9d853fba39c0c1060a80",
+      "tests/run_all.py": "8469c6d9193b617a5f22754bed8f13d00f6423f792349fd5171c74c8994cad2d"
+    },
+    "config_digest": "5573d9cacdd796b8d6cecc06f2c3bce0c4e3d3f08d732031fc513409f591b401",
+    "config_files": {
+      "config.py": "f525271ac8259eba76aa675c1cff34a3a7b1f44ac19f8ebf405f33fac650f899",
+      "requirements.lock.txt": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be"
+    },
+    "protocol_family": "e10-fp32-fixed22-core-360m-2026-08-10"
+  },
+  "grant": {
+    "path": "results/experiments/e10_capacity_360m/calibration_grant_20260810.json",
+    "sha256": "f55a14112f43c546d7408cc4cecf6f9c75b97c70f479dc2e1412ea53407b6159"
+  },
+  "reason": "Phase-0 calibration ended; the one-time optimizer grant is closed",
+  "calibration_status": "COMPLETED_WITHIN_CAP",
+  "claim_sha256": "43fb899ccbf0d5ebfe8f49cff97355eed8b4e127d6ec6dc642be5df2b41b235f",
+  "spend_entry_id": "7365db746d0c906842689275010e31608657f03cec4c150e2731c04b8f78b655",
+  "e10_calibration_authorized_constant": null,
+  "e10_training_authorized": null
+}

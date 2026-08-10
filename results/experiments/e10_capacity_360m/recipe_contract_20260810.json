@@ -1,0 +1,191 @@
+{
+  "metadata": {
+    "timestamp": "2026-08-10T17:39:43",
+    "git_commit": "6592f2f",
+    "git_dirty": true,
+    "open_clip_version": "3.3.0",
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "h5py_version": "3.16.0",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 0,
+    "deterministic": true,
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "embed_dim": 512,
+    "top_k_answers": 100,
+    "n_train": 40000,
+    "n_val": 8000,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "hidden_dim": 512,
+    "dropout": 0.3,
+    "weight_decay": 0.0001,
+    "task_id": "e10-phase0-calibration",
+    "protocol_family": "e10-fp32-fixed22-core-360m-2026-08-10",
+    "binding": {
+      "source_digest": "769c359e506839f1b7ff9d0d1e17045e05e8a30168bf5e55906f1247ad77439b",
+      "source_files": {
+        "experiments/e10_capacity_360m/e10_common.py": "c7b16d473483b595f05729f253996780c214b487bbf3ab0c11ffefd716779051",
+        "experiments/e10_capacity_360m/run.py": "624508ed53eab6a28e4b6d329ef8aad7cb1a3e7fb8544f6bf377617971f3994a",
+        "experiments/e10_capacity_360m/calibration.py": "8280a161bcd829521f660379f2f0dafc6fe04c7a8ab0ba75a1f6dcd544428b49",
+        "experiments/e10_capacity_360m/projection.py": "70db18f691051056295ddc6ea83e05b08bc1f6b1c9580cda014a8aa682a2ec71",
+        "experiments/e8b_readout_generation/latents.py": "051604b60d1c8fce65e1fa2e9ec53b155fb4af41b7fe9377d009f39f04f0502f",
+        "experiments/e8b_readout_generation/readouts.py": "28acdf21c87b286c78dcc2ff2be24a4834dd21b265f4420b4014f8a9d1254ca6",
+        "experiments/e8b_readout_generation/training.py": "5ec731105db87b6b5aa16bca02e9c2e3705050a59ef297a4956480fccec44ce3",
+        "experiments/e8b_readout_generation/run.py": "d05c79a749f6c4dc17e37d81f4f7598ea7f74d2e6573c4feae8243c2253e1430",
+        "experiments/e8a_question_encoder/e8a_common.py": "cd6c8ce0f0f9d93ec367d9e4c9ec611e5768e334964fe6d7c18bb3a04a70ba20",
+        "experiments/e8a_question_encoder/g21_scorer.py": "22ea9c59082840a60568d7b804a3cb66ac0daccb7b503a6c50305d1354f2f40d",
+        "src/reasoner.py": "3faafcd25e3f9e233c5173b71c1e1bbdd92859047d7b701d97ee16049892062c",
+        "src/tokens_data.py": "9e24a76e177ca8d8145995d1224d611d7de9303d0ea2b79552b3e106c01caf05",
+        "src/utils.py": "3e9af4431b68f96c10d1d6d7842a82ffe34e9100c09e1206d05bbb112c01d3ee",
+        "tests/test_e10.py": "58771a04baaaebb0043d13f1ef296d174bee16cfb9bc9d853fba39c0c1060a80",
+        "tests/run_all.py": "8469c6d9193b617a5f22754bed8f13d00f6423f792349fd5171c74c8994cad2d"
+      },
+      "config_digest": "5573d9cacdd796b8d6cecc06f2c3bce0c4e3d3f08d732031fc513409f591b401",
+      "config_files": {
+        "config.py": "f525271ac8259eba76aa675c1cff34a3a7b1f44ac19f8ebf405f33fac650f899",
+        "requirements.lock.txt": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be"
+      },
+      "protocol_family": "e10-fp32-fixed22-core-360m-2026-08-10"
+    }
+  },
+  "e10_recipe_contract": {
+    "status": "FROZEN_FOR_FUTURE_DECISION",
+    "protocol_family": "e10-fp32-fixed22-core-360m-2026-08-10",
+    "core_arms": [
+      "B4",
+      "B4r"
+    ],
+    "core_scales": [
+      "train_40k",
+      "train_250k"
+    ],
+    "core_seeds": [
+      0,
+      1,
+      2
+    ],
+    "future_cells": 12,
+    "scientific_cells_authorized": 0,
+    "dev_evaluation_epochs": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      8,
+      10,
+      13,
+      16,
+      19,
+      22
+    ],
+    "pair_normalization_keys": [
+      "arm",
+      "frozen_model_identity"
+    ],
+    "pairs": {
+      "train_40k_seed0": {
+        "B4_full_sha256": "11002db9f3dbf8f9f86f0808b5883386b46ea44ff901260c9534d6096cdf8c3f",
+        "B4r_full_sha256": "e1ebf308f642958f8b593428d923cb5262cf0fdbc438da0d3acfeb95443317ae",
+        "pairing_normalized_sha256": "5a7262cb01b5782f5c2860ec6067175b950bddeec13ad0c1c58a0598314440fa"
+      },
+      "train_40k_seed1": {
+        "B4_full_sha256": "c3b17ae72d968219904a6a67605a5f094b8ed30534e17068c3010a744bc97bc5",
+        "B4r_full_sha256": "4171f64405b3c9a7c282ed393858db5d3bf552684f84b157aec6963d2fda0021",
+        "pairing_normalized_sha256": "0955725914bc7c7b553cf1cdf528cdb01865f6ffbc6398449e6ff71dd0e5ed28"
+      },
+      "train_40k_seed2": {
+        "B4_full_sha256": "d5f58b7e43e9adf1beea45261c1b856256cddb27b7e649e6404da5d0b2711a6a",
+        "B4r_full_sha256": "76994deae525ea791f6e214ef541c00e02ccd0fa95c63e6b19ed40e54c1ba6be",
+        "pairing_normalized_sha256": "64bee7db33f72dd9807ba16ad40c69f7d9eb2ea068f8d9d29cd39f337001b2a5"
+      },
+      "train_250k_seed0": {
+        "B4_full_sha256": "9a1bb08eb7cdfd654cd54f08eb3abef155db4bfe3f5db427d1ff9df6cb1e0895",
+        "B4r_full_sha256": "ce572073cb8047aa4dd238e4796a9c302d2ae48e59c5db211402be4a9f458714",
+        "pairing_normalized_sha256": "7c1120b93400022201281991850adaeca37efdaeb2e755106eded5afd10ef859"
+      },
+      "train_250k_seed1": {
+        "B4_full_sha256": "e0f5f76c3199f82ac8543a744f1531ace03f917cc5ee05eba3efac9db7b1838d",
+        "B4r_full_sha256": "b0d0a9b9579777a2dfd449f7cf038e92f2f46434ed660bd0ba17b52b269cd7aa",
+        "pairing_normalized_sha256": "b8c101554c0e52c3e29326b1e73ec464a6bc86cbe533deb2583dc951aafe6c11"
+      },
+      "train_250k_seed2": {
+        "B4_full_sha256": "d18e15836efb534eb0489c60b8899b123609c7364d2445712fc121b95f3c19ca",
+        "B4r_full_sha256": "8e460859ad8c86ac52c8ed77e9ffb48b2f05fa2e2ec148bce89c396cdc3c8125",
+        "pairing_normalized_sha256": "59dcc64cebfedc6ad38ec211785b6dd1679a888e859c1de8dd879713c3f9b738"
+      }
+    },
+    "inheritance": {
+      "B4": {
+        "inherited_fields_identical": true,
+        "authorised_differences": {
+          "arm": "B4",
+          "protocol_family": "e10-fp32-fixed22-core-360m-2026-08-10",
+          "d_lm": 960,
+          "frozen_model_identity": "pretrained_smollm2_360m",
+          "dev_evaluation_epochs": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            8,
+            10,
+            13,
+            16,
+            19,
+            22
+          ]
+        },
+        "e10_resource_constants": {
+          "per_identity_ceiling_hours": null,
+          "per_cell_wall_clock_hours": null
+        }
+      },
+      "B4r": {
+        "inherited_fields_identical": true,
+        "authorised_differences": {
+          "arm": "B4r",
+          "protocol_family": "e10-fp32-fixed22-core-360m-2026-08-10",
+          "d_lm": 960,
+          "frozen_model_identity": "random_smollm2_360m",
+          "dev_evaluation_epochs": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            8,
+            10,
+            13,
+            16,
+            19,
+            22
+          ]
+        },
+        "e10_resource_constants": {
+          "per_identity_ceiling_hours": null,
+          "per_cell_wall_clock_hours": null
+        }
+      }
+    },
+    "e10_training_authorized": null,
+    "cross_size_interpretation": {
+      "trainable_parameter_delta": 196992,
+      "relative_delta_percent": 0.923,
+      "wording": "The cross-size comparison changes trainable capacity by only 0.923%, substantially less than earlier controlled capacity variations; nevertheless, it is interpreted as whole-system capacity sensitivity rather than an isolated frozen-LM-size effect."
+    }
+  }
+}

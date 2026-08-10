@@ -1,0 +1,90 @@
+{
+  "record_type": "e10_model_provenance_pre_download",
+  "task_id": "e10-phase0-calibration",
+  "status": "PRE_DOWNLOAD_EXPECTED_IDENTITY",
+  "NON_SCIENTIFIC": true,
+  "utc": "2026-08-10T16:39:48Z",
+  "git_commit": "6592f2f5d30899ca9474426de08a14043fc18b70",
+  "binding": {
+    "source_digest": "769c359e506839f1b7ff9d0d1e17045e05e8a30168bf5e55906f1247ad77439b",
+    "source_files": {
+      "experiments/e10_capacity_360m/e10_common.py": "c7b16d473483b595f05729f253996780c214b487bbf3ab0c11ffefd716779051",
+      "experiments/e10_capacity_360m/run.py": "624508ed53eab6a28e4b6d329ef8aad7cb1a3e7fb8544f6bf377617971f3994a",
+      "experiments/e10_capacity_360m/calibration.py": "8280a161bcd829521f660379f2f0dafc6fe04c7a8ab0ba75a1f6dcd544428b49",
+      "experiments/e10_capacity_360m/projection.py": "70db18f691051056295ddc6ea83e05b08bc1f6b1c9580cda014a8aa682a2ec71",
+      "experiments/e8b_readout_generation/latents.py": "051604b60d1c8fce65e1fa2e9ec53b155fb4af41b7fe9377d009f39f04f0502f",
+      "experiments/e8b_readout_generation/readouts.py": "28acdf21c87b286c78dcc2ff2be24a4834dd21b265f4420b4014f8a9d1254ca6",
+      "experiments/e8b_readout_generation/training.py": "5ec731105db87b6b5aa16bca02e9c2e3705050a59ef297a4956480fccec44ce3",
+      "experiments/e8b_readout_generation/run.py": "d05c79a749f6c4dc17e37d81f4f7598ea7f74d2e6573c4feae8243c2253e1430",
+      "experiments/e8a_question_encoder/e8a_common.py": "cd6c8ce0f0f9d93ec367d9e4c9ec611e5768e334964fe6d7c18bb3a04a70ba20",
+      "experiments/e8a_question_encoder/g21_scorer.py": "22ea9c59082840a60568d7b804a3cb66ac0daccb7b503a6c50305d1354f2f40d",
+      "src/reasoner.py": "3faafcd25e3f9e233c5173b71c1e1bbdd92859047d7b701d97ee16049892062c",
+      "src/tokens_data.py": "9e24a76e177ca8d8145995d1224d611d7de9303d0ea2b79552b3e106c01caf05",
+      "src/utils.py": "3e9af4431b68f96c10d1d6d7842a82ffe34e9100c09e1206d05bbb112c01d3ee",
+      "tests/test_e10.py": "58771a04baaaebb0043d13f1ef296d174bee16cfb9bc9d853fba39c0c1060a80",
+      "tests/run_all.py": "8469c6d9193b617a5f22754bed8f13d00f6423f792349fd5171c74c8994cad2d"
+    },
+    "config_digest": "5573d9cacdd796b8d6cecc06f2c3bce0c4e3d3f08d732031fc513409f591b401",
+    "config_files": {
+      "config.py": "f525271ac8259eba76aa675c1cff34a3a7b1f44ac19f8ebf405f33fac650f899",
+      "requirements.lock.txt": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be"
+    },
+    "protocol_family": "e10-fp32-fixed22-core-360m-2026-08-10"
+  },
+  "snapshot_absent_when_recorded": true,
+  "download_started": false,
+  "model": {
+    "repo_id": "HuggingFaceTB/SmolLM2-360M",
+    "pinned_revision": "f8027fd0eaeea54caa13c31d31b9fdc459c38b49",
+    "base_not_instruct": true,
+    "architecture": {
+      "architectures": [
+        "LlamaForCausalLM"
+      ],
+      "hidden_size": 960,
+      "num_hidden_layers": 32,
+      "num_attention_heads": 15,
+      "num_key_value_heads": 5,
+      "head_dim": 64,
+      "intermediate_size": 2560,
+      "vocab_size": 49152,
+      "tie_word_embeddings": true,
+      "rope_theta": 100000.0,
+      "rms_norm_eps": 1e-05,
+      "max_position_embeddings": 8192,
+      "initializer_range": 0.02
+    },
+    "dtype_on_disk": "bfloat16",
+    "parameter_count": 361821120,
+    "weight": {
+      "filename": "model.safetensors",
+      "bytes": 723674912,
+      "sha256": "7aaff6661428bed033abba9522bec81938678642cca3181fe752b6ca9e1e540f"
+    },
+    "expected_git_blob_sha1": {
+      "config.json": "2c111af0f7d9845b3b9910d3d18f7cdd94bf16c4",
+      "generation_config.json": "0fce861c328ff24830f3037d91ce773254447bf7",
+      "tokenizer.json": "f922b1797f0c88e71addc8393787831f2477a4bd",
+      "merges.txt": "69503b13f727ba3812b6803e97442a6de05ef5eb",
+      "vocab.json": "0ad5ecc2035b7031b88afb544ee95e2d49baa484"
+    },
+    "random_init_seed": 20260802
+  },
+  "u1_source": {
+    "path": "results/experiments/e8b_readout_generation/preregistration.json",
+    "sha256": "ec160d994b567975ba1c0e85955af668b01b63d6271b02fb1a3ee9951a6e2271"
+  },
+  "v2_answer_contract": {
+    "vocabulary_sha256": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680",
+    "answer_cache_sha256": "08f56d16b2f28a139248415cb633113e034ee23bf3d826b3f37d3eeb4d3e3e1c",
+    "answers": 100,
+    "max_answer_tokens": 4,
+    "length_histogram": {
+      "1": 63,
+      "2": 31,
+      "3": 5,
+      "4": 1
+    },
+    "strict_prefix_pairs": 0
+  }
+}

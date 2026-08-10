@@ -4,12 +4,12 @@ Usage, from the project root with the venv active:
 
     python -B tests/run_all.py
 
-The tests are read-only over the stored data, vocabularies and
-checkpoints; nothing is written, trained or modified. The reproduction
-test performs one brief evaluation-only forward pass and skips itself
-when CUDA is unavailable. None of the tests opens the embargoed
-clean-test target file; a source scan enforces that no test references
-it at all.
+The tests are read-only over stored data, vocabularies and checkpoints.
+Contract tests create and remove isolated temporary files; no project artifact
+is modified and nothing is trained. The reproduction test performs one brief
+evaluation-only forward pass and skips itself when CUDA is unavailable. None
+of the tests opens the embargoed clean-test target file; a source scan enforces
+that no test references it at all.
 """
 
 import sys
@@ -25,6 +25,7 @@ from tests import (
     test_e8a,
     test_e8a_safety,
     test_e8b,
+    test_e10,
     test_e9,
     test_g21_scorer,
     test_mask,
@@ -40,6 +41,7 @@ MODULES = (
     test_mask,
     test_seeding,
     test_checkpoints,
+    test_e10,
     test_reproduction,
     test_e8a,
     test_g21_scorer,

@@ -119,3 +119,12 @@ PER_MODEL_IDENTITY_CEILING_SUPERSESSION_RECORD = (
 # reach into an experiment module for a programme-wide bound.
 PER_RUN_WALL_CLOCK_HOURS = 8.0
 CORE_PROGRAMME_CEILING_HOURS = 180.0
+
+# --- E10 Phase-0 resource policy ---------------------------------------------
+# The 360M scientific matrix remains unauthorised. Gate 1 will recommend, but
+# will not set, a per-cell wall and per-identity ceiling. Any E10 scientific
+# entry must refuse while either value is None.
+E10_PER_IDENTITY_CEILING_HOURS = None
+E10_PER_CELL_WALL_CLOCK_HOURS = None
+E10_HEADROOM_FLOOR_HOURS = 1.0
+E10_CALIBRATION_BUDGET_HOURS = 0.10

@@ -682,9 +682,35 @@ scientific score was produced, and is recorded in
 results/experiments/e9_compact_vlm/g17_remediation.json with the later wording
 correction in g17_wording_correction.json.
 
-E10, F1 and F2 remain unauthorised and unstarted. E8B is closed and was not
-reopened: the timing bridge is read-only, verified each checkpoint against its
-frozen recorded SHA-256, and modified no E8B scientific artefact.
+The E10 scientific core, F1 and F2 remain unauthorised and unstarted. E8B is
+closed and was not reopened: the timing bridge is read-only, verified each
+checkpoint against its frozen recorded SHA-256, and modified no E8B scientific
+artefact.
+
+## E10 Phase-0 closure, 10 August 2026
+
+The user authorised only E10 implementation, exact SmolLM2-360M provenance and
+verification, one bounded non-scientific calibration, Gate 1 and validation.
+Phase 0 completed within that boundary. The executable arms retain the U1
+names B4 (pretrained frozen 360M readout) and B4r (architecture-matched random
+frozen control), paired across 40k/250k and seeds 0/1/2. No scientific cell or
+complete epoch ran. The calibration charged 0.032714 GPU-hours once to the
+size-qualified random identity and its one-time authorisation is permanently
+revoked.
+
+All Gate-1 hard gates passed. The resource record recommends, but does not set,
+an 8.194758-hour future cell wall and a 40-hour per-identity ceiling. The
+12-cell E10-only projection is 49.760369 expected and 62.192282 stress
+GPU-hours. A5/A8c remain scientifically owed and re-deferred outside E10; their
+reserve is explicit but unquantified because no authoritative comparable
+projection exists. A2/A2r remain unresolved without an invented definition.
+Physical storage fits the observed filesystems, but there is no established
+project allocation.
+
+The E10 core remains unauthorised. `E10_TRAINING_AUTHORIZED`,
+`E10_PER_IDENTITY_CEILING_HOURS` and `E10_PER_CELL_WALL_CLOCK_HOURS` remain
+`None` pending the user/Claude Gate-1 decision. No E10 scientific result exists
+yet. The durable report is docs/experiments/e10_phase0_calibration.md.
 
 ## Next permitted decisions
 
