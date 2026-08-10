@@ -279,14 +279,16 @@ hash no longer matches the worktree.
      mandatory frozen evaluations, run in the pair-preserving order
      that run.pair_preserving_order() prints, under the frozen recipe
      of point 2 and the fixed-22 rule of point 5. It broadens nothing:
-     grid points 4-8, E9, E10, F1, F2 and the clean test remain
+     grid points 4-8, E9, the E10 scientific core, F1, F2 and the clean test remain
      refused, the scientific design is unchanged, and the matrix is
      fixed regardless of what early results look like.
-     SUPERSEDED IN PART on 10 August 2026, for E9 only: the user
-     authorized the E9 design with targeted amendments and E9 has since
-     been executed and closed. The E9 clause of this 8 August grant is
-     therefore historical. Grid points 4-8, E10, F1, F2 and the clean
-     test remain refused, and nothing else in this grant changes.
+     SUPERSEDED IN PART on 10 August 2026: the user authorized the E9
+     design with targeted amendments and E9 has since been executed and
+     closed; separately, the user authorized and Codex completed E10 Phase 0
+     implementation, provenance, bounded non-scientific calibration and Gate
+     1. These narrow supersessions do not authorize the E10 scientific core,
+     grid points 4-8, F1, F2 or the clean test, and nothing else in this grant
+     changes.
      Performance-driven retries are forbidden, a failed execution
      grants no automatic retry, and any retry that does not fit the
      frozen ceiling and floor policy halts and returns to the user.

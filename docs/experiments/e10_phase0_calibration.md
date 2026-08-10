@@ -13,13 +13,15 @@ performed one bounded non-scientific B4r calibration and produced the Gate-1
 resource projection. It did not run a scientific cell or a complete epoch.
 The 12-cell core remains unauthorised.
 
-The cross-size interface has 493,504 trainable parameters rather than 296,512,
-an increase of 196,992 or 0.923 per cent. The cross-size comparison changes
-trainable capacity by only 0.923 per cent, substantially less than earlier
-controlled capacity variations; nevertheless, it is interpreted as
-whole-system capacity sensitivity rather than an isolated frozen-LM-size
-effect. Earlier B1/B2 evidence does not prove that this difference cannot
-matter.
+The projection interface has 493,504 trainable parameters rather than 296,512,
+an increase of 196,992 or 66.44 per cent within that layer. Total trainable
+capacity rises from 21,343,808 to 21,540,800 parameters: the same 196,992
+parameters are 0.923 per cent of the smaller whole trainable system. The
+cross-size comparison therefore changes total trainable capacity by only 0.923
+per cent, substantially less than earlier controlled capacity variations;
+nevertheless, it is interpreted as whole-system capacity sensitivity rather
+than an isolated frozen-LM-size effect. Earlier B1/B2 evidence does not prove
+that this difference cannot matter.
 
 ## Governance
 
@@ -65,10 +67,16 @@ documents the narrow validator repair, the old and new source digests, the
 unchanged model pin and recipe, and zero optimizer steps or charged hours at
 the correction point.
 
-The verified config, generation-config, tokenizer, merges and vocabulary blob
-SHA-1 values match their pins. The tokenizer, merges and vocabulary bytes are
-identical to the pinned 135M artifacts. The frozen V2 answer vocabulary has
-SHA-256 `f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680`.
+The verified Git blob SHA-1 pins are
+`2c111af0f7d9845b3b9910d3d18f7cdd94bf16c4` for the configuration,
+`0fce861c328ff24830f3037d91ce773254447bf7` for the generation configuration,
+`f922b1797f0c88e71addc8393787831f2477a4bd` for the tokenizer,
+`69503b13f727ba3812b6803e97442a6de05ef5eb` for the merges and
+`0ad5ecc2035b7031b88afb544ee95e2d49baa484` for the vocabulary. The tokenizer,
+merges and vocabulary bytes are identical to the pinned 135M artifacts. B4r
+uses the frozen random-initialisation seed 20260802. The frozen V2 answer
+vocabulary has SHA-256
+`f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680`.
 The 100-answer cache has SHA-256
 `08f56d16b2f28a139248415cb633113e034ee23bf3d826b3f37d3eeb4d3e3e1c`,
 length histogram 63/31/5/1 for one through four tokens, maximum length four
