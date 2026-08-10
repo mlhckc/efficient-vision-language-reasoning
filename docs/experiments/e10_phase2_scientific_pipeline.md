@@ -225,3 +225,29 @@ constants are unchanged.
 The Phase-2 test module now passes 38 checks, and the Phase-0 and Phase-1
 suites, the full repository runner, `phase1-verify` and `phase2-verify` are all
 unchanged and passing. The scientific core is still closed.
+
+## Review closure
+
+The independent Phase-2 review returned PASS on the repair patch at HEAD
+`45986fc`. Both blocking findings are discharged, and the reviewer separately
+verified the production synthetic end-to-end run, production G10 enforcement,
+provenance and record regeneration, non-regression, the unset scientific
+authorisation, the absence of any real scientific execution and the intact
+clean-test embargo. Its conclusion, quoted: explicit scientific authorisation is
+now the only remaining closed gate before the frozen 12-cell E10 matrix.
+
+The closure is recorded immutably in
+`results/experiments/e10_capacity_360m/phase2_review_closure_20260810.json`. It
+binds both reviewed heads, both patch identities and digests, the two discharged
+findings, the reviewer's verified items, the closure validation, the frozen
+result trees, the twelve recipe digests, the Phase-1 and Phase-2 record digests
+and every collaboration-packet artefact. It also carries forward one correction
+rather than rewriting evidence: two digest fields in the repair implementation
+record captured an intermediate regeneration during the repair session rather
+than the bytes finally committed, and the closure record pins the actual values
+and explains the difference. No patch digest and no review object is affected.
+
+The closure changes no scientific source, test, configuration, recipe, resource
+constant, result implementation or frozen record. It grants nothing: E10 remains
+unauthorised, `run core-cell B4 train_40k 0` still refuses, and authorising the
+twelve-cell matrix stays a separate explicit decision for the user.

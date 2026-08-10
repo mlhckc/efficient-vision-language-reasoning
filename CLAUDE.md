@@ -217,6 +217,20 @@ hash no longer matches the worktree.
   `run core-cell B4 train_40k 0` still refuses, zero optimizer steps, zero
   checkpoints, zero GPU-hours charged to any core cell. See
   docs/experiments/e10_phase2_scientific_pipeline.md.
+- E10 Phase-2 review CLOSED on 11 August 2026. The independent reviewer
+  returned PASS on the repair patch at HEAD 45986fc, discharging both blocking
+  findings and separately verifying the production synthetic end-to-end run,
+  production G10 enforcement, provenance and record regeneration,
+  non-regression, the unset scientific authorisation, the absence of any real
+  scientific execution and the intact clean-test embargo. Its conclusion:
+  explicit scientific authorisation is now the only remaining closed gate
+  before the frozen 12-cell E10 matrix. The closure is recorded in
+  results/experiments/e10_capacity_360m/phase2_review_closure_20260810.json and
+  changed no scientific source, test, configuration, recipe, resource constant,
+  result implementation or frozen record. IT AUTHORISES NOTHING: the E10
+  scientific core is still unauthorised, `E10_TRAINING_AUTHORIZED` is still
+  `None`, and starting the twelve-cell matrix requires a separate explicit
+  user decision that has not been given.
 - Current gate, updated 2 August 2026 (E8A/E8B/E9 programme). The user
   authorized the E8A frozen-SLM question-encoder branch, the E8B frozen-SLM
   readout and bounded-generation branch, and the E9 evaluation-only compact-VLM

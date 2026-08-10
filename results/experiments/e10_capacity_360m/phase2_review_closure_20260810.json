@@ -1,0 +1,238 @@
+{
+  "schema_version": 1,
+  "record_type": "e10_phase2_review_closure",
+  "task_id": "e10-phase2-scientific-pipeline",
+  "status": "INDEPENDENT_REVIEW_PASS_PACKET_CLOSED",
+  "NON_SCIENTIFIC": true,
+  "utc": "2026-08-10T22:41:22Z",
+  "git_commit": "45986fc49a8117ed951339457099f5d3debda3a3",
+  "binding": {
+    "source_digest": "809320d75e0ae68f81bdd4ba6d7e33c8a6afcdf39db4afbe0d49343bf7b49baa",
+    "source_files": {
+      "experiments/e10_capacity_360m/e10_common.py": "c3d7bcf302acc04fddce01f7d6026b0ca27656eeb86b0a08d5b7d0f89c618859",
+      "experiments/e10_capacity_360m/run.py": "beb60592b15f09569b2ee18f667b26cb42b7c857e64ce24dd231704bd31fa7b0",
+      "experiments/e10_capacity_360m/calibration.py": "8280a161bcd829521f660379f2f0dafc6fe04c7a8ab0ba75a1f6dcd544428b49",
+      "experiments/e10_capacity_360m/projection.py": "f3e3d4a911896b5d7403eeb0cc32f034cfafa5293f30310257516d4043211a0a",
+      "experiments/e10_capacity_360m/phase1.py": "598fbe46371aae375b486ac1cdd761adb122d0b41d6a33749d8bcbf3ab339d9b",
+      "experiments/e10_capacity_360m/phase2.py": "264327a4f6296e8b8be92781a627643e4666ebdd05b5ffe997aed7ba8cba95ce",
+      "experiments/e10_capacity_360m/science.py": "4d1d88ea842f38a27059fbf911c72dfea6d39dd999cf3df67cae4d2ebbc54d06",
+      "experiments/e10_capacity_360m/analysis.py": "0faccc49e1191f42c4287377b587ffce0c89988e59053d7e177553478ca9a056",
+      "experiments/e8b_readout_generation/latents.py": "051604b60d1c8fce65e1fa2e9ec53b155fb4af41b7fe9377d009f39f04f0502f",
+      "experiments/e8b_readout_generation/readouts.py": "28acdf21c87b286c78dcc2ff2be24a4834dd21b265f4420b4014f8a9d1254ca6",
+      "experiments/e8b_readout_generation/training.py": "5ec731105db87b6b5aa16bca02e9c2e3705050a59ef297a4956480fccec44ce3",
+      "experiments/e8b_readout_generation/run.py": "d05c79a749f6c4dc17e37d81f4f7598ea7f74d2e6573c4feae8243c2253e1430",
+      "experiments/e8a_question_encoder/e8a_common.py": "cd6c8ce0f0f9d93ec367d9e4c9ec611e5768e334964fe6d7c18bb3a04a70ba20",
+      "experiments/e8a_question_encoder/g21_scorer.py": "22ea9c59082840a60568d7b804a3cb66ac0daccb7b503a6c50305d1354f2f40d",
+      "src/reasoner.py": "3faafcd25e3f9e233c5173b71c1e1bbdd92859047d7b701d97ee16049892062c",
+      "src/tokens_data.py": "9e24a76e177ca8d8145995d1224d611d7de9303d0ea2b79552b3e106c01caf05",
+      "src/utils.py": "3e9af4431b68f96c10d1d6d7842a82ffe34e9100c09e1206d05bbb112c01d3ee",
+      "tests/test_e10.py": "323a53a9b4a86176535d31801226568e34a215c625a1c919ed8ba412b8d1ff86",
+      "tests/test_e10_phase1.py": "c25fe79485deea73e118c342f6f7548507b4b8a4d74a1391ffa6202cbf424ce8",
+      "tests/test_e10_phase2.py": "2f4c6f1f1e6804ed64d6659c36de380f2c688ee94407e9bff3f1b958ae0d4130",
+      "tests/run_all.py": "bb5f795196867f45cbc29f004cbeca5e1ae4da12c7d1f80dddec0bde102e8689"
+    },
+    "config_digest": "4b9fa43cb74b511c0bb6fda3c7c043d6047ef5e5e220c1abad6e35138f3df9ab",
+    "config_files": {
+      "config.py": "2612dfeaa2a2ca54888bd0be2004a90efaa533c16c75db2ed08baadf3f060574",
+      "requirements.lock.txt": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be"
+    },
+    "protocol_family": "e10-fp32-fixed22-core-360m-2026-08-10"
+  },
+  "review": {
+    "verdict": "PASS",
+    "reviewer": "the fresh independent Claude reviewer that returned the CHANGES_REQUIRED verdict; it did not implement the pipeline or the repair",
+    "executor": "Claude, at the user's explicit direction",
+    "executor_reviewed_own_patch": false,
+    "rounds": 2,
+    "verdicts_in_order": [
+      "CHANGES_REQUIRED",
+      "PASS"
+    ],
+    "conclusion_quoted": "Explicit scientific authorisation is now the only remaining closed gate before the frozen 12-cell E10 matrix."
+  },
+  "reviewed_heads": {
+    "phase1_reviewed_base": "231ad3bdfa3efc7e3caee3137987739b43d3193a",
+    "phase2_implementation": "20cd5bfa35768b1e83d5d8b1d23fc68eff13c8bb",
+    "phase2_repair_final": "45986fc49a8117ed951339457099f5d3debda3a3"
+  },
+  "review_objects": {
+    "implementation_patch": {
+      "path": "31-changes.patch",
+      "sha256": "24be021fb974984706956d57aa3c8264f79bf7d1df644a4efb59787e5cd2b792",
+      "range": "231ad3bdfa3efc7e3caee3137987739b43d3193a..20cd5bfa35768b1e83d5d8b1d23fc68eff13c8bb",
+      "verdict": "CHANGES_REQUIRED"
+    },
+    "final_repair_patch": {
+      "path": "41-repair-changes.patch",
+      "sha256": "082540eb70ca4f664bc9af49ca6437ce395c31d8183c887b9490a7d3d1f1f429",
+      "range": "20cd5bfa35768b1e83d5d8b1d23fc68eff13c8bb..45986fc49a8117ed951339457099f5d3debda3a3",
+      "verdict": "PASS",
+      "is_the_final_review_object": true
+    }
+  },
+  "findings_discharged": {
+    "B1_strict_determinism_before_first_guard_stage": "DISCHARGED",
+    "B2_difference_in_differences_half_magnitude": "DISCHARGED",
+    "blocking_findings_outstanding": 0
+  },
+  "reviewer_verified_pass": {
+    "production_synthetic_end_to_end": "PASS",
+    "production_g10_enforcement": "PASS",
+    "provenance_and_record_regeneration": "PASS",
+    "non_regression": "PASS",
+    "scientific_authorisation_unset": true,
+    "zero_real_scientific_execution": true,
+    "clean_test_embargo_intact": true
+  },
+  "closure_validation": {
+    "phase1_verify": "PASS",
+    "phase2_verify": "PASS",
+    "test_e10_checks": 21,
+    "test_e10_phase1_checks": 15,
+    "test_e10_phase2_checks": 38,
+    "git_diff_check": "clean",
+    "frozen_result_trees": {
+      "e8a_question_encoder": {
+        "files": 111,
+        "tree_sha256": "eb772211e54818be31f16af3a893ea2a80eafb4da6329ddce50435ace36dff39",
+        "matches_frozen_baseline": true
+      },
+      "e8b_readout_generation": {
+        "files": 201,
+        "tree_sha256": "5dcaf477b5eace01adeb2bb98c446a632203c33e4b36b1201e8fac4225e270d2",
+        "matches_frozen_baseline": true
+      },
+      "e9_compact_vlm": {
+        "files": 62,
+        "tree_sha256": "2c3e7a1523952f482260dd3eda5613a7f5a2ede125d4def82952abf9673b0885",
+        "matches_frozen_baseline": true
+      }
+    },
+    "recipe_digests_identical_to_phase0_contract": true,
+    "recipe_digests": {
+      "B4_train_40k_seed0": "11002db9f3dbf8f9f86f0808b5883386b46ea44ff901260c9534d6096cdf8c3f",
+      "B4r_train_40k_seed0": "e1ebf308f642958f8b593428d923cb5262cf0fdbc438da0d3acfeb95443317ae",
+      "B4_train_40k_seed1": "c3b17ae72d968219904a6a67605a5f094b8ed30534e17068c3010a744bc97bc5",
+      "B4r_train_40k_seed1": "4171f64405b3c9a7c282ed393858db5d3bf552684f84b157aec6963d2fda0021",
+      "B4_train_40k_seed2": "d5f58b7e43e9adf1beea45261c1b856256cddb27b7e649e6404da5d0b2711a6a",
+      "B4r_train_40k_seed2": "76994deae525ea791f6e214ef541c00e02ccd0fa95c63e6b19ed40e54c1ba6be",
+      "B4_train_250k_seed0": "9a1bb08eb7cdfd654cd54f08eb3abef155db4bfe3f5db427d1ff9df6cb1e0895",
+      "B4r_train_250k_seed0": "ce572073cb8047aa4dd238e4796a9c302d2ae48e59c5db211402be4a9f458714",
+      "B4_train_250k_seed1": "e0f5f76c3199f82ac8543a744f1531ace03f917cc5ee05eba3efac9db7b1838d",
+      "B4r_train_250k_seed1": "b0d0a9b9579777a2dfd449f7cf038e92f2f46434ed660bd0ba17b52b269cd7aa",
+      "B4_train_250k_seed2": "d18e15836efb534eb0489c60b8899b123609c7364d2445712fc121b95f3c19ca",
+      "B4r_train_250k_seed2": "8e460859ad8c86ac52c8ed77e9ffb48b2f05fa2e2ec148bce89c396cdc3c8125"
+    },
+    "embargo_scan": {
+      "files_checked": 31,
+      "passed": true
+    },
+    "output_scan": {
+      "checkpoint_files": 0,
+      "forbidden_metric_fields": 0,
+      "embargo_source_scan_passed": true
+    }
+  },
+  "scientific_state": {
+    "e10_training_authorized": null,
+    "e10_calibration_authorized": null,
+    "known_negative_core_cell": "E10 CORE REFUSED: scientific authorization is None",
+    "real_b4_b4r_cells": 0,
+    "real_scientific_checkpoints": 0,
+    "real_e10_performance_values": 0,
+    "real_core_gpu_hours": 0.0,
+    "no_scientific_cells_proof": {
+      "published_cell_records": 0,
+      "checkpoint_files": 0,
+      "charged_core_cells": 0,
+      "e10_training_authorized": null
+    },
+    "spend_ledger_entries": 1,
+    "spend_ledger_contexts": [
+      "phase0_calibration"
+    ],
+    "pretrained_smollm2_360m_hours": 0.0,
+    "random_smollm2_360m_hours": 0.032714183273333336,
+    "scientific_result_tree_exists": false,
+    "clean_test_accessed": false
+  },
+  "resource_policy_unchanged": {
+    "per_cell_wall_clock_hours": 12.0,
+    "e10_per_identity_ceiling_hours": 40.0,
+    "programme_wide_identity_ceiling_hours": 40.0,
+    "effective_identity_ceiling_hours": 40.0,
+    "headroom_floor_hours": 1.0,
+    "automatic_retries_per_identity": 0,
+    "max_authorized_retries_per_identity": 1,
+    "wall_source": "config.E10_PER_CELL_WALL_CLOCK_HOURS",
+    "ceiling_rule": "min(E10_PER_IDENTITY_CEILING_HOURS, PER_MODEL_IDENTITY_CEILING_HOURS)"
+  },
+  "immutable_records_at_closure": {
+    "phase1": {
+      "phase1_binding_amendment_20260810.json": "872591d2c89058ac843d12d3205cc29f1636ce63dbefeb9f2cd1a7caa114ef95",
+      "phase1_resource_policy_20260810.json": "0cf96a0465b6fdc88e5797d2322db5785c54414aa7b54d2dc55cb0f5d6852a4c",
+      "phase1_a5_a8c_identity_governance_20260810.json": "4ee2453cef6cb3497da8ead7f30577ed48d5b9bc217df53b90a4f18118fe8b9a",
+      "phase1_whole_cell_wall_repair_20260810.json": "fa9381769829816c6ae99a7f87e67983f9deef45edb2e1653e6846a3ec9527aa"
+    },
+    "phase2": {
+      "phase2_binding_amendment_20260810.json": "f2b08934e4f4fb04dbe9bf9feca563b3d5750e802b0d4b354a00913083f27645",
+      "phase2_scientific_pipeline_20260810.json": "fe4727586fda46bb00cb3a563d1e88b3958c3cab8f4c9ebf88fe8bc05adcfab9"
+    }
+  },
+  "packet_artifacts": {
+    "00-request.md": "86a5d20fd3bf79bd820982741a4f7391c17f55dec8f3699d6978037e744ef93c",
+    "10-plan.md": "0feca7c4d587e07e9d1de7410dce6b5281dcb5885571ff13668f726a78a9a630",
+    "30-implementation.json": "7a396f8eab53269c11457d5c64de8d3a7c4b36812f720943d98c89508ccc6cad",
+    "31-changes.patch": "24be021fb974984706956d57aa3c8264f79bf7d1df644a4efb59787e5cd2b792",
+    "32-review-changes-required.md": "0ddc23e1b4dc412eab0fa9e9dace6f8c2e743427bcbc7ff15931bf58181dd6c0",
+    "40-repair-implementation.json": "30f6d35436dfb1732547030b518e92671c9fc4778a69b08ff618d18b3dbe5567",
+    "41-repair-changes.patch": "082540eb70ca4f664bc9af49ca6437ce395c31d8183c887b9490a7d3d1f1f429",
+    "50-review-pass.md": "399e0e9c8b7426bac46ee61a27b2e32dbc6b63cc8a2587f2d81d063f9d0145e1",
+    "log.md": "a44925deab279c2e5d140e1ed725810101115d7b4481e3a48a7d18111083457c",
+    "state.json": "ce6a187bcec2986c15eb81bf7ee92d040e9db613b5587239f27335872f8d90ea"
+  },
+  "correction_carried_forward": {
+    "record": "40-repair-implementation.json",
+    "fields": [
+      "binding.phase2_binding_amendment_sha256",
+      "binding.phase2_scientific_pipeline_sha256"
+    ],
+    "recorded_values": [
+      "b9a3148b424c90f722640401b8f50102b9233f921d40d7dc79d638fe19d4a671",
+      "8ec4e368f36e8a8559dd90969e6a158f325a216ea5cffa1f63a3691381199f19"
+    ],
+    "actual_values_at_the_reviewed_head": [
+      "f2b08934e4f4fb04dbe9bf9feca563b3d5750e802b0d4b354a00913083f27645",
+      "fe4727586fda46bb00cb3a563d1e88b3958c3cab8f4c9ebf88fe8bc05adcfab9"
+    ],
+    "explanation": "the two fields captured an intermediate regeneration during the repair session rather than the bytes finally committed at 45986fc; both Phase-2 records bind the live source digest and were regenerated again after the last source edit",
+    "prior_record_rewritten": false,
+    "superseded_by": "this record",
+    "affects_review_object": false,
+    "affects_any_patch_digest": false,
+    "affects_the_revision_1_superseded_pins": false,
+    "revision_1_pins_verified_correct": {
+      "phase2_binding_amendment_20260810.json": "8dcce832b0f1d6a1f6edd4155600eca69d7a2e4aee08531bbadeb73580b48f43",
+      "phase2_scientific_pipeline_20260810.json": "a7648596c471aaa49ad10ffd6d5acc198b93b2b5d1e8f4a84b15dddc6b54922a",
+      "verified_against": "the bytes committed at 20cd5bf"
+    }
+  },
+  "what_this_closure_does_not_grant": {
+    "e10_scientific_core_authorized": false,
+    "twelve_cell_matrix_started": false,
+    "f1_started": false,
+    "f2_started": false,
+    "clean_test_opened": false,
+    "next_gate": "explicit user authorisation of the frozen twelve-cell matrix; setting E10_TRAINING_AUTHORIZED is a separate decision that this review does not make"
+  },
+  "closure_scope": {
+    "scientific_source_modified": false,
+    "test_modified": false,
+    "configuration_modified": false,
+    "recipe_modified": false,
+    "resource_constant_modified": false,
+    "result_implementation_modified": false,
+    "frozen_record_modified": false,
+    "prior_review_evidence_rewritten": false
+  }
+}
