@@ -231,6 +231,29 @@ hash no longer matches the worktree.
   scientific core is still unauthorised, `E10_TRAINING_AUTHORIZED` is still
   `None`, and starting the twelve-cell matrix requires a separate explicit
   user decision that has not been given.
+- E10 Phase 3 (implemented 11 August 2026, review requested, NOT approved)
+  repaired the self-defeating authorisation gate and changed no scientific
+  behaviour. The defect, reproduced at the Phase-2 closure HEAD: because
+  e10_common.py is inside SOURCE_PATHS, setting `E10_TRAINING_AUTHORIZED` to
+  the approval token moved the live source digest (809320d7 to 214fcc39) and
+  made phase1-verify, phase2-verify and the core cell fail on stale
+  provenance, so the only implemented authorisation mechanism could not be
+  used without invalidating the reviewed source it was meant to open.
+  BINDING FROM NOW ON: `E10_TRAINING_AUTHORIZED` is a LEGACY REFUSAL SENTINEL
+  and must remain `None`; any other value is itself a refusal. Scientific
+  authorisation is granted ONLY by one immutable EXTERNAL grant record in
+  shared state, outside the repository and outside SOURCE_PATHS and
+  CONFIG_PATHS, validated by the single canonical validator
+  e10_common.validate_core_authorization_grant. It grants exactly the frozen,
+  pair-preserved twelve-cell B4/B4r matrix or it refuses; there is no partial
+  authorisation, no environment-variable route, no config-mutation route and
+  no source-edit route. No project source may write the grant. Creating one
+  provably does not move the source digest. A narrow Phase-3 amendment carries
+  every approved Phase-0/1/2 record forward byte for byte. Nothing scientific
+  ran: no grant exists, `run core-cell B4 train_40k 0` still refuses, zero
+  cells, checkpoints, accuracies and core GPU-hours. The real grant will be
+  created only after an independent Phase-3 review returns PASS. See
+  docs/experiments/e10_phase3_authorization_binding.md.
 - Current gate, updated 2 August 2026 (E8A/E8B/E9 programme). The user
   authorized the E8A frozen-SLM question-encoder branch, the E8B frozen-SLM
   readout and bounded-generation branch, and the E9 evaluation-only compact-VLM

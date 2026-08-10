@@ -3,8 +3,10 @@
 Phase 0 measured the 360M readout family, recommended a per-cell wall and a
 per-identity ceiling, and deliberately left both unset. Phase 1 sets them and
 makes them enforceable. Nothing here authorises a scientific cell: the B4/B4r
-core matrix stays refused while e10_common.E10_TRAINING_AUTHORIZED is unset,
-and every entry point in this module refuses with it.
+core matrix stays refused while no valid external scientific core authorization
+grant exists, and every entry point in this module refuses with it. Phase 3
+moved that decision out of the source constant and into the external grant; the
+constant is a legacy refusal sentinel that must remain None.
 
 The independent Phase-0 review found one execution-readiness gap: the E10
 recipe drops the inherited E8B ``wall_clock_halt_hours`` field and no runner
@@ -265,6 +267,9 @@ def assert_scientific_core_refused() -> dict:
         "refused": True,
         "refusal": refusal,
         "e10_training_authorized": e10.E10_TRAINING_AUTHORIZED,
+        "core_authorization_grant_present": (
+            e10.core_authorization_grant_path().is_file()
+        ),
     }
 
 
@@ -401,11 +406,19 @@ class ScientificCellGuard:
         now_ns = self._clock() if now_ns is None else now_ns
         return now_ns >= state.permit.deadline_monotonic_ns
 
-    def check(self, context: str = "step") -> dict:
-        """Re-check the wall. Raises once reached, and stays raised."""
+    def check(self, context: str = "step", *,
+              revalidate_grant: bool = False) -> dict:
+        """Re-check the wall. Raises once reached, and stays raised.
+
+        ``revalidate_grant`` additionally re-reads the external scientific
+        authorization grant, so a grant removed or altered under a running cell
+        stops it at the next stage boundary.
+        """
         state = self._require_open()
         try:
-            return e10.validate_cell_permit(state.permit)
+            return e10.validate_cell_permit(
+                state.permit, revalidate_grant=revalidate_grant
+            )
         except CellWallExceeded as error:
             self._halt(f"{error} (at {context})")
             raise
@@ -416,14 +429,16 @@ class ScientificCellGuard:
 
         The deadline is checked when the stage opens and again when it closes,
         and only a stage that closed inside the wall counts towards the
-        completeness requirement that a successful cell must satisfy.
+        completeness requirement that a successful cell must satisfy. The
+        external authorization grant is revalidated on entry, so a stage can
+        never open under an authorization that has since been withdrawn.
         """
         if name not in CELL_STAGES:
             raise GuardrailError(
                 f"{name!r} is not an E10 cell stage; expected one of "
                 f"{list(CELL_STAGES)}"
             )
-        self.check(f"stage_enter:{name}")
+        self.check(f"stage_enter:{name}", revalidate_grant=True)
         yield self
         self.check(f"stage_exit:{name}")
         self._stages_completed.add(name)

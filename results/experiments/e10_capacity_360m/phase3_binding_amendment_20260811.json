@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "record_type": "e10_phase3_binding_amendment",
+  "task_id": "e10-phase3-authorization-binding",
+  "status": "PHASE2_EVIDENCE_CARRIED_FORWARD",
+  "NON_SCIENTIFIC": true,
+  "utc": "2026-08-10T23:29:56Z",
+  "binding": {
+    "source_digest": "b72d4f7fd1f0e5287997edf85fc7087958b0ed8757259f8e74d92c6f3c2e942d",
+    "source_files": {
+      "experiments/e10_capacity_360m/e10_common.py": "17607266d4c16e9415afca9cb1275b9cfb1c1c0594667a64a3edcd48d6a5631e",
+      "experiments/e10_capacity_360m/run.py": "f5aaa7ae35a85f061921e21835184b0766ae64a3b6a0663b547686ae09a2f61f",
+      "experiments/e10_capacity_360m/calibration.py": "8280a161bcd829521f660379f2f0dafc6fe04c7a8ab0ba75a1f6dcd544428b49",
+      "experiments/e10_capacity_360m/projection.py": "f3e3d4a911896b5d7403eeb0cc32f034cfafa5293f30310257516d4043211a0a",
+      "experiments/e10_capacity_360m/phase1.py": "a9495372bb4dfd5e96dd0bb37c5590cfc3311ba2abce15055830861746d30f25",
+      "experiments/e10_capacity_360m/phase2.py": "264327a4f6296e8b8be92781a627643e4666ebdd05b5ffe997aed7ba8cba95ce",
+      "experiments/e10_capacity_360m/phase3.py": "5fe67478e6ec97be24beba09a7ecd6a82fe921d85e812126dab72ffa3add896b",
+      "experiments/e10_capacity_360m/science.py": "4d1d88ea842f38a27059fbf911c72dfea6d39dd999cf3df67cae4d2ebbc54d06",
+      "experiments/e10_capacity_360m/analysis.py": "0faccc49e1191f42c4287377b587ffce0c89988e59053d7e177553478ca9a056",
+      "experiments/e8b_readout_generation/latents.py": "051604b60d1c8fce65e1fa2e9ec53b155fb4af41b7fe9377d009f39f04f0502f",
+      "experiments/e8b_readout_generation/readouts.py": "28acdf21c87b286c78dcc2ff2be24a4834dd21b265f4420b4014f8a9d1254ca6",
+      "experiments/e8b_readout_generation/training.py": "5ec731105db87b6b5aa16bca02e9c2e3705050a59ef297a4956480fccec44ce3",
+      "experiments/e8b_readout_generation/run.py": "d05c79a749f6c4dc17e37d81f4f7598ea7f74d2e6573c4feae8243c2253e1430",
+      "experiments/e8a_question_encoder/e8a_common.py": "cd6c8ce0f0f9d93ec367d9e4c9ec611e5768e334964fe6d7c18bb3a04a70ba20",
+      "experiments/e8a_question_encoder/g21_scorer.py": "22ea9c59082840a60568d7b804a3cb66ac0daccb7b503a6c50305d1354f2f40d",
+      "src/reasoner.py": "3faafcd25e3f9e233c5173b71c1e1bbdd92859047d7b701d97ee16049892062c",
+      "src/tokens_data.py": "9e24a76e177ca8d8145995d1224d611d7de9303d0ea2b79552b3e106c01caf05",
+      "src/utils.py": "3e9af4431b68f96c10d1d6d7842a82ffe34e9100c09e1206d05bbb112c01d3ee",
+      "tests/test_e10.py": "53258283f3b232682d6a65987bbab3a9cf99cb2d39e3510953bccef67d021bbd",
+      "tests/test_e10_phase1.py": "a472e60d351a70d5c4ed93653ea0c6e7977ba90874f6333e1a419605c4883b7d",
+      "tests/test_e10_phase2.py": "ecf03ea6224d5bf14eb62a96a33819b405aea34da6086e96f6ab9004496b77c6",
+      "tests/test_e10_phase3.py": "2d7e7c64707642cc79e22575621ab7c80e904b420b3f1980159349e910302849",
+      "tests/run_all.py": "0a53250ac3c10edd788ea756a64dff54e83d2dec824ad557a6f8ea629e741786"
+    },
+    "config_digest": "4b9fa43cb74b511c0bb6fda3c7c043d6047ef5e5e220c1abad6e35138f3df9ab",
+    "config_files": {
+      "config.py": "2612dfeaa2a2ca54888bd0be2004a90efaa533c16c75db2ed08baadf3f060574",
+      "requirements.lock.txt": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be"
+    },
+    "protocol_family": "e10-fp32-fixed22-core-360m-2026-08-10"
+  },
+  "reason": "Phase 3 adds the external scientific authorization grant, its canonical validator and the Phase-3 module and test sources, so the live source digest moves. config.py and requirements.lock.txt are untouched, so the config digest does not move. The Phase-2 records are preserved byte for byte and are carried forward by this record instead of being rewritten.",
+  "change_scope": {
+    "authorization_binding_implemented": true,
+    "resource_constants_changed": false,
+    "scientific_recipe_changed": false,
+    "core_matrix_changed": false,
+    "model_pin_changed": false,
+    "dev_evaluation_cadence_changed": false,
+    "scientific_authorization_granted": false,
+    "phase0_record_rewritten": false,
+    "phase1_record_rewritten": false,
+    "phase2_record_rewritten": false
+  },
+  "phase2_r2_source_digest": "809320d75e0ae68f81bdd4ba6d7e33c8a6afcdf39db4afbe0d49343bf7b49baa",
+  "phase2_r2_config_digest": "4b9fa43cb74b511c0bb6fda3c7c043d6047ef5e5e220c1abad6e35138f3df9ab",
+  "preserved_records": {
+    "phase2_binding_amendment_20260810.json": {
+      "location": "repository",
+      "sha256": "f2b08934e4f4fb04dbe9bf9feca563b3d5750e802b0d4b354a00913083f27645"
+    },
+    "phase2_scientific_pipeline_20260810.json": {
+      "location": "repository",
+      "sha256": "fe4727586fda46bb00cb3a563d1e88b3958c3cab8f4c9ebf88fe8bc05adcfab9"
+    },
+    "phase2_review_closure_20260810.json": {
+      "location": "repository",
+      "sha256": "d0e48a987d0a274add54d6c42e7d99118158f06ade0d747c847de7f0be32392f"
+    }
+  },
+  "scientific_execution": {
+    "optimizer_steps": 0,
+    "scientific_cells_executed": 0,
+    "gpu_hours_charged": 0.0,
+    "e10_training_authorized": null
+  }
+}

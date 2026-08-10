@@ -13,6 +13,7 @@ import json
 import sys
 import tempfile
 import time
+from contextlib import contextmanager
 from pathlib import Path
 from unittest import mock
 
@@ -29,6 +30,8 @@ from tests.test_e10 import (
     _strict_state_restored,
     _temporary_shared_paths,
     _write_ledgers,
+    mirror_governance,
+    write_core_authorization_grant,
     write_retry_authorization,
 )
 
@@ -52,26 +55,37 @@ class _SpyOptimizer:
         self.steps += 1
 
 
+@contextmanager
 def _authorized_core(stack_paths: dict):
-    """Patch exactly what a scientific cell would need, and nothing more."""
-    return (
-        mock.patch.object(e10, "E10_TRAINING_AUTHORIZED",
-                          e10.CORE_AUTHORIZATION_TOKEN),
+    """Authorise exactly what a scientific cell would need, and nothing more.
+
+    Since Phase 3 the source constant is not an authorization route, so the
+    authorised state is one valid external grant written into the temporary
+    authorization directory that _temporary_shared_paths has redirected. The
+    temporary OUT_DIR mirrors the immutable governance tree, because the
+    provenance chain the grant binds resolves its records through OUT_DIR.
+    """
+    output = mirror_governance(stack_paths["OUT_DIR"])
+    write_core_authorization_grant()
+    with (
         mock.patch.object(e10, "assert_shared_state_healthy",
                           return_value={"calibration_complete": True}),
-        mock.patch.object(e10, "OUT_DIR", stack_paths["OUT_DIR"]),
-    )
+        mock.patch.object(e10, "OUT_DIR", output),
+    ):
+        yield output
 
 
 # 1. The scientific core still refuses.
 
 def test_scientific_core_still_refuses() -> None:
     assert e10.E10_TRAINING_AUTHORIZED is None
-    assert phase1.assert_scientific_core_refused() == {
-        "refused": True,
-        "refusal": "E10 CORE REFUSED: scientific authorization is None",
-        "e10_training_authorized": None,
-    }
+    refused = phase1.assert_scientific_core_refused()
+    assert refused["refused"] is True
+    assert refused["e10_training_authorized"] is None
+    assert refused["core_authorization_grant_present"] is False
+    assert refused["refusal"].startswith(
+        "E10 CORE REFUSED: scientific authorization grant is absent"
+    )
     for arm, scale, seed in FROZEN_ORDER:
         _must_raise(
             SystemExit,
@@ -322,8 +336,7 @@ def test_wall_halt_accounts_and_cannot_silently_continue() -> None:
             _temporary_shared_paths(root) as paths,
         ):
             _write_ledgers(paths["SPEND_LEDGER"], paths["RETRY_LEDGER"])
-            patches = _authorized_core({"OUT_DIR": output})
-            with patches[0], patches[1], patches[2]:
+            with _authorized_core({"OUT_DIR": output}):
                 e10.enable_strict_determinism()
                 optimizer = _SpyOptimizer()
                 expired = time.monotonic_ns() - WALL_NS - 1
@@ -399,8 +412,7 @@ def test_unguarded_tail_crossing_the_wall_cannot_complete() -> None:
         output.mkdir()
         with _strict_state_restored(), _temporary_shared_paths(root) as paths:
             _write_ledgers(paths["SPEND_LEDGER"], paths["RETRY_LEDGER"])
-            patches = _authorized_core({"OUT_DIR": output})
-            with patches[0], patches[1], patches[2]:
+            with _authorized_core({"OUT_DIR": output}):
                 e10.enable_strict_determinism()
                 optimizer = _SpyOptimizer()
                 # Two seconds of wall remain when the cell opens.
@@ -466,8 +478,7 @@ def test_completed_requires_every_stage_inside_the_wall() -> None:
         output.mkdir()
         with _strict_state_restored(), _temporary_shared_paths(root) as paths:
             _write_ledgers(paths["SPEND_LEDGER"], paths["RETRY_LEDGER"])
-            patches = _authorized_core({"OUT_DIR": output})
-            with patches[0], patches[1], patches[2]:
+            with _authorized_core({"OUT_DIR": output}):
                 e10.enable_strict_determinism()
                 partial = phase1.ScientificCellGuard("B4r", "train_40k", 1)
                 with partial:
@@ -502,8 +513,7 @@ def test_accounting_refuses_over_wall_completed_entries() -> None:
         root = Path(directory)
         with _strict_state_restored(), _temporary_shared_paths(root) as paths:
             _write_ledgers(paths["SPEND_LEDGER"], paths["RETRY_LEDGER"])
-            patches = _authorized_core({"OUT_DIR": root})
-            with patches[0], patches[1], patches[2]:
+            with _authorized_core({"OUT_DIR": root}):
                 e10.enable_strict_determinism()
                 permit = e10.authorize_cell_execution("B4", "train_40k", 0)
                 # A caller that under-reports occupancy cannot buy a success:

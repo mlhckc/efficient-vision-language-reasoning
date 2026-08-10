@@ -42,6 +42,8 @@ from tests.test_e10 import (
     _strict_state_restored,
     _temporary_shared_paths,
     _write_ledgers,
+    mirror_governance,
+    write_core_authorization_grant,
 )
 
 
@@ -56,7 +58,6 @@ FROZEN_ORDER = [
 FROZEN_CADENCE = (1, 2, 3, 4, 5, 6, 8, 10, 13, 16, 19, 22)
 SYNTHETIC_ROWS = 20
 SYNTHETIC_IMAGES = 5
-AUTH = "e10-core-matrix-approved"
 
 
 # --- helpers ------------------------------------------------------------------
@@ -345,8 +346,7 @@ def test_optimizer_steps_only_occur_through_the_guarded_path() -> None:
         root = Path(directory)
         paths = stack.enter_context(_temporary_shared_paths(root))
         _write_ledgers(paths["SPEND_LEDGER"], paths["RETRY_LEDGER"])
-        stack.enter_context(mock.patch.object(
-            e10, "E10_TRAINING_AUTHORIZED", e10.CORE_AUTHORIZATION_TOKEN))
+        write_core_authorization_grant()
         stack.enter_context(mock.patch.object(
             e10, "assert_shared_state_healthy", lambda **_: {}))
         stack.enter_context(mock.patch.object(
@@ -546,14 +546,12 @@ def test_missing_required_artefact_prevents_completion() -> None:
         paths = stack.enter_context(_temporary_shared_paths(root))
         _write_ledgers(paths["SPEND_LEDGER"], paths["RETRY_LEDGER"])
         _patched_core_tree(stack, root)
-        stack.enter_context(mock.patch.object(
-            e10, "E10_TRAINING_AUTHORIZED", e10.CORE_AUTHORIZATION_TOKEN))
+        write_core_authorization_grant()
         stack.enter_context(mock.patch.object(
             e10, "assert_shared_state_healthy", lambda **_: {}))
         stack.enter_context(mock.patch.object(
             e10, "assert_strict_determinism", lambda: {"stub": True}))
-        governance = root / "governance"
-        governance.mkdir()
+        governance = mirror_governance(root / "governance")
         stack.enter_context(mock.patch.object(e10, "OUT_DIR", governance))
         with phase1.ScientificCellGuard("B4", "train_40k", 0) as guard:
             with guard.stage("setup"):
@@ -748,7 +746,8 @@ def test_scientific_authorization_remains_closed() -> None:
     assert e10.E10_CALIBRATION_AUTHORIZED is None
     refusal = phase1.assert_scientific_core_refused()
     assert refusal["refused"] is True
-    assert "scientific authorization is None" in refusal["refusal"]
+    assert refusal["core_authorization_grant_present"] is False
+    assert "scientific authorization grant is absent" in refusal["refusal"]
     _must_raise(SystemExit,
                 lambda: e10_run.core_cell("B4", "train_40k", 0),
                 "E10 CORE REFUSED")
@@ -811,8 +810,12 @@ def _non_strict_process_state() -> None:
 
 
 def _authorized(stack: ExitStack) -> None:
-    stack.enter_context(mock.patch.object(
-        e10, "E10_TRAINING_AUTHORIZED", AUTH))
+    """The authorised state: one valid external grant, no source mutation.
+
+    _temporary_shared_paths has already redirected CORE_AUTHORIZATION_DIR into
+    the caller's temporary directory, so nothing here touches real shared state.
+    """
+    write_core_authorization_grant()
     stack.enter_context(mock.patch.object(
         e10, "assert_shared_state_healthy", lambda **_: {}))
 
@@ -828,8 +831,7 @@ def test_first_stage_refuses_without_strict_determinism() -> None:
         root = Path(directory)
         paths = stack.enter_context(_temporary_shared_paths(root))
         _write_ledgers(paths["SPEND_LEDGER"], paths["RETRY_LEDGER"])
-        governance = root / "governance"
-        governance.mkdir()
+        governance = mirror_governance(root / "governance")
         stack.enter_context(mock.patch.object(e10, "OUT_DIR", governance))
         _authorized(stack)
         _non_strict_process_state()
@@ -867,8 +869,7 @@ def test_production_entry_enables_determinism_before_the_first_stage() -> None:
         root = Path(directory)
         paths = stack.enter_context(_temporary_shared_paths(root))
         _write_ledgers(paths["SPEND_LEDGER"], paths["RETRY_LEDGER"])
-        governance = root / "governance"
-        governance.mkdir()
+        governance = mirror_governance(root / "governance")
         stack.enter_context(mock.patch.object(e10, "OUT_DIR", governance))
         _patched_core_tree(stack, root)
         _authorized(stack)
@@ -1053,6 +1054,9 @@ def _install_harness(stack: ExitStack, root: Path, inputs: dict) -> dict:
         "GOVERNANCE_LOCK": root / "governance.lock",
         "INITIALIZATION_PENDING": root / "initialization-pending.json",
         "LEDGER_FAILURE_PATH": root / "ledger-failure.json",
+        # The external authorization directory is redirected with the rest of
+        # shared state, so the harness can never touch a real authorization.
+        "CORE_AUTHORIZATION_DIR": root / "core-authorization",
     }
     for name, path in ledgers.items():
         stack.enter_context(mock.patch.object(e10, name, path))
@@ -1076,7 +1080,6 @@ def _install_harness(stack: ExitStack, root: Path, inputs: dict) -> dict:
         e10, "assert_no_embargo_reference",
         lambda paths=None: real_scan(real_sources)))
     _patched_core_tree(stack, root)
-    _authorized(stack)
 
     cache = readouts.build_answer_cache(_HarnessTokenizer(), HARNESS_ANSWERS)
     replacements = {
@@ -1141,6 +1144,9 @@ def _install_harness(stack: ExitStack, root: Path, inputs: dict) -> dict:
 
     stack.enter_context(mock.patch.object(
         e8b_training, "g10_collapse_record", _recorded_collapse))
+    # Authorised last: the grant binds the frozen model identity, so it is
+    # written once the harness stand-in identity is the live one.
+    _authorized(stack)
     return {"ledgers": ledgers, "governance": governance}
 
 

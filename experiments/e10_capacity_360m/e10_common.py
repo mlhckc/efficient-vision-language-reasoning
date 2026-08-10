@@ -194,6 +194,13 @@ E8B_CALIBRATION_ENVIRONMENT = {
 # Scientific execution stays closed at hand-back.  The one bounded calibration
 # is authorised by an immutable grant plus a later immutable revocation record,
 # not by changing this source constant and not by E8B's live token.
+#
+# Phase 3 makes the same true of the scientific core. E10_TRAINING_AUTHORIZED is
+# now a LEGACY REFUSAL SENTINEL and is not an authorization route: this module
+# is inside SOURCE_PATHS, so setting it moves the live source digest and, as the
+# Phase-3 reproduction showed, invalidates the very reviewed provenance chain an
+# authorization has to bind. It must remain None; any other value is itself a
+# refusal. The core is opened by the immutable EXTERNAL grant below.
 E10_TRAINING_AUTHORIZED = None
 E10_CALIBRATION_AUTHORIZED = None
 CORE_AUTHORIZATION_TOKEN = "e10-core-matrix-approved"
@@ -204,6 +211,35 @@ CALIBRATION_REVOCATION_PATH = OUT_DIR / "calibration_revocation_20260810.json"
 CALIBRATION_MAX_GPU_HOURS = config.E10_CALIBRATION_BUDGET_HOURS
 CALIBRATION_MAX_SECONDS = CALIBRATION_MAX_GPU_HOURS * 3600.0
 CALIBRATION_SAFETY_SECONDS = 15.0
+
+# --- the external scientific core authorization grant -------------------------
+# The grant lives in shared state, outside the repository and outside both
+# SOURCE_PATHS and CONFIG_PATHS, so creating it cannot move a digest that the
+# reviewed records bind. No project source may write it: it is created out of
+# band by the user after an independent Phase-3 review, exactly like the retry
+# authorization records, and phase3.assert_no_self_granted_authorization proves
+# no execution path can write one for itself.
+E10_EXPERIMENT_ID = "e10_capacity_360m"
+CORE_AUTHORIZATION_DIR = SHARED_STATE_DIR / "e10-core-authorization"
+CORE_AUTHORIZATION_GRANT_NAME = "e10-core-authorization-grant.json"
+CORE_AUTHORIZED_BY = "user"
+CORE_AUTHORIZATION_PURPOSE = (
+    "execute the frozen E10 twelve-cell B4/B4r core matrix under the reviewed "
+    "Phase-1 guardrails and the reviewed Phase-2 scientific pipeline"
+)
+# What the grant does NOT open. Every one of these is False in the one valid
+# grant, and any other value is a scope-broadening refusal.
+CORE_GRANT_SCOPE_EXCLUSIONS = {
+    "clean_test_authorized": False,
+    "f1_model_freeze_authorized": False,
+    "f2_clean_test_evaluation_authorized": False,
+    "a5_authorized": False,
+    "a8c_authorized": False,
+    "additional_cells_authorized": False,
+    "recipe_or_matrix_changes_authorized": False,
+    "automatic_retry_authorized": False,
+    "generation_beyond_frozen_protocol_authorized": False,
+}
 
 PERMITTED_RETRY_REASONS = {
     "node_failure",
@@ -348,6 +384,36 @@ PHASE1_R2_RECORD_SHA256 = {
     "phase1_a5_a8c_identity_governance_20260810.json":
         "4ee2453cef6cb3497da8ead7f30577ed48d5b9bc217df53b90a4f18118fe8b9a",
 }
+# --- Phase-3 binding supersession --------------------------------------------
+# Phase 3 adds the external-grant validator, the Phase-3 module and the Phase-3
+# test module, so the live source digest moves once more. config.py and
+# requirements.lock.txt are untouched, so the config digest does NOT move and
+# the Phase-2 pair differs from the live one in its source component alone. No
+# approved record is rewritten: one immutable amendment pins the pre-amendment
+# digests and the SHA-256 of every Phase-2 record it carries forward, exactly as
+# Phase 1 and Phase 2 did before it.
+PHASE3_TASK_ID = "e10-phase3-authorization-binding"
+PHASE3_AMENDMENT_PATH = OUT_DIR / "phase3_binding_amendment_20260811.json"
+PHASE3_AUTHORIZATION_PATH = (
+    OUT_DIR / "phase3_authorization_binding_20260811.json"
+)
+PHASE3_PATHS = (PHASE3_AMENDMENT_PATH, PHASE3_AUTHORIZATION_PATH)
+# The digests in force at the independently reviewed Phase-2 closure HEAD
+# 5d79bf5fb435ce365335593aff6912e37071f65c, which this task starts from.
+PHASE2_R2_SOURCE_DIGEST = (
+    "809320d75e0ae68f81bdd4ba6d7e33c8a6afcdf39db4afbe0d49343bf7b49baa"
+)
+PHASE2_R2_CONFIG_DIGEST = (
+    "4b9fa43cb74b511c0bb6fda3c7c043d6047ef5e5e220c1abad6e35138f3df9ab"
+)
+PHASE2_R2_RECORD_SHA256 = {
+    "phase2_binding_amendment_20260810.json":
+        "f2b08934e4f4fb04dbe9bf9feca563b3d5750e802b0d4b354a00913083f27645",
+    "phase2_scientific_pipeline_20260810.json":
+        "fe4727586fda46bb00cb3a563d1e88b3958c3cab8f4c9ebf88fe8bc05adcfab9",
+    "phase2_review_closure_20260810.json":
+        "d0e48a987d0a274add54d6c42e7d99118158f06ade0d747c847de7f0be32392f",
+}
 PHASE0_SOURCE_DIGEST = (
     "06f5583ae847cdc327b4099599895619af8d3350a2c0a88c89ff6aac0c6f323a"
 )
@@ -404,6 +470,7 @@ SOURCE_PATHS = (
     Path(__file__).with_name("projection.py"),
     Path(__file__).with_name("phase1.py"),
     Path(__file__).with_name("phase2.py"),
+    Path(__file__).with_name("phase3.py"),
     Path(__file__).with_name("science.py"),
     Path(__file__).with_name("analysis.py"),
     PROJECT_ROOT / "experiments" / "e8b_readout_generation" / "latents.py",
@@ -418,6 +485,7 @@ SOURCE_PATHS = (
     PROJECT_ROOT / "tests" / "test_e10.py",
     PROJECT_ROOT / "tests" / "test_e10_phase1.py",
     PROJECT_ROOT / "tests" / "test_e10_phase2.py",
+    PROJECT_ROOT / "tests" / "test_e10_phase3.py",
     PROJECT_ROOT / "tests" / "run_all.py",
 )
 CONFIG_PATHS = (
@@ -645,6 +713,7 @@ def assert_current_binding(record: dict, context: str) -> dict:
 def accepted_historical_bindings() -> tuple[tuple[str, str], ...]:
     """The (source, config) digest pairs a superseded record may still carry."""
     return (
+        (PHASE2_R2_SOURCE_DIGEST, PHASE2_R2_CONFIG_DIGEST),
         (PHASE1_R2_SOURCE_DIGEST, PHASE1_R2_CONFIG_DIGEST),
         (PHASE1_R1_SOURCE_DIGEST, PHASE1_R1_CONFIG_DIGEST),
         (PHASE0_SOURCE_DIGEST, PHASE0_CONFIG_DIGEST),
@@ -655,6 +724,7 @@ def accepted_historical_bindings() -> tuple[tuple[str, str], ...]:
 def _amendment_chain() -> tuple[tuple[Path, Any], ...]:
     """Newest first. Each link carries the records the next one bound."""
     return (
+        (PHASE3_AMENDMENT_PATH, validate_phase3_amendment),
         (PHASE2_AMENDMENT_PATH, validate_phase2_amendment),
         (PHASE1_REPAIR_PATH, validate_phase1_repair),
         (PHASE1_AMENDMENT_PATH, validate_phase1_amendment),
@@ -662,13 +732,79 @@ def _amendment_chain() -> tuple[tuple[Path, Any], ...]:
     )
 
 
+def validate_phase3_amendment() -> dict:
+    """The immutable record that carries the Phase-2 evidence across Phase 3.
+
+    Phase 3 adds the external-grant validator and its module and test sources,
+    so the live source digest moves. This is the newest link in the chain, so it
+    is the one record validated against the LIVE binding; every earlier link is
+    admitted only through assert_recorded_binding and its pinned bytes.
+    """
+    amendment = read_json_mapping(PHASE3_AMENDMENT_PATH)
+    required = {
+        "schema_version", "record_type", "task_id", "status", "NON_SCIENTIFIC",
+        "utc", "binding", "reason", "change_scope", "phase2_r2_source_digest",
+        "phase2_r2_config_digest", "preserved_records", "scientific_execution",
+    }
+    _require_exact_keys(amendment, required, "E10 Phase-3 amendment")
+    if amendment["schema_version"] != 1 \
+            or amendment["record_type"] != "e10_phase3_binding_amendment" \
+            or amendment["task_id"] != PHASE3_TASK_ID \
+            or amendment["status"] != "PHASE2_EVIDENCE_CARRIED_FORWARD" \
+            or amendment["NON_SCIENTIFIC"] is not True \
+            or amendment["phase2_r2_source_digest"] != PHASE2_R2_SOURCE_DIGEST \
+            or amendment["phase2_r2_config_digest"] != PHASE2_R2_CONFIG_DIGEST \
+            or amendment["scientific_execution"] != {
+                "optimizer_steps": 0,
+                "scientific_cells_executed": 0,
+                "gpu_hours_charged": 0.0,
+                "e10_training_authorized": None,
+            }:
+        raise AssertionError("E10 Phase-3 amendment semantics mismatch")
+    _require_utc(amendment["utc"], "E10 Phase-3 amendment utc")
+    assert_current_binding(amendment, "E10 Phase-3 amendment")
+    if amendment["change_scope"] != {
+        "authorization_binding_implemented": True,
+        "resource_constants_changed": False,
+        "scientific_recipe_changed": False,
+        "core_matrix_changed": False,
+        "model_pin_changed": False,
+        "dev_evaluation_cadence_changed": False,
+        "scientific_authorization_granted": False,
+        "phase0_record_rewritten": False,
+        "phase1_record_rewritten": False,
+        "phase2_record_rewritten": False,
+    }:
+        raise AssertionError("E10 Phase-3 amendment scope mismatch")
+    preserved = amendment["preserved_records"]
+    if not isinstance(preserved, dict) \
+            or set(preserved) != set(PHASE2_R2_RECORD_SHA256):
+        raise AssertionError("E10 Phase-3 amendment record set mismatch")
+    for filename, expected_sha in PHASE2_R2_RECORD_SHA256.items():
+        reference = preserved[filename]
+        _require_exact_keys(
+            reference, {"location", "sha256"}, f"Phase-3 amendment {filename}"
+        )
+        if reference["sha256"] != expected_sha \
+                or reference["location"] != "repository":
+            raise AssertionError(
+                f"E10 Phase-3 amendment preserved record mismatch: {filename}"
+            )
+        if sha256_file(OUT_DIR / filename) != expected_sha:
+            raise AssertionError(
+                f"E10 Phase-2 record changed under Phase 3: {filename}"
+            )
+    return amendment
+
+
 def validate_phase2_amendment() -> dict:
     """The immutable record that carries the Phase-1 evidence across Phase 2.
 
     Phase 2 adds executable scientific pipeline sources and therefore moves the
-    live source digest. This is the newest link in the chain, so it is the one
-    record validated against the LIVE binding; every earlier link is admitted
-    only through assert_recorded_binding and its pinned bytes.
+    live source digest. It was the newest link in the chain while it was the
+    newest record; Phase 3 adds a newer link, so this record is now admitted
+    exactly like every other superseded record: the live binding, or the one
+    historical pair an immutable amendment names together with these bytes.
     """
     amendment = read_json_mapping(PHASE2_AMENDMENT_PATH)
     required = {
@@ -692,7 +828,9 @@ def validate_phase2_amendment() -> dict:
             }:
         raise AssertionError("E10 Phase-2 amendment semantics mismatch")
     _require_utc(amendment["utc"], "E10 Phase-2 amendment utc")
-    assert_current_binding(amendment, "E10 Phase-2 amendment")
+    assert_recorded_binding(
+        amendment, "E10 Phase-2 amendment", PHASE2_AMENDMENT_PATH
+    )
     if amendment["change_scope"] != {
         "scientific_pipeline_implemented": True,
         "resource_constants_changed": False,
@@ -976,7 +1114,8 @@ def assert_current_or_precorrection_binding(
 def assert_no_embargo_reference(paths: list[Path] | None = None) -> dict:
     if paths is None:
         paths = list(Path(__file__).parent.rglob("*.py"))
-        for name in ("test_e10.py", "test_e10_phase1.py", "test_e10_phase2.py"):
+        for name in ("test_e10.py", "test_e10_phase1.py", "test_e10_phase2.py",
+                     "test_e10_phase3.py"):
             test_path = PROJECT_ROOT / "tests" / name
             if test_path.exists():
                 paths.append(test_path)
@@ -1739,7 +1878,191 @@ def model_identity(arm: str) -> str:
         raise AssertionError(f"unknown E10 arm {arm!r}") from None
 
 
-def assert_core_entry_authorized(arm: str, scale: str, seed: int) -> None:
+def _record_reference(path: Path) -> dict:
+    return {"path": str(Path(path).relative_to(PROJECT_ROOT)),
+            "sha256": sha256_file(path)}
+
+
+def core_authorization_grant_path() -> Path:
+    """The one path an external scientific core authorization may occupy."""
+    return CORE_AUTHORIZATION_DIR / CORE_AUTHORIZATION_GRANT_NAME
+
+
+def core_authorization_grant_expectations() -> dict:
+    """Every field the one valid core authorization grant must carry.
+
+    The grant is data, never code: this states what it must say, and
+    validate_core_authorization_grant refuses anything else. Every value is
+    derived from a frozen contract or a pinned constant, so a grant can never
+    depend on, and can never be shaped by, an observed E10 scientific result.
+    """
+    policy = resource_policy()
+    frozen = frozen_recipe_contract()
+    digests = {}
+    for arm, scale, seed in CORE_CELLS:
+        observed = recipe_sha256(build_recipe(arm, scale, seed))
+        expected = frozen["pairs"][f"{scale}_seed{seed}"][f"{arm}_full_sha256"]
+        if observed != expected:
+            raise AssertionError(
+                f"E10 recipe digest drift at {arm}/{scale}/seed{seed}"
+            )
+        digests[f"{arm}_{scale}_seed{seed}"] = observed
+    return {
+        "schema_version": 1,
+        "record_type": "e10_core_authorization_grant",
+        "task_id": PHASE3_TASK_ID,
+        "status": "SCIENTIFIC_CORE_AUTHORIZED",
+        "authorized_by": CORE_AUTHORIZED_BY,
+        "authorization_token": CORE_AUTHORIZATION_TOKEN,
+        "purpose": CORE_AUTHORIZATION_PURPOSE,
+        "experiment": E10_EXPERIMENT_ID,
+        "protocol_family": PROTOCOL_FAMILY,
+        "authorized_arms": list(CORE_ARMS),
+        "authorized_scales": list(CORE_SCALES),
+        "authorized_seeds": list(CORE_SEEDS),
+        "authorized_cells": [list(cell) for cell in pair_preserving_order()],
+        "recipe_contract": _record_reference(RECIPE_CONTRACT_PATH),
+        "recipe_digests": digests,
+        "model": {
+            "repo": MODEL_REPO,
+            "revision": MODEL_REVISION,
+            "weight_sha256": MODEL_WEIGHT_SHA256,
+            "parameters": MODEL_PARAMETERS,
+            "random_init_seed": RANDOM_INIT_SEED,
+            "identities": {arm: ARMS[arm]["identity"] for arm in CORE_ARMS},
+        },
+        "per_cell_wall_clock_hours": policy["per_cell_wall_clock_hours"],
+        "effective_identity_ceiling_hours": policy[
+            "effective_identity_ceiling_hours"
+        ],
+        "automatic_retries": 0,
+        "scope_exclusions": dict(CORE_GRANT_SCOPE_EXCLUSIONS),
+        "provenance": {
+            "phase3_binding_amendment": _record_reference(PHASE3_AMENDMENT_PATH),
+            "phase2_binding_amendment": _record_reference(PHASE2_AMENDMENT_PATH),
+        },
+    }
+
+
+def core_authorization_grant_id(body: dict) -> str:
+    """The self-hash that makes a tampered grant detectable byte for byte."""
+    return sha256_bytes(canonical_json_bytes(
+        {key: value for key, value in body.items() if key != "grant_id"}
+    ))
+
+
+def validate_core_authorization_grant(arm: str | None = None,
+                                      scale: str | None = None,
+                                      seed: int | None = None) -> dict:
+    """The single canonical validator for the external scientific core grant.
+
+    It fails closed on a missing, competing, malformed, tampered, stale,
+    mis-scoped or over-broad grant, and it authorises nothing beyond the exact
+    frozen, pair-preserved twelve-cell matrix. There is no partial
+    authorisation: a grant either names that whole matrix, under the reviewed
+    Phase-3 source and provenance, or it is refused.
+
+    No E10 code path creates such a record. It is written by the user, out of
+    band, after an independent Phase-3 review.
+    """
+    path = core_authorization_grant_path()
+    if not path.is_file():
+        raise AssertionError(
+            f"scientific authorization grant is absent: no immutable E10 core "
+            f"authorization grant exists at {path}"
+        )
+    competing = sorted(
+        item.name for item in CORE_AUTHORIZATION_DIR.glob("*.json")
+        if item != path
+    )
+    if competing:
+        raise AssertionError(
+            f"competing E10 core authorization records exist: {competing}"
+        )
+    grant = read_json_mapping(path)
+    expected = core_authorization_grant_expectations()
+    _require_exact_keys(
+        grant, set(expected) | {"grant_id", "utc", "binding"},
+        "E10 core authorization grant",
+    )
+    _require_utc(grant["utc"], "E10 core authorization grant utc")
+    _require_sha256(grant["grant_id"], "E10 core authorization grant id")
+    if not hmac.compare_digest(grant["grant_id"],
+                               core_authorization_grant_id(grant)):
+        raise AssertionError(
+            "E10 core authorization grant bytes do not match its grant_id; "
+            "the record was modified after it was written"
+        )
+    # A grant is only ever created after the review of the source it opens, so
+    # a superseded binding is always a refusal: there is no historical pair an
+    # authorization may fall back on.
+    assert_current_binding(grant, "E10 core authorization grant")
+    # The matrix is judged on its own terms first, so a missing pair, an extra
+    # cell or a reordered matrix refuses with the reason rather than as a
+    # generic field mismatch. The pairing rule is recomputed, not inferred.
+    cells = grant["authorized_cells"]
+    if not isinstance(cells, list) or not all(
+            isinstance(cell, list) and len(cell) == 3 for cell in cells):
+        raise AssertionError(
+            "E10 core authorization grant cell list is malformed"
+        )
+    tupled = [tuple(cell) for cell in cells]
+    if len(tupled) != len(CORE_CELLS) or set(tupled) != set(CORE_CELLS):
+        raise AssertionError(
+            "E10 core authorization grant is not the frozen twelve-cell matrix"
+        )
+    if [list(cell) for cell in pair_preserving_order(tupled)] != cells:
+        raise AssertionError(
+            "E10 core authorization grant order is not pair preserving"
+        )
+    for key, value in expected.items():
+        if grant[key] != value:
+            raise AssertionError(
+                f"E10 core authorization grant mismatch for {key}: recorded "
+                f"{grant[key]!r}, required {value!r}"
+            )
+    # The predecessor provenance must still validate and must still be the
+    # bytes the grant names; a stale chain can never authorise anything.
+    validate_phase3_amendment()
+    if (arm, scale, seed) == (None, None, None):
+        return grant
+    if (arm, scale, seed) not in CORE_CELLS:
+        raise AssertionError(
+            f"{arm}/{scale}/seed{seed} is not an E10 core cell"
+        )
+    if [arm, scale, seed] not in grant["authorized_cells"] \
+            or arm not in grant["authorized_arms"] \
+            or scale not in grant["authorized_scales"] \
+            or seed not in grant["authorized_seeds"]:
+        raise AssertionError(
+            f"{arm}/{scale}/seed{seed} is not in the authorised E10 matrix"
+        )
+    return grant
+
+
+def assert_no_core_authorization_grant() -> dict:
+    """Prove no real external scientific core authorization exists.
+
+    A hand-back statement about the CURRENT state, not a guardrail: once the
+    user creates the grant, this stops holding by design.
+    """
+    path = core_authorization_grant_path()
+    present = sorted(
+        item.name for item in CORE_AUTHORIZATION_DIR.glob("*.json")
+    ) if CORE_AUTHORIZATION_DIR.is_dir() else []
+    if present:
+        raise AssertionError(
+            f"an E10 core authorization record exists: {present}"
+        )
+    return {
+        "grant_path": str(path),
+        "grant_present": False,
+        "records_in_authorization_directory": 0,
+        "e10_training_authorized": E10_TRAINING_AUTHORIZED,
+    }
+
+
+def assert_core_entry_authorized(arm: str, scale: str, seed: int) -> dict:
     if (arm, scale, seed) not in CORE_CELLS:
         raise SystemExit(f"E10 CORE REFUSED: unknown cell {arm}/{scale}/seed{seed}")
     if config.E10_PER_IDENTITY_CEILING_HOURS is None:
@@ -1753,13 +2076,23 @@ def assert_core_entry_authorized(arm: str, scale: str, seed: int) -> None:
         resource_policy()
     except AssertionError as error:
         raise SystemExit(f"E10 CORE REFUSED: {error}") from None
-    if E10_TRAINING_AUTHORIZED != CORE_AUTHORIZATION_TOKEN:
+    # Phase 3. The source constant is a legacy refusal sentinel, never a route:
+    # setting it moves the live source digest and invalidates the reviewed
+    # provenance chain the authorization has to bind. It must stay None.
+    if E10_TRAINING_AUTHORIZED is not None:
         raise SystemExit(
-            f"E10 CORE REFUSED: scientific authorization is "
+            f"E10 CORE REFUSED: the source constant E10_TRAINING_AUTHORIZED is "
+            f"not a scientific authorization route and must remain None; found "
             f"{E10_TRAINING_AUTHORIZED!r}"
         )
-    # Only reached after the side-effect-free Phase-0 budget/auth refusals.
+    try:
+        grant = validate_core_authorization_grant(arm, scale, seed)
+    except (AssertionError, OSError, ValueError) as error:
+        raise SystemExit(f"E10 CORE REFUSED: {error}") from None
+    # Only reached after the side-effect-free budget, sentinel and grant
+    # refusals; no model, dataset, CUDA context or output directory is touched.
     assert_shared_state_healthy(require_calibration_complete=True)
+    return grant
 
 
 @contextmanager
@@ -3109,7 +3442,10 @@ class CellExecutionPermit:
 
     It carries the mandatory per-cell wall as a monotonic deadline, so the wall
     the Phase-0 recipe no longer inherits from E8B is re-imposed here instead of
-    inside the frozen recipe.
+    inside the frozen recipe. It also carries the identity and the bytes of the
+    external authorization grant it was issued under, so a permit can exist only
+    where a valid grant existed, and a grant that changes under a running cell
+    is detectable at every stage boundary.
     """
 
     token: str
@@ -3121,6 +3457,8 @@ class CellExecutionPermit:
     recipe_sha256: str
     source_digest: str
     config_digest: str
+    grant_id: str
+    grant_sha256: str
     per_cell_wall_hours: float
     effective_identity_ceiling_hours: float
     process_pid: int
@@ -3134,10 +3472,10 @@ class CellWallExceeded(TimeoutError):
 
 
 def _cell_permit_values(arm: str, scale: str, seed: int,
-                        started_monotonic_ns: int) -> dict:
+                        started_monotonic_ns: int, grant: dict) -> dict:
     policy = resource_policy()
     return {
-        "token": CORE_AUTHORIZATION_TOKEN,
+        "token": grant["authorization_token"],
         "task_id": PHASE1_TASK_ID,
         "arm": arm,
         "scale": scale,
@@ -3146,6 +3484,8 @@ def _cell_permit_values(arm: str, scale: str, seed: int,
         "recipe_sha256": recipe_sha256(build_recipe(arm, scale, seed)),
         "source_digest": source_digest()[0],
         "config_digest": config_digest()[0],
+        "grant_id": grant["grant_id"],
+        "grant_sha256": sha256_file(core_authorization_grant_path()),
         "per_cell_wall_hours": policy["per_cell_wall_clock_hours"],
         "effective_identity_ceiling_hours": policy[
             "effective_identity_ceiling_hours"
@@ -3161,12 +3501,17 @@ def _cell_permit_values(arm: str, scale: str, seed: int,
 def authorize_cell_execution(arm: str, scale: str, seed: int, *,
                              started_monotonic_ns: int | None = None
                              ) -> CellExecutionPermit:
-    """Issue a wall-bound permit; refuses while the core stays unauthorised."""
-    assert_core_entry_authorized(arm, scale, seed)
+    """Issue a wall-bound permit; refuses while the core stays unauthorised.
+
+    The permit is issued from the grant the entry gate validated, so a permit
+    can never exist without a valid external authorization.
+    """
+    grant = assert_core_entry_authorized(arm, scale, seed)
     values = _cell_permit_values(
         arm, scale, seed,
         time.monotonic_ns() if started_monotonic_ns is None
         else started_monotonic_ns,
+        grant,
     )
     signature = hmac.new(
         _PERMIT_SIGNING_SECRET, canonical_json_bytes(values), hashlib.sha256
@@ -3196,6 +3541,8 @@ def _validate_cell_permit_identity(permit: CellExecutionPermit) -> None:
         raise AssertionError("cell permit names a cell outside the E10 matrix")
     if permit.identity != model_identity(permit.arm):
         raise AssertionError("cell permit identity does not match its arm")
+    _require_sha256(permit.grant_id, "cell permit authorization grant id")
+    _require_sha256(permit.grant_sha256, "cell permit authorization grant bytes")
     # Recheck the live bounds on every use, so editing the constants mid-run
     # cannot widen a wall that is already running. The recipe is covered by the
     # signature and is not rebuilt here, to keep the per-step cost small.
@@ -3212,13 +3559,34 @@ def _validate_cell_permit_identity(permit: CellExecutionPermit) -> None:
         raise AssertionError("cell permit deadline was altered")
 
 
-def validate_cell_permit(permit: CellExecutionPermit) -> dict:
-    """Re-check the wall on every use; a reached wall can never continue."""
+def validate_cell_permit(permit: CellExecutionPermit,
+                         *, revalidate_grant: bool = False) -> dict:
+    """Re-check the wall on every use; a reached wall can never continue.
+
+    The per-step path stays free of filesystem work: the permit is signed,
+    process-bound and carries the grant it was issued under, and the grant
+    itself is fully revalidated at cell entry, at every stage boundary
+    (``revalidate_grant``) and again inside accounting.
+    """
     _validate_cell_permit_identity(permit)
-    if E10_TRAINING_AUTHORIZED != CORE_AUTHORIZATION_TOKEN:
+    if E10_TRAINING_AUTHORIZED is not None:
         raise AssertionError(
-            "E10 CELL REFUSED: scientific authorization is not live"
+            "E10 CELL REFUSED: the source constant E10_TRAINING_AUTHORIZED was "
+            "mutated under a running cell; it is not an authorization route "
+            "and must remain None"
         )
+    if revalidate_grant:
+        path = core_authorization_grant_path()
+        if not path.is_file():
+            raise AssertionError(
+                "E10 CELL REFUSED: the external scientific authorization grant "
+                "was removed under a running cell"
+            )
+        if not hmac.compare_digest(sha256_file(path), permit.grant_sha256):
+            raise AssertionError(
+                "E10 CELL REFUSED: the external scientific authorization grant "
+                "changed under a running cell"
+            )
     remaining_ns = permit.deadline_monotonic_ns - time.monotonic_ns()
     if remaining_ns <= 0:
         raise CellWallExceeded(

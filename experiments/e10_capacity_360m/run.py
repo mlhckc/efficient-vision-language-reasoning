@@ -14,15 +14,18 @@ Examples, from the project root with the project environment sourced:
     python -B -m experiments.e10_capacity_360m.run phase1-verify
     python -B -m experiments.e10_capacity_360m.run phase2-record
     python -B -m experiments.e10_capacity_360m.run phase2-verify
+    python -B -m experiments.e10_capacity_360m.run phase3-record
+    python -B -m experiments.e10_capacity_360m.run phase3-verify
     python -B -m experiments.e10_capacity_360m.run core-order
     python -B -m experiments.e10_capacity_360m.run analysis
     python -B -m experiments.e10_capacity_360m.run core-cell B4 train_40k 0
 
 The final command is the required known-negative. It refused in Phase 0, it
-still refused after the Phase-1 guardrails, and it still refuses now that Phase
-2 has implemented the scientific pipeline behind them: implementing a pipeline
-authorises nothing. It refuses before model, data, CUDA, result-directory or
-optimizer initialization.
+still refused after the Phase-1 guardrails, it still refused once Phase 2 had
+implemented the scientific pipeline behind them, and it still refuses now that
+Phase 3 has implemented the external authorization binding: implementing a
+mechanism authorises nothing. It refuses before model, data, CUDA,
+result-directory or optimizer initialization.
 """
 
 from __future__ import annotations
@@ -429,6 +432,10 @@ def status() -> dict:
             path.name: path.exists()
             for path in e10.PHASE1_PATHS + (e10.PHASE1_REPAIR_PATH,)
         },
+        "phase3_records": {
+            path.name: path.exists() for path in e10.PHASE3_PATHS
+        },
+        "core_authorization_grant": e10.core_authorization_grant_path().is_file(),
         "scientific_core_refusal": phase1.scientific_refusal(),
         "free_scratch_bytes": shutil.disk_usage(PROJECT_ROOT).free,
     }
@@ -454,6 +461,8 @@ def main(argv=None) -> int:
     subparsers.add_parser("phase1-verify")
     subparsers.add_parser("phase2-record")
     subparsers.add_parser("phase2-verify")
+    subparsers.add_parser("phase3-record")
+    subparsers.add_parser("phase3-verify")
     subparsers.add_parser("analysis")
     subparsers.add_parser("core-order")
     cell = subparsers.add_parser("core-cell")
@@ -489,6 +498,12 @@ def main(argv=None) -> int:
     elif args.command == "phase2-verify":
         from experiments.e10_capacity_360m import phase2
         result = phase2.verify()
+    elif args.command == "phase3-record":
+        from experiments.e10_capacity_360m import phase3
+        result = phase3.write_phase3_records()
+    elif args.command == "phase3-verify":
+        from experiments.e10_capacity_360m import phase3
+        result = phase3.verify()
     elif args.command == "analysis":
         from experiments.e10_capacity_360m import analysis
         # Refuses unless the exact frozen twelve-cell set exists and every

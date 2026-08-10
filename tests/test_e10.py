@@ -11,6 +11,7 @@ import multiprocessing
 import os
 import queue
 import random
+import shutil
 import sys
 import tempfile
 import time
@@ -123,11 +124,61 @@ def _temporary_shared_paths(root: Path):
         "CALIBRATION_PATH": root / "calibration.json",
         "GATE1_PATH": root / "gate1.json",
         "RETRY_AUTHORIZATION_DIR": root / "retry-authorizations",
+        "CORE_AUTHORIZATION_DIR": root / "core-authorization",
     }
     with ExitStack() as stack:
         for name, path in paths.items():
             stack.enter_context(mock.patch.object(e10, name, path))
         yield paths
+
+
+def mirror_governance(output: Path) -> Path:
+    """Mirror the immutable governance tree into a temporary OUT_DIR.
+
+    The provenance chain the authorization grant binds resolves its preserved
+    records through OUT_DIR, so a test that redirects OUT_DIR has to carry those
+    records with it. The copy is byte-identical and the real tree is untouched.
+    """
+    output = Path(output)
+    shutil.copytree(e10.OUT_DIR, output, dirs_exist_ok=True)
+    return output
+
+
+# The real shared-state authorization path, captured before any test patches
+# it, so a test that forgets to redirect CORE_AUTHORIZATION_DIR fails loudly
+# instead of writing a real scientific authorization.
+_REAL_CORE_AUTHORIZATION_DIR = e10.CORE_AUTHORIZATION_DIR
+
+
+def write_core_authorization_grant(**overrides) -> Path:
+    """Fabricate the external scientific core grant a test needs.
+
+    Only a test may do this, and only inside a temporary directory that
+    _temporary_shared_paths has redirected CORE_AUTHORIZATION_DIR into. No
+    project source writes such a record, which
+    phase3.assert_no_self_granted_authorization proves by scanning the sources.
+    """
+    if e10.CORE_AUTHORIZATION_DIR == _REAL_CORE_AUTHORIZATION_DIR:
+        raise AssertionError(
+            "a test must never write the real E10 core authorization grant; "
+            "redirect CORE_AUTHORIZATION_DIR into a temporary directory first"
+        )
+    body = {
+        **e10.core_authorization_grant_expectations(),
+        "utc": e10.utc_now(),
+        "binding": e10.binding_record(),
+    }
+    body.update({key: value for key, value in overrides.items()
+                 if key != "grant_id"})
+    grant = {
+        "grant_id": overrides.get("grant_id",
+                                  e10.core_authorization_grant_id(body)),
+        **body,
+    }
+    path = e10.core_authorization_grant_path()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    e10.atomic_write_json(path, grant)
+    return path
 
 
 def _valid_calibration_spend_entry(*, identity="random_smollm2_360m",
