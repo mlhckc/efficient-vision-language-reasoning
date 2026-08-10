@@ -129,8 +129,9 @@ Phase-3 work began.
 
 After the repair, at the final Phase-3 state:
 
-- live source digest `9b1afd8359148ef7b63d08cddad48823e2568760c12341814b5e6ec1bdc99801`;
-  config digest `4b9fa43cb74b511c0bb6fda3c7c043d6047ef5e5e220c1abad6e35138f3df9ab`,
+- live source digest `b72d4f7fd1f0e5287997edf85fc7087958b0ed8757259f8e74d92c6f3c2e942d`,
+  which is the digest the Phase-3 amendment binds; config digest
+  `4b9fa43cb74b511c0bb6fda3c7c043d6047ef5e5e220c1abad6e35138f3df9ab`,
   unchanged from Phase 2;
 - creating, validating and opening a synthetic grant leaves the source digest
   and every per-file digest byte-identical, measured before, during and after;
