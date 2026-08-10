@@ -1,0 +1,55 @@
+{
+  "e9_g17_wording_correction": {
+    "why": "The summary wording 'the clean test is embargoed and untouched' and the row 'clean test accessed: no' were accurate about CONTENTS and too broad about PATHS: the pre-score implementation recorded in g17_remediation.json did resolve and stat() the embargoed path.",
+    "superseded_wording": [
+      "Development set only. The clean test is embargoed and untouched.",
+      "| clean test accessed | no |",
+      "No clean-test result: the embargo is intact"
+    ],
+    "operative_wording": "Clean-test contents were never opened, read, scored or used. A pre-score implementation briefly resolved and stat()ed the embargoed path, which violated the project's stricter G17 path-level rule. This was detected and repaired before any scientific score was produced.",
+    "files_changed": [
+      "docs/experiments/e9_compact_vlm.md",
+      "experiments/e9_compact_vlm/tables.py",
+      "results/experiments/e9_compact_vlm/e9_results_tables.md (regenerated from the unchanged e9_results.json)"
+    ],
+    "scientific_change": "NONE. No metric, prediction, evaluation artefact or conclusion changed.",
+    "evidence": {
+      "e9_results_sha256_unchanged": "5d42ae9344fa9d7bcd48589645d62b4d0c20db9a3d9d03288bbddd6832ae2caa",
+      "rendered_tables_numeric_tokens_identical": true,
+      "rendered_tables_diff": "exactly two wording lines; every one of the 504 numeric tokens is identical before and after"
+    },
+    "preserved": [
+      "results/experiments/e9_compact_vlm/g17_remediation.json remains the authoritative disclosure and is not modified by this correction"
+    ]
+  },
+  "metadata": {
+    "timestamp": "2026-08-10T12:50:59",
+    "git_commit": "e3c8f0b",
+    "git_dirty": true,
+    "open_clip_version": "3.3.0",
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "h5py_version": "3.16.0",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "deterministic": true,
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "embed_dim": 512,
+    "top_k_answers": 100,
+    "n_train": 40000,
+    "n_val": 8000,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "hidden_dim": 512,
+    "dropout": 0.3,
+    "weight_decay": 0.0001
+  }
+}

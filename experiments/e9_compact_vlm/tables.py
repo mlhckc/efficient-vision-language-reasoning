@@ -39,7 +39,13 @@ def main() -> int:
     add = lines.append
 
     add("# E9 result tables\n")
-    add("Development set only. The clean test is embargoed and untouched.\n")
+    # The G17 wording is precise about what was and was not touched: contents
+    # were never opened, but a pre-score implementation did resolve the path.
+    add("Development set only. Clean-test contents were never opened, read, "
+        "scored or used. A pre-score implementation briefly resolved and "
+        "stat()ed the embargoed path, which violated the project's stricter "
+        "G17 path-level rule; it was detected and repaired before any "
+        "scientific score was produced (g17_remediation.json).\n")
     add(f"Framing: {results['framing']}\n")
 
     # --- Table 1: primary open generation --------------------------------
@@ -214,8 +220,10 @@ def main() -> int:
     add("| replication bitwise identical | "
         f"{fmt(determinism['tokens_bitwise_identical'])} |")
     add(f"| optional cells dropped | {len(results['optional_dropped'])} |")
-    add("| clean test accessed | "
+    add("| clean-test contents opened, read, scored or used | "
         f"{fmt(results['clean_test_accessed'])} |")
+    add("| embargoed path resolved by a pre-score implementation | yes, "
+        "repaired before any score (g17_remediation.json) |")
     add(f"| frozen protocol sha256 | `{results['frozen_protocol_sha256']}` |")
 
     path = e9.RESULTS_DIR / "e9_results_tables.md"

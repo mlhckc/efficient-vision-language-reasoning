@@ -1,0 +1,1732 @@
+{
+  "e9_results": {
+    "framing": "CONTEXTUAL POSITIONING, not a matched causal comparison. SmolVLM is externally pretrained and instruction-tuned; its 256M text backbone corresponds to SmolLM2-135M-Instruct while E8A and E8B use base checkpoints.",
+    "primary_readout": "open generation",
+    "secondary_readout": "trie-constrained generation, DIAGNOSTIC only",
+    "auxiliary_condition": "blank image, UNMATCHED ablation",
+    "frozen_protocol_sha256": "e38c0b9e6702cebd97f08487d70177ac49064df5db3e2e1c0d38601415769b02",
+    "scored_passes": {
+      "smolvlm_256m/open/normal": {
+        "role": "PRIMARY",
+        "readout": "open",
+        "readout_role": "PRIMARY",
+        "condition": "normal",
+        "condition_role": "PRIMARY",
+        "answer_support": "unconstrained",
+        "views": {
+          "raw_10004": {
+            "denominator": "raw partition, 10,004 rows, 777 clusters",
+            "n": 10004,
+            "raw_exact": 0.0001,
+            "normalised_exact": 0.436525,
+            "raw_hit_count": 1,
+            "normalised_hit_count": 4367
+          },
+          "in_vocabulary_7714": {
+            "denominator": "common top-100-supported rows, 7,714 rows, 768 clusters",
+            "n": 7714,
+            "raw_exact": 0.0,
+            "normalised_exact": 0.498574,
+            "raw_hit_count": 0,
+            "normalised_hit_count": 3846
+          },
+          "top1000_9823": {
+            "denominator": "top-1000-supported rows, 9,823 rows",
+            "n": 9823,
+            "raw_exact": 0.000102,
+            "normalised_exact": 0.442126,
+            "raw_hit_count": 1,
+            "normalised_hit_count": 4343
+          }
+        },
+        "diagnostics": {
+          "mean_generated_tokens": 2.0814,
+          "max_generated_tokens": 17,
+          "empty_rate": 0.0,
+          "overlong_rate": 0.0,
+          "emission_in_top100_rate": 0.046881,
+          "emission_in_top1000_rate": 0.057277,
+          "distinct_emissions": 1799,
+          "raw_minus_normalised": -0.436425
+        }
+      },
+      "smolvlm_256m/open/deranged": {
+        "role": "PRIMARY",
+        "readout": "open",
+        "readout_role": "PRIMARY",
+        "condition": "deranged",
+        "condition_role": "PRIMARY (matched image-partner intervention)",
+        "answer_support": "unconstrained",
+        "views": {
+          "raw_10004": {
+            "denominator": "raw partition, 10,004 rows, 777 clusters",
+            "n": 10004,
+            "raw_exact": 0.0,
+            "normalised_exact": 0.268892,
+            "raw_hit_count": 0,
+            "normalised_hit_count": 2690
+          },
+          "in_vocabulary_7714": {
+            "denominator": "common top-100-supported rows, 7,714 rows, 768 clusters",
+            "n": 7714,
+            "raw_exact": 0.0,
+            "normalised_exact": 0.329271,
+            "raw_hit_count": 0,
+            "normalised_hit_count": 2540
+          },
+          "top1000_9823": {
+            "denominator": "top-1000-supported rows, 9,823 rows",
+            "n": 9823,
+            "raw_exact": 0.0,
+            "normalised_exact": 0.272524,
+            "raw_hit_count": 0,
+            "normalised_hit_count": 2677
+          }
+        },
+        "diagnostics": {
+          "mean_generated_tokens": 2.0481,
+          "max_generated_tokens": 20,
+          "empty_rate": 0.0,
+          "overlong_rate": 0.0001,
+          "emission_in_top100_rate": 0.056577,
+          "emission_in_top1000_rate": 0.068972,
+          "distinct_emissions": 1736,
+          "raw_minus_normalised": -0.268892
+        }
+      },
+      "smolvlm_256m/open/blank": {
+        "role": "PRIMARY",
+        "readout": "open",
+        "readout_role": "PRIMARY",
+        "condition": "blank",
+        "condition_role": "AUXILIARY / UNMATCHED ABLATION",
+        "answer_support": "unconstrained",
+        "views": {
+          "raw_10004": {
+            "denominator": "raw partition, 10,004 rows, 777 clusters",
+            "n": 10004,
+            "raw_exact": 0.0,
+            "normalised_exact": 0.261096,
+            "raw_hit_count": 0,
+            "normalised_hit_count": 2612
+          },
+          "in_vocabulary_7714": {
+            "denominator": "common top-100-supported rows, 7,714 rows, 768 clusters",
+            "n": 7714,
+            "raw_exact": 0.0,
+            "normalised_exact": 0.315919,
+            "raw_hit_count": 0,
+            "normalised_hit_count": 2437
+          },
+          "top1000_9823": {
+            "denominator": "top-1000-supported rows, 9,823 rows",
+            "n": 9823,
+            "raw_exact": 0.0,
+            "normalised_exact": 0.264583,
+            "raw_hit_count": 0,
+            "normalised_hit_count": 2599
+          }
+        },
+        "diagnostics": {
+          "mean_generated_tokens": 1.2741,
+          "max_generated_tokens": 15,
+          "empty_rate": 0.0,
+          "overlong_rate": 0.0,
+          "emission_in_top100_rate": 0.612055,
+          "emission_in_top1000_rate": 0.757397,
+          "distinct_emissions": 1357,
+          "raw_minus_normalised": -0.261096
+        }
+      },
+      "smolvlm_256m/constrained/normal": {
+        "role": "PRIMARY",
+        "readout": "constrained",
+        "readout_role": "SECONDARY DIAGNOSTIC",
+        "condition": "normal",
+        "condition_role": "PRIMARY",
+        "answer_support": "top_1000",
+        "views": {
+          "raw_10004": {
+            "denominator": "raw partition, 10,004 rows, 777 clusters",
+            "n": 10004,
+            "raw_exact": 0.003798,
+            "normalised_exact": 0.441623,
+            "raw_hit_count": 38,
+            "normalised_hit_count": 4418
+          },
+          "in_vocabulary_7714": {
+            "denominator": "common top-100-supported rows, 7,714 rows, 768 clusters",
+            "n": 7714,
+            "raw_exact": 0.00363,
+            "normalised_exact": 0.497537,
+            "raw_hit_count": 28,
+            "normalised_hit_count": 3838
+          },
+          "top1000_9823": {
+            "denominator": "top-1000-supported rows, 9,823 rows",
+            "n": 9823,
+            "raw_exact": 0.003868,
+            "normalised_exact": 0.449761,
+            "raw_hit_count": 38,
+            "normalised_hit_count": 4418
+          }
+        },
+        "diagnostics": {
+          "mean_generated_tokens": 1.1462,
+          "max_generated_tokens": 4,
+          "empty_rate": 0.0,
+          "overlong_rate": 0.0,
+          "emission_in_top100_rate": 0.697221,
+          "emission_in_top1000_rate": 1.0,
+          "distinct_emissions": 676,
+          "raw_minus_normalised": -0.437825
+        }
+      },
+      "smolvlm_256m/constrained/deranged": {
+        "role": "PRIMARY",
+        "readout": "constrained",
+        "readout_role": "SECONDARY DIAGNOSTIC",
+        "condition": "deranged",
+        "condition_role": "PRIMARY (matched image-partner intervention)",
+        "answer_support": "top_1000",
+        "views": {
+          "raw_10004": {
+            "denominator": "raw partition, 10,004 rows, 777 clusters",
+            "n": 10004,
+            "raw_exact": 0.001499,
+            "normalised_exact": 0.272391,
+            "raw_hit_count": 15,
+            "normalised_hit_count": 2725
+          },
+          "in_vocabulary_7714": {
+            "denominator": "common top-100-supported rows, 7,714 rows, 768 clusters",
+            "n": 7714,
+            "raw_exact": 0.001815,
+            "normalised_exact": 0.333031,
+            "raw_hit_count": 14,
+            "normalised_hit_count": 2569
+          },
+          "top1000_9823": {
+            "denominator": "top-1000-supported rows, 9,823 rows",
+            "n": 9823,
+            "raw_exact": 0.001527,
+            "normalised_exact": 0.27741,
+            "raw_hit_count": 15,
+            "normalised_hit_count": 2725
+          }
+        },
+        "diagnostics": {
+          "mean_generated_tokens": 1.1248,
+          "max_generated_tokens": 4,
+          "empty_rate": 0.0,
+          "overlong_rate": 0.0,
+          "emission_in_top100_rate": 0.694222,
+          "emission_in_top1000_rate": 1.0,
+          "distinct_emissions": 677,
+          "raw_minus_normalised": -0.270892
+        }
+      },
+      "smolvlm_500m/open/normal": {
+        "role": "SECONDARY",
+        "readout": "open",
+        "readout_role": "PRIMARY",
+        "condition": "normal",
+        "condition_role": "PRIMARY",
+        "answer_support": "unconstrained",
+        "views": {
+          "raw_10004": {
+            "denominator": "raw partition, 10,004 rows, 777 clusters",
+            "n": 10004,
+            "raw_exact": 0.0,
+            "normalised_exact": 0.489004,
+            "raw_hit_count": 0,
+            "normalised_hit_count": 4892
+          },
+          "in_vocabulary_7714": {
+            "denominator": "common top-100-supported rows, 7,714 rows, 768 clusters",
+            "n": 7714,
+            "raw_exact": 0.0,
+            "normalised_exact": 0.559891,
+            "raw_hit_count": 0,
+            "normalised_hit_count": 4319
+          },
+          "top1000_9823": {
+            "denominator": "top-1000-supported rows, 9,823 rows",
+            "n": 9823,
+            "raw_exact": 0.0,
+            "normalised_exact": 0.494961,
+            "raw_hit_count": 0,
+            "normalised_hit_count": 4862
+          }
+        },
+        "diagnostics": {
+          "mean_generated_tokens": 2.0083,
+          "max_generated_tokens": 20,
+          "empty_rate": 0.0,
+          "overlong_rate": 0.0002,
+          "emission_in_top100_rate": 0.07597,
+          "emission_in_top1000_rate": 0.118553,
+          "distinct_emissions": 1745,
+          "raw_minus_normalised": -0.489004
+        }
+      },
+      "smolvlm_500m/constrained/normal": {
+        "role": "SECONDARY",
+        "readout": "constrained",
+        "readout_role": "SECONDARY DIAGNOSTIC",
+        "condition": "normal",
+        "condition_role": "PRIMARY",
+        "answer_support": "top_1000",
+        "views": {
+          "raw_10004": {
+            "denominator": "raw partition, 10,004 rows, 777 clusters",
+            "n": 10004,
+            "raw_exact": 0.0003,
+            "normalised_exact": 0.485706,
+            "raw_hit_count": 3,
+            "normalised_hit_count": 4859
+          },
+          "in_vocabulary_7714": {
+            "denominator": "common top-100-supported rows, 7,714 rows, 768 clusters",
+            "n": 7714,
+            "raw_exact": 0.0,
+            "normalised_exact": 0.547057,
+            "raw_hit_count": 0,
+            "normalised_hit_count": 4220
+          },
+          "top1000_9823": {
+            "denominator": "top-1000-supported rows, 9,823 rows",
+            "n": 9823,
+            "raw_exact": 0.000305,
+            "normalised_exact": 0.494655,
+            "raw_hit_count": 3,
+            "normalised_hit_count": 4859
+          }
+        },
+        "diagnostics": {
+          "mean_generated_tokens": 1.1425,
+          "max_generated_tokens": 3,
+          "empty_rate": 0.0,
+          "overlong_rate": 0.0,
+          "emission_in_top100_rate": 0.714614,
+          "emission_in_top1000_rate": 1.0,
+          "distinct_emissions": 619,
+          "raw_minus_normalised": -0.485406
+        }
+      }
+    },
+    "internal_contrasts": {
+      "smolvlm_256m/open/normal_minus_deranged": {
+        "mean_difference": 0.16763,
+        "ci_lower": 0.15252,
+        "ci_upper": 0.18319,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "metric": "pinned VQA-style normalised exact match",
+        "outcome": "positive directional evidence (single-run; condition 3 inapplicable, E9 has no training seeds)",
+        "kind": "PRIMARY matched image-partner reliance",
+        "uncertainty_note": "single deterministic run; the interval is image-clustered and carries no training-seed variance because E9 is not trained"
+      },
+      "smolvlm_256m/open/normal_minus_blank": {
+        "mean_difference": 0.17543,
+        "ci_lower": 0.16112,
+        "ci_upper": 0.1899,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "metric": "pinned VQA-style normalised exact match",
+        "outcome": "positive directional evidence (single-run; condition 3 inapplicable, E9 has no training seeds)",
+        "kind": "AUXILIARY / UNMATCHED ablation",
+        "uncertainty_note": "single deterministic run; the interval is image-clustered and carries no training-seed variance because E9 is not trained"
+      },
+      "smolvlm_256m/constrained/normal_minus_deranged": {
+        "mean_difference": 0.16923,
+        "ci_lower": 0.15387,
+        "ci_upper": 0.18498,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "metric": "pinned VQA-style normalised exact match",
+        "outcome": "positive directional evidence (single-run; condition 3 inapplicable, E9 has no training seeds)",
+        "kind": "PRIMARY matched image-partner reliance",
+        "uncertainty_note": "single deterministic run; the interval is image-clustered and carries no training-seed variance because E9 is not trained"
+      }
+    },
+    "open_versus_constrained": {
+      "smolvlm_256m/normal": {
+        "mean_difference": -0.0051,
+        "ci_lower": -0.01273,
+        "ci_upper": 0.00274,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "direction": "open minus constrained",
+        "outcome": "uncertain or mixed evidence",
+        "interpretation_rule": "A large negative value means the open readout is losing accuracy to output FORMAT and support, not to task content. The constrained readout stays a SECONDARY DIAGNOSTIC and is never promoted to primary, whichever way this difference points.",
+        "support_disclosure": "The constrained readout chooses among 1000 candidates; E8B's classifiers choose among 100. The two tasks are not equated."
+      },
+      "smolvlm_256m/deranged": {
+        "mean_difference": -0.0035,
+        "ci_lower": -0.00901,
+        "ci_upper": 0.00202,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "direction": "open minus constrained",
+        "outcome": "uncertain or mixed evidence",
+        "interpretation_rule": "A large negative value means the open readout is losing accuracy to output FORMAT and support, not to task content. The constrained readout stays a SECONDARY DIAGNOSTIC and is never promoted to primary, whichever way this difference points.",
+        "support_disclosure": "The constrained readout chooses among 1000 candidates; E8B's classifiers choose among 100. The two tasks are not equated."
+      },
+      "smolvlm_500m/normal": {
+        "mean_difference": 0.0033,
+        "ci_lower": -0.00394,
+        "ci_upper": 0.01047,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "direction": "open minus constrained",
+        "outcome": "uncertain or mixed evidence",
+        "interpretation_rule": "A large negative value means the open readout is losing accuracy to output FORMAT and support, not to task content. The constrained readout stays a SECONDARY DIAGNOSTIC and is never promoted to primary, whichever way this difference points.",
+        "support_disclosure": "The constrained readout chooses among 1000 candidates; E8B's classifiers choose among 100. The two tasks are not equated."
+      }
+    },
+    "versus_e8b_paired": {
+      "smolvlm_256m/open/normal vs B1/train_40k [normal]": {
+        "mean_difference": 0.01623,
+        "ci_lower": 0.00266,
+        "ci_upper": 0.0302,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "e9_side": "one deterministic frozen checkpoint, no training seeds",
+        "e8_side": "three independently trained seeds, entering each draw as the within-draw seed mean",
+        "uncertainty_note": "These are NOT equivalent sources of uncertainty. The interval is image-clustered on a fixed seed set and propagates no training variance on either side.",
+        "outcome": "positive directional evidence (single-run; condition 3 inapplicable, E9 has no training seeds)",
+        "status": "CONTEXTUAL. Not a leaderboard claim and not a matched causal comparison: training history, multimodal pretraining, answer support and output format all differ."
+      },
+      "smolvlm_256m/open/normal vs B1/train_250k [normal]": {
+        "mean_difference": -0.02146,
+        "ci_lower": -0.03479,
+        "ci_upper": -0.0066,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "e9_side": "one deterministic frozen checkpoint, no training seeds",
+        "e8_side": "three independently trained seeds, entering each draw as the within-draw seed mean",
+        "uncertainty_note": "These are NOT equivalent sources of uncertainty. The interval is image-clustered on a fixed seed set and propagates no training variance on either side.",
+        "outcome": "negative directional evidence (single-run; condition 3 inapplicable, E9 has no training seeds)",
+        "status": "CONTEXTUAL. Not a leaderboard claim and not a matched causal comparison: training history, multimodal pretraining, answer support and output format all differ."
+      },
+      "smolvlm_256m/open/normal vs B2/train_40k [normal]": {
+        "mean_difference": 0.02482,
+        "ci_lower": 0.01093,
+        "ci_upper": 0.03956,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "e9_side": "one deterministic frozen checkpoint, no training seeds",
+        "e8_side": "three independently trained seeds, entering each draw as the within-draw seed mean",
+        "uncertainty_note": "These are NOT equivalent sources of uncertainty. The interval is image-clustered on a fixed seed set and propagates no training variance on either side.",
+        "outcome": "positive directional evidence (single-run; condition 3 inapplicable, E9 has no training seeds)",
+        "status": "CONTEXTUAL. Not a leaderboard claim and not a matched causal comparison: training history, multimodal pretraining, answer support and output format all differ."
+      },
+      "smolvlm_256m/open/normal vs B2/train_250k [normal]": {
+        "mean_difference": -0.02679,
+        "ci_lower": -0.0399,
+        "ci_upper": -0.0125,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "e9_side": "one deterministic frozen checkpoint, no training seeds",
+        "e8_side": "three independently trained seeds, entering each draw as the within-draw seed mean",
+        "uncertainty_note": "These are NOT equivalent sources of uncertainty. The interval is image-clustered on a fixed seed set and propagates no training variance on either side.",
+        "outcome": "negative directional evidence (single-run; condition 3 inapplicable, E9 has no training seeds)",
+        "status": "CONTEXTUAL. Not a leaderboard claim and not a matched causal comparison: training history, multimodal pretraining, answer support and output format all differ."
+      },
+      "smolvlm_256m/open/normal vs B3/train_40k [normal]": {
+        "mean_difference": 0.04382,
+        "ci_lower": 0.02996,
+        "ci_upper": 0.05807,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "e9_side": "one deterministic frozen checkpoint, no training seeds",
+        "e8_side": "three independently trained seeds, entering each draw as the within-draw seed mean",
+        "uncertainty_note": "These are NOT equivalent sources of uncertainty. The interval is image-clustered on a fixed seed set and propagates no training variance on either side.",
+        "outcome": "positive directional evidence (single-run; condition 3 inapplicable, E9 has no training seeds)",
+        "status": "CONTEXTUAL. Not a leaderboard claim and not a matched causal comparison: training history, multimodal pretraining, answer support and output format all differ."
+      },
+      "smolvlm_256m/open/normal vs B3/train_250k [normal]": {
+        "mean_difference": -0.02312,
+        "ci_lower": -0.03688,
+        "ci_upper": -0.0088,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "e9_side": "one deterministic frozen checkpoint, no training seeds",
+        "e8_side": "three independently trained seeds, entering each draw as the within-draw seed mean",
+        "uncertainty_note": "These are NOT equivalent sources of uncertainty. The interval is image-clustered on a fixed seed set and propagates no training variance on either side.",
+        "outcome": "negative directional evidence (single-run; condition 3 inapplicable, E9 has no training seeds)",
+        "status": "CONTEXTUAL. Not a leaderboard claim and not a matched causal comparison: training history, multimodal pretraining, answer support and output format all differ."
+      },
+      "smolvlm_256m/open/deranged vs B1/train_40k [deranged]": {
+        "mean_difference": -0.05974,
+        "ci_lower": -0.0701,
+        "ci_upper": -0.04895,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "e9_side": "one deterministic frozen checkpoint, no training seeds",
+        "e8_side": "three independently trained seeds, entering each draw as the within-draw seed mean",
+        "uncertainty_note": "These are NOT equivalent sources of uncertainty. The interval is image-clustered on a fixed seed set and propagates no training variance on either side.",
+        "outcome": "negative directional evidence (single-run; condition 3 inapplicable, E9 has no training seeds)",
+        "status": "CONTEXTUAL. Not a leaderboard claim and not a matched causal comparison: training history, multimodal pretraining, answer support and output format all differ."
+      },
+      "smolvlm_256m/open/deranged vs B1/train_250k [deranged]": {
+        "mean_difference": -0.07157,
+        "ci_lower": -0.08246,
+        "ci_upper": -0.06076,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "e9_side": "one deterministic frozen checkpoint, no training seeds",
+        "e8_side": "three independently trained seeds, entering each draw as the within-draw seed mean",
+        "uncertainty_note": "These are NOT equivalent sources of uncertainty. The interval is image-clustered on a fixed seed set and propagates no training variance on either side.",
+        "outcome": "negative directional evidence (single-run; condition 3 inapplicable, E9 has no training seeds)",
+        "status": "CONTEXTUAL. Not a leaderboard claim and not a matched causal comparison: training history, multimodal pretraining, answer support and output format all differ."
+      },
+      "smolvlm_256m/open/deranged vs B2/train_40k [deranged]": {
+        "mean_difference": -0.05671,
+        "ci_lower": -0.0673,
+        "ci_upper": -0.04639,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "e9_side": "one deterministic frozen checkpoint, no training seeds",
+        "e8_side": "three independently trained seeds, entering each draw as the within-draw seed mean",
+        "uncertainty_note": "These are NOT equivalent sources of uncertainty. The interval is image-clustered on a fixed seed set and propagates no training variance on either side.",
+        "outcome": "negative directional evidence (single-run; condition 3 inapplicable, E9 has no training seeds)",
+        "status": "CONTEXTUAL. Not a leaderboard claim and not a matched causal comparison: training history, multimodal pretraining, answer support and output format all differ."
+      },
+      "smolvlm_256m/open/deranged vs B2/train_250k [deranged]": {
+        "mean_difference": -0.06844,
+        "ci_lower": -0.07806,
+        "ci_upper": -0.05798,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "e9_side": "one deterministic frozen checkpoint, no training seeds",
+        "e8_side": "three independently trained seeds, entering each draw as the within-draw seed mean",
+        "uncertainty_note": "These are NOT equivalent sources of uncertainty. The interval is image-clustered on a fixed seed set and propagates no training variance on either side.",
+        "outcome": "negative directional evidence (single-run; condition 3 inapplicable, E9 has no training seeds)",
+        "status": "CONTEXTUAL. Not a leaderboard claim and not a matched causal comparison: training history, multimodal pretraining, answer support and output format all differ."
+      },
+      "smolvlm_256m/open/deranged vs B3/train_40k [deranged]": {
+        "mean_difference": -0.03938,
+        "ci_lower": -0.05004,
+        "ci_upper": -0.02884,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "e9_side": "one deterministic frozen checkpoint, no training seeds",
+        "e8_side": "three independently trained seeds, entering each draw as the within-draw seed mean",
+        "uncertainty_note": "These are NOT equivalent sources of uncertainty. The interval is image-clustered on a fixed seed set and propagates no training variance on either side.",
+        "outcome": "negative directional evidence (single-run; condition 3 inapplicable, E9 has no training seeds)",
+        "status": "CONTEXTUAL. Not a leaderboard claim and not a matched causal comparison: training history, multimodal pretraining, answer support and output format all differ."
+      },
+      "smolvlm_256m/open/deranged vs B3/train_250k [deranged]": {
+        "mean_difference": -0.06801,
+        "ci_lower": -0.07744,
+        "ci_upper": -0.05822,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "e9_side": "one deterministic frozen checkpoint, no training seeds",
+        "e8_side": "three independently trained seeds, entering each draw as the within-draw seed mean",
+        "uncertainty_note": "These are NOT equivalent sources of uncertainty. The interval is image-clustered on a fixed seed set and propagates no training variance on either side.",
+        "outcome": "negative directional evidence (single-run; condition 3 inapplicable, E9 has no training seeds)",
+        "status": "CONTEXTUAL. Not a leaderboard claim and not a matched causal comparison: training history, multimodal pretraining, answer support and output format all differ."
+      },
+      "smolvlm_256m/constrained/normal vs B1/train_40k [normal]": {
+        "mean_difference": 0.02132,
+        "ci_lower": 0.00756,
+        "ci_upper": 0.03568,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "e9_side": "one deterministic frozen checkpoint, no training seeds",
+        "e8_side": "three independently trained seeds, entering each draw as the within-draw seed mean",
+        "uncertainty_note": "These are NOT equivalent sources of uncertainty. The interval is image-clustered on a fixed seed set and propagates no training variance on either side.",
+        "outcome": "positive directional evidence (single-run; condition 3 inapplicable, E9 has no training seeds)",
+        "status": "CONTEXTUAL. Not a leaderboard claim and not a matched causal comparison: training history, multimodal pretraining, answer support and output format all differ."
+      },
+      "smolvlm_256m/constrained/normal vs B1/train_250k [normal]": {
+        "mean_difference": -0.01636,
+        "ci_lower": -0.03021,
+        "ci_upper": -0.00211,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "e9_side": "one deterministic frozen checkpoint, no training seeds",
+        "e8_side": "three independently trained seeds, entering each draw as the within-draw seed mean",
+        "uncertainty_note": "These are NOT equivalent sources of uncertainty. The interval is image-clustered on a fixed seed set and propagates no training variance on either side.",
+        "outcome": "negative directional evidence (single-run; condition 3 inapplicable, E9 has no training seeds)",
+        "status": "CONTEXTUAL. Not a leaderboard claim and not a matched causal comparison: training history, multimodal pretraining, answer support and output format all differ."
+      },
+      "smolvlm_256m/constrained/normal vs B2/train_40k [normal]": {
+        "mean_difference": 0.02992,
+        "ci_lower": 0.01584,
+        "ci_upper": 0.0443,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "e9_side": "one deterministic frozen checkpoint, no training seeds",
+        "e8_side": "three independently trained seeds, entering each draw as the within-draw seed mean",
+        "uncertainty_note": "These are NOT equivalent sources of uncertainty. The interval is image-clustered on a fixed seed set and propagates no training variance on either side.",
+        "outcome": "positive directional evidence (single-run; condition 3 inapplicable, E9 has no training seeds)",
+        "status": "CONTEXTUAL. Not a leaderboard claim and not a matched causal comparison: training history, multimodal pretraining, answer support and output format all differ."
+      },
+      "smolvlm_256m/constrained/normal vs B2/train_250k [normal]": {
+        "mean_difference": -0.02169,
+        "ci_lower": -0.03574,
+        "ci_upper": -0.00723,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "e9_side": "one deterministic frozen checkpoint, no training seeds",
+        "e8_side": "three independently trained seeds, entering each draw as the within-draw seed mean",
+        "uncertainty_note": "These are NOT equivalent sources of uncertainty. The interval is image-clustered on a fixed seed set and propagates no training variance on either side.",
+        "outcome": "negative directional evidence (single-run; condition 3 inapplicable, E9 has no training seeds)",
+        "status": "CONTEXTUAL. Not a leaderboard claim and not a matched causal comparison: training history, multimodal pretraining, answer support and output format all differ."
+      },
+      "smolvlm_256m/constrained/normal vs B3/train_40k [normal]": {
+        "mean_difference": 0.04891,
+        "ci_lower": 0.03512,
+        "ci_upper": 0.06286,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "e9_side": "one deterministic frozen checkpoint, no training seeds",
+        "e8_side": "three independently trained seeds, entering each draw as the within-draw seed mean",
+        "uncertainty_note": "These are NOT equivalent sources of uncertainty. The interval is image-clustered on a fixed seed set and propagates no training variance on either side.",
+        "outcome": "positive directional evidence (single-run; condition 3 inapplicable, E9 has no training seeds)",
+        "status": "CONTEXTUAL. Not a leaderboard claim and not a matched causal comparison: training history, multimodal pretraining, answer support and output format all differ."
+      },
+      "smolvlm_256m/constrained/normal vs B3/train_250k [normal]": {
+        "mean_difference": -0.01803,
+        "ci_lower": -0.03247,
+        "ci_upper": -0.0038,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "e9_side": "one deterministic frozen checkpoint, no training seeds",
+        "e8_side": "three independently trained seeds, entering each draw as the within-draw seed mean",
+        "uncertainty_note": "These are NOT equivalent sources of uncertainty. The interval is image-clustered on a fixed seed set and propagates no training variance on either side.",
+        "outcome": "negative directional evidence (single-run; condition 3 inapplicable, E9 has no training seeds)",
+        "status": "CONTEXTUAL. Not a leaderboard claim and not a matched causal comparison: training history, multimodal pretraining, answer support and output format all differ."
+      },
+      "smolvlm_256m/constrained/deranged vs B1/train_40k [deranged]": {
+        "mean_difference": -0.05624,
+        "ci_lower": -0.06679,
+        "ci_upper": -0.04536,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "e9_side": "one deterministic frozen checkpoint, no training seeds",
+        "e8_side": "three independently trained seeds, entering each draw as the within-draw seed mean",
+        "uncertainty_note": "These are NOT equivalent sources of uncertainty. The interval is image-clustered on a fixed seed set and propagates no training variance on either side.",
+        "outcome": "negative directional evidence (single-run; condition 3 inapplicable, E9 has no training seeds)",
+        "status": "CONTEXTUAL. Not a leaderboard claim and not a matched causal comparison: training history, multimodal pretraining, answer support and output format all differ."
+      },
+      "smolvlm_256m/constrained/deranged vs B1/train_250k [deranged]": {
+        "mean_difference": -0.06807,
+        "ci_lower": -0.07916,
+        "ci_upper": -0.05709,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "e9_side": "one deterministic frozen checkpoint, no training seeds",
+        "e8_side": "three independently trained seeds, entering each draw as the within-draw seed mean",
+        "uncertainty_note": "These are NOT equivalent sources of uncertainty. The interval is image-clustered on a fixed seed set and propagates no training variance on either side.",
+        "outcome": "negative directional evidence (single-run; condition 3 inapplicable, E9 has no training seeds)",
+        "status": "CONTEXTUAL. Not a leaderboard claim and not a matched causal comparison: training history, multimodal pretraining, answer support and output format all differ."
+      },
+      "smolvlm_256m/constrained/deranged vs B2/train_40k [deranged]": {
+        "mean_difference": -0.05321,
+        "ci_lower": -0.06396,
+        "ci_upper": -0.04307,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "e9_side": "one deterministic frozen checkpoint, no training seeds",
+        "e8_side": "three independently trained seeds, entering each draw as the within-draw seed mean",
+        "uncertainty_note": "These are NOT equivalent sources of uncertainty. The interval is image-clustered on a fixed seed set and propagates no training variance on either side.",
+        "outcome": "negative directional evidence (single-run; condition 3 inapplicable, E9 has no training seeds)",
+        "status": "CONTEXTUAL. Not a leaderboard claim and not a matched causal comparison: training history, multimodal pretraining, answer support and output format all differ."
+      },
+      "smolvlm_256m/constrained/deranged vs B2/train_250k [deranged]": {
+        "mean_difference": -0.06494,
+        "ci_lower": -0.07491,
+        "ci_upper": -0.05503,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "e9_side": "one deterministic frozen checkpoint, no training seeds",
+        "e8_side": "three independently trained seeds, entering each draw as the within-draw seed mean",
+        "uncertainty_note": "These are NOT equivalent sources of uncertainty. The interval is image-clustered on a fixed seed set and propagates no training variance on either side.",
+        "outcome": "negative directional evidence (single-run; condition 3 inapplicable, E9 has no training seeds)",
+        "status": "CONTEXTUAL. Not a leaderboard claim and not a matched causal comparison: training history, multimodal pretraining, answer support and output format all differ."
+      },
+      "smolvlm_256m/constrained/deranged vs B3/train_40k [deranged]": {
+        "mean_difference": -0.03589,
+        "ci_lower": -0.04629,
+        "ci_upper": -0.02585,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "e9_side": "one deterministic frozen checkpoint, no training seeds",
+        "e8_side": "three independently trained seeds, entering each draw as the within-draw seed mean",
+        "uncertainty_note": "These are NOT equivalent sources of uncertainty. The interval is image-clustered on a fixed seed set and propagates no training variance on either side.",
+        "outcome": "negative directional evidence (single-run; condition 3 inapplicable, E9 has no training seeds)",
+        "status": "CONTEXTUAL. Not a leaderboard claim and not a matched causal comparison: training history, multimodal pretraining, answer support and output format all differ."
+      },
+      "smolvlm_256m/constrained/deranged vs B3/train_250k [deranged]": {
+        "mean_difference": -0.06451,
+        "ci_lower": -0.07455,
+        "ci_upper": -0.05492,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "e9_side": "one deterministic frozen checkpoint, no training seeds",
+        "e8_side": "three independently trained seeds, entering each draw as the within-draw seed mean",
+        "uncertainty_note": "These are NOT equivalent sources of uncertainty. The interval is image-clustered on a fixed seed set and propagates no training variance on either side.",
+        "outcome": "negative directional evidence (single-run; condition 3 inapplicable, E9 has no training seeds)",
+        "status": "CONTEXTUAL. Not a leaderboard claim and not a matched causal comparison: training history, multimodal pretraining, answer support and output format all differ."
+      },
+      "smolvlm_500m/open/normal vs B1/train_40k [normal]": {
+        "mean_difference": 0.06871,
+        "ci_lower": 0.05491,
+        "ci_upper": 0.08201,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "e9_side": "one deterministic frozen checkpoint, no training seeds",
+        "e8_side": "three independently trained seeds, entering each draw as the within-draw seed mean",
+        "uncertainty_note": "These are NOT equivalent sources of uncertainty. The interval is image-clustered on a fixed seed set and propagates no training variance on either side.",
+        "outcome": "positive directional evidence (single-run; condition 3 inapplicable, E9 has no training seeds)",
+        "status": "CONTEXTUAL. Not a leaderboard claim and not a matched causal comparison: training history, multimodal pretraining, answer support and output format all differ."
+      },
+      "smolvlm_500m/open/normal vs B1/train_250k [normal]": {
+        "mean_difference": 0.03102,
+        "ci_lower": 0.01723,
+        "ci_upper": 0.04386,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "e9_side": "one deterministic frozen checkpoint, no training seeds",
+        "e8_side": "three independently trained seeds, entering each draw as the within-draw seed mean",
+        "uncertainty_note": "These are NOT equivalent sources of uncertainty. The interval is image-clustered on a fixed seed set and propagates no training variance on either side.",
+        "outcome": "positive directional evidence (single-run; condition 3 inapplicable, E9 has no training seeds)",
+        "status": "CONTEXTUAL. Not a leaderboard claim and not a matched causal comparison: training history, multimodal pretraining, answer support and output format all differ."
+      },
+      "smolvlm_500m/open/normal vs B2/train_40k [normal]": {
+        "mean_difference": 0.0773,
+        "ci_lower": 0.06284,
+        "ci_upper": 0.09073,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "e9_side": "one deterministic frozen checkpoint, no training seeds",
+        "e8_side": "three independently trained seeds, entering each draw as the within-draw seed mean",
+        "uncertainty_note": "These are NOT equivalent sources of uncertainty. The interval is image-clustered on a fixed seed set and propagates no training variance on either side.",
+        "outcome": "positive directional evidence (single-run; condition 3 inapplicable, E9 has no training seeds)",
+        "status": "CONTEXTUAL. Not a leaderboard claim and not a matched causal comparison: training history, multimodal pretraining, answer support and output format all differ."
+      },
+      "smolvlm_500m/open/normal vs B2/train_250k [normal]": {
+        "mean_difference": 0.02569,
+        "ci_lower": 0.01237,
+        "ci_upper": 0.03843,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "e9_side": "one deterministic frozen checkpoint, no training seeds",
+        "e8_side": "three independently trained seeds, entering each draw as the within-draw seed mean",
+        "uncertainty_note": "These are NOT equivalent sources of uncertainty. The interval is image-clustered on a fixed seed set and propagates no training variance on either side.",
+        "outcome": "positive directional evidence (single-run; condition 3 inapplicable, E9 has no training seeds)",
+        "status": "CONTEXTUAL. Not a leaderboard claim and not a matched causal comparison: training history, multimodal pretraining, answer support and output format all differ."
+      },
+      "smolvlm_500m/open/normal vs B3/train_40k [normal]": {
+        "mean_difference": 0.09629,
+        "ci_lower": 0.08266,
+        "ci_upper": 0.10889,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "e9_side": "one deterministic frozen checkpoint, no training seeds",
+        "e8_side": "three independently trained seeds, entering each draw as the within-draw seed mean",
+        "uncertainty_note": "These are NOT equivalent sources of uncertainty. The interval is image-clustered on a fixed seed set and propagates no training variance on either side.",
+        "outcome": "positive directional evidence (single-run; condition 3 inapplicable, E9 has no training seeds)",
+        "status": "CONTEXTUAL. Not a leaderboard claim and not a matched causal comparison: training history, multimodal pretraining, answer support and output format all differ."
+      },
+      "smolvlm_500m/open/normal vs B3/train_250k [normal]": {
+        "mean_difference": 0.02935,
+        "ci_lower": 0.01599,
+        "ci_upper": 0.04266,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "e9_side": "one deterministic frozen checkpoint, no training seeds",
+        "e8_side": "three independently trained seeds, entering each draw as the within-draw seed mean",
+        "uncertainty_note": "These are NOT equivalent sources of uncertainty. The interval is image-clustered on a fixed seed set and propagates no training variance on either side.",
+        "outcome": "positive directional evidence (single-run; condition 3 inapplicable, E9 has no training seeds)",
+        "status": "CONTEXTUAL. Not a leaderboard claim and not a matched causal comparison: training history, multimodal pretraining, answer support and output format all differ."
+      },
+      "smolvlm_500m/constrained/normal vs B1/train_40k [normal]": {
+        "mean_difference": 0.06541,
+        "ci_lower": 0.051,
+        "ci_upper": 0.07901,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "e9_side": "one deterministic frozen checkpoint, no training seeds",
+        "e8_side": "three independently trained seeds, entering each draw as the within-draw seed mean",
+        "uncertainty_note": "These are NOT equivalent sources of uncertainty. The interval is image-clustered on a fixed seed set and propagates no training variance on either side.",
+        "outcome": "positive directional evidence (single-run; condition 3 inapplicable, E9 has no training seeds)",
+        "status": "CONTEXTUAL. Not a leaderboard claim and not a matched causal comparison: training history, multimodal pretraining, answer support and output format all differ."
+      },
+      "smolvlm_500m/constrained/normal vs B1/train_250k [normal]": {
+        "mean_difference": 0.02772,
+        "ci_lower": 0.01345,
+        "ci_upper": 0.04133,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "e9_side": "one deterministic frozen checkpoint, no training seeds",
+        "e8_side": "three independently trained seeds, entering each draw as the within-draw seed mean",
+        "uncertainty_note": "These are NOT equivalent sources of uncertainty. The interval is image-clustered on a fixed seed set and propagates no training variance on either side.",
+        "outcome": "positive directional evidence (single-run; condition 3 inapplicable, E9 has no training seeds)",
+        "status": "CONTEXTUAL. Not a leaderboard claim and not a matched causal comparison: training history, multimodal pretraining, answer support and output format all differ."
+      },
+      "smolvlm_500m/constrained/normal vs B2/train_40k [normal]": {
+        "mean_difference": 0.074,
+        "ci_lower": 0.05933,
+        "ci_upper": 0.08849,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "e9_side": "one deterministic frozen checkpoint, no training seeds",
+        "e8_side": "three independently trained seeds, entering each draw as the within-draw seed mean",
+        "uncertainty_note": "These are NOT equivalent sources of uncertainty. The interval is image-clustered on a fixed seed set and propagates no training variance on either side.",
+        "outcome": "positive directional evidence (single-run; condition 3 inapplicable, E9 has no training seeds)",
+        "status": "CONTEXTUAL. Not a leaderboard claim and not a matched causal comparison: training history, multimodal pretraining, answer support and output format all differ."
+      },
+      "smolvlm_500m/constrained/normal vs B2/train_250k [normal]": {
+        "mean_difference": 0.02239,
+        "ci_lower": 0.00854,
+        "ci_upper": 0.03597,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "e9_side": "one deterministic frozen checkpoint, no training seeds",
+        "e8_side": "three independently trained seeds, entering each draw as the within-draw seed mean",
+        "uncertainty_note": "These are NOT equivalent sources of uncertainty. The interval is image-clustered on a fixed seed set and propagates no training variance on either side.",
+        "outcome": "positive directional evidence (single-run; condition 3 inapplicable, E9 has no training seeds)",
+        "status": "CONTEXTUAL. Not a leaderboard claim and not a matched causal comparison: training history, multimodal pretraining, answer support and output format all differ."
+      },
+      "smolvlm_500m/constrained/normal vs B3/train_40k [normal]": {
+        "mean_difference": 0.093,
+        "ci_lower": 0.07804,
+        "ci_upper": 0.10664,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "e9_side": "one deterministic frozen checkpoint, no training seeds",
+        "e8_side": "three independently trained seeds, entering each draw as the within-draw seed mean",
+        "uncertainty_note": "These are NOT equivalent sources of uncertainty. The interval is image-clustered on a fixed seed set and propagates no training variance on either side.",
+        "outcome": "positive directional evidence (single-run; condition 3 inapplicable, E9 has no training seeds)",
+        "status": "CONTEXTUAL. Not a leaderboard claim and not a matched causal comparison: training history, multimodal pretraining, answer support and output format all differ."
+      },
+      "smolvlm_500m/constrained/normal vs B3/train_250k [normal]": {
+        "mean_difference": 0.02606,
+        "ci_lower": 0.01186,
+        "ci_upper": 0.03968,
+        "clusters": 777,
+        "rows": 10004,
+        "draws": 2000,
+        "e9_side": "one deterministic frozen checkpoint, no training seeds",
+        "e8_side": "three independently trained seeds, entering each draw as the within-draw seed mean",
+        "uncertainty_note": "These are NOT equivalent sources of uncertainty. The interval is image-clustered on a fixed seed set and propagates no training variance on either side.",
+        "outcome": "positive directional evidence (single-run; condition 3 inapplicable, E9 has no training seeds)",
+        "status": "CONTEXTUAL. Not a leaderboard claim and not a matched causal comparison: training history, multimodal pretraining, answer support and output format all differ."
+      }
+    },
+    "e8b_reference_accuracy": {
+      "B1/train_40k": {
+        "normalised_exact": 0.420299,
+        "per_seed": [
+          0.423731,
+          0.418133,
+          0.419032
+        ],
+        "readout": "classifier"
+      },
+      "B1/train_250k": {
+        "normalised_exact": 0.457983,
+        "per_seed": [
+          0.453719,
+          0.460716,
+          0.459516
+        ],
+        "readout": "classifier"
+      },
+      "B2/train_40k": {
+        "normalised_exact": 0.411702,
+        "per_seed": [
+          0.410336,
+          0.413735,
+          0.411036
+        ],
+        "readout": "R1"
+      },
+      "B2/train_250k": {
+        "normalised_exact": 0.463315,
+        "per_seed": [
+          0.459516,
+          0.462815,
+          0.467613
+        ],
+        "readout": "R1"
+      },
+      "B3/train_40k": {
+        "normalised_exact": 0.39271,
+        "per_seed": [
+          0.409636,
+          0.368453,
+          0.40004
+        ],
+        "readout": "R1"
+      },
+      "B3/train_250k": {
+        "normalised_exact": 0.459649,
+        "per_seed": [
+          0.461315,
+          0.460316,
+          0.457317
+        ],
+        "readout": "R1"
+      }
+    },
+    "e8b_reference_reliance": {
+      "B1/train_40k": {
+        "mean_difference": 0.09166,
+        "per_seed": [
+          0.09906,
+          0.08637,
+          0.08956
+        ],
+        "ci_lower": 0.08153,
+        "ci_upper": 0.10227,
+        "clusters": 777,
+        "rows": 10004,
+        "kind": "normal minus deranged, raw denominator, R1 readout",
+        "uncertainty_note": "three independently trained seeds; the interval conditions on that fixed seed set"
+      },
+      "B1/train_250k": {
+        "mean_difference": 0.11752,
+        "per_seed": [
+          0.11485,
+          0.12305,
+          0.11465
+        ],
+        "ci_lower": 0.10654,
+        "ci_upper": 0.12915,
+        "clusters": 777,
+        "rows": 10004,
+        "kind": "normal minus deranged, raw denominator, R1 readout",
+        "uncertainty_note": "three independently trained seeds; the interval conditions on that fixed seed set"
+      },
+      "B2/train_40k": {
+        "mean_difference": 0.0861,
+        "per_seed": [
+          0.08507,
+          0.09086,
+          0.08237
+        ],
+        "ci_lower": 0.07515,
+        "ci_upper": 0.09776,
+        "clusters": 777,
+        "rows": 10004,
+        "kind": "normal minus deranged, raw denominator, R1 readout",
+        "uncertainty_note": "three independently trained seeds; the interval conditions on that fixed seed set"
+      },
+      "B2/train_250k": {
+        "mean_difference": 0.12598,
+        "per_seed": [
+          0.12005,
+          0.12545,
+          0.13245
+        ],
+        "ci_lower": 0.11477,
+        "ci_upper": 0.1375,
+        "clusters": 777,
+        "rows": 10004,
+        "kind": "normal minus deranged, raw denominator, R1 readout",
+        "uncertainty_note": "three independently trained seeds; the interval conditions on that fixed seed set"
+      },
+      "B3/train_40k": {
+        "mean_difference": 0.08443,
+        "per_seed": [
+          0.08816,
+          0.08507,
+          0.08007
+        ],
+        "ci_lower": 0.07447,
+        "ci_upper": 0.09506,
+        "clusters": 777,
+        "rows": 10004,
+        "kind": "normal minus deranged, raw denominator, R1 readout",
+        "uncertainty_note": "three independently trained seeds; the interval conditions on that fixed seed set"
+      },
+      "B3/train_250k": {
+        "mean_difference": 0.12275,
+        "per_seed": [
+          0.12025,
+          0.12215,
+          0.12585
+        ],
+        "ci_lower": 0.11146,
+        "ci_upper": 0.13443,
+        "clusters": 777,
+        "rows": 10004,
+        "kind": "normal minus deranged, raw denominator, R1 readout",
+        "uncertainty_note": "three independently trained seeds; the interval conditions on that fixed seed set"
+      }
+    },
+    "e7b_historical_reference": {
+      "node": "otter155",
+      "status": "HISTORICAL / REFERENCE. Unpaired: quoted, never differenced against an E9 number with an interval.",
+      "denominator": "10,004 raw development rows, seed 0, train_250k",
+      "systems": {
+        "question_only": {
+          "accuracy": 0.38864,
+          "warm_serial_ms": 1.96
+        },
+        "concat": {
+          "accuracy": 0.44462,
+          "warm_serial_ms": 7.61
+        },
+        "fusion": {
+          "accuracy": 0.45062,
+          "warm_serial_ms": 7.635
+        },
+        "vocab1000_product": {
+          "accuracy": 0.4905,
+          "warm_serial_ms": 7.671
+        },
+        "siglip_fusion": {
+          "accuracy": 0.45792,
+          "warm_serial_ms": 9.843
+        },
+        "reasoner": {
+          "accuracy": 0.45602,
+          "warm_serial_ms": 9.172
+        },
+        "e8a_A0p": {
+          "accuracy": 0.45852,
+          "warm_serial_ms": 9.212
+        },
+        "e8a_A1": {
+          "accuracy": 0.44332,
+          "warm_serial_ms": 20.146
+        }
+      }
+    },
+    "exposure_table": {
+      "our_systems": {
+        "gqa_question_answer_pairs": "yes, training split, in-vocabulary subset",
+        "gqa_visual_genome_imagery": "yes, training split"
+      },
+      "smolvlm": {
+        "gqa_question_answer_pairs": "not named in the documented mixture (The Cauldron, Docmatix) at the pinned revision",
+        "gqa_visual_genome_imagery": "likely, via Visual Genome and COCO imagery in Cauldron subsets"
+      },
+      "caveat": "Absence of GQA from a published training-dataset list is NOT proof of zero image or content overlap. No direct GQA supervised-training claim is made in either direction. E9 is never described as zero-shot at the image level.",
+      "framing": "CONTEXTUAL POSITIONING, not a matched causal comparison. SmolVLM is externally pretrained and instruction-tuned; its 256M text backbone corresponds to SmolLM2-135M-Instruct while E8A and E8B use base checkpoints."
+    },
+    "efficiency": {
+      "harness": "E7b serial protocol, imported read-only",
+      "r1_exclusion": {
+        "excluded": [
+          "e8b_B2_R1",
+          "e8b_B3_R1"
+        ],
+        "reason": "R1 is not one of the three pairings amendment 7 asks for, and E8B's R1 scorer is written for batch amortisation: it forwards one incremental step per multi-token candidate over a shared prefix cache, which is near-free at the batch 128 E8B evaluates with and dominates a batch-1 serial query. Timing it under the E7b protocol would spend roughly a sixth of the whole E9 branch budget measuring an implementation choice rather than a system property.",
+        "consequence": "No serial latency is reported for E8B's canonical R1 readout. The R2 and R3 figures are not substitutes for it and are never presented as R1's cost."
+      },
+      "pretrained_identity_gate": {
+        "identity": "pretrained SmolLM2-135M",
+        "already_projected_hours": 34.803,
+        "e9_bridge_projected_hours": 0.31667,
+        "total_hours": 35.11967,
+        "ceiling_hours": 40.0,
+        "headroom_hours": 4.88033,
+        "gate_fires": false,
+        "source": "results/experiments/e8b_readout_generation/core_resource_projection_20260807.json",
+        "constant": "config.PER_MODEL_IDENTITY_CEILING_HOURS"
+      },
+      "warmup": 50,
+      "iterations": 300,
+      "passes": 3,
+      "batch": 1,
+      "pass_order_seed": 20260810,
+      "aggregate": {
+        "e9_256m_open": {
+          "system": "e9_256m_open",
+          "family": "compact_vlm",
+          "role": "PRIMARY",
+          "readout": "open",
+          "readout_role": "PRIMARY",
+          "total_parameters": 256484928,
+          "trainable_parameters": 0,
+          "checkpoint_bytes": 512969856,
+          "mean_generated_tokens": 2.2333,
+          "node": "otter159.eps.surrey.ac.uk",
+          "warm_median_ms": 140.907,
+          "per_pass_median_ms": [
+            140.907,
+            141.9246,
+            140.6215
+          ],
+          "spread_ms": 1.3031,
+          "cold_first_query_ms": 419.452,
+          "load_seconds": 1.092,
+          "peak_memory_reserved_bytes": 1207959552,
+          "queries_per_second": 7.097
+        },
+        "e9_256m_constrained": {
+          "system": "e9_256m_constrained",
+          "family": "compact_vlm",
+          "role": "PRIMARY",
+          "readout": "constrained",
+          "readout_role": "SECONDARY DIAGNOSTIC",
+          "total_parameters": 256484928,
+          "trainable_parameters": 0,
+          "checkpoint_bytes": 512969856,
+          "mean_generated_tokens": 1.0667,
+          "node": "otter159.eps.surrey.ac.uk",
+          "warm_median_ms": 142.6747,
+          "per_pass_median_ms": [
+            143.2988,
+            142.5285,
+            142.6747
+          ],
+          "spread_ms": 0.7703,
+          "cold_first_query_ms": 416.432,
+          "load_seconds": 1.127,
+          "peak_memory_reserved_bytes": 1205862400,
+          "queries_per_second": 7.009
+        },
+        "e9_500m_open": {
+          "system": "e9_500m_open",
+          "family": "compact_vlm",
+          "role": "SECONDARY",
+          "readout": "open",
+          "readout_role": "PRIMARY",
+          "total_parameters": 507482304,
+          "trainable_parameters": 0,
+          "checkpoint_bytes": 1014964608,
+          "mean_generated_tokens": 1.9767,
+          "node": "otter159.eps.surrey.ac.uk",
+          "warm_median_ms": 151.3801,
+          "per_pass_median_ms": [
+            151.3797,
+            151.3801,
+            152.6738
+          ],
+          "spread_ms": 1.2941,
+          "cold_first_query_ms": 418.297,
+          "load_seconds": 1.154,
+          "peak_memory_reserved_bytes": 1910505472,
+          "queries_per_second": 6.606
+        },
+        "e9_500m_constrained": {
+          "system": "e9_500m_constrained",
+          "family": "compact_vlm",
+          "role": "SECONDARY",
+          "readout": "constrained",
+          "readout_role": "SECONDARY DIAGNOSTIC",
+          "total_parameters": 507482304,
+          "trainable_parameters": 0,
+          "checkpoint_bytes": 1014964608,
+          "mean_generated_tokens": 1.11,
+          "node": "otter159.eps.surrey.ac.uk",
+          "warm_median_ms": 152.854,
+          "per_pass_median_ms": [
+            152.854,
+            152.5334,
+            153.7743
+          ],
+          "spread_ms": 1.2409,
+          "cold_first_query_ms": 422.658,
+          "load_seconds": 1.18,
+          "peak_memory_reserved_bytes": 1910505472,
+          "queries_per_second": 6.542
+        },
+        "fusion": {
+          "system": "fusion",
+          "family": "clip_global",
+          "role": "E7b BRIDGE CONTROL",
+          "readout": "classifier",
+          "readout_role": "reference",
+          "total_parameters": 152377701,
+          "trainable_parameters": 1100388,
+          "checkpoint_bytes": 4404289,
+          "mean_generated_tokens": 0.0,
+          "node": "otter159.eps.surrey.ac.uk",
+          "warm_median_ms": 6.2081,
+          "per_pass_median_ms": [
+            6.1945,
+            6.2081,
+            6.2124
+          ],
+          "spread_ms": 0.0179,
+          "cold_first_query_ms": 124.28,
+          "load_seconds": 2.33,
+          "peak_memory_reserved_bytes": 687865856,
+          "queries_per_second": 161.08
+        },
+        "vocab1000_product": {
+          "system": "vocab1000_product",
+          "family": "clip_global",
+          "role": "E7b SAME-NODE REFERENCE",
+          "readout": "classifier",
+          "readout_role": "accuracy-matched same-node reference",
+          "total_parameters": 152577257,
+          "trainable_parameters": 1299944,
+          "checkpoint_bytes": 5202443,
+          "mean_generated_tokens": 0.0,
+          "node": "otter159.eps.surrey.ac.uk",
+          "warm_median_ms": 6.199,
+          "per_pass_median_ms": [
+            6.2448,
+            6.1621,
+            6.199
+          ],
+          "spread_ms": 0.0827,
+          "cold_first_query_ms": 121.355,
+          "load_seconds": 2.327,
+          "peak_memory_reserved_bytes": 687865856,
+          "queries_per_second": 161.316
+        },
+        "e8b_B1": {
+          "system": "e8b_B1",
+          "family": "e8b_bridge",
+          "role": "E8B TIMING BRIDGE (read-only, train_250k seed 0)",
+          "readout": "classifier",
+          "readout_role": "language-model-free reference",
+          "total_parameters": 172377445,
+          "trainable_parameters": 21100132,
+          "checkpoint_bytes": 84442935,
+          "mean_generated_tokens": 0.0,
+          "node": "otter159.eps.surrey.ac.uk",
+          "warm_median_ms": 10.242,
+          "per_pass_median_ms": [
+            10.6031,
+            10.1807,
+            10.242
+          ],
+          "spread_ms": 0.4224,
+          "cold_first_query_ms": 150.015,
+          "load_seconds": 2.41,
+          "peak_memory_reserved_bytes": 796917760,
+          "queries_per_second": 97.637
+        },
+        "e8b_B2_R2": {
+          "system": "e8b_B2_R2",
+          "family": "e8b_bridge",
+          "role": "E8B TIMING BRIDGE (read-only, train_250k seed 0)",
+          "readout": "R2",
+          "readout_role": "trie-constrained, pairs with E9 constrained",
+          "total_parameters": 307136129,
+          "trainable_parameters": 21343808,
+          "checkpoint_bytes": 85417591,
+          "mean_generated_tokens": 1.0767,
+          "node": "otter159.eps.surrey.ac.uk",
+          "warm_median_ms": 39.7326,
+          "per_pass_median_ms": [
+            39.7326,
+            39.4155,
+            40.8844
+          ],
+          "spread_ms": 1.4689,
+          "cold_first_query_ms": 206.917,
+          "load_seconds": 4.434,
+          "peak_memory_reserved_bytes": 1388314624,
+          "queries_per_second": 25.168
+        },
+        "e8b_B2_R3": {
+          "system": "e8b_B2_R3",
+          "family": "e8b_bridge",
+          "role": "E8B TIMING BRIDGE (read-only, train_250k seed 0)",
+          "readout": "R3",
+          "readout_role": "free generation, pairs with E9 open",
+          "total_parameters": 307136129,
+          "trainable_parameters": 21343808,
+          "checkpoint_bytes": 85417591,
+          "mean_generated_tokens": 1.0767,
+          "node": "otter159.eps.surrey.ac.uk",
+          "warm_median_ms": 39.2394,
+          "per_pass_median_ms": [
+            40.0108,
+            38.8053,
+            39.2394
+          ],
+          "spread_ms": 1.2055,
+          "cold_first_query_ms": 200.794,
+          "load_seconds": 4.394,
+          "peak_memory_reserved_bytes": 1388314624,
+          "queries_per_second": 25.485
+        },
+        "e8b_B3_R2": {
+          "system": "e8b_B3_R2",
+          "family": "e8b_bridge",
+          "role": "E8B TIMING BRIDGE (read-only, train_250k seed 0)",
+          "readout": "R2",
+          "readout_role": "trie-constrained, pairs with E9 constrained",
+          "total_parameters": 307136129,
+          "trainable_parameters": 21343808,
+          "checkpoint_bytes": 85417591,
+          "mean_generated_tokens": 1.0433,
+          "node": "otter159.eps.surrey.ac.uk",
+          "warm_median_ms": 39.6561,
+          "per_pass_median_ms": [
+            39.4083,
+            39.8927,
+            39.6561
+          ],
+          "spread_ms": 0.4844,
+          "cold_first_query_ms": 223.848,
+          "load_seconds": 3.861,
+          "peak_memory_reserved_bytes": 1388314624,
+          "queries_per_second": 25.217
+        },
+        "e8b_B3_R3": {
+          "system": "e8b_B3_R3",
+          "family": "e8b_bridge",
+          "role": "E8B TIMING BRIDGE (read-only, train_250k seed 0)",
+          "readout": "R3",
+          "readout_role": "free generation, pairs with E9 open",
+          "total_parameters": 307136129,
+          "trainable_parameters": 21343808,
+          "checkpoint_bytes": 85417591,
+          "mean_generated_tokens": 1.0433,
+          "node": "otter159.eps.surrey.ac.uk",
+          "warm_median_ms": 38.7963,
+          "per_pass_median_ms": [
+            39.0368,
+            38.6648,
+            38.7963
+          ],
+          "spread_ms": 0.372,
+          "cold_first_query_ms": 202.441,
+          "load_seconds": 3.862,
+          "peak_memory_reserved_bytes": 1388314624,
+          "queries_per_second": 25.776
+        }
+      },
+      "e7b_bridge": {
+        "control": "fusion, train_250k seed 0",
+        "e9_node_median_ms": 6.2081,
+        "e7b_historical_median_ms": 7.635,
+        "historical_node": "otter155",
+        "e9_node": "otter159.eps.surrey.ac.uk",
+        "relative_difference": -0.1869,
+        "pre_registered_tolerance": 0.1,
+        "consistent_with_e7b": false,
+        "policy": "Different-node measurements are NEVER merged into one frontier and no adjustment factor is applied. Every E9 efficiency conclusion uses the same-node measurements in this file. E7b's otter155 medians remain historical reference evidence."
+      },
+      "e8b_artefacts_modified": false,
+      "clean_test_accessed": false
+    },
+    "determinism": {
+      "rows": 512,
+      "greedy_asserted": true,
+      "beams": 1,
+      "question_ids_identical": true,
+      "token_lengths_identical": true,
+      "tokens_bitwise_identical": true,
+      "reference": "e9_smolvlm_256m_open_normal.json",
+      "replica": "e9_determinism_replica.json",
+      "reference_tokens_sha256": "1132e537bd5694f2497cc2382074a498654d1e084fd0db80a93e1e097410fb0b"
+    },
+    "resource_ledger": {
+      "entries": [
+        {
+          "step": "preflight",
+          "seconds": 4.37,
+          "gpu_hours": 0.001214,
+          "note": "bounded preflight and protocol freeze"
+        },
+        {
+          "step": "smolvlm_256m/open/normal",
+          "seconds": 919.066,
+          "gpu_hours": 0.255296,
+          "note": "--readout open --condition normal --out /scratch/Efficient Vision-Language Reasoning with Small Language Models/results/experiments/e9_compact_vlm/e9_smolvlm_256m_open_normal.json"
+        },
+        {
+          "step": "smolvlm_256m/open/deranged",
+          "seconds": 926.754,
+          "gpu_hours": 0.257432,
+          "note": "--readout open --condition deranged --out /scratch/Efficient Vision-Language Reasoning with Small Language Models/results/experiments/e9_compact_vlm/e9_smolvlm_256m_open_deranged.json"
+        },
+        {
+          "step": "smolvlm_256m/open/blank",
+          "seconds": 1140.278,
+          "gpu_hours": 0.316744,
+          "note": "--readout open --condition blank --out /scratch/Efficient Vision-Language Reasoning with Small Language Models/results/experiments/e9_compact_vlm/e9_smolvlm_256m_open_blank.json"
+        },
+        {
+          "step": "smolvlm_256m/constrained/normal",
+          "seconds": 987.309,
+          "gpu_hours": 0.274252,
+          "note": "--readout constrained --condition normal --out /scratch/Efficient Vision-Language Reasoning with Small Language Models/results/experiments/e9_compact_vlm/e9_smolvlm_256m_constrained_normal.json"
+        },
+        {
+          "step": "smolvlm_256m/constrained/deranged",
+          "seconds": 980.863,
+          "gpu_hours": 0.272462,
+          "note": "--readout constrained --condition deranged --out /scratch/Efficient Vision-Language Reasoning with Small Language Models/results/experiments/e9_compact_vlm/e9_smolvlm_256m_constrained_deranged.json"
+        },
+        {
+          "step": "determinism/replica",
+          "seconds": 52.275,
+          "gpu_hours": 0.014521,
+          "note": "--condition normal --rows 512 --out /scratch/Efficient Vision-Language Reasoning with Small Language Models/results/experiments/e9_compact_vlm/e9_determinism_replica.json"
+        },
+        {
+          "step": "smolvlm_500m/open/normal",
+          "seconds": 1068.027,
+          "gpu_hours": 0.296674,
+          "note": "--readout open --condition normal --out /scratch/Efficient Vision-Language Reasoning with Small Language Models/results/experiments/e9_compact_vlm/e9_smolvlm_500m_open_normal.json"
+        },
+        {
+          "step": "smolvlm_500m/constrained/normal",
+          "seconds": 1130.859,
+          "gpu_hours": 0.314127,
+          "note": "--readout constrained --condition normal --out /scratch/Efficient Vision-Language Reasoning with Small Language Models/results/experiments/e9_compact_vlm/e9_smolvlm_500m_constrained_normal.json"
+        },
+        {
+          "step": "timing/fusion/pass1",
+          "seconds": 6.176,
+          "gpu_hours": 0.001716,
+          "note": ""
+        },
+        {
+          "step": "timing/e8b_B2_R3/pass1",
+          "seconds": 20.394,
+          "gpu_hours": 0.005665,
+          "note": ""
+        },
+        {
+          "step": "timing/e9_500m_open/pass1",
+          "seconds": 58.908,
+          "gpu_hours": 0.016363,
+          "note": ""
+        },
+        {
+          "step": "timing/e8b_B2_R2/pass1",
+          "seconds": 20.316,
+          "gpu_hours": 0.005643,
+          "note": ""
+        },
+        {
+          "step": "timing/e8b_B3_R3/pass1",
+          "seconds": 19.36,
+          "gpu_hours": 0.005378,
+          "note": ""
+        },
+        {
+          "step": "timing/e9_256m_open/pass1",
+          "seconds": 55.551,
+          "gpu_hours": 0.015431,
+          "note": ""
+        },
+        {
+          "step": "timing/e8b_B1/pass1",
+          "seconds": 7.626,
+          "gpu_hours": 0.002118,
+          "note": ""
+        },
+        {
+          "step": "timing/e8b_B3_R2/pass1",
+          "seconds": 19.434,
+          "gpu_hours": 0.005398,
+          "note": ""
+        },
+        {
+          "step": "timing/e9_500m_constrained/pass1",
+          "seconds": 59.662,
+          "gpu_hours": 0.016573,
+          "note": ""
+        },
+        {
+          "step": "timing/e9_256m_constrained/pass1",
+          "seconds": 55.995,
+          "gpu_hours": 0.015554,
+          "note": ""
+        },
+        {
+          "step": "timing/e8b_B3_R3/pass2",
+          "seconds": 19.268,
+          "gpu_hours": 0.005352,
+          "note": ""
+        },
+        {
+          "step": "timing/e8b_B2_R2/pass2",
+          "seconds": 20.175,
+          "gpu_hours": 0.005604,
+          "note": ""
+        },
+        {
+          "step": "timing/e9_500m_constrained/pass2",
+          "seconds": 59.563,
+          "gpu_hours": 0.016545,
+          "note": ""
+        },
+        {
+          "step": "timing/e9_256m_constrained/pass2",
+          "seconds": 55.686,
+          "gpu_hours": 0.015468,
+          "note": ""
+        },
+        {
+          "step": "timing/fusion/pass2",
+          "seconds": 5.994,
+          "gpu_hours": 0.001665,
+          "note": ""
+        },
+        {
+          "step": "timing/e9_500m_open/pass2",
+          "seconds": 58.951,
+          "gpu_hours": 0.016375,
+          "note": ""
+        },
+        {
+          "step": "timing/e8b_B1/pass2",
+          "seconds": 7.567,
+          "gpu_hours": 0.002102,
+          "note": ""
+        },
+        {
+          "step": "timing/e8b_B3_R2/pass2",
+          "seconds": 19.626,
+          "gpu_hours": 0.005452,
+          "note": ""
+        },
+        {
+          "step": "timing/e8b_B2_R3/pass2",
+          "seconds": 19.915,
+          "gpu_hours": 0.005532,
+          "note": ""
+        },
+        {
+          "step": "timing/e9_256m_open/pass2",
+          "seconds": 55.998,
+          "gpu_hours": 0.015555,
+          "note": ""
+        },
+        {
+          "step": "timing/e8b_B2_R3/pass3",
+          "seconds": 20.092,
+          "gpu_hours": 0.005581,
+          "note": ""
+        },
+        {
+          "step": "timing/e9_256m_constrained/pass3",
+          "seconds": 55.67,
+          "gpu_hours": 0.015464,
+          "note": ""
+        },
+        {
+          "step": "timing/e8b_B2_R2/pass3",
+          "seconds": 20.741,
+          "gpu_hours": 0.005761,
+          "note": ""
+        },
+        {
+          "step": "timing/e9_500m_constrained/pass3",
+          "seconds": 59.906,
+          "gpu_hours": 0.016641,
+          "note": ""
+        },
+        {
+          "step": "timing/e9_500m_open/pass3",
+          "seconds": 59.379,
+          "gpu_hours": 0.016494,
+          "note": ""
+        },
+        {
+          "step": "timing/e8b_B1/pass3",
+          "seconds": 7.542,
+          "gpu_hours": 0.002095,
+          "note": ""
+        },
+        {
+          "step": "timing/e8b_B3_R3/pass3",
+          "seconds": 19.304,
+          "gpu_hours": 0.005362,
+          "note": ""
+        },
+        {
+          "step": "timing/fusion/pass3",
+          "seconds": 6.028,
+          "gpu_hours": 0.001674,
+          "note": ""
+        },
+        {
+          "step": "timing/e8b_B3_R2/pass3",
+          "seconds": 19.57,
+          "gpu_hours": 0.005436,
+          "note": ""
+        },
+        {
+          "step": "timing/e9_256m_open/pass3",
+          "seconds": 55.398,
+          "gpu_hours": 0.015388,
+          "note": ""
+        },
+        {
+          "step": "timing/vocab1000_product/pass1",
+          "seconds": 6.019,
+          "gpu_hours": 0.001672,
+          "note": ""
+        },
+        {
+          "step": "timing/vocab1000_product/pass2",
+          "seconds": 5.972,
+          "gpu_hours": 0.001659,
+          "note": ""
+        },
+        {
+          "step": "timing/vocab1000_product/pass3",
+          "seconds": 5.998,
+          "gpu_hours": 0.001666,
+          "note": ""
+        }
+      ],
+      "total_gpu_hours": 2.277104,
+      "branch_halt_hours": 6.0,
+      "headroom_hours": 3.722896
+    },
+    "resource_ledger_at_end_of_generation": {
+      "entries": [
+        {
+          "step": "preflight",
+          "seconds": 4.37,
+          "gpu_hours": 0.001214,
+          "note": "bounded preflight and protocol freeze"
+        },
+        {
+          "step": "smolvlm_256m/open/normal",
+          "seconds": 919.066,
+          "gpu_hours": 0.255296,
+          "note": "--readout open --condition normal --out /scratch/Efficient Vision-Language Reasoning with Small Language Models/results/experiments/e9_compact_vlm/e9_smolvlm_256m_open_normal.json"
+        },
+        {
+          "step": "smolvlm_256m/open/deranged",
+          "seconds": 926.754,
+          "gpu_hours": 0.257432,
+          "note": "--readout open --condition deranged --out /scratch/Efficient Vision-Language Reasoning with Small Language Models/results/experiments/e9_compact_vlm/e9_smolvlm_256m_open_deranged.json"
+        },
+        {
+          "step": "smolvlm_256m/open/blank",
+          "seconds": 1140.278,
+          "gpu_hours": 0.316744,
+          "note": "--readout open --condition blank --out /scratch/Efficient Vision-Language Reasoning with Small Language Models/results/experiments/e9_compact_vlm/e9_smolvlm_256m_open_blank.json"
+        },
+        {
+          "step": "smolvlm_256m/constrained/normal",
+          "seconds": 987.309,
+          "gpu_hours": 0.274252,
+          "note": "--readout constrained --condition normal --out /scratch/Efficient Vision-Language Reasoning with Small Language Models/results/experiments/e9_compact_vlm/e9_smolvlm_256m_constrained_normal.json"
+        },
+        {
+          "step": "smolvlm_256m/constrained/deranged",
+          "seconds": 980.863,
+          "gpu_hours": 0.272462,
+          "note": "--readout constrained --condition deranged --out /scratch/Efficient Vision-Language Reasoning with Small Language Models/results/experiments/e9_compact_vlm/e9_smolvlm_256m_constrained_deranged.json"
+        },
+        {
+          "step": "determinism/replica",
+          "seconds": 52.275,
+          "gpu_hours": 0.014521,
+          "note": "--condition normal --rows 512 --out /scratch/Efficient Vision-Language Reasoning with Small Language Models/results/experiments/e9_compact_vlm/e9_determinism_replica.json"
+        },
+        {
+          "step": "smolvlm_500m/open/normal",
+          "seconds": 1068.027,
+          "gpu_hours": 0.296674,
+          "note": "--readout open --condition normal --out /scratch/Efficient Vision-Language Reasoning with Small Language Models/results/experiments/e9_compact_vlm/e9_smolvlm_500m_open_normal.json"
+        },
+        {
+          "step": "smolvlm_500m/constrained/normal",
+          "seconds": 1130.859,
+          "gpu_hours": 0.314127,
+          "note": "--readout constrained --condition normal --out /scratch/Efficient Vision-Language Reasoning with Small Language Models/results/experiments/e9_compact_vlm/e9_smolvlm_500m_constrained_normal.json"
+        }
+      ],
+      "total_gpu_hours": 2.002722,
+      "branch_halt_hours": 6.0,
+      "headroom_hours": 3.997278
+    },
+    "optional_dropped": [],
+    "clean_test_accessed": false,
+    "scorer": {
+      "upstream_repository": "GT-Vision-Lab/VQA",
+      "upstream_commit": "a013f0043c1e2cdc995922dfe257f7149aa9af06",
+      "upstream_source_path": "PythonEvaluationTools/vqaEvaluation/vqaEval.py",
+      "licence": "BSD 2-Clause",
+      "vendored_source": "experiments/e8a_question_encoder/vendor/vqa/vqaEval.py",
+      "vendored_source_sha256": "f08edfcad5be0112500993e245c706b6cb928eadebe203f89f838e5e0d04bec8",
+      "vendored_licence": "experiments/e8a_question_encoder/vendor/vqa/LICENSE",
+      "vendored_licence_sha256": "4bf86fe8b104b69fc72caaa095b2fff4bade0d3d9a7970c6a5fd01fb736cad04",
+      "adapter": "experiments/e8a_question_encoder/g21_scorer.py",
+      "adapter_sha256": "22ea9c59082840a60568d7b804a3cb66ac0daccb7b503a6c50305d1354f2f40d"
+    },
+    "statistics": {
+      "procedure": "image-clustered paired bootstrap, 2,000 draws, fresh default_rng(0), 95 per cent percentile interval, clusters are development imageIds",
+      "e9_rule": "conditions 1 and 2 of the universal directional rule only; condition 3 is inapplicable because E9 has no training seeds, and every E9 interval is labelled single-run"
+    }
+  },
+  "metadata": {
+    "timestamp": "2026-08-10T12:08:00",
+    "git_commit": "a4c9b8b",
+    "git_dirty": true,
+    "open_clip_version": "3.3.0",
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "h5py_version": "3.16.0",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "deterministic": true,
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "embed_dim": 512,
+    "top_k_answers": 100,
+    "n_train": 40000,
+    "n_val": 8000,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "hidden_dim": 512,
+    "dropout": 0.3,
+    "weight_decay": 0.0001
+  }
+}

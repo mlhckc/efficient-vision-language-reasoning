@@ -657,6 +657,35 @@ recorded but NOT authorised. Any new model, dependency or architectural
 direction requires fresh explicit approval. Phase 1 has not begun and requires
 the user's explicit authorisation.
 
+## E9 closure, 10 August 2026
+
+The sentence above about Phase 1 is superseded for E9 only. The user approved
+the E9 design with targeted amendments on 10 August 2026 and authorised
+execution to proceed automatically if the bounded preflight passed. It did, and
+E9 ran and closed the same day: one primary frozen compact VLM
+(SmolVLM-256M-Instruct) and one secondary capacity point
+(SmolVLM-500M-Instruct), evaluation only, zero trainable parameters, seven
+generation passes over the 10,004-row raw development partition, a 512-row
+bitwise determinism replication, and same-node serial efficiency under the
+frozen E7b protocol including a read-only timing bridge over the frozen E8B
+train_250k seed-0 checkpoints. 2.2771 of the pre-registered 6.0 GPU-hour branch
+halt was spent and no optional cell was dropped. Results are in
+docs/experiments/e9_compact_vlm.md and results/experiments/e9_compact_vlm/.
+
+E9 is a contextual baseline, not a clean causal architecture experiment. No
+E9-versus-E8B difference is attributed to integrated architecture alone.
+
+Clean-test contents were never opened, read, scored or used. A pre-score E9
+implementation briefly resolved and stat()ed the embargoed path, which violated
+the stricter G17 path-level rule; it was detected and repaired before any
+scientific score was produced, and is recorded in
+results/experiments/e9_compact_vlm/g17_remediation.json with the later wording
+correction in g17_wording_correction.json.
+
+E10, F1 and F2 remain unauthorised and unstarted. E8B is closed and was not
+reopened: the timing bridge is read-only, verified each checkpoint against its
+frozen recorded SHA-256, and modified no E8B scientific artefact.
+
 ## Next permitted decisions
 
 The S1-S3 corrections, the P0-P3 preparation packets and the authorized

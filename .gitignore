@@ -45,9 +45,29 @@ results/experiments/e7b_serial_efficiency/pilot_evidence/*
 
 # E8B readout-generation records: preregistration, preflight and audit
 # JSON records are tracked; checkpoints and large artefacts stay ignored.
+# The rendered analysis tables and figures are tracked too, on the same
+# footing as E7b's csv and png: they are small, they are named as Outputs in
+# docs/experiments/e8b_core_matrix.md, and a clone could not otherwise see
+# an artefact the report cites. The 37 per-row npz arrays, the checkpoints,
+# the failed-attempt archive and the run logs stay ignored.
 !results/experiments/e8b_readout_generation/
 results/experiments/e8b_readout_generation/*
 !results/experiments/e8b_readout_generation/*.json
+!results/experiments/e8b_readout_generation/*.md
+!results/experiments/e8b_readout_generation/*.png
+
+# E9 compact-VLM records: the same policy as E8A and E8B. Small auditable
+# JSON and markdown are tracked so every reported number can be checked from
+# a clone; the per-row token npz arrays stay local and are covered by
+# results/experiments/e9_compact_vlm/ARTEFACT_MANIFEST.json, which records
+# each one's path, size and SHA-256. E9 writes no checkpoint.
+!results/experiments/e9_compact_vlm/
+results/experiments/e9_compact_vlm/*
+!results/experiments/e9_compact_vlm/*.json
+!results/experiments/e9_compact_vlm/*.md
+!results/experiments/e9_compact_vlm/timing/
+results/experiments/e9_compact_vlm/timing/*
+!results/experiments/e9_compact_vlm/timing/*.json
 
 # Python bytecode
 __pycache__/

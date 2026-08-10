@@ -1,0 +1,291 @@
+{
+  "e9_frozen_protocol": {
+    "frozen_utc": "2026-08-10T08:44:13Z",
+    "framing": "E9 is a CONTEXTUAL BASELINE, not a clean causal architecture experiment. Training history and multimodal pretraining differ, so no E9-vs-E8 difference is attributed to integrated architecture alone.",
+    "primary_readout": "open generation",
+    "secondary_readout": "trie-constrained generation, DIAGNOSTIC only, never promoted to primary",
+    "auxiliary_condition": "blank image, UNMATCHED ablation"
+  },
+  "prompt": "Answer the question using a single word or phrase.\nQuestion: {question}\nAnswer:",
+  "prompt_sha256": "16544e0488e052ed533a64d21082f0b82dd9bc793f157cf0ac01fbfd92f2f5e1",
+  "models": {
+    "smolvlm_256m": {
+      "repo": "HuggingFaceTB/SmolVLM-256M-Instruct",
+      "revision": "7e3e67edbbed1bf9888184d9df282b700a323964",
+      "licence": "apache-2.0",
+      "parameters": 256484928,
+      "trainable_parameters": 0,
+      "prompt": "Answer the question using a single word or phrase.\nQuestion: {question}\nAnswer:",
+      "prompt_sha256": "16544e0488e052ed533a64d21082f0b82dd9bc793f157cf0ac01fbfd92f2f5e1",
+      "chat_template": "<|im_start|>{% for message in messages %}{{message['role'] | capitalize}}{% if message['content'][0]['type'] == 'image' %}{{':'}}{% else %}{{': '}}{% endif %}{% for line in message['content'] %}{% if line['type'] == 'text' %}{{line['text']}}{% elif line['type'] == 'image' %}{{ '<image>' }}{% endif %}{% endfor %}<end_of_utterance>\n{% endfor %}{% if add_generation_prompt %}{{ 'Assistant:' }}{% endif %}",
+      "chat_template_sha256": "830005085ddd94cec605b6e21b885b28ffad6e3f82ee6a212c523533e8f04f01",
+      "image_processor": {
+        "do_convert_rgb": true,
+        "do_image_splitting": true,
+        "do_normalize": true,
+        "do_pad": true,
+        "do_rescale": true,
+        "do_resize": true,
+        "image_mean": [
+          0.5,
+          0.5,
+          0.5
+        ],
+        "image_processor_type": "Idefics3ImageProcessor",
+        "image_std": [
+          0.5,
+          0.5,
+          0.5
+        ],
+        "max_image_size": {
+          "longest_edge": 512
+        },
+        "resample": 1,
+        "rescale_factor": 0.00392156862745098,
+        "size": {
+          "longest_edge": 2048
+        }
+      },
+      "image_processor_sha256": "95e949e069c9cc2556feaee98308df80aeb98c446f9b2e7504355048cbf46f66",
+      "tokenizer_sha256": "2680f167572281f6a6f96d3760447502ce11185c30be1513b0493debbc2e5a89",
+      "generation": {
+        "do_sample": false,
+        "num_beams": 1,
+        "open_max_new_tokens": 20,
+        "dtype": "bfloat16",
+        "attn_implementation": "sdpa",
+        "padding_side": "left",
+        "eos_token_id": 49279,
+        "pad_token_id": 2,
+        "bos_token_id": 1,
+        "defaults": {
+          "temperature": null,
+          "top_p": null,
+          "top_k": null,
+          "repetition_penalty": 1.0,
+          "length_penalty": 1.0,
+          "no_repeat_ngram_size": 0,
+          "use_cache": true,
+          "early_stopping": false,
+          "num_return_sequences": 1
+        }
+      },
+      "generation_sha256": "0b77b4cc0be764ec22e7137b231aa303eed582da3544b16114434d5da2f78faf",
+      "smoke_peak_reserved_bytes": 1870659584,
+      "checkpoint_bytes": 512969856
+    },
+    "smolvlm_500m": {
+      "repo": "HuggingFaceTB/SmolVLM-500M-Instruct",
+      "revision": "a7da5b986cb59b408707209984f360a5f4ad7e47",
+      "licence": "apache-2.0",
+      "parameters": 507482304,
+      "trainable_parameters": 0,
+      "prompt": "Answer the question using a single word or phrase.\nQuestion: {question}\nAnswer:",
+      "prompt_sha256": "16544e0488e052ed533a64d21082f0b82dd9bc793f157cf0ac01fbfd92f2f5e1",
+      "chat_template": "<|im_start|>{% for message in messages %}{{message['role'] | capitalize}}{% if message['content'][0]['type'] == 'image' %}{{':'}}{% else %}{{': '}}{% endif %}{% for line in message['content'] %}{% if line['type'] == 'text' %}{{line['text']}}{% elif line['type'] == 'image' %}{{ '<image>' }}{% endif %}{% endfor %}<end_of_utterance>\n{% endfor %}{% if add_generation_prompt %}{{ 'Assistant:' }}{% endif %}",
+      "chat_template_sha256": "830005085ddd94cec605b6e21b885b28ffad6e3f82ee6a212c523533e8f04f01",
+      "image_processor": {
+        "do_convert_rgb": true,
+        "do_image_splitting": true,
+        "do_normalize": true,
+        "do_pad": true,
+        "do_rescale": true,
+        "do_resize": true,
+        "image_mean": [
+          0.5,
+          0.5,
+          0.5
+        ],
+        "image_processor_type": "Idefics3ImageProcessor",
+        "image_std": [
+          0.5,
+          0.5,
+          0.5
+        ],
+        "max_image_size": {
+          "longest_edge": 512
+        },
+        "resample": 1,
+        "rescale_factor": 0.00392156862745098,
+        "size": {
+          "longest_edge": 2048
+        }
+      },
+      "image_processor_sha256": "95e949e069c9cc2556feaee98308df80aeb98c446f9b2e7504355048cbf46f66",
+      "tokenizer_sha256": "2680f167572281f6a6f96d3760447502ce11185c30be1513b0493debbc2e5a89",
+      "generation": {
+        "do_sample": false,
+        "num_beams": 1,
+        "open_max_new_tokens": 20,
+        "dtype": "bfloat16",
+        "attn_implementation": "sdpa",
+        "padding_side": "left",
+        "eos_token_id": 49279,
+        "pad_token_id": 2,
+        "bos_token_id": 1,
+        "defaults": {
+          "temperature": null,
+          "top_p": null,
+          "top_k": null,
+          "repetition_penalty": 1.0,
+          "length_penalty": 1.0,
+          "no_repeat_ngram_size": 0,
+          "use_cache": true,
+          "early_stopping": false,
+          "num_return_sequences": 1
+        }
+      },
+      "generation_sha256": "0b77b4cc0be764ec22e7137b231aa303eed582da3544b16114434d5da2f78faf",
+      "smoke_peak_reserved_bytes": 2342518784,
+      "checkpoint_bytes": 1014964608
+    }
+  },
+  "exposure": {
+    "smolvlm_256m": {
+      "card_sha256": "0b687c656b2587d84cb85003825746f8b3a08497dff4ed51b54b1090719fa512",
+      "documented_datasets": [
+        "HuggingFaceM4/the_cauldron",
+        "HuggingFaceM4/Docmatix"
+      ],
+      "gqa_named_in_card": false,
+      "supervised_gqa_claim": "NOT MADE. No direct GQA supervised-training claim is made in either direction.",
+      "overlap_caveat": "Absence of GQA from a published training-dataset list is NOT proof of zero image or content overlap. GQA imagery derives from Visual Genome, which Cauldron subsets draw on, so image-level exposure is likely and E9 is never described as zero-shot at the image level.",
+      "framing": "CONTEXTUAL POSITIONING, not a matched causal comparison. SmolVLM is externally pretrained and instruction-tuned."
+    },
+    "smolvlm_500m": {
+      "card_sha256": "8465c1a46b0db5d5d0d0945df04032d1b405bb2fa12cdab3da1652bd75fca4b9",
+      "documented_datasets": [
+        "HuggingFaceM4/the_cauldron",
+        "HuggingFaceM4/Docmatix"
+      ],
+      "gqa_named_in_card": false,
+      "supervised_gqa_claim": "NOT MADE. No direct GQA supervised-training claim is made in either direction.",
+      "overlap_caveat": "Absence of GQA from a published training-dataset list is NOT proof of zero image or content overlap. GQA imagery derives from Visual Genome, which Cauldron subsets draw on, so image-level exposure is likely and E9 is never described as zero-shot at the image level.",
+      "framing": "CONTEXTUAL POSITIONING, not a matched causal comparison. SmolVLM is externally pretrained and instruction-tuned."
+    }
+  },
+  "trie": {
+    "support": "top_1000",
+    "n_answers": 1000,
+    "n_token_sequences": 2000,
+    "surface_forms": "bare and one leading space, both mapping to the same answer index",
+    "max_sequence_length": 5,
+    "length_histogram": {
+      "1": 1040,
+      "2": 740,
+      "3": 205,
+      "4": 14,
+      "5": 1
+    },
+    "constrained_max_new_tokens": 7,
+    "sequences_sha256": "ae8f8db5e3e4a6f3313467c8a7cefa725d31006ccfb94cf0a87e4827c81e1199",
+    "accepted_set_equals_support": true,
+    "support_disclosure": "The constrained readout offers 1000 candidates. E8B's classifiers choose among 100. A top-1000 constrained task is NOT equated with E8B's top-100 classifier task; the difference is disclosed wherever the two appear together."
+  },
+  "image_token_id": 49190,
+  "derangement": {
+    "construction": "rejection-sampled permutation of the sorted unique imageIds until it has no fixed point",
+    "rng": "np.random.default_rng(42)",
+    "seed": 42,
+    "draws_until_derangement": 7,
+    "n_images": 777,
+    "self_pairs": 0,
+    "sha256": "5f8f7868fc73804b40d2424923a369740404504ae902bbc5527ac67dde4044f4",
+    "intervention_kind": "identical IMAGE-PARTNER intervention to E8B; NOT an identical feature-space intervention, because preprocessing differs"
+  },
+  "blank_image": {
+    "size": [
+      384,
+      384
+    ],
+    "value": [
+      128,
+      128,
+      128
+    ],
+    "sha256": "9b7a160746c759b816b8e69dd9aa23432ac291854a75787867a42a6feb7cf614",
+    "role": "AUXILIARY / UNMATCHED ABLATION",
+    "note": "not matched to E8B fixed_image, which is a feature-space mean"
+  },
+  "conditions": {
+    "normal": "PRIMARY",
+    "deranged": "PRIMARY (matched image-partner intervention)",
+    "blank": "AUXILIARY / UNMATCHED ABLATION"
+  },
+  "denominators": {
+    "raw_rows": 10004,
+    "raw_clusters": 777,
+    "in_vocabulary_rows": 7714,
+    "in_vocabulary_clusters": 768,
+    "top_1000_rows": 9823
+  },
+  "statistics": {
+    "draws": 2000,
+    "rng": "default_rng(0)",
+    "alpha": 0.05,
+    "raw_clusters": 777,
+    "in_vocabulary_clusters": 768
+  },
+  "batch_size": 8,
+  "branch_halt_hours": 6.0,
+  "execution_priority": {
+    "mandatory": [
+      [
+        "smolvlm_256m",
+        "open",
+        "normal"
+      ],
+      [
+        "smolvlm_256m",
+        "open",
+        "deranged"
+      ],
+      [
+        "smolvlm_256m",
+        "open",
+        "blank"
+      ],
+      [
+        "smolvlm_256m",
+        "constrained",
+        "normal"
+      ],
+      [
+        "smolvlm_256m",
+        "constrained",
+        "deranged"
+      ]
+    ],
+    "optional": [
+      [
+        "smolvlm_500m",
+        "open",
+        "normal"
+      ],
+      [
+        "smolvlm_500m",
+        "constrained",
+        "normal"
+      ]
+    ]
+  },
+  "vocabularies": {
+    "top_100_sha256": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680",
+    "top_1000_sha256": "6f307c2bd088340e56e831986e7cfe2b3e8f505bb5117f061bb5329089b7dbde",
+    "top_100_size": 100,
+    "top_1000_size": 1000,
+    "top_100_is_subset_of_top_1000": true
+  },
+  "scorer": {
+    "upstream_repository": "GT-Vision-Lab/VQA",
+    "upstream_commit": "a013f0043c1e2cdc995922dfe257f7149aa9af06",
+    "upstream_source_path": "PythonEvaluationTools/vqaEvaluation/vqaEval.py",
+    "licence": "BSD 2-Clause",
+    "vendored_source": "experiments/e8a_question_encoder/vendor/vqa/vqaEval.py",
+    "vendored_source_sha256": "f08edfcad5be0112500993e245c706b6cb928eadebe203f89f838e5e0d04bec8",
+    "vendored_licence": "experiments/e8a_question_encoder/vendor/vqa/LICENSE",
+    "vendored_licence_sha256": "4bf86fe8b104b69fc72caaa095b2fff4bade0d3d9a7970c6a5fd01fb736cad04",
+    "adapter": "experiments/e8a_question_encoder/g21_scorer.py",
+    "adapter_sha256": "22ea9c59082840a60568d7b804a3cb66ac0daccb7b503a6c50305d1354f2f40d"
+  }
+}

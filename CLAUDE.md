@@ -107,6 +107,31 @@ hash no longer matches the worktree.
   proxy (fusion is 48% slower than concat_wide at equal parameters).
   Supersedes the V1 stage-5 and src/efficiency.py-derived latencies.
   Development results only; see docs/experiments/e7a_efficiency.md.
+- E9 (authorized and completed 10 August 2026) placed one frozen compact
+  integrated VLM in context against the lightweight systems, evaluation only
+  and with zero trainable parameters. On the 10,004-row raw development
+  partition under the pinned G21 normalised metric, SmolVLM-256M-Instruct
+  reaches 0.436525 with free greedy generation: above every E8B arm at
+  train_40k and below every one at train_250k, all six paired contrasts
+  directional. SmolVLM-500M-Instruct, a secondary normal-condition-only
+  capacity point, reaches 0.489004 and exceeds every E8B arm at both scales
+  (+0.026 to +0.031 over the 250k arms). Constraining generation to the
+  top-1000 answer support moves the score by at most about 0.005 with every
+  interval containing zero, so output format is not what limits the compact
+  VLM; strict raw exact is near zero only because it emits " Yes." against
+  gold "yes". The matched image-partner derangement costs it +0.16763,
+  about a third more than any E8B arm's +0.084 to +0.126, so it relies on
+  the image more. On one node under the frozen E7b serial protocol the
+  top-1000 global head reaches the same raw-distribution accuracy at 6.199 ms
+  against SmolVLM-500M's 152.854 ms, about 25 times cheaper; the E8B bridge
+  measures B1 at 10.242 ms and B2/B3 R2/R3 at 38.8 to 39.7 ms. The fusion
+  bridge control failed its pre-registered 10 per cent tolerance against the
+  historical E7b node (-18.7 per cent), so those frontiers are not merged and
+  no adjustment factor is applied. E9 is contextual positioning, not a matched
+  causal comparison: training history, multimodal pretraining, answer support
+  and output format all differ, and SmolVLM-256M's text backbone is the
+  Instruct checkpoint where E8A and E8B use base. Development results only;
+  see docs/experiments/e9_compact_vlm.md.
 - Current gate, updated 2 August 2026 (E8A/E8B/E9 programme). The user
   authorized the E8A frozen-SLM question-encoder branch, the E8B frozen-SLM
   readout and bounded-generation branch, and the E9 evaluation-only compact-VLM
@@ -248,6 +273,11 @@ hash no longer matches the worktree.
      grid points 4-8, E9, E10, F1, F2 and the clean test remain
      refused, the scientific design is unchanged, and the matrix is
      fixed regardless of what early results look like.
+     SUPERSEDED IN PART on 10 August 2026, for E9 only: the user
+     authorized the E9 design with targeted amendments and E9 has since
+     been executed and closed. The E9 clause of this 8 August grant is
+     therefore historical. Grid points 4-8, E10, F1, F2 and the clean
+     test remain refused, and nothing else in this grant changes.
      Performance-driven retries are forbidden, a failed execution
      grants no automatic retry, and any retry that does not fit the
      frozen ceiling and floor policy halts and returns to the user.

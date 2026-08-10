@@ -1,0 +1,259 @@
+{
+  "e9_preflight": {
+    "dated_utc": "2026-08-10T08:44:13Z",
+    "clean_test_before": {
+      "present": true,
+      "size_bytes": 133695,
+      "mtime_ns": 1783870869441194418,
+      "note": "metadata only; the file is never opened by E9"
+    },
+    "dependency_gate": {
+      "accelerate_installed": false,
+      "accelerate_version": null,
+      "transformers": "5.14.1",
+      "tokenizers": "0.22.2",
+      "torch": "2.12.1+cu130",
+      "policy": "if the idefics3 path required accelerate this would be a stop-and-ask, not an install"
+    },
+    "output_paths": {
+      "existing_files": [],
+      "resumable_records": [],
+      "stale": []
+    },
+    "vocabularies": {
+      "top_100_sha256": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680",
+      "top_1000_sha256": "6f307c2bd088340e56e831986e7cfe2b3e8f505bb5117f061bb5329089b7dbde",
+      "top_100_size": 100,
+      "top_1000_size": 1000,
+      "top_100_is_subset_of_top_1000": true
+    },
+    "denominators": {
+      "raw_rows": 10004,
+      "raw_clusters": 777,
+      "in_vocabulary_rows": 7714,
+      "in_vocabulary_clusters": 768,
+      "top_1000_rows": 9823
+    },
+    "images": {
+      "distinct_images": 777,
+      "missing": 0
+    },
+    "scorer": {
+      "provenance": {
+        "upstream_repository": "GT-Vision-Lab/VQA",
+        "upstream_commit": "a013f0043c1e2cdc995922dfe257f7149aa9af06",
+        "upstream_source_path": "PythonEvaluationTools/vqaEvaluation/vqaEval.py",
+        "licence": "BSD 2-Clause",
+        "vendored_source": "experiments/e8a_question_encoder/vendor/vqa/vqaEval.py",
+        "vendored_source_sha256": "f08edfcad5be0112500993e245c706b6cb928eadebe203f89f838e5e0d04bec8",
+        "vendored_licence": "experiments/e8a_question_encoder/vendor/vqa/LICENSE",
+        "vendored_licence_sha256": "4bf86fe8b104b69fc72caaa095b2fff4bade0d3d9a7970c6a5fd01fb736cad04",
+        "adapter": "experiments/e8a_question_encoder/g21_scorer.py",
+        "adapter_sha256": "22ea9c59082840a60568d7b804a3cb66ac0daccb7b503a6c50305d1354f2f40d"
+      },
+      "independent_cases": 6,
+      "verified": true
+    },
+    "derangement": {
+      "construction": "rejection-sampled permutation of the sorted unique imageIds until it has no fixed point",
+      "rng": "np.random.default_rng(42)",
+      "seed": 42,
+      "draws_until_derangement": 7,
+      "n_images": 777,
+      "self_pairs": 0,
+      "sha256": "5f8f7868fc73804b40d2424923a369740404504ae902bbc5527ac67dde4044f4",
+      "intervention_kind": "identical IMAGE-PARTNER intervention to E8B; NOT an identical feature-space intervention, because preprocessing differs"
+    },
+    "blank_image": {
+      "size": [
+        384,
+        384
+      ],
+      "value": [
+        128,
+        128,
+        128
+      ],
+      "sha256": "9b7a160746c759b816b8e69dd9aa23432ac291854a75787867a42a6feb7cf614",
+      "role": "AUXILIARY / UNMATCHED ABLATION",
+      "note": "not matched to E8B fixed_image, which is a feature-space mean"
+    },
+    "memory": {
+      "device_total_bytes": 20989804544,
+      "device_total_mib": 20017,
+      "smoke_worst_peak_bytes": 2342518784,
+      "ceiling_bytes": 16791843635,
+      "sufficient": true
+    },
+    "exposure": {
+      "smolvlm_256m": {
+        "card_sha256": "0b687c656b2587d84cb85003825746f8b3a08497dff4ed51b54b1090719fa512",
+        "documented_datasets": [
+          "HuggingFaceM4/the_cauldron",
+          "HuggingFaceM4/Docmatix"
+        ],
+        "gqa_named_in_card": false,
+        "supervised_gqa_claim": "NOT MADE. No direct GQA supervised-training claim is made in either direction.",
+        "overlap_caveat": "Absence of GQA from a published training-dataset list is NOT proof of zero image or content overlap. GQA imagery derives from Visual Genome, which Cauldron subsets draw on, so image-level exposure is likely and E9 is never described as zero-shot at the image level.",
+        "framing": "CONTEXTUAL POSITIONING, not a matched causal comparison. SmolVLM is externally pretrained and instruction-tuned."
+      },
+      "smolvlm_500m": {
+        "card_sha256": "8465c1a46b0db5d5d0d0945df04032d1b405bb2fa12cdab3da1652bd75fca4b9",
+        "documented_datasets": [
+          "HuggingFaceM4/the_cauldron",
+          "HuggingFaceM4/Docmatix"
+        ],
+        "gqa_named_in_card": false,
+        "supervised_gqa_claim": "NOT MADE. No direct GQA supervised-training claim is made in either direction.",
+        "overlap_caveat": "Absence of GQA from a published training-dataset list is NOT proof of zero image or content overlap. GQA imagery derives from Visual Genome, which Cauldron subsets draw on, so image-level exposure is likely and E9 is never described as zero-shot at the image level.",
+        "framing": "CONTEXTUAL POSITIONING, not a matched causal comparison. SmolVLM is externally pretrained and instruction-tuned."
+      }
+    },
+    "conditions": {
+      "smolvlm_256m": {
+        "normal": {
+          "accepted": true,
+          "prompt_tokens": 893,
+          "image_tokens": 832,
+          "pixel_values_shape": [
+            2,
+            13,
+            3,
+            512,
+            512
+          ],
+          "generated_shape": [
+            2,
+            895
+          ],
+          "role": "PRIMARY"
+        },
+        "deranged": {
+          "accepted": true,
+          "prompt_tokens": 893,
+          "image_tokens": 832,
+          "pixel_values_shape": [
+            2,
+            13,
+            3,
+            512,
+            512
+          ],
+          "generated_shape": [
+            2,
+            895
+          ],
+          "role": "PRIMARY (matched image-partner intervention)"
+        },
+        "blank": {
+          "accepted": true,
+          "prompt_tokens": 1158,
+          "image_tokens": 1088,
+          "pixel_values_shape": [
+            2,
+            17,
+            3,
+            512,
+            512
+          ],
+          "generated_shape": [
+            2,
+            1160
+          ],
+          "role": "AUXILIARY / UNMATCHED ABLATION"
+        }
+      },
+      "smolvlm_500m": {
+        "normal": {
+          "accepted": true,
+          "prompt_tokens": 893,
+          "image_tokens": 832,
+          "pixel_values_shape": [
+            2,
+            13,
+            3,
+            512,
+            512
+          ],
+          "generated_shape": [
+            2,
+            895
+          ],
+          "role": "PRIMARY"
+        },
+        "deranged": {
+          "accepted": true,
+          "prompt_tokens": 893,
+          "image_tokens": 832,
+          "pixel_values_shape": [
+            2,
+            13,
+            3,
+            512,
+            512
+          ],
+          "generated_shape": [
+            2,
+            895
+          ],
+          "role": "PRIMARY (matched image-partner intervention)"
+        },
+        "blank": {
+          "accepted": true,
+          "prompt_tokens": 1158,
+          "image_tokens": 1088,
+          "pixel_values_shape": [
+            2,
+            17,
+            3,
+            512,
+            512
+          ],
+          "generated_shape": [
+            2,
+            1160
+          ],
+          "role": "AUXILIARY / UNMATCHED ABLATION"
+        }
+      }
+    },
+    "clean_test_after": {
+      "present": true,
+      "size_bytes": 133695,
+      "mtime_ns": 1783870869441194418,
+      "note": "metadata only; the file is never opened by E9"
+    },
+    "elapsed_seconds": 4.355,
+    "frozen_protocol_sha256": "e38c0b9e6702cebd97f08487d70177ac49064df5db3e2e1c0d38601415769b02"
+  },
+  "metadata": {
+    "timestamp": "2026-08-10T09:44:17",
+    "git_commit": "a4c9b8b",
+    "git_dirty": true,
+    "open_clip_version": "3.3.0",
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "h5py_version": "3.16.0",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "deterministic": true,
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "embed_dim": 512,
+    "top_k_answers": 100,
+    "n_train": 40000,
+    "n_val": 8000,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "hidden_dim": 512,
+    "dropout": 0.3,
+    "weight_decay": 0.0001
+  }
+}

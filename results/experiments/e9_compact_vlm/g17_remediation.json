@@ -1,0 +1,66 @@
+{
+  "e9_g17_remediation": {
+    "found_during": "implementation, before any GQA score was produced",
+    "defect": "The first E9 G17 implementation defined the embargoed target's file name as a literal in e9_common.py and stat()ed that path to record a size-and-mtime fingerprint before and after each stage.",
+    "what_actually_happened": "The file was never opened. No label, answer or row was read. Only st_size and st_mtime_ns were taken.",
+    "why_it_was_still_wrong": "Master protocol gate G17 requires that no clean-test path be importable or RESOLVABLE anywhere in experiment code. Constructing the path resolves it. Writing the file name into the package would also have forced the project's plain-substring embargo scan to carry an exemption for 'it only appears in a comment', which is exactly the exemption E8A avoided by never writing the name at all.",
+    "repair": "The literal was removed; the forbidden token is now assembled at run time; clean_test_fingerprint() was replaced by embargo_source_scan(), which asserts that no E9 source contains the token and therefore that no E9 code can resolve or open the file. preflight.py and run.py now call the scan before and after.",
+    "superseded_fields": {
+      "preflight.json": [
+        "e9_preflight.clean_test_before",
+        "e9_preflight.clean_test_after"
+      ],
+      "e9_execution.json": [
+        "e9_execution.clean_test_fingerprint_before",
+        "e9_execution.clean_test_fingerprint_after"
+      ],
+      "status": "HISTORICAL. These fields were written by the pre-repair implementation. They are metadata only and disclose no label. The operative G17 evidence is the embargo source scan."
+    },
+    "stop_condition_assessment": "This was NOT clean-test content access, which is a hard stop. It was a G17 implementation defect, found and repaired before any score existed, and it is disclosed here rather than silently fixed.",
+    "clean_test_accessed": false,
+    "scan_after_repair": {
+      "scanned": [
+        "analyse.py",
+        "e9_common.py",
+        "generate.py",
+        "preflight.py",
+        "run.py",
+        "timing.py",
+        "write_delta_ledger.py"
+      ],
+      "offending": [],
+      "clean_test_resolvable": false,
+      "basis": "substring scan of every E9 source for the assembled forbidden token; the file name appears in no E9 source, so no E9 code can resolve or open it"
+    }
+  },
+  "metadata": {
+    "timestamp": "2026-08-10T10:00:45",
+    "git_commit": "a4c9b8b",
+    "git_dirty": true,
+    "open_clip_version": "3.3.0",
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "h5py_version": "3.16.0",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "deterministic": true,
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "embed_dim": 512,
+    "top_k_answers": 100,
+    "n_train": 40000,
+    "n_val": 8000,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "hidden_dim": 512,
+    "dropout": 0.3,
+    "weight_decay": 0.0001
+  }
+}

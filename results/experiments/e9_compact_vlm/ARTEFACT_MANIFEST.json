@@ -1,0 +1,350 @@
+{
+  "e9_artefact_manifest": {
+    "experiment": "E9 compact-VLM contextual baseline",
+    "report": "docs/experiments/e9_compact_vlm.md",
+    "frozen_protocol_sha256": "e38c0b9e6702cebd97f08487d70177ac49064df5db3e2e1c0d38601415769b02",
+    "policy": "Small auditable JSON and markdown are version controlled so every reported number can be checked from a clone. Binary per-row token arrays stay local by design and are listed here with their size and SHA-256. Model weights live in the ignored project cache and are pinned by repository and revision in frozen_protocol.json, not by hash of a downloaded blob.",
+    "version_controlled": {
+      "count": 51,
+      "bytes": 3351652,
+      "files": [
+        {
+          "path": "results/experiments/e9_compact_vlm/delta_ledger.json",
+          "bytes": 7770,
+          "sha256": "bf1fc309ee8fd0ee6882fd5eba030a7b1e3100c9a529498164d744ba28cd6af4"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/e9_determinism_replica.json",
+          "bytes": 24526,
+          "sha256": "70d44f5838c1ae5c608702157d5f50c4a86a8b5b7fa8bb9ec74c79d4e561787e"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/e9_determinism_replication.json",
+          "bytes": 1246,
+          "sha256": "e6b5fd960033cf0aaee55386fb75948810bec2501b0fbeae57c35e1c87df8c53"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/e9_efficiency.json",
+          "bytes": 11197,
+          "sha256": "929c45ae2544a7a70416c5ebb1fea0c2871c943e5d59e24b67aae60676922d0b"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/e9_execution.json",
+          "bytes": 12444,
+          "sha256": "006430df76ce215afac263089724592dd936371fcb1ce2145e59d4c9db4fbadd"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/e9_results.json",
+          "bytes": 78181,
+          "sha256": "5d42ae9344fa9d7bcd48589645d62b4d0c20db9a3d9d03288bbddd6832ae2caa"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/e9_results_tables.md",
+          "bytes": 16409,
+          "sha256": "9b91ae0667a8e492dcc4a76a62ded7b42e181a603a55f399d696b749292c69db"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/e9_smolvlm_256m_constrained_deranged.json",
+          "bytes": 434225,
+          "sha256": "a330e476ba6f6fe969a8d0f66bde75361b4c6f2f263ad4fa2ba5ccb095280b00"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/e9_smolvlm_256m_constrained_normal.json",
+          "bytes": 437221,
+          "sha256": "5c3ea579f3527e0a92ebdb68e799a0b6c4662bcba936e667471bf4052cc62440"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/e9_smolvlm_256m_open_blank.json",
+          "bytes": 440954,
+          "sha256": "35a39083246f03294f07af0b9b965ec482e2cc7ce1b442cb42168619e3ef73e4"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/e9_smolvlm_256m_open_deranged.json",
+          "bytes": 444515,
+          "sha256": "6dec0484239e3da1e54a1100e3969ac738364d99789ce24fc4832bdd254552b9"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/e9_smolvlm_256m_open_normal.json",
+          "bytes": 447145,
+          "sha256": "ae6049dddcc9df4381f569cf69e9b7553786f235077335826dc882a56bf5d58b"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/e9_smolvlm_500m_constrained_normal.json",
+          "bytes": 437323,
+          "sha256": "65e54cfdb24b1edfb2ccdd32ce8e91f00b874ab00556340e8dab7a6a7c9f767c"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/e9_smolvlm_500m_open_normal.json",
+          "bytes": 445272,
+          "sha256": "65fa61f3e2b1e855391415968a51f89ac44b00557464086b000ff93bae9a85f6"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/frozen_protocol.json",
+          "bytes": 11273,
+          "sha256": "e38c0b9e6702cebd97f08487d70177ac49064df5db3e2e1c0d38601415769b02"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/g17_remediation.json",
+          "bytes": 3248,
+          "sha256": "44f7b304198522631b0fa6303e07fb1eeb0e73848696d659ae93b63fbcf9f92d"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/preflight.json",
+          "bytes": 8329,
+          "sha256": "a0d35407e274bdbd4fbeb37e8a82ce77c329ec395aa9efaac516bf0d025325e9"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/resource_ledger.json",
+          "bytes": 6928,
+          "sha256": "28d15e5240fba76a9d81705b8ebb4c3562132a866be6083c3b697b97ed062f49"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/timing/e8b_B1_pass1.json",
+          "bytes": 2698,
+          "sha256": "11bfda83a496e261fae7d6c428d7159ce41944809abd57a3ae06a0e002fec9d8"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/timing/e8b_B1_pass2.json",
+          "bytes": 2698,
+          "sha256": "5c7ec4706f6b4cc71a0675e6ceb80ee7680f443984af9cde5517aeac6670c9c4"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/timing/e8b_B1_pass3.json",
+          "bytes": 2698,
+          "sha256": "1172a096ac8e215f28a18dbdb33b0fa1a60926286c441128126737a31ecf1a1b"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/timing/e8b_B2_R2_pass1.json",
+          "bytes": 2715,
+          "sha256": "df9e7bcbe3414256310665a4dfde187bcb8f8369ef477a98c935f309457825b7"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/timing/e8b_B2_R2_pass2.json",
+          "bytes": 2715,
+          "sha256": "6d299bd06d53947616988ec13d5318ceb4454ef7f55c2d2b28cb8674fe94b103"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/timing/e8b_B2_R2_pass3.json",
+          "bytes": 2715,
+          "sha256": "7fdd09bd463667500d413c25eaaac22fdd9e53b4e951207c8323c7cc27e9f01d"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/timing/e8b_B2_R3_pass1.json",
+          "bytes": 2707,
+          "sha256": "40b505e9d320f5db88fdc00601a5bdac32767f743825689c04f555687a0ec330"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/timing/e8b_B2_R3_pass2.json",
+          "bytes": 2705,
+          "sha256": "a8b6e75f4b5e28c36cbf0b67f61f4ac9c1145c9c9265ce545916cdb30edab63c"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/timing/e8b_B2_R3_pass3.json",
+          "bytes": 2707,
+          "sha256": "8883bcab01db77a2e61abbab3351991c2c40e583bed008c9f6a097fb7bdbb1f8"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/timing/e8b_B3_R2_pass1.json",
+          "bytes": 2714,
+          "sha256": "453ce0ae88ed5e1c6bf92a4bddd436fb716e15b54de6b6ec29e0b2281560b185"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/timing/e8b_B3_R2_pass2.json",
+          "bytes": 2713,
+          "sha256": "0ff46ab776942fd9bdf6b9267e747c494fd4a6debd3f31b835e5d4528bd68de9"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/timing/e8b_B3_R2_pass3.json",
+          "bytes": 2715,
+          "sha256": "c95d82a63ea1ed354c4eae60cb7ba4fa1d6ac076b1364f19de644cee5cc51050"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/timing/e8b_B3_R3_pass1.json",
+          "bytes": 2706,
+          "sha256": "06e0300f73a666bb520e9d48571d7af2f3abe1b56b6da2d2f5a33151cd61b762"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/timing/e8b_B3_R3_pass2.json",
+          "bytes": 2706,
+          "sha256": "84839034820fab84731429a696507232448d865159902213248d726f8c2ca859"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/timing/e8b_B3_R3_pass3.json",
+          "bytes": 2707,
+          "sha256": "4d2a018437b55b10a8d03d143832b2fa2203dcbe1fb9ed8ee19d7bf975005b2a"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/timing/e9_256m_constrained_pass1.json",
+          "bytes": 2438,
+          "sha256": "fcb42da6f0f14487bc81cf9ba5373c992ef5b61463512bf3337ea0186dee4022"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/timing/e9_256m_constrained_pass2.json",
+          "bytes": 2439,
+          "sha256": "1edc1b85b8c36a0233d15a2741507a85162a6c1e8341f51ff0635266b671c8fb"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/timing/e9_256m_constrained_pass3.json",
+          "bytes": 2440,
+          "sha256": "fb66a7ef1257948d0accfa256c0b7b0b420e2802e662d83107b094cf88f6bb9f"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/timing/e9_256m_open_pass1.json",
+          "bytes": 2410,
+          "sha256": "26c3ac215379054b0f5bb31dae30bbc3ecec107698a2accc3315d897aa2a5174"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/timing/e9_256m_open_pass2.json",
+          "bytes": 2411,
+          "sha256": "5717458ce1907277f8956ed7bb3d15ec43589f103b50096b39a82b16b8b7ba31"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/timing/e9_256m_open_pass3.json",
+          "bytes": 2411,
+          "sha256": "f78f3a078505c776b6cada2c3ff844ba6194be3eef907ff8231fa8aa3cc83197"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/timing/e9_500m_constrained_pass1.json",
+          "bytes": 2441,
+          "sha256": "28ae5c016b9c00530854f574f2b5872d177687cbe9846040c189725a9af5fd35"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/timing/e9_500m_constrained_pass2.json",
+          "bytes": 2442,
+          "sha256": "ff621d600a005388ad76433ecc189e8734548e9f950502a10a8d1361498f02db"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/timing/e9_500m_constrained_pass3.json",
+          "bytes": 2441,
+          "sha256": "160770ee64d814bf7c171245add7a9fb5a6f3e035c577e70a462bd21f987fc8f"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/timing/e9_500m_open_pass1.json",
+          "bytes": 2415,
+          "sha256": "cbf84317c45340165dbc95c137f26f70363d351911a9d04e248bc0a7ed0c4503"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/timing/e9_500m_open_pass2.json",
+          "bytes": 2416,
+          "sha256": "ce58387d7f9ab4c687d97b336d35771f759846abfdce02afcb979817ff6459c2"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/timing/e9_500m_open_pass3.json",
+          "bytes": 2414,
+          "sha256": "c4cb52011172a2e60b61554b7365397868f1b36e40b32548d8d38ebe6201b3f1"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/timing/fusion_pass1.json",
+          "bytes": 2265,
+          "sha256": "4e93e16f6520154aba3e7ea37a53a80a54b5365a9872f81369abf47adfd4d359"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/timing/fusion_pass2.json",
+          "bytes": 2263,
+          "sha256": "d965d1ab0a11fd943843f312e845839bc2d1329318706eef1f74141624296309"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/timing/fusion_pass3.json",
+          "bytes": 2261,
+          "sha256": "7233f22f20873a3f3fc6e0a0f3a9926cc9c1a072ab33644ef5c90c61d13c9a0d"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/timing/vocab1000_product_pass1.json",
+          "bytes": 2307,
+          "sha256": "8f6990b4f8d915eea117efaf0dff158d4680c8b0bfc6efb971d47f6551ed93df"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/timing/vocab1000_product_pass2.json",
+          "bytes": 2307,
+          "sha256": "8a8a967f218a158353e625a922d84965061be87a0025faaa9397ee005341beda"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/timing/vocab1000_product_pass3.json",
+          "bytes": 2306,
+          "sha256": "436704bd24f84544e6cd4c339cf88f7ced7b0e7588d35fb9b1dbe83305c54ad9"
+        }
+      ]
+    },
+    "local_by_design": {
+      "count": 8,
+      "bytes": 445550,
+      "files": [
+        {
+          "path": "results/experiments/e9_compact_vlm/e9_determinism_replica.tokens.npz",
+          "bytes": 4169,
+          "sha256": "76d4c6da6c6f6affe1f50d53c41696214737854206b6e0bcf37d40f0741117e5"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/e9_smolvlm_256m_constrained_deranged.tokens.npz",
+          "bytes": 54971,
+          "sha256": "42fb1c3d0252adbf0e8319b77a390ab69fe0b72b589fdf48c8de4779b524dfb5"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/e9_smolvlm_256m_constrained_normal.tokens.npz",
+          "bytes": 55775,
+          "sha256": "15c25fd4d0d3c3cbad409859ea609d7296980f94c3e555f2c16307db8793832c"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/e9_smolvlm_256m_open_blank.tokens.npz",
+          "bytes": 64376,
+          "sha256": "8ca7f9a626a37886c6226a7c81d80fece0d9637d4222873ca96844a8807fd667"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/e9_smolvlm_256m_open_deranged.tokens.npz",
+          "bytes": 71341,
+          "sha256": "1f5992a44ce8bb2e0fbdd77540088e4519df325449ec1d872309dd2ef58f08aa"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/e9_smolvlm_256m_open_normal.tokens.npz",
+          "bytes": 72550,
+          "sha256": "1132e537bd5694f2497cc2382074a498654d1e084fd0db80a93e1e097410fb0b"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/e9_smolvlm_500m_constrained_normal.tokens.npz",
+          "bytes": 54046,
+          "sha256": "e28a21f0d29b489e9538faf2a0039ebfd0edc4393bdcd15641dc2f1f6e1a2565"
+        },
+        {
+          "path": "results/experiments/e9_compact_vlm/e9_smolvlm_500m_open_normal.tokens.npz",
+          "bytes": 68322,
+          "sha256": "802199f0195fc6239dff26abdd1ebb770497089ffe7cac50068f9198d83cdcf1"
+        }
+      ],
+      "reason": "binary arrays; each generation record also carries its own tokens_sha256, so these are checkable two ways"
+    },
+    "not_written_by_e9": {
+      "checkpoints": "none; E9 is evaluation-only and writes no checkpoint",
+      "model_weights": "SmolVLM-256M-Instruct and SmolVLM-500M-Instruct are downloaded into the ignored .cache directory and pinned by repository and revision"
+    }
+  },
+  "metadata": {
+    "timestamp": "2026-08-10T12:50:59",
+    "git_commit": "e3c8f0b",
+    "git_dirty": true,
+    "open_clip_version": "3.3.0",
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "h5py_version": "3.16.0",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "deterministic": true,
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "embed_dim": 512,
+    "top_k_answers": 100,
+    "n_train": 40000,
+    "n_val": 8000,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "hidden_dim": 512,
+    "dropout": 0.3,
+    "weight_decay": 0.0001
+  }
+}

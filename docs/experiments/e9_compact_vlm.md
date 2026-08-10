@@ -108,7 +108,12 @@ Full tables are in `e9_results_tables.md`; the headline numbers follow.
 
 ## Results
 
-Development set only. The clean test is embargoed and untouched.
+Development set only. Clean-test contents were never opened, read, scored or
+used. A pre-score implementation briefly resolved and `stat()`ed the embargoed
+path, which violated the project's stricter G17 path-level rule; it was
+detected and repaired before any scientific score was produced. See
+`g17_remediation.json` and the corresponding entry under Decisions and
+problems.
 
 ### Accuracy, raw 10,004-row denominator, G21 normalised
 
@@ -266,7 +271,8 @@ reason.
 | model download footprint | 1.42 GiB (0.49 + 0.97) |
 | checkpoints written | none |
 | pretrained-identity ledger after the bridge | 35.120 of 40.0 GPU-h |
-| clean test accessed | no |
+| clean-test contents opened, read, scored or used | no |
+| embargoed path resolved by a pre-score implementation | yes, repaired before any score (`g17_remediation.json`) |
 
 ## Decisions and problems
 
@@ -283,6 +289,19 @@ the token and therefore that no E9 code can resolve or open the file. This was
 not clean-test content access, so it was not a stop condition; it is recorded
 in `g17_remediation.json` rather than silently fixed, and the affected
 preflight and execution fields are marked historical.
+
+**The summary wording was too broad and has been corrected.** An earlier
+version of this report and of the rendered tables said the clean test was
+"embargoed and untouched" and recorded "clean test accessed: no". That is
+accurate about contents and inaccurate about paths, because the pre-score
+implementation above did resolve and `stat()` the embargoed path. The
+operative wording throughout is now: clean-test contents were never opened,
+read, scored or used; a pre-score implementation briefly resolved and
+`stat()`ed the embargoed path, violating the project's stricter G17
+path-level rule; and this was detected and repaired before any scientific
+score was produced. The correction is a wording change only. No metric,
+prediction, evaluation artefact or conclusion changed, which is verified by
+`g17_wording_correction.json`.
 
 **E8B's R1 readout is not timed, and no number stands in for it.** Amendment 7
 asks for three pairings — E9 open against R3, E9 constrained against R2, and B1
@@ -334,5 +353,7 @@ difference to integrated architecture, because training history, multimodal
 pretraining, answer support and output format all differ. No claim about
 SmolVLM's GQA exposure beyond what its model card documents. No 135M-to-360M
 backbone effect from the 500M point. No comparison against published GQA
-scores. No leaderboard claim. No clean-test result: the embargo is intact and
-F1, F2 and E10 remain unstarted.
+scores. No leaderboard claim. No clean-test result: clean-test contents were
+never opened, read, scored or used, and F1, F2 and E10 remain unstarted. The
+one qualification, stated rather than absorbed, is the pre-score path
+resolution recorded above and in `g17_remediation.json`.

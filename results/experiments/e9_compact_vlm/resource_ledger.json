@@ -1,0 +1,259 @@
+{
+  "entries": [
+    {
+      "step": "preflight",
+      "seconds": 4.37,
+      "gpu_hours": 0.001214,
+      "note": "bounded preflight and protocol freeze"
+    },
+    {
+      "step": "smolvlm_256m/open/normal",
+      "seconds": 919.066,
+      "gpu_hours": 0.255296,
+      "note": "--readout open --condition normal --out /scratch/Efficient Vision-Language Reasoning with Small Language Models/results/experiments/e9_compact_vlm/e9_smolvlm_256m_open_normal.json"
+    },
+    {
+      "step": "smolvlm_256m/open/deranged",
+      "seconds": 926.754,
+      "gpu_hours": 0.257432,
+      "note": "--readout open --condition deranged --out /scratch/Efficient Vision-Language Reasoning with Small Language Models/results/experiments/e9_compact_vlm/e9_smolvlm_256m_open_deranged.json"
+    },
+    {
+      "step": "smolvlm_256m/open/blank",
+      "seconds": 1140.278,
+      "gpu_hours": 0.316744,
+      "note": "--readout open --condition blank --out /scratch/Efficient Vision-Language Reasoning with Small Language Models/results/experiments/e9_compact_vlm/e9_smolvlm_256m_open_blank.json"
+    },
+    {
+      "step": "smolvlm_256m/constrained/normal",
+      "seconds": 987.309,
+      "gpu_hours": 0.274252,
+      "note": "--readout constrained --condition normal --out /scratch/Efficient Vision-Language Reasoning with Small Language Models/results/experiments/e9_compact_vlm/e9_smolvlm_256m_constrained_normal.json"
+    },
+    {
+      "step": "smolvlm_256m/constrained/deranged",
+      "seconds": 980.863,
+      "gpu_hours": 0.272462,
+      "note": "--readout constrained --condition deranged --out /scratch/Efficient Vision-Language Reasoning with Small Language Models/results/experiments/e9_compact_vlm/e9_smolvlm_256m_constrained_deranged.json"
+    },
+    {
+      "step": "determinism/replica",
+      "seconds": 52.275,
+      "gpu_hours": 0.014521,
+      "note": "--condition normal --rows 512 --out /scratch/Efficient Vision-Language Reasoning with Small Language Models/results/experiments/e9_compact_vlm/e9_determinism_replica.json"
+    },
+    {
+      "step": "smolvlm_500m/open/normal",
+      "seconds": 1068.027,
+      "gpu_hours": 0.296674,
+      "note": "--readout open --condition normal --out /scratch/Efficient Vision-Language Reasoning with Small Language Models/results/experiments/e9_compact_vlm/e9_smolvlm_500m_open_normal.json"
+    },
+    {
+      "step": "smolvlm_500m/constrained/normal",
+      "seconds": 1130.859,
+      "gpu_hours": 0.314127,
+      "note": "--readout constrained --condition normal --out /scratch/Efficient Vision-Language Reasoning with Small Language Models/results/experiments/e9_compact_vlm/e9_smolvlm_500m_constrained_normal.json"
+    },
+    {
+      "step": "timing/fusion/pass1",
+      "seconds": 6.176,
+      "gpu_hours": 0.001716,
+      "note": ""
+    },
+    {
+      "step": "timing/e8b_B2_R3/pass1",
+      "seconds": 20.394,
+      "gpu_hours": 0.005665,
+      "note": ""
+    },
+    {
+      "step": "timing/e9_500m_open/pass1",
+      "seconds": 58.908,
+      "gpu_hours": 0.016363,
+      "note": ""
+    },
+    {
+      "step": "timing/e8b_B2_R2/pass1",
+      "seconds": 20.316,
+      "gpu_hours": 0.005643,
+      "note": ""
+    },
+    {
+      "step": "timing/e8b_B3_R3/pass1",
+      "seconds": 19.36,
+      "gpu_hours": 0.005378,
+      "note": ""
+    },
+    {
+      "step": "timing/e9_256m_open/pass1",
+      "seconds": 55.551,
+      "gpu_hours": 0.015431,
+      "note": ""
+    },
+    {
+      "step": "timing/e8b_B1/pass1",
+      "seconds": 7.626,
+      "gpu_hours": 0.002118,
+      "note": ""
+    },
+    {
+      "step": "timing/e8b_B3_R2/pass1",
+      "seconds": 19.434,
+      "gpu_hours": 0.005398,
+      "note": ""
+    },
+    {
+      "step": "timing/e9_500m_constrained/pass1",
+      "seconds": 59.662,
+      "gpu_hours": 0.016573,
+      "note": ""
+    },
+    {
+      "step": "timing/e9_256m_constrained/pass1",
+      "seconds": 55.995,
+      "gpu_hours": 0.015554,
+      "note": ""
+    },
+    {
+      "step": "timing/e8b_B3_R3/pass2",
+      "seconds": 19.268,
+      "gpu_hours": 0.005352,
+      "note": ""
+    },
+    {
+      "step": "timing/e8b_B2_R2/pass2",
+      "seconds": 20.175,
+      "gpu_hours": 0.005604,
+      "note": ""
+    },
+    {
+      "step": "timing/e9_500m_constrained/pass2",
+      "seconds": 59.563,
+      "gpu_hours": 0.016545,
+      "note": ""
+    },
+    {
+      "step": "timing/e9_256m_constrained/pass2",
+      "seconds": 55.686,
+      "gpu_hours": 0.015468,
+      "note": ""
+    },
+    {
+      "step": "timing/fusion/pass2",
+      "seconds": 5.994,
+      "gpu_hours": 0.001665,
+      "note": ""
+    },
+    {
+      "step": "timing/e9_500m_open/pass2",
+      "seconds": 58.951,
+      "gpu_hours": 0.016375,
+      "note": ""
+    },
+    {
+      "step": "timing/e8b_B1/pass2",
+      "seconds": 7.567,
+      "gpu_hours": 0.002102,
+      "note": ""
+    },
+    {
+      "step": "timing/e8b_B3_R2/pass2",
+      "seconds": 19.626,
+      "gpu_hours": 0.005452,
+      "note": ""
+    },
+    {
+      "step": "timing/e8b_B2_R3/pass2",
+      "seconds": 19.915,
+      "gpu_hours": 0.005532,
+      "note": ""
+    },
+    {
+      "step": "timing/e9_256m_open/pass2",
+      "seconds": 55.998,
+      "gpu_hours": 0.015555,
+      "note": ""
+    },
+    {
+      "step": "timing/e8b_B2_R3/pass3",
+      "seconds": 20.092,
+      "gpu_hours": 0.005581,
+      "note": ""
+    },
+    {
+      "step": "timing/e9_256m_constrained/pass3",
+      "seconds": 55.67,
+      "gpu_hours": 0.015464,
+      "note": ""
+    },
+    {
+      "step": "timing/e8b_B2_R2/pass3",
+      "seconds": 20.741,
+      "gpu_hours": 0.005761,
+      "note": ""
+    },
+    {
+      "step": "timing/e9_500m_constrained/pass3",
+      "seconds": 59.906,
+      "gpu_hours": 0.016641,
+      "note": ""
+    },
+    {
+      "step": "timing/e9_500m_open/pass3",
+      "seconds": 59.379,
+      "gpu_hours": 0.016494,
+      "note": ""
+    },
+    {
+      "step": "timing/e8b_B1/pass3",
+      "seconds": 7.542,
+      "gpu_hours": 0.002095,
+      "note": ""
+    },
+    {
+      "step": "timing/e8b_B3_R3/pass3",
+      "seconds": 19.304,
+      "gpu_hours": 0.005362,
+      "note": ""
+    },
+    {
+      "step": "timing/fusion/pass3",
+      "seconds": 6.028,
+      "gpu_hours": 0.001674,
+      "note": ""
+    },
+    {
+      "step": "timing/e8b_B3_R2/pass3",
+      "seconds": 19.57,
+      "gpu_hours": 0.005436,
+      "note": ""
+    },
+    {
+      "step": "timing/e9_256m_open/pass3",
+      "seconds": 55.398,
+      "gpu_hours": 0.015388,
+      "note": ""
+    },
+    {
+      "step": "timing/vocab1000_product/pass1",
+      "seconds": 6.019,
+      "gpu_hours": 0.001672,
+      "note": ""
+    },
+    {
+      "step": "timing/vocab1000_product/pass2",
+      "seconds": 5.972,
+      "gpu_hours": 0.001659,
+      "note": ""
+    },
+    {
+      "step": "timing/vocab1000_product/pass3",
+      "seconds": 5.998,
+      "gpu_hours": 0.001666,
+      "note": ""
+    }
+  ],
+  "total_gpu_hours": 2.277104,
+  "branch_halt_hours": 6.0,
+  "headroom_hours": 3.722896
+}
