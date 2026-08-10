@@ -141,6 +141,35 @@ hash no longer matches the worktree.
   E10 scientific budget constants remain `None`; the one-time calibration
   authorisation is revoked. See
   docs/experiments/e10_phase0_calibration.md.
+- E10 Phase 1 (completed 10 August 2026), after the independent Phase-0 review
+  returned PASS with one execution-readiness finding. The user set the two E10
+  resource constants and the retry policy; nothing scientific was authorised.
+  Binding: `E10_PER_CELL_WALL_CLOCK_HOURS = 12.0` is a HARD executable
+  operational halt per scientific cell, not a projection field; a cell that
+  reaches it fails closed, is charged and recorded as halted, and never
+  continues. `E10_PER_IDENTITY_CEILING_HOURS = 40.0` is E10-specific and may
+  never be more permissive than the programme-wide bound: every gate uses
+  min(E10_PER_IDENTITY_CEILING_HOURS, PER_MODEL_IDENTITY_CEILING_HOURS),
+  computed once in e10_common.effective_identity_ceiling_hours, and no E10
+  module declares its own copy of the programme-wide value. NO AUTOMATIC
+  RETRY: the earlier nominal one-forced-retry behaviour is withdrawn because
+  the Gate-1 stress projection leaves post-retry margins of 0.040641 and
+  0.007927 GPU-hours; a failed scientific cell now requires a fresh explicit
+  user or reviewer authorization record, single-use and bound to one cell,
+  which no project code may write. A5/A8c keep OPEN_UNQUANTIFIED_RESERVE, no
+  numeric reserve was invented, and if they use the same pinned pretrained
+  SmolLM2-360M identity their future compute is charged against the same
+  authoritative frozen-model identity accounting. Storage keeps its
+  qualification: physical fit established, formal project allocation
+  unestablished. The reviewer's finding, that the E10 recipe drops the
+  inherited E8B wall_clock_halt_hours field and no runner re-imposed a wall, is
+  repaired outside the frozen recipe: the wall is carried by a signed
+  process-bound cell permit and enforced by ScientificCellGuard, so all twelve
+  recipe digests are identical to the Phase-0 recipe contract and the frozen
+  matrix, seeds, scales and pair preservation are unchanged. Setting the
+  constants authorises nothing: `E10_TRAINING_AUTHORIZED` is still `None` and
+  `run core-cell B4 train_40k 0` still refuses. See
+  docs/experiments/e10_phase1_guardrails.md.
 - Current gate, updated 2 August 2026 (E8A/E8B/E9 programme). The user
   authorized the E8A frozen-SLM question-encoder branch, the E8B frozen-SLM
   readout and bounded-generation branch, and the E9 evaluation-only compact-VLM

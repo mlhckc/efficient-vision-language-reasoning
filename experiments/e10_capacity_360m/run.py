@@ -1,4 +1,4 @@
-"""E10 Phase-0 governance, provenance and refusal entry points.
+"""E10 governance, provenance, guardrail and refusal entry points.
 
 Examples, from the project root with the project environment sourced:
 
@@ -8,11 +8,16 @@ Examples, from the project root with the project environment sourced:
     python -B -m experiments.e10_capacity_360m.run provenance --download-verify
     python -B -m experiments.e10_capacity_360m.run ledgers --initialize
     python -B -m experiments.e10_capacity_360m.run calibration-grant
+    python -B -m experiments.e10_capacity_360m.run phase1-policy
+    python -B -m experiments.e10_capacity_360m.run phase1-record
+    python -B -m experiments.e10_capacity_360m.run phase1-verify
     python -B -m experiments.e10_capacity_360m.run core-order
     python -B -m experiments.e10_capacity_360m.run core-cell B4 train_40k 0
 
-The final command is a required known-negative in Phase 0. It refuses before
-model, data, CUDA, result-directory or optimizer initialization.
+The final command is the required known-negative. It refused in Phase 0 and it
+still refuses after the Phase-1 guardrails: setting the resource constants
+authorises nothing. It refuses before model, data, CUDA, result-directory or
+optimizer initialization.
 """
 
 from __future__ import annotations
@@ -34,6 +39,7 @@ from huggingface_hub import snapshot_download  # noqa: E402
 import config  # noqa: E402
 from src import utils  # noqa: E402
 from experiments.e10_capacity_360m import e10_common as e10  # noqa: E402
+from experiments.e10_capacity_360m import phase1  # noqa: E402
 
 
 FROZEN_BASELINES = e10.FROZEN_RESULT_BASELINES
@@ -253,7 +259,14 @@ def core_cell(arm: str, scale: str, seed: int) -> int:
     # Deliberately the first operation: no output directory, model, data, CUDA,
     # ledger or imported E8B authorization can be reached before this refusal.
     e10.assert_core_entry_authorized(arm, scale, seed)
-    raise AssertionError("unreachable in Phase 0")
+    # Phase-1 guardrails. Unreachable while the scientific authorization is
+    # unset; when it is granted, no cell may start without the mandatory wall,
+    # the effective identity ceiling, the frozen order and the no-retry proof.
+    with phase1.ScientificCellGuard(arm, scale, seed) as guard:
+        guard.check("entry")
+        raise AssertionError(
+            "unreachable while E10 scientific execution is refused"
+        )
 
 
 def _frozen_tree_inventory(root: Path) -> dict:
@@ -318,6 +331,9 @@ def write_validation_record() -> dict:
     if e10.E10_TRAINING_AUTHORIZED is not None \
             or e10.E10_CALIBRATION_AUTHORIZED is not None:
         raise AssertionError("an E10 authorization constant is live")
+    # Phase-0 gate, retained as written. Phase 0 required both resource
+    # constants to be unset; Phase 1 set them by explicit user decision, so
+    # this one-shot writer is historical and its record is immutable.
     if config.E10_PER_IDENTITY_CEILING_HOURS is not None \
             or config.E10_PER_CELL_WALL_CLOCK_HOURS is not None:
         raise AssertionError("an E10 scientific resource constant is set")
@@ -399,6 +415,11 @@ def status() -> dict:
         "scientific_cell_wall": getattr(
             __import__("config"), "E10_PER_CELL_WALL_CLOCK_HOURS"
         ),
+        "effective_identity_ceiling": e10.effective_identity_ceiling_hours(),
+        "phase1_records": {
+            path.name: path.exists() for path in e10.PHASE1_PATHS
+        },
+        "scientific_core_refusal": phase1.scientific_refusal(),
         "free_scratch_bytes": shutil.disk_usage(PROJECT_ROOT).free,
     }
 
@@ -417,6 +438,9 @@ def main(argv=None) -> int:
     ledgers = subparsers.add_parser("ledgers")
     ledgers.add_argument("--initialize", action="store_true", required=True)
     subparsers.add_parser("calibration-grant")
+    subparsers.add_parser("phase1-policy")
+    subparsers.add_parser("phase1-record")
+    subparsers.add_parser("phase1-verify")
     subparsers.add_parser("core-order")
     cell = subparsers.add_parser("core-cell")
     cell.add_argument("arm")
@@ -437,6 +461,12 @@ def main(argv=None) -> int:
         result = initialize_ledgers()
     elif args.command == "calibration-grant":
         result = write_calibration_grant()
+    elif args.command == "phase1-policy":
+        result = phase1.policy_record()
+    elif args.command == "phase1-record":
+        result = phase1.write_phase1_records()
+    elif args.command == "phase1-verify":
+        result = phase1.verify()
     elif args.command == "core-order":
         result = core_order()
     elif args.command == "core-cell":

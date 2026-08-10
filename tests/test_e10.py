@@ -122,6 +122,7 @@ def _temporary_shared_paths(root: Path):
         "CALIBRATION_REVOCATION_PATH": root / "calibration-revocation.json",
         "CALIBRATION_PATH": root / "calibration.json",
         "GATE1_PATH": root / "gate1.json",
+        "RETRY_AUTHORIZATION_DIR": root / "retry-authorizations",
     }
     with ExitStack() as stack:
         for name, path in paths.items():
@@ -150,6 +151,51 @@ def _valid_calibration_spend_entry(*, identity="random_smollm2_360m",
         "recipe_digests": {"B4r_train_40k_seed0": "4" * 64},
     }
     return {"entry_id": e10.sha256_bytes(e10.canonical_json_bytes(body)), **body}
+
+
+def write_retry_authorization(root: Path, arm: str, scale: str, seed: int,
+                              *, reason: str = "node_failure",
+                              projected_hours: float = 1.0,
+                              authorized_by: str = "user",
+                              automatic: bool = False,
+                              nonce: str | None = None) -> dict:
+    """Fabricate the out-of-band retry authorization a test needs.
+
+    Only a test may do this. No project source writes such a record, which
+    phase1.assert_no_automatic_retry proves by scanning the sources.
+    """
+    nonce = nonce or e10.sha256_bytes(
+        f"{arm}/{scale}/{seed}/{authorized_by}".encode("ascii")
+    )
+    failure = root / f"failed-{arm}-{scale}-seed{seed}-{nonce[:8]}.json"
+    if not failure.exists():
+        e10.atomic_write_json(
+            failure, {"status": "CELL_FAILED", "cell": [arm, scale, seed]}
+        )
+    record = {
+        "schema_version": 1,
+        "record_type": "e10_retry_authorization",
+        "task_id": e10.PHASE1_TASK_ID,
+        "status": "AUTHORIZED_ONCE",
+        "utc": e10.utc_now(),
+        "arm": arm,
+        "scale": scale,
+        "seed": seed,
+        "identity": e10.model_identity(arm),
+        "reason": reason,
+        "authorized_by": authorized_by,
+        "authorization_nonce": nonce,
+        "automatic": automatic,
+        "failed_cell_record": {
+            "path": str(failure.relative_to(e10.PROJECT_ROOT)),
+            "sha256": e10.sha256_file(failure),
+        },
+        "projected_hours": projected_hours,
+    }
+    path = e10.retry_authorization_path(nonce)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    e10.atomic_write_json(path, record)
+    return record
 
 
 def _resign_permit(permit: e10.CalibrationPermit, **changes):
@@ -401,6 +447,17 @@ def test_retry_policy_exact_fit_and_second_retry_refusal() -> None:
                     },
                 },
             })
+            # No automatic retry: the same call that used to succeed now
+            # refuses until a fresh out-of-band authorization exists.
+            _must_raise(
+                AssertionError,
+                lambda: e10.record_forced_retry(
+                    "B4r", "train_40k", 0, "node_failure",
+                    str(evidence.relative_to(e10.PROJECT_ROOT)), 1.0,
+                ),
+                "no fresh retry authorization",
+            )
+            write_retry_authorization(root, "B4r", "train_40k", 0)
             recorded = e10.record_forced_retry(
                 "B4r", "train_40k", 0, "node_failure",
                 str(evidence.relative_to(e10.PROJECT_ROOT)), 1.0,
@@ -408,7 +465,11 @@ def test_retry_policy_exact_fit_and_second_retry_refusal() -> None:
             assert len(recorded["retries"]) == 1
             assert recorded["retries"][0]["identity"] == "random_smollm2_360m"
             assert recorded["retries"][0]["fit"]["projected_total_hours"] == 9.0
+            assert recorded["retries"][0]["authorized_by"] == "user"
             assert e10._validate_retry_ledger(recorded) == recorded
+            write_retry_authorization(
+                root, "B4r", "train_40k", 0, nonce="c" * 64
+            )
             _must_raise(
                 AssertionError,
                 lambda: e10.record_forced_retry(

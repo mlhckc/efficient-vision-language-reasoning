@@ -120,11 +120,33 @@ PER_MODEL_IDENTITY_CEILING_SUPERSESSION_RECORD = (
 PER_RUN_WALL_CLOCK_HOURS = 8.0
 CORE_PROGRAMME_CEILING_HOURS = 180.0
 
-# --- E10 Phase-0 resource policy ---------------------------------------------
-# The 360M scientific matrix remains unauthorised. Gate 1 will recommend, but
-# will not set, a per-cell wall and per-identity ceiling. Any E10 scientific
-# entry must refuse while either value is None.
-E10_PER_IDENTITY_CEILING_HOURS = None
-E10_PER_CELL_WALL_CLOCK_HOURS = None
+# --- E10 Phase-1 resource policy ---------------------------------------------
+# Set by explicit user decision on 2026-08-10, after the independently reviewed
+# PASS of E10 Phase 0. Phase 0 recommended these values and deliberately left
+# both at None; Phase 1 sets them. Setting them authorises nothing: the 360M
+# B4/B4r scientific matrix stays refused while the scientific authorization
+# constant is unset, and both values are now MANDATORY, so an E10 scientific
+# entry also refuses if either is None or non-positive.
+#
+# 12.0 hours is a HARD operational wall per scientific cell, not a projection
+# field. The Gate-1 recommendation was 8.194758 h and the largest 1.25x stress
+# cell is 7.879575 h (train_250k); 12.0 h is the lowest reviewed candidate and
+# clears that stress cell by 4.120425 h. A cell that reaches the wall fails
+# closed, is charged and recorded as halted, and never continues.
+E10_PER_CELL_WALL_CLOCK_HOURS = 12.0
+# 40.0 hours per frozen model identity. This is an E10-SPECIFIC value and must
+# never be more permissive than the programme-wide bound above. Every gate uses
+# min(E10_PER_IDENTITY_CEILING_HOURS, PER_MODEL_IDENTITY_CEILING_HOURS),
+# computed in exactly one place: e10_common.effective_identity_ceiling_hours.
+# Do not copy the programme-wide literal here or into any experiment module.
+E10_PER_IDENTITY_CEILING_HOURS = 40.0
 E10_HEADROOM_FLOOR_HOURS = 1.0
 E10_CALIBRATION_BUDGET_HOURS = 0.10
+# NO AUTOMATIC RETRY. Gate 1 left the post-retry identity margin at 0.040641 h
+# (pretrained) and 0.007927 h (random), which is operationally meaningless, so
+# a runner may never consume a retry on its own. Zero automatic retries are
+# available; a retry requires a fresh explicit user or reviewer authorization
+# record, and E10_MAX_AUTHORIZED_RETRIES_PER_IDENTITY bounds how many such
+# authorised retries an identity may ever consume.
+E10_AUTOMATIC_RETRIES_PER_IDENTITY = 0
+E10_MAX_AUTHORIZED_RETRIES_PER_IDENTITY = 1

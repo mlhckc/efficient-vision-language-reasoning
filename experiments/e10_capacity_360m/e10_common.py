@@ -42,6 +42,7 @@ from experiments.e8b_readout_generation import latents as e8b_latents  # noqa: E
 
 
 TASK_ID = "e10-phase0-calibration"
+PHASE1_TASK_ID = "e10-phase1-authorization-guardrails"
 OUT_DIR = config.RESULTS_DIR / "experiments" / "e10_capacity_360m"
 SHARED_STATE_DIR = Path(
     "/user/HS400/mc02623/backups/efficient-vision-language-reasoning/e10-locks"
@@ -180,7 +181,14 @@ FORBIDDEN_RETRY_REASONS = {
     "loss_curve_shape",
     "try_another_seed",
 }
-MAX_FORCED_RETRIES_PER_IDENTITY = 1
+# No automatic retry exists. A runner may consume zero retries on its own, and
+# the bound on retries an identity may ever consume applies only to retries a
+# fresh explicit authorization record has already permitted. Both numbers come
+# from config; neither is redeclared here.
+AUTOMATIC_RETRIES_PER_IDENTITY = config.E10_AUTOMATIC_RETRIES_PER_IDENTITY
+MAX_FORCED_RETRIES_PER_IDENTITY = config.E10_MAX_AUTHORIZED_RETRIES_PER_IDENTITY
+RETRY_AUTHORIZATION_DIR = SHARED_STATE_DIR / "e10-retry-authorizations"
+RETRY_AUTHORIZED_BY = {"user", "independent_reviewer"}
 
 PREDOWNLOAD_PATH = OUT_DIR / "model_provenance_20260810.json"
 MODEL_VERIFICATION_PATH = OUT_DIR / "model_verification_20260810.json"
@@ -234,6 +242,57 @@ PRECORRECTION_RECORD_SHA256 = {
     ),
 }
 
+# --- Phase-1 binding supersession --------------------------------------------
+# Phase 1 sets config.E10_PER_CELL_WALL_CLOCK_HOURS and
+# config.E10_PER_IDENTITY_CEILING_HOURS and adds the Phase-1 guard sources, so
+# both live digests move. The immutable Phase-0 records are never rewritten;
+# instead one immutable amendment record pins the pre-amendment digests and the
+# SHA-256 of every Phase-0 record it carries forward, exactly as the earlier
+# source correction did. A historical binding is accepted only for a record the
+# amendment names and whose bytes still match.
+PHASE1_AMENDMENT_PATH = OUT_DIR / "phase1_binding_amendment_20260810.json"
+PHASE1_POLICY_PATH = OUT_DIR / "phase1_resource_policy_20260810.json"
+PHASE1_A5_A8C_PATH = OUT_DIR / "phase1_a5_a8c_identity_governance_20260810.json"
+PHASE1_PATHS = (PHASE1_AMENDMENT_PATH, PHASE1_POLICY_PATH, PHASE1_A5_A8C_PATH)
+PHASE0_SOURCE_DIGEST = (
+    "06f5583ae847cdc327b4099599895619af8d3350a2c0a88c89ff6aac0c6f323a"
+)
+PHASE0_CONFIG_DIGEST = (
+    "5573d9cacdd796b8d6cecc06f2c3bce0c4e3d3f08d732031fc513409f591b401"
+)
+# Every immutable record written before the Phase-1 amendment, repository and
+# shared state alike, keyed by file name.
+PHASE0_RECORD_SHA256 = {
+    "a5_a8c_disposition_20260810.json":
+        "31b70d4f8f44c8ca86e76431e9ebba487f18102d33eccb81be5b7f47001c8167",
+    "calibration_20260810.json":
+        "70fb4391f56f34dd3ce0c2a97603f821cd1dcfb516e39b5834b8d671cc1dc304",
+    "calibration_grant_20260810.json":
+        "f55a14112f43c546d7408cc4cecf6f9c75b97c70f479dc2e1412ea53407b6159",
+    "calibration_revocation_20260810.json":
+        "a64ca77cbce51a1e2f5869b8ffc627f6be8845ec8a0ed30466efbc7a1e046223",
+    "frozen_artifact_baseline_20260810.json":
+        "5a945fade1f75a05095e5e6805dde64ced3a23a7ff268b809bd26b0ef564417b",
+    "gate1_projection_20260810.json":
+        "2955a6a2abfc1c9ef725c7e14221fba316100e17277858472a09dc9841a64e06",
+    "model_provenance_20260810.json":
+        "fcca830be2638a2ede7446e11d49f998f3aaf2f3f2c6b16b336b5b34c552fad8",
+    "model_verification_20260810.json":
+        "3c058d0ced8aa4dbf50a318d76f8fc355d5ba611a4e04d9eb8e9c31e2eaad74a",
+    "recipe_contract_20260810.json":
+        "dc0523e292df91f1ce761dbfc0ac9cd4042db688a2e1102334e0494f6acd00a9",
+    "source_correction_20260810.json":
+        "3ebe07e364e61805b3131d87baa28dc13cd2e8c1ffcdd4eec62f559bd671b526",
+    "u1_discharge_20260810.json":
+        "2371d67ad33f9684357f0e7b130ffb88031ae5a8a1fbd70fe394ed8a80af04cc",
+    "validation_20260810.json":
+        "aa1ac220f708ea06991cd0f1cb64fee6ffe0b139e04fb5c79ba16c07f204ad42",
+    "e10-calibration-claim-20260810.json":
+        "43fb899ccbf0d5ebfe8f49cff97355eed8b4e127d6ec6dc642be5df2b41b235f",
+    "e10-calibration-completion-20260810.json":
+        "a8cb23f6fafc31c484b62227487d0476c883e2df7ed4b3179a99e90f7c6f4ddb",
+}
+
 U1_PATH = (
     config.RESULTS_DIR
     / "experiments"
@@ -249,6 +308,7 @@ SOURCE_PATHS = (
     Path(__file__).with_name("run.py"),
     Path(__file__).with_name("calibration.py"),
     Path(__file__).with_name("projection.py"),
+    Path(__file__).with_name("phase1.py"),
     PROJECT_ROOT / "experiments" / "e8b_readout_generation" / "latents.py",
     PROJECT_ROOT / "experiments" / "e8b_readout_generation" / "readouts.py",
     PROJECT_ROOT / "experiments" / "e8b_readout_generation" / "training.py",
@@ -259,6 +319,7 @@ SOURCE_PATHS = (
     PROJECT_ROOT / "src" / "tokens_data.py",
     PROJECT_ROOT / "src" / "utils.py",
     PROJECT_ROOT / "tests" / "test_e10.py",
+    PROJECT_ROOT / "tests" / "test_e10_phase1.py",
     PROJECT_ROOT / "tests" / "run_all.py",
 )
 CONFIG_PATHS = (
@@ -483,6 +544,107 @@ def assert_current_binding(record: dict, context: str) -> dict:
     return binding
 
 
+def accepted_historical_bindings() -> tuple[tuple[str, str], ...]:
+    """The (source, config) digest pairs a superseded record may still carry."""
+    return (
+        (PHASE0_SOURCE_DIGEST, PHASE0_CONFIG_DIGEST),
+        (PRECORRECTION_SOURCE_DIGEST, PRECORRECTION_CONFIG_DIGEST),
+    )
+
+
+def validate_phase1_amendment() -> dict:
+    """The immutable record that carries the Phase-0 evidence across Phase 1."""
+    amendment = read_json_mapping(PHASE1_AMENDMENT_PATH)
+    required = {
+        "schema_version", "record_type", "task_id", "status", "NON_SCIENTIFIC",
+        "utc", "binding", "reason", "change_scope", "phase0_source_digest",
+        "phase0_config_digest", "precorrection_source_digest",
+        "precorrection_config_digest", "preserved_records",
+        "scientific_execution",
+    }
+    _require_exact_keys(amendment, required, "E10 Phase-1 amendment")
+    if amendment["schema_version"] != 1 \
+            or amendment["record_type"] != "e10_phase1_binding_amendment" \
+            or amendment["task_id"] != PHASE1_TASK_ID \
+            or amendment["status"] != "PHASE0_EVIDENCE_CARRIED_FORWARD" \
+            or amendment["NON_SCIENTIFIC"] is not True \
+            or amendment["phase0_source_digest"] != PHASE0_SOURCE_DIGEST \
+            or amendment["phase0_config_digest"] != PHASE0_CONFIG_DIGEST \
+            or amendment["precorrection_source_digest"] != (
+                PRECORRECTION_SOURCE_DIGEST
+            ) \
+            or amendment["precorrection_config_digest"] != (
+                PRECORRECTION_CONFIG_DIGEST
+            ) \
+            or amendment["scientific_execution"] != {
+                "optimizer_steps": 0,
+                "scientific_cells_executed": 0,
+                "gpu_hours_charged": 0.0,
+                "e10_training_authorized": None,
+            }:
+        raise AssertionError("E10 Phase-1 amendment semantics mismatch")
+    _require_utc(amendment["utc"], "E10 Phase-1 amendment utc")
+    assert_current_binding(amendment, "E10 Phase-1 amendment")
+    if amendment["change_scope"] != {
+        "resource_constants_set": True,
+        "scientific_recipe_changed": False,
+        "core_matrix_changed": False,
+        "model_pin_changed": False,
+        "phase0_record_rewritten": False,
+    }:
+        raise AssertionError("E10 Phase-1 amendment scope mismatch")
+    preserved = amendment["preserved_records"]
+    if not isinstance(preserved, dict) \
+            or set(preserved) != set(PHASE0_RECORD_SHA256):
+        raise AssertionError("E10 Phase-1 amendment record set mismatch")
+    for filename, expected_sha in PHASE0_RECORD_SHA256.items():
+        reference = preserved[filename]
+        _require_exact_keys(
+            reference, {"location", "sha256"}, f"Phase-1 amendment {filename}"
+        )
+        if reference["sha256"] != expected_sha \
+                or reference["location"] not in {"repository", "shared_state"}:
+            raise AssertionError(
+                f"E10 Phase-1 amendment preserved record mismatch: {filename}"
+            )
+    return amendment
+
+
+def assert_recorded_binding(record: dict, context: str, record_path: Path) -> dict:
+    """Accept the live binding, or a superseded one an amendment carries.
+
+    A historical binding is admitted only when an immutable amendment record
+    names this exact file and its bytes still hash to the pinned value, so a
+    stale binding can never be waved through on its own.
+    """
+    binding = record.get("binding")
+    if not isinstance(binding, dict):
+        raise AssertionError(f"{context}: missing binding map")
+    live = binding_record()
+    if all(binding.get(key) == live[key] for key in (
+        "source_digest", "config_digest", "protocol_family"
+    )):
+        return binding
+    if binding.get("protocol_family") != PROTOCOL_FAMILY:
+        raise AssertionError(f"{context}: unrecorded stale binding refused")
+    pair = (binding.get("source_digest"), binding.get("config_digest"))
+    if pair not in accepted_historical_bindings():
+        raise AssertionError(f"{context}: unrecorded stale binding refused")
+    filename = Path(record_path).name
+    observed = sha256_file(Path(record_path))
+    if PHASE1_AMENDMENT_PATH.exists():
+        amendment = validate_phase1_amendment()
+        reference = amendment["preserved_records"].get(filename)
+        if reference is not None and reference["sha256"] == observed:
+            return binding
+    if pair == (PRECORRECTION_SOURCE_DIGEST, PRECORRECTION_CONFIG_DIGEST):
+        correction = validate_source_correction()
+        reference = correction["preserved_records"].get(filename)
+        if reference is not None and reference["sha256"] == observed:
+            return binding
+    raise AssertionError(f"{context}: no amendment binds this record")
+
+
 def validate_source_correction() -> dict:
     correction = read_json_mapping(SOURCE_CORRECTION_PATH)
     required = {
@@ -510,7 +672,9 @@ def validate_source_correction() -> dict:
             }:
         raise AssertionError("E10 source-correction semantics mismatch")
     _require_utc(correction["utc"], "E10 source-correction utc")
-    assert_current_binding(correction, "E10 source correction")
+    assert_recorded_binding(
+        correction, "E10 source correction", SOURCE_CORRECTION_PATH
+    )
     if correction["change_scope"] != {
         "raw_config_head_dim": None,
         "derived_formula": "hidden_size / num_attention_heads",
@@ -552,25 +716,8 @@ def validate_source_correction() -> dict:
 
 def assert_current_or_precorrection_binding(
         record: dict, context: str, record_path: Path) -> dict:
-    binding = record.get("binding")
-    if not isinstance(binding, dict):
-        raise AssertionError(f"{context}: missing binding map")
-    live = binding_record()
-    if all(binding.get(key) == live[key] for key in (
-        "source_digest", "config_digest", "protocol_family"
-    )):
-        return binding
-    if binding.get("source_digest") != PRECORRECTION_SOURCE_DIGEST \
-            or binding.get("config_digest") != PRECORRECTION_CONFIG_DIGEST \
-            or binding.get("protocol_family") != PROTOCOL_FAMILY:
-        raise AssertionError(f"{context}: unrecorded stale binding refused")
-    correction = validate_source_correction()
-    filename = Path(record_path).name
-    reference = correction["preserved_records"].get(filename)
-    if reference is None \
-            or reference["sha256"] != sha256_file(record_path):
-        raise AssertionError(f"{context}: correction does not bind this record")
-    return binding
+    # Retained name; the accepted set is now the whole recorded chain.
+    return assert_recorded_binding(record, context, record_path)
 
 
 def assert_no_embargo_reference(paths: list[Path] | None = None) -> dict:
@@ -978,7 +1125,7 @@ def model_verification_record(snapshot: Path | None = None) -> dict:
 
 def validate_model_verification() -> dict:
     record = read_json_mapping(MODEL_VERIFICATION_PATH)
-    assert_current_binding(record, "model verification")
+    assert_recorded_binding(record, "model verification", MODEL_VERIFICATION_PATH)
     if record.get("record_type") != "e10_model_verification":
         raise AssertionError("wrong model-verification record type")
     if record.get("all_hard_checks_passed") is not True:
@@ -1322,6 +1469,13 @@ def assert_core_entry_authorized(arm: str, scale: str, seed: int) -> None:
         raise SystemExit("E10 CORE REFUSED: per-identity ceiling is unset")
     if config.E10_PER_CELL_WALL_CLOCK_HOURS is None:
         raise SystemExit("E10 CORE REFUSED: per-cell wall is unset")
+    # Both bounds are mandatory, not merely present: a non-positive or
+    # non-numeric value, a wall above the effective identity ceiling, or a
+    # non-zero automatic-retry allowance all refuse here, before anything runs.
+    try:
+        resource_policy()
+    except AssertionError as error:
+        raise SystemExit(f"E10 CORE REFUSED: {error}") from None
     if E10_TRAINING_AUTHORIZED != CORE_AUTHORIZATION_TOKEN:
         raise SystemExit(
             f"E10 CORE REFUSED: scientific authorization is "
@@ -1517,7 +1671,7 @@ def _validate_spend_ledger(payload: dict) -> dict:
             raise AssertionError(f"E10 spend entry {index} measurement mismatch")
         if entry["outcome"] not in {
             "completed", "cap_reached", "headroom_insufficient", "hard_gate_halted", "terminated",
-            "aborted_pre_gpu", "cap_overrun",
+            "aborted_pre_gpu", "cap_overrun", "wall_clock_halted",
         }:
             raise AssertionError(f"E10 spend entry {index} has unknown outcome")
         if not isinstance(entry["host"], str) or not entry["host"]:
@@ -1575,11 +1729,13 @@ def _validate_retry_ledger(payload: dict) -> dict:
     if not isinstance(retries, list):
         raise AssertionError("E10 retry ledger has no retries list")
     retry_ids = set()
+    nonces = set()
     for index, retry in enumerate(retries):
         keys = {
             "retry_id", "identity", "arm", "scale", "seed", "reason",
             "evidence", "evidence_sha256", "gate1_sha256", "fit", "utc",
             "source_digest", "config_digest", "recipe_sha256",
+            "authorization_nonce", "authorization_sha256", "authorized_by",
         }
         _require_exact_keys(retry, keys, f"E10 retry entry {index}")
         _require_sha256(retry["retry_id"], f"E10 retry entry {index} ID")
@@ -1598,18 +1754,32 @@ def _validate_retry_ledger(payload: dict) -> dict:
         if not isinstance(retry["evidence"], str) or not retry["evidence"]:
             raise AssertionError(f"E10 retry entry {index} evidence is missing")
         for key in ("evidence_sha256", "gate1_sha256", "source_digest",
-                    "config_digest", "recipe_sha256"):
+                    "config_digest", "recipe_sha256", "authorization_nonce",
+                    "authorization_sha256"):
             _require_sha256(retry[key], f"E10 retry entry {index} {key}")
+        if retry["authorization_nonce"] in nonces:
+            raise AssertionError(
+                "E10 retry ledger reuses one retry authorization nonce"
+            )
+        nonces.add(retry["authorization_nonce"])
+        if retry["authorized_by"] not in RETRY_AUTHORIZED_BY:
+            raise AssertionError(
+                f"E10 retry entry {index} was not authorized by the user or an "
+                f"independent reviewer"
+            )
         fit = retry["fit"]
         fit_keys = {
             "identity", "already_charged_hours", "remaining_mandatory_hours",
             "retry_cost_hours", "projected_total_hours", "ceiling_hours",
+            "e10_ceiling_hours", "programme_wide_ceiling_hours",
             "headroom_floor_hours", "per_cell_wall_hours",
-            "retries_already_taken", "admissible",
+            "retries_already_taken", "automatic_retries_permitted",
+            "requires_fresh_authorization", "admissible",
         }
         _require_exact_keys(fit, fit_keys, f"E10 retry entry {index} fit")
         numeric_keys = fit_keys - {
             "identity", "retries_already_taken", "admissible",
+            "requires_fresh_authorization",
         }
         for key in numeric_keys:
             if not _is_number(fit[key]) or fit[key] < 0:
@@ -1621,6 +1791,16 @@ def _validate_retry_ledger(payload: dict) -> dict:
             raise AssertionError(f"E10 retry entry {index} fit identity/count invalid")
         if fit["admissible"] is not True:
             raise AssertionError(f"E10 retry entry {index} was not admissible")
+        if fit["ceiling_hours"] > fit["programme_wide_ceiling_hours"]:
+            raise AssertionError(
+                f"E10 retry entry {index} used a ceiling more permissive than "
+                f"the programme-wide bound"
+            )
+        if fit["automatic_retries_permitted"] != 0 \
+                or fit["requires_fresh_authorization"] is not True:
+            raise AssertionError(
+                f"E10 retry entry {index} records an automatic retry"
+            )
         _require_utc(retry["utc"], f"E10 retry entry {index} utc")
     return payload
 
@@ -1699,6 +1879,239 @@ def charge_gpu_hours(identity: str, context: str, occupancy_ns: int,
     }
 
 
+def _mandatory_positive_hours(value: Any, name: str) -> float:
+    """Fail closed on an unset, non-numeric or non-positive resource bound."""
+    if value is None:
+        raise AssertionError(f"E10 REFUSED: {name} is unset")
+    if not _is_number(value) or value <= 0:
+        raise AssertionError(f"E10 REFUSED: {name} is not a positive number")
+    return float(value)
+
+
+def per_cell_wall_hours() -> float:
+    """The mandatory hard operational wall for one E10 scientific cell."""
+    return _mandatory_positive_hours(
+        config.E10_PER_CELL_WALL_CLOCK_HOURS, "E10_PER_CELL_WALL_CLOCK_HOURS"
+    )
+
+
+def per_cell_wall_seconds() -> float:
+    return per_cell_wall_hours() * 3600.0
+
+
+def effective_identity_ceiling_hours() -> float:
+    """The only place an E10 identity ceiling is decided.
+
+    The E10-specific ceiling can tighten the programme-wide frozen-model
+    identity ceiling but can never loosen it, so the effective bound is the
+    minimum of the two. config.PER_MODEL_IDENTITY_CEILING_HOURS is read here
+    and is never copied into an E10 constant.
+    """
+    e10_ceiling = _mandatory_positive_hours(
+        config.E10_PER_IDENTITY_CEILING_HOURS, "E10_PER_IDENTITY_CEILING_HOURS"
+    )
+    programme_ceiling = _mandatory_positive_hours(
+        config.PER_MODEL_IDENTITY_CEILING_HOURS,
+        "PER_MODEL_IDENTITY_CEILING_HOURS",
+    )
+    effective = min(e10_ceiling, programme_ceiling)
+    if effective > programme_ceiling:  # pragma: no cover - min() guarantees it
+        raise AssertionError("E10 ceiling cannot exceed the programme-wide bound")
+    return effective
+
+
+def resource_policy() -> dict:
+    """Every mandatory E10 execution bound, resolved and fail-closed."""
+    wall = per_cell_wall_hours()
+    effective = effective_identity_ceiling_hours()
+    if wall > effective:
+        raise AssertionError(
+            "E10 REFUSED: the per-cell wall exceeds the effective identity ceiling"
+        )
+    automatic = config.E10_AUTOMATIC_RETRIES_PER_IDENTITY
+    if automatic != 0:
+        raise AssertionError(
+            "E10 REFUSED: automatic retries are not permitted; the constant "
+            f"is {automatic!r} and must be 0"
+        )
+    return {
+        "per_cell_wall_clock_hours": wall,
+        "e10_per_identity_ceiling_hours": float(
+            config.E10_PER_IDENTITY_CEILING_HOURS
+        ),
+        "programme_wide_identity_ceiling_hours": float(
+            config.PER_MODEL_IDENTITY_CEILING_HOURS
+        ),
+        "effective_identity_ceiling_hours": effective,
+        "headroom_floor_hours": float(config.E10_HEADROOM_FLOOR_HOURS),
+        "automatic_retries_per_identity": 0,
+        "max_authorized_retries_per_identity": MAX_FORCED_RETRIES_PER_IDENTITY,
+        "wall_source": "config.E10_PER_CELL_WALL_CLOCK_HOURS",
+        "ceiling_rule": (
+            "min(E10_PER_IDENTITY_CEILING_HOURS, "
+            "PER_MODEL_IDENTITY_CEILING_HOURS)"
+        ),
+    }
+
+
+def retry_authorization_path(nonce: str) -> Path:
+    _require_sha256(nonce, "retry authorization nonce")
+    return RETRY_AUTHORIZATION_DIR / f"e10-retry-authorization-{nonce}.json"
+
+
+def validate_retry_authorization(arm: str, scale: str, seed: int,
+                                 reason: str) -> dict:
+    """Find the one fresh, unconsumed authorization for exactly this cell.
+
+    No E10 code path creates such a record. It is written by the user or by an
+    independent reviewer, out of band, after the failure it names.
+    """
+    if (arm, scale, seed) not in CORE_CELLS:
+        raise AssertionError("retry authorization cell is not in the E10 matrix")
+    if not RETRY_AUTHORIZATION_DIR.is_dir():
+        raise AssertionError(
+            "E10 RETRY REFUSED: no fresh retry authorization record exists"
+        )
+    consumed = {
+        entry.get("authorization_nonce")
+        for entry in read_retry_ledger()["retries"]
+    }
+    identity = model_identity(arm)
+    matches = []
+    for path in sorted(RETRY_AUTHORIZATION_DIR.glob("*.json")):
+        record = read_json_mapping(path)
+        required = {
+            "schema_version", "record_type", "task_id", "status", "utc",
+            "arm", "scale", "seed", "identity", "reason", "authorized_by",
+            "authorization_nonce", "automatic", "failed_cell_record",
+            "projected_hours",
+        }
+        _require_exact_keys(record, required, f"retry authorization {path.name}")
+        if record["schema_version"] != 1 \
+                or record["record_type"] != "e10_retry_authorization" \
+                or record["task_id"] != PHASE1_TASK_ID \
+                or record["status"] != "AUTHORIZED_ONCE":
+            raise AssertionError(
+                f"retry authorization {path.name} schema/type/status mismatch"
+            )
+        _require_utc(record["utc"], f"retry authorization {path.name} utc")
+        _require_sha256(
+            record["authorization_nonce"], f"retry authorization {path.name}"
+        )
+        if record["automatic"] is not False:
+            raise AssertionError("an automatic retry authorization is refused")
+        if record["authorized_by"] not in RETRY_AUTHORIZED_BY:
+            raise AssertionError(
+                f"retry authorization {path.name} was not signed by the user "
+                f"or an independent reviewer"
+            )
+        if path != retry_authorization_path(record["authorization_nonce"]):
+            raise AssertionError(
+                f"retry authorization {path.name} is not at its nonce path"
+            )
+        validate_retry_reason(record["reason"])
+        failure = record["failed_cell_record"]
+        _require_exact_keys(
+            failure, {"path", "sha256"}, f"retry authorization {path.name} failure"
+        )
+        _require_sha256(failure["sha256"], "retry authorization failure record")
+        failure_path = PROJECT_ROOT / failure["path"]
+        if not failure_path.is_file() \
+                or sha256_file(failure_path) != failure["sha256"]:
+            raise AssertionError(
+                "retry authorization does not name an existing failure record"
+            )
+        if record["authorization_nonce"] in consumed:
+            continue
+        if (record["arm"], record["scale"], record["seed"]) != (arm, scale, seed):
+            continue
+        if record["identity"] != identity or record["reason"] != reason:
+            continue
+        matches.append(record)
+    if len(matches) != 1:
+        raise AssertionError(
+            f"E10 RETRY REFUSED: expected exactly one fresh authorization for "
+            f"{arm}/{scale}/seed{seed}, found {len(matches)}"
+        )
+    return matches[0]
+
+
+CORE_CELL_OUTCOMES = {
+    "completed", "wall_clock_halted", "hard_gate_halted", "terminated",
+    "aborted_pre_gpu",
+}
+
+
+def charge_core_cell_hours(arm: str, scale: str, seed: int, *,
+                           occupancy_ns: int, outcome: str,
+                           started_utc: str, ended_utc: str) -> dict:
+    """Append one E10 scientific-cell charge, including a halted cell.
+
+    Accounting is atomic under the shared governance lock and is never skipped
+    because a cell failed: a wall-clock halt is charged exactly like any other
+    occupancy. The scientific authorization is re-checked here so no accounting
+    path can become an entry point into unauthorised execution.
+    """
+    if (arm, scale, seed) not in CORE_CELLS:
+        raise AssertionError(f"{arm}/{scale}/seed{seed} is not an E10 core cell")
+    if outcome not in CORE_CELL_OUTCOMES:
+        raise AssertionError(f"unknown E10 core-cell outcome {outcome!r}")
+    if not isinstance(occupancy_ns, int) or isinstance(occupancy_ns, bool) \
+            or occupancy_ns < 0:
+        raise AssertionError(f"invalid occupancy nanoseconds {occupancy_ns!r}")
+    assert_core_entry_authorized(arm, scale, seed)
+    identity = model_identity(arm)
+    recipe = build_recipe(arm, scale, seed)
+    with exclusive_file_lock(GOVERNANCE_LOCK):
+        ledger = read_spend_ledger()
+        read_retry_ledger()
+        body = {
+            "identity": identity,
+            "arm": arm,
+            "context": "e10_core_cell",
+            "cell": [arm, scale, seed],
+            "gpu_occupancy_ns": occupancy_ns,
+            "measurement": "process_monotonic_ns",
+            "outcome": outcome,
+            "host": socket.gethostname(),
+            "pid": os.getpid(),
+            "started_utc": started_utc,
+            "ended_utc": ended_utc,
+            "source_digest": source_digest()[0],
+            "config_digest": config_digest()[0],
+            "protocol_family": PROTOCOL_FAMILY,
+            "claim_sha256": None,
+            "recipe_digests": {
+                f"{arm}_{scale}_seed{seed}": recipe_sha256(recipe)
+            },
+        }
+        entry = {"entry_id": sha256_bytes(canonical_json_bytes(body)), **body}
+        ledger["entries"].append(entry)
+        _validate_spend_ledger(ledger)
+        charged = identity_hours(identity, ledger)
+        ceiling = effective_identity_ceiling_hours()
+        # The charge is published before the ceiling is judged: occupancy that
+        # has already happened is never withheld from the ledger.
+        atomic_replace_json(SPEND_LEDGER, ledger)
+        if charged > ceiling:
+            overrun = AssertionError(
+                f"{identity} reached {charged} charged hours against the "
+                f"effective ceiling {ceiling}"
+            )
+            latch_shared_failure(
+                "e10_core_cell_identity_ceiling_exceeded", overrun,
+                claim_sha256=None, occupancy_ns=occupancy_ns,
+            )
+            raise overrun
+    return {
+        **entry,
+        "seconds": occupancy_ns / 1_000_000_000.0,
+        "gpu_hours": occupancy_ns / 3_600_000_000_000.0,
+        "identity_charged_hours": charged,
+        "effective_identity_ceiling_hours": ceiling,
+    }
+
+
 def validate_retry_reason(reason: str) -> str:
     if reason in FORBIDDEN_RETRY_REASONS:
         raise AssertionError(f"retry reason {reason!r} is performance-driven")
@@ -1735,7 +2148,8 @@ def retry_admissible(arm: str, projected_hours: float,
     spend = identity_hours(identity, spend_ledger)
     retry_ledger = read_retry_ledger() if retry_ledger is None else retry_ledger
     count = retries_taken(identity, retry_ledger)
-    ceiling = float(config.E10_PER_IDENTITY_CEILING_HOURS)
+    ceiling = effective_identity_ceiling_hours()
+    wall = per_cell_wall_hours()
     total = spend + remaining_mandatory_hours + projected_hours
     floor = float(config.E10_HEADROOM_FLOOR_HOURS)
     return {
@@ -1745,13 +2159,19 @@ def retry_admissible(arm: str, projected_hours: float,
         "retry_cost_hours": projected_hours,
         "projected_total_hours": total,
         "ceiling_hours": ceiling,
+        "e10_ceiling_hours": float(config.E10_PER_IDENTITY_CEILING_HOURS),
+        "programme_wide_ceiling_hours": float(
+            config.PER_MODEL_IDENTITY_CEILING_HOURS
+        ),
         "headroom_floor_hours": floor,
-        "per_cell_wall_hours": float(config.E10_PER_CELL_WALL_CLOCK_HOURS),
+        "per_cell_wall_hours": wall,
         "retries_already_taken": count,
+        "automatic_retries_permitted": 0,
+        "requires_fresh_authorization": True,
         "admissible": (
             count < MAX_FORCED_RETRIES_PER_IDENTITY
             and total <= ceiling - floor
-            and projected_hours <= float(config.E10_PER_CELL_WALL_CLOCK_HOURS)
+            and projected_hours <= wall
         ),
     }
 
@@ -1771,10 +2191,19 @@ def record_forced_retry(arm: str, scale: str, seed: int, reason: str,
         spend = read_spend_ledger()
         ledger = read_retry_ledger()
         assert_shared_state_healthy()
+        # No automatic retry: a fresh, single-use, out-of-band authorization
+        # record for exactly this cell must already exist. Zero retries are
+        # available without one, whatever the resource fit says.
+        if AUTOMATIC_RETRIES_PER_IDENTITY != 0:
+            raise AssertionError("automatic E10 retries are not permitted")
+        authorization = validate_retry_authorization(arm, scale, seed, reason)
+        authorization_path = retry_authorization_path(
+            authorization["authorization_nonce"]
+        )
         if retries_taken(identity, ledger) >= MAX_FORCED_RETRIES_PER_IDENTITY:
             raise AssertionError("second forced retry for this identity refused")
         gate1 = read_json_mapping(GATE1_PATH)
-        assert_current_binding(gate1, "retry Gate 1")
+        assert_recorded_binding(gate1, "retry Gate 1", GATE1_PATH)
         if not str(gate1.get("status", "")).startswith("GATE1_READY"):
             raise AssertionError("retry requires a ready, frozen Gate-1 record")
         cell_projection = gate1["per_cell_projections"][scale][
@@ -1806,6 +2235,12 @@ def record_forced_retry(arm: str, scale: str, seed: int, reason: str,
         )
         if not fit["admissible"]:
             raise AssertionError(f"retry does not fit unchanged gates: {fit}")
+        if not math.isclose(float(authorization["projected_hours"]),
+                            float(projected_hours),
+                            rel_tol=0.0, abs_tol=1e-12):
+            raise AssertionError(
+                "retry authorization cost differs from the requested cost"
+            )
         recipe = build_recipe(arm, scale, seed)
         body = {
             "identity": identity,
@@ -1821,6 +2256,9 @@ def record_forced_retry(arm: str, scale: str, seed: int, reason: str,
             "source_digest": source_digest()[0],
             "config_digest": config_digest()[0],
             "recipe_sha256": recipe_sha256(recipe),
+            "authorization_nonce": authorization["authorization_nonce"],
+            "authorization_sha256": sha256_file(authorization_path),
+            "authorized_by": authorization["authorized_by"],
         }
         ledger["retries"].append({
             "retry_id": sha256_bytes(canonical_json_bytes(body)), **body
@@ -1876,7 +2314,7 @@ def _validate_calibration_grant_record(grant: dict) -> dict:
     if grant["schema_version"] != 1:
         raise AssertionError("calibration grant schema mismatch")
     _require_utc(grant["utc"], "calibration grant utc")
-    assert_current_binding(grant, "calibration grant")
+    assert_recorded_binding(grant, "calibration grant", CALIBRATION_GRANT_PATH)
     if grant["fixed_segments"] != calibration_grant_segments():
         raise AssertionError("calibration grant segment bounds mismatch")
     expected = {
@@ -1935,7 +2373,7 @@ def _validated_calibration_claim() -> dict:
     if not isinstance(claim["pid"], int) or isinstance(claim["pid"], bool) \
             or claim["pid"] <= 0:
         raise AssertionError("calibration claim pid is invalid")
-    assert_current_binding(claim, "calibration claim")
+    assert_recorded_binding(claim, "calibration claim", CALIBRATION_CLAIM_PATH)
     _require_exact_keys(claim["grant"], {"path", "sha256"}, "claim grant ref")
     _require_sha256(claim["grant"]["sha256"], "claim grant SHA")
     if claim["grant"]["sha256"] != sha256_file(CALIBRATION_GRANT_PATH):
@@ -1967,7 +2405,9 @@ def _validated_calibration_completion() -> dict:
             or completion["status"] != "FINALIZED_AND_REVOKED":
         raise AssertionError("calibration completion schema/type/status mismatch")
     _require_utc(completion["utc"], "calibration completion utc")
-    assert_current_binding(completion, "calibration completion")
+    assert_recorded_binding(
+        completion, "calibration completion", CALIBRATION_COMPLETION_PATH
+    )
     claim = _validated_calibration_claim()
     if completion["claim_sha256"] != sha256_file(CALIBRATION_CLAIM_PATH):
         raise AssertionError("calibration completion claim reference mismatch")
@@ -1989,7 +2429,9 @@ def _validated_calibration_completion() -> dict:
             raise AssertionError(f"calibration completion {name} reference is stale")
 
     calibration = read_json_mapping(CALIBRATION_PATH)
-    assert_current_binding(calibration, "completed calibration")
+    assert_recorded_binding(
+        calibration, "completed calibration", CALIBRATION_PATH
+    )
     if calibration.get("schema_version") != 1 \
             or calibration.get("record_type") != "e10_phase0_calibration" \
             or calibration.get("task_id") != TASK_ID \
@@ -2022,7 +2464,9 @@ def _validated_calibration_completion() -> dict:
             or revocation["status"] != "REVOKED":
         raise AssertionError("calibration revocation schema/type/status mismatch")
     _require_utc(revocation["utc"], "calibration revocation utc")
-    assert_current_binding(revocation, "calibration revocation")
+    assert_recorded_binding(
+        revocation, "calibration revocation", CALIBRATION_REVOCATION_PATH
+    )
     _require_exact_keys(revocation["grant"], {"path", "sha256"},
                         "calibration revocation grant")
     if revocation["grant"] != {
@@ -2232,7 +2676,9 @@ def calibration_is_revoked() -> bool:
             or not CALIBRATION_COMPLETION_PATH.exists():
         return False
     record = read_json_mapping(CALIBRATION_REVOCATION_PATH)
-    assert_current_binding(record, "calibration revocation")
+    assert_recorded_binding(
+        record, "calibration revocation", CALIBRATION_REVOCATION_PATH
+    )
     _validated_calibration_completion()
     return record.get("status") == "REVOKED"
 
@@ -2346,11 +2792,142 @@ def validate_calibration_permit(permit: CalibrationPermit) -> dict:
     return assert_strict_determinism()
 
 
-def guarded_optimizer_step(optimizer, permit: CalibrationPermit) -> dict:
+@dataclass(frozen=True)
+class CellExecutionPermit:
+    """A signed, process-bound permit for one E10 scientific cell.
+
+    It carries the mandatory per-cell wall as a monotonic deadline, so the wall
+    the Phase-0 recipe no longer inherits from E8B is re-imposed here instead of
+    inside the frozen recipe.
+    """
+
+    token: str
+    task_id: str
+    arm: str
+    scale: str
+    seed: int
+    identity: str
+    recipe_sha256: str
+    source_digest: str
+    config_digest: str
+    per_cell_wall_hours: float
+    effective_identity_ceiling_hours: float
+    process_pid: int
+    started_monotonic_ns: int
+    deadline_monotonic_ns: int
+    signature: str
+
+
+class CellWallExceeded(TimeoutError):
+    """The mandatory E10 per-cell wall-clock deadline was reached."""
+
+
+def _cell_permit_values(arm: str, scale: str, seed: int,
+                        started_monotonic_ns: int) -> dict:
+    policy = resource_policy()
+    return {
+        "token": CORE_AUTHORIZATION_TOKEN,
+        "task_id": PHASE1_TASK_ID,
+        "arm": arm,
+        "scale": scale,
+        "seed": seed,
+        "identity": model_identity(arm),
+        "recipe_sha256": recipe_sha256(build_recipe(arm, scale, seed)),
+        "source_digest": source_digest()[0],
+        "config_digest": config_digest()[0],
+        "per_cell_wall_hours": policy["per_cell_wall_clock_hours"],
+        "effective_identity_ceiling_hours": policy[
+            "effective_identity_ceiling_hours"
+        ],
+        "process_pid": os.getpid(),
+        "started_monotonic_ns": started_monotonic_ns,
+        "deadline_monotonic_ns": started_monotonic_ns + int(
+            policy["per_cell_wall_clock_hours"] * 3600.0 * 1_000_000_000
+        ),
+    }
+
+
+def authorize_cell_execution(arm: str, scale: str, seed: int, *,
+                             started_monotonic_ns: int | None = None
+                             ) -> CellExecutionPermit:
+    """Issue a wall-bound permit; refuses while the core stays unauthorised."""
+    assert_core_entry_authorized(arm, scale, seed)
+    values = _cell_permit_values(
+        arm, scale, seed,
+        time.monotonic_ns() if started_monotonic_ns is None
+        else started_monotonic_ns,
+    )
+    signature = hmac.new(
+        _PERMIT_SIGNING_SECRET, canonical_json_bytes(values), hashlib.sha256
+    ).hexdigest()
+    return CellExecutionPermit(**values, signature=signature)
+
+
+def _validate_cell_permit_identity(permit: CellExecutionPermit) -> None:
+    if not isinstance(permit, CellExecutionPermit):
+        raise AssertionError("optimizer path has no E10 cell permit")
+    values = {
+        field: getattr(permit, field)
+        for field in permit.__dataclass_fields__
+        if field != "signature"
+    }
+    expected = hmac.new(
+        _PERMIT_SIGNING_SECRET, canonical_json_bytes(values), hashlib.sha256
+    ).hexdigest()
+    if not hmac.compare_digest(permit.signature, expected):
+        raise AssertionError("optimizer path carries a forged E10 cell permit")
+    if permit.token != CORE_AUTHORIZATION_TOKEN \
+            or permit.task_id != PHASE1_TASK_ID:
+        raise AssertionError("optimizer path carries the wrong E10 cell permit")
+    if permit.process_pid != os.getpid():
+        raise AssertionError("optimizer path permit belongs to another process")
+    if (permit.arm, permit.scale, permit.seed) not in CORE_CELLS:
+        raise AssertionError("cell permit names a cell outside the E10 matrix")
+    if permit.identity != model_identity(permit.arm):
+        raise AssertionError("cell permit identity does not match its arm")
+    # Recheck the live bounds on every use, so editing the constants mid-run
+    # cannot widen a wall that is already running. The recipe is covered by the
+    # signature and is not rebuilt here, to keep the per-step cost small.
+    policy = resource_policy()
+    if permit.per_cell_wall_hours != policy["per_cell_wall_clock_hours"] \
+            or permit.effective_identity_ceiling_hours != policy[
+                "effective_identity_ceiling_hours"
+            ]:
+        raise AssertionError("cell permit bounds no longer match the live policy")
+    expected_deadline = permit.started_monotonic_ns + int(
+        permit.per_cell_wall_hours * 3600.0 * 1_000_000_000
+    )
+    if permit.deadline_monotonic_ns != expected_deadline:
+        raise AssertionError("cell permit deadline was altered")
+
+
+def validate_cell_permit(permit: CellExecutionPermit) -> dict:
+    """Re-check the wall on every use; a reached wall can never continue."""
+    _validate_cell_permit_identity(permit)
+    if E10_TRAINING_AUTHORIZED != CORE_AUTHORIZATION_TOKEN:
+        raise AssertionError(
+            "E10 CELL REFUSED: scientific authorization is not live"
+        )
+    remaining_ns = permit.deadline_monotonic_ns - time.monotonic_ns()
+    if remaining_ns <= 0:
+        raise CellWallExceeded(
+            f"E10 per-cell wall of {permit.per_cell_wall_hours} hours reached "
+            f"for {permit.arm}/{permit.scale}/seed{permit.seed}"
+        )
+    return {
+        **assert_strict_determinism(),
+        "remaining_seconds": remaining_ns / 1_000_000_000.0,
+    }
+
+
+def guarded_optimizer_step(optimizer, permit) -> dict:
     """The only E10 helper that may invoke optimizer.step()."""
-    determinism = validate_calibration_permit(permit)
+    if isinstance(permit, CellExecutionPermit):
+        state = validate_cell_permit(permit)
+    else:
+        state = validate_calibration_permit(permit)
     optimizer.step()
-    return determinism
+    return state
 
 
 def memory_gate(allocated_bytes: int, reserved_bytes: int,

@@ -83,7 +83,9 @@ def _git_state() -> dict:
 
 def _validated_validation() -> dict:
     validation = e10.read_json_mapping(e10.VALIDATION_PATH)
-    e10.assert_current_binding(validation, "Phase-0 validation")
+    e10.assert_recorded_binding(
+        validation, "Phase-0 validation", e10.VALIDATION_PATH
+    )
     if validation.get("schema_version") != 1 \
             or validation.get("record_type") != "e10_phase0_validation" \
             or validation.get("task_id") != e10.TASK_ID \
@@ -214,7 +216,9 @@ def validate_governance_records() -> dict:
 
 def _validated_calibration() -> tuple[dict, dict, dict]:
     calibration = e10.read_json_mapping(e10.CALIBRATION_PATH)
-    e10.assert_current_binding(calibration, "Phase-0 calibration")
+    e10.assert_recorded_binding(
+        calibration, "Phase-0 calibration", e10.CALIBRATION_PATH
+    )
     if calibration.get("schema_version") != 1 \
             or calibration.get("record_type") != "e10_phase0_calibration" \
             or calibration.get("task_id") != e10.TASK_ID \
