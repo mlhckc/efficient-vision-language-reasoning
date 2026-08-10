@@ -512,8 +512,11 @@ def test_accounting_refuses_over_wall_completed_entries() -> None:
                     "B4", "train_40k", 0,
                     started_monotonic_ns=time.monotonic_ns() - WALL_NS - 1,
                 )
+                # Reaching the wall fails closed, so the boundary itself is
+                # refused, not only the nanosecond after it.
                 for target, occupancy in (
                     (permit, WALL_NS + 1),
+                    (permit, WALL_NS),
                     (expired, 1),
                 ):
                     _must_raise(
@@ -523,10 +526,17 @@ def test_accounting_refuses_over_wall_completed_entries() -> None:
                             started_utc="2026-08-10T00:00:00Z",
                             ended_utc="2026-08-10T12:00:01Z",
                         ),
-                        "cannot be recorded as completed",
+                        "at or above the",
                     )
                 assert [entry for entry in e10.read_spend_ledger()["entries"]
                         if entry["context"] == "e10_core_cell"] == []
+                # One nanosecond below the wall is still a valid success.
+                admissible = e10.charge_core_cell_hours(
+                    permit, occupancy_ns=WALL_NS - 1, outcome="completed",
+                    started_utc="2026-08-10T00:00:00Z",
+                    ended_utc="2026-08-10T11:59:59Z",
+                )
+                assert admissible["outcome"] == "completed"
                 # A halted charge above the wall is accepted and recorded.
                 charge = e10.charge_core_cell_hours(
                     expired, occupancy_ns=WALL_NS + 1,
@@ -564,10 +574,31 @@ def test_accounting_refuses_over_wall_completed_entries() -> None:
                 _must_raise(
                     AssertionError,
                     lambda: e10._validate_spend_ledger(forged),
-                    "completed cell above",
+                    "completed cell at or above",
                 )
-                # The same entry at exactly the wall is admissible, so the
+                # The three boundary cases, in one place: the wall itself is
+                # refused, one nanosecond below it is admissible, so the
                 # rejection is a wall test and not a blanket refusal.
+                for occupancy, admissible in (
+                    (WALL_NS + 1, False), (WALL_NS, False), (WALL_NS - 1, True),
+                ):
+                    body["gpu_occupancy_ns"] = occupancy
+                    forged["entries"] = [{
+                        "entry_id": e10.sha256_bytes(
+                            e10.canonical_json_bytes(body)
+                        ),
+                        **body,
+                    }]
+                    if admissible:
+                        assert e10._validate_spend_ledger(forged) == forged
+                    else:
+                        _must_raise(
+                            AssertionError,
+                            lambda: e10._validate_spend_ledger(forged),
+                            "completed cell at or above",
+                        )
+                # A halted cell at or beyond the wall stays admissible.
+                body["outcome"] = "wall_clock_halted"
                 body["gpu_occupancy_ns"] = WALL_NS
                 forged["entries"] = [
                     {"entry_id": e10.sha256_bytes(e10.canonical_json_bytes(body)),

@@ -814,6 +814,20 @@ def write_phase1_repair_record() -> dict:
         "phase1_r1_source_digest": e10.PHASE1_R1_SOURCE_DIGEST,
         "phase1_r1_config_digest": e10.PHASE1_R1_CONFIG_DIGEST,
         "preserved_records": preserved,
+        "regenerated_within_open_revision": {
+            "regenerated": True,
+            "superseded_sha256": e10.PHASE1_REPAIR_SUPERSEDED_SHA256,
+            "reason": (
+                "A follow-up review of the same open repair revision required "
+                "the accounting backstops to halt at equality with the wall, "
+                "not only above it. That edit moved the live source digest, so "
+                "this record was regenerated inside the same unapproved "
+                "revision instead of chaining a second amendment onto an "
+                "amendment. Its content is otherwise unchanged, the superseded "
+                "version remains in git history at commit a4bb773, and no "
+                "Phase-0 record and no Phase-1 revision-1 record was touched."
+            ),
+        },
         "whole_cell_wall": wall_reimposition_record(),
         "scientific_execution": {
             "optimizer_steps": 0,

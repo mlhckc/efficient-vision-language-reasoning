@@ -152,7 +152,9 @@ hash no longer matches the worktree.
   outcome requires every stage to have closed inside the wall; finalisation
   re-derives the deadline on every exit path, including a normal exit in which
   nothing checked; and accounting plus ledger validation independently refuse
-  a `completed` cell above the wall. The guard does NOT interrupt an in-flight
+  a `completed` cell at or above the wall. Equality halts in every layer: the
+  guard stops at `now >= deadline` and both accounting backstops stop at
+  `occupancy >= wall`. The guard does NOT interrupt an in-flight
   operation: the guarantee is that a crossing can never publish a successful
   scientific result, can never be charged as completed, and can never continue
   authorised scientific work under that permit. The independent Phase-1 review

@@ -21,8 +21,8 @@ The twelve-cell B4/B4r core matrix remains refused.
 The user's decisions of 2026-08-10, taken after the Phase-0 PASS:
 
 1. `E10_PER_CELL_WALL_CLOCK_HOURS = 12.0`, a hard executable operational halt
-   rather than a projection field. A cell that reaches the wall fails closed,
-   is recorded and charged as halted, and never continues.
+   rather than a projection field. A cell that reaches or exceeds the wall
+   fails closed, is recorded and charged as halted, and never continues.
 2. `E10_PER_IDENTITY_CEILING_HOURS = 40.0`, never more permissive than the
    programme-wide frozen-model identity ceiling. Every gate uses
    `min(E10_PER_IDENTITY_CEILING_HOURS, PER_MODEL_IDENTITY_CEILING_HOURS)`.
@@ -71,20 +71,23 @@ reproduced and is now impossible. Four independent mechanisms enforce it:
    checked the wall. A crossing forces the `wall_clock_halted` outcome, latches
    the halt, writes the halt record, charges the consumed time and raises out
    of the `with` block so the crossing cannot return silently.
-4. Accounting refuses over-wall success independently of the guard.
-   `charge_core_cell_hours` takes the signed permit and rejects a `completed`
-   outcome when either the charged occupancy or the elapsed time the permit
-   itself implies exceeds the wall, and `_validate_spend_ledger` rejects a
-   `completed` core-cell entry above the wall when the ledger is read. Both
-   read the wall from `config`, never from a caller argument, so a bug in the
-   guard layer still cannot write or replay a valid over-wall success.
+4. Accounting refuses success at or above the wall, independently of the
+   guard. `charge_core_cell_hours` takes the signed permit and rejects a
+   `completed` outcome when either the charged occupancy or the elapsed time
+   the permit itself implies reaches or exceeds the wall, and
+   `_validate_spend_ledger` rejects a `completed` core-cell entry at or above
+   the wall when the ledger is read. Both read the wall from `config`, never
+   from a caller argument, so a bug in the guard layer still cannot write or
+   replay a valid success at or above the wall. Equality halts in all three
+   layers: the guard and finalisation stop at `now >= deadline`, and both
+   accounting backstops stop at `occupancy >= wall`.
 
 What the guard does not do is interrupt an operation that is already running.
 A CUDA kernel, an evaluation pass or a generation tail in flight continues
 until it returns; the deadline is not an asynchronous kill. The guarantee is
-narrower and is stated as implemented: a cell that crosses the wall cannot
-publish a successful scientific result, cannot be charged as completed, and
-cannot continue authorised scientific work under that permit.
+narrower and is stated as implemented: a cell that reaches or exceeds the wall
+cannot publish a successful scientific result, cannot be charged as completed,
+and cannot continue authorised scientific work under that permit.
 
 Setting the two constants changes the live config digest, and adding the
 Phase-1 sources changes the live source digest, so every immutable Phase-0
@@ -170,8 +173,11 @@ Verification:
   `CellWallExceeded` out of the `with` block, `guard.halted` is `True`, the
   ledger entry is `outcome = wall_clock_halted`, the record is
   `status = WALL_CLOCK_HALTED` with `scientific_success = false`, and no
-  completed record exists. A forged `completed` ledger entry above the wall is
-  rejected by validation, while the same entry exactly at the wall is accepted.
+  completed record exists. The accounting boundary is exact and agrees with the
+  guard: a `completed` charge or ledger entry at wall minus one nanosecond is
+  admissible, at exactly the wall it is rejected, and at wall plus one
+  nanosecond it is rejected; a `wall_clock_halted` entry at or beyond the wall
+  stays admissible.
 - The source scan over 101 project files finds no code path that writes a
   retry authorization record and no call site that consumes a retry.
 

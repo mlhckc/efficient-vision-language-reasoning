@@ -258,6 +258,13 @@ PHASE1_PATHS = (PHASE1_AMENDMENT_PATH, PHASE1_POLICY_PATH, PHASE1_A5_A8C_PATH)
 # review. It moves the source digest again, so it adds one more link to the
 # chain and carries the three Phase-1 revision-1 records forward unchanged.
 PHASE1_REPAIR_PATH = OUT_DIR / "phase1_whole_cell_wall_repair_20260810.json"
+# The repair record binds the live source digest, so the follow-up boundary fix
+# inside the SAME open, unapproved repair revision regenerated it rather than
+# chaining a second amendment onto an amendment for a comparison operator. The
+# superseded version stays in git history and is named here and in the record.
+PHASE1_REPAIR_SUPERSEDED_SHA256 = (
+    "cc07adca2107dd11915ccad08be8a9a9a1bf493cb640a5493401e8d78acbb0de"
+)
 PHASE1_R1_SOURCE_DIGEST = (
     "dae2978dbd11ac5dd8a182c970f461eb47087813e8f7839203c77bea551f4ed2"
 )
@@ -590,8 +597,17 @@ def validate_phase1_repair() -> dict:
         "utc", "binding", "reason", "review", "change_scope",
         "phase1_r1_source_digest", "phase1_r1_config_digest",
         "preserved_records", "whole_cell_wall", "scientific_execution",
+        "regenerated_within_open_revision",
     }
     _require_exact_keys(repair, required, "E10 Phase-1 repair")
+    regeneration = repair["regenerated_within_open_revision"]
+    _require_exact_keys(
+        regeneration, {"regenerated", "superseded_sha256", "reason"},
+        "E10 Phase-1 repair regeneration",
+    )
+    if regeneration["regenerated"] is not True \
+            or regeneration["superseded_sha256"] != PHASE1_REPAIR_SUPERSEDED_SHA256:
+        raise AssertionError("E10 Phase-1 repair regeneration record mismatch")
     if repair["schema_version"] != 1 \
             or repair["record_type"] != "e10_phase1_whole_cell_wall_repair" \
             or repair["task_id"] != PHASE1_TASK_ID \
@@ -1788,15 +1804,16 @@ def _validate_spend_ledger(payload: dict) -> dict:
             if entry["claim_sha256"] is not None:
                 raise AssertionError("core spend cannot carry a calibration claim")
             # Defence in depth for the whole-cell wall. A scientific cell that
-            # occupied more than the authorised wall can never be a success,
+            # reached or exceeded the authorised wall can never be a success,
             # whichever layer wrote the entry, so such a ledger is refused on
-            # read as well as on write.
-            if entry["outcome"] == "completed" and occupancy > int(
+            # read as well as on write. Equality halts here for the same reason
+            # it halts in the guard: the wall is reached, not merely approached.
+            if entry["outcome"] == "completed" and occupancy >= int(
                 per_cell_wall_seconds() * 1_000_000_000
             ):
                 raise AssertionError(
-                    f"E10 spend entry {index} claims a completed cell above "
-                    f"the {per_cell_wall_hours()} hour per-cell wall"
+                    f"E10 spend entry {index} claims a completed cell at or "
+                    f"above the {per_cell_wall_hours()} hour per-cell wall"
                 )
     return payload
 
@@ -2164,12 +2181,15 @@ def charge_core_cell_hours(permit: CellExecutionPermit, *,
         raise AssertionError(f"invalid occupancy nanoseconds {occupancy_ns!r}")
     wall_ns = int(per_cell_wall_seconds() * 1_000_000_000)
     permit_elapsed_ns = time.monotonic_ns() - permit.started_monotonic_ns
-    if outcome == "completed" and (occupancy_ns > wall_ns
-                                   or permit_elapsed_ns > wall_ns):
+    # Reaching the wall fails closed, exactly as the guard and finalisation
+    # layers treat it: they halt on now >= deadline, so accounting must reject
+    # at equality too rather than only above it.
+    if outcome == "completed" and (occupancy_ns >= wall_ns
+                                   or permit_elapsed_ns >= wall_ns):
         raise AssertionError(
             f"E10 ACCOUNTING REFUSED: {arm}/{scale}/seed{seed} cannot be "
-            f"recorded as completed above the {per_cell_wall_hours()} hour "
-            f"per-cell wall (charged {occupancy_ns} ns, permit elapsed "
+            f"recorded as completed at or above the {per_cell_wall_hours()} "
+            f"hour per-cell wall (charged {occupancy_ns} ns, permit elapsed "
             f"{permit_elapsed_ns} ns, wall {wall_ns} ns)"
         )
     assert_core_entry_authorized(arm, scale, seed)
