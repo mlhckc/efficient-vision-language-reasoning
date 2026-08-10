@@ -142,6 +142,42 @@ ANSWER_CACHE_FACTS = {
 APPROVED_DEVELOPMENT_CSV_BASENAMES = frozenset({
     "train_40k.csv", "train_250k.csv", "dev.csv",
 })
+
+# --- Phase-2 scientific data contract ----------------------------------------
+# The scientific pipeline consumes exactly the already-frozen development
+# inputs. Every one of these digests is pinned rather than measured-and-trusted,
+# and each was cross-checked against the frozen E8B core-cell records, so an
+# E10 cell that silently trained on a different manifest or a rebuilt token
+# store fails closed instead of producing an incomparable result.
+MANIFEST_BASENAMES = {
+    "train_40k": "train_40k.csv",
+    "train_250k": "train_250k.csv",
+    "dev": "dev.csv",
+}
+MANIFEST_SHA256 = {
+    "train_40k":
+        "cda03c133e581d486c1e29f6d99376ee59f9841564b3fb890bc401f4da5c90d2",
+    "train_250k":
+        "be7d867afd2757a631145bc1c56c3b1a4dcf43784c1a6abf1c3b75452b865074",
+    "dev":
+        "95d1b504dcc4deb7d69ba0c9e293d1c00bae93df4b6907174a1dd615cb93cdc9",
+}
+EXPECTED_MANIFEST_ROWS = {
+    "train_40k": 40_000, "train_250k": 250_000, "dev": 7_714,
+}
+TOKEN_STORE_SHA256 = {
+    "image_tokens":
+        "c852811a4e3393387012a099d3ad8d494fe4be0f3d95f70b4a1328db4ad59588",
+    "question_tokens":
+        "503f33827f25202b979076333a4a5258b31808f674b31d521b4b43e098732037",
+}
+# The scientific artefact tree is deliberately NOT inside OUT_DIR. OUT_DIR
+# holds the immutable Phase-0/Phase-1 governance records, and
+# assert_no_scientific_outputs proves that tree never acquires a checkpoint or
+# a performance field. Publishing a real cell into it would retire that proof;
+# publishing beside it keeps the guardrail meaningful for the whole programme.
+CORE_OUT_DIR = config.RESULTS_DIR / "experiments" / "e10_capacity_360m_core"
+CORE_CHECKPOINT_DIR = CORE_OUT_DIR / "checkpoints"
 CSV_REFERENCE_PATTERN = re.compile(
     r"(?<![A-Za-z0-9_.-])([A-Za-z0-9_./\\-]+"
     + re.escape(chr(46) + "csv")
@@ -281,6 +317,37 @@ PHASE1_R1_RECORD_SHA256 = {
     "phase1_a5_a8c_identity_governance_20260810.json":
         "4ee2453cef6cb3497da8ead7f30577ed48d5b9bc217df53b90a4f18118fe8b9a",
 }
+# --- Phase-2 binding supersession --------------------------------------------
+# Phase 2 implements the scientific pipeline behind the reviewed Phase-1
+# guardrails. It adds three E10 source modules and one test module, replaces the
+# guarded stub in run.py and extends e10_common, so the live source digest moves
+# again. config.py and requirements.lock.txt are untouched, so the config digest
+# does NOT move and the Phase-1 pair differs from the live one in its source
+# component alone. As in Phase 1, no approved record is rewritten: one immutable
+# amendment pins the pre-amendment digests and the SHA-256 of every Phase-1
+# record it carries forward.
+PHASE2_TASK_ID = "e10-phase2-scientific-pipeline"
+PHASE2_AMENDMENT_PATH = OUT_DIR / "phase2_binding_amendment_20260810.json"
+PHASE2_PIPELINE_PATH = OUT_DIR / "phase2_scientific_pipeline_20260810.json"
+PHASE2_PATHS = (PHASE2_AMENDMENT_PATH, PHASE2_PIPELINE_PATH)
+# The digests in force at the independently reviewed Phase-1 HEAD
+# 231ad3bdfa3efc7e3caee3137987739b43d3193a, which this task starts from.
+PHASE1_R2_SOURCE_DIGEST = (
+    "e9bfb325e95c71b21ba7508361bb304c8f97bdf8f0ce207d4ba6c4aecb1dee87"
+)
+PHASE1_R2_CONFIG_DIGEST = (
+    "4b9fa43cb74b511c0bb6fda3c7c043d6047ef5e5e220c1abad6e35138f3df9ab"
+)
+PHASE1_R2_RECORD_SHA256 = {
+    "phase1_whole_cell_wall_repair_20260810.json":
+        "fa9381769829816c6ae99a7f87e67983f9deef45edb2e1653e6846a3ec9527aa",
+    "phase1_binding_amendment_20260810.json":
+        "872591d2c89058ac843d12d3205cc29f1636ce63dbefeb9f2cd1a7caa114ef95",
+    "phase1_resource_policy_20260810.json":
+        "0cf96a0465b6fdc88e5797d2322db5785c54414aa7b54d2dc55cb0f5d6852a4c",
+    "phase1_a5_a8c_identity_governance_20260810.json":
+        "4ee2453cef6cb3497da8ead7f30577ed48d5b9bc217df53b90a4f18118fe8b9a",
+}
 PHASE0_SOURCE_DIGEST = (
     "06f5583ae847cdc327b4099599895619af8d3350a2c0a88c89ff6aac0c6f323a"
 )
@@ -336,6 +403,9 @@ SOURCE_PATHS = (
     Path(__file__).with_name("calibration.py"),
     Path(__file__).with_name("projection.py"),
     Path(__file__).with_name("phase1.py"),
+    Path(__file__).with_name("phase2.py"),
+    Path(__file__).with_name("science.py"),
+    Path(__file__).with_name("analysis.py"),
     PROJECT_ROOT / "experiments" / "e8b_readout_generation" / "latents.py",
     PROJECT_ROOT / "experiments" / "e8b_readout_generation" / "readouts.py",
     PROJECT_ROOT / "experiments" / "e8b_readout_generation" / "training.py",
@@ -347,6 +417,7 @@ SOURCE_PATHS = (
     PROJECT_ROOT / "src" / "utils.py",
     PROJECT_ROOT / "tests" / "test_e10.py",
     PROJECT_ROOT / "tests" / "test_e10_phase1.py",
+    PROJECT_ROOT / "tests" / "test_e10_phase2.py",
     PROJECT_ROOT / "tests" / "run_all.py",
 )
 CONFIG_PATHS = (
@@ -574,6 +645,7 @@ def assert_current_binding(record: dict, context: str) -> dict:
 def accepted_historical_bindings() -> tuple[tuple[str, str], ...]:
     """The (source, config) digest pairs a superseded record may still carry."""
     return (
+        (PHASE1_R2_SOURCE_DIGEST, PHASE1_R2_CONFIG_DIGEST),
         (PHASE1_R1_SOURCE_DIGEST, PHASE1_R1_CONFIG_DIGEST),
         (PHASE0_SOURCE_DIGEST, PHASE0_CONFIG_DIGEST),
         (PRECORRECTION_SOURCE_DIGEST, PRECORRECTION_CONFIG_DIGEST),
@@ -583,10 +655,75 @@ def accepted_historical_bindings() -> tuple[tuple[str, str], ...]:
 def _amendment_chain() -> tuple[tuple[Path, Any], ...]:
     """Newest first. Each link carries the records the next one bound."""
     return (
+        (PHASE2_AMENDMENT_PATH, validate_phase2_amendment),
         (PHASE1_REPAIR_PATH, validate_phase1_repair),
         (PHASE1_AMENDMENT_PATH, validate_phase1_amendment),
         (SOURCE_CORRECTION_PATH, validate_source_correction),
     )
+
+
+def validate_phase2_amendment() -> dict:
+    """The immutable record that carries the Phase-1 evidence across Phase 2.
+
+    Phase 2 adds executable scientific pipeline sources and therefore moves the
+    live source digest. This is the newest link in the chain, so it is the one
+    record validated against the LIVE binding; every earlier link is admitted
+    only through assert_recorded_binding and its pinned bytes.
+    """
+    amendment = read_json_mapping(PHASE2_AMENDMENT_PATH)
+    required = {
+        "schema_version", "record_type", "task_id", "status", "NON_SCIENTIFIC",
+        "utc", "binding", "reason", "change_scope", "phase1_r2_source_digest",
+        "phase1_r2_config_digest", "preserved_records", "scientific_execution",
+    }
+    _require_exact_keys(amendment, required, "E10 Phase-2 amendment")
+    if amendment["schema_version"] != 1 \
+            or amendment["record_type"] != "e10_phase2_binding_amendment" \
+            or amendment["task_id"] != PHASE2_TASK_ID \
+            or amendment["status"] != "PHASE1_EVIDENCE_CARRIED_FORWARD" \
+            or amendment["NON_SCIENTIFIC"] is not True \
+            or amendment["phase1_r2_source_digest"] != PHASE1_R2_SOURCE_DIGEST \
+            or amendment["phase1_r2_config_digest"] != PHASE1_R2_CONFIG_DIGEST \
+            or amendment["scientific_execution"] != {
+                "optimizer_steps": 0,
+                "scientific_cells_executed": 0,
+                "gpu_hours_charged": 0.0,
+                "e10_training_authorized": None,
+            }:
+        raise AssertionError("E10 Phase-2 amendment semantics mismatch")
+    _require_utc(amendment["utc"], "E10 Phase-2 amendment utc")
+    assert_current_binding(amendment, "E10 Phase-2 amendment")
+    if amendment["change_scope"] != {
+        "scientific_pipeline_implemented": True,
+        "resource_constants_changed": False,
+        "scientific_recipe_changed": False,
+        "core_matrix_changed": False,
+        "model_pin_changed": False,
+        "dev_evaluation_cadence_changed": False,
+        "scientific_authorization_granted": False,
+        "phase0_record_rewritten": False,
+        "phase1_record_rewritten": False,
+    }:
+        raise AssertionError("E10 Phase-2 amendment scope mismatch")
+    preserved = amendment["preserved_records"]
+    if not isinstance(preserved, dict) \
+            or set(preserved) != set(PHASE1_R2_RECORD_SHA256):
+        raise AssertionError("E10 Phase-2 amendment record set mismatch")
+    for filename, expected_sha in PHASE1_R2_RECORD_SHA256.items():
+        reference = preserved[filename]
+        _require_exact_keys(
+            reference, {"location", "sha256"}, f"Phase-2 amendment {filename}"
+        )
+        if reference["sha256"] != expected_sha \
+                or reference["location"] != "repository":
+            raise AssertionError(
+                f"E10 Phase-2 amendment preserved record mismatch: {filename}"
+            )
+        if sha256_file(OUT_DIR / filename) != expected_sha:
+            raise AssertionError(
+                f"E10 Phase-1 record changed under Phase 2: {filename}"
+            )
+    return amendment
 
 
 def validate_phase1_repair() -> dict:
@@ -623,7 +760,11 @@ def validate_phase1_repair() -> dict:
             }:
         raise AssertionError("E10 Phase-1 repair semantics mismatch")
     _require_utc(repair["utc"], "E10 Phase-1 repair utc")
-    assert_current_binding(repair, "E10 Phase-1 repair")
+    # Was assert_current_binding while this record was the newest link in the
+    # chain. Phase 2 adds a newer link, so the repair record is now admitted
+    # exactly like every other superseded record: the live binding, or the one
+    # historical pair an immutable amendment names together with these bytes.
+    assert_recorded_binding(repair, "E10 Phase-1 repair", PHASE1_REPAIR_PATH)
     if repair["change_scope"] != {
         "resource_constants_changed": False,
         "scientific_recipe_changed": False,
@@ -733,10 +874,23 @@ def assert_recorded_binding(record: dict, context: str, record_path: Path) -> di
     record_path = Path(record_path)
     filename = record_path.name
     observed = sha256_file(record_path)
-    for amendment_path, validator in _amendment_chain():
+    chain = _amendment_chain()
+    # A link may only be carried forward by a STRICTLY NEWER link. The chain is
+    # newest first, so a record that is itself a link consults only the links
+    # before it. Without this the repair and the amendment, each validated
+    # through this function, would validate each other forever; the ordering is
+    # also the substantive rule, since a record cannot be carried forward by
+    # evidence that already existed when it was written.
+    own_index = next(
+        (index for index, (path, _) in enumerate(chain) if path == record_path),
+        None,
+    )
+    for index, (amendment_path, validator) in enumerate(chain):
         # A record is never carried forward by itself, and an absent link is
         # simply not consulted; nothing here weakens the exact-bytes rule.
         if amendment_path == record_path or not amendment_path.exists():
+            continue
+        if own_index is not None and index >= own_index:
             continue
         reference = validator()["preserved_records"].get(filename)
         if reference is not None and reference["sha256"] == observed:
@@ -822,11 +976,17 @@ def assert_current_or_precorrection_binding(
 def assert_no_embargo_reference(paths: list[Path] | None = None) -> dict:
     if paths is None:
         paths = list(Path(__file__).parent.rglob("*.py"))
-        test_path = PROJECT_ROOT / "tests" / "test_e10.py"
-        if test_path.exists():
-            paths.append(test_path)
+        for name in ("test_e10.py", "test_e10_phase1.py", "test_e10_phase2.py"):
+            test_path = PROJECT_ROOT / "tests" / name
+            if test_path.exists():
+                paths.append(test_path)
         if OUT_DIR.exists():
             paths.extend(OUT_DIR.rglob("*.json"))
+        # The scientific artefact tree is scanned on exactly the same terms as
+        # the governance tree: a published cell may name only the three
+        # allowlisted development manifests.
+        if CORE_OUT_DIR.exists():
+            paths.extend(CORE_OUT_DIR.rglob("*.json"))
         report_path = (
             PROJECT_ROOT / "docs" / "experiments" / "e10_phase0_calibration.md"
         )
@@ -1479,6 +1639,24 @@ def build_recipe(arm: str, scale: str, seed: int) -> dict:
         "dev_evaluation_epochs": list(DEV_EVALUATION_EPOCHS),
     })
     return reference
+
+
+def frozen_recipe_contract() -> dict:
+    """The immutable Phase-0 recipe contract, binding-checked before use.
+
+    The governance records carry their binding inside ``metadata``, so a
+    consumer must not look for it at the root. This is the single reader every
+    later phase uses, so the twelve frozen digests are always compared against
+    a record that has been proven current or recorded-historical.
+    """
+    record = read_json_mapping(RECIPE_CONTRACT_PATH)
+    if set(record) != {"metadata", "e10_recipe_contract"}:
+        raise AssertionError("E10 recipe contract root schema mismatch")
+    assert_recorded_binding(
+        {"binding": record["metadata"].get("binding")},
+        "E10 recipe contract", RECIPE_CONTRACT_PATH,
+    )
+    return record["e10_recipe_contract"]
 
 
 def recipe_sha256(recipe: dict) -> str:
@@ -3076,6 +3254,71 @@ def memory_gate(allocated_bytes: int, reserved_bytes: int,
         "ceiling_fraction": 0.80,
         "fires": fraction >= 0.80,
         "gate_basis": "peak reserved / device total; equality halts",
+    }
+
+
+def core_run_name(arm: str, scale: str, seed: int) -> str:
+    """The one name every artefact of a scientific cell is derived from."""
+    if (arm, scale, seed) not in CORE_CELLS:
+        raise AssertionError(f"{arm}/{scale}/seed{seed} is not an E10 core cell")
+    return f"e10_core_{arm}_{scale}_seed{seed}"
+
+
+def core_cell_paths(arm: str, scale: str, seed: int) -> dict:
+    """Every path one scientific cell may write, derived from one name."""
+    name = core_run_name(arm, scale, seed)
+    return {
+        "run_name": name,
+        "result": CORE_OUT_DIR / f"{name}.json",
+        "failed": CORE_OUT_DIR / f"{name}_FAILED.json",
+        "per_row": CORE_OUT_DIR / f"{name}_per_row.npz",
+        "canonical_checkpoint": CORE_CHECKPOINT_DIR / f"{name}_canonical_ep22.pt",
+        "secondary_checkpoint": (
+            CORE_CHECKPOINT_DIR / f"{name}_secondary_best_of22.pt"
+        ),
+        "resume_checkpoint": CORE_CHECKPOINT_DIR / f"resume_{name}.pt",
+    }
+
+
+def charged_core_cells(ledger: dict | None = None) -> list:
+    """Every scientific cell the authoritative spend ledger has ever charged."""
+    ledger = read_spend_ledger() if ledger is None else _validate_spend_ledger(ledger)
+    return [
+        {
+            "cell": list(entry["cell"]),
+            "outcome": entry["outcome"],
+            "gpu_hours": float(entry["gpu_occupancy_ns"]) / 3_600_000_000_000.0,
+            "entry_id": entry["entry_id"],
+        }
+        for entry in ledger["entries"]
+        if entry["context"] == "e10_core_cell"
+    ]
+
+
+def assert_no_scientific_cells() -> dict:
+    """Prove no E10 scientific cell has ever executed or been published.
+
+    This is the Phase-2 hand-back proof. It is a statement about the CURRENT
+    state, not a guardrail against future authorised execution: once the user
+    authorises the core matrix and a cell runs, this stops holding by design.
+    """
+    published = sorted(
+        path.name for path in CORE_OUT_DIR.glob("*.json")
+    ) if CORE_OUT_DIR.exists() else []
+    checkpoints = sorted(
+        path.name for path in CORE_CHECKPOINT_DIR.glob("*")
+    ) if CORE_CHECKPOINT_DIR.exists() else []
+    charged = charged_core_cells()
+    if published or checkpoints or charged:
+        raise AssertionError(
+            f"E10 scientific artefacts exist: results={published}, "
+            f"checkpoints={checkpoints}, charged_cells={len(charged)}"
+        )
+    return {
+        "published_cell_records": 0,
+        "checkpoint_files": 0,
+        "charged_core_cells": 0,
+        "e10_training_authorized": E10_TRAINING_AUTHORIZED,
     }
 
 

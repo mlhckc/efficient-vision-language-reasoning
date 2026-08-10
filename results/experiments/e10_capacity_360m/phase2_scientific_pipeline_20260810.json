@@ -1,0 +1,219 @@
+{
+  "schema_version": 1,
+  "record_type": "e10_phase2_scientific_pipeline",
+  "task_id": "e10-phase2-scientific-pipeline",
+  "status": "PIPELINE_IMPLEMENTED_SCIENTIFIC_EXECUTION_STILL_REFUSED",
+  "NON_SCIENTIFIC": true,
+  "utc": "2026-08-10T21:02:31Z",
+  "git_commit": "231ad3bdfa3efc7e3caee3137987739b43d3193a",
+  "binding": {
+    "source_digest": "f72ff9ef7fb5267e8d8e79ba82ec6718d277fa2ab37edb2defdf56bebbd31d39",
+    "source_files": {
+      "experiments/e10_capacity_360m/e10_common.py": "c3d7bcf302acc04fddce01f7d6026b0ca27656eeb86b0a08d5b7d0f89c618859",
+      "experiments/e10_capacity_360m/run.py": "beb60592b15f09569b2ee18f667b26cb42b7c857e64ce24dd231704bd31fa7b0",
+      "experiments/e10_capacity_360m/calibration.py": "8280a161bcd829521f660379f2f0dafc6fe04c7a8ab0ba75a1f6dcd544428b49",
+      "experiments/e10_capacity_360m/projection.py": "f3e3d4a911896b5d7403eeb0cc32f034cfafa5293f30310257516d4043211a0a",
+      "experiments/e10_capacity_360m/phase1.py": "598fbe46371aae375b486ac1cdd761adb122d0b41d6a33749d8bcbf3ab339d9b",
+      "experiments/e10_capacity_360m/phase2.py": "983a00e27418d209f7024f6c14c8babb59d197b77b7f51da7de167e3e999622a",
+      "experiments/e10_capacity_360m/science.py": "781f6f489ad4f5ec5f1a793d2e6baa27ea05004976e5c6eae152748020f24145",
+      "experiments/e10_capacity_360m/analysis.py": "ba6430e2b8a2c26e4c944444d1396ba6455102aa20d1659d026765666fae7f58",
+      "experiments/e8b_readout_generation/latents.py": "051604b60d1c8fce65e1fa2e9ec53b155fb4af41b7fe9377d009f39f04f0502f",
+      "experiments/e8b_readout_generation/readouts.py": "28acdf21c87b286c78dcc2ff2be24a4834dd21b265f4420b4014f8a9d1254ca6",
+      "experiments/e8b_readout_generation/training.py": "5ec731105db87b6b5aa16bca02e9c2e3705050a59ef297a4956480fccec44ce3",
+      "experiments/e8b_readout_generation/run.py": "d05c79a749f6c4dc17e37d81f4f7598ea7f74d2e6573c4feae8243c2253e1430",
+      "experiments/e8a_question_encoder/e8a_common.py": "cd6c8ce0f0f9d93ec367d9e4c9ec611e5768e334964fe6d7c18bb3a04a70ba20",
+      "experiments/e8a_question_encoder/g21_scorer.py": "22ea9c59082840a60568d7b804a3cb66ac0daccb7b503a6c50305d1354f2f40d",
+      "src/reasoner.py": "3faafcd25e3f9e233c5173b71c1e1bbdd92859047d7b701d97ee16049892062c",
+      "src/tokens_data.py": "9e24a76e177ca8d8145995d1224d611d7de9303d0ea2b79552b3e106c01caf05",
+      "src/utils.py": "3e9af4431b68f96c10d1d6d7842a82ffe34e9100c09e1206d05bbb112c01d3ee",
+      "tests/test_e10.py": "323a53a9b4a86176535d31801226568e34a215c625a1c919ed8ba412b8d1ff86",
+      "tests/test_e10_phase1.py": "c25fe79485deea73e118c342f6f7548507b4b8a4d74a1391ffa6202cbf424ce8",
+      "tests/test_e10_phase2.py": "81dfed7a3e99cc38ea29469bffed50d899980b43352ab4240a932bd823a3a74b",
+      "tests/run_all.py": "bb5f795196867f45cbc29f004cbeca5e1ae4da12c7d1f80dddec0bde102e8689"
+    },
+    "config_digest": "4b9fa43cb74b511c0bb6fda3c7c043d6047ef5e5e220c1abad6e35138f3df9ab",
+    "config_files": {
+      "config.py": "2612dfeaa2a2ca54888bd0be2004a90efaa533c16c75db2ed08baadf3f060574",
+      "requirements.lock.txt": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be"
+    },
+    "protocol_family": "e10-fp32-fixed22-core-360m-2026-08-10"
+  },
+  "reviewed_phase1_base_head": "231ad3bdfa3efc7e3caee3137987739b43d3193a",
+  "contract": {
+    "task_id": "e10-phase2-scientific-pipeline",
+    "implements": {
+      "labelled_train_dev_loading": true,
+      "b4_b4r_construction": true,
+      "frozen_22_epoch_training": true,
+      "pinned_development_cadence": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        10,
+        13,
+        16,
+        19,
+        22
+      ],
+      "canonical_scoring": "G21 pinned normaliser and the two metrics",
+      "g14_diagnostics": [
+        "pre-selection",
+        "post-selection"
+      ],
+      "final_r1_evaluation": true,
+      "checkpoint_and_result_publication": true,
+      "cell_artefact_reconciliation": [
+        "canonical_checkpoint",
+        "secondary_checkpoint",
+        "per_row",
+        "result"
+      ],
+      "frozen_statistical_analysis": true
+    },
+    "primary_result_rule": "the epoch-22 checkpoint is the canonical primary; the best of the twelve evaluated epochs is a clearly labelled secondary diagnostic and never replaces it",
+    "primary_metric": "canonical FP32 development R1 of the epoch-22 checkpoint, with the pinned G21 normalised exact match reported beside it",
+    "reused_from_e8": {
+      "experiments.e8b_readout_generation.latents": "LatentTrunk, LatentProjection, E8BPrefixModel, the preregistered projection scale and the teacher-forced answer-token loss",
+      "experiments.e8b_readout_generation.readouts": "the answer cache and prefix trie, and the R1/R2 reference and cached scorers the G14 gate compares",
+      "experiments.e8b_readout_generation.training": "r1_scores_batched, the G14 row construction and strata record, the G10 collapse diagnostic and the labels= reference loss",
+      "experiments.e8a_question_encoder.g21_scorer": "the single approved normaliser and the two pinned metrics",
+      "experiments.e8a_question_encoder.analyse_core": "the image-clustered resampling stream, the percentile interval and the universal directional rule",
+      "src.tokens_data": "the cached token stores, dataset and collation"
+    },
+    "deliberate_e10_differences": {
+      "development_cadence": "E8B evaluated every epoch; E10 evaluates only the twelve pinned epochs 1, 2, 3, 4, 5, 6, 8, 10, 13, 16, 19 and 22 of the frozen E10 recipe contract. Epoch 22 is always evaluated, so the primary result is always measured.",
+      "g8_overfit_gate": "not run. The frozen Gate-1 per-cell budget enumerates training, twelve development evaluations, the inherited G14 schedule, a small fixed overhead and one final R1 pass. E8B's G8 tiny-subset overfit gate can train for up to 200 epochs and is not funded by it; running it unbudgeted would put the 12-hour whole-cell wall at risk.",
+      "resume": "E8B could resume a crashed cell from a verified checkpoint. E10 never resumes: a leftover training state is a hard refusal, because continuing an interrupted trajectory is a retry and no retry exists without a fresh explicit authorization record.",
+      "wall_enforcement": "E8B carried an 8-hour wall inside its recipe and checked it every 25 training steps. The E10 recipe deliberately carries no resource field; the 12-hour whole-cell wall is imposed by the signed cell permit and enforced at every stage boundary, every optimizer step and at finalisation on every exit path.",
+      "artefact_tree": "E10 publishes scientific artefacts to results/experiments/e10_capacity_360m_core/, beside rather than inside the immutable Phase-0/Phase-1 governance tree, so the no-scientific-outputs proof over that tree keeps its meaning.",
+      "halting_and_accounting": "every gate halt, lock, ledger charge and identity ceiling is E10's own. No E10 path reads or writes E8B's authorisation state, gate-halt records, run locks, result tree or identity ledger."
+    },
+    "frozen_recipe": {
+      "cells": 12,
+      "digests": {
+        "B4_train_40k_seed0": "11002db9f3dbf8f9f86f0808b5883386b46ea44ff901260c9534d6096cdf8c3f",
+        "B4r_train_40k_seed0": "e1ebf308f642958f8b593428d923cb5262cf0fdbc438da0d3acfeb95443317ae",
+        "B4_train_40k_seed1": "c3b17ae72d968219904a6a67605a5f094b8ed30534e17068c3010a744bc97bc5",
+        "B4r_train_40k_seed1": "4171f64405b3c9a7c282ed393858db5d3bf552684f84b157aec6963d2fda0021",
+        "B4_train_40k_seed2": "d5f58b7e43e9adf1beea45261c1b856256cddb27b7e649e6404da5d0b2711a6a",
+        "B4r_train_40k_seed2": "76994deae525ea791f6e214ef541c00e02ccd0fa95c63e6b19ed40e54c1ba6be",
+        "B4_train_250k_seed0": "9a1bb08eb7cdfd654cd54f08eb3abef155db4bfe3f5db427d1ff9df6cb1e0895",
+        "B4r_train_250k_seed0": "ce572073cb8047aa4dd238e4796a9c302d2ae48e59c5db211402be4a9f458714",
+        "B4_train_250k_seed1": "e0f5f76c3199f82ac8543a744f1531ace03f917cc5ee05eba3efac9db7b1838d",
+        "B4r_train_250k_seed1": "b0d0a9b9579777a2dfd449f7cf038e92f2f46434ed660bd0ba17b52b269cd7aa",
+        "B4_train_250k_seed2": "d18e15836efb534eb0489c60b8899b123609c7364d2445712fc121b95f3c19ca",
+        "B4r_train_250k_seed2": "8e460859ad8c86ac52c8ed77e9ffb48b2f05fa2e2ec148bce89c396cdc3c8125"
+      },
+      "dev_evaluation_epochs": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        10,
+        13,
+        16,
+        19,
+        22
+      ],
+      "canonical_epoch": 22
+    },
+    "training_control_flow": {
+      "epoch_loops": 1,
+      "early_exit_statements": 0,
+      "guarded_optimizer_step_call_sites": 1,
+      "bare_optimizer_steps": 0,
+      "frozen_epochs": 22,
+      "scheduler_horizon_epochs": 100
+    },
+    "stage_coverage": {
+      "required_stages": [
+        "setup",
+        "training",
+        "development_evaluation",
+        "g14_diagnostics",
+        "final_r1_evaluation",
+        "result_publication"
+      ],
+      "guarded_stages": [
+        "development_evaluation",
+        "final_r1_evaluation",
+        "g14_diagnostics",
+        "result_publication",
+        "setup",
+        "training"
+      ],
+      "unguarded": 0
+    },
+    "frozen_plan": {
+      "cells": 12,
+      "pair_preserving": true,
+      "adaptive": false
+    },
+    "resource_policy": {
+      "per_cell_wall_clock_hours": 12.0,
+      "e10_per_identity_ceiling_hours": 40.0,
+      "programme_wide_identity_ceiling_hours": 40.0,
+      "effective_identity_ceiling_hours": 40.0,
+      "headroom_floor_hours": 1.0,
+      "automatic_retries_per_identity": 0,
+      "max_authorized_retries_per_identity": 1,
+      "wall_source": "config.E10_PER_CELL_WALL_CLOCK_HOURS",
+      "ceiling_rule": "min(E10_PER_IDENTITY_CEILING_HOURS, PER_MODEL_IDENTITY_CEILING_HOURS)"
+    },
+    "no_automatic_retry": {
+      "files_scanned": 104,
+      "automatic_retry_writers": 0,
+      "automatic_retry_call_sites": 0,
+      "automatic_retries_per_identity": 0
+    },
+    "analysis_refuses_incomplete_matrix": {
+      "refused": true,
+      "refusal": "cell B4/train_40k/seed0 has no published result at /scratch/Efficient Vision-Language Reasoning with Small Language Models/results/experiments/e10_capacity_360m_core/e10_core_B4_train_40k_seed0.json; a missing cell is never imputed"
+    },
+    "scientific_core": {
+      "refused": true,
+      "refusal": "E10 CORE REFUSED: scientific authorization is None",
+      "e10_training_authorized": null
+    },
+    "no_scientific_execution": {
+      "published_cell_records": 0,
+      "checkpoint_files": 0,
+      "charged_core_cells": 0,
+      "e10_training_authorized": null
+    },
+    "data_contract": {
+      "manifests": {
+        "dev": "95d1b504dcc4deb7d69ba0c9e293d1c00bae93df4b6907174a1dd615cb93cdc9",
+        "train_250k": "be7d867afd2757a631145bc1c56c3b1a4dcf43784c1a6abf1c3b75452b865074",
+        "train_40k": "cda03c133e581d486c1e29f6d99376ee59f9841564b3fb890bc401f4da5c90d2"
+      },
+      "manifest_rows": {
+        "train_40k": 40000,
+        "train_250k": 250000,
+        "dev": 7714
+      },
+      "token_stores": {
+        "image_tokens": "c852811a4e3393387012a099d3ad8d494fe4be0f3d95f70b4a1328db4ad59588",
+        "question_tokens": "503f33827f25202b979076333a4a5258b31808f674b31d521b4b43e098732037"
+      },
+      "answer_vocabulary_sha256": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680",
+      "answer_cache_sha256": "08f56d16b2f28a139248415cb633113e034ee23bf3d826b3f37d3eeb4d3e3e1c",
+      "clean_test_resolvable": false
+    },
+    "clean_test_accessed": false
+  },
+  "artefact_tree": {
+    "scientific_results": "results/experiments/e10_capacity_360m_core",
+    "checkpoints": "results/experiments/e10_capacity_360m_core/checkpoints",
+    "large_artefacts_tracked_by": "per-cell SHA-256 in the cell record",
+    "exists_yet": false
+  },
+  "clean_test_accessed": false
+}

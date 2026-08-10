@@ -12,11 +12,15 @@ Examples, from the project root with the project environment sourced:
     python -B -m experiments.e10_capacity_360m.run phase1-record
     python -B -m experiments.e10_capacity_360m.run phase1-repair-record
     python -B -m experiments.e10_capacity_360m.run phase1-verify
+    python -B -m experiments.e10_capacity_360m.run phase2-record
+    python -B -m experiments.e10_capacity_360m.run phase2-verify
     python -B -m experiments.e10_capacity_360m.run core-order
+    python -B -m experiments.e10_capacity_360m.run analysis
     python -B -m experiments.e10_capacity_360m.run core-cell B4 train_40k 0
 
-The final command is the required known-negative. It refused in Phase 0 and it
-still refuses after the Phase-1 guardrails: setting the resource constants
+The final command is the required known-negative. It refused in Phase 0, it
+still refused after the Phase-1 guardrails, and it still refuses now that Phase
+2 has implemented the scientific pipeline behind them: implementing a pipeline
 authorises nothing. It refuses before model, data, CUDA, result-directory or
 optimizer initialization.
 """
@@ -260,21 +264,18 @@ def core_cell(arm: str, scale: str, seed: int) -> int:
     # Deliberately the first operation: no output directory, model, data, CUDA,
     # ledger or imported E8B authorization can be reached before this refusal.
     e10.assert_core_entry_authorized(arm, scale, seed)
-    # Phase-1 guardrails. Unreachable while the scientific authorization is
-    # unset; when it is granted, no cell may start without the mandatory wall,
-    # the effective identity ceiling, the frozen order and the no-retry proof.
+    # Phase 2 replaced the guarded stub with the real scientific pipeline. The
+    # refusal above is unchanged and is still the first thing that happens, so
+    # this line stays unreachable while the scientific authorization is unset.
     #
-    # The whole cell lifecycle runs inside the guard, and every scientifically
-    # relevant stage runs inside guard.stage(). Training is not special: the
-    # same 12-hour deadline governs setup, the development evaluations, the
-    # G14 diagnostics, the final R1 evaluation and result publication. A stage
-    # left outside a wrapper cannot end as a completed cell.
-    with phase1.ScientificCellGuard(arm, scale, seed) as guard:
-        for stage in phase1.CELL_STAGES:
-            with guard.stage(stage):
-                raise AssertionError(
-                    "unreachable while E10 scientific execution is refused"
-                )
+    # The whole cell lifecycle runs inside phase1.ScientificCellGuard, and every
+    # scientifically relevant stage runs inside guard.stage(). Training is not
+    # special: the same 12-hour deadline governs setup, the development
+    # evaluations, the G14 diagnostics, the final R1 evaluation and result
+    # publication. A stage left outside a wrapper cannot end as a completed cell.
+    from experiments.e10_capacity_360m import science  # noqa: PLC0415
+
+    return science.run_core_cell(arm, scale, seed)
 
 
 def _frozen_tree_inventory(root: Path) -> dict:
@@ -451,6 +452,9 @@ def main(argv=None) -> int:
     subparsers.add_parser("phase1-record")
     subparsers.add_parser("phase1-repair-record")
     subparsers.add_parser("phase1-verify")
+    subparsers.add_parser("phase2-record")
+    subparsers.add_parser("phase2-verify")
+    subparsers.add_parser("analysis")
     subparsers.add_parser("core-order")
     cell = subparsers.add_parser("core-cell")
     cell.add_argument("arm")
@@ -479,6 +483,18 @@ def main(argv=None) -> int:
         result = phase1.write_phase1_repair_record()
     elif args.command == "phase1-verify":
         result = phase1.verify()
+    elif args.command == "phase2-record":
+        from experiments.e10_capacity_360m import phase2
+        result = phase2.write_phase2_records()
+    elif args.command == "phase2-verify":
+        from experiments.e10_capacity_360m import phase2
+        result = phase2.verify()
+    elif args.command == "analysis":
+        from experiments.e10_capacity_360m import analysis
+        # Refuses unless the exact frozen twelve-cell set exists and every
+        # pair and evidence identity reconciles; it never analyses a partial
+        # matrix and never imputes a missing cell.
+        return analysis.main()
     elif args.command == "core-order":
         result = core_order()
     elif args.command == "core-cell":

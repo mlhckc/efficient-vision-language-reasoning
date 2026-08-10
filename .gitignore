@@ -76,6 +76,16 @@ results/experiments/e9_compact_vlm/timing/*
 results/experiments/e10_capacity_360m/*
 !results/experiments/e10_capacity_360m/*.json
 
+# E10 360M scientific cells: the same policy as E8B. The per-cell JSON records
+# and the matrix analysis are tracked so every reported number can be checked
+# from a clone; the checkpoints and the per-row npz arrays stay local and are
+# tracked by the SHA-256 recorded inside each cell record. This tree is
+# deliberately separate from the Phase-0/Phase-1 governance tree above.
+!results/experiments/e10_capacity_360m_core/
+results/experiments/e10_capacity_360m_core/*
+!results/experiments/e10_capacity_360m_core/*.json
+!results/experiments/e10_capacity_360m_core/*.md
+
 # Python bytecode
 __pycache__/
 *.pyc

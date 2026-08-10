@@ -183,6 +183,30 @@ hash no longer matches the worktree.
   constants authorises nothing: `E10_TRAINING_AUTHORIZED` is still `None` and
   `run core-cell B4 train_40k 0` still refuses. See
   docs/experiments/e10_phase1_guardrails.md.
+- E10 Phase 2 (completed 10 August 2026) implemented the scientific pipeline
+  behind the reviewed Phase-1 guardrails, and executed none of it. New:
+  labelled train/dev loading against pinned manifest and token-store digests,
+  B4/B4r construction with the audited G13 order and the frozen parameter
+  counts, the 22-epoch loop with no early stopping, the pinned cadence
+  (1, 2, 3, 4, 5, 6, 8, 10, 13, 16, 19, 22) read from the frozen contract,
+  scheduler horizon 100 epochs, epoch 22 as the sole primary checkpoint and
+  result, the ported G14-FP32 scorer-identity gate at both stages, the final
+  canonical R1 evaluation with G9/G10/G11 and the pinned G21 scoring, atomic
+  publication with fail-closed cell reconciliation, and the frozen
+  post-matrix analysis that refuses anything short of the complete,
+  pair-preserved, accounting-reconciled twelve-cell set. Every stage runs
+  inside ScientificCellGuard and guarded_optimizer_step is the only path to
+  an optimizer step. Three deliberate differences from E8B are recorded: the
+  pinned cadence, no G8 overfit gate (the frozen Gate-1 per-cell budget does
+  not fund it), and no resume (a leftover training state is a hard refusal).
+  One item is flagged for the user rather than resolved: the frozen per-cell
+  budget's single extra full-development pass is implemented as the final
+  normal-condition R1 evaluation, and no visual-reliance intervention is
+  implemented because no E10 record registers one. Development-set work only,
+  and nothing scientific ran: `E10_TRAINING_AUTHORIZED` is still `None`,
+  `run core-cell B4 train_40k 0` still refuses, zero optimizer steps, zero
+  checkpoints, zero GPU-hours charged to any core cell. See
+  docs/experiments/e10_phase2_scientific_pipeline.md.
 - Current gate, updated 2 August 2026 (E8A/E8B/E9 programme). The user
   authorized the E8A frozen-SLM question-encoder branch, the E8B frozen-SLM
   readout and bounded-generation branch, and the E9 evaluation-only compact-VLM
