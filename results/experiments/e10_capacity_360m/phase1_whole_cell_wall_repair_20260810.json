@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "record_type": "e10_phase1_whole_cell_wall_repair",
+  "task_id": "e10-phase1-authorization-guardrails",
+  "status": "WHOLE_CELL_WALL_ENFORCED",
+  "NON_SCIENTIFIC": true,
+  "utc": "2026-08-10T19:27:40Z",
+  "binding": {
+    "source_digest": "7b91b0c24a0c7f3506158f1db2e6f8bbac58f4ed978578ddc52291f1733b4f34",
+    "source_files": {
+      "experiments/e10_capacity_360m/e10_common.py": "57eb0482e9de7a8d92cc27baf898ced848dc45cc89be151b75dd49f1b19e20d9",
+      "experiments/e10_capacity_360m/run.py": "586bcac5f838e4e8afe7f31d652828603dac75ba85b45a6591e321246638bd58",
+      "experiments/e10_capacity_360m/calibration.py": "8280a161bcd829521f660379f2f0dafc6fe04c7a8ab0ba75a1f6dcd544428b49",
+      "experiments/e10_capacity_360m/projection.py": "f3e3d4a911896b5d7403eeb0cc32f034cfafa5293f30310257516d4043211a0a",
+      "experiments/e10_capacity_360m/phase1.py": "167f9cede7826cf9dc98e96955c9514f25d17f39e3f99674b3c78382a9922daf",
+      "experiments/e8b_readout_generation/latents.py": "051604b60d1c8fce65e1fa2e9ec53b155fb4af41b7fe9377d009f39f04f0502f",
+      "experiments/e8b_readout_generation/readouts.py": "28acdf21c87b286c78dcc2ff2be24a4834dd21b265f4420b4014f8a9d1254ca6",
+      "experiments/e8b_readout_generation/training.py": "5ec731105db87b6b5aa16bca02e9c2e3705050a59ef297a4956480fccec44ce3",
+      "experiments/e8b_readout_generation/run.py": "d05c79a749f6c4dc17e37d81f4f7598ea7f74d2e6573c4feae8243c2253e1430",
+      "experiments/e8a_question_encoder/e8a_common.py": "cd6c8ce0f0f9d93ec367d9e4c9ec611e5768e334964fe6d7c18bb3a04a70ba20",
+      "experiments/e8a_question_encoder/g21_scorer.py": "22ea9c59082840a60568d7b804a3cb66ac0daccb7b503a6c50305d1354f2f40d",
+      "src/reasoner.py": "3faafcd25e3f9e233c5173b71c1e1bbdd92859047d7b701d97ee16049892062c",
+      "src/tokens_data.py": "9e24a76e177ca8d8145995d1224d611d7de9303d0ea2b79552b3e106c01caf05",
+      "src/utils.py": "3e9af4431b68f96c10d1d6d7842a82ffe34e9100c09e1206d05bbb112c01d3ee",
+      "tests/test_e10.py": "323a53a9b4a86176535d31801226568e34a215c625a1c919ed8ba412b8d1ff86",
+      "tests/test_e10_phase1.py": "46b90f831cf77e47a61d662b5d1176198c14be1213f5dc75b27b8fa1ef8d77ac",
+      "tests/run_all.py": "a7a61f4e805af43bfd064df0b4cfedd9eacb794e867d092c948b14366469b008"
+    },
+    "config_digest": "4b9fa43cb74b511c0bb6fda3c7c043d6047ef5e5e220c1abad6e35138f3df9ab",
+    "config_files": {
+      "config.py": "2612dfeaa2a2ca54888bd0be2004a90efaa533c16c75db2ed08baadf3f060574",
+      "requirements.lock.txt": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be"
+    },
+    "protocol_family": "e10-fp32-fixed22-core-360m-2026-08-10"
+  },
+  "reason": "The independent Phase-1 review returned CHANGES_REQUIRED on one scientific-execution blocker: the 12-hour limit was not a true whole-cell hard wall. A cell could finish training inside the wall, run an unguarded evaluation or G14 tail, cross the wall with no optimizer step and no voluntary check, and still exit with outcome completed and an over-wall charge.",
+  "review": {
+    "verdict": "CHANGES_REQUIRED",
+    "reviewed_head": "175d856bcb754e666bf448fd25b77313d5676870",
+    "blocking_defect": "the per-cell wall governed only guarded interactions, not the whole cell lifecycle"
+  },
+  "change_scope": {
+    "resource_constants_changed": false,
+    "scientific_recipe_changed": false,
+    "core_matrix_changed": false,
+    "model_pin_changed": false,
+    "phase0_record_rewritten": false,
+    "phase1_record_rewritten": false
+  },
+  "phase1_r1_source_digest": "dae2978dbd11ac5dd8a182c970f461eb47087813e8f7839203c77bea551f4ed2",
+  "phase1_r1_config_digest": "4b9fa43cb74b511c0bb6fda3c7c043d6047ef5e5e220c1abad6e35138f3df9ab",
+  "preserved_records": {
+    "phase1_binding_amendment_20260810.json": {
+      "location": "repository",
+      "sha256": "872591d2c89058ac843d12d3205cc29f1636ce63dbefeb9f2cd1a7caa114ef95"
+    },
+    "phase1_resource_policy_20260810.json": {
+      "location": "repository",
+      "sha256": "0cf96a0465b6fdc88e5797d2322db5785c54414aa7b54d2dc55cb0f5d6852a4c"
+    },
+    "phase1_a5_a8c_identity_governance_20260810.json": {
+      "location": "repository",
+      "sha256": "4ee2453cef6cb3497da8ead7f30577ed48d5b9bc217df53b90a4f18118fe8b9a"
+    }
+  },
+  "whole_cell_wall": {
+    "recipe_carries_wall_field": false,
+    "wall_imposed_by": "experiments.e10_capacity_360m.e10_common.CellExecutionPermit via ScientificCellGuard",
+    "wall_source": "config.E10_PER_CELL_WALL_CLOCK_HOURS",
+    "per_cell_wall_clock_hours": 12.0,
+    "scope": "whole cell lifecycle, not only training",
+    "required_guarded_stages": [
+      "setup",
+      "training",
+      "development_evaluation",
+      "g14_diagnostics",
+      "final_r1_evaluation",
+      "result_publication"
+    ],
+    "enforcement_points": [
+      "stage entry and stage exit for every stage in CELL_STAGES",
+      "every guarded optimizer step",
+      "finalisation on every exit path, including a normal exit in which nothing checked the wall",
+      "charge_core_cell_hours refuses a completed outcome above the wall",
+      "the spend-ledger validator refuses a completed core entry above the wall on read"
+    ],
+    "interrupts_in_flight_operations": false,
+    "guarantee": "a cell that crosses the wall cannot publish a successful scientific result, cannot be charged as completed, and cannot continue authorised scientific work under that permit",
+    "recipe_digests": {
+      "B4_train_40k_seed0": "11002db9f3dbf8f9f86f0808b5883386b46ea44ff901260c9534d6096cdf8c3f",
+      "B4r_train_40k_seed0": "e1ebf308f642958f8b593428d923cb5262cf0fdbc438da0d3acfeb95443317ae",
+      "B4_train_40k_seed1": "c3b17ae72d968219904a6a67605a5f094b8ed30534e17068c3010a744bc97bc5",
+      "B4r_train_40k_seed1": "4171f64405b3c9a7c282ed393858db5d3bf552684f84b157aec6963d2fda0021",
+      "B4_train_40k_seed2": "d5f58b7e43e9adf1beea45261c1b856256cddb27b7e649e6404da5d0b2711a6a",
+      "B4r_train_40k_seed2": "76994deae525ea791f6e214ef541c00e02ccd0fa95c63e6b19ed40e54c1ba6be",
+      "B4_train_250k_seed0": "9a1bb08eb7cdfd654cd54f08eb3abef155db4bfe3f5db427d1ff9df6cb1e0895",
+      "B4r_train_250k_seed0": "ce572073cb8047aa4dd238e4796a9c302d2ae48e59c5db211402be4a9f458714",
+      "B4_train_250k_seed1": "e0f5f76c3199f82ac8543a744f1531ace03f917cc5ee05eba3efac9db7b1838d",
+      "B4r_train_250k_seed1": "b0d0a9b9579777a2dfd449f7cf038e92f2f46434ed660bd0ba17b52b269cd7aa",
+      "B4_train_250k_seed2": "d18e15836efb534eb0489c60b8899b123609c7364d2445712fc121b95f3c19ca",
+      "B4r_train_250k_seed2": "8e460859ad8c86ac52c8ed77e9ffb48b2f05fa2e2ec148bce89c396cdc3c8125"
+    }
+  },
+  "scientific_execution": {
+    "optimizer_steps": 0,
+    "scientific_cells_executed": 0,
+    "gpu_hours_charged": 0.0,
+    "e10_training_authorized": null
+  }
+}

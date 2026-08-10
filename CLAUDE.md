@@ -145,9 +145,20 @@ hash no longer matches the worktree.
   returned PASS with one execution-readiness finding. The user set the two E10
   resource constants and the retry policy; nothing scientific was authorised.
   Binding: `E10_PER_CELL_WALL_CLOCK_HOURS = 12.0` is a HARD executable
-  operational halt per scientific cell, not a projection field; a cell that
-  reaches it fails closed, is charged and recorded as halted, and never
-  continues. `E10_PER_IDENTITY_CEILING_HOURS = 40.0` is E10-specific and may
+  WHOLE-CELL operational halt, not a projection field and not a training-only
+  bound. The same deadline governs setup, training, the development
+  evaluations, the G14 diagnostics, the final R1 evaluation and result
+  publication. Every stage runs inside a guarded wrapper; a `completed`
+  outcome requires every stage to have closed inside the wall; finalisation
+  re-derives the deadline on every exit path, including a normal exit in which
+  nothing checked; and accounting plus ledger validation independently refuse
+  a `completed` cell above the wall. The guard does NOT interrupt an in-flight
+  operation: the guarantee is that a crossing can never publish a successful
+  scientific result, can never be charged as completed, and can never continue
+  authorised scientific work under that permit. The independent Phase-1 review
+  returned CHANGES_REQUIRED because the first implementation enforced the wall
+  only at guarded interactions; that defect was reproduced and repaired, and
+  the frozen recipe was not touched. `E10_PER_IDENTITY_CEILING_HOURS = 40.0` is E10-specific and may
   never be more permissive than the programme-wide bound: every gate uses
   min(E10_PER_IDENTITY_CEILING_HOURS, PER_MODEL_IDENTITY_CEILING_HOURS),
   computed once in e10_common.effective_identity_ceiling_hours, and no E10

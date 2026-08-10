@@ -330,14 +330,21 @@ def test_wall_halt_accounts_and_cannot_silently_continue() -> None:
                 guard = phase1.ScientificCellGuard(
                     "B4r", "train_40k", 0, started_monotonic_ns=expired
                 )
-                with guard:
-                    _must_raise(e10.CellWallExceeded, guard.check, "per-cell wall")
-                    # Latched: no later call may continue the cell.
-                    _must_raise(e10.CellWallExceeded, guard.check)
-                    _must_raise(
-                        e10.CellWallExceeded,
-                        lambda: guard.guarded_optimizer_step(optimizer),
-                    )
+
+                def cell() -> None:
+                    with guard:
+                        _must_raise(
+                            e10.CellWallExceeded, guard.check, "per-cell wall"
+                        )
+                        # Latched: no later call may continue the cell.
+                        _must_raise(e10.CellWallExceeded, guard.check)
+                        _must_raise(
+                            e10.CellWallExceeded,
+                            lambda: guard.guarded_optimizer_step(optimizer),
+                        )
+
+                # The block cannot return quietly once the wall was reached.
+                _must_raise(e10.CellWallExceeded, cell, "per-cell wall")
                 assert guard.halted is True
                 assert optimizer.steps == 0
 
@@ -364,12 +371,209 @@ def test_wall_halt_accounts_and_cannot_silently_continue() -> None:
                 assert halt["spend_entry_id"] == core[0]["entry_id"]
 
                 # Positive control: inside the wall the same gate permits one
-                # step, so the refusals above are not vacuous.
+                # step and a completed cell, so the refusals above are not
+                # vacuous.
                 fresh = phase1.ScientificCellGuard("B4", "train_40k", 0)
                 with fresh:
-                    fresh.check("entry")
-                    fresh.guarded_optimizer_step(optimizer)
+                    for name in phase1.CELL_STAGES:
+                        with fresh.stage(name):
+                            if name == "training":
+                                fresh.guarded_optimizer_step(optimizer)
                 assert optimizer.steps == 1
+                assert fresh.halted is False
+                assert fresh._finalized["outcome"] == "completed"
+
+
+# 8b. Regression: an unguarded non-training tail crosses the whole-cell wall.
+
+def test_unguarded_tail_crossing_the_wall_cannot_complete() -> None:
+    """The exact failure the independent Phase-1 review demonstrated.
+
+    Training finishes inside the wall, an unguarded evaluation or G14 tail
+    crosses hour 12, and nothing steps the optimizer or checks the guard after
+    the crossing. The cell must not end as completed.
+    """
+    with tempfile.TemporaryDirectory() as directory:
+        root = Path(directory)
+        output = root / "out"
+        output.mkdir()
+        with _strict_state_restored(), _temporary_shared_paths(root) as paths:
+            _write_ledgers(paths["SPEND_LEDGER"], paths["RETRY_LEDGER"])
+            patches = _authorized_core({"OUT_DIR": output})
+            with patches[0], patches[1], patches[2]:
+                e10.enable_strict_determinism()
+                optimizer = _SpyOptimizer()
+                # Two seconds of wall remain when the cell opens.
+                start = time.monotonic_ns() - WALL_NS + 2_000_000_000
+                guard = phase1.ScientificCellGuard(
+                    "B4", "train_40k", 0, started_monotonic_ns=start
+                )
+
+                def cell() -> None:
+                    with guard:
+                        with guard.stage("setup"):
+                            pass
+                        with guard.stage("training"):
+                            guard.guarded_optimizer_step(optimizer)
+                        # The unguarded tail. Real time crosses the deadline
+                        # here; no optimizer step and no guard check follow.
+                        remaining_ns = (
+                            guard.permit.deadline_monotonic_ns - time.monotonic_ns()
+                        )
+                        time.sleep(max(0.05, remaining_ns / 1e9 + 0.10))
+
+                error = _must_raise(e10.CellWallExceeded, cell, "per-cell wall")
+                assert "before finalisation" in str(error)
+                assert optimizer.steps == 1
+
+                # The cell cannot complete and cannot publish success.
+                entries = [entry for entry in e10.read_spend_ledger()["entries"]
+                           if entry["context"] == "e10_core_cell"]
+                assert len(entries) == 1
+                assert entries[0]["outcome"] == "wall_clock_halted"
+                assert entries[0]["gpu_occupancy_ns"] > WALL_NS
+                assert e10.identity_hours("pretrained_smollm2_360m") > 12.0
+                assert sorted(output.glob("cell_completed_*.json")) == []
+                halts = sorted(output.glob("cell_wall_clock_halted_*.json"))
+                assert len(halts) == 1
+                halt = json.loads(halts[0].read_text())
+                assert halt["status"] == "WALL_CLOCK_HALTED"
+                assert halt["scientific_success"] is False
+                assert halt["wall_reached_before_finalisation"] is True
+                assert halt["guarded_stages_completed"] == ["setup", "training"]
+                assert halt["required_stages"] == list(phase1.CELL_STAGES)
+
+                # Subsequent guard use refuses.
+                assert guard.halted is True
+                _must_raise(e10.CellWallExceeded, guard.check)
+                _must_raise(
+                    e10.CellWallExceeded,
+                    lambda: guard.guarded_optimizer_step(optimizer),
+                )
+                _must_raise(
+                    e10.CellWallExceeded,
+                    lambda: guard.stage("final_r1_evaluation").__enter__(),
+                )
+                assert optimizer.steps == 1
+
+
+# 8c. A cell that leaves a stage unguarded cannot complete either.
+
+def test_completed_requires_every_stage_inside_the_wall() -> None:
+    with tempfile.TemporaryDirectory() as directory:
+        root = Path(directory)
+        output = root / "out"
+        output.mkdir()
+        with _strict_state_restored(), _temporary_shared_paths(root) as paths:
+            _write_ledgers(paths["SPEND_LEDGER"], paths["RETRY_LEDGER"])
+            patches = _authorized_core({"OUT_DIR": output})
+            with patches[0], patches[1], patches[2]:
+                e10.enable_strict_determinism()
+                partial = phase1.ScientificCellGuard("B4r", "train_40k", 1)
+                with partial:
+                    for name in phase1.CELL_STAGES[:-1]:
+                        with partial.stage(name):
+                            pass
+                assert partial._finalized["outcome"] == "terminated"
+                assert sorted(output.glob("cell_completed_*.json")) == []
+
+                # Positive control: every stage guarded, inside the wall.
+                full = phase1.ScientificCellGuard("B4", "train_250k", 2)
+                with full:
+                    for name in phase1.CELL_STAGES:
+                        with full.stage(name):
+                            pass
+                assert full._finalized["outcome"] == "completed"
+                assert full.halted is False
+                assert full.stages_completed == phase1.CELL_STAGES
+                completed = sorted(output.glob("cell_completed_*.json"))
+                assert len(completed) == 1
+                payload = json.loads(completed[0].read_text())
+                assert payload["scientific_success"] is True
+                assert payload["wall_reached_before_finalisation"] is False
+                # A finalised cell cannot continue.
+                _must_raise(phase1.GuardrailError, full.check, "already finalised")
+
+
+# 8d. Accounting independently refuses an over-wall success.
+
+def test_accounting_refuses_over_wall_completed_entries() -> None:
+    with tempfile.TemporaryDirectory() as directory:
+        root = Path(directory)
+        with _strict_state_restored(), _temporary_shared_paths(root) as paths:
+            _write_ledgers(paths["SPEND_LEDGER"], paths["RETRY_LEDGER"])
+            patches = _authorized_core({"OUT_DIR": root})
+            with patches[0], patches[1], patches[2]:
+                e10.enable_strict_determinism()
+                permit = e10.authorize_cell_execution("B4", "train_40k", 0)
+                # A caller that under-reports occupancy cannot buy a success:
+                # the permit's own elapsed time is checked as well.
+                expired = e10.authorize_cell_execution(
+                    "B4", "train_40k", 0,
+                    started_monotonic_ns=time.monotonic_ns() - WALL_NS - 1,
+                )
+                for target, occupancy in (
+                    (permit, WALL_NS + 1),
+                    (expired, 1),
+                ):
+                    _must_raise(
+                        AssertionError,
+                        lambda t=target, o=occupancy: e10.charge_core_cell_hours(
+                            t, occupancy_ns=o, outcome="completed",
+                            started_utc="2026-08-10T00:00:00Z",
+                            ended_utc="2026-08-10T12:00:01Z",
+                        ),
+                        "cannot be recorded as completed",
+                    )
+                assert [entry for entry in e10.read_spend_ledger()["entries"]
+                        if entry["context"] == "e10_core_cell"] == []
+                # A halted charge above the wall is accepted and recorded.
+                charge = e10.charge_core_cell_hours(
+                    expired, occupancy_ns=WALL_NS + 1,
+                    outcome="wall_clock_halted",
+                    started_utc="2026-08-10T00:00:00Z",
+                    ended_utc="2026-08-10T12:00:01Z",
+                )
+                assert charge["outcome"] == "wall_clock_halted"
+
+                # A forged over-wall success is rejected by ledger validation,
+                # so a bug in the guard layer still cannot publish one.
+                forged = e10._initial_spend_ledger()
+                body = {
+                    "identity": "pretrained_smollm2_360m",
+                    "arm": "B4",
+                    "context": "e10_core_cell",
+                    "cell": ["B4", "train_40k", 0],
+                    "gpu_occupancy_ns": WALL_NS + 1,
+                    "measurement": "process_monotonic_ns",
+                    "outcome": "completed",
+                    "host": "unit-test-host",
+                    "pid": 1,
+                    "started_utc": "2026-08-10T00:00:00Z",
+                    "ended_utc": "2026-08-10T12:00:01Z",
+                    "source_digest": "1" * 64,
+                    "config_digest": "2" * 64,
+                    "protocol_family": e10.PROTOCOL_FAMILY,
+                    "claim_sha256": None,
+                    "recipe_digests": {"B4_train_40k_seed0": "4" * 64},
+                }
+                forged["entries"] = [
+                    {"entry_id": e10.sha256_bytes(e10.canonical_json_bytes(body)),
+                     **body}
+                ]
+                _must_raise(
+                    AssertionError,
+                    lambda: e10._validate_spend_ledger(forged),
+                    "completed cell above",
+                )
+                # The same entry at exactly the wall is admissible, so the
+                # rejection is a wall test and not a blanket refusal.
+                body["gpu_occupancy_ns"] = WALL_NS
+                forged["entries"] = [
+                    {"entry_id": e10.sha256_bytes(e10.canonical_json_bytes(body)),
+                     **body}
+                ]
+                assert e10._validate_spend_ledger(forged) == forged
 
 
 # 10 and 11. The frozen order and B4/B4r pair preservation are exact.
@@ -473,6 +677,9 @@ TESTS = (
     test_automatic_retry_is_impossible,
     test_retry_without_fresh_authorization_refuses,
     test_wall_halt_accounts_and_cannot_silently_continue,
+    test_unguarded_tail_crossing_the_wall_cannot_complete,
+    test_completed_requires_every_stage_inside_the_wall,
+    test_accounting_refuses_over_wall_completed_entries,
     test_frozen_twelve_cell_order_and_pair_preservation,
     test_frozen_result_trees_are_unchanged,
     test_embargo_and_output_guards_still_pass,

@@ -50,6 +50,42 @@ function in the E10 package that calls `optimizer.step()`; it now accepts the
 cell permit as well as the calibration permit, so a scientific training loop
 cannot step outside the wall.
 
+The wall governs the whole cell lifecycle, not only training. The independent
+Phase-1 review returned CHANGES_REQUIRED on exactly this point: the first
+implementation enforced the deadline only at guarded interactions, so a cell
+could finish training inside the wall, run an unguarded evaluation or G14 tail,
+cross hour 12 with no optimizer step and no voluntary check, and still exit
+with `outcome=completed` and an over-wall charge. That behaviour was
+reproduced and is now impossible. Four independent mechanisms enforce it:
+
+1. Every scientifically relevant stage runs inside `guard.stage(name)`, which
+   checks the deadline on entry and again on exit. The required stages are
+   `setup`, `training`, `development_evaluation`, `g14_diagnostics`,
+   `final_r1_evaluation` and `result_publication`, and `run.core_cell` is
+   written in exactly that shape.
+2. A `completed` outcome requires every one of those stages to have closed
+   inside the wall. A cell that leaves any stage unguarded is finalised as
+   `terminated`, never as a success.
+3. Finalisation re-derives the current monotonic time against the permit
+   deadline on every exit path, including a normal exit in which nothing
+   checked the wall. A crossing forces the `wall_clock_halted` outcome, latches
+   the halt, writes the halt record, charges the consumed time and raises out
+   of the `with` block so the crossing cannot return silently.
+4. Accounting refuses over-wall success independently of the guard.
+   `charge_core_cell_hours` takes the signed permit and rejects a `completed`
+   outcome when either the charged occupancy or the elapsed time the permit
+   itself implies exceeds the wall, and `_validate_spend_ledger` rejects a
+   `completed` core-cell entry above the wall when the ledger is read. Both
+   read the wall from `config`, never from a caller argument, so a bug in the
+   guard layer still cannot write or replay a valid over-wall success.
+
+What the guard does not do is interrupt an operation that is already running.
+A CUDA kernel, an evaluation pass or a generation tail in flight continues
+until it returns; the deadline is not an asynchronous kill. The guarantee is
+narrower and is stated as implemented: a cell that crosses the wall cannot
+publish a successful scientific result, cannot be charged as completed, and
+cannot continue authorised scientific work under that permit.
+
 Setting the two constants changes the live config digest, and adding the
 Phase-1 sources changes the live source digest, so every immutable Phase-0
 record would otherwise become unverifiable. The Phase-0 records are not
@@ -65,6 +101,7 @@ Commands run, from the project root with the environment sourced:
     python -B tests/test_e10_phase1.py
     python -B tests/run_all.py
     python -B -m experiments.e10_capacity_360m.run phase1-record
+    python -B -m experiments.e10_capacity_360m.run phase1-repair-record
     python -B -m experiments.e10_capacity_360m.run phase1-verify
     python -B -m experiments.e10_capacity_360m.run core-order
     python -B -m experiments.e10_capacity_360m.run core-cell B4 train_40k 0
@@ -93,6 +130,11 @@ Records, all immutable and non-scientific, under
   `0cf96a0465b6fdc88e5797d2322db5785c54414aa7b54d2dc55cb0f5d6852a4c`.
 - `phase1_a5_a8c_identity_governance_20260810.json`, SHA-256
   `4ee2453cef6cb3497da8ead7f30577ed48d5b9bc217df53b90a4f18118fe8b9a`.
+- `phase1_whole_cell_wall_repair_20260810.json`, SHA-256
+  `cc07adca2107dd11915ccad08be8a9a9a1bf493cb640a5493401e8d78acbb0de`, written
+  after the CHANGES_REQUIRED review. It records the blocking defect, the
+  implemented whole-cell semantics and the three revision-1 records it carries
+  forward; none of them was rewritten.
 
 ## Results
 
@@ -119,19 +161,40 @@ Verification:
 - The E8A, E8B and E9 result trees hash to their pre-implementation baselines
   (111, 201 and 62 files), and `git diff` against the base commit over those
   three directories is empty.
-- 12 focused Phase-1 checks pass; `tests/test_e10.py` passes 21 checks; the
+- 15 focused Phase-1 checks pass; `tests/test_e10.py` passes 21 checks; the
   full suite passes all fifteen modules.
+- The whole-cell regression reproduces the reviewer's case directly. Before the
+  repair the cell exited quietly with `guard.halted = False`, a ledger entry of
+  `outcome = completed` at 12.0 charged hours and a record of
+  `status = COMPLETED`. After the repair the same script raises
+  `CellWallExceeded` out of the `with` block, `guard.halted` is `True`, the
+  ledger entry is `outcome = wall_clock_halted`, the record is
+  `status = WALL_CLOCK_HALTED` with `scientific_success = false`, and no
+  completed record exists. A forged `completed` ledger entry above the wall is
+  rejected by validation, while the same entry exactly at the wall is accepted.
 - The source scan over 101 project files finds no code path that writes a
   retry authorization record and no call site that consumes a retry.
 
 ## Decisions and problems
 
-The reviewer's finding could have been repaired by putting
+The Phase-0 reviewer's finding could have been repaired by putting
 `wall_clock_halt_hours` back into the recipe. That was rejected: the recipe
 digest is the scientific identity of a cell, it is pinned in the Phase-0 recipe
 contract, and a resource bound is not part of it. Imposing the wall through the
 permit keeps the frozen matrix bit-identical and still makes the wall
 mandatory, which the tests check from both directions.
+
+The first implementation of that permit was not enough, and the independent
+Phase-1 review was right to block it. Making the deadline visible only at
+guarded interactions left the wall as an opt-in that a future evaluation or
+G14 tail could simply not call. The repair chose mandatory stage wrappers plus
+fail-closed finalisation over a watchdog thread: a thread could latch the halt
+a little sooner but still could not interrupt an in-flight kernel, and it would
+introduce concurrent access to the shared ledger from a background thread. The
+chosen design keeps all accounting on one thread and moves the burden of proof
+onto the cell: a successful cell must show that every stage closed inside the
+wall. Where the two designs genuinely differ is in how quickly a crossing is
+noticed, and that difference is documented rather than papered over.
 
 Setting the constants necessarily moved both binding digests. Rewriting the
 Phase-0 records to match was rejected as evidence tampering; leaving them

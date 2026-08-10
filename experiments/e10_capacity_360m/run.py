@@ -10,6 +10,7 @@ Examples, from the project root with the project environment sourced:
     python -B -m experiments.e10_capacity_360m.run calibration-grant
     python -B -m experiments.e10_capacity_360m.run phase1-policy
     python -B -m experiments.e10_capacity_360m.run phase1-record
+    python -B -m experiments.e10_capacity_360m.run phase1-repair-record
     python -B -m experiments.e10_capacity_360m.run phase1-verify
     python -B -m experiments.e10_capacity_360m.run core-order
     python -B -m experiments.e10_capacity_360m.run core-cell B4 train_40k 0
@@ -262,11 +263,18 @@ def core_cell(arm: str, scale: str, seed: int) -> int:
     # Phase-1 guardrails. Unreachable while the scientific authorization is
     # unset; when it is granted, no cell may start without the mandatory wall,
     # the effective identity ceiling, the frozen order and the no-retry proof.
+    #
+    # The whole cell lifecycle runs inside the guard, and every scientifically
+    # relevant stage runs inside guard.stage(). Training is not special: the
+    # same 12-hour deadline governs setup, the development evaluations, the
+    # G14 diagnostics, the final R1 evaluation and result publication. A stage
+    # left outside a wrapper cannot end as a completed cell.
     with phase1.ScientificCellGuard(arm, scale, seed) as guard:
-        guard.check("entry")
-        raise AssertionError(
-            "unreachable while E10 scientific execution is refused"
-        )
+        for stage in phase1.CELL_STAGES:
+            with guard.stage(stage):
+                raise AssertionError(
+                    "unreachable while E10 scientific execution is refused"
+                )
 
 
 def _frozen_tree_inventory(root: Path) -> dict:
@@ -417,7 +425,8 @@ def status() -> dict:
         ),
         "effective_identity_ceiling": e10.effective_identity_ceiling_hours(),
         "phase1_records": {
-            path.name: path.exists() for path in e10.PHASE1_PATHS
+            path.name: path.exists()
+            for path in e10.PHASE1_PATHS + (e10.PHASE1_REPAIR_PATH,)
         },
         "scientific_core_refusal": phase1.scientific_refusal(),
         "free_scratch_bytes": shutil.disk_usage(PROJECT_ROOT).free,
@@ -440,6 +449,7 @@ def main(argv=None) -> int:
     subparsers.add_parser("calibration-grant")
     subparsers.add_parser("phase1-policy")
     subparsers.add_parser("phase1-record")
+    subparsers.add_parser("phase1-repair-record")
     subparsers.add_parser("phase1-verify")
     subparsers.add_parser("core-order")
     cell = subparsers.add_parser("core-cell")
@@ -465,6 +475,8 @@ def main(argv=None) -> int:
         result = phase1.policy_record()
     elif args.command == "phase1-record":
         result = phase1.write_phase1_records()
+    elif args.command == "phase1-repair-record":
+        result = phase1.write_phase1_repair_record()
     elif args.command == "phase1-verify":
         result = phase1.verify()
     elif args.command == "core-order":

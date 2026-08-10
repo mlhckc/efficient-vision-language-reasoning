@@ -24,6 +24,7 @@ from __future__ import annotations
 import ast
 import inspect
 import time
+from contextlib import contextmanager
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable
@@ -35,6 +36,18 @@ from experiments.e10_capacity_360m import e10_common as e10  # noqa: E402
 
 
 TASK_ID = e10.PHASE1_TASK_ID
+
+# The whole cell lifecycle, not only training. Every one of these stages must
+# run inside ScientificCellGuard.stage(), and a cell that leaves any of them
+# unguarded can never be recorded as completed.
+CELL_STAGES = (
+    "setup",
+    "training",
+    "development_evaluation",
+    "g14_diagnostics",
+    "final_r1_evaluation",
+    "result_publication",
+)
 
 # The user's 2026-08-10 Phase-1 resource decisions, in the words that bind.
 USER_DECISIONS = {
@@ -276,12 +289,24 @@ class _CellState:
 
 
 class ScientificCellGuard:
-    """Hold one scientific cell inside its mandatory wall and accounting.
+    """Hold one scientific cell inside its mandatory whole-cell wall.
 
-    The guard is the only sanctioned way to run an E10 scientific cell. It
-    refuses to open while the core is unauthorised, halts the cell the moment
-    the wall is reached, latches that halt so no later call can continue, and
-    charges the occupancy either way before the failure propagates.
+    The wall governs the entire cell lifecycle, not only training. Two
+    mechanisms make that unavoidable rather than optional:
+
+    1. Every scientifically relevant stage in CELL_STAGES must run inside
+       ``stage()``, which checks the deadline on entry and on exit. A cell
+       that leaves any stage unguarded can never be recorded as completed.
+    2. Finalisation re-derives the current monotonic time against the permit
+       deadline on every exit path, including a normal exit in which nothing
+       checked the wall. A crossing forces the wall-clock halt outcome,
+       latches the halt and raises.
+
+    The guard does not interrupt an in-flight operation. A CUDA kernel, an
+    evaluation pass or a generation tail that is already running continues
+    until it returns. What the guard guarantees is that such a cell cannot
+    publish a successful scientific result, cannot be charged as completed,
+    and cannot continue authorised scientific work under that permit.
     """
 
     def __init__(self, arm: str, scale: str, seed: int, *,
@@ -303,6 +328,7 @@ class ScientificCellGuard:
         self._halted_reason: str | None = None
         self._finalized: dict | None = None
         self._finalize_attempted = False
+        self._stages_completed: set[str] = set()
 
     # -- lifecycle ------------------------------------------------------------
 
@@ -330,6 +356,10 @@ class ScientificCellGuard:
         if self._state is not None and not self._finalize_attempted:
             outcome = "completed" if exc_type is None else "terminated"
             self._finalize(outcome)
+        if exc_type is None and self._halted_reason is not None:
+            # A crossing that nothing observed during the cell still has to
+            # surface: a silent return would read as a successful cell.
+            raise CellWallExceeded(self._halted_reason)
         return False
 
     # -- enforcement ----------------------------------------------------------
@@ -342,11 +372,20 @@ class ScientificCellGuard:
     def permit(self) -> e10.CellExecutionPermit:
         return self._require_open().permit
 
+    @property
+    def stages_completed(self) -> tuple[str, ...]:
+        return tuple(stage for stage in CELL_STAGES
+                     if stage in self._stages_completed)
+
     def _require_open(self) -> _CellState:
         if self._state is None:
             raise GuardrailError("the E10 cell guard was not entered")
         if self._halted_reason is not None:
             raise CellWallExceeded(self._halted_reason)
+        if self._finalize_attempted:
+            raise GuardrailError(
+                "the E10 cell was already finalised; it cannot continue"
+            )
         return self._state
 
     def elapsed_seconds(self) -> float:
@@ -354,6 +393,13 @@ class ScientificCellGuard:
         if state is None:
             return 0.0
         return (self._clock() - state.started_monotonic_ns) / 1_000_000_000.0
+
+    def _deadline_reached(self, now_ns: int | None = None) -> bool:
+        state = self._state
+        if state is None:
+            return False
+        now_ns = self._clock() if now_ns is None else now_ns
+        return now_ns >= state.permit.deadline_monotonic_ns
 
     def check(self, context: str = "step") -> dict:
         """Re-check the wall. Raises once reached, and stays raised."""
@@ -363,6 +409,24 @@ class ScientificCellGuard:
         except CellWallExceeded as error:
             self._halt(f"{error} (at {context})")
             raise
+
+    @contextmanager
+    def stage(self, name: str):
+        """Run one scientifically relevant stage inside the whole-cell wall.
+
+        The deadline is checked when the stage opens and again when it closes,
+        and only a stage that closed inside the wall counts towards the
+        completeness requirement that a successful cell must satisfy.
+        """
+        if name not in CELL_STAGES:
+            raise GuardrailError(
+                f"{name!r} is not an E10 cell stage; expected one of "
+                f"{list(CELL_STAGES)}"
+            )
+        self.check(f"stage_enter:{name}")
+        yield self
+        self.check(f"stage_exit:{name}")
+        self._stages_completed.add(name)
 
     def guarded_optimizer_step(self, optimizer) -> dict:
         """Step only through the single authorised optimizer gate."""
@@ -376,7 +440,8 @@ class ScientificCellGuard:
     def _halt(self, reason: str) -> None:
         if self._halted_reason is None:
             self._halted_reason = reason
-            self._finalize("wall_clock_halted", detail=reason)
+            if not self._finalize_attempted:
+                self._finalize("wall_clock_halted", detail=reason)
 
     # -- accounting -----------------------------------------------------------
 
@@ -387,10 +452,34 @@ class ScientificCellGuard:
         # One attempt only. A failed attempt has already latched shared state,
         # and retrying it here would hide that latch behind a second error.
         self._finalize_attempted = True
-        occupancy_ns = max(0, self._clock() - state.started_monotonic_ns)
+        now_ns = self._clock()
+        occupancy_ns = max(0, now_ns - state.started_monotonic_ns)
+        # Fail closed on EVERY exit path. The deadline is re-derived here even
+        # when no optimizer step and no voluntary check ran during the overrun,
+        # so an unguarded evaluation, G14 or publication tail that crossed the
+        # wall can never be finalised as a completed cell.
+        if outcome != "wall_clock_halted" and self._deadline_reached(now_ns):
+            crossing = (
+                f"E10 per-cell wall of {state.permit.per_cell_wall_hours} hours "
+                f"was reached before finalisation of "
+                f"{self.arm}/{self.scale}/seed{self.seed}"
+            )
+            detail = f"{detail}; {crossing}" if detail else crossing
+            outcome = "wall_clock_halted"
+        if outcome == "wall_clock_halted" and self._halted_reason is None:
+            self._halted_reason = detail
+        # A successful cell must prove every scientifically relevant stage ran
+        # inside the wall. An unguarded stage is an unmeasured stage.
+        if outcome == "completed":
+            missing = [stage for stage in CELL_STAGES
+                       if stage not in self._stages_completed]
+            if missing:
+                outcome = "terminated"
+                unguarded = f"unguarded scientific stages: {missing}"
+                detail = f"{detail}; {unguarded}" if detail else unguarded
         try:
             charge = e10.charge_core_cell_hours(
-                self.arm, self.scale, self.seed,
+                state.permit,
                 occupancy_ns=occupancy_ns,
                 outcome=outcome,
                 started_utc=state.started_utc,
@@ -436,6 +525,10 @@ class ScientificCellGuard:
             "gpu_hours": charge["gpu_hours"],
             "spend_entry_id": charge["entry_id"],
             "detail": detail,
+            "scientific_success": outcome == "completed",
+            "guarded_stages_completed": list(self.stages_completed),
+            "required_stages": list(CELL_STAGES),
+            "wall_reached_before_finalisation": self._deadline_reached(),
             "automatic_retry_available": False,
             "retry_requires_fresh_authorization": True,
         }
@@ -476,6 +569,23 @@ def wall_reimposition_record() -> dict:
         ),
         "wall_source": "config.E10_PER_CELL_WALL_CLOCK_HOURS",
         "per_cell_wall_clock_hours": per_cell_wall_hours(),
+        "scope": "whole cell lifecycle, not only training",
+        "required_guarded_stages": list(CELL_STAGES),
+        "enforcement_points": [
+            "stage entry and stage exit for every stage in CELL_STAGES",
+            "every guarded optimizer step",
+            "finalisation on every exit path, including a normal exit in "
+            "which nothing checked the wall",
+            "charge_core_cell_hours refuses a completed outcome above the wall",
+            "the spend-ledger validator refuses a completed core entry above "
+            "the wall on read",
+        ],
+        "interrupts_in_flight_operations": False,
+        "guarantee": (
+            "a cell that crosses the wall cannot publish a successful "
+            "scientific result, cannot be charged as completed, and cannot "
+            "continue authorised scientific work under that permit"
+        ),
         "recipe_digests": recipes,
     }
 
@@ -654,9 +764,73 @@ def write_phase1_records() -> dict:
     }
 
 
+def write_phase1_repair_record() -> dict:
+    """Write the immutable whole-cell wall repair record, once."""
+    if e10.PHASE1_REPAIR_PATH.exists():
+        raise FileExistsError(
+            f"immutable E10 Phase-1 repair record exists: {e10.PHASE1_REPAIR_PATH}"
+        )
+    e10.assert_no_embargo_reference()
+    assert_scientific_core_refused()
+    preserved = {}
+    for filename, expected in e10.PHASE1_R1_RECORD_SHA256.items():
+        path = e10.OUT_DIR / filename
+        digest = e10.sha256_file(path)
+        if digest != expected:
+            raise GuardrailError(f"Phase-1 revision-1 record changed: {filename}")
+        preserved[filename] = {"location": "repository", "sha256": digest}
+    repair = {
+        "schema_version": 1,
+        "record_type": "e10_phase1_whole_cell_wall_repair",
+        "task_id": TASK_ID,
+        "status": "WHOLE_CELL_WALL_ENFORCED",
+        "NON_SCIENTIFIC": True,
+        "utc": e10.utc_now(),
+        "binding": e10.binding_record(),
+        "reason": (
+            "The independent Phase-1 review returned CHANGES_REQUIRED on one "
+            "scientific-execution blocker: the 12-hour limit was not a true "
+            "whole-cell hard wall. A cell could finish training inside the "
+            "wall, run an unguarded evaluation or G14 tail, cross the wall "
+            "with no optimizer step and no voluntary check, and still exit "
+            "with outcome completed and an over-wall charge."
+        ),
+        "review": {
+            "verdict": "CHANGES_REQUIRED",
+            "reviewed_head": "175d856bcb754e666bf448fd25b77313d5676870",
+            "blocking_defect": (
+                "the per-cell wall governed only guarded interactions, not the "
+                "whole cell lifecycle"
+            ),
+        },
+        "change_scope": {
+            "resource_constants_changed": False,
+            "scientific_recipe_changed": False,
+            "core_matrix_changed": False,
+            "model_pin_changed": False,
+            "phase0_record_rewritten": False,
+            "phase1_record_rewritten": False,
+        },
+        "phase1_r1_source_digest": e10.PHASE1_R1_SOURCE_DIGEST,
+        "phase1_r1_config_digest": e10.PHASE1_R1_CONFIG_DIGEST,
+        "preserved_records": preserved,
+        "whole_cell_wall": wall_reimposition_record(),
+        "scientific_execution": {
+            "optimizer_steps": 0,
+            "scientific_cells_executed": 0,
+            "gpu_hours_charged": 0.0,
+            "e10_training_authorized": None,
+        },
+    }
+    digest = e10.atomic_write_json(e10.PHASE1_REPAIR_PATH, repair)
+    return {"phase1_whole_cell_wall_repair": digest}
+
+
 def _validated_policy_record() -> dict:
     record = e10.read_json_mapping(e10.PHASE1_POLICY_PATH)
-    e10.assert_current_binding(record, "E10 Phase-1 resource policy")
+    e10.assert_recorded_binding(
+        record, "E10 Phase-1 resource policy", e10.PHASE1_POLICY_PATH
+    )
     if record.get("record_type") != "e10_phase1_resource_policy" \
             or record.get("task_id") != TASK_ID \
             or record.get("NON_SCIENTIFIC") is not True \
@@ -677,7 +851,9 @@ def _validated_policy_record() -> dict:
 
 def _validated_a5_a8c_record() -> dict:
     record = e10.read_json_mapping(e10.PHASE1_A5_A8C_PATH)
-    e10.assert_current_binding(record, "E10 Phase-1 A5/A8c governance")
+    e10.assert_recorded_binding(
+        record, "E10 Phase-1 A5/A8c governance", e10.PHASE1_A5_A8C_PATH
+    )
     if record.get("record_type") != "e10_phase1_a5_a8c_identity_governance" \
             or record.get("task_id") != TASK_ID \
             or record.get("status") != "OPEN_UNQUANTIFIED_RESERVE" \
@@ -696,6 +872,7 @@ def _validated_a5_a8c_record() -> dict:
 
 def verify() -> dict:
     """Validate every Phase-1 guardrail and its recorded evidence."""
+    repair = e10.validate_phase1_repair()
     amendment = e10.validate_phase1_amendment()
     policy = _validated_policy_record()
     a5_a8c = _validated_a5_a8c_record()
@@ -715,6 +892,12 @@ def verify() -> dict:
             raise GuardrailError(f"frozen {name} result tree changed: {observed}")
         frozen[name] = observed
     return {
+        "phase1_whole_cell_wall_repair": {
+            "sha256": e10.sha256_file(e10.PHASE1_REPAIR_PATH),
+            "status": repair["status"],
+            "preserved_records": len(repair["preserved_records"]),
+        },
+        "whole_cell_wall": wall_reimposition_record(),
         "phase1_binding_amendment": {
             "sha256": e10.sha256_file(e10.PHASE1_AMENDMENT_PATH),
             "preserved_records": len(amendment["preserved_records"]),

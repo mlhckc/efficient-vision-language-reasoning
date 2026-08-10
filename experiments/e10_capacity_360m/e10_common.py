@@ -254,6 +254,26 @@ PHASE1_AMENDMENT_PATH = OUT_DIR / "phase1_binding_amendment_20260810.json"
 PHASE1_POLICY_PATH = OUT_DIR / "phase1_resource_policy_20260810.json"
 PHASE1_A5_A8C_PATH = OUT_DIR / "phase1_a5_a8c_identity_governance_20260810.json"
 PHASE1_PATHS = (PHASE1_AMENDMENT_PATH, PHASE1_POLICY_PATH, PHASE1_A5_A8C_PATH)
+# The whole-cell wall repair after the independent Phase-1 CHANGES_REQUIRED
+# review. It moves the source digest again, so it adds one more link to the
+# chain and carries the three Phase-1 revision-1 records forward unchanged.
+PHASE1_REPAIR_PATH = OUT_DIR / "phase1_whole_cell_wall_repair_20260810.json"
+PHASE1_R1_SOURCE_DIGEST = (
+    "dae2978dbd11ac5dd8a182c970f461eb47087813e8f7839203c77bea551f4ed2"
+)
+# config.py is untouched by the repair, so the config digest is unchanged and
+# the pair differs from the live one in its source component alone.
+PHASE1_R1_CONFIG_DIGEST = (
+    "4b9fa43cb74b511c0bb6fda3c7c043d6047ef5e5e220c1abad6e35138f3df9ab"
+)
+PHASE1_R1_RECORD_SHA256 = {
+    "phase1_binding_amendment_20260810.json":
+        "872591d2c89058ac843d12d3205cc29f1636ce63dbefeb9f2cd1a7caa114ef95",
+    "phase1_resource_policy_20260810.json":
+        "0cf96a0465b6fdc88e5797d2322db5785c54414aa7b54d2dc55cb0f5d6852a4c",
+    "phase1_a5_a8c_identity_governance_20260810.json":
+        "4ee2453cef6cb3497da8ead7f30577ed48d5b9bc217df53b90a4f18118fe8b9a",
+}
 PHASE0_SOURCE_DIGEST = (
     "06f5583ae847cdc327b4099599895619af8d3350a2c0a88c89ff6aac0c6f323a"
 )
@@ -547,9 +567,71 @@ def assert_current_binding(record: dict, context: str) -> dict:
 def accepted_historical_bindings() -> tuple[tuple[str, str], ...]:
     """The (source, config) digest pairs a superseded record may still carry."""
     return (
+        (PHASE1_R1_SOURCE_DIGEST, PHASE1_R1_CONFIG_DIGEST),
         (PHASE0_SOURCE_DIGEST, PHASE0_CONFIG_DIGEST),
         (PRECORRECTION_SOURCE_DIGEST, PRECORRECTION_CONFIG_DIGEST),
     )
+
+
+def _amendment_chain() -> tuple[tuple[Path, Any], ...]:
+    """Newest first. Each link carries the records the next one bound."""
+    return (
+        (PHASE1_REPAIR_PATH, validate_phase1_repair),
+        (PHASE1_AMENDMENT_PATH, validate_phase1_amendment),
+        (SOURCE_CORRECTION_PATH, validate_source_correction),
+    )
+
+
+def validate_phase1_repair() -> dict:
+    """The immutable record of the whole-cell wall repair."""
+    repair = read_json_mapping(PHASE1_REPAIR_PATH)
+    required = {
+        "schema_version", "record_type", "task_id", "status", "NON_SCIENTIFIC",
+        "utc", "binding", "reason", "review", "change_scope",
+        "phase1_r1_source_digest", "phase1_r1_config_digest",
+        "preserved_records", "whole_cell_wall", "scientific_execution",
+    }
+    _require_exact_keys(repair, required, "E10 Phase-1 repair")
+    if repair["schema_version"] != 1 \
+            or repair["record_type"] != "e10_phase1_whole_cell_wall_repair" \
+            or repair["task_id"] != PHASE1_TASK_ID \
+            or repair["status"] != "WHOLE_CELL_WALL_ENFORCED" \
+            or repair["NON_SCIENTIFIC"] is not True \
+            or repair["phase1_r1_source_digest"] != PHASE1_R1_SOURCE_DIGEST \
+            or repair["phase1_r1_config_digest"] != PHASE1_R1_CONFIG_DIGEST \
+            or repair["scientific_execution"] != {
+                "optimizer_steps": 0,
+                "scientific_cells_executed": 0,
+                "gpu_hours_charged": 0.0,
+                "e10_training_authorized": None,
+            }:
+        raise AssertionError("E10 Phase-1 repair semantics mismatch")
+    _require_utc(repair["utc"], "E10 Phase-1 repair utc")
+    assert_current_binding(repair, "E10 Phase-1 repair")
+    if repair["change_scope"] != {
+        "resource_constants_changed": False,
+        "scientific_recipe_changed": False,
+        "core_matrix_changed": False,
+        "model_pin_changed": False,
+        "phase0_record_rewritten": False,
+        "phase1_record_rewritten": False,
+    }:
+        raise AssertionError("E10 Phase-1 repair scope mismatch")
+    preserved = repair["preserved_records"]
+    if not isinstance(preserved, dict) \
+            or set(preserved) != set(PHASE1_R1_RECORD_SHA256):
+        raise AssertionError("E10 Phase-1 repair record set mismatch")
+    for filename, expected_sha in PHASE1_R1_RECORD_SHA256.items():
+        reference = preserved[filename]
+        _require_exact_keys(
+            reference, {"location", "sha256"}, f"Phase-1 repair {filename}"
+        )
+        if reference["sha256"] != expected_sha \
+                or reference["location"] != "repository":
+            raise AssertionError(
+                f"E10 Phase-1 repair preserved record mismatch: {filename}"
+            )
+    return repair
 
 
 def validate_phase1_amendment() -> dict:
@@ -584,7 +666,9 @@ def validate_phase1_amendment() -> dict:
             }:
         raise AssertionError("E10 Phase-1 amendment semantics mismatch")
     _require_utc(amendment["utc"], "E10 Phase-1 amendment utc")
-    assert_current_binding(amendment, "E10 Phase-1 amendment")
+    assert_recorded_binding(
+        amendment, "E10 Phase-1 amendment", PHASE1_AMENDMENT_PATH
+    )
     if amendment["change_scope"] != {
         "resource_constants_set": True,
         "scientific_recipe_changed": False,
@@ -630,16 +714,15 @@ def assert_recorded_binding(record: dict, context: str, record_path: Path) -> di
     pair = (binding.get("source_digest"), binding.get("config_digest"))
     if pair not in accepted_historical_bindings():
         raise AssertionError(f"{context}: unrecorded stale binding refused")
-    filename = Path(record_path).name
-    observed = sha256_file(Path(record_path))
-    if PHASE1_AMENDMENT_PATH.exists():
-        amendment = validate_phase1_amendment()
-        reference = amendment["preserved_records"].get(filename)
-        if reference is not None and reference["sha256"] == observed:
-            return binding
-    if pair == (PRECORRECTION_SOURCE_DIGEST, PRECORRECTION_CONFIG_DIGEST):
-        correction = validate_source_correction()
-        reference = correction["preserved_records"].get(filename)
+    record_path = Path(record_path)
+    filename = record_path.name
+    observed = sha256_file(record_path)
+    for amendment_path, validator in _amendment_chain():
+        # A record is never carried forward by itself, and an absent link is
+        # simply not consulted; nothing here weakens the exact-bytes rule.
+        if amendment_path == record_path or not amendment_path.exists():
+            continue
+        reference = validator()["preserved_records"].get(filename)
         if reference is not None and reference["sha256"] == observed:
             return binding
     raise AssertionError(f"{context}: no amendment binds this record")
@@ -1704,6 +1787,17 @@ def _validate_spend_ledger(payload: dict) -> dict:
                 raise AssertionError(f"E10 spend entry {index} cell is invalid")
             if entry["claim_sha256"] is not None:
                 raise AssertionError("core spend cannot carry a calibration claim")
+            # Defence in depth for the whole-cell wall. A scientific cell that
+            # occupied more than the authorised wall can never be a success,
+            # whichever layer wrote the entry, so such a ledger is refused on
+            # read as well as on write.
+            if entry["outcome"] == "completed" and occupancy > int(
+                per_cell_wall_seconds() * 1_000_000_000
+            ):
+                raise AssertionError(
+                    f"E10 spend entry {index} claims a completed cell above "
+                    f"the {per_cell_wall_hours()} hour per-cell wall"
+                )
     return payload
 
 
@@ -2042,7 +2136,7 @@ CORE_CELL_OUTCOMES = {
 }
 
 
-def charge_core_cell_hours(arm: str, scale: str, seed: int, *,
+def charge_core_cell_hours(permit: CellExecutionPermit, *,
                            occupancy_ns: int, outcome: str,
                            started_utc: str, ended_utc: str) -> dict:
     """Append one E10 scientific-cell charge, including a halted cell.
@@ -2051,7 +2145,16 @@ def charge_core_cell_hours(arm: str, scale: str, seed: int, *,
     because a cell failed: a wall-clock halt is charged exactly like any other
     occupancy. The scientific authorization is re-checked here so no accounting
     path can become an entry point into unauthorised execution.
+
+    Defence in depth for the whole-cell wall: a "completed" outcome is refused
+    whenever the charged occupancy, or the elapsed time the signed permit
+    itself implies, exceeds the authorised per-cell wall. The wall and the
+    start of the cell both come from the permit and from config, never from a
+    caller argument, so a bug in the guard layer still cannot write a valid
+    over-wall success entry.
     """
+    _validate_cell_permit_identity(permit)
+    arm, scale, seed = permit.arm, permit.scale, permit.seed
     if (arm, scale, seed) not in CORE_CELLS:
         raise AssertionError(f"{arm}/{scale}/seed{seed} is not an E10 core cell")
     if outcome not in CORE_CELL_OUTCOMES:
@@ -2059,6 +2162,16 @@ def charge_core_cell_hours(arm: str, scale: str, seed: int, *,
     if not isinstance(occupancy_ns, int) or isinstance(occupancy_ns, bool) \
             or occupancy_ns < 0:
         raise AssertionError(f"invalid occupancy nanoseconds {occupancy_ns!r}")
+    wall_ns = int(per_cell_wall_seconds() * 1_000_000_000)
+    permit_elapsed_ns = time.monotonic_ns() - permit.started_monotonic_ns
+    if outcome == "completed" and (occupancy_ns > wall_ns
+                                   or permit_elapsed_ns > wall_ns):
+        raise AssertionError(
+            f"E10 ACCOUNTING REFUSED: {arm}/{scale}/seed{seed} cannot be "
+            f"recorded as completed above the {per_cell_wall_hours()} hour "
+            f"per-cell wall (charged {occupancy_ns} ns, permit elapsed "
+            f"{permit_elapsed_ns} ns, wall {wall_ns} ns)"
+        )
     assert_core_entry_authorized(arm, scale, seed)
     identity = model_identity(arm)
     recipe = build_recipe(arm, scale, seed)
