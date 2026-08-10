@@ -1,0 +1,2350 @@
+{
+  "metadata": {
+    "timestamp": "2026-08-10T03:09:47",
+    "git_commit": "c22e5f0",
+    "git_dirty": true,
+    "open_clip_version": "3.3.0",
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "h5py_version": "3.16.0",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "deterministic": true,
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "embed_dim": 512,
+    "top_k_answers": 100,
+    "n_train": 40000,
+    "n_val": 8000,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "hidden_dim": 512,
+    "dropout": 0.3,
+    "weight_decay": 0.0001
+  },
+  "e8b_final_report": {
+    "dated_utc": "2026-08-10",
+    "READ_ONLY": true,
+    "basis_commit": "1b4ea42",
+    "PRIMARY": {
+      "accuracy_by_arm_and_scale": {
+        "B1/train_40k": {
+          "seeds": [
+            0.54952,
+            0.54226,
+            0.54343
+          ],
+          "mean": 0.54507,
+          "sample_sd": 0.0039,
+          "min": 0.54226,
+          "max": 0.54952,
+          "range": 0.00726
+        },
+        "B1/train_250k": {
+          "seeds": [
+            0.58841,
+            0.59749,
+            0.59593
+          ],
+          "mean": 0.59394,
+          "sample_sd": 0.00486,
+          "min": 0.58841,
+          "max": 0.59749,
+          "range": 0.00908
+        },
+        "B2/train_40k": {
+          "seeds": [
+            0.53215,
+            0.53656,
+            0.53306
+          ],
+          "mean": 0.53392,
+          "sample_sd": 0.00233,
+          "min": 0.53215,
+          "max": 0.53656,
+          "range": 0.00441
+        },
+        "B2/train_250k": {
+          "seeds": [
+            0.59593,
+            0.60021,
+            0.60643
+          ],
+          "mean": 0.60086,
+          "sample_sd": 0.00528,
+          "min": 0.59593,
+          "max": 0.60643,
+          "range": 0.0105
+        },
+        "B3/train_40k": {
+          "seeds": [
+            0.53124,
+            0.47783,
+            0.5188
+          ],
+          "mean": 0.50929,
+          "sample_sd": 0.02795,
+          "min": 0.47783,
+          "max": 0.53124,
+          "range": 0.05341
+        },
+        "B3/train_250k": {
+          "seeds": [
+            0.59826,
+            0.59697,
+            0.59308
+          ],
+          "mean": 0.5961,
+          "sample_sd": 0.0027,
+          "min": 0.59308,
+          "max": 0.59826,
+          "range": 0.00518
+        },
+        "B1/scale_change_40k_to_250k": {
+          "mean_40k": 0.54507,
+          "mean_250k": 0.59394,
+          "change": 0.04887
+        },
+        "B2/scale_change_40k_to_250k": {
+          "mean_40k": 0.53392,
+          "mean_250k": 0.60086,
+          "change": 0.06694
+        },
+        "B3/scale_change_40k_to_250k": {
+          "mean_40k": 0.50929,
+          "mean_250k": 0.5961,
+          "change": 0.08681
+        }
+      },
+      "paired_contrasts_in_vocabulary": [
+        {
+          "contrast": "B3 - B2",
+          "scale": "train_40k",
+          "mean_paired_difference": -0.02463,
+          "per_seed_differences": [
+            -0.00091,
+            -0.05872,
+            -0.01426
+          ],
+          "seeds_above_zero": 0,
+          "seeds_below_zero": 3,
+          "ci95_low": -0.03333,
+          "ci95_high": -0.01619,
+          "excludes_zero": true,
+          "directional_rule_outcome": "negative directional evidence",
+          "accuracy_a": 0.50929,
+          "accuracy_b": 0.53392,
+          "n_rows": 7714,
+          "n_image_clusters": 768,
+          "bootstrap": {
+            "draws": 2000,
+            "seed": 0,
+            "resampling": "image-clustered, with replacement",
+            "implementation": "experiments/e8a_question_encoder/analyse_core.py"
+          },
+          "interval_caveat": "the 95 per cent interval is image-clustered over the development images and CONDITIONS ON THE FIXED TRAINED SEED SET: it propagates sampling variation over questions and images, not training variance. The three per-seed differences are reported beside it, as the canonical rule requires.",
+          "clean_causal_architecture_comparison": true
+        },
+        {
+          "contrast": "B2 - B1",
+          "scale": "train_40k",
+          "mean_paired_difference": -0.01115,
+          "per_seed_differences": [
+            -0.01737,
+            -0.0057,
+            -0.01037
+          ],
+          "seeds_above_zero": 0,
+          "seeds_below_zero": 3,
+          "ci95_low": -0.01965,
+          "ci95_high": -0.00299,
+          "excludes_zero": true,
+          "directional_rule_outcome": "negative directional evidence",
+          "accuracy_a": 0.53392,
+          "accuracy_b": 0.54507,
+          "n_rows": 7714,
+          "n_image_clusters": 768,
+          "bootstrap": {
+            "draws": 2000,
+            "seed": 0,
+            "resampling": "image-clustered, with replacement",
+            "implementation": "experiments/e8a_question_encoder/analyse_core.py"
+          },
+          "interval_caveat": "the 95 per cent interval is image-clustered over the development images and CONDITIONS ON THE FIXED TRAINED SEED SET: it propagates sampling variation over questions and images, not training variance. The three per-seed differences are reported beside it, as the canonical rule requires.",
+          "selection_rule_caveat": "B1 selects its primary checkpoint by the frozen section-7.3 rule (best development accuracy over a 100-epoch budget with early stopping, earliest epoch on ties), whereas B2 and B3 use the frozen epoch-22 rule with no early stopping. The differing checkpoint-selection rules MAY FAVOUR B1 relative to fixed-epoch systems, so a B1-versus-B2/B3 difference is a SYSTEM-LEVEL comparison of two complete configurations rather than a clean causal architecture contrast; architecture and selection rule are not separable in it. B3 minus B2 is the only contrast in this matrix whose two arms share a selection rule.",
+          "clean_causal_architecture_comparison": false
+        },
+        {
+          "contrast": "B3 - B1",
+          "scale": "train_40k",
+          "mean_paired_difference": -0.03578,
+          "per_seed_differences": [
+            -0.01828,
+            -0.06443,
+            -0.02463
+          ],
+          "seeds_above_zero": 0,
+          "seeds_below_zero": 3,
+          "ci95_low": -0.0442,
+          "ci95_high": -0.02749,
+          "excludes_zero": true,
+          "directional_rule_outcome": "negative directional evidence",
+          "accuracy_a": 0.50929,
+          "accuracy_b": 0.54507,
+          "n_rows": 7714,
+          "n_image_clusters": 768,
+          "bootstrap": {
+            "draws": 2000,
+            "seed": 0,
+            "resampling": "image-clustered, with replacement",
+            "implementation": "experiments/e8a_question_encoder/analyse_core.py"
+          },
+          "interval_caveat": "the 95 per cent interval is image-clustered over the development images and CONDITIONS ON THE FIXED TRAINED SEED SET: it propagates sampling variation over questions and images, not training variance. The three per-seed differences are reported beside it, as the canonical rule requires.",
+          "selection_rule_caveat": "B1 selects its primary checkpoint by the frozen section-7.3 rule (best development accuracy over a 100-epoch budget with early stopping, earliest epoch on ties), whereas B2 and B3 use the frozen epoch-22 rule with no early stopping. The differing checkpoint-selection rules MAY FAVOUR B1 relative to fixed-epoch systems, so a B1-versus-B2/B3 difference is a SYSTEM-LEVEL comparison of two complete configurations rather than a clean causal architecture contrast; architecture and selection rule are not separable in it. B3 minus B2 is the only contrast in this matrix whose two arms share a selection rule.",
+          "clean_causal_architecture_comparison": false
+        },
+        {
+          "contrast": "B3 - B2",
+          "scale": "train_250k",
+          "mean_paired_difference": -0.00475,
+          "per_seed_differences": [
+            0.00233,
+            -0.00324,
+            -0.01335
+          ],
+          "seeds_above_zero": 1,
+          "seeds_below_zero": 2,
+          "ci95_low": -0.01208,
+          "ci95_high": 0.00297,
+          "excludes_zero": false,
+          "directional_rule_outcome": "uncertain or mixed evidence",
+          "accuracy_a": 0.5961,
+          "accuracy_b": 0.60086,
+          "n_rows": 7714,
+          "n_image_clusters": 768,
+          "bootstrap": {
+            "draws": 2000,
+            "seed": 0,
+            "resampling": "image-clustered, with replacement",
+            "implementation": "experiments/e8a_question_encoder/analyse_core.py"
+          },
+          "interval_caveat": "the 95 per cent interval is image-clustered over the development images and CONDITIONS ON THE FIXED TRAINED SEED SET: it propagates sampling variation over questions and images, not training variance. The three per-seed differences are reported beside it, as the canonical rule requires.",
+          "clean_causal_architecture_comparison": true
+        },
+        {
+          "contrast": "B2 - B1",
+          "scale": "train_250k",
+          "mean_paired_difference": 0.00691,
+          "per_seed_differences": [
+            0.00752,
+            0.00272,
+            0.0105
+          ],
+          "seeds_above_zero": 3,
+          "seeds_below_zero": 0,
+          "ci95_low": -0.00112,
+          "ci95_high": 0.01491,
+          "excludes_zero": false,
+          "directional_rule_outcome": "uncertain or mixed evidence",
+          "accuracy_a": 0.60086,
+          "accuracy_b": 0.59394,
+          "n_rows": 7714,
+          "n_image_clusters": 768,
+          "bootstrap": {
+            "draws": 2000,
+            "seed": 0,
+            "resampling": "image-clustered, with replacement",
+            "implementation": "experiments/e8a_question_encoder/analyse_core.py"
+          },
+          "interval_caveat": "the 95 per cent interval is image-clustered over the development images and CONDITIONS ON THE FIXED TRAINED SEED SET: it propagates sampling variation over questions and images, not training variance. The three per-seed differences are reported beside it, as the canonical rule requires.",
+          "selection_rule_caveat": "B1 selects its primary checkpoint by the frozen section-7.3 rule (best development accuracy over a 100-epoch budget with early stopping, earliest epoch on ties), whereas B2 and B3 use the frozen epoch-22 rule with no early stopping. The differing checkpoint-selection rules MAY FAVOUR B1 relative to fixed-epoch systems, so a B1-versus-B2/B3 difference is a SYSTEM-LEVEL comparison of two complete configurations rather than a clean causal architecture contrast; architecture and selection rule are not separable in it. B3 minus B2 is the only contrast in this matrix whose two arms share a selection rule.",
+          "clean_causal_architecture_comparison": false
+        },
+        {
+          "contrast": "B3 - B1",
+          "scale": "train_250k",
+          "mean_paired_difference": 0.00216,
+          "per_seed_differences": [
+            0.00985,
+            -0.00052,
+            -0.00285
+          ],
+          "seeds_above_zero": 1,
+          "seeds_below_zero": 2,
+          "ci95_low": -0.00511,
+          "ci95_high": 0.00952,
+          "excludes_zero": false,
+          "directional_rule_outcome": "uncertain or mixed evidence",
+          "accuracy_a": 0.5961,
+          "accuracy_b": 0.59394,
+          "n_rows": 7714,
+          "n_image_clusters": 768,
+          "bootstrap": {
+            "draws": 2000,
+            "seed": 0,
+            "resampling": "image-clustered, with replacement",
+            "implementation": "experiments/e8a_question_encoder/analyse_core.py"
+          },
+          "interval_caveat": "the 95 per cent interval is image-clustered over the development images and CONDITIONS ON THE FIXED TRAINED SEED SET: it propagates sampling variation over questions and images, not training variance. The three per-seed differences are reported beside it, as the canonical rule requires.",
+          "selection_rule_caveat": "B1 selects its primary checkpoint by the frozen section-7.3 rule (best development accuracy over a 100-epoch budget with early stopping, earliest epoch on ties), whereas B2 and B3 use the frozen epoch-22 rule with no early stopping. The differing checkpoint-selection rules MAY FAVOUR B1 relative to fixed-epoch systems, so a B1-versus-B2/B3 difference is a SYSTEM-LEVEL comparison of two complete configurations rather than a clean causal architecture contrast; architecture and selection rule are not separable in it. B3 minus B2 is the only contrast in this matrix whose two arms share a selection rule.",
+          "clean_causal_architecture_comparison": false
+        }
+      ],
+      "scale_effects": [
+        {
+          "contrast": "B1 250k - B1 40k",
+          "arm": "B1",
+          "mean_paired_difference": 0.04887,
+          "per_seed_differences": [
+            0.03889,
+            0.05522,
+            0.0525
+          ],
+          "seeds_above_zero": 3,
+          "ci95_low": 0.03943,
+          "ci95_high": 0.05801,
+          "excludes_zero": true,
+          "directional_rule_outcome": "positive directional evidence",
+          "n_rows": 7714,
+          "n_image_clusters": 768,
+          "paired_on": "the same development rows; only the training set size differs",
+          "interval_caveat": "the 95 per cent interval is image-clustered over the development images and CONDITIONS ON THE FIXED TRAINED SEED SET: it propagates sampling variation over questions and images, not training variance. The three per-seed differences are reported beside it, as the canonical rule requires."
+        },
+        {
+          "contrast": "B2 250k - B2 40k",
+          "arm": "B2",
+          "mean_paired_difference": 0.06693,
+          "per_seed_differences": [
+            0.06378,
+            0.06365,
+            0.07337
+          ],
+          "seeds_above_zero": 3,
+          "ci95_low": 0.05683,
+          "ci95_high": 0.07633,
+          "excludes_zero": true,
+          "directional_rule_outcome": "positive directional evidence",
+          "n_rows": 7714,
+          "n_image_clusters": 768,
+          "paired_on": "the same development rows; only the training set size differs",
+          "interval_caveat": "the 95 per cent interval is image-clustered over the development images and CONDITIONS ON THE FIXED TRAINED SEED SET: it propagates sampling variation over questions and images, not training variance. The three per-seed differences are reported beside it, as the canonical rule requires."
+        },
+        {
+          "contrast": "B3 250k - B3 40k",
+          "arm": "B3",
+          "mean_paired_difference": 0.08681,
+          "per_seed_differences": [
+            0.06702,
+            0.11913,
+            0.07428
+          ],
+          "seeds_above_zero": 3,
+          "ci95_low": 0.07781,
+          "ci95_high": 0.0964,
+          "excludes_zero": true,
+          "directional_rule_outcome": "positive directional evidence",
+          "n_rows": 7714,
+          "n_image_clusters": 768,
+          "paired_on": "the same development rows; only the training set size differs",
+          "interval_caveat": "the 95 per cent interval is image-clustered over the development images and CONDITIONS ON THE FIXED TRAINED SEED SET: it propagates sampling variation over questions and images, not training variance. The three per-seed differences are reported beside it, as the canonical rule requires."
+        }
+      ],
+      "readouts": [
+        {
+          "arm": "B2",
+          "scale": "train_40k",
+          "readout": "R1",
+          "denominator": "in_vocabulary",
+          "scorer": "raw",
+          "seeds": [
+            0.53215,
+            0.53656,
+            0.53306
+          ],
+          "mean": 0.53392,
+          "sample_sd": 0.00233
+        },
+        {
+          "arm": "B2",
+          "scale": "train_40k",
+          "readout": "R1",
+          "denominator": "in_vocabulary",
+          "scorer": "normalised",
+          "seeds": [
+            0.53215,
+            0.53656,
+            0.53306
+          ],
+          "mean": 0.53392,
+          "sample_sd": 0.00233
+        },
+        {
+          "arm": "B2",
+          "scale": "train_40k",
+          "readout": "R1",
+          "denominator": "raw",
+          "scorer": "raw",
+          "seeds": [
+            0.41034,
+            0.41374,
+            0.41104
+          ],
+          "mean": 0.4117,
+          "sample_sd": 0.00179
+        },
+        {
+          "arm": "B2",
+          "scale": "train_40k",
+          "readout": "R1",
+          "denominator": "raw",
+          "scorer": "normalised",
+          "seeds": [
+            0.41034,
+            0.41374,
+            0.41104
+          ],
+          "mean": 0.4117,
+          "sample_sd": 0.00179
+        },
+        {
+          "arm": "B2",
+          "scale": "train_40k",
+          "readout": "R2",
+          "denominator": "in_vocabulary",
+          "scorer": "raw",
+          "seeds": [
+            0.53176,
+            0.53721,
+            0.53332
+          ],
+          "mean": 0.53409,
+          "sample_sd": 0.0028
+        },
+        {
+          "arm": "B2",
+          "scale": "train_40k",
+          "readout": "R2",
+          "denominator": "in_vocabulary",
+          "scorer": "normalised",
+          "seeds": [
+            0.53176,
+            0.53721,
+            0.53332
+          ],
+          "mean": 0.53409,
+          "sample_sd": 0.0028
+        },
+        {
+          "arm": "B2",
+          "scale": "train_40k",
+          "readout": "R2",
+          "denominator": "raw",
+          "scorer": "raw",
+          "seeds": [
+            0.41004,
+            0.41423,
+            0.41124
+          ],
+          "mean": 0.41184,
+          "sample_sd": 0.00216
+        },
+        {
+          "arm": "B2",
+          "scale": "train_40k",
+          "readout": "R2",
+          "denominator": "raw",
+          "scorer": "normalised",
+          "seeds": [
+            0.41004,
+            0.41423,
+            0.41124
+          ],
+          "mean": 0.41184,
+          "sample_sd": 0.00216
+        },
+        {
+          "arm": "B2",
+          "scale": "train_40k",
+          "readout": "R3",
+          "denominator": "in_vocabulary",
+          "scorer": "raw",
+          "seeds": [
+            0.5315,
+            0.53682,
+            0.5328
+          ],
+          "mean": 0.5337,
+          "sample_sd": 0.00277
+        },
+        {
+          "arm": "B2",
+          "scale": "train_40k",
+          "readout": "R3",
+          "denominator": "in_vocabulary",
+          "scorer": "normalised",
+          "seeds": [
+            0.5315,
+            0.53682,
+            0.5328
+          ],
+          "mean": 0.5337,
+          "sample_sd": 0.00277
+        },
+        {
+          "arm": "B2",
+          "scale": "train_40k",
+          "readout": "R3",
+          "denominator": "raw",
+          "scorer": "raw",
+          "seeds": [
+            0.40984,
+            0.41393,
+            0.41084
+          ],
+          "mean": 0.41154,
+          "sample_sd": 0.00214
+        },
+        {
+          "arm": "B2",
+          "scale": "train_40k",
+          "readout": "R3",
+          "denominator": "raw",
+          "scorer": "normalised",
+          "seeds": [
+            0.40984,
+            0.41393,
+            0.41084
+          ],
+          "mean": 0.41154,
+          "sample_sd": 0.00214
+        },
+        {
+          "arm": "B2",
+          "scale": "train_250k",
+          "readout": "R1",
+          "denominator": "in_vocabulary",
+          "scorer": "raw",
+          "seeds": [
+            0.59593,
+            0.60021,
+            0.60643
+          ],
+          "mean": 0.60086,
+          "sample_sd": 0.00528
+        },
+        {
+          "arm": "B2",
+          "scale": "train_250k",
+          "readout": "R1",
+          "denominator": "in_vocabulary",
+          "scorer": "normalised",
+          "seeds": [
+            0.59593,
+            0.60021,
+            0.60643
+          ],
+          "mean": 0.60086,
+          "sample_sd": 0.00528
+        },
+        {
+          "arm": "B2",
+          "scale": "train_250k",
+          "readout": "R1",
+          "denominator": "raw",
+          "scorer": "raw",
+          "seeds": [
+            0.45952,
+            0.46281,
+            0.46761
+          ],
+          "mean": 0.46331,
+          "sample_sd": 0.00407
+        },
+        {
+          "arm": "B2",
+          "scale": "train_250k",
+          "readout": "R1",
+          "denominator": "raw",
+          "scorer": "normalised",
+          "seeds": [
+            0.45952,
+            0.46281,
+            0.46761
+          ],
+          "mean": 0.46331,
+          "sample_sd": 0.00407
+        },
+        {
+          "arm": "B2",
+          "scale": "train_250k",
+          "readout": "R2",
+          "denominator": "in_vocabulary",
+          "scorer": "raw",
+          "seeds": [
+            0.5958,
+            0.60047,
+            0.60617
+          ],
+          "mean": 0.60081,
+          "sample_sd": 0.00519
+        },
+        {
+          "arm": "B2",
+          "scale": "train_250k",
+          "readout": "R2",
+          "denominator": "in_vocabulary",
+          "scorer": "normalised",
+          "seeds": [
+            0.5958,
+            0.60047,
+            0.60617
+          ],
+          "mean": 0.60081,
+          "sample_sd": 0.00519
+        },
+        {
+          "arm": "B2",
+          "scale": "train_250k",
+          "readout": "R2",
+          "denominator": "raw",
+          "scorer": "raw",
+          "seeds": [
+            0.45942,
+            0.46302,
+            0.46741
+          ],
+          "mean": 0.46328,
+          "sample_sd": 0.00401
+        },
+        {
+          "arm": "B2",
+          "scale": "train_250k",
+          "readout": "R2",
+          "denominator": "raw",
+          "scorer": "normalised",
+          "seeds": [
+            0.45942,
+            0.46302,
+            0.46741
+          ],
+          "mean": 0.46328,
+          "sample_sd": 0.00401
+        },
+        {
+          "arm": "B2",
+          "scale": "train_250k",
+          "readout": "R3",
+          "denominator": "in_vocabulary",
+          "scorer": "raw",
+          "seeds": [
+            0.59567,
+            0.60034,
+            0.60591
+          ],
+          "mean": 0.60064,
+          "sample_sd": 0.00513
+        },
+        {
+          "arm": "B2",
+          "scale": "train_250k",
+          "readout": "R3",
+          "denominator": "in_vocabulary",
+          "scorer": "normalised",
+          "seeds": [
+            0.59567,
+            0.60034,
+            0.60591
+          ],
+          "mean": 0.60064,
+          "sample_sd": 0.00513
+        },
+        {
+          "arm": "B2",
+          "scale": "train_250k",
+          "readout": "R3",
+          "denominator": "raw",
+          "scorer": "raw",
+          "seeds": [
+            0.45932,
+            0.46292,
+            0.46721
+          ],
+          "mean": 0.46315,
+          "sample_sd": 0.00395
+        },
+        {
+          "arm": "B2",
+          "scale": "train_250k",
+          "readout": "R3",
+          "denominator": "raw",
+          "scorer": "normalised",
+          "seeds": [
+            0.45932,
+            0.46292,
+            0.46721
+          ],
+          "mean": 0.46315,
+          "sample_sd": 0.00395
+        },
+        {
+          "arm": "B3",
+          "scale": "train_40k",
+          "readout": "R1",
+          "denominator": "in_vocabulary",
+          "scorer": "raw",
+          "seeds": [
+            0.53124,
+            0.47783,
+            0.5188
+          ],
+          "mean": 0.50929,
+          "sample_sd": 0.02794
+        },
+        {
+          "arm": "B3",
+          "scale": "train_40k",
+          "readout": "R1",
+          "denominator": "in_vocabulary",
+          "scorer": "normalised",
+          "seeds": [
+            0.53124,
+            0.47783,
+            0.5188
+          ],
+          "mean": 0.50929,
+          "sample_sd": 0.02794
+        },
+        {
+          "arm": "B3",
+          "scale": "train_40k",
+          "readout": "R1",
+          "denominator": "raw",
+          "scorer": "raw",
+          "seeds": [
+            0.40964,
+            0.36845,
+            0.40004
+          ],
+          "mean": 0.39271,
+          "sample_sd": 0.02155
+        },
+        {
+          "arm": "B3",
+          "scale": "train_40k",
+          "readout": "R1",
+          "denominator": "raw",
+          "scorer": "normalised",
+          "seeds": [
+            0.40964,
+            0.36845,
+            0.40004
+          ],
+          "mean": 0.39271,
+          "sample_sd": 0.02155
+        },
+        {
+          "arm": "B3",
+          "scale": "train_40k",
+          "readout": "R2",
+          "denominator": "in_vocabulary",
+          "scorer": "raw",
+          "seeds": [
+            0.53163,
+            0.47692,
+            0.51893
+          ],
+          "mean": 0.50916,
+          "sample_sd": 0.02863
+        },
+        {
+          "arm": "B3",
+          "scale": "train_40k",
+          "readout": "R2",
+          "denominator": "in_vocabulary",
+          "scorer": "normalised",
+          "seeds": [
+            0.53163,
+            0.47692,
+            0.51893
+          ],
+          "mean": 0.50916,
+          "sample_sd": 0.02863
+        },
+        {
+          "arm": "B3",
+          "scale": "train_40k",
+          "readout": "R2",
+          "denominator": "raw",
+          "scorer": "raw",
+          "seeds": [
+            0.40994,
+            0.36775,
+            0.40014
+          ],
+          "mean": 0.39261,
+          "sample_sd": 0.02208
+        },
+        {
+          "arm": "B3",
+          "scale": "train_40k",
+          "readout": "R2",
+          "denominator": "raw",
+          "scorer": "normalised",
+          "seeds": [
+            0.40994,
+            0.36775,
+            0.40014
+          ],
+          "mean": 0.39261,
+          "sample_sd": 0.02208
+        },
+        {
+          "arm": "B3",
+          "scale": "train_40k",
+          "readout": "R3",
+          "denominator": "in_vocabulary",
+          "scorer": "raw",
+          "seeds": [
+            0.53046,
+            0.4755,
+            0.5188
+          ],
+          "mean": 0.50825,
+          "sample_sd": 0.02896
+        },
+        {
+          "arm": "B3",
+          "scale": "train_40k",
+          "readout": "R3",
+          "denominator": "in_vocabulary",
+          "scorer": "normalised",
+          "seeds": [
+            0.53046,
+            0.4755,
+            0.5188
+          ],
+          "mean": 0.50825,
+          "sample_sd": 0.02896
+        },
+        {
+          "arm": "B3",
+          "scale": "train_40k",
+          "readout": "R3",
+          "denominator": "raw",
+          "scorer": "raw",
+          "seeds": [
+            0.40904,
+            0.36675,
+            0.40024
+          ],
+          "mean": 0.39201,
+          "sample_sd": 0.02231
+        },
+        {
+          "arm": "B3",
+          "scale": "train_40k",
+          "readout": "R3",
+          "denominator": "raw",
+          "scorer": "normalised",
+          "seeds": [
+            0.40904,
+            0.36675,
+            0.40024
+          ],
+          "mean": 0.39201,
+          "sample_sd": 0.02231
+        },
+        {
+          "arm": "B3",
+          "scale": "train_250k",
+          "readout": "R1",
+          "denominator": "in_vocabulary",
+          "scorer": "raw",
+          "seeds": [
+            0.59826,
+            0.59697,
+            0.59308
+          ],
+          "mean": 0.5961,
+          "sample_sd": 0.0027
+        },
+        {
+          "arm": "B3",
+          "scale": "train_250k",
+          "readout": "R1",
+          "denominator": "in_vocabulary",
+          "scorer": "normalised",
+          "seeds": [
+            0.59826,
+            0.59697,
+            0.59308
+          ],
+          "mean": 0.5961,
+          "sample_sd": 0.0027
+        },
+        {
+          "arm": "B3",
+          "scale": "train_250k",
+          "readout": "R1",
+          "denominator": "raw",
+          "scorer": "raw",
+          "seeds": [
+            0.46131,
+            0.46032,
+            0.45732
+          ],
+          "mean": 0.45965,
+          "sample_sd": 0.00208
+        },
+        {
+          "arm": "B3",
+          "scale": "train_250k",
+          "readout": "R1",
+          "denominator": "raw",
+          "scorer": "normalised",
+          "seeds": [
+            0.46131,
+            0.46032,
+            0.45732
+          ],
+          "mean": 0.45965,
+          "sample_sd": 0.00208
+        },
+        {
+          "arm": "B3",
+          "scale": "train_250k",
+          "readout": "R2",
+          "denominator": "in_vocabulary",
+          "scorer": "raw",
+          "seeds": [
+            0.59774,
+            0.59645,
+            0.59321
+          ],
+          "mean": 0.5958,
+          "sample_sd": 0.00234
+        },
+        {
+          "arm": "B3",
+          "scale": "train_250k",
+          "readout": "R2",
+          "denominator": "in_vocabulary",
+          "scorer": "normalised",
+          "seeds": [
+            0.59774,
+            0.59645,
+            0.59321
+          ],
+          "mean": 0.5958,
+          "sample_sd": 0.00234
+        },
+        {
+          "arm": "B3",
+          "scale": "train_250k",
+          "readout": "R2",
+          "denominator": "raw",
+          "scorer": "raw",
+          "seeds": [
+            0.46092,
+            0.45992,
+            0.45742
+          ],
+          "mean": 0.45942,
+          "sample_sd": 0.0018
+        },
+        {
+          "arm": "B3",
+          "scale": "train_250k",
+          "readout": "R2",
+          "denominator": "raw",
+          "scorer": "normalised",
+          "seeds": [
+            0.46092,
+            0.45992,
+            0.45742
+          ],
+          "mean": 0.45942,
+          "sample_sd": 0.0018
+        },
+        {
+          "arm": "B3",
+          "scale": "train_250k",
+          "readout": "R3",
+          "denominator": "in_vocabulary",
+          "scorer": "raw",
+          "seeds": [
+            0.59762,
+            0.59606,
+            0.59308
+          ],
+          "mean": 0.59558,
+          "sample_sd": 0.00231
+        },
+        {
+          "arm": "B3",
+          "scale": "train_250k",
+          "readout": "R3",
+          "denominator": "in_vocabulary",
+          "scorer": "normalised",
+          "seeds": [
+            0.59762,
+            0.59606,
+            0.59308
+          ],
+          "mean": 0.59558,
+          "sample_sd": 0.00231
+        },
+        {
+          "arm": "B3",
+          "scale": "train_250k",
+          "readout": "R3",
+          "denominator": "raw",
+          "scorer": "raw",
+          "seeds": [
+            0.46082,
+            0.45962,
+            0.45732
+          ],
+          "mean": 0.45925,
+          "sample_sd": 0.00178
+        },
+        {
+          "arm": "B3",
+          "scale": "train_250k",
+          "readout": "R3",
+          "denominator": "raw",
+          "scorer": "normalised",
+          "seeds": [
+            0.46082,
+            0.45962,
+            0.45732
+          ],
+          "mean": 0.45925,
+          "sample_sd": 0.00178
+        },
+        {
+          "arm": "B1",
+          "scale": "train_40k",
+          "readout": "classifier",
+          "denominator": "in_vocabulary",
+          "scorer": "raw",
+          "seeds": [
+            0.54952,
+            0.54226,
+            0.54343
+          ],
+          "mean": 0.54507,
+          "sample_sd": 0.0039
+        },
+        {
+          "arm": "B1",
+          "scale": "train_40k",
+          "readout": "classifier",
+          "denominator": "in_vocabulary",
+          "scorer": "normalised",
+          "seeds": [
+            0.54952,
+            0.54226,
+            0.54343
+          ],
+          "mean": 0.54507,
+          "sample_sd": 0.0039
+        },
+        {
+          "arm": "B1",
+          "scale": "train_40k",
+          "readout": "classifier",
+          "denominator": "raw",
+          "scorer": "raw",
+          "seeds": [
+            0.42373,
+            0.41813,
+            0.41903
+          ],
+          "mean": 0.4203,
+          "sample_sd": 0.00301
+        },
+        {
+          "arm": "B1",
+          "scale": "train_40k",
+          "readout": "classifier",
+          "denominator": "raw",
+          "scorer": "normalised",
+          "seeds": [
+            0.42373,
+            0.41813,
+            0.41903
+          ],
+          "mean": 0.4203,
+          "sample_sd": 0.00301
+        },
+        {
+          "arm": "B1",
+          "scale": "train_250k",
+          "readout": "classifier",
+          "denominator": "in_vocabulary",
+          "scorer": "raw",
+          "seeds": [
+            0.58841,
+            0.59749,
+            0.59593
+          ],
+          "mean": 0.59394,
+          "sample_sd": 0.00485
+        },
+        {
+          "arm": "B1",
+          "scale": "train_250k",
+          "readout": "classifier",
+          "denominator": "in_vocabulary",
+          "scorer": "normalised",
+          "seeds": [
+            0.58841,
+            0.59749,
+            0.59593
+          ],
+          "mean": 0.59394,
+          "sample_sd": 0.00485
+        },
+        {
+          "arm": "B1",
+          "scale": "train_250k",
+          "readout": "classifier",
+          "denominator": "raw",
+          "scorer": "raw",
+          "seeds": [
+            0.45372,
+            0.46072,
+            0.45952
+          ],
+          "mean": 0.45798,
+          "sample_sd": 0.00374
+        },
+        {
+          "arm": "B1",
+          "scale": "train_250k",
+          "readout": "classifier",
+          "denominator": "raw",
+          "scorer": "normalised",
+          "seeds": [
+            0.45372,
+            0.46072,
+            0.45952
+          ],
+          "mean": 0.45798,
+          "sample_sd": 0.00374
+        }
+      ],
+      "readout_contrasts_raw_denominator": [
+        {
+          "contrast": "B3 - B2",
+          "scale": "train_40k",
+          "basis": "r1_hits_normal",
+          "mean_paired_difference": -0.01899,
+          "per_seed_differences": [
+            -0.0007,
+            -0.04528,
+            -0.011
+          ],
+          "seeds_above_zero": 0,
+          "ci95_low": -0.02548,
+          "ci95_high": -0.01205,
+          "excludes_zero": true,
+          "directional_rule_outcome": "negative directional evidence",
+          "n_rows": 10004,
+          "n_image_clusters": 777
+        },
+        {
+          "contrast": "B3 - B2",
+          "scale": "train_250k",
+          "basis": "r1_hits_normal",
+          "mean_paired_difference": -0.00367,
+          "per_seed_differences": [
+            0.0018,
+            -0.0025,
+            -0.0103
+          ],
+          "seeds_above_zero": 1,
+          "ci95_low": -0.00965,
+          "ci95_high": 0.00215,
+          "excludes_zero": false,
+          "directional_rule_outcome": "uncertain or mixed evidence",
+          "n_rows": 10004,
+          "n_image_clusters": 777
+        }
+      ],
+      "interventions": [
+        {
+          "arm": "B1",
+          "scale": "train_40k",
+          "condition": "normal",
+          "readout": "classifier",
+          "seeds": [
+            0.54952,
+            0.54226,
+            0.54343
+          ],
+          "mean": 0.54507,
+          "sample_sd": 0.0039,
+          "drop_from_own_normal_mean": 0.0,
+          "drop_per_seed": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "arm": "B1",
+          "scale": "train_40k",
+          "condition": "fixed_image",
+          "readout": "classifier",
+          "seeds": [
+            0.4637,
+            0.45022,
+            0.451
+          ],
+          "mean": 0.45497,
+          "sample_sd": 0.00757,
+          "drop_from_own_normal_mean": 0.0901,
+          "drop_per_seed": [
+            0.08582,
+            0.09204,
+            0.09243
+          ]
+        },
+        {
+          "arm": "B1",
+          "scale": "train_40k",
+          "condition": "fixed_question",
+          "readout": "classifier",
+          "seeds": [
+            0.22945,
+            0.22984,
+            0.23412
+          ],
+          "mean": 0.23114,
+          "sample_sd": 0.00259,
+          "drop_from_own_normal_mean": 0.31393,
+          "drop_per_seed": [
+            0.32007,
+            0.31242,
+            0.30931
+          ]
+        },
+        {
+          "arm": "B1",
+          "scale": "train_40k",
+          "condition": "shuffled_image",
+          "readout": "classifier",
+          "seeds": [
+            0.42105,
+            0.43026,
+            0.42728
+          ],
+          "mean": 0.4262,
+          "sample_sd": 0.0047,
+          "drop_from_own_normal_mean": 0.11887,
+          "drop_per_seed": [
+            0.12847,
+            0.112,
+            0.11615
+          ]
+        },
+        {
+          "arm": "B1",
+          "scale": "train_250k",
+          "condition": "normal",
+          "readout": "classifier",
+          "seeds": [
+            0.58841,
+            0.59749,
+            0.59593
+          ],
+          "mean": 0.59394,
+          "sample_sd": 0.00485,
+          "drop_from_own_normal_mean": 0.0,
+          "drop_per_seed": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "arm": "B1",
+          "scale": "train_250k",
+          "condition": "fixed_image",
+          "readout": "classifier",
+          "seeds": [
+            0.48354,
+            0.46642,
+            0.47213
+          ],
+          "mean": 0.47403,
+          "sample_sd": 0.00871,
+          "drop_from_own_normal_mean": 0.11991,
+          "drop_per_seed": [
+            0.10487,
+            0.13106,
+            0.1238
+          ]
+        },
+        {
+          "arm": "B1",
+          "scale": "train_250k",
+          "condition": "fixed_question",
+          "readout": "classifier",
+          "seeds": [
+            0.19393,
+            0.23386,
+            0.21312
+          ],
+          "mean": 0.21364,
+          "sample_sd": 0.01997,
+          "drop_from_own_normal_mean": 0.3803,
+          "drop_per_seed": [
+            0.39448,
+            0.36362,
+            0.38281
+          ]
+        },
+        {
+          "arm": "B1",
+          "scale": "train_250k",
+          "condition": "shuffled_image",
+          "readout": "classifier",
+          "seeds": [
+            0.43946,
+            0.4379,
+            0.44724
+          ],
+          "mean": 0.44154,
+          "sample_sd": 0.005,
+          "drop_from_own_normal_mean": 0.15241,
+          "drop_per_seed": [
+            0.14895,
+            0.15958,
+            0.14869
+          ]
+        },
+        {
+          "arm": "B2",
+          "scale": "train_40k",
+          "condition": "normal",
+          "readout": "R1",
+          "seeds": [
+            0.53215,
+            0.53656,
+            0.53306
+          ],
+          "mean": 0.53392,
+          "sample_sd": 0.00233,
+          "drop_from_own_normal_mean": 0.0,
+          "drop_per_seed": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "arm": "B2",
+          "scale": "train_40k",
+          "condition": "fixed_image",
+          "readout": "R1",
+          "seeds": [
+            0.44918,
+            0.4462,
+            0.45165
+          ],
+          "mean": 0.44901,
+          "sample_sd": 0.00273,
+          "drop_from_own_normal_mean": 0.08491,
+          "drop_per_seed": [
+            0.08297,
+            0.09035,
+            0.08141
+          ]
+        },
+        {
+          "arm": "B2",
+          "scale": "train_40k",
+          "condition": "fixed_question",
+          "readout": "R1",
+          "seeds": [
+            0.21973,
+            0.23464,
+            0.22686
+          ],
+          "mean": 0.22708,
+          "sample_sd": 0.00746,
+          "drop_from_own_normal_mean": 0.30685,
+          "drop_per_seed": [
+            0.31242,
+            0.30192,
+            0.3062
+          ]
+        },
+        {
+          "arm": "B2",
+          "scale": "train_40k",
+          "condition": "shuffled_image",
+          "readout": "R1",
+          "seeds": [
+            0.42183,
+            0.41872,
+            0.42624
+          ],
+          "mean": 0.42226,
+          "sample_sd": 0.00378,
+          "drop_from_own_normal_mean": 0.11166,
+          "drop_per_seed": [
+            0.11032,
+            0.11784,
+            0.10682
+          ]
+        },
+        {
+          "arm": "B2",
+          "scale": "train_250k",
+          "condition": "normal",
+          "readout": "R1",
+          "seeds": [
+            0.59593,
+            0.60021,
+            0.60643
+          ],
+          "mean": 0.60086,
+          "sample_sd": 0.00528,
+          "drop_from_own_normal_mean": 0.0,
+          "drop_per_seed": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "arm": "B2",
+          "scale": "train_250k",
+          "condition": "fixed_image",
+          "readout": "R1",
+          "seeds": [
+            0.4873,
+            0.4628,
+            0.47731
+          ],
+          "mean": 0.4758,
+          "sample_sd": 0.01232,
+          "drop_from_own_normal_mean": 0.12505,
+          "drop_per_seed": [
+            0.10863,
+            0.13741,
+            0.12912
+          ]
+        },
+        {
+          "arm": "B2",
+          "scale": "train_250k",
+          "condition": "fixed_question",
+          "readout": "R1",
+          "seeds": [
+            0.14584,
+            0.22984,
+            0.10475
+          ],
+          "mean": 0.16014,
+          "sample_sd": 0.06376,
+          "drop_from_own_normal_mean": 0.44072,
+          "drop_per_seed": [
+            0.45009,
+            0.37037,
+            0.50169
+          ]
+        },
+        {
+          "arm": "B2",
+          "scale": "train_250k",
+          "condition": "shuffled_image",
+          "readout": "R1",
+          "seeds": [
+            0.44024,
+            0.43752,
+            0.43466
+          ],
+          "mean": 0.43747,
+          "sample_sd": 0.00279,
+          "drop_from_own_normal_mean": 0.16338,
+          "drop_per_seed": [
+            0.15569,
+            0.16269,
+            0.17177
+          ]
+        },
+        {
+          "arm": "B3",
+          "scale": "train_40k",
+          "condition": "normal",
+          "readout": "R1",
+          "seeds": [
+            0.53124,
+            0.47783,
+            0.5188
+          ],
+          "mean": 0.50929,
+          "sample_sd": 0.02794,
+          "drop_from_own_normal_mean": 0.0,
+          "drop_per_seed": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "arm": "B3",
+          "scale": "train_40k",
+          "condition": "fixed_image",
+          "readout": "R1",
+          "seeds": [
+            0.44192,
+            0.35624,
+            0.43428
+          ],
+          "mean": 0.41081,
+          "sample_sd": 0.04742,
+          "drop_from_own_normal_mean": 0.09848,
+          "drop_per_seed": [
+            0.08932,
+            0.1216,
+            0.08452
+          ]
+        },
+        {
+          "arm": "B3",
+          "scale": "train_40k",
+          "condition": "fixed_question",
+          "readout": "R1",
+          "seeds": [
+            0.20262,
+            0.063,
+            0.22971
+          ],
+          "mean": 0.16511,
+          "sample_sd": 0.08946,
+          "drop_from_own_normal_mean": 0.34418,
+          "drop_per_seed": [
+            0.32862,
+            0.41483,
+            0.28908
+          ]
+        },
+        {
+          "arm": "B3",
+          "scale": "train_40k",
+          "condition": "shuffled_image",
+          "readout": "R1",
+          "seeds": [
+            0.4169,
+            0.36751,
+            0.41496
+          ],
+          "mean": 0.39979,
+          "sample_sd": 0.02797,
+          "drop_from_own_normal_mean": 0.1095,
+          "drop_per_seed": [
+            0.11434,
+            0.11032,
+            0.10384
+          ]
+        },
+        {
+          "arm": "B3",
+          "scale": "train_250k",
+          "condition": "normal",
+          "readout": "R1",
+          "seeds": [
+            0.59826,
+            0.59697,
+            0.59308
+          ],
+          "mean": 0.5961,
+          "sample_sd": 0.0027,
+          "drop_from_own_normal_mean": 0.0,
+          "drop_per_seed": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "arm": "B3",
+          "scale": "train_250k",
+          "condition": "fixed_image",
+          "readout": "R1",
+          "seeds": [
+            0.47122,
+            0.4663,
+            0.46681
+          ],
+          "mean": 0.46811,
+          "sample_sd": 0.00271,
+          "drop_from_own_normal_mean": 0.12799,
+          "drop_per_seed": [
+            0.12704,
+            0.13067,
+            0.12626
+          ]
+        },
+        {
+          "arm": "B3",
+          "scale": "train_250k",
+          "condition": "fixed_question",
+          "readout": "R1",
+          "seeds": [
+            0.1483,
+            0.06689,
+            0.04758
+          ],
+          "mean": 0.08759,
+          "sample_sd": 0.05346,
+          "drop_from_own_normal_mean": 0.50851,
+          "drop_per_seed": [
+            0.44996,
+            0.53008,
+            0.5455
+          ]
+        },
+        {
+          "arm": "B3",
+          "scale": "train_250k",
+          "condition": "shuffled_image",
+          "readout": "R1",
+          "seeds": [
+            0.44231,
+            0.43855,
+            0.42987
+          ],
+          "mean": 0.43691,
+          "sample_sd": 0.00638,
+          "drop_from_own_normal_mean": 0.15919,
+          "drop_per_seed": [
+            0.15595,
+            0.15841,
+            0.16321
+          ]
+        }
+      ],
+      "image_reliance": [
+        {
+          "arm": "B1",
+          "scale": "train_40k",
+          "contrast": "normal - deranged image",
+          "mean_drop": 0.09166,
+          "per_seed_drops": [
+            0.09906,
+            0.08637,
+            0.08956
+          ],
+          "ci95_low": 0.08153,
+          "ci95_high": 0.10227,
+          "directional_rule_outcome": "positive directional evidence"
+        },
+        {
+          "arm": "B1",
+          "scale": "train_250k",
+          "contrast": "normal - deranged image",
+          "mean_drop": 0.11752,
+          "per_seed_drops": [
+            0.11485,
+            0.12305,
+            0.11465
+          ],
+          "ci95_low": 0.10654,
+          "ci95_high": 0.12915,
+          "directional_rule_outcome": "positive directional evidence"
+        },
+        {
+          "arm": "B2",
+          "scale": "train_40k",
+          "contrast": "normal - deranged image",
+          "mean_drop": 0.0861,
+          "per_seed_drops": [
+            0.08507,
+            0.09086,
+            0.08237
+          ],
+          "ci95_low": 0.07515,
+          "ci95_high": 0.09776,
+          "directional_rule_outcome": "positive directional evidence"
+        },
+        {
+          "arm": "B2",
+          "scale": "train_250k",
+          "contrast": "normal - deranged image",
+          "mean_drop": 0.12598,
+          "per_seed_drops": [
+            0.12005,
+            0.12545,
+            0.13245
+          ],
+          "ci95_low": 0.11477,
+          "ci95_high": 0.1375,
+          "directional_rule_outcome": "positive directional evidence"
+        },
+        {
+          "arm": "B3",
+          "scale": "train_40k",
+          "contrast": "normal - deranged image",
+          "mean_drop": 0.08443,
+          "per_seed_drops": [
+            0.08816,
+            0.08507,
+            0.08007
+          ],
+          "ci95_low": 0.07447,
+          "ci95_high": 0.09506,
+          "directional_rule_outcome": "positive directional evidence"
+        },
+        {
+          "arm": "B3",
+          "scale": "train_250k",
+          "contrast": "normal - deranged image",
+          "mean_drop": 0.12275,
+          "per_seed_drops": [
+            0.12025,
+            0.12215,
+            0.12585
+          ],
+          "ci95_low": 0.11146,
+          "ci95_high": 0.13443,
+          "directional_rule_outcome": "positive directional evidence"
+        }
+      ],
+      "r3_validity": [
+        {
+          "arm": "B2",
+          "scale": "train_40k",
+          "in_vocabulary_rate": 0.97904,
+          "out_of_vocabulary_rate": 0.02083,
+          "empty_rate": 0.000133,
+          "overlong_rate": 0.0
+        },
+        {
+          "arm": "B2",
+          "scale": "train_250k",
+          "in_vocabulary_rate": 0.98977,
+          "out_of_vocabulary_rate": 0.0102,
+          "empty_rate": 3.3e-05,
+          "overlong_rate": 0.0
+        },
+        {
+          "arm": "B3",
+          "scale": "train_40k",
+          "in_vocabulary_rate": 0.97664,
+          "out_of_vocabulary_rate": 0.02259,
+          "empty_rate": 0.000633,
+          "overlong_rate": 0.000133
+        },
+        {
+          "arm": "B3",
+          "scale": "train_250k",
+          "in_vocabulary_rate": 0.99134,
+          "out_of_vocabulary_rate": 0.0086,
+          "empty_rate": 0.0,
+          "overlong_rate": 6.7e-05
+        }
+      ]
+    },
+    "SECONDARY_DIAGNOSTIC": {
+      "stability": {
+        "primary_rule_unchanged": "B2/B3 primary is epoch 22; best-of-22 is a SECONDARY DIAGNOSTIC and is never promoted",
+        "by_cell": [
+          {
+            "arm": "B1",
+            "scale": "train_40k",
+            "seed": 0,
+            "primary": 0.54952,
+            "canonical_epoch": 9,
+            "epochs_run": 19,
+            "secondary_best_of_22": null,
+            "secondary_best_epoch": null,
+            "secondary_minus_primary": null
+          },
+          {
+            "arm": "B1",
+            "scale": "train_40k",
+            "seed": 1,
+            "primary": 0.54226,
+            "canonical_epoch": 5,
+            "epochs_run": 15,
+            "secondary_best_of_22": null,
+            "secondary_best_epoch": null,
+            "secondary_minus_primary": null
+          },
+          {
+            "arm": "B1",
+            "scale": "train_40k",
+            "seed": 2,
+            "primary": 0.54343,
+            "canonical_epoch": 4,
+            "epochs_run": 14,
+            "secondary_best_of_22": null,
+            "secondary_best_epoch": null,
+            "secondary_minus_primary": null
+          },
+          {
+            "arm": "B1",
+            "scale": "train_250k",
+            "seed": 0,
+            "primary": 0.58841,
+            "canonical_epoch": 18,
+            "epochs_run": 28,
+            "secondary_best_of_22": null,
+            "secondary_best_epoch": null,
+            "secondary_minus_primary": null
+          },
+          {
+            "arm": "B1",
+            "scale": "train_250k",
+            "seed": 1,
+            "primary": 0.59749,
+            "canonical_epoch": 5,
+            "epochs_run": 15,
+            "secondary_best_of_22": null,
+            "secondary_best_epoch": null,
+            "secondary_minus_primary": null
+          },
+          {
+            "arm": "B1",
+            "scale": "train_250k",
+            "seed": 2,
+            "primary": 0.59593,
+            "canonical_epoch": 7,
+            "epochs_run": 17,
+            "secondary_best_of_22": null,
+            "secondary_best_epoch": null,
+            "secondary_minus_primary": null
+          },
+          {
+            "arm": "B2",
+            "scale": "train_40k",
+            "seed": 0,
+            "primary": 0.53215,
+            "canonical_epoch": 22,
+            "epochs_run": 22,
+            "secondary_best_of_22": 0.53591,
+            "secondary_best_epoch": 17,
+            "secondary_minus_primary": 0.00376
+          },
+          {
+            "arm": "B2",
+            "scale": "train_40k",
+            "seed": 1,
+            "primary": 0.53656,
+            "canonical_epoch": 22,
+            "epochs_run": 22,
+            "secondary_best_of_22": 0.53669,
+            "secondary_best_epoch": 8,
+            "secondary_minus_primary": 0.00013
+          },
+          {
+            "arm": "B2",
+            "scale": "train_40k",
+            "seed": 2,
+            "primary": 0.53306,
+            "canonical_epoch": 22,
+            "epochs_run": 22,
+            "secondary_best_of_22": 0.53306,
+            "secondary_best_epoch": 22,
+            "secondary_minus_primary": 0.0
+          },
+          {
+            "arm": "B2",
+            "scale": "train_250k",
+            "seed": 0,
+            "primary": 0.59593,
+            "canonical_epoch": 22,
+            "epochs_run": 22,
+            "secondary_best_of_22": 0.60474,
+            "secondary_best_epoch": 12,
+            "secondary_minus_primary": 0.00881
+          },
+          {
+            "arm": "B2",
+            "scale": "train_250k",
+            "seed": 1,
+            "primary": 0.60021,
+            "canonical_epoch": 22,
+            "epochs_run": 22,
+            "secondary_best_of_22": 0.605,
+            "secondary_best_epoch": 11,
+            "secondary_minus_primary": 0.00479
+          },
+          {
+            "arm": "B2",
+            "scale": "train_250k",
+            "seed": 2,
+            "primary": 0.60643,
+            "canonical_epoch": 22,
+            "epochs_run": 22,
+            "secondary_best_of_22": 0.60643,
+            "secondary_best_epoch": 22,
+            "secondary_minus_primary": 0.0
+          },
+          {
+            "arm": "B3",
+            "scale": "train_40k",
+            "seed": 0,
+            "primary": 0.53124,
+            "canonical_epoch": 22,
+            "epochs_run": 22,
+            "secondary_best_of_22": 0.53928,
+            "secondary_best_epoch": 16,
+            "secondary_minus_primary": 0.00804
+          },
+          {
+            "arm": "B3",
+            "scale": "train_40k",
+            "seed": 1,
+            "primary": 0.47783,
+            "canonical_epoch": 22,
+            "epochs_run": 22,
+            "secondary_best_of_22": 0.52943,
+            "secondary_best_epoch": 12,
+            "secondary_minus_primary": 0.0516
+          },
+          {
+            "arm": "B3",
+            "scale": "train_40k",
+            "seed": 2,
+            "primary": 0.5188,
+            "canonical_epoch": 22,
+            "epochs_run": 22,
+            "secondary_best_of_22": 0.53967,
+            "secondary_best_epoch": 7,
+            "secondary_minus_primary": 0.02087
+          },
+          {
+            "arm": "B3",
+            "scale": "train_250k",
+            "seed": 0,
+            "primary": 0.59826,
+            "canonical_epoch": 22,
+            "epochs_run": 22,
+            "secondary_best_of_22": 0.59826,
+            "secondary_best_epoch": 15,
+            "secondary_minus_primary": 0.0
+          },
+          {
+            "arm": "B3",
+            "scale": "train_250k",
+            "seed": 1,
+            "primary": 0.59697,
+            "canonical_epoch": 22,
+            "epochs_run": 22,
+            "secondary_best_of_22": 0.60086,
+            "secondary_best_epoch": 11,
+            "secondary_minus_primary": 0.00389
+          },
+          {
+            "arm": "B3",
+            "scale": "train_250k",
+            "seed": 2,
+            "primary": 0.59308,
+            "canonical_epoch": 22,
+            "epochs_run": 22,
+            "secondary_best_of_22": 0.59865,
+            "secondary_best_epoch": 20,
+            "secondary_minus_primary": 0.00557
+          }
+        ],
+        "by_arm_scale": {
+          "B1/train_40k": {
+            "primary": {
+              "seeds": [
+                0.54952,
+                0.54226,
+                0.54343
+              ],
+              "mean": 0.54507,
+              "sample_sd": 0.0039,
+              "min": 0.54226,
+              "max": 0.54952,
+              "range": 0.00726
+            },
+            "secondary_minus_primary_mean": null,
+            "secondary_minus_primary_max": null
+          },
+          "B1/train_250k": {
+            "primary": {
+              "seeds": [
+                0.58841,
+                0.59749,
+                0.59593
+              ],
+              "mean": 0.59394,
+              "sample_sd": 0.00486,
+              "min": 0.58841,
+              "max": 0.59749,
+              "range": 0.00908
+            },
+            "secondary_minus_primary_mean": null,
+            "secondary_minus_primary_max": null
+          },
+          "B2/train_40k": {
+            "primary": {
+              "seeds": [
+                0.53215,
+                0.53656,
+                0.53306
+              ],
+              "mean": 0.53392,
+              "sample_sd": 0.00233,
+              "min": 0.53215,
+              "max": 0.53656,
+              "range": 0.00441
+            },
+            "secondary_minus_primary_mean": 0.0013,
+            "secondary_minus_primary_max": 0.00376
+          },
+          "B2/train_250k": {
+            "primary": {
+              "seeds": [
+                0.59593,
+                0.60021,
+                0.60643
+              ],
+              "mean": 0.60086,
+              "sample_sd": 0.00528,
+              "min": 0.59593,
+              "max": 0.60643,
+              "range": 0.0105
+            },
+            "secondary_minus_primary_mean": 0.00453,
+            "secondary_minus_primary_max": 0.00881
+          },
+          "B3/train_40k": {
+            "primary": {
+              "seeds": [
+                0.53124,
+                0.47783,
+                0.5188
+              ],
+              "mean": 0.50929,
+              "sample_sd": 0.02795,
+              "min": 0.47783,
+              "max": 0.53124,
+              "range": 0.05341
+            },
+            "secondary_minus_primary_mean": 0.02684,
+            "secondary_minus_primary_max": 0.0516
+          },
+          "B3/train_250k": {
+            "primary": {
+              "seeds": [
+                0.59826,
+                0.59697,
+                0.59308
+              ],
+              "mean": 0.5961,
+              "sample_sd": 0.0027,
+              "min": 0.59308,
+              "max": 0.59826,
+              "range": 0.00518
+            },
+            "secondary_minus_primary_mean": 0.00315,
+            "secondary_minus_primary_max": 0.00557
+          }
+        }
+      },
+      "note": "best-of-22 never determines a primary comparison, a model freeze or a clean-test checkpoint"
+    },
+    "EXPLORATORY": {
+      "abandoned_search": "grid points 1-3 of the eight-point recipe search are exploratory protocol-diagnostic evidence only, support no superiority claim in either direction, and are NOT promoted anywhere in this report"
+    },
+    "resources": {
+      "accounting_rule": "Three DIFFERENT scopes, which must not be mixed. A and B are E8B-ONLY and cover the eighteen core cells. C is PROGRAMME-WIDE per frozen model identity and includes E8A, the abandoned search, characterisation and probe hours spent long before this matrix. A and B differ only by the failed first attempt of B3/train_40k/seed0, which is charged in B and excluded from A and is never netted out. The identity totals in C DO NOT SUM to B and were never intended to: they answer a different question, namely how much each frozen model identity has cost across the whole programme against its 40 h ceiling.",
+      "A_e8b_only_scientific_successful_run_hours": 35.46092,
+      "B_e8b_only_operational_charged_hours": 36.77751,
+      "difference_failed_attempts_hours": 1.31659,
+      "A_and_B_scope": "the eighteen E8B core cells only",
+      "C_scope": "programme-wide, per frozen model identity, including all pre-E8B spend on that identity",
+      "C_does_not_sum_to_B": true,
+      "by_cell": [
+        {
+          "arm": "B1",
+          "scale": "train_40k",
+          "seed": 0,
+          "successful_run_hours": 0.10736,
+          "failed_attempt_hours": 0.0,
+          "total_charged_hours": 0.10736,
+          "processes": [
+            0.10736
+          ]
+        },
+        {
+          "arm": "B1",
+          "scale": "train_40k",
+          "seed": 1,
+          "successful_run_hours": 0.08556,
+          "failed_attempt_hours": 0.0,
+          "total_charged_hours": 0.08556,
+          "processes": [
+            0.08556
+          ]
+        },
+        {
+          "arm": "B1",
+          "scale": "train_40k",
+          "seed": 2,
+          "successful_run_hours": 0.08008,
+          "failed_attempt_hours": 0.0,
+          "total_charged_hours": 0.08008,
+          "processes": [
+            0.08008
+          ]
+        },
+        {
+          "arm": "B1",
+          "scale": "train_250k",
+          "seed": 0,
+          "successful_run_hours": 0.85991,
+          "failed_attempt_hours": 0.0,
+          "total_charged_hours": 0.85991,
+          "processes": [
+            0.85991
+          ]
+        },
+        {
+          "arm": "B1",
+          "scale": "train_250k",
+          "seed": 1,
+          "successful_run_hours": 0.46246,
+          "failed_attempt_hours": 0.0,
+          "total_charged_hours": 0.46246,
+          "processes": [
+            0.46246
+          ]
+        },
+        {
+          "arm": "B1",
+          "scale": "train_250k",
+          "seed": 2,
+          "successful_run_hours": 0.52367,
+          "failed_attempt_hours": 0.0,
+          "total_charged_hours": 0.52367,
+          "processes": [
+            0.52367
+          ]
+        },
+        {
+          "arm": "B2",
+          "scale": "train_40k",
+          "seed": 0,
+          "successful_run_hours": 1.684,
+          "failed_attempt_hours": 0.0,
+          "total_charged_hours": 1.684,
+          "processes": [
+            1.684
+          ]
+        },
+        {
+          "arm": "B2",
+          "scale": "train_40k",
+          "seed": 1,
+          "successful_run_hours": 1.53448,
+          "failed_attempt_hours": 0.0,
+          "total_charged_hours": 1.53448,
+          "processes": [
+            1.53448
+          ]
+        },
+        {
+          "arm": "B2",
+          "scale": "train_40k",
+          "seed": 2,
+          "successful_run_hours": 1.53748,
+          "failed_attempt_hours": 0.0,
+          "total_charged_hours": 1.53748,
+          "processes": [
+            1.53748
+          ]
+        },
+        {
+          "arm": "B2",
+          "scale": "train_250k",
+          "seed": 0,
+          "successful_run_hours": 3.98375,
+          "failed_attempt_hours": 0.0,
+          "total_charged_hours": 3.98375,
+          "processes": [
+            3.98375
+          ]
+        },
+        {
+          "arm": "B2",
+          "scale": "train_250k",
+          "seed": 1,
+          "successful_run_hours": 3.98364,
+          "failed_attempt_hours": 0.0,
+          "total_charged_hours": 3.98364,
+          "processes": [
+            3.98364
+          ]
+        },
+        {
+          "arm": "B2",
+          "scale": "train_250k",
+          "seed": 2,
+          "successful_run_hours": 3.98068,
+          "failed_attempt_hours": 0.0,
+          "total_charged_hours": 3.98068,
+          "processes": [
+            3.98068
+          ]
+        },
+        {
+          "arm": "B3",
+          "scale": "train_40k",
+          "seed": 0,
+          "successful_run_hours": 1.53787,
+          "failed_attempt_hours": 1.31659,
+          "total_charged_hours": 2.85446,
+          "processes": [
+            1.31659,
+            1.53787
+          ]
+        },
+        {
+          "arm": "B3",
+          "scale": "train_40k",
+          "seed": 1,
+          "successful_run_hours": 1.54508,
+          "failed_attempt_hours": 0.0,
+          "total_charged_hours": 1.54508,
+          "processes": [
+            1.54508
+          ]
+        },
+        {
+          "arm": "B3",
+          "scale": "train_40k",
+          "seed": 2,
+          "successful_run_hours": 1.56639,
+          "failed_attempt_hours": 0.0,
+          "total_charged_hours": 1.56639,
+          "processes": [
+            1.56639
+          ]
+        },
+        {
+          "arm": "B3",
+          "scale": "train_250k",
+          "seed": 0,
+          "successful_run_hours": 3.98397,
+          "failed_attempt_hours": 0.0,
+          "total_charged_hours": 3.98397,
+          "processes": [
+            3.98397
+          ]
+        },
+        {
+          "arm": "B3",
+          "scale": "train_250k",
+          "seed": 1,
+          "successful_run_hours": 3.9871,
+          "failed_attempt_hours": 0.0,
+          "total_charged_hours": 3.9871,
+          "processes": [
+            3.9871
+          ]
+        },
+        {
+          "arm": "B3",
+          "scale": "train_250k",
+          "seed": 2,
+          "successful_run_hours": 4.01744,
+          "failed_attempt_hours": 0.0,
+          "total_charged_hours": 4.01744,
+          "processes": [
+            4.01744
+          ]
+        }
+      ],
+      "C_per_identity_programme_wide": {
+        "pretrained": {
+          "charged_hours": 27.9777,
+          "projected_total_hours": 35.9417,
+          "ceiling_hours": 40.0,
+          "headroom_hours": 4.0583,
+          "headroom_floor_hours": 1.0,
+          "gate_fires": false,
+          "forced_retries_taken": 1,
+          "forced_retry_allowance": 1
+        },
+        "random": {
+          "charged_hours": 18.6621,
+          "projected_total_hours": 21.5631,
+          "ceiling_hours": 40.0,
+          "headroom_hours": 18.4369,
+          "headroom_floor_hours": 1.0,
+          "gate_fires": false,
+          "forced_retries_taken": 0,
+          "forced_retry_allowance": 1
+        },
+        "none": {
+          "charged_hours": 2.119,
+          "projected_total_hours": 3.2229,
+          "ceiling_hours": 40.0,
+          "headroom_hours": 36.7771,
+          "headroom_floor_hours": 1.0,
+          "gate_fires": false,
+          "forced_retries_taken": 0,
+          "forced_retry_allowance": 1
+        }
+      },
+      "parameters": {
+        "B2_B3_trunk_plus_projection": 21343808,
+        "B2_B3_frozen_language_model": 134515008,
+        "B1_readout": 52836,
+        "source": "asserted in the E8B preflight gradient gate and the implementation audit; not recomputed here"
+      },
+      "storage_bytes": {
+        "canonical_checkpoints": 1531667586,
+        "resume_checkpoints": 6127573723,
+        "total_gib": 7.133
+      },
+      "evaluation_latency": "NOT MEASURED HERE. The frozen readout cost measurement belongs to the readout evaluation that has not run; see the not_computed block.",
+      "e7b_integration": "deferred: an E7b serial-cost comparison is only methodologically valid once the R1/R2/R3 readouts have actually run on these checkpoints under the frozen protocol.",
+      "final_evaluation_hours_measured": 3.84396,
+      "final_evaluation_seconds_per_cell_mean": {
+        "B1/train_40k": 12.8,
+        "B1/train_250k": 12.8,
+        "B2/train_40k": 1148.4,
+        "B2/train_250k": 1148.6,
+        "B3/train_40k": 1147.3,
+        "B3/train_250k": 1142.8
+      },
+      "projection_line_item_lm_hours": 2.8,
+      "projection_note": "the measured language-model evaluation exceeds the 2.8 h projection line item. It remains inside every per-identity committed reservation and fired no gate; the overrun is recorded rather than absorbed."
+    },
+    "b1_selection_rule_caveat": "B1 selects its primary checkpoint by the frozen section-7.3 rule (best development accuracy over a 100-epoch budget with early stopping, earliest epoch on ties), whereas B2 and B3 use the frozen epoch-22 rule with no early stopping. The differing checkpoint-selection rules MAY FAVOUR B1 relative to fixed-epoch systems, so a B1-versus-B2/B3 difference is a SYSTEM-LEVEL comparison of two complete configurations rather than a clean causal architecture contrast; architecture and selection rule are not separable in it. B3 minus B2 is the only contrast in this matrix whose two arms share a selection rule.",
+    "statistical_procedure": {
+      "rule": "the universal primary directional rule of canonical plan section 5, applied verbatim",
+      "conditions": [
+        "the mean paired difference is greater than zero",
+        "the 95 per cent fixed-seed-set image-clustered interval has a lower bound greater than zero",
+        "at least two of the three individual seed differences are greater than zero"
+      ],
+      "negative_case": "the three mirrored conditions",
+      "otherwise": "uncertain or mixed evidence",
+      "implementation_reused": "experiments/e8a_question_encoder/analyse_core.py clustered_bootstrap, percentile_interval and directional_rule; no test was added, substituted or tuned for E8B",
+      "caveat": "the 95 per cent interval is image-clustered over the development images and CONDITIONS ON THE FIXED TRAINED SEED SET: it propagates sampling variation over questions and images, not training variance. The three per-seed differences are reported beside it, as the canonical rule requires."
+    },
+    "clean_test_accessed": false
+  }
+}

@@ -1,0 +1,483 @@
+{
+  "metadata": {
+    "timestamp": "2026-08-10T02:28:10",
+    "git_commit": "c22e5f0",
+    "git_dirty": true,
+    "open_clip_version": "3.3.0",
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "h5py_version": "3.16.0",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "deterministic": true,
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "embed_dim": 512,
+    "top_k_answers": 100,
+    "n_train": 40000,
+    "n_val": 8000,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "hidden_dim": 512,
+    "dropout": 0.3,
+    "weight_decay": 0.0001
+  },
+  "e8b_final_evaluation": {
+    "dated_utc": "2026-08-09",
+    "NO_TRAINING": true,
+    "cell": [
+      "B2",
+      "train_250k",
+      1
+    ],
+    "run": "e8b_core_B2_train_250k_seed1",
+    "manifest_basis_commit": "1b4ea42",
+    "checkpoint": {
+      "path": "results/experiments/e8b_readout_generation/checkpoints/e8b_core_B2_train_250k_seed1_canonical_ep22.pt",
+      "sha256": "32635320a0f0349d161e26217104487f11a27cbe667a12e0bf36bf086de40744",
+      "rule": "epoch_22",
+      "epoch": 22
+    },
+    "result_record_sha256": "f9b11c077e3e8dc18971588f2915bb9924d4e1bc06cefc639097b7e586329316",
+    "evaluator_source_digest": "333b44e7a44cdbba52261b79ce04ffb9f39e6dc8715d1af56f9d196a903726e8",
+    "driver": "experiments/e8b_readout_generation/run_final_evaluation.py (orchestration only)",
+    "protocol_family": "e8b-fp32-fixed22-core-2026-08-07",
+    "denominators": {
+      "raw_rows": 10004,
+      "in_vocabulary_rows": 7714,
+      "out_of_vocabulary_rows": 2290,
+      "image_clusters_raw": 777,
+      "coverage": 0.771092,
+      "restriction_optimisation": "REJECTED and not used; every readout runs on the full raw denominator"
+    },
+    "conditions": {
+      "normal": {
+        "R1_in_vocabulary": {
+          "n": 7714,
+          "raw_exact": 0.600207,
+          "normalised_exact": 0.600207,
+          "raw_hit_count": 4630,
+          "normalised_hit_count": 4630
+        },
+        "R2_in_vocabulary": {
+          "n": 7714,
+          "raw_exact": 0.600467,
+          "normalised_exact": 0.600467,
+          "raw_hit_count": 4632,
+          "normalised_hit_count": 4632
+        },
+        "R3_in_vocabulary": {
+          "n": 7714,
+          "raw_exact": 0.600337,
+          "normalised_exact": 0.600337
+        },
+        "R1_raw_denominator": {
+          "n": 10004,
+          "basis": "DIRECT: every row scored against its gold string, including the out-of-vocabulary rows. The coverage identity is used only to cross-check this number, never to produce it (canonical plan section 6).",
+          "raw_hits": 4630,
+          "normalised_hits": 4630,
+          "raw_exact": 0.462815,
+          "normalised_exact": 0.462815,
+          "coverage_identity_cross_check": {
+            "coverage": 0.771092,
+            "raw_hits_in_vocabulary": 4630,
+            "normalised_hits_in_vocabulary": 4630,
+            "out_of_vocabulary_hits": {
+              "raw": 0,
+              "normalised": 0
+            },
+            "identity_agrees": true
+          }
+        },
+        "R2_raw_denominator": {
+          "n": 10004,
+          "basis": "DIRECT: every row scored against its gold string, including the out-of-vocabulary rows. The coverage identity is used only to cross-check this number, never to produce it (canonical plan section 6).",
+          "raw_hits": 4632,
+          "normalised_hits": 4632,
+          "raw_exact": 0.463015,
+          "normalised_exact": 0.463015,
+          "coverage_identity_cross_check": {
+            "coverage": 0.771092,
+            "raw_hits_in_vocabulary": 4632,
+            "normalised_hits_in_vocabulary": 4632,
+            "out_of_vocabulary_hits": {
+              "raw": 0,
+              "normalised": 0
+            },
+            "identity_agrees": true
+          }
+        },
+        "R3_raw_denominator": {
+          "n": 10004,
+          "raw_exact": 0.462915,
+          "normalised_exact": 0.462915
+        },
+        "R3_outcomes": {
+          "denominator": 10004,
+          "counts": {
+            "in_vocabulary": 9874,
+            "out_of_vocabulary": 129,
+            "empty": 1,
+            "overlong": 0
+          },
+          "rates": {
+            "in_vocabulary": 0.9870051979208316,
+            "out_of_vocabulary": 0.01289484206317473,
+            "empty": 9.996001599360256e-05,
+            "overlong": 0.0
+          },
+          "note": "every emission stays in the denominator; invalid outputs are counted, never excluded"
+        },
+        "seconds": 296.44
+      },
+      "fixed_image": {
+        "R1_in_vocabulary": {
+          "n": 7714,
+          "raw_exact": 0.462795,
+          "normalised_exact": 0.462795,
+          "raw_hit_count": 3570,
+          "normalised_hit_count": 3570
+        },
+        "R2_in_vocabulary": {
+          "n": 7714,
+          "raw_exact": 0.463054,
+          "normalised_exact": 0.463054,
+          "raw_hit_count": 3572,
+          "normalised_hit_count": 3572
+        },
+        "R3_in_vocabulary": {
+          "n": 7714,
+          "raw_exact": 0.463054,
+          "normalised_exact": 0.463054
+        },
+        "R1_raw_denominator": {
+          "n": 10004,
+          "basis": "DIRECT: every row scored against its gold string, including the out-of-vocabulary rows. The coverage identity is used only to cross-check this number, never to produce it (canonical plan section 6).",
+          "raw_hits": 3570,
+          "normalised_hits": 3570,
+          "raw_exact": 0.356857,
+          "normalised_exact": 0.356857,
+          "coverage_identity_cross_check": {
+            "coverage": 0.771092,
+            "raw_hits_in_vocabulary": 3570,
+            "normalised_hits_in_vocabulary": 3570,
+            "out_of_vocabulary_hits": {
+              "raw": 0,
+              "normalised": 0
+            },
+            "identity_agrees": true
+          }
+        },
+        "R2_raw_denominator": {
+          "n": 10004,
+          "basis": "DIRECT: every row scored against its gold string, including the out-of-vocabulary rows. The coverage identity is used only to cross-check this number, never to produce it (canonical plan section 6).",
+          "raw_hits": 3572,
+          "normalised_hits": 3572,
+          "raw_exact": 0.357057,
+          "normalised_exact": 0.357057,
+          "coverage_identity_cross_check": {
+            "coverage": 0.771092,
+            "raw_hits_in_vocabulary": 3572,
+            "normalised_hits_in_vocabulary": 3572,
+            "out_of_vocabulary_hits": {
+              "raw": 0,
+              "normalised": 0
+            },
+            "identity_agrees": true
+          }
+        },
+        "R3_raw_denominator": {
+          "n": 10004,
+          "raw_exact": 0.357057,
+          "normalised_exact": 0.357057
+        },
+        "R3_outcomes": {
+          "denominator": 10004,
+          "counts": {
+            "in_vocabulary": 9956,
+            "out_of_vocabulary": 48,
+            "empty": 0,
+            "overlong": 0
+          },
+          "rates": {
+            "in_vocabulary": 0.995201919232307,
+            "out_of_vocabulary": 0.004798080767692923,
+            "empty": 0.0,
+            "overlong": 0.0
+          },
+          "note": "every emission stays in the denominator; invalid outputs are counted, never excluded"
+        },
+        "seconds": 295.321
+      },
+      "fixed_question": {
+        "R1_in_vocabulary": {
+          "n": 7714,
+          "raw_exact": 0.229842,
+          "normalised_exact": 0.229842,
+          "raw_hit_count": 1773,
+          "normalised_hit_count": 1773
+        },
+        "R2_in_vocabulary": {
+          "n": 7714,
+          "raw_exact": 0.228416,
+          "normalised_exact": 0.228416,
+          "raw_hit_count": 1762,
+          "normalised_hit_count": 1762
+        },
+        "R3_in_vocabulary": {
+          "n": 7714,
+          "raw_exact": 0.225305,
+          "normalised_exact": 0.225305
+        },
+        "R1_raw_denominator": {
+          "n": 10004,
+          "basis": "DIRECT: every row scored against its gold string, including the out-of-vocabulary rows. The coverage identity is used only to cross-check this number, never to produce it (canonical plan section 6).",
+          "raw_hits": 1773,
+          "normalised_hits": 1773,
+          "raw_exact": 0.177229,
+          "normalised_exact": 0.177229,
+          "coverage_identity_cross_check": {
+            "coverage": 0.771092,
+            "raw_hits_in_vocabulary": 1773,
+            "normalised_hits_in_vocabulary": 1773,
+            "out_of_vocabulary_hits": {
+              "raw": 0,
+              "normalised": 0
+            },
+            "identity_agrees": true
+          }
+        },
+        "R2_raw_denominator": {
+          "n": 10004,
+          "basis": "DIRECT: every row scored against its gold string, including the out-of-vocabulary rows. The coverage identity is used only to cross-check this number, never to produce it (canonical plan section 6).",
+          "raw_hits": 1762,
+          "normalised_hits": 1762,
+          "raw_exact": 0.17613,
+          "normalised_exact": 0.17613,
+          "coverage_identity_cross_check": {
+            "coverage": 0.771092,
+            "raw_hits_in_vocabulary": 1762,
+            "normalised_hits_in_vocabulary": 1762,
+            "out_of_vocabulary_hits": {
+              "raw": 0,
+              "normalised": 0
+            },
+            "identity_agrees": true
+          }
+        },
+        "R3_raw_denominator": {
+          "n": 10004,
+          "raw_exact": 0.173731,
+          "normalised_exact": 0.173731
+        },
+        "R3_outcomes": {
+          "denominator": 10004,
+          "counts": {
+            "in_vocabulary": 9767,
+            "out_of_vocabulary": 237,
+            "empty": 0,
+            "overlong": 0
+          },
+          "rates": {
+            "in_vocabulary": 0.9763094762095162,
+            "out_of_vocabulary": 0.023690523790483805,
+            "empty": 0.0,
+            "overlong": 0.0
+          },
+          "note": "every emission stays in the denominator; invalid outputs are counted, never excluded"
+        },
+        "seconds": 289.938
+      },
+      "shuffled_image": {
+        "R1_in_vocabulary": {
+          "n": 7714,
+          "raw_exact": 0.437516,
+          "normalised_exact": 0.437516,
+          "raw_hit_count": 3375,
+          "normalised_hit_count": 3375
+        },
+        "R2_in_vocabulary": {
+          "n": 7714,
+          "raw_exact": 0.437257,
+          "normalised_exact": 0.437257,
+          "raw_hit_count": 3373,
+          "normalised_hit_count": 3373
+        },
+        "R3_in_vocabulary": {
+          "n": 7714,
+          "raw_exact": 0.436998,
+          "normalised_exact": 0.436998
+        },
+        "R1_raw_denominator": {
+          "n": 10004,
+          "basis": "DIRECT: every row scored against its gold string, including the out-of-vocabulary rows. The coverage identity is used only to cross-check this number, never to produce it (canonical plan section 6).",
+          "raw_hits": 3375,
+          "normalised_hits": 3375,
+          "raw_exact": 0.337365,
+          "normalised_exact": 0.337365,
+          "coverage_identity_cross_check": {
+            "coverage": 0.771092,
+            "raw_hits_in_vocabulary": 3375,
+            "normalised_hits_in_vocabulary": 3375,
+            "out_of_vocabulary_hits": {
+              "raw": 0,
+              "normalised": 0
+            },
+            "identity_agrees": true
+          }
+        },
+        "R2_raw_denominator": {
+          "n": 10004,
+          "basis": "DIRECT: every row scored against its gold string, including the out-of-vocabulary rows. The coverage identity is used only to cross-check this number, never to produce it (canonical plan section 6).",
+          "raw_hits": 3373,
+          "normalised_hits": 3373,
+          "raw_exact": 0.337165,
+          "normalised_exact": 0.337165,
+          "coverage_identity_cross_check": {
+            "coverage": 0.771092,
+            "raw_hits_in_vocabulary": 3373,
+            "normalised_hits_in_vocabulary": 3373,
+            "out_of_vocabulary_hits": {
+              "raw": 0,
+              "normalised": 0
+            },
+            "identity_agrees": true
+          }
+        },
+        "R3_raw_denominator": {
+          "n": 10004,
+          "raw_exact": 0.336965,
+          "normalised_exact": 0.336965
+        },
+        "R3_outcomes": {
+          "denominator": 10004,
+          "counts": {
+            "in_vocabulary": 9871,
+            "out_of_vocabulary": 133,
+            "empty": 0,
+            "overlong": 0
+          },
+          "rates": {
+            "in_vocabulary": 0.9867053178728509,
+            "out_of_vocabulary": 0.01329468212714914,
+            "empty": 0.0,
+            "overlong": 0.0
+          },
+          "note": "every emission stays in the denominator; invalid outputs are counted, never excluded"
+        },
+        "seconds": 296.311
+      }
+    },
+    "normalisation_check": {
+      "distinct_oov_gold": 563,
+      "collisions_with_vocabulary_normal_form": [],
+      "identity_holds_for_normalised_match": true,
+      "note": "if this ever fails, the normalised raw-denominator accuracy must be scored row by row instead of derived by coverage"
+    },
+    "determinism": {
+      "deterministic_algorithms": true,
+      "warn_only": false,
+      "flash_sdp": false,
+      "mem_efficient_sdp": false,
+      "math_sdp": true,
+      "cudnn_deterministic": true,
+      "cublas_workspace_config": ":4096:8"
+    },
+    "frozen_lm": {
+      "arm_model": "random",
+      "repo_id": "HuggingFaceTB/SmolLM2-135M",
+      "pinned_revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+      "construction": "utils.set_seed(20260802); from_config in float32; cast to bfloat16; no pretrained weight loaded",
+      "tied_embeddings_verified": true,
+      "parameter_count": 134515008,
+      "config_sha256": "1d556eab73b69c7f11f64c557a2f9c6f440bd4c6b89bb2584a6b498c92603843",
+      "tokenizer_file_sha256": "9ca9acddb6525a194ec8ac7a87f24fbba7232a9a15ffa1af0c1224fcd888e47c",
+      "state_dict_sha256": "c6666d3ce0af64ae784d61562f9ea7e56e2b214220f26bbd2d6fd0999bce474b",
+      "resolved_revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+      "resolved_snapshot_path": "/scratch/Efficient Vision-Language Reasoning with Small Language Models/.cache/huggingface/hub/models--HuggingFaceTB--SmolLM2-135M/snapshots/93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+      "transformers_version": "5.14.1",
+      "tokenizers_version": "0.22.2",
+      "loaded_dtype": "torch.bfloat16",
+      "parameter_dtypes": [
+        "torch.bfloat16"
+      ],
+      "config_dtype_normalised": "torch.bfloat16",
+      "attn_implementation": "sdpa",
+      "generation_config_source": "pinned snapshot, identical for both arms",
+      "rotary_fp32_restoration": {
+        "restored_buffers": {
+          "inv_freq": {
+            "dtype": "torch.float32",
+            "shape": [
+              32
+            ],
+            "sha256": "4dcfda84ce763abe24a92bbf6718c1b03753068a39a15aaf8ae5ac2fdc6ca266"
+          },
+          "original_inv_freq": {
+            "dtype": "torch.float32",
+            "shape": [
+              32
+            ],
+            "sha256": "4dcfda84ce763abe24a92bbf6718c1b03753068a39a15aaf8ae5ac2fdc6ca266"
+          }
+        },
+        "rule": "reconstructed in fp32 from the pinned configuration, identically for the pretrained and random arms (OI5)"
+      },
+      "buffer_inventory": {
+        "model.rotary_emb.inv_freq": {
+          "dtype": "torch.float32",
+          "shape": [
+            32
+          ],
+          "sha256": "8efa5ae72fba0f25a2d4509ab96d5e5ffe54ea4171882b879143484fa5cb3bf6"
+        },
+        "model.rotary_emb.original_inv_freq": {
+          "dtype": "torch.float32",
+          "shape": [
+            32
+          ],
+          "sha256": "8efa5ae72fba0f25a2d4509ab96d5e5ffe54ea4171882b879143484fa5cb3bf6"
+        }
+      }
+    },
+    "per_row_artefact": {
+      "path": "results/experiments/e8b_readout_generation/e8b_core_B2_train_250k_seed1_final_eval_per_row.npz",
+      "sha256": "8d765471c10cd57b27aa4c0fa8b673bc249811fc63a20c2dcb7317e6153f7495"
+    },
+    "wall_seconds": 1178.82,
+    "resource_gate_before": {
+      "identity": "random",
+      "already_charged_hours": 18.6621,
+      "committed_not_yet_spent_hours": 1.704,
+      "reserved_for_unrun_cells_hours": 1.197,
+      "additional_hours": 0.0,
+      "projected_total_hours": 21.5631,
+      "ceiling_hours": 40.0,
+      "applies": true,
+      "headroom_hours": 18.4369,
+      "headroom_floor_hours": 1.0,
+      "baseline_budget_hours": 34.805,
+      "measured_programme_hours": 34.803,
+      "baseline_arithmetic_gap_hours": 0.002,
+      "enforceable_recovery_margin_hours": 4.195,
+      "largest_cell_retry_hours": 4.249,
+      "largest_retry_fits_automatically": false,
+      "baseline_headroom_hours": 13.2419,
+      "over_baseline": false,
+      "forced_retries_taken": 0,
+      "contingency_unlocked_hours": 0.0,
+      "contingency_unlocked": false,
+      "below_headroom_floor": false,
+      "fires": false,
+      "fire_reason": null
+    },
+    "clean_test_accessed": false
+  }
+}

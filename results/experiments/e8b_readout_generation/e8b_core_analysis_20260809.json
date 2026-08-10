@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-08-09T23:02:03",
-    "git_commit": "1b4ea42",
+    "timestamp": "2026-08-10T03:09:44",
+    "git_commit": "c22e5f0",
     "git_dirty": true,
     "open_clip_version": "3.3.0",
     "numpy_version": "2.5.0",
@@ -919,7 +919,7 @@
           "implementation": "experiments/e8a_question_encoder/analyse_core.py"
         },
         "interval_caveat": "the 95 per cent interval is image-clustered over the development images and CONDITIONS ON THE FIXED TRAINED SEED SET: it propagates sampling variation over questions and images, not training variance. The three per-seed differences are reported beside it, as the canonical rule requires.",
-        "selection_rule_caveat": "B1 selects its primary checkpoint by the frozen section-7.3 rule (best development accuracy over a 100-epoch budget with early stopping, earliest epoch on ties), whereas B2 and B3 use the frozen epoch-22 rule with no early stopping. A B1-versus-B2/B3 difference therefore confounds architecture with checkpoint selection and is NOT a clean causal architecture comparison. B3 minus B2 is the only contrast in this matrix whose two arms share a selection rule.",
+        "selection_rule_caveat": "B1 selects its primary checkpoint by the frozen section-7.3 rule (best development accuracy over a 100-epoch budget with early stopping, earliest epoch on ties), whereas B2 and B3 use the frozen epoch-22 rule with no early stopping. The differing checkpoint-selection rules MAY FAVOUR B1 relative to fixed-epoch systems, so a B1-versus-B2/B3 difference is a SYSTEM-LEVEL comparison of two complete configurations rather than a clean causal architecture contrast; architecture and selection rule are not separable in it. B3 minus B2 is the only contrast in this matrix whose two arms share a selection rule.",
         "clean_causal_architecture_comparison": false
       },
       {
@@ -948,7 +948,7 @@
           "implementation": "experiments/e8a_question_encoder/analyse_core.py"
         },
         "interval_caveat": "the 95 per cent interval is image-clustered over the development images and CONDITIONS ON THE FIXED TRAINED SEED SET: it propagates sampling variation over questions and images, not training variance. The three per-seed differences are reported beside it, as the canonical rule requires.",
-        "selection_rule_caveat": "B1 selects its primary checkpoint by the frozen section-7.3 rule (best development accuracy over a 100-epoch budget with early stopping, earliest epoch on ties), whereas B2 and B3 use the frozen epoch-22 rule with no early stopping. A B1-versus-B2/B3 difference therefore confounds architecture with checkpoint selection and is NOT a clean causal architecture comparison. B3 minus B2 is the only contrast in this matrix whose two arms share a selection rule.",
+        "selection_rule_caveat": "B1 selects its primary checkpoint by the frozen section-7.3 rule (best development accuracy over a 100-epoch budget with early stopping, earliest epoch on ties), whereas B2 and B3 use the frozen epoch-22 rule with no early stopping. The differing checkpoint-selection rules MAY FAVOUR B1 relative to fixed-epoch systems, so a B1-versus-B2/B3 difference is a SYSTEM-LEVEL comparison of two complete configurations rather than a clean causal architecture contrast; architecture and selection rule are not separable in it. B3 minus B2 is the only contrast in this matrix whose two arms share a selection rule.",
         "clean_causal_architecture_comparison": false
       },
       {
@@ -1005,7 +1005,7 @@
           "implementation": "experiments/e8a_question_encoder/analyse_core.py"
         },
         "interval_caveat": "the 95 per cent interval is image-clustered over the development images and CONDITIONS ON THE FIXED TRAINED SEED SET: it propagates sampling variation over questions and images, not training variance. The three per-seed differences are reported beside it, as the canonical rule requires.",
-        "selection_rule_caveat": "B1 selects its primary checkpoint by the frozen section-7.3 rule (best development accuracy over a 100-epoch budget with early stopping, earliest epoch on ties), whereas B2 and B3 use the frozen epoch-22 rule with no early stopping. A B1-versus-B2/B3 difference therefore confounds architecture with checkpoint selection and is NOT a clean causal architecture comparison. B3 minus B2 is the only contrast in this matrix whose two arms share a selection rule.",
+        "selection_rule_caveat": "B1 selects its primary checkpoint by the frozen section-7.3 rule (best development accuracy over a 100-epoch budget with early stopping, earliest epoch on ties), whereas B2 and B3 use the frozen epoch-22 rule with no early stopping. The differing checkpoint-selection rules MAY FAVOUR B1 relative to fixed-epoch systems, so a B1-versus-B2/B3 difference is a SYSTEM-LEVEL comparison of two complete configurations rather than a clean causal architecture contrast; architecture and selection rule are not separable in it. B3 minus B2 is the only contrast in this matrix whose two arms share a selection rule.",
         "clean_causal_architecture_comparison": false
       },
       {
@@ -1034,7 +1034,7 @@
           "implementation": "experiments/e8a_question_encoder/analyse_core.py"
         },
         "interval_caveat": "the 95 per cent interval is image-clustered over the development images and CONDITIONS ON THE FIXED TRAINED SEED SET: it propagates sampling variation over questions and images, not training variance. The three per-seed differences are reported beside it, as the canonical rule requires.",
-        "selection_rule_caveat": "B1 selects its primary checkpoint by the frozen section-7.3 rule (best development accuracy over a 100-epoch budget with early stopping, earliest epoch on ties), whereas B2 and B3 use the frozen epoch-22 rule with no early stopping. A B1-versus-B2/B3 difference therefore confounds architecture with checkpoint selection and is NOT a clean causal architecture comparison. B3 minus B2 is the only contrast in this matrix whose two arms share a selection rule.",
+        "selection_rule_caveat": "B1 selects its primary checkpoint by the frozen section-7.3 rule (best development accuracy over a 100-epoch budget with early stopping, earliest epoch on ties), whereas B2 and B3 use the frozen epoch-22 rule with no early stopping. The differing checkpoint-selection rules MAY FAVOUR B1 relative to fixed-epoch systems, so a B1-versus-B2/B3 difference is a SYSTEM-LEVEL comparison of two complete configurations rather than a clean causal architecture contrast; architecture and selection rule are not separable in it. B3 minus B2 is the only contrast in this matrix whose two arms share a selection rule.",
         "clean_causal_architecture_comparison": false
       }
     ],
@@ -1399,10 +1399,13 @@
       }
     },
     "resources": {
-      "accounting_rule": "A is scientific successful-run compute; B is operational charged compute and includes every failed attempt. The failed first attempt of B3/train_40k/seed0 is charged in B and excluded from A. Nothing is netted out.",
-      "A_scientific_successful_run_hours": 35.46092,
-      "B_operational_charged_hours": 36.77751,
+      "accounting_rule": "Three DIFFERENT scopes, which must not be mixed. A and B are E8B-ONLY and cover the eighteen core cells. C is PROGRAMME-WIDE per frozen model identity and includes E8A, the abandoned search, characterisation and probe hours spent long before this matrix. A and B differ only by the failed first attempt of B3/train_40k/seed0, which is charged in B and excluded from A and is never netted out. The identity totals in C DO NOT SUM to B and were never intended to: they answer a different question, namely how much each frozen model identity has cost across the whole programme against its 40 h ceiling.",
+      "A_e8b_only_scientific_successful_run_hours": 35.46092,
+      "B_e8b_only_operational_charged_hours": 36.77751,
       "difference_failed_attempts_hours": 1.31659,
+      "A_and_B_scope": "the eighteen E8B core cells only",
+      "C_scope": "programme-wide, per frozen model identity, including all pre-E8B spend on that identity",
+      "C_does_not_sum_to_B": true,
       "by_cell": [
         {
           "arm": "B1",
@@ -1604,7 +1607,7 @@
           ]
         }
       ],
-      "per_identity": {
+      "C_per_identity_programme_wide": {
         "pretrained": {
           "charged_hours": 27.9777,
           "projected_total_hours": 35.9417,
@@ -1662,7 +1665,7 @@
       "implementation_reused": "experiments/e8a_question_encoder/analyse_core.py clustered_bootstrap, percentile_interval and directional_rule; no test was added, substituted or tuned for E8B",
       "caveat": "the 95 per cent interval is image-clustered over the development images and CONDITIONS ON THE FIXED TRAINED SEED SET: it propagates sampling variation over questions and images, not training variance. The three per-seed differences are reported beside it, as the canonical rule requires."
     },
-    "b1_selection_rule_caveat": "B1 selects its primary checkpoint by the frozen section-7.3 rule (best development accuracy over a 100-epoch budget with early stopping, earliest epoch on ties), whereas B2 and B3 use the frozen epoch-22 rule with no early stopping. A B1-versus-B2/B3 difference therefore confounds architecture with checkpoint selection and is NOT a clean causal architecture comparison. B3 minus B2 is the only contrast in this matrix whose two arms share a selection rule.",
+    "b1_selection_rule_caveat": "B1 selects its primary checkpoint by the frozen section-7.3 rule (best development accuracy over a 100-epoch budget with early stopping, earliest epoch on ties), whereas B2 and B3 use the frozen epoch-22 rule with no early stopping. The differing checkpoint-selection rules MAY FAVOUR B1 relative to fixed-epoch systems, so a B1-versus-B2/B3 difference is a SYSTEM-LEVEL comparison of two complete configurations rather than a clean causal architecture contrast; architecture and selection rule are not separable in it. B3 minus B2 is the only contrast in this matrix whose two arms share a selection rule.",
     "not_computed": {
       "readouts_R1_R2_R3": "NOT RUN. final_evaluation.py implements and validates them, but nothing drives it over the eighteen frozen checkpoints.",
       "interventions": "NOT RUN, for the same reason: fixed-image, fixed-question and deranged-image are implemented in final_evaluation.evaluate_condition and never invoked on a core checkpoint.",

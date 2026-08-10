@@ -1,0 +1,227 @@
+{
+  "metadata": {
+    "timestamp": "2026-08-09T23:14:35",
+    "git_commit": "c22e5f0",
+    "git_dirty": false,
+    "open_clip_version": "3.3.0",
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "h5py_version": "3.16.0",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 42,
+    "deterministic": true,
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "embed_dim": 512,
+    "top_k_answers": 100,
+    "n_train": 40000,
+    "n_val": 8000,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "hidden_dim": 512,
+    "dropout": 0.3,
+    "weight_decay": 0.0001
+  },
+  "e8b_final_evaluation": {
+    "dated_utc": "2026-08-09",
+    "NO_TRAINING": true,
+    "cell": [
+      "B1",
+      "train_40k",
+      0
+    ],
+    "run": "e8b_core_B1_train_40k_seed0",
+    "manifest_basis_commit": "1b4ea42",
+    "checkpoint": {
+      "path": "results/experiments/e8b_readout_generation/checkpoints/e8b_core_B1_train_40k_seed0_canonical_best.pt",
+      "sha256": "126d91f78bba5bebc9ec9dd49926b83c7b5c92c953b40d033743cb8d5a89214a",
+      "rule": "best development accuracy, earliest epoch on ties (the v3_01 selection rule)",
+      "epoch": 9
+    },
+    "result_record_sha256": "77a0a26ab8f828134f0f44e46a725c5ffffeb7e3ad8b62216e608fbf0b898920",
+    "evaluator_source_digest": "333b44e7a44cdbba52261b79ce04ffb9f39e6dc8715d1af56f9d196a903726e8",
+    "driver": "experiments/e8b_readout_generation/run_final_evaluation.py (orchestration only)",
+    "protocol_family": "e8b-fp32-fixed22-core-2026-08-07",
+    "denominators": {
+      "raw_rows": 10004,
+      "in_vocabulary_rows": 7714,
+      "out_of_vocabulary_rows": 2290,
+      "image_clusters_raw": 777,
+      "coverage": 0.771092,
+      "restriction_optimisation": "REJECTED and not used; every readout runs on the full raw denominator"
+    },
+    "conditions": {
+      "normal": {
+        "classifier_in_vocabulary": {
+          "n": 7714,
+          "raw_exact": 0.54952,
+          "normalised_exact": 0.54952,
+          "raw_hit_count": 4239,
+          "normalised_hit_count": 4239
+        },
+        "classifier_raw_denominator": {
+          "n": 10004,
+          "basis": "DIRECT: every row scored against its gold string, including the out-of-vocabulary rows. The coverage identity is used only to cross-check this number, never to produce it (canonical plan section 6).",
+          "raw_hits": 4239,
+          "normalised_hits": 4239,
+          "raw_exact": 0.423731,
+          "normalised_exact": 0.423731,
+          "coverage_identity_cross_check": {
+            "coverage": 0.771092,
+            "raw_hits_in_vocabulary": 4239,
+            "normalised_hits_in_vocabulary": 4239,
+            "out_of_vocabulary_hits": {
+              "raw": 0,
+              "normalised": 0
+            },
+            "identity_agrees": true
+          }
+        },
+        "seconds": 3.34,
+        "readouts_defined_for_this_arm": "classifier only; the canonical plan does not define R1/R2/R3 for B1 and none is invented here"
+      },
+      "fixed_image": {
+        "classifier_in_vocabulary": {
+          "n": 7714,
+          "raw_exact": 0.463702,
+          "normalised_exact": 0.463702,
+          "raw_hit_count": 3577,
+          "normalised_hit_count": 3577
+        },
+        "classifier_raw_denominator": {
+          "n": 10004,
+          "basis": "DIRECT: every row scored against its gold string, including the out-of-vocabulary rows. The coverage identity is used only to cross-check this number, never to produce it (canonical plan section 6).",
+          "raw_hits": 3577,
+          "normalised_hits": 3577,
+          "raw_exact": 0.357557,
+          "normalised_exact": 0.357557,
+          "coverage_identity_cross_check": {
+            "coverage": 0.771092,
+            "raw_hits_in_vocabulary": 3577,
+            "normalised_hits_in_vocabulary": 3577,
+            "out_of_vocabulary_hits": {
+              "raw": 0,
+              "normalised": 0
+            },
+            "identity_agrees": true
+          }
+        },
+        "seconds": 3.21,
+        "readouts_defined_for_this_arm": "classifier only; the canonical plan does not define R1/R2/R3 for B1 and none is invented here"
+      },
+      "fixed_question": {
+        "classifier_in_vocabulary": {
+          "n": 7714,
+          "raw_exact": 0.229453,
+          "normalised_exact": 0.229453,
+          "raw_hit_count": 1770,
+          "normalised_hit_count": 1770
+        },
+        "classifier_raw_denominator": {
+          "n": 10004,
+          "basis": "DIRECT: every row scored against its gold string, including the out-of-vocabulary rows. The coverage identity is used only to cross-check this number, never to produce it (canonical plan section 6).",
+          "raw_hits": 1770,
+          "normalised_hits": 1770,
+          "raw_exact": 0.176929,
+          "normalised_exact": 0.176929,
+          "coverage_identity_cross_check": {
+            "coverage": 0.771092,
+            "raw_hits_in_vocabulary": 1770,
+            "normalised_hits_in_vocabulary": 1770,
+            "out_of_vocabulary_hits": {
+              "raw": 0,
+              "normalised": 0
+            },
+            "identity_agrees": true
+          }
+        },
+        "seconds": 2.97,
+        "readouts_defined_for_this_arm": "classifier only; the canonical plan does not define R1/R2/R3 for B1 and none is invented here"
+      },
+      "shuffled_image": {
+        "classifier_in_vocabulary": {
+          "n": 7714,
+          "raw_exact": 0.421053,
+          "normalised_exact": 0.421053,
+          "raw_hit_count": 3248,
+          "normalised_hit_count": 3248
+        },
+        "classifier_raw_denominator": {
+          "n": 10004,
+          "basis": "DIRECT: every row scored against its gold string, including the out-of-vocabulary rows. The coverage identity is used only to cross-check this number, never to produce it (canonical plan section 6).",
+          "raw_hits": 3248,
+          "normalised_hits": 3248,
+          "raw_exact": 0.32467,
+          "normalised_exact": 0.32467,
+          "coverage_identity_cross_check": {
+            "coverage": 0.771092,
+            "raw_hits_in_vocabulary": 3248,
+            "normalised_hits_in_vocabulary": 3248,
+            "out_of_vocabulary_hits": {
+              "raw": 0,
+              "normalised": 0
+            },
+            "identity_agrees": true
+          }
+        },
+        "seconds": 3.15,
+        "readouts_defined_for_this_arm": "classifier only; the canonical plan does not define R1/R2/R3 for B1 and none is invented here"
+      }
+    },
+    "normalisation_check": {
+      "distinct_oov_gold": 563,
+      "collisions_with_vocabulary_normal_form": [],
+      "identity_holds_for_normalised_match": true,
+      "note": "if this ever fails, the normalised raw-denominator accuracy must be scored row by row instead of derived by coverage"
+    },
+    "determinism": {
+      "deterministic_algorithms": true,
+      "warn_only": false,
+      "flash_sdp": false,
+      "mem_efficient_sdp": false,
+      "math_sdp": true,
+      "cudnn_deterministic": true,
+      "cublas_workspace_config": ":4096:8"
+    },
+    "frozen_lm": null,
+    "per_row_artefact": {
+      "path": "results/experiments/e8b_readout_generation/e8b_core_B1_train_40k_seed0_final_eval_per_row.npz",
+      "sha256": "28783c70c61e0e207aeca20e6a4ccbbc3d4cc82064bc80ba1382ff3cc72517ec"
+    },
+    "wall_seconds": 12.67,
+    "resource_gate_before": {
+      "identity": "none",
+      "already_charged_hours": 2.119,
+      "committed_not_yet_spent_hours": 0.0,
+      "reserved_for_unrun_cells_hours": 1.1039,
+      "additional_hours": 0.0,
+      "projected_total_hours": 3.2229,
+      "ceiling_hours": 40.0,
+      "applies": false,
+      "headroom_hours": 36.7771,
+      "headroom_floor_hours": 1.0,
+      "baseline_budget_hours": 34.805,
+      "measured_programme_hours": 34.803,
+      "baseline_arithmetic_gap_hours": 0.002,
+      "enforceable_recovery_margin_hours": 4.195,
+      "largest_cell_retry_hours": 4.249,
+      "largest_retry_fits_automatically": false,
+      "baseline_headroom_hours": 31.5821,
+      "over_baseline": false,
+      "forced_retries_taken": 0,
+      "contingency_unlocked_hours": 0.0,
+      "contingency_unlocked": false,
+      "below_headroom_floor": false,
+      "fires": false,
+      "fire_reason": null
+    },
+    "clean_test_accessed": false
+  }
+}
