@@ -2040,6 +2040,36 @@ def validate_core_authorization_grant(arm: str | None = None,
     return grant
 
 
+def core_authorization_state() -> dict:
+    """Report the external-authorization state; never assert a verdict on it.
+
+    A verifier has to be able to describe both the closed and the authorised
+    state truthfully, so this reports what is there. The hand-back proof that
+    nothing is authorised is assert_no_core_authorization_grant below, which is
+    for writers and hand-back checks rather than for routine verification.
+    """
+    path = core_authorization_grant_path()
+    records = sorted(
+        item.name for item in CORE_AUTHORIZATION_DIR.glob("*.json")
+    ) if CORE_AUTHORIZATION_DIR.is_dir() else []
+    valid = False
+    reason = None
+    if path.is_file():
+        try:
+            validate_core_authorization_grant()
+            valid = True
+        except (AssertionError, OSError, ValueError) as error:
+            reason = str(error)
+    return {
+        "grant_path": str(path),
+        "grant_present": path.is_file(),
+        "grant_valid": valid,
+        "invalid_reason": reason,
+        "records_in_authorization_directory": len(records),
+        "e10_training_authorized": E10_TRAINING_AUTHORIZED,
+    }
+
+
 def assert_no_core_authorization_grant() -> dict:
     """Prove no real external scientific core authorization exists.
 

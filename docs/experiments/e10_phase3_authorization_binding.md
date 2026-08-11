@@ -129,13 +129,20 @@ Phase-3 work began.
 
 After the repair, at the final Phase-3 state:
 
-- live source digest `b72d4f7fd1f0e5287997edf85fc7087958b0ed8757259f8e74d92c6f3c2e942d`,
-  which is the digest the Phase-3 amendment binds; config digest
+- live source digest `857ec44e8f5275569a5369b0dfbcd0cbff660b038d5b9cd39c67083ceb0a6b98`
+  at revision 2, which is the digest the Phase-3 amendment binds (revision 1
+  bound `b72d4f7fd1f0e5287997edf85fc7087958b0ed8757259f8e74d92c6f3c2e942d`);
+  config digest
   `4b9fa43cb74b511c0bb6fda3c7c043d6047ef5e5e220c1abad6e35138f3df9ab`,
   unchanged from Phase 2;
 - creating, validating and opening a synthetic grant leaves the source digest
   and every per-file digest byte-identical, measured before, during and after;
-- `phase1-verify`, `phase2-verify` and `phase3-verify` all exit zero;
+- in the NO-GRANT state, `phase1-verify`, `phase2-verify` and `phase3-verify`
+  all exit zero and every one of the twelve frozen cells refuses;
+- in the VALID-GRANT state, with one valid exact synthetic grant in a temporary
+  authorization directory, all three verifiers also pass and exactly the twelve
+  frozen cells open, nothing else does, and removing the grant returns every
+  verifier and the entry gate to the refusal state;
 - `tests/test_e10.py` 21 checks, `tests/test_e10_phase1.py` 15 checks,
   `tests/test_e10_phase2.py` 38 checks, `tests/test_e10_phase3.py` 21 checks,
   and `tests/run_all.py` reports all test modules passing;
@@ -203,6 +210,53 @@ redirects `CORE_AUTHORIZATION_DIR` with the rest of shared state, and
 `write_core_authorization_grant` refuses outright if the real path is still
 live, so the mistake cannot recur silently. The harness also now installs its
 grant after the stand-in model identity is in force.
+
+## Revision 2: the independent review finding
+
+The independent Phase-3 review confirmed the external-grant mechanism sound and
+returned CHANGES_REQUIRED on one blocking defect, repaired here.
+
+`phase1.assert_scientific_core_refused` still encoded the pre-Phase-3 invariant
+that the E10 scientific core must always refuse. That was truthful while nothing
+could authorise it. After Phase 3 it is not: with a valid exact external grant,
+scientific entry is correctly authorised, `scientific_refusal()` returns `None`,
+and that function raised. Because `phase1.verify`, `phase2.verify` through
+`pipeline_contract` and `phase3.verify` through `authorization_contract` all
+call it, all three verification commands failed the moment a valid grant
+existed. The reviewer reproduced all three failures; so did this repair, before
+changing anything, with the exact error
+`GuardrailError: the E10 scientific core did not refuse; Phase 1 authorises no
+cell`. The defect was in verification and preflight only: execution itself was
+already correctly authorisable.
+
+The invariant is now stated as the thing that must never happen, the same way
+`phase3.assert_entry_gate_requires_grant` states it. With no valid grant, every
+one of the twelve frozen cells must refuse, and the function checks the whole
+matrix rather than only the first cell of the frozen order. With a valid grant,
+the authorised state is returned truthfully, but only when the single canonical
+validator accepts that grant on its own terms; an absent, invalid or tampered
+grant behind an apparently authorised entry fails closed. The returned mapping
+keeps `refused`, `refusal`, `e10_training_authorized` and
+`core_authorization_grant_present`, and adds the grant validity, identity,
+authorised-cell count and any invalid-grant reason.
+
+A second instance of the same mistake was found in this phase's own code and
+repaired with it: `authorization_contract` embedded
+`e10.assert_no_core_authorization_grant`, which raises whenever a grant exists.
+It now reports `e10.core_authorization_state`, and the hand-back proof that
+nothing is authorised stays where it belongs, in `write_phase3_records` and in
+the tests.
+
+Nothing else changed. The grant schema, the canonical validator, the Phase-3
+amendment and provenance validation, the exact twelve-cell authorisation
+surface, permit signing, mid-cell grant revalidation, the 12-hour wall, the
+40-hour ceiling and the zero-retry rule are all unchanged, and no scientific
+recipe, model, data, evaluation or statistics code was touched. The two Phase-3
+records bind the live source digest, which this repair moves, so they were
+regenerated inside the same open, unapproved revision; the superseded bytes stay
+in git history at `2eb11c3` and their SHA-256 values are pinned in
+`phase3.PHASE3_SUPERSEDED_RECORD_SHA256` and in the regenerated record. No
+approved Phase-0, Phase-1 or Phase-2 evidence was rewritten.
 
 Phase 3 grants nothing. The one remaining gate is unchanged in substance and
 only changed in form: one explicit user scientific authorization, created out of

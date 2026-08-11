@@ -4,18 +4,18 @@
   "task_id": "e10-phase3-authorization-binding",
   "status": "AUTHORIZATION_MECHANISM_IMPLEMENTED_CORE_STILL_UNAUTHORIZED",
   "NON_SCIENTIFIC": true,
-  "utc": "2026-08-10T23:29:56Z",
-  "git_commit": "5d79bf5fb435ce365335593aff6912e37071f65c",
+  "utc": "2026-08-11T00:07:59Z",
+  "git_commit": "2eb11c3069eff3620d8a8a17c87d9577199d0d78",
   "binding": {
-    "source_digest": "b72d4f7fd1f0e5287997edf85fc7087958b0ed8757259f8e74d92c6f3c2e942d",
+    "source_digest": "857ec44e8f5275569a5369b0dfbcd0cbff660b038d5b9cd39c67083ceb0a6b98",
     "source_files": {
-      "experiments/e10_capacity_360m/e10_common.py": "17607266d4c16e9415afca9cb1275b9cfb1c1c0594667a64a3edcd48d6a5631e",
+      "experiments/e10_capacity_360m/e10_common.py": "2410464c632dc2a87fb573a004d38a92db060ec0c2c903bd206e034f56407b3e",
       "experiments/e10_capacity_360m/run.py": "f5aaa7ae35a85f061921e21835184b0766ae64a3b6a0663b547686ae09a2f61f",
       "experiments/e10_capacity_360m/calibration.py": "8280a161bcd829521f660379f2f0dafc6fe04c7a8ab0ba75a1f6dcd544428b49",
       "experiments/e10_capacity_360m/projection.py": "f3e3d4a911896b5d7403eeb0cc32f034cfafa5293f30310257516d4043211a0a",
-      "experiments/e10_capacity_360m/phase1.py": "a9495372bb4dfd5e96dd0bb37c5590cfc3311ba2abce15055830861746d30f25",
+      "experiments/e10_capacity_360m/phase1.py": "f0bac21674e99bfabe3b16bb1f1e923d2a571db75e5f12db07de75fee6c73b31",
       "experiments/e10_capacity_360m/phase2.py": "264327a4f6296e8b8be92781a627643e4666ebdd05b5ffe997aed7ba8cba95ce",
-      "experiments/e10_capacity_360m/phase3.py": "5fe67478e6ec97be24beba09a7ecd6a82fe921d85e812126dab72ffa3add896b",
+      "experiments/e10_capacity_360m/phase3.py": "3d94734c6b8898adb8091e077a711cd23eccded63cfac7e38942e7b766019645",
       "experiments/e10_capacity_360m/science.py": "4d1d88ea842f38a27059fbf911c72dfea6d39dd999cf3df67cae4d2ebbc54d06",
       "experiments/e10_capacity_360m/analysis.py": "0faccc49e1191f42c4287377b587ffce0c89988e59053d7e177553478ca9a056",
       "experiments/e8b_readout_generation/latents.py": "051604b60d1c8fce65e1fa2e9ec53b155fb4af41b7fe9377d009f39f04f0502f",
@@ -30,7 +30,7 @@
       "tests/test_e10.py": "53258283f3b232682d6a65987bbab3a9cf99cb2d39e3510953bccef67d021bbd",
       "tests/test_e10_phase1.py": "a472e60d351a70d5c4ed93653ea0c6e7977ba90874f6333e1a419605c4883b7d",
       "tests/test_e10_phase2.py": "ecf03ea6224d5bf14eb62a96a33819b405aea34da6086e96f6ab9004496b77c6",
-      "tests/test_e10_phase3.py": "2d7e7c64707642cc79e22575621ab7c80e904b420b3f1980159349e910302849",
+      "tests/test_e10_phase3.py": "521ae79cc7cb7c9c5506ae6a8671286e6c23a1bfa5e4d74609ba7a0a251f3f95",
       "tests/run_all.py": "0a53250ac3c10edd788ea756a64dff54e83d2dec824ad557a6f8ea629e741786"
     },
     "config_digest": "4b9fa43cb74b511c0bb6fda3c7c043d6047ef5e5e220c1abad6e35138f3df9ab",
@@ -42,6 +42,45 @@
   },
   "phase2_closure_head": "5d79bf5fb435ce365335593aff6912e37071f65c",
   "phase2_reviewed_source_head": "45986fc49a8117ed951339457099f5d3debda3a3",
+  "revision": {
+    "revision": 2,
+    "reason": "phase1.assert_scientific_core_refused still encoded the pre-Phase-3 invariant that the E10 scientific core must always refuse. With a valid exact external grant, scientific entry is correctly authorised and scientific_refusal() returns None, so that function raised and phase1-verify, phase2-verify and phase3-verify all failed on a legitimately authorised state.",
+    "review_verdict_repaired": "CHANGES_REQUIRED",
+    "repaired_from_head": "2eb11c3069eff3620d8a8a17c87d9577199d0d78",
+    "regenerated_within_open_revision": true,
+    "superseded_records": {
+      "phase3_binding_amendment_20260811.json": "a349eccaadac69a87cbf7ae1b0f2a7eea23c700fab7ec6a6f9e3e4a8d6c3065b",
+      "phase3_authorization_binding_20260811.json": "9bc65964f618204682025d13314bb885cb934a982e3b78e97b70a5794d2781de"
+    },
+    "finding": {
+      "verdict_repaired": "CHANGES_REQUIRED",
+      "blocking_findings": 1,
+      "finding": "phase1.assert_scientific_core_refused still encoded the pre-Phase-3 invariant that the E10 scientific core must always refuse. With a valid exact external grant, scientific entry is correctly authorised and scientific_refusal() returns None, so that function raised and phase1-verify, phase2-verify and phase3-verify all failed on a legitimately authorised state.",
+      "reproduced_before_repair": {
+        "no_grant": {
+          "phase1_verify": "PASS",
+          "phase2_verify": "PASS",
+          "phase3_verify": "PASS"
+        },
+        "valid_temp_grant": {
+          "phase1_verify": "FAIL",
+          "phase2_verify": "FAIL",
+          "phase3_verify": "FAIL",
+          "error": "GuardrailError: the E10 scientific core did not refuse; Phase 1 authorises no cell"
+        }
+      },
+      "scope": "verification and preflight only; scientific execution itself was already authorisable and no scientific behaviour was involved",
+      "repair": "the invariant is now stated as the thing that must never happen, the same way phase3.assert_entry_gate_requires_grant states it: a cell opening with no valid external grant behind it. The authorised state is admitted only when the single canonical validator accepts the grant, and the second instance of the same defect, the raising hand-back proof inside authorization_contract, now reports the state instead of asserting a verdict on it.",
+      "second_instance_repaired": "authorization_contract embedded e10.assert_no_core_authorization_grant, which raises whenever a grant exists; it now reports e10.core_authorization_state and the hand-back proof stays in write_phase3_records and in the tests"
+    },
+    "scientific_recipe_changed": false,
+    "core_matrix_changed": false,
+    "dev_evaluation_cadence_changed": false,
+    "resource_constants_changed": false,
+    "grant_schema_changed": false,
+    "validator_weakened": false,
+    "scientific_authorization_granted": false
+  },
   "contract": {
     "task_id": "e10-phase3-authorization-binding",
     "defect": {
@@ -211,7 +250,7 @@
       "provenance": {
         "phase3_binding_amendment": {
           "path": "results/experiments/e10_capacity_360m/phase3_binding_amendment_20260811.json",
-          "sha256": "a349eccaadac69a87cbf7ae1b0f2a7eea23c700fab7ec6a6f9e3e4a8d6c3065b"
+          "sha256": "a49cb8022f5b985e37fd26a984efb37bfe805ea173f4304a23d3249af55cbc05"
         },
         "phase2_binding_amendment": {
           "path": "results/experiments/e10_capacity_360m/phase2_binding_amendment_20260810.json",
@@ -273,7 +312,7 @@
       "inside_repository": false,
       "inside_source_paths": false,
       "inside_config_paths": false,
-      "source_digest": "b72d4f7fd1f0e5287997edf85fc7087958b0ed8757259f8e74d92c6f3c2e942d",
+      "source_digest": "857ec44e8f5275569a5369b0dfbcd0cbff660b038d5b9cd39c67083ceb0a6b98",
       "config_digest": "4b9fa43cb74b511c0bb6fda3c7c043d6047ef5e5e220c1abad6e35138f3df9ab"
     },
     "entry_gate": {
@@ -296,7 +335,11 @@
       "refused": true,
       "refusal": "E10 CORE REFUSED: scientific authorization grant is absent: no immutable E10 core authorization grant exists at /user/HS400/mc02623/backups/efficient-vision-language-reasoning/e10-locks/e10-core-authorization/e10-core-authorization-grant.json",
       "e10_training_authorized": null,
-      "core_authorization_grant_present": false
+      "core_authorization_grant_present": false,
+      "core_authorization_grant_valid": false,
+      "core_authorization_grant_id": null,
+      "authorized_cells": 0,
+      "invalid_grant_reason": null
     },
     "no_scientific_execution": {
       "published_cell_records": 0,
@@ -304,9 +347,11 @@
       "charged_core_cells": 0,
       "e10_training_authorized": null
     },
-    "no_core_authorization_grant": {
+    "core_authorization_state": {
       "grant_path": "/user/HS400/mc02623/backups/efficient-vision-language-reasoning/e10-locks/e10-core-authorization/e10-core-authorization-grant.json",
       "grant_present": false,
+      "grant_valid": false,
+      "invalid_reason": null,
       "records_in_authorization_directory": 0,
       "e10_training_authorized": null
     },

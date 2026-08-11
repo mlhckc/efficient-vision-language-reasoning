@@ -42,6 +42,63 @@ TASK_ID = e10.PHASE3_TASK_ID
 PHASE2_CLOSURE_HEAD = "5d79bf5fb435ce365335593aff6912e37071f65c"
 PHASE2_REVIEWED_SOURCE_HEAD = "45986fc49a8117ed951339457099f5d3debda3a3"
 
+# Revision 2, the repair of the one blocking finding from the independent
+# Phase-3 review of HEAD 2eb11c3. Both Phase-3 records bind the live source
+# digest, which the repair moves, so they are regenerated inside this same open,
+# unapproved revision rather than a second amendment being chained onto an
+# amendment. The superseded bytes remain in git history at 2eb11c3 and are
+# pinned here and in the regenerated record.
+PHASE3_REVISION = 2
+PHASE3_REPAIRED_FROM_HEAD = "2eb11c3069eff3620d8a8a17c87d9577199d0d78"
+PHASE3_SUPERSEDED_RECORD_SHA256 = {
+    "phase3_binding_amendment_20260811.json":
+        "a349eccaadac69a87cbf7ae1b0f2a7eea23c700fab7ec6a6f9e3e4a8d6c3065b",
+    "phase3_authorization_binding_20260811.json":
+        "9bc65964f618204682025d13314bb885cb934a982e3b78e97b70a5794d2781de",
+}
+
+# The blocking finding, recorded exactly rather than glossed. The external-grant
+# mechanism itself was independently verified sound; what failed was the
+# verifier-state invariant it left behind.
+REPAIRED_FINDING = {
+    "verdict_repaired": "CHANGES_REQUIRED",
+    "blocking_findings": 1,
+    "finding": (
+        "phase1.assert_scientific_core_refused still encoded the pre-Phase-3 "
+        "invariant that the E10 scientific core must always refuse. With a "
+        "valid exact external grant, scientific entry is correctly authorised "
+        "and scientific_refusal() returns None, so that function raised and "
+        "phase1-verify, phase2-verify and phase3-verify all failed on a "
+        "legitimately authorised state."
+    ),
+    "reproduced_before_repair": {
+        "no_grant": {"phase1_verify": "PASS", "phase2_verify": "PASS",
+                     "phase3_verify": "PASS"},
+        "valid_temp_grant": {"phase1_verify": "FAIL", "phase2_verify": "FAIL",
+                             "phase3_verify": "FAIL",
+                             "error": "GuardrailError: the E10 scientific core "
+                                      "did not refuse; Phase 1 authorises no "
+                                      "cell"},
+    },
+    "scope": "verification and preflight only; scientific execution itself was "
+             "already authorisable and no scientific behaviour was involved",
+    "repair": (
+        "the invariant is now stated as the thing that must never happen, the "
+        "same way phase3.assert_entry_gate_requires_grant states it: a cell "
+        "opening with no valid external grant behind it. The authorised state "
+        "is admitted only when the single canonical validator accepts the "
+        "grant, and the second instance of the same defect, the raising "
+        "hand-back proof inside authorization_contract, now reports the state "
+        "instead of asserting a verdict on it."
+    ),
+    "second_instance_repaired": (
+        "authorization_contract embedded e10.assert_no_core_authorization_"
+        "grant, which raises whenever a grant exists; it now reports "
+        "e10.core_authorization_state and the hand-back proof stays in "
+        "write_phase3_records and in the tests"
+    ),
+}
+
 # The defect, reproduced against the frozen scientific executor at the closure
 # HEAD before any Phase-3 source existed. Changing only the one constant from
 # None to the approval token moved the live source digest and made every
@@ -379,7 +436,10 @@ def authorization_contract() -> dict:
         "entry_gate": assert_entry_gate_requires_grant(),
         "scientific_core": phase1.assert_scientific_core_refused(),
         "no_scientific_execution": e10.assert_no_scientific_cells(),
-        "no_core_authorization_grant": e10.assert_no_core_authorization_grant(),
+        # Reported, not asserted: a verifier must describe the authorised state
+        # as truthfully as the closed one. The hand-back proof that nothing is
+        # authorised stays in write_phase3_records and in the tests.
+        "core_authorization_state": e10.core_authorization_state(),
         "frozen_recipe": phase2.assert_frozen_recipe_reproduced(),
         "frozen_plan": phase1.assert_frozen_execution_plan(),
         "resource_policy": phase1.resource_policy(),
@@ -465,6 +525,22 @@ def write_phase3_records() -> dict:
         "binding": e10.binding_record(),
         "phase2_closure_head": PHASE2_CLOSURE_HEAD,
         "phase2_reviewed_source_head": PHASE2_REVIEWED_SOURCE_HEAD,
+        "revision": {
+            "revision": PHASE3_REVISION,
+            "reason": REPAIRED_FINDING["finding"],
+            "review_verdict_repaired": REPAIRED_FINDING["verdict_repaired"],
+            "repaired_from_head": PHASE3_REPAIRED_FROM_HEAD,
+            "regenerated_within_open_revision": True,
+            "superseded_records": PHASE3_SUPERSEDED_RECORD_SHA256,
+            "finding": REPAIRED_FINDING,
+            "scientific_recipe_changed": False,
+            "core_matrix_changed": False,
+            "dev_evaluation_cadence_changed": False,
+            "resource_constants_changed": False,
+            "grant_schema_changed": False,
+            "validator_weakened": False,
+            "scientific_authorization_granted": False,
+        },
         "contract": authorization_contract(),
         "state_at_handback": {
             "core_authorization_grant_present": False,

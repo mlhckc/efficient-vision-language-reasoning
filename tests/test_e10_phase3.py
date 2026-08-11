@@ -556,8 +556,196 @@ def test_phase3_records_are_immutable_and_write_once() -> None:
         is False
     assert record["state_at_handback"]["scientific_cells_executed"] == 0
     assert record["clean_test_accessed"] is False
+    revision = record["revision"]
+    assert revision["revision"] == phase3.PHASE3_REVISION == 2
+    assert revision["review_verdict_repaired"] == "CHANGES_REQUIRED"
+    assert revision["repaired_from_head"] == phase3.PHASE3_REPAIRED_FROM_HEAD
+    assert revision["regenerated_within_open_revision"] is True
+    assert revision["superseded_records"] == phase3.PHASE3_SUPERSEDED_RECORD_SHA256
+    assert revision["scientific_recipe_changed"] is False
+    assert revision["core_matrix_changed"] is False
+    assert revision["grant_schema_changed"] is False
+    assert revision["validator_weakened"] is False
+    assert revision["scientific_authorization_granted"] is False
     assert record["contract"]["defect"]["config_digest_moved"] is False
     assert record["contract"]["validator"]["partial_authorization"] is False
+
+
+# --- the grant-aware verifier invariant ---------------------------------------
+
+PRODUCTION_VERIFIERS = (
+    ("phase1-verify", phase1.verify),
+    ("phase2-verify", phase2.verify),
+    ("phase3-verify", phase3.verify),
+)
+
+
+@contextmanager
+def _temporary_grant_directory(root: Path):
+    """Redirect ONLY the authorization directory.
+
+    The production verifiers read real shared state, real ledgers and the real
+    immutable governance tree; the grant is the single synthetic element, so
+    what is exercised is the production verifier against a real repository.
+    """
+    with mock.patch.object(e10, "CORE_AUTHORIZATION_DIR", Path(root)):
+        yield Path(root)
+
+
+def _all_verifiers_pass() -> dict:
+    """Run the three functions run.py dispatches phaseN-verify to."""
+    results = {}
+    for name, verifier in PRODUCTION_VERIFIERS:
+        verifier()
+        results[name] = "PASS"
+    return results
+
+
+def test_all_three_verifiers_pass_with_and_without_a_valid_grant() -> None:
+    """The blocking Phase-3 review finding, as a regression.
+
+    Before the repair, a valid exact grant made scientific_refusal() return
+    None, assert_scientific_core_refused raised, and all three verifiers failed
+    on a legitimately authorised state.
+    """
+    # CASE A: no grant. Every verifier passes and the core refuses.
+    assert _all_verifiers_pass() == {"phase1-verify": "PASS",
+                                     "phase2-verify": "PASS",
+                                     "phase3-verify": "PASS"}
+    assert phase1.scientific_refusal() is not None
+    closed = phase1.assert_scientific_core_refused()
+    assert closed["refused"] is True
+    assert closed["core_authorization_grant_present"] is False
+    assert closed["core_authorization_grant_valid"] is False
+
+    with tempfile.TemporaryDirectory() as directory:
+        with _temporary_grant_directory(Path(directory)):
+            # CASE B: one valid exact grant. Every verifier still passes.
+            write_core_authorization_grant()
+            assert _all_verifiers_pass() == {"phase1-verify": "PASS",
+                                             "phase2-verify": "PASS",
+                                             "phase3-verify": "PASS"}
+            opened = phase1.assert_scientific_core_refused()
+            assert opened["refused"] is False
+            assert opened["refusal"] is None
+            assert opened["e10_training_authorized"] is None
+            assert opened["core_authorization_grant_present"] is True
+            assert opened["core_authorization_grant_valid"] is True
+            assert opened["authorized_cells"] == 12
+            gate = phase3.assert_entry_gate_requires_grant()
+            assert gate["cells_authorised"] == 12 and gate["cells_refused"] == 0
+            for arm, scale, seed in FROZEN_ORDER:
+                assert e10.assert_core_entry_authorized(arm, scale, seed)
+            _must_raise(SystemExit,
+                        lambda: e10.assert_core_entry_authorized(
+                            *UNREGISTERED_CELL),
+                        "unknown cell")
+
+            # A grant that stops validating closes the core again: entry
+            # refuses, the verifiers still describe the state, and the reason
+            # is reported rather than swallowed.
+            path = e10.core_authorization_grant_path()
+            original = path.read_text()
+            edited = json.loads(original)
+            edited["purpose"] = edited["purpose"] + " and anything else"
+            path.write_text(json.dumps(edited))
+            tampered = phase1.assert_scientific_core_refused()
+            assert tampered["refused"] is True
+            assert tampered["core_authorization_grant_present"] is True
+            assert tampered["core_authorization_grant_valid"] is False
+            assert "grant_id" in tampered["invalid_grant_reason"]
+            assert _all_verifiers_pass() == {"phase1-verify": "PASS",
+                                             "phase2-verify": "PASS",
+                                             "phase3-verify": "PASS"}
+            _must_raise(SystemExit,
+                        lambda: e10.assert_core_entry_authorized(
+                            "B4", "train_40k", 0),
+                        "E10 CORE REFUSED")
+            path.write_text(original)
+            assert phase1.assert_scientific_core_refused()["refused"] is False
+
+            # Defence in depth: if some other path ever let entry open while no
+            # valid grant backed it, the invariant must fail closed rather than
+            # report an authorised state. The hole is simulated, because no real
+            # path can produce it.
+            path.unlink()
+            with mock.patch.object(e10, "assert_core_entry_authorized",
+                                   lambda *_: {"simulated": True}):
+                assert phase1.scientific_refusal() is None
+                _must_raise(phase1.GuardrailError,
+                            phase1.assert_scientific_core_refused,
+                            "no valid external authorization grant backs it")
+            write_core_authorization_grant()
+
+            # CASE C: the grant is removed. The refusal state returns.
+            path.unlink()
+            assert _all_verifiers_pass() == {"phase1-verify": "PASS",
+                                             "phase2-verify": "PASS",
+                                             "phase3-verify": "PASS"}
+            assert phase1.scientific_refusal() is not None
+            _must_raise(SystemExit,
+                        lambda: e10.assert_core_entry_authorized(
+                            "B4", "train_40k", 0),
+                        "grant is absent")
+
+    # The real production state is untouched by any of it.
+    assert e10.assert_no_core_authorization_grant()["grant_present"] is False
+    assert phase1.scientific_refusal() is not None
+
+
+def test_phase3_acceptance_sequence() -> None:
+    """The full Phase-3 acceptance case, in one sequence, on temp state only."""
+    steps = []
+    # 1-2. No grant; all three verifiers pass.
+    assert not e10.core_authorization_grant_path().exists()
+    steps.append(("no_grant_verifiers", _all_verifiers_pass()))
+    # 3. Digests recorded.
+    before_source, before_files = e10.source_digest()
+    before_config, before_config_files = e10.config_digest()
+    with tempfile.TemporaryDirectory() as directory:
+        with _temporary_grant_directory(Path(directory)):
+            # 4. A valid exact synthetic external grant.
+            path = write_core_authorization_grant()
+            grant = e10.validate_core_authorization_grant()
+            assert grant["authorized_cells"] == [list(c) for c in FROZEN_ORDER]
+            # 5. The digests do not move.
+            assert e10.source_digest() == (before_source, before_files)
+            assert e10.config_digest() == (before_config, before_config_files)
+            # 6. All three verifiers pass WITH the grant present.
+            steps.append(("grant_present_verifiers", _all_verifiers_pass()))
+            # 7. The exact authorised core entry opens.
+            permits = []
+            for arm, scale, seed in FROZEN_ORDER:
+                assert e10.assert_core_entry_authorized(arm, scale, seed)
+                permit = e10.authorize_cell_execution(arm, scale, seed)
+                assert permit.grant_id == grant["grant_id"]
+                permits.append(permit)
+            assert len(permits) == 12
+            # 8. An unauthorised cell still refuses.
+            for cell in (UNREGISTERED_CELL, ("B3", "train_40k", 0),
+                         ("B4", "train_40k", 3)):
+                _must_raise(SystemExit,
+                            lambda c=cell: e10.assert_core_entry_authorized(*c),
+                            "unknown cell")
+            # 9. Remove the temporary grant.
+            path.unlink()
+            assert not path.exists()
+            steps.append(("grant_removed_verifiers", _all_verifiers_pass()))
+    # 10. The production real state is still unauthorised, and the digests are
+    # still exactly what they were before any grant existed.
+    assert e10.source_digest() == (before_source, before_files)
+    assert e10.config_digest() == (before_config, before_config_files)
+    assert e10.assert_no_core_authorization_grant()["grant_present"] is False
+    assert e10.E10_TRAINING_AUTHORIZED is None
+    assert e10.assert_no_scientific_cells()["charged_core_cells"] == 0
+    _must_raise(SystemExit, lambda: e10_run.core_cell("B4", "train_40k", 0),
+                "grant is absent")
+    assert [name for name, _ in steps] == ["no_grant_verifiers",
+                                           "grant_present_verifiers",
+                                           "grant_removed_verifiers"]
+    for _, result in steps:
+        assert result == {"phase1-verify": "PASS", "phase2-verify": "PASS",
+                          "phase3-verify": "PASS"}
 
 
 # --- no scientific regression -------------------------------------------------
@@ -610,7 +798,8 @@ def test_phase3_verify_reports_the_real_state() -> None:
     assert contract["entry_gate"]["cells_authorised"] == 0
     assert contract["entry_gate"]["external_grant_present"] is False
     assert contract["scientific_core"]["refused"] is True
-    assert contract["no_core_authorization_grant"]["grant_present"] is False
+    assert contract["core_authorization_state"]["grant_present"] is False
+    assert contract["core_authorization_state"]["grant_valid"] is False
     assert contract["no_scientific_execution"]["charged_core_cells"] == 0
     assert contract["grant_schema"]["partial_authorization"] is False
     assert contract["grant_schema"]["contains_scientific_results"] is False
@@ -640,6 +829,8 @@ TESTS = (
     test_source_constant_mutation_is_not_a_grant_route,
     test_permit_path_works_with_the_valid_external_grant,
     test_no_real_scientific_grant_exists,
+    test_all_three_verifiers_pass_with_and_without_a_valid_grant,
+    test_phase3_acceptance_sequence,
     test_phase3_amendment_is_the_newest_chain_link,
     test_older_link_cannot_carry_itself_or_a_newer_one,
     test_phase3_records_are_immutable_and_write_once,

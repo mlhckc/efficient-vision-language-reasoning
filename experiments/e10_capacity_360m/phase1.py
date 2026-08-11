@@ -258,18 +258,64 @@ def scientific_refusal() -> str | None:
 
 
 def assert_scientific_core_refused() -> dict:
+    """No E10 cell may open without a valid external authorization grant.
+
+    Before Phase 3 the only honest statement was that the core always refuses,
+    because nothing could authorise it. Since Phase 3 an explicit external grant
+    may legitimately open the exact frozen matrix, and treating that as a
+    Phase-1 failure would make every verifier fail the moment the work is
+    authorised. So the invariant is stated as the thing that must never happen,
+    exactly as phase3.assert_entry_gate_requires_grant states it: a cell opening
+    with no valid grant behind it.
+
+    The authorised state is admitted only when the single canonical validator
+    accepts the grant on its own terms. Nothing here re-implements or relaxes
+    that validator, and the legacy source constant is still not a route.
+    """
     refusal = scientific_refusal()
-    if refusal is None:
+    grant_present = e10.core_authorization_grant_path().is_file()
+    grant = None
+    grant_error = None
+    if grant_present:
+        try:
+            grant = e10.validate_core_authorization_grant()
+        except (AssertionError, OSError, ValueError) as error:
+            grant_error = str(error)
+    if refusal is None and grant is None:
         raise GuardrailError(
-            "the E10 scientific core did not refuse; Phase 1 authorises no cell"
+            "the E10 scientific core did not refuse and no valid external "
+            "authorization grant backs it: "
+            + (grant_error or "no authorization grant record exists")
         )
+    if refusal is None and e10.E10_TRAINING_AUTHORIZED is not None:
+        raise GuardrailError(
+            "the E10 scientific core is open with the legacy source constant "
+            f"set to {e10.E10_TRAINING_AUTHORIZED!r}; it is not a route"
+        )
+    if grant is None:
+        # While no valid grant exists, nothing may open: the whole frozen
+        # matrix is checked, not only the first cell of the frozen order.
+        opened = []
+        for arm, scale, seed in e10.CORE_CELLS:
+            try:
+                e10.assert_core_entry_authorized(arm, scale, seed)
+            except (SystemExit, AssertionError):
+                continue
+            opened.append([arm, scale, seed])
+        if opened:
+            raise GuardrailError(
+                f"E10 cells opened with no valid external authorization "
+                f"grant: {opened}"
+            )
     return {
-        "refused": True,
+        "refused": refusal is not None,
         "refusal": refusal,
         "e10_training_authorized": e10.E10_TRAINING_AUTHORIZED,
-        "core_authorization_grant_present": (
-            e10.core_authorization_grant_path().is_file()
-        ),
+        "core_authorization_grant_present": grant_present,
+        "core_authorization_grant_valid": grant is not None,
+        "core_authorization_grant_id": grant["grant_id"] if grant else None,
+        "authorized_cells": len(grant["authorized_cells"]) if grant else 0,
+        "invalid_grant_reason": grant_error,
     }
 
 
