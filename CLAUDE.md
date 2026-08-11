@@ -231,7 +231,9 @@ hash no longer matches the worktree.
   scientific core is still unauthorised, `E10_TRAINING_AUTHORIZED` is still
   `None`, and starting the twelve-cell matrix requires a separate explicit
   user decision that has not been given.
-- E10 Phase 3 (implemented 11 August 2026, review requested, NOT approved)
+- E10 Phase 3 (completed 11 August 2026; independent review PASS, packet
+  closed at ce2495b, closure recorded at
+  results/experiments/e10_capacity_360m/phase3_review_closure_20260811.json)
   repaired the self-defeating authorisation gate and changed no scientific
   behaviour. The defect, reproduced at the Phase-2 closure HEAD: because
   e10_common.py is inside SOURCE_PATHS, setting `E10_TRAINING_AUTHORIZED` to
@@ -251,9 +253,16 @@ hash no longer matches the worktree.
   provably does not move the source digest. A narrow Phase-3 amendment carries
   every approved Phase-0/1/2 record forward byte for byte. Nothing scientific
   ran: no grant exists, `run core-cell B4 train_40k 0` still refuses, zero
-  cells, checkpoints, accuracies and core GPU-hours. The real grant will be
-  created only after an independent Phase-3 review returns PASS. See
-  docs/experiments/e10_phase3_authorization_binding.md.
+  cells, checkpoints, accuracies and core GPU-hours. The independent review
+  took two rounds: round 1 returned CHANGES_REQUIRED on one blocking defect,
+  that the pre-Phase-3 always-refuses verifier invariant made all three
+  verifiers fail once a valid grant existed; the repair made the invariant
+  grant-aware and round 2 returned PASS. All three verifiers now pass with no
+  grant, with a valid grant and after a grant is removed. The reviewer's
+  conclusion is that Phase 3 is technically READY for the creation of the
+  explicit real user scientific authorisation grant. THE CLOSURE AUTHORISES
+  NOTHING: creating that grant is a separate explicit user decision that has
+  not been given. See docs/experiments/e10_phase3_authorization_binding.md.
 - Current gate, updated 2 August 2026 (E8A/E8B/E9 programme). The user
   authorized the E8A frozen-SLM question-encoder branch, the E8B frozen-SLM
   readout and bounded-generation branch, and the E9 evaluation-only compact-VLM

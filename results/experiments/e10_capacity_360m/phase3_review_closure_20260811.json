@@ -1,0 +1,302 @@
+{
+  "schema_version": 1,
+  "record_type": "e10_phase3_review_closure",
+  "task_id": "e10-phase3-authorization-binding",
+  "status": "INDEPENDENT_REVIEW_PASS_PACKET_CLOSED",
+  "NON_SCIENTIFIC": true,
+  "utc": "2026-08-11T00:41:13Z",
+  "git_commit": "ce2495b5ccd69eabab468f263848add10bb6c683",
+  "binding": {
+    "source_digest": "857ec44e8f5275569a5369b0dfbcd0cbff660b038d5b9cd39c67083ceb0a6b98",
+    "source_files": {
+      "experiments/e10_capacity_360m/e10_common.py": "2410464c632dc2a87fb573a004d38a92db060ec0c2c903bd206e034f56407b3e",
+      "experiments/e10_capacity_360m/run.py": "f5aaa7ae35a85f061921e21835184b0766ae64a3b6a0663b547686ae09a2f61f",
+      "experiments/e10_capacity_360m/calibration.py": "8280a161bcd829521f660379f2f0dafc6fe04c7a8ab0ba75a1f6dcd544428b49",
+      "experiments/e10_capacity_360m/projection.py": "f3e3d4a911896b5d7403eeb0cc32f034cfafa5293f30310257516d4043211a0a",
+      "experiments/e10_capacity_360m/phase1.py": "f0bac21674e99bfabe3b16bb1f1e923d2a571db75e5f12db07de75fee6c73b31",
+      "experiments/e10_capacity_360m/phase2.py": "264327a4f6296e8b8be92781a627643e4666ebdd05b5ffe997aed7ba8cba95ce",
+      "experiments/e10_capacity_360m/phase3.py": "3d94734c6b8898adb8091e077a711cd23eccded63cfac7e38942e7b766019645",
+      "experiments/e10_capacity_360m/science.py": "4d1d88ea842f38a27059fbf911c72dfea6d39dd999cf3df67cae4d2ebbc54d06",
+      "experiments/e10_capacity_360m/analysis.py": "0faccc49e1191f42c4287377b587ffce0c89988e59053d7e177553478ca9a056",
+      "experiments/e8b_readout_generation/latents.py": "051604b60d1c8fce65e1fa2e9ec53b155fb4af41b7fe9377d009f39f04f0502f",
+      "experiments/e8b_readout_generation/readouts.py": "28acdf21c87b286c78dcc2ff2be24a4834dd21b265f4420b4014f8a9d1254ca6",
+      "experiments/e8b_readout_generation/training.py": "5ec731105db87b6b5aa16bca02e9c2e3705050a59ef297a4956480fccec44ce3",
+      "experiments/e8b_readout_generation/run.py": "d05c79a749f6c4dc17e37d81f4f7598ea7f74d2e6573c4feae8243c2253e1430",
+      "experiments/e8a_question_encoder/e8a_common.py": "cd6c8ce0f0f9d93ec367d9e4c9ec611e5768e334964fe6d7c18bb3a04a70ba20",
+      "experiments/e8a_question_encoder/g21_scorer.py": "22ea9c59082840a60568d7b804a3cb66ac0daccb7b503a6c50305d1354f2f40d",
+      "src/reasoner.py": "3faafcd25e3f9e233c5173b71c1e1bbdd92859047d7b701d97ee16049892062c",
+      "src/tokens_data.py": "9e24a76e177ca8d8145995d1224d611d7de9303d0ea2b79552b3e106c01caf05",
+      "src/utils.py": "3e9af4431b68f96c10d1d6d7842a82ffe34e9100c09e1206d05bbb112c01d3ee",
+      "tests/test_e10.py": "53258283f3b232682d6a65987bbab3a9cf99cb2d39e3510953bccef67d021bbd",
+      "tests/test_e10_phase1.py": "a472e60d351a70d5c4ed93653ea0c6e7977ba90874f6333e1a419605c4883b7d",
+      "tests/test_e10_phase2.py": "ecf03ea6224d5bf14eb62a96a33819b405aea34da6086e96f6ab9004496b77c6",
+      "tests/test_e10_phase3.py": "521ae79cc7cb7c9c5506ae6a8671286e6c23a1bfa5e4d74609ba7a0a251f3f95",
+      "tests/run_all.py": "0a53250ac3c10edd788ea756a64dff54e83d2dec824ad557a6f8ea629e741786"
+    },
+    "config_digest": "4b9fa43cb74b511c0bb6fda3c7c043d6047ef5e5e220c1abad6e35138f3df9ab",
+    "config_files": {
+      "config.py": "2612dfeaa2a2ca54888bd0be2004a90efaa533c16c75db2ed08baadf3f060574",
+      "requirements.lock.txt": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be"
+    },
+    "protocol_family": "e10-fp32-fixed22-core-360m-2026-08-10"
+  },
+  "review": {
+    "verdict": "PASS",
+    "final": true,
+    "reviewer": "the fresh independent Claude reviewer that returned the round-1 CHANGES_REQUIRED verdict; it did not author the implementation or the repair",
+    "executor": "Claude, at the user's explicit direction",
+    "executor_reviewed_own_patch": false,
+    "rounds": 2,
+    "verdicts_in_order": [
+      "CHANGES_REQUIRED",
+      "PASS"
+    ],
+    "conclusion": "Phase 3 is technically ready for the creation of the explicit REAL user scientific authorisation grant.",
+    "verdict_relayed_by": "the User",
+    "recorded_from": "50-review-pass.md, the executor's faithful record of the relayed verdict rather than a verbatim reviewer transcript"
+  },
+  "reviewed_heads": {
+    "phase2_approved_closure_base": "5d79bf5fb435ce365335593aff6912e37071f65c",
+    "phase3_implementation": "2eb11c3069eff3620d8a8a17c87d9577199d0d78",
+    "phase3_repair_final": "ce2495b5ccd69eabab468f263848add10bb6c683"
+  },
+  "review_objects": {
+    "implementation_patch": {
+      "path": "31-changes.patch",
+      "sha256": "f897694a6b4cc3756f8ff02cde62f44ac77fae37a70dfc3a671e143faf8f71e9",
+      "range": "5d79bf5fb435ce365335593aff6912e37071f65c..2eb11c3069eff3620d8a8a17c87d9577199d0d78",
+      "verdict": "CHANGES_REQUIRED"
+    },
+    "final_repair_patch": {
+      "path": "41-repair-changes.patch",
+      "sha256": "07c8ba1795b80fa61f132d6e9ff2e6607afb041b25a3d039717cee5b831c6b7b",
+      "range": "2eb11c3069eff3620d8a8a17c87d9577199d0d78..ce2495b5ccd69eabab468f263848add10bb6c683",
+      "verdict": "PASS",
+      "is_the_final_review_object": true
+    }
+  },
+  "findings_discharged": {
+    "B1_pre_phase3_always_refuses_verifier_invariant": "DISCHARGED",
+    "blocking_findings_outstanding": 0
+  },
+  "reviewer_verified_pass": {
+    "grant_aware_phase1_invariant": "PASS",
+    "phase3_authorization_contract": "PASS",
+    "no_grant_verifier_state": "PASS",
+    "valid_temp_grant_verifier_state": "PASS",
+    "exact_twelve_cell_authorization": "PASS",
+    "tampered_grant_refusal": "PASS",
+    "source_and_config_digest_invariance": "PASS",
+    "permit_and_resource_non_regression": "PASS",
+    "phase2_scientific_non_regression": "PASS",
+    "provenance": "PASS",
+    "real_authorization_grant_absent": true,
+    "zero_real_scientific_execution": true,
+    "clean_test_embargo_intact": true
+  },
+  "closure_validation": {
+    "phase1_verify": "PASS",
+    "phase2_verify": "PASS",
+    "phase3_verify": "PASS",
+    "test_e10_checks": 21,
+    "test_e10_phase1_checks": 15,
+    "test_e10_phase2_checks": 38,
+    "test_e10_phase3_checks": 23,
+    "git_diff_check": "clean",
+    "frozen_result_trees": {
+      "e8a_question_encoder": {
+        "files": 111,
+        "tree_sha256": "eb772211e54818be31f16af3a893ea2a80eafb4da6329ddce50435ace36dff39",
+        "matches_frozen_baseline": true
+      },
+      "e8b_readout_generation": {
+        "files": 201,
+        "tree_sha256": "5dcaf477b5eace01adeb2bb98c446a632203c33e4b36b1201e8fac4225e270d2",
+        "matches_frozen_baseline": true
+      },
+      "e9_compact_vlm": {
+        "files": 62,
+        "tree_sha256": "2c3e7a1523952f482260dd3eda5613a7f5a2ede125d4def82952abf9673b0885",
+        "matches_frozen_baseline": true
+      }
+    },
+    "recipe_digests_identical_to_phase0_contract": true,
+    "recipe_digests": {
+      "B4_train_40k_seed0": "11002db9f3dbf8f9f86f0808b5883386b46ea44ff901260c9534d6096cdf8c3f",
+      "B4r_train_40k_seed0": "e1ebf308f642958f8b593428d923cb5262cf0fdbc438da0d3acfeb95443317ae",
+      "B4_train_40k_seed1": "c3b17ae72d968219904a6a67605a5f094b8ed30534e17068c3010a744bc97bc5",
+      "B4r_train_40k_seed1": "4171f64405b3c9a7c282ed393858db5d3bf552684f84b157aec6963d2fda0021",
+      "B4_train_40k_seed2": "d5f58b7e43e9adf1beea45261c1b856256cddb27b7e649e6404da5d0b2711a6a",
+      "B4r_train_40k_seed2": "76994deae525ea791f6e214ef541c00e02ccd0fa95c63e6b19ed40e54c1ba6be",
+      "B4_train_250k_seed0": "9a1bb08eb7cdfd654cd54f08eb3abef155db4bfe3f5db427d1ff9df6cb1e0895",
+      "B4r_train_250k_seed0": "ce572073cb8047aa4dd238e4796a9c302d2ae48e59c5db211402be4a9f458714",
+      "B4_train_250k_seed1": "e0f5f76c3199f82ac8543a744f1531ace03f917cc5ee05eba3efac9db7b1838d",
+      "B4r_train_250k_seed1": "b0d0a9b9579777a2dfd449f7cf038e92f2f46434ed660bd0ba17b52b269cd7aa",
+      "B4_train_250k_seed2": "d18e15836efb534eb0489c60b8899b123609c7364d2445712fc121b95f3c19ca",
+      "B4r_train_250k_seed2": "8e460859ad8c86ac52c8ed77e9ffb48b2f05fa2e2ec148bce89c396cdc3c8125"
+    },
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "embargo_source_scan": {
+      "files_checked": 36,
+      "passed": true
+    },
+    "non_scientific_output_scan": {
+      "checkpoint_files": 0,
+      "forbidden_metric_fields": 0,
+      "embargo_source_scan_passed": true
+    }
+  },
+  "verifier_state_matrix": {
+    "no_grant": {
+      "phase1_verify": "PASS",
+      "phase2_verify": "PASS",
+      "phase3_verify": "PASS",
+      "core_entry": "refused"
+    },
+    "valid_exact_temporary_grant": {
+      "phase1_verify": "PASS",
+      "phase2_verify": "PASS",
+      "phase3_verify": "PASS",
+      "core_entry": "exactly the twelve frozen cells open"
+    },
+    "tampered_grant": {
+      "phase1_verify": "PASS",
+      "phase2_verify": "PASS",
+      "phase3_verify": "PASS",
+      "core_entry": "refused"
+    },
+    "grant_removed": {
+      "phase1_verify": "PASS",
+      "phase2_verify": "PASS",
+      "phase3_verify": "PASS",
+      "core_entry": "refused"
+    },
+    "measured_on": "temporary synthetic grants only; no real grant was ever created"
+  },
+  "authorization_mechanism_at_closure": {
+    "grant_path": "/user/HS400/mc02623/backups/efficient-vision-language-reasoning/e10-locks/e10-core-authorization/e10-core-authorization-grant.json",
+    "grant_is_outside": [
+      "the repository",
+      "SOURCE_PATHS",
+      "CONFIG_PATHS"
+    ],
+    "canonical_validator": "experiments.e10_capacity_360m.e10_common.validate_core_authorization_grant",
+    "partial_authorization": false,
+    "authorised_surface": "the frozen pair-preserved twelve-cell B4/B4r matrix, and nothing else",
+    "source_constant_is_a_route": false,
+    "environment_variable_is_a_route": false,
+    "config_mutation_is_a_route": false,
+    "source_digest_moved_by_creating_a_grant": false
+  },
+  "provenance_at_closure": {
+    "amendment_chain_newest_first": [
+      "phase3_binding_amendment_20260811.json",
+      "phase2_binding_amendment_20260810.json",
+      "phase1_whole_cell_wall_repair_20260810.json",
+      "phase1_binding_amendment_20260810.json",
+      "source_correction_20260810.json"
+    ],
+    "phase3_source_digest": "857ec44e8f5275569a5369b0dfbcd0cbff660b038d5b9cd39c67083ceb0a6b98",
+    "phase3_config_digest": "4b9fa43cb74b511c0bb6fda3c7c043d6047ef5e5e220c1abad6e35138f3df9ab",
+    "phase2_r2_source_digest": "809320d75e0ae68f81bdd4ba6d7e33c8a6afcdf39db4afbe0d49343bf7b49baa",
+    "config_digest_moved_since_phase_2": false,
+    "approved_phase0_phase1_phase2_records_rewritten": 0
+  },
+  "scientific_state": {
+    "e10_training_authorized": null,
+    "e10_calibration_authorized": null,
+    "real_core_authorization_grant_present": false,
+    "known_negative_core_cell": "E10 CORE REFUSED: scientific authorization grant is absent: no immutable E10 core authorization grant exists at /user/HS400/mc02623/backups/efficient-vision-language-reasoning/e10-locks/e10-core-authorization/e10-core-authorization-grant.json",
+    "real_b4_b4r_cells": 0,
+    "real_scientific_checkpoints": 0,
+    "real_e10_performance_values": 0,
+    "real_core_gpu_hours": 0.0,
+    "no_scientific_cells_proof": {
+      "published_cell_records": 0,
+      "checkpoint_files": 0,
+      "charged_core_cells": 0,
+      "e10_training_authorized": null
+    },
+    "spend_ledger_entries": 1,
+    "spend_ledger_contexts": [
+      "phase0_calibration"
+    ],
+    "pretrained_smollm2_360m_hours": 0.0,
+    "random_smollm2_360m_hours": 0.032714183273333336,
+    "scientific_result_tree_exists": false,
+    "clean_test_accessed": false
+  },
+  "resource_policy_unchanged": {
+    "per_cell_wall_clock_hours": 12.0,
+    "e10_per_identity_ceiling_hours": 40.0,
+    "programme_wide_identity_ceiling_hours": 40.0,
+    "effective_identity_ceiling_hours": 40.0,
+    "headroom_floor_hours": 1.0,
+    "automatic_retries_per_identity": 0,
+    "max_authorized_retries_per_identity": 1,
+    "wall_source": "config.E10_PER_CELL_WALL_CLOCK_HOURS",
+    "ceiling_rule": "min(E10_PER_IDENTITY_CEILING_HOURS, PER_MODEL_IDENTITY_CEILING_HOURS)"
+  },
+  "immutable_records_at_closure": {
+    "phase1": {
+      "phase1_a5_a8c_identity_governance_20260810.json": "4ee2453cef6cb3497da8ead7f30577ed48d5b9bc217df53b90a4f18118fe8b9a",
+      "phase1_binding_amendment_20260810.json": "872591d2c89058ac843d12d3205cc29f1636ce63dbefeb9f2cd1a7caa114ef95",
+      "phase1_resource_policy_20260810.json": "0cf96a0465b6fdc88e5797d2322db5785c54414aa7b54d2dc55cb0f5d6852a4c",
+      "phase1_whole_cell_wall_repair_20260810.json": "fa9381769829816c6ae99a7f87e67983f9deef45edb2e1653e6846a3ec9527aa"
+    },
+    "phase2": {
+      "phase2_binding_amendment_20260810.json": "f2b08934e4f4fb04dbe9bf9feca563b3d5750e802b0d4b354a00913083f27645",
+      "phase2_scientific_pipeline_20260810.json": "fe4727586fda46bb00cb3a563d1e88b3958c3cab8f4c9ebf88fe8bc05adcfab9",
+      "phase2_review_closure_20260810.json": "d0e48a987d0a274add54d6c42e7d99118158f06ade0d747c847de7f0be32392f"
+    },
+    "phase3": {
+      "phase3_binding_amendment_20260811.json": "a49cb8022f5b985e37fd26a984efb37bfe805ea173f4304a23d3249af55cbc05",
+      "phase3_authorization_binding_20260811.json": "46acab175d7e09dad504ebfb9341fe04e190dde4d2ceb6f1620b5866f1777713"
+    }
+  },
+  "phase3_records_regenerated_within_open_revision": {
+    "regenerated": true,
+    "repaired_from_head": "2eb11c3069eff3620d8a8a17c87d9577199d0d78",
+    "superseded_record_sha256": {
+      "phase3_binding_amendment_20260811.json": "a349eccaadac69a87cbf7ae1b0f2a7eea23c700fab7ec6a6f9e3e4a8d6c3065b",
+      "phase3_authorization_binding_20260811.json": "9bc65964f618204682025d13314bb885cb934a982e3b78e97b70a5794d2781de"
+    },
+    "superseded_bytes_preserved_in": "git history at 2eb11c3069eff3620d8a8a17c87d9577199d0d78",
+    "approved_evidence_rewritten": false
+  },
+  "packet_artifacts": {
+    "00-request.md": "3edfcd0dff7fd01e2f2d9a5b558384690a509361608de9ab7cf7c14d59b1af19",
+    "10-plan.md": "eb821c21e6a9a4fc5fccf7b7e7af21987e6f5ead8a9bea5cad60d445f620df56",
+    "30-implementation.json": "9ee788fdad7b85a2492becfc75cf1f5c1ceedface7bdc1e8b3c7473891196e2e",
+    "31-changes.patch": "f897694a6b4cc3756f8ff02cde62f44ac77fae37a70dfc3a671e143faf8f71e9",
+    "32-review-changes-required.md": "88f397bcdfc6c920a9693dfeb7ab044de0858379dad2b23812b5bafd0e2852f6",
+    "40-repair-implementation.json": "af1f2a3dcaf924f2eb97c187b9bffb8c22a177bf7881a3a3e46df7caa04666e2",
+    "41-repair-changes.patch": "07c8ba1795b80fa61f132d6e9ff2e6607afb041b25a3d039717cee5b831c6b7b",
+    "50-review-pass.md": "dbf3a79742ff8edc2f9aa64558a0917111e951c33dc811a50655bad9c705cd1b",
+    "log.md": "d91d90dd711d8a928f1dee63ef89ae75bc5c01582b887eff995ad99ad60c908e",
+    "state.json": "f76ccec9f7306ac4280540c6f1bc713dcce467cf750003c90d0b58d54d2d0fef"
+  },
+  "packet_artifacts_pinned_at": "the bytes at closure-record write time. log.md and state.json are then updated by this closure to record it, exactly as the Phase-2 closure did, and their post-closure bytes are pinned in state.json",
+  "what_this_closure_does_not_grant": {
+    "e10_scientific_core_authorized": false,
+    "real_authorization_grant_created": false,
+    "twelve_cell_matrix_started": false,
+    "f1_started": false,
+    "f2_started": false,
+    "a5_a8c_started": false,
+    "clean_test_opened": false,
+    "phase_4_created": false,
+    "next_gate": "creation of the one real external scientific core authorization grant by the User, out of band, without touching scientific source; this closure records that Phase 3 is technically ready for it and does not make that decision"
+  },
+  "closure_scope": {
+    "scientific_source_modified": false,
+    "test_modified": false,
+    "configuration_modified": false,
+    "recipe_modified": false,
+    "resource_constant_modified": false,
+    "grant_validator_modified": false,
+    "result_implementation_modified": false,
+    "frozen_record_modified": false,
+    "prior_review_evidence_rewritten": false
+  }
+}
