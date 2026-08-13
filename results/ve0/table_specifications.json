@@ -6,7 +6,7 @@
   "VE0-TAB-A4"
  ],
  "clean_test_accessed": false,
- "content_sha256": "ed1cf8e6d4bb280d74e37bfdd8a0b19bd06c28829c624c4833897cc1383232a0",
+ "content_sha256": "33396472f81a73db3d7a2dd1fcf32562dc0d426e258a4a2574140d8948bbaba7",
  "main_text_tables": [
   "VE0-TAB-01",
   "VE0-TAB-02",
@@ -20,7 +20,7 @@
  "not_rendered_by_ve0": true,
  "provenance": {
   "builder": "experiments/ve0/run_ve0.py",
-  "builder_sha256": "91d371cbdd09d9dd9362cc3749ae9a4b78bfec311157f1b6fdeda9522dbb539c",
+  "builder_sha256": "3a53114ff7e55ca6d38d92004717da9ccae1320ef411cd6124af5175d790bc42",
   "clean_test_accessed": false,
   "command": "python -m experiments.ve0.run_ve0",
   "deterministic_selection_salt": "P2607-VE0-QUALITATIVE-SALT-20260813-v1",
@@ -94,8 +94,8 @@
   "numpy_version": "2.5.0",
   "pandas_version": "3.0.3",
   "python": "3.12.3",
-  "repository_head": "6f457d12e350c95c85650f17e2a367c70ea32828",
-  "repository_head_short": "6f457d1",
+  "repository_head": "0f4fecb5e7e5a59d1e47d0953ca3127302694852",
+  "repository_head_short": "0f4fecb",
   "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
   "schema_version": 1,
   "selected_any_checkpoint": false,
@@ -108,6 +108,9 @@
   {
    "bolding_rule": "no bolding. Bolding a maximum in a table where some rows have no interval would imply a comparison the evidence does not support",
    "carries_v2_07_limitation": true,
+   "checkpoint_selection_rules": [
+    "BEST_ON_DEVELOPMENT"
+   ],
    "columns": [
     "system",
     "trainable parameters",
@@ -117,6 +120,9 @@
     "sd across training seeds (ddof=1)",
     "95% image-clustered interval",
     "interval available"
+   ],
+   "comparable_metric_ids": [
+    "v2_closed_vocab_top1_index_match"
    ],
    "consumes_evidence": [
     "EV-ARM-v2_02.concat.train_40k",
@@ -152,6 +158,7 @@
    "metric_ids": [
     "v2_closed_vocab_top1_index_match"
    ],
+   "mixes_checkpoint_selection": false,
    "placement": "MAIN_TEXT",
    "precision": "accuracies and effects to 5 decimal places, matching the canonical stored precision; never rounded further in a way that changes a reported comparison",
    "scientific_question": "What accuracy does each global-embedding head reach at each training scale?",
@@ -188,6 +195,9 @@
   {
    "bolding_rule": "no bolding by outcome. The comparison-class column carries the emphasis instead, because whether a contrast is capacity-matched matters more than whether it is positive",
    "carries_v2_07_limitation": false,
+   "checkpoint_selection_rules": [
+    "BEST_ON_DEVELOPMENT"
+   ],
    "columns": [
     "contrast",
     "comparison class",
@@ -197,6 +207,9 @@
     "sd across training seeds (ddof=1)",
     "n questions",
     "n images"
+   ],
+   "comparable_metric_ids": [
+    "v2_closed_vocab_top1_index_match"
    ],
    "consumes_evidence": [
     "EV-CON-v2_02.concat_minus_question_only.train_40k",
@@ -229,6 +242,7 @@
    "metric_ids": [
     "v2_closed_vocab_top1_index_match"
    ],
+   "mixes_checkpoint_selection": false,
    "placement": "MAIN_TEXT",
    "precision": "5 decimal places",
    "scientific_question": "How much of the fusion advantage survives at a matched budget, and which term carries it?",
@@ -256,6 +270,9 @@
   {
    "bolding_rule": "no bolding",
    "carries_v2_07_limitation": false,
+   "checkpoint_selection_rules": [
+    "FIXED_EPOCH_22"
+   ],
    "columns": [
     "system",
     "language model",
@@ -263,6 +280,9 @@
     "95% image-clustered interval",
     "excludes zero",
     "sd across training seeds (ddof=1)"
+   ],
+   "comparable_metric_ids": [
+    "g21_pinned_normalised_exact_match"
    ],
    "consumes_evidence": [
     "EV-CON-E10.scale_effect_B4",
@@ -290,6 +310,7 @@
    "metric_ids": [
     "g21_pinned_normalised_exact_match"
    ],
+   "mixes_checkpoint_selection": false,
    "placement": "MAIN_TEXT",
    "precision": "5 decimal places",
    "scientific_question": "How much does labelled training scale move each SLM-interface system?",
@@ -312,6 +333,10 @@
   {
    "bolding_rule": "no bolding",
    "carries_v2_07_limitation": false,
+   "checkpoint_selection_rules": [
+    "BEST_ON_DEVELOPMENT",
+    "FIXED_EPOCH_22"
+   ],
    "columns": [
     "arm",
     "interface side",
@@ -322,6 +347,9 @@
     "mean accuracy",
     "sd across training seeds (ddof=1)",
     "per-seed values"
+   ],
+   "comparable_metric_ids": [
+    "g21_pinned_normalised_exact_match"
    ],
    "consumes_evidence": [
     "EV-SEED-E10.B4.train_250k",
@@ -350,12 +378,14 @@
    "footnotes": [
     "The per-seed column is mandatory: E8B B3 at train_40k has a seed sd of 0.02795 and its mean alone is misleading.",
     "Every language model is frozen and was never trained or fine-tuned. The only newly trainable component in these paths is one linear projection per configuration.",
-    "E8A's projected interface is a learned common width, not a naturally shared pretrained embedding space."
+    "E8A's projected interface is a learned common width, not a naturally shared pretrained embedding space.",
+    "Checkpoint selection differs across the rows: E8A selects the best development epoch with patience 10, while E8B and E10 use the frozen fixed-22-epoch rule with no early stopping. A best-on-development accuracy and a fixed-epoch accuracy are not selected the same way, so reading the arms side by side is a system-level juxtaposition, not a matched comparison. The within-family pretrained-minus-random contrasts in Table VE0-TAB-05 are unaffected, because each of them compares two arms selected under the same rule."
    ],
    "highlight_rule": "rows flagged for high seed dispersion are marked with a dagger and their per-seed values are printed in full",
    "metric_ids": [
     "g21_pinned_normalised_exact_match"
    ],
+   "mixes_checkpoint_selection": true,
    "placement": "MAIN_TEXT",
    "precision": "5 decimal places",
    "scientific_question": "What does each frozen-SLM configuration reach, on each side of the interface?",
@@ -391,6 +421,10 @@
   {
    "bolding_rule": "no bolding. Bolding the question-side row because it is positive would visually assert the very asymmetry the reader should judge from the intervals",
    "carries_v2_07_limitation": false,
+   "checkpoint_selection_rules": [
+    "BEST_ON_DEVELOPMENT",
+    "FIXED_EPOCH_22"
+   ],
    "columns": [
     "contrast",
     "interface side",
@@ -401,6 +435,9 @@
     "excludes zero",
     "per-seed effects",
     "comparison class"
+   ],
+   "comparable_metric_ids": [
+    "g21_pinned_normalised_exact_match"
    ],
    "consumes_evidence": [
     "EV-CON-E10.difference_in_differences",
@@ -428,12 +465,14 @@
     "Every contrast is pretrained minus its architecture-matched random control at the SAME model size.",
     "Both E10 intervals contain zero and the seeds disagree in sign; they establish NEITHER equivalence NOR the absence of an effect.",
     "E10 does not reproduce E8B's directional negative 40k result.",
-    "The difference in differences is not directional."
+    "The difference in differences is a SECOND-ORDER interaction between the pretraining effect and training scale, not a pretrained-minus-random effect, and it is not directional.",
+    "Checkpoint selection differs BETWEEN families, E8A selecting the best development epoch while E8B and E10 use the frozen fixed-22 rule, but not WITHIN any row: every contrast here compares two arms selected under the same rule, so each effect is internally matched on that axis and only the cross-family reading is a juxtaposition."
    ],
    "highlight_rule": "none; direction is carried by the sign and the interval, not by colour",
    "metric_ids": [
     "g21_pinned_normalised_exact_match"
    ],
+   "mixes_checkpoint_selection": true,
    "placement": "MAIN_TEXT",
    "precision": "5 decimal places",
    "scientific_question": "Is there a reliable pretrained-over-random advantage, and does it grow with scale?",
@@ -460,6 +499,7 @@
   {
    "bolding_rule": "no bolding of the fastest system. The table spans two nodes and three timing classes, and a bold minimum would invite exactly the cross-node reading that is prohibited",
    "carries_v2_07_limitation": false,
+   "checkpoint_selection_rules": [],
    "columns": [
     "system",
     "experiment family",
@@ -471,6 +511,7 @@
     "comparable with end-to-end",
     "evidence status"
    ],
+   "comparable_metric_ids": [],
    "consumes_evidence": [
     "EV-EFF-E7a.e7a_additive_pipeline_sums",
     "EV-EFF-E7a.e7a_component_measurements",
@@ -525,6 +566,7 @@
     "latency_and_memory_components",
     "warm_median_serial_latency_ms"
    ],
+   "mixes_checkpoint_selection": false,
    "placement": "MAIN_TEXT",
    "precision": "latency to 4 decimal places as stored",
    "scientific_question": "What does each system cost per query, and under exactly which measurement conditions?",
@@ -558,6 +600,7 @@
   {
    "bolding_rule": "no bolding",
    "carries_v2_07_limitation": false,
+   "checkpoint_selection_rules": [],
    "columns": [
     "claim id",
     "claim as stated",
@@ -566,6 +609,7 @@
     "mandatory caveat",
     "forbidden stronger version"
    ],
+   "comparable_metric_ids": [],
    "consumes_claim_ledger": true,
    "consumes_evidence": [],
    "consumes_evidence_count": 0,
@@ -578,6 +622,7 @@
    ],
    "highlight_rule": "NOT_SUPPORTED rows are kept in the table, not deleted; they record prohibitions",
    "metric_ids": [],
+   "mixes_checkpoint_selection": false,
    "placement": "MAIN_TEXT",
    "precision": "NOT_APPLICABLE",
    "scientific_question": "What exactly does this dissertation claim, on what evidence, and with what boundary?",
@@ -591,6 +636,9 @@
   {
    "bolding_rule": "no bolding",
    "carries_v2_07_limitation": false,
+   "checkpoint_selection_rules": [
+    "BEST_ON_DEVELOPMENT"
+   ],
    "columns": [
     "slice id",
     "family",
@@ -604,6 +652,10 @@
     "n questions",
     "n images",
     "counts provenance"
+   ],
+   "comparable_metric_ids": [
+    "g21_pinned_normalised_exact_match",
+    "v2_closed_vocab_top1_index_match"
    ],
    "consumes_evidence": [
     "EV-SLC-E8A.A0p.train_250k.semantic-attr.accuracy",
@@ -818,6 +870,7 @@
     "v2_closed_vocab_top1_index_match"
    ],
    "mixed_metric_justification": "This is a complete reproducibility dump, not a comparison. Every row carries its family and hence its metric, and the table performs no arithmetic across rows.",
+   "mixes_checkpoint_selection": false,
    "placement": "APPENDIX",
    "precision": "5 decimal places",
    "scientific_question": "What is every per-type, per-structure and per-step-bucket value, with its counts?",
@@ -852,6 +905,10 @@
   {
    "bolding_rule": "no bolding",
    "carries_v2_07_limitation": true,
+   "checkpoint_selection_rules": [
+    "BEST_ON_DEVELOPMENT",
+    "FIXED_EPOCH_22"
+   ],
    "columns": [
     "row id",
     "family",
@@ -863,6 +920,10 @@
     "sd across training seeds (ddof=1)",
     "range",
     "high dispersion flag"
+   ],
+   "comparable_metric_ids": [
+    "g21_pinned_normalised_exact_match",
+    "v2_closed_vocab_top1_index_match"
    ],
    "consumes_evidence": [
     "EV-SEED-E10.B4.train_250k",
@@ -939,7 +1000,8 @@
    "evidence_ids": [],
    "footnotes": [
     "The standard deviation here is across independent TRAINING seeds (ddof=1). It is not a confidence interval and not evaluation-sampling uncertainty.",
-    "Seed sets are never pooled across families."
+    "Seed sets are never pooled across families.",
+    "Checkpoint selection differs across families: V2, V3, E2, E3 and E8A select the best development epoch, E8B and E10 use the frozen fixed-22 rule with no early stopping. Dispersion under a best-of rule and dispersion under a fixed-epoch rule are not the same quantity and are not compared across families here."
    ],
    "highlight_rule": "high-dispersion rows flagged in their own column",
    "metric_ids": [
@@ -947,6 +1009,7 @@
     "v2_closed_vocab_top1_index_match"
    ],
    "mixed_metric_justification": "A reproducibility dump of seed dispersion. The family column carries the metric and no arithmetic crosses families.",
+   "mixes_checkpoint_selection": true,
    "placement": "APPENDIX",
    "precision": "5 decimal places",
    "scientific_question": "What is the per-seed value behind every reported mean?",
@@ -1009,6 +1072,9 @@
   {
    "bolding_rule": "no bolding",
    "carries_v2_07_limitation": true,
+   "checkpoint_selection_rules": [
+    "BEST_ON_DEVELOPMENT"
+   ],
    "columns": [
     "encoder",
     "system",
@@ -1018,6 +1084,9 @@
     "sd across training seeds (ddof=1)",
     "95% image-clustered interval",
     "interval available"
+   ],
+   "comparable_metric_ids": [
+    "v2_closed_vocab_top1_index_match"
    ],
    "consumes_evidence": [
     "EV-ARM-e2.concat.train_250k",
@@ -1062,6 +1131,7 @@
    "metric_ids": [
     "v2_closed_vocab_top1_index_match"
    ],
+   "mixes_checkpoint_selection": false,
    "placement": "APPENDIX",
    "precision": "5 decimal places",
    "scientific_question": "What is the encoder-swap direction at 250k, where no clustered contrast exists?",
@@ -1102,6 +1172,10 @@
   {
    "bolding_rule": "no bolding",
    "carries_v2_07_limitation": false,
+   "checkpoint_selection_rules": [
+    "BEST_ON_DEVELOPMENT",
+    "FIXED_EPOCH_22"
+   ],
    "columns": [
     "contrast id",
     "family",
@@ -1113,6 +1187,10 @@
     "n questions",
     "n images",
     "training seeds"
+   ],
+   "comparable_metric_ids": [
+    "g21_pinned_normalised_exact_match",
+    "v2_closed_vocab_top1_index_match"
    ],
    "consumes_evidence": [
     "EV-CON-E10.difference_in_differences",
@@ -1194,7 +1272,8 @@
    "footnotes": [
     "Multiplicity is disclosed and deliberately uncorrected. No p-value is computed and no new hypothesis test was introduced.",
     "Analysis role and comparison class were fixed before any reconstructed number existed and no row was reclassified after its interval was computed.",
-    "Two metrics appear; the family column identifies which."
+    "Two metrics appear; the family column identifies which.",
+    "Two checkpoint-selection rules appear, best development epoch for V2, V3, E2, E3 and E8A and the frozen fixed-22 rule for E8B and E10. Every contrast listed is internally matched on that axis, comparing two arms selected under the same rule; the registry performs no arithmetic across families."
    ],
    "highlight_rule": "none. Every contrast is listed whether or not its interval excludes zero; twenty of them do not",
    "metric_ids": [
@@ -1202,6 +1281,7 @@
     "v2_closed_vocab_top1_index_match"
    ],
    "mixed_metric_justification": "A complete registry, not a comparison. Effects are never differenced or ranked across metrics.",
+   "mixes_checkpoint_selection": true,
    "placement": "APPENDIX",
    "precision": "5 decimal places",
    "scientific_question": "What is every contrast this project computed, including the ones whose intervals contain zero?",

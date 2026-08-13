@@ -50,16 +50,134 @@ def _check_superseded(spec_id: str, entry: dict, resolved: list,
     return superseded
 
 
+# Metrics that never occupy a shared quantitative accuracy axis and so cannot
+# create a mixed-scorer hazard. Structural counts are axis metadata (a
+# training-set size on a categorical axis, a row count in a caption); latency
+# metrics live on their own axis and are already governed by the efficiency
+# contract. Everything else is an accuracy scorer and is guarded.
+METRIC_MIX_EXEMPT = (
+    "structural_count_or_share",
+    "latency_and_memory_components",
+    "warm_median_serial_latency_ms",
+)
+
+
+def comparable_metrics(metrics: list) -> list:
+    """The metrics that would share a quantitative accuracy axis."""
+    return [m for m in metrics if m not in METRIC_MIX_EXEMPT]
+
+
 def _check_metric_mix(spec_id: str, entry: dict, metrics: list) -> None:
-    """A figure or table may not put two scorers on one scale unsupervised."""
-    quantitative = [m for m in metrics
-                    if m not in ("structural_count_or_share",
-                                 "latency_and_memory_components",
-                                 "warm_median_serial_latency_ms")]
+    """A figure or table may not put two scorers on one scale unsupervised.
+
+    This rule was declared before it could bite: three real development
+    accuracies were carrying a structural metric identity, which is exempt
+    here, so the figure consuming them passed the guard while genuinely
+    mixing a scorer with what looked like a count. The identity defect is
+    repaired at source; this function is unchanged in intent but is now
+    reachable, and the validation suite exercises it in both directions
+    against synthetic specifications.
+    """
+    quantitative = comparable_metrics(metrics)
     if len(quantitative) > 1 and not entry.get("mixed_metric_justification"):
         raise AssertionError(
             f"{spec_id} consumes {quantitative} on one specification without "
             f"a mixed_metric_justification. {pol.MIXED_METRIC_RULE}")
+
+
+def training_selection_rules(evidence_ids: list, index: dict) -> list:
+    """Distinct checkpoint-selection CLASSES among evidence that was trained.
+
+    Comparing the human descriptions instead would make two families that
+    follow the identical best-on-development rule, but describe it at
+    different lengths, look like a protocol difference. The class is the
+    controlled value; the detail is prose.
+    """
+    rules = set()
+    for evidence in evidence_ids:
+        rule = index[evidence].get("checkpoint_selection_class")
+        if not rule or rule in (vc.NOT_APPLICABLE, "NO_TRAINING"):
+            continue
+        rules.add(rule)
+    return sorted(rules)
+
+
+def _has_selection_caveat(entry: dict) -> bool:
+    if entry.get("checkpoint_selection_caveat"):
+        return True
+    text = " ".join([
+        str(entry.get("mandatory_caption_caveat") or ""),
+        " ".join(entry.get("footnotes") or []),
+    ]).lower()
+    return "checkpoint selection" in text or "checkpoint-selection" in text
+
+
+def _check_checkpoint_selection_mix(spec_id: str, entry: dict,
+                                    resolved: list, index: dict) -> list:
+    """Mixing selection rules on one specification must be visible.
+
+    V2, V3, E2, E3 and E8A select the best development epoch; E8B and E10 use
+    the frozen fixed-22 rule with no early stopping. Putting both on one
+    figure or table is legitimate, but it makes the reading a system-level
+    juxtaposition rather than a matched comparison, and the VE-0 report claims
+    this is enforced. It now is: a specification that mixes them and says
+    nothing about it fails the build.
+    """
+    rules = training_selection_rules(resolved, index)
+    if len(rules) > 1 and not _has_selection_caveat(entry):
+        raise AssertionError(
+            f"{spec_id} consumes evidence selected under {len(rules)} "
+            f"different checkpoint-selection rules {rules} without naming "
+            f"that difference in its caveat or footnotes. "
+            f"{pol.CROSS_FAMILY_SELECTION_CAVEAT}")
+    return rules
+
+
+def _check_uncertainty_declaration(spec_id: str, entry: dict) -> None:
+    """A by-panel uncertainty declaration must say what each panel carries."""
+    kind = entry["uncertainty_shown"]
+    if kind not in spec.UNCERTAINTY_KINDS:
+        raise AssertionError(
+            f"{spec_id} declares an unknown uncertainty kind: {kind}")
+    if kind.endswith("_BY_PANEL"):
+        panels = entry.get("uncertainty_by_panel") or {}
+        if len(panels) < 2:
+            raise AssertionError(
+                f"{spec_id} declares a by-panel uncertainty kind but does not "
+                f"name what at least two panels carry")
+
+
+def _check_row_groups(spec_id: str, entry: dict, resolved: list) -> None:
+    """Declared row groups must cover exactly the evidence they claim.
+
+    Used where a figure separates first-order effects from a second-order
+    interaction, so the separation cannot silently drift away from the
+    evidence it was drawn to separate.
+    """
+    groups = entry.get("row_groups")
+    if not groups:
+        return
+    grouped, seen = [], set()
+    for group in groups:
+        if group["order"] == "SECOND_ORDER" and not group.get(
+                "separation_requirement"):
+            raise AssertionError(
+                f"{spec_id} declares a second-order row group with no "
+                f"separation requirement")
+        for evidence in group["evidence_ids"]:
+            if evidence not in resolved:
+                raise AssertionError(
+                    f"{spec_id} row group {group['group_id']} names "
+                    f"{evidence}, which the specification does not consume")
+            if evidence in seen:
+                raise AssertionError(
+                    f"{spec_id} places {evidence} in more than one row group")
+            seen.add(evidence)
+            grouped.append(evidence)
+    missing = sorted(set(resolved) - seen)
+    if missing:
+        raise AssertionError(
+            f"{spec_id} declares row groups but leaves {missing} ungrouped")
 
 
 def build_figures(rows: list, index: dict) -> dict:
@@ -82,14 +200,17 @@ def build_figures(rows: list, index: dict) -> dict:
 
         metrics = _metrics_of(resolved, index)
         _check_metric_mix(figure_id, figure, metrics)
+        _check_uncertainty_declaration(figure_id, figure)
+        _check_row_groups(figure_id, figure, resolved)
+        selection_rules = _check_checkpoint_selection_mix(
+            figure_id, figure, resolved, index)
 
-        if figure["uncertainty_shown"] not in spec.UNCERTAINTY_KINDS:
-            raise AssertionError(
-                f"{figure_id} declares an unknown uncertainty kind: "
-                f"{figure['uncertainty_shown']}")
         if figure["placement"] not in spec.PLACEMENTS:
             raise AssertionError(f"{figure_id} has an unknown placement")
 
+        figure["checkpoint_selection_rules"] = selection_rules
+        figure["mixes_checkpoint_selection"] = len(selection_rules) > 1
+        figure["comparable_metric_ids"] = comparable_metrics(metrics)
         figure["consumes_evidence"] = resolved
         figure["consumes_evidence_count"] = len(resolved)
         figure["metric_ids"] = metrics
@@ -137,12 +258,17 @@ def build_tables(rows: list, index: dict) -> dict:
 
         metrics = _metrics_of(resolved, index)
         _check_metric_mix(table_id, table, metrics)
+        selection_rules = _check_checkpoint_selection_mix(
+            table_id, table, resolved, index)
 
         if table["placement"] not in spec.PLACEMENTS:
             raise AssertionError(f"{table_id} has an unknown placement")
         if not table["footnotes"]:
             raise AssertionError(f"{table_id} carries no footnote")
 
+        table["checkpoint_selection_rules"] = selection_rules
+        table["mixes_checkpoint_selection"] = len(selection_rules) > 1
+        table["comparable_metric_ids"] = comparable_metrics(metrics)
         table["consumes_evidence"] = resolved
         table["consumes_evidence_count"] = len(resolved)
         table["metric_ids"] = metrics

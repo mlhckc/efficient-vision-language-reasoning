@@ -603,20 +603,54 @@ PROVENANCE_CONTRACT = {
                  "selection this is the frozen VE-0 salt"},
         {"field": "output_sha256", "note": "hash of the produced file"},
         {"field": "content_sha256",
-         "note": "hash of the scientific content with the provenance block "
-                 "removed. This is the value a later rebuild must reproduce"},
+         "note": "hash of the scientific content, with the provenance block "
+                 "and the digest field itself removed. This is the value a "
+                 "later rebuild must reproduce, and it is self-verifying: "
+                 "recomputing it over a written artefact's own parsed bytes "
+                 "reproduces the value stored inside it"},
         {"field": "generated_utc",
-         "note": "OPTIONAL metadata. It must not enter content_sha256, and "
-                 "VE-0 writes no timestamp into any artefact at all, so a "
-                 "VE-0 rebuild is byte-identical, not merely "
-                 "content-identical"},
+         "note": "OPTIONAL metadata. It must not enter content_sha256. VE-0 "
+                 "writes no wall-clock timestamp into any artefact at all, "
+                 "which is why byte identity holds within an identical "
+                 "provenance context; it does NOT make byte identity hold "
+                 "across a different committed HEAD, because provenance "
+                 "records that HEAD"},
     ],
+    "determinism_contract": {
+        "note": "determinism here is two-tier, and conflating the tiers is "
+                "what makes a validation suite either too weak or wrong. An "
+                "earlier revision of this contract claimed byte identity "
+                "unconditionally; that claim was false as soon as the "
+                "artefacts were committed and the repository HEAD moved.",
+        "tier_1_scientific_content": "content_sha256 is INVARIANT given "
+            "unchanged scientific inputs. This is the property that matters "
+            "and the property the validation suite proves.",
+        "tier_2_provenance_bearing_bytes": "the full-file sha256 covers the "
+            "provenance block, which records the repository HEAD and the "
+            "worktree state. Those legitimately move when artefacts are "
+            "committed.",
+        "within_identical_provenance_context": "same HEAD, same worktree "
+            "state, same inputs: a rebuild is byte-identical.",
+        "across_a_different_committed_head": "unchanged scientific inputs: "
+            "scientific content identity is the invariant and "
+            "provenance-bearing bytes may legitimately differ.",
+        "why_repository_head_stays": "repository_head is NOT removed from "
+            "provenance to make the two tiers coincide. Knowing which source "
+            "state produced an artefact is worth more than a simpler hash "
+            "rule.",
+    },
     "determinism_rules": [
         "JSON is written with sorted keys and a fixed indent",
-        "no wall-clock timestamp enters any scientific content",
+        "no wall-clock timestamp enters any artefact, scientific content or "
+        "otherwise",
         "no filesystem iteration order affects output; every collection is "
         "sorted by an explicit key",
-        "a second build from unchanged inputs produces identical bytes",
+        "within an identical provenance context, a second build from "
+        "unchanged inputs produces identical bytes",
+        "across a different committed HEAD with unchanged scientific inputs, "
+        "content_sha256 is identical and provenance-bearing bytes may differ",
+        "validation rebuilds into an isolated temporary directory and never "
+        "rewrites the frozen outputs it is checking",
     ],
     "traceability_statement": "a figure in the dissertation, a table in the "
         "dissertation and a slide in the supervisor deck must each resolve, "

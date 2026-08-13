@@ -8,13 +8,15 @@
   "VE0-FIG-A6"
  ],
  "clean_test_accessed": false,
- "content_sha256": "a498dec4f37a50188727aebb12da236a65f6ebf30832a7d0b4bd99e1de10f480",
+ "content_sha256": "a2979aa15d2371f0e358e1f0022dd00922c59ea54cb39507fd9a2f3d556d4b89",
  "figure_count": 16,
  "figures": [
   {
    "caption_claim": "The systems compared in this dissertation share a frozen encoder and differ in how the question reaches the answer.",
    "carries_v2_07_limitation": false,
    "chart_type": "block schematic with an experiment-family legend",
+   "checkpoint_selection_rules": [],
+   "comparable_metric_ids": [],
    "consumes_evidence": [],
    "consumes_evidence_count": 0,
    "decision_note": "Kept in main text. Without it a reader cannot tell which experiment a later number belongs to.",
@@ -28,6 +30,7 @@
    "likely_viva_question": "Is this one system or several?",
    "mandatory_caption_caveat": "The branches are alternative experimental configurations, not one deployed architecture. Only the parts drawn as trainable were ever trained; every encoder, language model and compact VLM stayed frozen throughout.",
    "metric_ids": [],
+   "mixes_checkpoint_selection": false,
    "placement": "MAIN_TEXT",
    "scientific_question": "Which systems were built, which frozen parts they share, and which experiment family each branch belongs to.",
    "selectors": [],
@@ -44,6 +47,12 @@
    "caption_claim": "At 40k the fusion features give a real gain over concatenation, and capacity explains part of it: at matched budgets the gain shrinks and one of the two matched contrasts no longer excludes zero.",
    "carries_v2_07_limitation": false,
    "chart_type": "two panels: (a) accuracy per system with clustered intervals, (b) contrast forest of the four capacity-matched effects plus the unmatched one",
+   "checkpoint_selection_rules": [
+    "BEST_ON_DEVELOPMENT"
+   ],
+   "comparable_metric_ids": [
+    "v2_closed_vocab_top1_index_match"
+   ],
    "consumes_evidence": [
     "EV-ARM-v2_02.concat.train_40k",
     "EV-ARM-v2_02.fusion.train_40k",
@@ -79,6 +88,7 @@
    "metric_ids": [
     "v2_closed_vocab_top1_index_match"
    ],
+   "mixes_checkpoint_selection": false,
    "placement": "MAIN_TEXT",
    "scientific_question": "Does explicit multimodal interaction beat concatenation at 40k, and how much of that survives at a matched parameter budget?",
    "selectors": [
@@ -111,6 +121,12 @@
    "caption_claim": "Accuracy rises with labelled training scale for every head, and the gap between fusion and concatenation narrows as the training set grows.",
    "carries_v2_07_limitation": true,
    "chart_type": "line plot, one line per system, per-seed points overplotted",
+   "checkpoint_selection_rules": [
+    "BEST_ON_DEVELOPMENT"
+   ],
+   "comparable_metric_ids": [
+    "v2_closed_vocab_top1_index_match"
+   ],
    "consumes_evidence": [
     "EV-DSC-train_100k.n_questions",
     "EV-DSC-train_250k.n_questions",
@@ -143,6 +159,7 @@
     "structural_count_or_share",
     "v2_closed_vocab_top1_index_match"
    ],
+   "mixes_checkpoint_selection": false,
    "placement": "MAIN_TEXT",
    "scientific_question": "How do the baseline, concatenation and fusion heads move from 40k to 100k to 250k labelled questions?",
    "selectors": [
@@ -183,6 +200,12 @@
    "caption_claim": "A pooled deficit at four or more reasoning steps persists across both frozen encoders, across training scales and across head families.",
    "carries_v2_07_limitation": false,
    "chart_type": "two panels: (a) accuracy per step bucket per system, (b) pooled four-or-more-step deficit per system and scale with clustered intervals",
+   "checkpoint_selection_rules": [
+    "BEST_ON_DEVELOPMENT"
+   ],
+   "comparable_metric_ids": [
+    "v2_closed_vocab_top1_index_match"
+   ],
    "consumes_evidence": [
     "EV-DEF-e2.pooled_ge4_deficit.concat.train_250k",
     "EV-DEF-e2.pooled_ge4_deficit.concat.train_40k",
@@ -246,6 +269,7 @@
    "metric_ids": [
     "v2_closed_vocab_top1_index_match"
    ],
+   "mixes_checkpoint_selection": false,
    "placement": "MAIN_TEXT",
    "scientific_question": "Where does accuracy fall as the number of reasoning steps grows, and does any system in the set reduce the deficit?",
    "selectors": [
@@ -284,6 +308,12 @@
    "caption_claim": "The multimodal heads depend on the correct image: replacing it with another development image or with zeros costs accuracy, and the question-only control is provably unaffected.",
    "carries_v2_07_limitation": false,
    "chart_type": "grouped horizontal bars, one pair per system (shuffled, zeroed), with clustered intervals",
+   "checkpoint_selection_rules": [
+    "BEST_ON_DEVELOPMENT"
+   ],
+   "comparable_metric_ids": [
+    "v2_closed_vocab_top1_index_match"
+   ],
    "consumes_evidence": [
     "EV-CON-v2_06.concat.drop_shuffled.train_40k",
     "EV-CON-v2_06.concat.drop_zeroed.train_40k",
@@ -310,6 +340,7 @@
    "metric_ids": [
     "v2_closed_vocab_top1_index_match"
    ],
+   "mixes_checkpoint_selection": false,
    "placement": "MAIN_TEXT",
    "scientific_question": "How much accuracy does each system lose when the image is replaced by another development image or by zeros?",
    "selectors": [
@@ -336,8 +367,14 @@
   },
   {
    "caption_claim": "The 21.1M-parameter latent-query reasoner does not materially outperform the 1.1M global fusion head at 40k, and no scale shows it reducing the four-or-more-step deficit.",
-   "carries_v2_07_limitation": false,
+   "carries_v2_07_limitation": true,
    "chart_type": "two panels: (a) reasoner and fusion accuracy against training scale, (b) forest of the three paired reasoner-minus-fusion deficit differences",
+   "checkpoint_selection_rules": [
+    "BEST_ON_DEVELOPMENT"
+   ],
+   "comparable_metric_ids": [
+    "v2_closed_vocab_top1_index_match"
+   ],
    "consumes_evidence": [
     "EV-CON-v3_02a.reasoner_minus_fusion_deficit.train_40k",
     "EV-CON-v3_03.reasoner_minus_fusion_deficit.train_100k",
@@ -345,10 +382,13 @@
     "EV-DSC-v3_01.reasoner.train_40k.seed_mean",
     "EV-DSC-v3_01.reasoner.train_40k.seed_sd",
     "EV-DSC-v3_01.reasoner_minus_fusion.train_40k.seed_mean",
+    "EV-SEED-v2_07.fusion.train_100k",
+    "EV-SEED-v2_07.fusion.train_250k",
+    "EV-SEED-v2_07.fusion.train_40k",
     "EV-SEED-v3_03.reasoner.train_100k",
     "EV-SEED-v3_03.reasoner.train_250k"
    ],
-   "consumes_evidence_count": 8,
+   "consumes_evidence_count": 11,
    "decision_note": "Main text, and deliberately separated from the representation-quality figure. Pairing V3 with E2 in one panel would imply a shared axis between a system-level comparison and a representation-confounded one.",
    "dissertation_section": [
     "R5_LATENT_REASONING_AND_REPRESENTATION"
@@ -363,13 +403,13 @@
     "EV-DSC-v3_01.reasoner_minus_fusion.train_40k.seed_mean"
    ],
    "figure_id": "VE0-FIG-06",
-   "grouping": "panel (a) annotates each system's trainable parameter count, because the size difference is the point",
+   "grouping": "panel (a) draws two series, the reasoner and the global fusion reference, and annotates each system's trainable parameter count because the size difference is the point. The two series are drawn with visibly different seed-set labels, because they do not share one",
    "likely_viva_question": "So token-level access does not help?",
-   "mandatory_caption_caveat": "A system-level comparison: input granularity, architecture and parameter count change together, so token-level access is not isolated as a cause. All three deficit-difference intervals include zero, which is an absence of a detected difference, not evidence of equivalence. The 40k accuracy point and its gap come from v3_01 and carry a seed spread only, with no clustered interval. The fusion side at 100k and 250k comes from v2_07 and carries its documented limitation.",
+   "mandatory_caption_caveat": "A system-level comparison: input granularity, architecture and parameter count change together, so token-level access is not isolated as a cause. All three deficit-difference intervals include zero, which is an absence of a detected difference, not evidence of equivalence. The 40k reasoner accuracy and its same-seed gap come from v3_01 and carry an across-training-seed standard deviation only, with no clustered interval. The fusion reference series is v2_07 historical aggregate and seed evidence and carries the v2_07 ACCEPTED DOCUMENTED LIMITATION: one of forty reconstruction cells differed by a single numerically tied row, the reconstructed clustered family was therefore conservatively omitted in full, no image-clustered evaluation interval is available for the affected scaling evidence, and no post-hoc partial-family rescue was performed. PROTOCOL DIFFERENCES that must stay visible: the two series do not share a seed set, the reasoner using three seeds and the fusion reference five, so panel (a) is a system-level juxtaposition and not a matched paired comparison. Both series use the same V2-era closed-vocabulary scorer on the same 7,714-row development view and the same best-on-development checkpoint-selection rule, which is what makes the juxtaposition legitimate at all.",
    "metric_ids": [
-    "structural_count_or_share",
     "v2_closed_vocab_top1_index_match"
    ],
+   "mixes_checkpoint_selection": false,
    "placement": "MAIN_TEXT",
    "scientific_question": "Does a question-conditioned latent-query reasoner over token-level visual features beat the far smaller global-embedding fusion head, and does it reduce the multi-step deficit?",
    "selectors": [
@@ -378,9 +418,22 @@
      "experiment_family": [
       "v3_03"
      ]
+    },
+    {
+     "evidence_class": "SEED",
+     "experiment_family": [
+      "v2_07"
+     ],
+     "model_system": [
+      "fusion"
+     ]
     }
    ],
    "source_provenance": [
+    {
+     "path": "results/experiments/v2_07_scaling/results.json",
+     "sha256": "852206e1b0a404955ed66c5b56a3b9bd7215c15fb35b438dd703cc6c497b79fc"
+    },
     {
      "path": "results/experiments/v3_01_reasoner/results.json",
      "sha256": "472fe626775d755e1a24ae3da814466773b3e067537201cb88351ea27d8abfd9"
@@ -396,16 +449,26 @@
    ],
    "superseded_evidence_consumed": [],
    "supervisor_slide": "SLIDE-08-BIGGER-REASONER-DID-NOT-PAY",
-   "uncertainty_shown": "CLUSTERED_CI95",
+   "uncertainty_by_panel": {
+    "panel_a": "SEED_SD. Both series carry across-training-seed standard deviation only. No clustered interval exists for either: the reasoner accuracies come from v3_01 and v3_03, which the closure did not reconstruct, and the fusion series comes from the stopped v2_07 family. Neither is drawn as a confidence interval.",
+    "panel_b": "CLUSTERED_CI95. The three paired deficit differences carry image-clustered evaluation-sampling intervals on 7,714 rows over 768 represented development images."
+   },
+   "uncertainty_shown": "SEED_SD_AND_CLUSTERED_CI95_BY_PANEL",
    "viva_answer": "Not in this configuration. Three things changed at once, so the honest statement is about the systems as built, not about token access in isolation.",
    "working_title": "Token-level latent reasoning against the global heads",
-   "x_axis": "(a) labelled training questions; (b) deficit difference in accuracy points, zero line drawn",
-   "y_axis": "(a) development accuracy; (b) training scale"
+   "x_axis": "(a) labelled training questions, categorical over 40k, 100k and 250k; (b) deficit difference in accuracy points, zero line drawn",
+   "y_axis": "(a) development accuracy under the V2-era closed-vocabulary scorer; (b) training scale"
   },
   {
    "caption_claim": "Under the tested 40k controlled comparison, the stronger frozen representation improves the multimodal systems: the three multimodal gains exclude zero while the question-only gain does not, supporting representation quality as an important factor acting mainly through the image path.",
    "carries_v2_07_limitation": false,
    "chart_type": "forest plot, one row per head, ordered so the question_only row is visually last",
+   "checkpoint_selection_rules": [
+    "BEST_ON_DEVELOPMENT"
+   ],
+   "comparable_metric_ids": [
+    "v2_closed_vocab_top1_index_match"
+   ],
    "consumes_evidence": [
     "EV-CON-e2.siglip_minus_clip_concat.train_40k",
     "EV-CON-e2.siglip_minus_clip_fusion.train_40k",
@@ -431,6 +494,7 @@
    "metric_ids": [
     "v2_closed_vocab_top1_index_match"
    ],
+   "mixes_checkpoint_selection": false,
    "placement": "MAIN_TEXT",
    "scientific_question": "What does a stronger frozen dual encoder change, and does it change the image path or the question path?",
    "selectors": [],
@@ -451,7 +515,14 @@
   {
    "caption_claim": "Frozen pretraining helps on the question side at both scales, while no reliable positive pretrained-over-random advantage is detected for either tested answer-side readout.",
    "carries_v2_07_limitation": false,
-   "chart_type": "forest plot in three labelled blocks: question side 135M, answer side 135M, answer side 360M",
+   "chart_type": "forest plot in three labelled first-order blocks (question side 135M, answer side 135M, answer side 360M), plus ONE visually separated second-order block below a rule, holding the E10 difference in differences alone",
+   "checkpoint_selection_rules": [
+    "BEST_ON_DEVELOPMENT",
+    "FIXED_EPOCH_22"
+   ],
+   "comparable_metric_ids": [
+    "g21_pinned_normalised_exact_match"
+   ],
    "consumes_evidence": [
     "EV-CON-E10.difference_in_differences",
     "EV-CON-E10.pretraining_effect.train_250k",
@@ -480,11 +551,50 @@
    "figure_id": "VE0-FIG-08",
    "grouping": "by interface side and language-model size; every row states its reference condition and its comparison class",
    "likely_viva_question": "Does this mean pretraining does not matter for the answer side?",
-   "mandatory_caption_caveat": "Every row is pretrained minus its architecture-matched random control at the same model size; a random 135M model is never the control for a pretrained 360M model. An interval that contains zero is an absence of a detected effect and establishes NEITHER equivalence NOR the absence of an effect. E10 does not reproduce E8B's directional negative 40k result. The 135M to 360M step is whole-system capacity sensitivity, not an isolated causal language-model-size effect: trainable capacity moves too, 21,343,808 to 21,540,800 parameters. E8B B3 at 40k has a seed sd of 0.02795 and its per-seed values must be shown beside this figure. Checkpoint selection differs: E8A selects the best development epoch, E8B and E10 use the frozen fixed-22 rule.",
+   "mandatory_caption_caveat": "Every row is pretrained minus its architecture-matched random control at the same model size; a random 135M model is never the control for a pretrained 360M model. An interval that contains zero is an absence of a detected effect and establishes NEITHER equivalence NOR the absence of an effect. E10 does not reproduce E8B's directional negative 40k result. The 135M to 360M step is whole-system capacity sensitivity, not an isolated causal language-model-size effect: trainable capacity moves too, 21,343,808 to 21,540,800 parameters. E8B B3 at 40k has a seed sd of 0.02795 and its per-seed values must be shown beside this figure. Checkpoint selection differs: E8A selects the best development epoch, E8B and E10 use the frozen fixed-22 rule. The bottom block is a SECOND-ORDER quantity: the E10 difference in differences is an interaction between the pretraining effect and training scale, not a pretrained-minus-random effect, so the axis label above it does not describe it. It is not directional.",
    "metric_ids": [
     "g21_pinned_normalised_exact_match"
    ],
+   "mixes_checkpoint_selection": true,
    "placement": "MAIN_TEXT",
+   "row_groups": [
+    {
+     "evidence_ids": [
+      "EV-CON-E8A.A1_minus_A1r.train_40k",
+      "EV-CON-E8A.A1_minus_A1r.train_250k"
+     ],
+     "group_id": "G1_question_side_135M",
+     "order": "FIRST_ORDER",
+     "quantity": "pretrained minus architecture-matched random"
+    },
+    {
+     "evidence_ids": [
+      "EV-CON-E8B.B3_-_B2.train_40k",
+      "EV-CON-E8B.B3_-_B2.train_250k"
+     ],
+     "group_id": "G2_answer_side_135M",
+     "order": "FIRST_ORDER",
+     "quantity": "pretrained minus architecture-matched random"
+    },
+    {
+     "evidence_ids": [
+      "EV-CON-E10.pretraining_effect.train_40k",
+      "EV-CON-E10.pretraining_effect.train_250k"
+     ],
+     "group_id": "G3_answer_side_360M",
+     "order": "FIRST_ORDER",
+     "quantity": "pretrained minus architecture-matched random"
+    },
+    {
+     "evidence_ids": [
+      "EV-CON-E10.difference_in_differences"
+     ],
+     "group_id": "G4_second_order_interaction",
+     "order": "SECOND_ORDER",
+     "quantity": "difference in differences: (B4 minus B4r) at train_250k minus (B4 minus B4r) at train_40k. This is an interaction between the pretraining effect and training scale, NOT a pretraining effect",
+     "separation_requirement": "drawn below a horizontal rule, in its own labelled block, with its own row label naming it a second-order interaction. It must never sit inside or immediately adjacent to the three first-order blocks without that separation"
+    }
+   ],
    "scientific_question": "Does frozen pretraining help, and does the answer depend on which side of the interface the language model sits?",
    "selectors": [],
    "source_provenance": [
@@ -506,13 +616,15 @@
    "uncertainty_shown": "CLUSTERED_CI95",
    "viva_answer": "No. It means no reliable positive advantage was detected for these two answer-side interfaces at these scales. The intervals contain zero, which does not establish equivalence or absence, and the finding does not generalise to other interfaces.",
    "working_title": "Frozen small-language-model pretraining, question side and answer side",
-   "x_axis": "pretrained minus architecture-matched random, in accuracy points, zero line drawn",
+   "x_axis": "first-order blocks: pretrained minus architecture-matched random, in accuracy points, zero line drawn. The second-order block shares the numeric scale but is labelled separately, because a difference of two such differences is not itself a pretrained-minus-random effect and must not be read along that axis label",
    "y_axis": "block and training scale"
   },
   {
    "caption_claim": "A small global-embedding head reaches comparable accuracy to much larger systems at a small fraction of the measured end-to-end serial latency.",
    "carries_v2_07_limitation": false,
    "chart_type": "two side-by-side scatter panels, one per measurement node, never one merged frontier",
+   "checkpoint_selection_rules": [],
+   "comparable_metric_ids": [],
    "consumes_evidence": [
     "EV-EFF-E7b.concat",
     "EV-EFF-E7b.e8a_a0p",
@@ -548,6 +660,7 @@
    "metric_ids": [
     "warm_median_serial_latency_ms"
    ],
+   "mixes_checkpoint_selection": false,
    "placement": "MAIN_TEXT",
    "scientific_question": "What does each system cost per query, and which systems are not dominated?",
    "selectors": [
@@ -580,6 +693,8 @@
    "caption_claim": "Examples selected by a frozen deterministic rule, not chosen for appearance.",
    "carries_v2_07_limitation": false,
    "chart_type": "image gallery: image, question, gold answer, each compared system's prediction, correctness marks",
+   "checkpoint_selection_rules": [],
+   "comparable_metric_ids": [],
    "consumes_evidence": [
     "EV-DSC-dev.n_images",
     "EV-DSC-dev.n_questions_in_vocabulary"
@@ -598,6 +713,7 @@
    "metric_ids": [
     "structural_count_or_share"
    ],
+   "mixes_checkpoint_selection": false,
    "placement": "MAIN_TEXT",
    "populated_by": "VE-2",
    "scientific_question": "What do agreements and disagreements between these systems look like on individual development questions?",
@@ -628,6 +744,12 @@
    "caption_claim": "Either interaction term alone recovers most of the fusion gain at an equal parameter budget, and the two terms behave alike.",
    "carries_v2_07_limitation": false,
    "chart_type": "forest plot of all nine published ablation gaps",
+   "checkpoint_selection_rules": [
+    "BEST_ON_DEVELOPMENT"
+   ],
+   "comparable_metric_ids": [
+    "v2_closed_vocab_top1_index_match"
+   ],
    "consumes_evidence": [
     "EV-CON-v2_04.difference_576k_minus_concat.train_40k",
     "EV-CON-v2_04.difference_natural_minus_concat.train_40k",
@@ -653,6 +775,7 @@
    "metric_ids": [
     "v2_closed_vocab_top1_index_match"
    ],
+   "mixes_checkpoint_selection": false,
    "placement": "APPENDIX",
    "scientific_question": "Which interaction term carries the fusion gain, and are the product and absolute difference terms redundant?",
    "selectors": [
@@ -681,6 +804,14 @@
    "caption_claim": "Most systems are seed-stable; two rows are not, and are named.",
    "carries_v2_07_limitation": true,
    "chart_type": "dot plot, one dot per training seed, mean marked",
+   "checkpoint_selection_rules": [
+    "BEST_ON_DEVELOPMENT",
+    "FIXED_EPOCH_22"
+   ],
+   "comparable_metric_ids": [
+    "g21_pinned_normalised_exact_match",
+    "v2_closed_vocab_top1_index_match"
+   ],
    "consumes_evidence": [
     "EV-SEED-E10.B4.train_250k",
     "EV-SEED-E10.B4.train_40k",
@@ -759,12 +890,13 @@
    "figure_id": "VE0-FIG-A2",
    "grouping": "by family; the two high-dispersion rows are highlighted and named",
    "likely_viva_question": "How stable are these numbers?",
-   "mandatory_caption_caveat": "The spread here is across independent TRAINING seeds. It is a different quantity from the image-clustered evaluation-sampling intervals used elsewhere and the two are never interchanged. Seed sets differ by family (five seeds for V2, E2 and E3; three for V3, E8A, E8B and E10) and are never pooled across families. Two metrics appear in this figure and are shown as separate blocks, never on one shared scale.",
+   "mandatory_caption_caveat": "The spread here is across independent TRAINING seeds. It is a different quantity from the image-clustered evaluation-sampling intervals used elsewhere and the two are never interchanged. Seed sets differ by family (five seeds for V2, E2 and E3; three for V3, E8A, E8B and E10) and are never pooled across families. Two metrics appear in this figure and are shown as separate blocks, never on one shared scale. Checkpoint selection also differs across the blocks: V2, V3, E2, E3 and E8A select the best development epoch, while E8B and E10 use the frozen fixed-22 rule with no early stopping, so the dispersions are not measured under one selection protocol.",
    "metric_ids": [
     "g21_pinned_normalised_exact_match",
     "v2_closed_vocab_top1_index_match"
    ],
    "mixed_metric_justification": "Two metrics appear because the figure is about seed dispersion, not about accuracy level. They are drawn as separate blocks with the metric named on each, and no value is differenced or ranked across the blocks.",
+   "mixes_checkpoint_selection": true,
    "placement": "APPENDIX",
    "scientific_question": "How much does a result move when only the training seed changes?",
    "selectors": [
@@ -830,6 +962,12 @@
    "caption_claim": "Growing the closed answer set from 100 to 1000 raises development coverage substantially.",
    "carries_v2_07_limitation": false,
    "chart_type": "two panels: coverage bars, and E3-view accuracies by system and scale",
+   "checkpoint_selection_rules": [
+    "BEST_ON_DEVELOPMENT"
+   ],
+   "comparable_metric_ids": [
+    "v2_closed_vocab_top1_index_match"
+   ],
    "consumes_evidence": [
     "EV-ARM-e3.concat.train_250k",
     "EV-ARM-e3.concat.train_40k",
@@ -866,6 +1004,7 @@
     "structural_count_or_share",
     "v2_closed_vocab_top1_index_match"
    ],
+   "mixes_checkpoint_selection": false,
    "placement": "APPENDIX",
    "scientific_question": "What does growing the closed answer set from 100 to 1000 buy and cost?",
    "selectors": [
@@ -908,6 +1047,12 @@
    "caption_claim": "The fusion advantage concentrates in a subset of question types rather than lifting all types equally.",
    "carries_v2_07_limitation": false,
    "chart_type": "two panels: per-type accuracy, and per-type gap forest",
+   "checkpoint_selection_rules": [
+    "BEST_ON_DEVELOPMENT"
+   ],
+   "comparable_metric_ids": [
+    "v2_closed_vocab_top1_index_match"
+   ],
    "consumes_evidence": [
     "EV-SLC-v2_02.concat.train_40k.semantic-attr.accuracy",
     "EV-SLC-v2_02.concat.train_40k.semantic-cat.accuracy",
@@ -980,6 +1125,7 @@
    "metric_ids": [
     "v2_closed_vocab_top1_index_match"
    ],
+   "mixes_checkpoint_selection": false,
    "placement": "APPENDIX",
    "scientific_question": "Which question types carry the fusion advantage?",
    "selectors": [
@@ -1013,6 +1159,8 @@
    "caption_claim": "A frozen compact integrated VLM can be placed in context against these lightweight systems on one node.",
    "carries_v2_07_limitation": false,
    "chart_type": "annotated scatter on the E9 node only, accuracy against latency, compact VLMs marked distinctly",
+   "checkpoint_selection_rules": [],
+   "comparable_metric_ids": [],
    "consumes_evidence": [
     "EV-EFF-E9.e8b_B1",
     "EV-EFF-E9.e8b_B2_R2",
@@ -1040,6 +1188,7 @@
    "metric_ids": [
     "warm_median_serial_latency_ms"
    ],
+   "mixes_checkpoint_selection": false,
    "placement": "APPENDIX",
    "scientific_question": "Where does a frozen compact integrated VLM sit relative to these lightweight systems?",
    "selectors": [
@@ -1068,6 +1217,8 @@
    "caption_claim": "The frozen encoder dominates a raw query; the trainable head is a small fraction of it.",
    "carries_v2_07_limitation": false,
    "chart_type": "grouped bars per system: end-to-end serial, cached-image question side, cached-feature head only, each block labelled with its timing class",
+   "checkpoint_selection_rules": [],
+   "comparable_metric_ids": [],
    "consumes_evidence": [
     "EV-EFF-E7a.e7a_component_measurements",
     "EV-EFF-E7b.concat",
@@ -1109,6 +1260,7 @@
     "latency_and_memory_components",
     "warm_median_serial_latency_ms"
    ],
+   "mixes_checkpoint_selection": false,
    "placement": "APPENDIX",
    "scientific_question": "Which stage of the pipeline dominates a query, and how much does feature caching remove?",
    "selectors": [
@@ -1161,7 +1313,7 @@
  "not_rendered_by_ve0": true,
  "provenance": {
   "builder": "experiments/ve0/run_ve0.py",
-  "builder_sha256": "91d371cbdd09d9dd9362cc3749ae9a4b78bfec311157f1b6fdeda9522dbb539c",
+  "builder_sha256": "3a53114ff7e55ca6d38d92004717da9ccae1320ef411cd6124af5175d790bc42",
   "clean_test_accessed": false,
   "command": "python -m experiments.ve0.run_ve0",
   "deterministic_selection_salt": "P2607-VE0-QUALITATIVE-SALT-20260813-v1",
@@ -1235,8 +1387,8 @@
   "numpy_version": "2.5.0",
   "pandas_version": "3.0.3",
   "python": "3.12.3",
-  "repository_head": "6f457d12e350c95c85650f17e2a367c70ea32828",
-  "repository_head_short": "6f457d1",
+  "repository_head": "0f4fecb5e7e5a59d1e47d0953ca3127302694852",
+  "repository_head_short": "0f4fecb",
   "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
   "schema_version": 1,
   "selected_any_checkpoint": false,
@@ -1251,7 +1403,8 @@
   "NONE_STRUCTURAL": "no uncertainty: a counted quantity",
   "NOT_APPLICABLE": "a schematic; no data",
   "SEED_POINTS": "every per-seed value plotted individually, no summary bar hiding the spread",
-  "SEED_SD": "sample standard deviation across independent training seeds (ddof=1), labelled SD, never labelled CI"
+  "SEED_SD": "sample standard deviation across independent training seeds (ddof=1), labelled SD, never labelled CI",
+  "SEED_SD_AND_CLUSTERED_CI95_BY_PANEL": "a multi-panel figure whose panels carry DIFFERENT uncertainty kinds. Each panel names its own kind in uncertainty_by_panel, the two are never drawn on one glyph or one axis, and the caption states which panel carries which. This exists so a figure that legitimately shows a seed spread beside a clustered interval cannot declare only one of them and leave a reader to assume the other"
  },
  "ve0_output": "F"
 }

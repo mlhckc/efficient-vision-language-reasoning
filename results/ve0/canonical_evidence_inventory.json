@@ -6,25 +6,90 @@
   "SECONDARY": "planned, reported in full, but not a headline claim"
  },
  "checkpoint_selection_by_family": {
-  "E10": "fixed epoch 22, no early stopping; epoch 22 is the sole primary",
-  "E2": "best development epoch",
-  "E3": "best development epoch",
-  "E7a": "no training; measurement only",
-  "E7b": "no training; measurement only",
-  "E8A": "best development epoch, patience 10, at most 100 epochs",
-  "E8B": "fixed epoch 22, no early stopping; epoch 22 is the sole primary",
-  "E9": "no training; evaluation only",
-  "e2": "best development epoch",
-  "e3": "best development epoch",
-  "v2_02": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
-  "v2_03": "best development epoch",
-  "v2_04": "best development epoch",
-  "v2_05c": "best development epoch",
-  "v2_06": "best development epoch",
-  "v2_07": "best development epoch",
-  "v3_01": "best development epoch, patience 10",
-  "v3_02a": "best development epoch, patience 10",
-  "v3_03": "best development epoch, patience 10"
+  "E10": {
+   "class": "FIXED_EPOCH_22",
+   "detail": "fixed epoch 22, no early stopping; epoch 22 is the sole primary"
+  },
+  "E2": {
+   "class": "BEST_ON_DEVELOPMENT",
+   "detail": "best development epoch"
+  },
+  "E3": {
+   "class": "BEST_ON_DEVELOPMENT",
+   "detail": "best development epoch"
+  },
+  "E7a": {
+   "class": "NO_TRAINING",
+   "detail": "no training; measurement only"
+  },
+  "E7b": {
+   "class": "NO_TRAINING",
+   "detail": "no training; measurement only"
+  },
+  "E8A": {
+   "class": "BEST_ON_DEVELOPMENT",
+   "detail": "best development epoch, patience 10, at most 100 epochs"
+  },
+  "E8B": {
+   "class": "FIXED_EPOCH_22",
+   "detail": "fixed epoch 22, no early stopping; epoch 22 is the sole primary"
+  },
+  "E9": {
+   "class": "NO_TRAINING",
+   "detail": "no training; evaluation only"
+  },
+  "e2": {
+   "class": "BEST_ON_DEVELOPMENT",
+   "detail": "best development epoch"
+  },
+  "e3": {
+   "class": "BEST_ON_DEVELOPMENT",
+   "detail": "best development epoch"
+  },
+  "v2_00": {
+   "class": "NO_TRAINING",
+   "detail": "no training; a protocol artefact"
+  },
+  "v2_01": {
+   "class": "NO_TRAINING",
+   "detail": "no training; a zero-shot protocol check"
+  },
+  "v2_02": {
+   "class": "BEST_ON_DEVELOPMENT",
+   "detail": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)"
+  },
+  "v2_03": {
+   "class": "BEST_ON_DEVELOPMENT",
+   "detail": "best development epoch"
+  },
+  "v2_04": {
+   "class": "BEST_ON_DEVELOPMENT",
+   "detail": "best development epoch"
+  },
+  "v2_05c": {
+   "class": "BEST_ON_DEVELOPMENT",
+   "detail": "best development epoch"
+  },
+  "v2_06": {
+   "class": "BEST_ON_DEVELOPMENT",
+   "detail": "best development epoch"
+  },
+  "v2_07": {
+   "class": "BEST_ON_DEVELOPMENT",
+   "detail": "best development epoch"
+  },
+  "v3_01": {
+   "class": "BEST_ON_DEVELOPMENT",
+   "detail": "best development epoch, patience 10"
+  },
+  "v3_02a": {
+   "class": "BEST_ON_DEVELOPMENT",
+   "detail": "best development epoch, patience 10"
+  },
+  "v3_03": {
+   "class": "BEST_ON_DEVELOPMENT",
+   "detail": "best development epoch, patience 10"
+  }
  },
  "clean_test_accessed": false,
  "comparison_classes": {
@@ -59,7 +124,7 @@
   "not_consumed": 17,
   "note": "a row that no specification consumes is recorded, not deleted. Several are supersession markers whose purpose is to be found and refused, and the descriptive counts exist for captions rather than for a figure of their own."
  },
- "content_sha256": "335efcd5c8b280a87f7b1d343da12bdaf70e3d2247b26b8e5574659a516ce35b",
+ "content_sha256": "14e01e83db7f392aafa27c7aee4f241f97bcb4d1272bb8c41ca3f19d096c4c24",
  "cross_family_selection_caveat": "Checkpoint selection differs across families. V2, V3, E2, E3 and E8A select the best development epoch; E8B and E10 use the frozen fixed-22 rule with no early stopping. A best-on-development number and a fixed-epoch number are not selected the same way, so a side-by-side reading is a system-level comparison, not a matched one.",
  "evidence_classes": {
   "ARM": "one system's development accuracy with an evaluation interval",
@@ -97,7 +162,7 @@
  "mixed_metric_rule": "No figure axis and no table column block may place two metric_ids on a shared quantitative scale unless the specification sets mixed_metric_justification and carries the non-comparability footnote. The V2-era closed-vocabulary scorer and the pinned G21 normalised scorer are never averaged, differenced or ranked against each other.",
  "provenance": {
   "builder": "experiments/ve0/run_ve0.py",
-  "builder_sha256": "91d371cbdd09d9dd9362cc3749ae9a4b78bfec311157f1b6fdeda9522dbb539c",
+  "builder_sha256": "3a53114ff7e55ca6d38d92004717da9ccae1320ef411cd6124af5175d790bc42",
   "clean_test_accessed": false,
   "command": "python -m experiments.ve0.run_ve0",
   "deterministic_selection_salt": "P2607-VE0-QUALITATIVE-SALT-20260813-v1",
@@ -171,8 +236,8 @@
   "numpy_version": "2.5.0",
   "pandas_version": "3.0.3",
   "python": "3.12.3",
-  "repository_head": "6f457d12e350c95c85650f17e2a367c70ea32828",
-  "repository_head_short": "6f457d1",
+  "repository_head": "0f4fecb5e7e5a59d1e47d0953ca3127302694852",
+  "repository_head_short": "0f4fecb",
   "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
   "schema_version": 1,
   "selected_any_checkpoint": false,
@@ -197,6 +262,7 @@
     "results/experiments/e2_siglip/checkpoints/concat_250k_seed42.pt"
    ],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [
     "687ffc05045cc1bd9f6487766ec21cc14f2a49f98192c5c5fa50137e5bb93148",
     "12173763b238973a5a341882c52f0aa1a8476f516d4cb2387fd00fe79746d524",
@@ -313,6 +379,7 @@
     "results/experiments/e2_siglip/checkpoints/concat_40k_seed42.pt"
    ],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [
     "7d5cf1d145ac2fff5d1d029c58204c9c0dfde511bd2bc88b8867022a04f318f3",
     "d8cf8ee14041d94e2c5b4b380523f97cbaac14751bd84173e8251e41af8c0d43",
@@ -429,6 +496,7 @@
     "results/experiments/e2_siglip/checkpoints/fusion_250k_seed42.pt"
    ],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [
     "caa297c8a26e5050d3eda5835194591d3a8dc04ed9c8f4637aa54b65d4e65a33",
     "32b4c7f05ba3b427afb187b5f7f16400f3f2d4141f54605f81382031aaf79f71",
@@ -545,6 +613,7 @@
     "results/experiments/e2_siglip/checkpoints/fusion_40k_seed42.pt"
    ],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [
     "e55ed38c17f41ecaa2bb91fa8cf0724dab717a0bb4540c888db36fa596c51730",
     "57ee08928ee9b8bc27201bd9d30369bb2cc0e36643fb8fc3561753b402539612",
@@ -661,6 +730,7 @@
     "results/experiments/e2_siglip/checkpoints/product_250k_seed42.pt"
    ],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [
     "2c43c7a350d498ca6c7b81f06f45dd41e009e0f28b3ce3a925b77097a761273f",
     "cb82f2a58575a021c47979967bdec683f1573e7146adf4ba1fe9866127a175d6",
@@ -777,6 +847,7 @@
     "results/experiments/e2_siglip/checkpoints/product_40k_seed42.pt"
    ],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [
     "79780a9577d1696bea61558fcf0c32fe98cd9aa82881fda38133dde7faf08628",
     "e70f37273a226468187c8e5ebd4e93723a67cb360c94bba1103334906dd0348a",
@@ -893,6 +964,7 @@
     "results/experiments/e2_siglip/checkpoints/question_only_250k_seed42.pt"
    ],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [
     "167d3ad9fd83e43812d8bd3c0cf19304190524887c41581d1ffb280865a01f4e",
     "86ef9c514b1325919b9b4b71307e3cb6b433cdf50a658bd42efedf24197c53ec",
@@ -1009,6 +1081,7 @@
     "results/experiments/e2_siglip/checkpoints/question_only_40k_seed42.pt"
    ],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [
     "46aba4fd9d9833552535b6749e7bfa0e1461542c4439f6f6d056f1138a51e084",
     "61155716115a8601db501b05812e2ec87f3814228e75e042ebcfc6f38f4c4b87",
@@ -1125,6 +1198,7 @@
     "results/experiments/e3_vocab1000/checkpoints/concat_250k_seed42.pt"
    ],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [
     "b42efd2604520e67ef92446b6006c9f70e7432607e560b9903181e224185a313",
     "e805d0a8f92fdb2a2a1aa468ba387b4447821b5e0d46aa390abc617776e6cb32",
@@ -1241,6 +1315,7 @@
     "results/experiments/e3_vocab1000/checkpoints/concat_40k_seed42.pt"
    ],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [
     "324d7b46bcaee4a7cd9d803f27366fd170580776bed63a7b947430c3fd52c606",
     "829395464f6cf07a49bab14f6764b1b698b24d9fe54aec399562fcdb9a6980db",
@@ -1357,6 +1432,7 @@
     "results/experiments/e3_vocab1000/checkpoints/fusion_250k_seed42.pt"
    ],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [
     "f7a505d9bbaa64c3724fc8c5d91276a0943b26830db86fb8b06dde97b9c7b184",
     "014dea69dc01a640676dc4316046b1694111e3786c55692a02379b0e413ec5b1",
@@ -1473,6 +1549,7 @@
     "results/experiments/e3_vocab1000/checkpoints/fusion_40k_seed42.pt"
    ],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [
     "ef9d9bb21563d9f594800f9c21f78b378c095cc3d5e468313a7093cf4926d14a",
     "fa053a45540850abb3373ed6a0939417540f6875ae6720077d64823980c866b7",
@@ -1589,6 +1666,7 @@
     "results/experiments/e3_vocab1000/checkpoints/product_250k_seed42.pt"
    ],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [
     "004115a2c79cbf287eecd09b15b3eb9d64a55d63ce4cda5382befada5ebfeba4",
     "ab749b49c56bd7f64eb296d4dbbd754dac5c62b013409b73483bd397989cf795",
@@ -1705,6 +1783,7 @@
     "results/experiments/e3_vocab1000/checkpoints/product_40k_seed42.pt"
    ],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [
     "542a4617a26de8b27624765cba302210a02ce12c3f977caef38a8c9abdb61c1c",
     "65f492a4c49184fc90113e149b2cd1c33f63fd23951b9ef66a991ae3922d8c1e",
@@ -1821,6 +1900,7 @@
     "results/experiments/e3_vocab1000/checkpoints/question_only_250k_seed42.pt"
    ],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [
     "3b04ba979f199aa371b7bc96fc4d187a324aec261837079af4edd16c8aa5d648",
     "58d003d781e2fa75a26a1dc2fa69d016ce72554544ba4fb8de9b51700a2fe58d",
@@ -1937,6 +2017,7 @@
     "results/experiments/e3_vocab1000/checkpoints/question_only_40k_seed42.pt"
    ],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [
     "32dad868680d9b22e70e5fbcfabd286971bfe17e9d5377138e71c901cde30ed1",
     "faddb6b4fd52d1869052ad15a45399aa142bbb24e29b5488724f47da39a1dceb",
@@ -2053,6 +2134,7 @@
     "results/experiments/v2_02_multiseed/checkpoints/concat_seed42.pt"
    ],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [
     "84261a126aa65b3b587cdb331cf2020e5f81ef6570d32092c11f8f40943f1380",
     "81ccdb92dc7d072a8e1f6d4d236fc351613d26df1dd8733578ac5d36ccf92c0b",
@@ -2173,6 +2255,7 @@
     "results/experiments/v2_02_multiseed/checkpoints/fusion_seed42.pt"
    ],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [
     "d372fb2bdc59ec3fb7233f9ab46de8abb4d699b5bc9abe54a5654d309cc73b96",
     "4dcf23b98b6b2a787fa4193255107d5c8a927326715879c104dd7401d10f8f30",
@@ -2293,6 +2376,7 @@
     "results/experiments/v2_02_multiseed/checkpoints/image_only_seed42.pt"
    ],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [
     "e7c5401e244d5dcd92655e9d827a784e09b41c1186d6b1e72dc2fedf9a6c34f0",
     "eb2b679207f673f283c8a42f2309b77baff1d15342ccb6763464945d06076f9b",
@@ -2413,6 +2497,7 @@
     "results/experiments/v2_02_multiseed/checkpoints/question_only_seed42.pt"
    ],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [
     "4b88f9b7759fbb32a0e82a2f8bf318abb966da4c3e81136245023bb848a11ddd",
     "ed1f61e0f0fd3dd623ded8129c00705614f664f6be10b6da5549eff048d9fe36",
@@ -2533,6 +2618,7 @@
     "results/experiments/v2_03_param_match/checkpoints/concat_wide_seed42.pt"
    ],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [
     "806c92e74ac348994e611982f901b1c2241b0cc86b3ba91e0192dc1db638187f",
     "06b742a81ca5a3240e767055d8d4fb865dd18990ebff15f8c2058de89c36dd95",
@@ -2633,6 +2719,7 @@
     "results/experiments/v2_03_param_match/checkpoints/fusion_narrow_seed42.pt"
    ],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [
     "4ad6a58ef988fa3b093fb86cb2f13df0859994fc953f4143cac1edb6bcef5cba",
     "0a8ea28b66630f8b5906a8201559ff52ec32454f9a076412b3d70e1d64c1cf87",
@@ -2733,6 +2820,7 @@
     "results/experiments/v2_04_ablation/checkpoints/difference_576k_seed42.pt"
    ],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [
     "dccd7466dcfc9548d17dabafdbb46f91bb530447c27065aab0fee10c7ffa8993",
     "8776aa36df8f2a44535d05aaeb815547a3b8c38e0bb415eb3c519e2a9ed0a9c2",
@@ -2845,6 +2933,7 @@
     "results/experiments/v2_04_ablation/checkpoints/difference_natural_seed42.pt"
    ],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [
     "0a5f3f8545134e2cc3652a393c7756645c73a311e36fcc643d9b4a3b510d9471",
     "281fff578237925e28efc70834b79ea43e97c1b879636e5666a551fea185e4ed",
@@ -2957,6 +3046,7 @@
     "results/experiments/v2_04_ablation/checkpoints/product_576k_seed42.pt"
    ],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [
     "69197d040ebd9cc890c12519ee754cc3650265f936d9c9182bbfab8330b123be",
     "931d87334e3fa800436d7085a183d32fee11f05695c0f2bd4e90a2da8cfc3dcc",
@@ -3069,6 +3159,7 @@
     "results/experiments/v2_04_ablation/checkpoints/product_natural_seed42.pt"
    ],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [
     "fe507aee4b3bb1d789355e65b0cae9c9869f821e36313da7770a743b880d8b3d",
     "20247663427f9b161e4ee6ade80351598b9d8afdc1c7fbb7a5dae26e05546545",
@@ -3181,6 +3272,7 @@
     "results/experiments/v2_02_multiseed/checkpoints/concat_seed42.pt"
    ],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [
     "84261a126aa65b3b587cdb331cf2020e5f81ef6570d32092c11f8f40943f1380",
     "81ccdb92dc7d072a8e1f6d4d236fc351613d26df1dd8733578ac5d36ccf92c0b",
@@ -3403,6 +3495,7 @@
     "results/experiments/v2_02_multiseed/checkpoints/fusion_seed42.pt"
    ],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [
     "d372fb2bdc59ec3fb7233f9ab46de8abb4d699b5bc9abe54a5654d309cc73b96",
     "4dcf23b98b6b2a787fa4193255107d5c8a927326715879c104dd7401d10f8f30",
@@ -3625,6 +3718,7 @@
     "results/experiments/v2_02_multiseed/checkpoints/image_only_seed42.pt"
    ],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [
     "e7c5401e244d5dcd92655e9d827a784e09b41c1186d6b1e72dc2fedf9a6c34f0",
     "eb2b679207f673f283c8a42f2309b77baff1d15342ccb6763464945d06076f9b",
@@ -3847,6 +3941,7 @@
     "results/experiments/v2_04_ablation/checkpoints/product_576k_seed42.pt"
    ],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [
     "69197d040ebd9cc890c12519ee754cc3650265f936d9c9182bbfab8330b123be",
     "931d87334e3fa800436d7085a183d32fee11f05695c0f2bd4e90a2da8cfc3dcc",
@@ -4069,6 +4164,7 @@
     "results/experiments/v2_02_multiseed/checkpoints/question_only_seed42.pt"
    ],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [
     "4b88f9b7759fbb32a0e82a2f8bf318abb966da4c3e81136245023bb848a11ddd",
     "ed1f61e0f0fd3dd623ded8129c00705614f664f6be10b6da5549eff048d9fe36",
@@ -4285,6 +4381,7 @@
    "canonical_source_sha256": "37ffdcd09aa2bcd306ca9b54229a1d0d17ff203b6b0900e09e5f876ad1ed0748",
    "checkpoint_identity": [],
    "checkpoint_selection": "fixed epoch 22, no early stopping; epoch 22 is the sole primary",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
    "checkpoint_sha256": [],
    "ci95": [
     -0.00709,
@@ -4352,6 +4449,7 @@
    "canonical_source_sha256": "37ffdcd09aa2bcd306ca9b54229a1d0d17ff203b6b0900e09e5f876ad1ed0748",
    "checkpoint_identity": [],
    "checkpoint_selection": "fixed epoch 22, no early stopping; epoch 22 is the sole primary",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
    "checkpoint_sha256": [],
    "ci95": [
     -0.01071,
@@ -4419,6 +4517,7 @@
    "canonical_source_sha256": "37ffdcd09aa2bcd306ca9b54229a1d0d17ff203b6b0900e09e5f876ad1ed0748",
    "checkpoint_identity": [],
    "checkpoint_selection": "fixed epoch 22, no early stopping; epoch 22 is the sole primary",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
    "checkpoint_sha256": [],
    "ci95": [
     -0.01508,
@@ -4486,6 +4585,7 @@
    "canonical_source_sha256": "37ffdcd09aa2bcd306ca9b54229a1d0d17ff203b6b0900e09e5f876ad1ed0748",
    "checkpoint_identity": [],
    "checkpoint_selection": "fixed epoch 22, no early stopping; epoch 22 is the sole primary",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
    "checkpoint_sha256": [],
    "ci95": [
     0.058,
@@ -4548,6 +4648,7 @@
    "canonical_source_sha256": "37ffdcd09aa2bcd306ca9b54229a1d0d17ff203b6b0900e09e5f876ad1ed0748",
    "checkpoint_identity": [],
    "checkpoint_selection": "fixed epoch 22, no early stopping; epoch 22 is the sole primary",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
    "checkpoint_sha256": [],
    "ci95": [
     0.05287,
@@ -4610,6 +4711,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.05951,
@@ -4670,6 +4772,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.04144,
@@ -4730,6 +4833,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     -0.02983,
@@ -4790,6 +4894,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     -0.01996,
@@ -4850,6 +4955,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.03935,
@@ -4917,6 +5023,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.02947,
@@ -4984,6 +5091,7 @@
    "canonical_source_sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138",
    "checkpoint_identity": [],
    "checkpoint_selection": "fixed epoch 22, no early stopping; epoch 22 is the sole primary",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
    "checkpoint_sha256": [],
    "ci95": [
     -0.00112,
@@ -5044,6 +5152,7 @@
    "canonical_source_sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138",
    "checkpoint_identity": [],
    "checkpoint_selection": "fixed epoch 22, no early stopping; epoch 22 is the sole primary",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
    "checkpoint_sha256": [],
    "ci95": [
     -0.01965,
@@ -5104,6 +5213,7 @@
    "canonical_source_sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138",
    "checkpoint_identity": [],
    "checkpoint_selection": "fixed epoch 22, no early stopping; epoch 22 is the sole primary",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
    "checkpoint_sha256": [],
    "ci95": [
     -0.00511,
@@ -5164,6 +5274,7 @@
    "canonical_source_sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138",
    "checkpoint_identity": [],
    "checkpoint_selection": "fixed epoch 22, no early stopping; epoch 22 is the sole primary",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
    "checkpoint_sha256": [],
    "ci95": [
     -0.0442,
@@ -5224,6 +5335,7 @@
    "canonical_source_sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138",
    "checkpoint_identity": [],
    "checkpoint_selection": "fixed epoch 22, no early stopping; epoch 22 is the sole primary",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
    "checkpoint_sha256": [],
    "ci95": [
     -0.01208,
@@ -5291,6 +5403,7 @@
    "canonical_source_sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138",
    "checkpoint_identity": [],
    "checkpoint_selection": "fixed epoch 22, no early stopping; epoch 22 is the sole primary",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
    "checkpoint_sha256": [],
    "ci95": [
     -0.03333,
@@ -5358,6 +5471,7 @@
    "canonical_source_sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138",
    "checkpoint_identity": [],
    "checkpoint_selection": "fixed epoch 22, no early stopping; epoch 22 is the sole primary",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
    "checkpoint_sha256": [],
    "ci95": [
     0.10654,
@@ -5418,6 +5532,7 @@
    "canonical_source_sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138",
    "checkpoint_identity": [],
    "checkpoint_selection": "fixed epoch 22, no early stopping; epoch 22 is the sole primary",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
    "checkpoint_sha256": [],
    "ci95": [
     0.08153,
@@ -5478,6 +5593,7 @@
    "canonical_source_sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138",
    "checkpoint_identity": [],
    "checkpoint_selection": "fixed epoch 22, no early stopping; epoch 22 is the sole primary",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
    "checkpoint_sha256": [],
    "ci95": [
     0.11477,
@@ -5538,6 +5654,7 @@
    "canonical_source_sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138",
    "checkpoint_identity": [],
    "checkpoint_selection": "fixed epoch 22, no early stopping; epoch 22 is the sole primary",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
    "checkpoint_sha256": [],
    "ci95": [
     0.07515,
@@ -5598,6 +5715,7 @@
    "canonical_source_sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138",
    "checkpoint_identity": [],
    "checkpoint_selection": "fixed epoch 22, no early stopping; epoch 22 is the sole primary",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
    "checkpoint_sha256": [],
    "ci95": [
     0.11146,
@@ -5658,6 +5776,7 @@
    "canonical_source_sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138",
    "checkpoint_identity": [],
    "checkpoint_selection": "fixed epoch 22, no early stopping; epoch 22 is the sole primary",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
    "checkpoint_sha256": [],
    "ci95": [
     0.07447,
@@ -5718,6 +5837,7 @@
    "canonical_source_sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138",
    "checkpoint_identity": [],
    "checkpoint_selection": "fixed epoch 22, no early stopping; epoch 22 is the sole primary",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
    "checkpoint_sha256": [],
    "ci95": [
     0.03943,
@@ -5780,6 +5900,7 @@
    "canonical_source_sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138",
    "checkpoint_identity": [],
    "checkpoint_selection": "fixed epoch 22, no early stopping; epoch 22 is the sole primary",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
    "checkpoint_sha256": [],
    "ci95": [
     0.05683,
@@ -5842,6 +5963,7 @@
    "canonical_source_sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138",
    "checkpoint_identity": [],
    "checkpoint_selection": "fixed epoch 22, no early stopping; epoch 22 is the sole primary",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
    "checkpoint_sha256": [],
    "ci95": [
     0.07781,
@@ -5904,6 +6026,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.07692,
@@ -6008,6 +6131,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.06128,
@@ -6112,6 +6236,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     -0.00387,
@@ -6216,6 +6341,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.00674,
@@ -6320,6 +6446,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.00069,
@@ -6424,6 +6551,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.00618,
@@ -6528,6 +6656,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.00592,
@@ -6637,6 +6766,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.00601,
@@ -6746,6 +6876,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.00403,
@@ -6855,6 +6986,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     -6e-05,
@@ -6964,6 +7096,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.07413,
@@ -7071,6 +7204,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.05578,
@@ -7178,6 +7312,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     -0.00138,
@@ -7285,6 +7420,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.00871,
@@ -7392,6 +7528,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.00334,
@@ -7499,6 +7636,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.00745,
@@ -7606,6 +7744,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.05395,
@@ -7717,6 +7856,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.00794,
@@ -7828,6 +7968,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.00376,
@@ -7919,6 +8060,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     -0.00116,
@@ -8010,6 +8152,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.00025,
@@ -8101,6 +8244,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.00285,
@@ -8192,6 +8336,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.00338,
@@ -8300,6 +8445,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.0037,
@@ -8408,6 +8554,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.00077,
@@ -8516,6 +8663,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     -0.00383,
@@ -8624,6 +8772,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     -0.00402,
@@ -8732,6 +8881,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     -0.00654,
@@ -8840,6 +8990,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.00495,
@@ -8948,6 +9099,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     -0.00552,
@@ -9056,6 +9208,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.00811,
@@ -9164,6 +9317,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.10295,
@@ -9383,6 +9537,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.08697,
@@ -9602,6 +9757,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.12769,
@@ -9821,6 +9977,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.10403,
@@ -10040,6 +10197,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.01565,
@@ -10259,6 +10417,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     -0.00093,
@@ -10478,6 +10637,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.11355,
@@ -10697,6 +10857,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.09854,
@@ -10916,6 +11077,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.0,
@@ -11135,6 +11297,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.0,
@@ -11354,6 +11517,7 @@
    "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     -0.00672,
@@ -11419,6 +11583,7 @@
    "canonical_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     -0.01211,
@@ -11484,6 +11649,7 @@
    "canonical_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     -0.01323,
@@ -11549,6 +11715,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.07207,
@@ -11613,6 +11780,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.09138,
@@ -11677,6 +11845,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.07208,
@@ -11741,6 +11910,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.07424,
@@ -11805,6 +11975,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.06786,
@@ -11869,6 +12040,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.08085,
@@ -11933,6 +12105,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.05195,
@@ -11997,6 +12170,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.07273,
@@ -12061,6 +12235,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.09335,
@@ -12125,6 +12300,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.08003,
@@ -12189,6 +12365,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.07013,
@@ -12253,6 +12430,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.08379,
@@ -12316,13 +12494,15 @@
    "canonical_source_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
    "canonical_source_sha256": "cfe82a17f0353a9bb6f107f770e59b6b7321ff69ab8d31eda2f49f16d5976e62",
    "checkpoint_identity": [],
-   "checkpoint_selection": "NOT_APPLICABLE",
+   "checkpoint_selection": "no training; a protocol artefact",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
-   "ci_type": "NO_INTERVAL: a structural count or share, not an estimate",
+   "ci_type": "NO_INTERVAL: a counted quantity or a share of counts read from a frozen protocol artefact, not an estimate, so it carries no sampling uncertainty.",
    "cluster_unit": "NOT_APPLICABLE",
    "comparison_class": "DESCRIPTIVE_ONLY",
    "consumption_status": "CONSUMED",
+   "counts_provenance": "NOT_APPLICABLE: a protocol-level share",
    "dataset": "NOT_APPLICABLE",
    "directional": null,
    "evidence_class": "DSC",
@@ -12349,11 +12529,12 @@
    "proposed_table_use": [],
    "qualitative_pairing": "NOT_APPLICABLE",
    "quantity": "share of raw development questions whose answer is in the top-100 closed answer set",
+   "quantity_kind": "STRUCTURAL_SHARE",
    "rng_seed": null,
    "row_level_evidence_paths": [],
    "row_level_sha256": [],
    "scientific_role": "SUPPORTING",
-   "scoring_implementation": "read from artifacts/v2_00_protocol/protocol_build_summary.json at pointer /dev/v2_coverage",
+   "scoring_implementation": "a counted quantity or a share of counts read from a frozen protocol artefact; not an estimate and carrying no sampling uncertainty. Read from artifacts/v2_00_protocol/protocol_build_summary.json at pointer /dev/v2_coverage.",
    "seed_set": "NOT_APPLICABLE",
    "source_key": "dev.coverage_top100",
    "source_pointer": "/dev/v2_coverage",
@@ -12371,12 +12552,14 @@
    "canonical_source_sha256": "bbdf65f724ee89cc6078628cd85684ad64a06585b6d34bdf0638b364c2a52be6",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
-   "ci_type": "NO_INTERVAL: a structural count or share, not an estimate",
+   "ci_type": "NO_INTERVAL: a counted quantity or a share of counts read from a frozen protocol artefact, not an estimate, so it carries no sampling uncertainty.",
    "cluster_unit": "NOT_APPLICABLE",
    "comparison_class": "DESCRIPTIVE_ONLY",
    "consumption_status": "CONSUMED",
+   "counts_provenance": "NOT_APPLICABLE: a protocol-level share",
    "dataset": "NOT_APPLICABLE",
    "directional": null,
    "evidence_class": "DSC",
@@ -12385,7 +12568,7 @@
    "excludes_zero": null,
    "experiment_family": "E3",
    "forbidden_stronger_claim": "any causal reading, and any ranking against a quantity measured differently",
-   "mandatory_limitation": "Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed.",
+   "mandatory_limitation": "Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. Top-100 and top-1000 results are never paired: different development rows (7,714 against 9,823), a different class count and different training rows.",
    "metric_id": "structural_count_or_share",
    "model_system": "NOT_APPLICABLE",
    "n_questions": null,
@@ -12403,11 +12586,12 @@
    "proposed_table_use": [],
    "qualitative_pairing": "NOT_APPLICABLE",
    "quantity": "share of raw development questions whose answer is in the top-1000 closed answer set",
+   "quantity_kind": "STRUCTURAL_SHARE",
    "rng_seed": null,
    "row_level_evidence_paths": [],
    "row_level_sha256": [],
    "scientific_role": "APPENDIX",
-   "scoring_implementation": "read from results/experiments/e3_vocab1000/results.json at pointer /e3_vocab1000/build_summary/dev/coverage_top1000",
+   "scoring_implementation": "a counted quantity or a share of counts read from a frozen protocol artefact; not an estimate and carrying no sampling uncertainty. Read from results/experiments/e3_vocab1000/results.json at pointer /e3_vocab1000/build_summary/dev/coverage_top1000.",
    "seed_set": "NOT_APPLICABLE",
    "source_key": "dev.coverage_top1000",
    "source_pointer": "/e3_vocab1000/build_summary/dev/coverage_top1000",
@@ -12424,14 +12608,16 @@
    "canonical_source_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
    "canonical_source_sha256": "cfe82a17f0353a9bb6f107f770e59b6b7321ff69ab8d31eda2f49f16d5976e62",
    "checkpoint_identity": [],
-   "checkpoint_selection": "NOT_APPLICABLE",
+   "checkpoint_selection": "no training; a protocol artefact",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
-   "ci_type": "NO_INTERVAL: a structural count or share, not an estimate",
+   "ci_type": "NO_INTERVAL: a counted quantity or a share of counts read from a frozen protocol artefact, not an estimate, so it carries no sampling uncertainty.",
    "cluster_unit": "NOT_APPLICABLE",
    "comparison_class": "DESCRIPTIVE_ONLY",
    "consumption_status": "CONSUMED",
-   "dataset": "NOT_APPLICABLE",
+   "counts_provenance": "NOT_APPLICABLE: this scalar IS a count",
+   "dataset": "GQA, image-disjoint V2 development partition",
    "directional": null,
    "evidence_class": "DSC",
    "evidence_id": "EV-DSC-dev.n_images",
@@ -12459,15 +12645,16 @@
    "proposed_table_use": [],
    "qualitative_pairing": "NOT_APPLICABLE",
    "quantity": "development images in the image-disjoint partition",
+   "quantity_kind": "STRUCTURAL_COUNT",
    "rng_seed": null,
    "row_level_evidence_paths": [],
    "row_level_sha256": [],
    "scientific_role": "SUPPORTING",
-   "scoring_implementation": "read from artifacts/v2_00_protocol/protocol_build_summary.json at pointer /dev/n_images",
+   "scoring_implementation": "a counted quantity or a share of counts read from a frozen protocol artefact; not an estimate and carrying no sampling uncertainty. Read from artifacts/v2_00_protocol/protocol_build_summary.json at pointer /dev/n_images.",
    "seed_set": "NOT_APPLICABLE",
    "source_key": "dev.n_images",
    "source_pointer": "/dev/n_images",
-   "split": "NOT_APPLICABLE",
+   "split": "v2_dev_raw",
    "story_stage": "S01_BASELINE_REPRESENTATION",
    "training_scale": "NOT_APPLICABLE"
   },
@@ -12475,19 +12662,21 @@
    "across_training_seed_sd_ddof1": null,
    "allowed_claim": "a description of the measured profile",
    "analysis_role": "DIAGNOSTIC",
-   "answer_set_size": null,
+   "answer_set_size": 100,
    "appendix_destination": "NOT_APPLICABLE",
    "canonical_source_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
    "canonical_source_sha256": "cfe82a17f0353a9bb6f107f770e59b6b7321ff69ab8d31eda2f49f16d5976e62",
    "checkpoint_identity": [],
-   "checkpoint_selection": "NOT_APPLICABLE",
+   "checkpoint_selection": "no training; a protocol artefact",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
-   "ci_type": "NO_INTERVAL: a structural count or share, not an estimate",
+   "ci_type": "NO_INTERVAL: a counted quantity or a share of counts read from a frozen protocol artefact, not an estimate, so it carries no sampling uncertainty.",
    "cluster_unit": "NOT_APPLICABLE",
    "comparison_class": "DESCRIPTIVE_ONLY",
    "consumption_status": "CONSUMED",
-   "dataset": "NOT_APPLICABLE",
+   "counts_provenance": "NOT_APPLICABLE: this scalar IS a count",
+   "dataset": "GQA, image-disjoint V2 development partition",
    "directional": null,
    "evidence_class": "DSC",
    "evidence_id": "EV-DSC-dev.n_questions_in_vocabulary",
@@ -12515,15 +12704,16 @@
    "proposed_table_use": [],
    "qualitative_pairing": "NOT_APPLICABLE",
    "quantity": "in-vocabulary development questions in the top-100 view",
+   "quantity_kind": "STRUCTURAL_COUNT",
    "rng_seed": null,
    "row_level_evidence_paths": [],
    "row_level_sha256": [],
    "scientific_role": "SUPPORTING",
-   "scoring_implementation": "read from artifacts/v2_00_protocol/protocol_build_summary.json at pointer /manifests/dev/n_questions",
+   "scoring_implementation": "a counted quantity or a share of counts read from a frozen protocol artefact; not an estimate and carrying no sampling uncertainty. Read from artifacts/v2_00_protocol/protocol_build_summary.json at pointer /manifests/dev/n_questions.",
    "seed_set": "NOT_APPLICABLE",
    "source_key": "dev.n_questions_in_vocabulary",
    "source_pointer": "/manifests/dev/n_questions",
-   "split": "NOT_APPLICABLE",
+   "split": "v2_dev",
    "story_stage": "S01_BASELINE_REPRESENTATION",
    "training_scale": "NOT_APPLICABLE"
   },
@@ -12536,14 +12726,16 @@
    "canonical_source_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
    "canonical_source_sha256": "cfe82a17f0353a9bb6f107f770e59b6b7321ff69ab8d31eda2f49f16d5976e62",
    "checkpoint_identity": [],
-   "checkpoint_selection": "NOT_APPLICABLE",
+   "checkpoint_selection": "no training; a protocol artefact",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
-   "ci_type": "NO_INTERVAL: a structural count or share, not an estimate",
+   "ci_type": "NO_INTERVAL: a counted quantity or a share of counts read from a frozen protocol artefact, not an estimate, so it carries no sampling uncertainty.",
    "cluster_unit": "NOT_APPLICABLE",
    "comparison_class": "DESCRIPTIVE_ONLY",
    "consumption_status": "NOT_CONSUMED_BY_ANY_SPECIFICATION",
-   "dataset": "NOT_APPLICABLE",
+   "counts_provenance": "NOT_APPLICABLE: this scalar IS a count",
+   "dataset": "GQA, image-disjoint V2 development partition",
    "directional": null,
    "evidence_class": "DSC",
    "evidence_id": "EV-DSC-dev.n_raw_questions",
@@ -12565,15 +12757,16 @@
    "proposed_table_use": [],
    "qualitative_pairing": "NOT_APPLICABLE",
    "quantity": "raw development questions before the vocabulary gate",
+   "quantity_kind": "STRUCTURAL_COUNT",
    "rng_seed": null,
    "row_level_evidence_paths": [],
    "row_level_sha256": [],
    "scientific_role": "SUPPORTING",
-   "scoring_implementation": "read from artifacts/v2_00_protocol/protocol_build_summary.json at pointer /dev/n_raw_questions",
+   "scoring_implementation": "a counted quantity or a share of counts read from a frozen protocol artefact; not an estimate and carrying no sampling uncertainty. Read from artifacts/v2_00_protocol/protocol_build_summary.json at pointer /dev/n_raw_questions.",
    "seed_set": "NOT_APPLICABLE",
    "source_key": "dev.n_raw_questions",
    "source_pointer": "/dev/n_raw_questions",
-   "split": "NOT_APPLICABLE",
+   "split": "v2_dev_raw",
    "story_stage": "S01_BASELINE_REPRESENTATION",
    "training_scale": "NOT_APPLICABLE"
   },
@@ -12586,13 +12779,15 @@
    "canonical_source_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
    "canonical_source_sha256": "cfe82a17f0353a9bb6f107f770e59b6b7321ff69ab8d31eda2f49f16d5976e62",
    "checkpoint_identity": [],
-   "checkpoint_selection": "NOT_APPLICABLE",
+   "checkpoint_selection": "no training; a protocol artefact",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
-   "ci_type": "NO_INTERVAL: a structural count or share, not an estimate",
+   "ci_type": "NO_INTERVAL: a counted quantity or a share of counts read from a frozen protocol artefact, not an estimate, so it carries no sampling uncertainty.",
    "cluster_unit": "NOT_APPLICABLE",
    "comparison_class": "DESCRIPTIVE_ONLY",
    "consumption_status": "CONSUMED",
+   "counts_provenance": "NOT_APPLICABLE: this scalar IS a count",
    "dataset": "NOT_APPLICABLE",
    "directional": null,
    "evidence_class": "DSC",
@@ -12621,17 +12816,18 @@
    "proposed_table_use": [],
    "qualitative_pairing": "NOT_APPLICABLE",
    "quantity": "labelled training questions at the 100k scale",
+   "quantity_kind": "STRUCTURAL_COUNT",
    "rng_seed": null,
    "row_level_evidence_paths": [],
    "row_level_sha256": [],
    "scientific_role": "SUPPORTING",
-   "scoring_implementation": "read from artifacts/v2_00_protocol/protocol_build_summary.json at pointer /manifests/train_100k/n_questions",
+   "scoring_implementation": "a counted quantity or a share of counts read from a frozen protocol artefact; not an estimate and carrying no sampling uncertainty. Read from artifacts/v2_00_protocol/protocol_build_summary.json at pointer /manifests/train_100k/n_questions.",
    "seed_set": "NOT_APPLICABLE",
    "source_key": "train_100k.n_questions",
    "source_pointer": "/manifests/train_100k/n_questions",
    "split": "NOT_APPLICABLE",
    "story_stage": "S05_TRAINING_SCALE",
-   "training_scale": "NOT_APPLICABLE"
+   "training_scale": "train_100k"
   },
   {
    "across_training_seed_sd_ddof1": null,
@@ -12642,13 +12838,15 @@
    "canonical_source_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
    "canonical_source_sha256": "cfe82a17f0353a9bb6f107f770e59b6b7321ff69ab8d31eda2f49f16d5976e62",
    "checkpoint_identity": [],
-   "checkpoint_selection": "NOT_APPLICABLE",
+   "checkpoint_selection": "no training; a protocol artefact",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
-   "ci_type": "NO_INTERVAL: a structural count or share, not an estimate",
+   "ci_type": "NO_INTERVAL: a counted quantity or a share of counts read from a frozen protocol artefact, not an estimate, so it carries no sampling uncertainty.",
    "cluster_unit": "NOT_APPLICABLE",
    "comparison_class": "DESCRIPTIVE_ONLY",
    "consumption_status": "CONSUMED",
+   "counts_provenance": "NOT_APPLICABLE: this scalar IS a count",
    "dataset": "NOT_APPLICABLE",
    "directional": null,
    "evidence_class": "DSC",
@@ -12677,17 +12875,18 @@
    "proposed_table_use": [],
    "qualitative_pairing": "NOT_APPLICABLE",
    "quantity": "labelled training questions at the 250k scale",
+   "quantity_kind": "STRUCTURAL_COUNT",
    "rng_seed": null,
    "row_level_evidence_paths": [],
    "row_level_sha256": [],
    "scientific_role": "SUPPORTING",
-   "scoring_implementation": "read from artifacts/v2_00_protocol/protocol_build_summary.json at pointer /manifests/train_250k/n_questions",
+   "scoring_implementation": "a counted quantity or a share of counts read from a frozen protocol artefact; not an estimate and carrying no sampling uncertainty. Read from artifacts/v2_00_protocol/protocol_build_summary.json at pointer /manifests/train_250k/n_questions.",
    "seed_set": "NOT_APPLICABLE",
    "source_key": "train_250k.n_questions",
    "source_pointer": "/manifests/train_250k/n_questions",
    "split": "NOT_APPLICABLE",
    "story_stage": "S05_TRAINING_SCALE",
-   "training_scale": "NOT_APPLICABLE"
+   "training_scale": "train_250k"
   },
   {
    "across_training_seed_sd_ddof1": null,
@@ -12698,13 +12897,15 @@
    "canonical_source_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
    "canonical_source_sha256": "cfe82a17f0353a9bb6f107f770e59b6b7321ff69ab8d31eda2f49f16d5976e62",
    "checkpoint_identity": [],
-   "checkpoint_selection": "NOT_APPLICABLE",
+   "checkpoint_selection": "no training; a protocol artefact",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
-   "ci_type": "NO_INTERVAL: a structural count or share, not an estimate",
+   "ci_type": "NO_INTERVAL: a counted quantity or a share of counts read from a frozen protocol artefact, not an estimate, so it carries no sampling uncertainty.",
    "cluster_unit": "NOT_APPLICABLE",
    "comparison_class": "DESCRIPTIVE_ONLY",
    "consumption_status": "CONSUMED",
+   "counts_provenance": "NOT_APPLICABLE: this scalar IS a count",
    "dataset": "NOT_APPLICABLE",
    "directional": null,
    "evidence_class": "DSC",
@@ -12733,49 +12934,53 @@
    "proposed_table_use": [],
    "qualitative_pairing": "NOT_APPLICABLE",
    "quantity": "labelled training questions at the 40k scale",
+   "quantity_kind": "STRUCTURAL_COUNT",
    "rng_seed": null,
    "row_level_evidence_paths": [],
    "row_level_sha256": [],
    "scientific_role": "SUPPORTING",
-   "scoring_implementation": "read from artifacts/v2_00_protocol/protocol_build_summary.json at pointer /manifests/train_40k/n_questions",
+   "scoring_implementation": "a counted quantity or a share of counts read from a frozen protocol artefact; not an estimate and carrying no sampling uncertainty. Read from artifacts/v2_00_protocol/protocol_build_summary.json at pointer /manifests/train_40k/n_questions.",
    "seed_set": "NOT_APPLICABLE",
    "source_key": "train_40k.n_questions",
    "source_pointer": "/manifests/train_40k/n_questions",
    "split": "NOT_APPLICABLE",
    "story_stage": "S05_TRAINING_SCALE",
-   "training_scale": "NOT_APPLICABLE"
+   "training_scale": "train_40k"
   },
   {
    "across_training_seed_sd_ddof1": null,
    "allowed_claim": "a description of the measured profile",
-   "analysis_role": "DIAGNOSTIC",
-   "answer_set_size": null,
+   "analysis_role": "SECONDARY",
+   "answer_set_size": 100,
    "appendix_destination": "NOT_APPLICABLE",
    "canonical_source_path": "results/experiments/v3_01_reasoner/results.json",
    "canonical_source_sha256": "472fe626775d755e1a24ae3da814466773b3e067537201cb88351ea27d8abfd9",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
-   "ci_type": "NO_INTERVAL: a structural count or share, not an estimate",
+   "ci_type": "NO_INTERVAL_AVAILABLE: this is a development accuracy under the V2-era closed-vocabulary scorer, not a counted quantity. No image-clustered evaluation-sampling interval exists for it because the post-E10 closure reconstructed the global-head families only, so the V3 families have no reconstructed row-level evidence and no clustered interval was ever computed for this scalar. The accompanying seed mean and seed sd summarise variability across three independent TRAINING runs; they are NOT an evaluation-sampling interval. No interval is invented or reconstructed here.",
    "cluster_unit": "NOT_APPLICABLE",
    "comparison_class": "DESCRIPTIVE_ONLY",
+   "comparison_class_reason": "a single system's accuracy summary, not a comparison between systems. The system-level comparison is carried by the reasoner-minus-fusion gap row.",
    "consumption_status": "CONSUMED",
-   "dataset": "NOT_APPLICABLE",
+   "counts_provenance": "n_questions and n_unique_images are NOT read from the v3_01 artefact, which does not record them. They are the V3 development view, bound by the closure's own v3_02a and v3_03 rows on the same split under the identical frozen v3_01 recipe and the same seed set: 7,714 in-vocabulary rows over 768 represented development images, with the v3_02a reasoner step buckets summing to exactly 7,714. The same-seed reasoner-minus-fusion gap additionally requires the same evaluation rows as v2_02's fusion arm, which is canonically 7,714 rows over 768 images. WARNING for any later reader: the v3_01 artefact carries a top-level n_val field of 8000, which is a stale V1-era configuration value and does NOT describe this evaluation.",
+   "dataset": "GQA, image-disjoint V2 development partition",
    "directional": null,
    "evidence_class": "DSC",
    "evidence_id": "EV-DSC-v3_01.reasoner.train_40k.seed_mean",
-   "evidence_readiness": "READY",
+   "evidence_readiness": "READY_SEED_ONLY_NO_INTERVAL",
    "excludes_zero": null,
    "experiment_family": "v3_01",
    "forbidden_stronger_claim": "any causal reading, and any ranking against a quantity measured differently",
-   "mandatory_limitation": "Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed.",
-   "metric_id": "structural_count_or_share",
-   "model_system": "NOT_APPLICABLE",
-   "n_questions": null,
+   "mandatory_limitation": "Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. A system-level comparison. Input granularity, architecture and parameter count change together, so token-level access is not isolated as the cause. These 40k values carry NO image-clustered evaluation interval: the closure reconstructed the global-head families only. Report the across-training-seed mean and sd over three seeds, and the same-seed gap, with no interval. The original v3_01 pooled step statistics are superseded by v3_02a.",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "reasoner",
+   "n_questions": 7714,
    "n_resamples": null,
-   "n_training_seeds": null,
-   "n_unique_images": null,
+   "n_training_seeds": 3,
+   "n_unique_images": 768,
    "point_estimate": 0.54222,
    "proposed_dissertation_section": [
     "R5_LATENT_REASONING_AND_REPRESENTATION"
@@ -12788,50 +12993,58 @@
    ],
    "proposed_table_use": [],
    "qualitative_pairing": "NOT_APPLICABLE",
-   "quantity": "mean development accuracy of the 40k latent-query reasoner across three training seeds",
+   "quantity": "mean development accuracy of the 40k latent-query reasoner across three independent training seeds",
+   "quantity_kind": "DEVELOPMENT_ACCURACY",
    "rng_seed": null,
    "row_level_evidence_paths": [],
    "row_level_sha256": [],
    "scientific_role": "CORE",
-   "scoring_implementation": "read from results/experiments/v3_01_reasoner/results.json at pointer /v3_01_reasoner/final/mean",
-   "seed_set": "NOT_APPLICABLE",
+   "scoring_implementation": "argmax over the closed answer set compared with the gold label index, on the in-vocabulary development rows. The V2-era scorer. Read from results/experiments/v3_01_reasoner/results.json at pointer /v3_01_reasoner/final/mean.",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
    "source_key": "v3_01.reasoner.train_40k.seed_mean",
    "source_pointer": "/v3_01_reasoner/final/mean",
-   "split": "NOT_APPLICABLE",
+   "split": "v2_dev",
    "story_stage": "S08_LATENT_REASONER",
-   "training_scale": "NOT_APPLICABLE"
+   "training_scale": "train_40k"
   },
   {
-   "across_training_seed_sd_ddof1": null,
+   "across_training_seed_sd_ddof1": 0.00366,
    "allowed_claim": "a description of the measured profile",
-   "analysis_role": "DIAGNOSTIC",
-   "answer_set_size": null,
+   "analysis_role": "SECONDARY",
+   "answer_set_size": 100,
    "appendix_destination": "NOT_APPLICABLE",
    "canonical_source_path": "results/experiments/v3_01_reasoner/results.json",
    "canonical_source_sha256": "472fe626775d755e1a24ae3da814466773b3e067537201cb88351ea27d8abfd9",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
-   "ci_type": "NO_INTERVAL: a structural count or share, not an estimate",
+   "ci_type": "NO_INTERVAL_AVAILABLE: this is a development accuracy under the V2-era closed-vocabulary scorer, not a counted quantity. No image-clustered evaluation-sampling interval exists for it because the post-E10 closure reconstructed the global-head families only, so the V3 families have no reconstructed row-level evidence and no clustered interval was ever computed for this scalar. The accompanying seed mean and seed sd summarise variability across three independent TRAINING runs; they are NOT an evaluation-sampling interval. No interval is invented or reconstructed here.",
    "cluster_unit": "NOT_APPLICABLE",
    "comparison_class": "DESCRIPTIVE_ONLY",
+   "comparison_class_reason": "a dispersion summary for one system, not a comparison between systems.",
    "consumption_status": "CONSUMED",
-   "dataset": "NOT_APPLICABLE",
+   "counts_provenance": "n_questions and n_unique_images are NOT read from the v3_01 artefact, which does not record them. They are the V3 development view, bound by the closure's own v3_02a and v3_03 rows on the same split under the identical frozen v3_01 recipe and the same seed set: 7,714 in-vocabulary rows over 768 represented development images, with the v3_02a reasoner step buckets summing to exactly 7,714. The same-seed reasoner-minus-fusion gap additionally requires the same evaluation rows as v2_02's fusion arm, which is canonically 7,714 rows over 768 images. WARNING for any later reader: the v3_01 artefact carries a top-level n_val field of 8000, which is a stale V1-era configuration value and does NOT describe this evaluation.",
+   "dataset": "GQA, image-disjoint V2 development partition",
    "directional": null,
    "evidence_class": "DSC",
    "evidence_id": "EV-DSC-v3_01.reasoner.train_40k.seed_sd",
-   "evidence_readiness": "READY",
+   "evidence_readiness": "READY_SEED_ONLY_NO_INTERVAL",
    "excludes_zero": null,
    "experiment_family": "v3_01",
    "forbidden_stronger_claim": "any causal reading, and any ranking against a quantity measured differently",
-   "mandatory_limitation": "Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed.",
-   "metric_id": "structural_count_or_share",
-   "model_system": "NOT_APPLICABLE",
-   "n_questions": null,
+   "mandatory_limitation": "Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. A system-level comparison. Input granularity, architecture and parameter count change together, so token-level access is not isolated as the cause. These 40k values carry NO image-clustered evaluation interval: the closure reconstructed the global-head families only. Report the across-training-seed mean and sd over three seeds, and the same-seed gap, with no interval. The original v3_01 pooled step statistics are superseded by v3_02a.",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "reasoner",
+   "n_questions": 7714,
    "n_resamples": null,
-   "n_training_seeds": null,
-   "n_unique_images": null,
+   "n_training_seeds": 3,
+   "n_unique_images": 768,
    "point_estimate": 0.00366,
    "proposed_dissertation_section": [
     "R5_LATENT_REASONING_AND_REPRESENTATION"
@@ -12844,50 +13057,58 @@
    ],
    "proposed_table_use": [],
    "qualitative_pairing": "NOT_APPLICABLE",
-   "quantity": "across-training-seed standard deviation of the 40k latent-query reasoner. NOT a confidence interval",
+   "quantity": "standard deviation of the 40k latent-query reasoner's development accuracy across three independent TRAINING seeds. This is training-run variability, NOT a confidence interval and NOT evaluation-sampling uncertainty",
+   "quantity_kind": "TRAINING_SEED_DISPERSION",
    "rng_seed": null,
    "row_level_evidence_paths": [],
    "row_level_sha256": [],
    "scientific_role": "CORE",
-   "scoring_implementation": "read from results/experiments/v3_01_reasoner/results.json at pointer /v3_01_reasoner/final/std",
-   "seed_set": "NOT_APPLICABLE",
+   "scoring_implementation": "argmax over the closed answer set compared with the gold label index, on the in-vocabulary development rows. The V2-era scorer. Read from results/experiments/v3_01_reasoner/results.json at pointer /v3_01_reasoner/final/std.",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
    "source_key": "v3_01.reasoner.train_40k.seed_sd",
    "source_pointer": "/v3_01_reasoner/final/std",
-   "split": "NOT_APPLICABLE",
+   "split": "v2_dev",
    "story_stage": "S08_LATENT_REASONER",
-   "training_scale": "NOT_APPLICABLE"
+   "training_scale": "train_40k"
   },
   {
    "across_training_seed_sd_ddof1": null,
-   "allowed_claim": "a description of the measured profile",
-   "analysis_role": "DIAGNOSTIC",
-   "answer_set_size": null,
+   "allowed_claim": "a statement about the systems as built",
+   "analysis_role": "SECONDARY",
+   "answer_set_size": 100,
    "appendix_destination": "NOT_APPLICABLE",
    "canonical_source_path": "results/experiments/v3_01_reasoner/results.json",
    "canonical_source_sha256": "472fe626775d755e1a24ae3da814466773b3e067537201cb88351ea27d8abfd9",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
-   "ci_type": "NO_INTERVAL: a structural count or share, not an estimate",
+   "ci_type": "NO_INTERVAL_AVAILABLE: this is a development accuracy under the V2-era closed-vocabulary scorer, not a counted quantity. No image-clustered evaluation-sampling interval exists for it because the post-E10 closure reconstructed the global-head families only, so the V3 families have no reconstructed row-level evidence and no clustered interval was ever computed for this scalar. The accompanying seed mean and seed sd summarise variability across three independent TRAINING runs; they are NOT an evaluation-sampling interval. No interval is invented or reconstructed here.",
    "cluster_unit": "NOT_APPLICABLE",
-   "comparison_class": "DESCRIPTIVE_ONLY",
+   "comparison_class": "SYSTEM_LEVEL_COMPARISON",
+   "comparison_class_reason": "this row IS a contrast between two whole systems that differ in input granularity, architecture and parameter count at once. DESCRIPTIVE_ONLY would understate what the quantity is and would drop the no-single-component boundary that must travel with it.",
    "consumption_status": "CONSUMED",
-   "dataset": "NOT_APPLICABLE",
+   "counts_provenance": "n_questions and n_unique_images are NOT read from the v3_01 artefact, which does not record them. They are the V3 development view, bound by the closure's own v3_02a and v3_03 rows on the same split under the identical frozen v3_01 recipe and the same seed set: 7,714 in-vocabulary rows over 768 represented development images, with the v3_02a reasoner step buckets summing to exactly 7,714. The same-seed reasoner-minus-fusion gap additionally requires the same evaluation rows as v2_02's fusion arm, which is canonically 7,714 rows over 768 images. WARNING for any later reader: the v3_01 artefact carries a top-level n_val field of 8000, which is a stale V1-era configuration value and does NOT describe this evaluation.",
+   "dataset": "GQA, image-disjoint V2 development partition",
    "directional": null,
    "evidence_class": "DSC",
    "evidence_id": "EV-DSC-v3_01.reasoner_minus_fusion.train_40k.seed_mean",
-   "evidence_readiness": "READY",
+   "evidence_readiness": "READY_SEED_ONLY_NO_INTERVAL",
    "excludes_zero": null,
    "experiment_family": "v3_01",
-   "forbidden_stronger_claim": "any causal reading, and any ranking against a quantity measured differently",
-   "mandatory_limitation": "Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed.",
-   "metric_id": "structural_count_or_share",
-   "model_system": "NOT_APPLICABLE",
-   "n_questions": null,
+   "forbidden_stronger_claim": "attributing the outcome to any single component, such as token-level access, in isolation",
+   "mandatory_limitation": "Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. A system-level comparison. Input granularity, architecture and parameter count change together, so token-level access is not isolated as the cause. These 40k values carry NO image-clustered evaluation interval: the closure reconstructed the global-head families only. Report the across-training-seed mean and sd over three seeds, and the same-seed gap, with no interval. The original v3_01 pooled step statistics are superseded by v3_02a.",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "reasoner minus fusion",
+   "n_questions": 7714,
    "n_resamples": null,
-   "n_training_seeds": null,
-   "n_unique_images": null,
+   "n_training_seeds": 3,
+   "n_unique_images": 768,
    "point_estimate": 0.00307,
    "proposed_dissertation_section": [
     "R5_LATENT_REASONING_AND_REPRESENTATION"
@@ -12900,18 +13121,23 @@
    ],
    "proposed_table_use": [],
    "qualitative_pairing": "NOT_APPLICABLE",
-   "quantity": "same-seed mean accuracy gap of the 40k reasoner over the global fusion head",
+   "quantity": "same-seed mean development accuracy gap of the 40k latent-query reasoner over the global fusion head",
+   "quantity_kind": "DEVELOPMENT_ACCURACY_CONTRAST",
    "rng_seed": null,
    "row_level_evidence_paths": [],
    "row_level_sha256": [],
    "scientific_role": "CORE",
-   "scoring_implementation": "read from results/experiments/v3_01_reasoner/results.json at pointer /v3_01_reasoner/gaps_same_seeds/reasoner_minus_fusion/mean",
-   "seed_set": "NOT_APPLICABLE",
+   "scoring_implementation": "argmax over the closed answer set compared with the gold label index, on the in-vocabulary development rows. The V2-era scorer. Read from results/experiments/v3_01_reasoner/results.json at pointer /v3_01_reasoner/gaps_same_seeds/reasoner_minus_fusion/mean.",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
    "source_key": "v3_01.reasoner_minus_fusion.train_40k.seed_mean",
    "source_pointer": "/v3_01_reasoner/gaps_same_seeds/reasoner_minus_fusion/mean",
-   "split": "NOT_APPLICABLE",
+   "split": "v2_dev",
    "story_stage": "S08_LATENT_REASONER",
-   "training_scale": "NOT_APPLICABLE"
+   "training_scale": "train_40k"
   },
   {
    "accuracy_pairing": {
@@ -12928,6 +13154,7 @@
    "canonical_source_sha256": "368ba5c2a149953193cf237bdf77023c17b244540ef7b9bfac55cb5a7fdc1a85",
    "checkpoint_identity": [],
    "checkpoint_selection": "no training; measurement only",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: warm median over repeated passes; the across-pass spread is recorded in the source artefact",
@@ -12991,6 +13218,7 @@
    "canonical_source_sha256": "368ba5c2a149953193cf237bdf77023c17b244540ef7b9bfac55cb5a7fdc1a85",
    "checkpoint_identity": [],
    "checkpoint_selection": "no training; measurement only",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: warm median over repeated passes; the across-pass spread is recorded in the source artefact",
@@ -13061,6 +13289,7 @@
    "canonical_source_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
    "checkpoint_identity": [],
    "checkpoint_selection": "no training; measurement only",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: warm median over repeated passes; the across-pass spread is recorded in the source artefact",
@@ -13129,6 +13358,7 @@
    "canonical_source_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
    "checkpoint_identity": [],
    "checkpoint_selection": "no training; measurement only",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: warm median over repeated passes; the across-pass spread is recorded in the source artefact",
@@ -13194,6 +13424,7 @@
    "canonical_source_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
    "checkpoint_identity": [],
    "checkpoint_selection": "no training; measurement only",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: warm median over repeated passes; the across-pass spread is recorded in the source artefact",
@@ -13264,6 +13495,7 @@
    "canonical_source_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
    "checkpoint_identity": [],
    "checkpoint_selection": "no training; measurement only",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: warm median over repeated passes; the across-pass spread is recorded in the source artefact",
@@ -13332,6 +13564,7 @@
    "canonical_source_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
    "checkpoint_identity": [],
    "checkpoint_selection": "no training; measurement only",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: warm median over repeated passes; the across-pass spread is recorded in the source artefact",
@@ -13397,6 +13630,7 @@
    "canonical_source_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
    "checkpoint_identity": [],
    "checkpoint_selection": "no training; measurement only",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: warm median over repeated passes; the across-pass spread is recorded in the source artefact",
@@ -13467,6 +13701,7 @@
    "canonical_source_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
    "checkpoint_identity": [],
    "checkpoint_selection": "no training; measurement only",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: warm median over repeated passes; the across-pass spread is recorded in the source artefact",
@@ -13535,6 +13770,7 @@
    "canonical_source_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
    "checkpoint_identity": [],
    "checkpoint_selection": "no training; measurement only",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: warm median over repeated passes; the across-pass spread is recorded in the source artefact",
@@ -13600,6 +13836,7 @@
    "canonical_source_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
    "checkpoint_identity": [],
    "checkpoint_selection": "no training; measurement only",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: warm median over repeated passes; the across-pass spread is recorded in the source artefact",
@@ -13670,6 +13907,7 @@
    "canonical_source_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
    "checkpoint_identity": [],
    "checkpoint_selection": "no training; measurement only",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: warm median over repeated passes; the across-pass spread is recorded in the source artefact",
@@ -13738,6 +13976,7 @@
    "canonical_source_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
    "checkpoint_identity": [],
    "checkpoint_selection": "no training; measurement only",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: warm median over repeated passes; the across-pass spread is recorded in the source artefact",
@@ -13803,6 +14042,7 @@
    "canonical_source_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
    "checkpoint_identity": [],
    "checkpoint_selection": "no training; measurement only",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: warm median over repeated passes; the across-pass spread is recorded in the source artefact",
@@ -13873,6 +14113,7 @@
    "canonical_source_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
    "checkpoint_identity": [],
    "checkpoint_selection": "no training; measurement only",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: warm median over repeated passes; the across-pass spread is recorded in the source artefact",
@@ -13941,6 +14182,7 @@
    "canonical_source_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
    "checkpoint_identity": [],
    "checkpoint_selection": "no training; measurement only",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: warm median over repeated passes; the across-pass spread is recorded in the source artefact",
@@ -14011,6 +14253,7 @@
    "canonical_source_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
    "checkpoint_identity": [],
    "checkpoint_selection": "no training; measurement only",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: warm median over repeated passes; the across-pass spread is recorded in the source artefact",
@@ -14079,6 +14322,7 @@
    "canonical_source_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
    "checkpoint_identity": [],
    "checkpoint_selection": "no training; measurement only",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: warm median over repeated passes; the across-pass spread is recorded in the source artefact",
@@ -14144,6 +14388,7 @@
    "canonical_source_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
    "checkpoint_identity": [],
    "checkpoint_selection": "no training; measurement only",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: warm median over repeated passes; the across-pass spread is recorded in the source artefact",
@@ -14214,6 +14459,7 @@
    "canonical_source_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
    "checkpoint_identity": [],
    "checkpoint_selection": "no training; measurement only",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: warm median over repeated passes; the across-pass spread is recorded in the source artefact",
@@ -14282,6 +14528,7 @@
    "canonical_source_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
    "checkpoint_identity": [],
    "checkpoint_selection": "no training; measurement only",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: warm median over repeated passes; the across-pass spread is recorded in the source artefact",
@@ -14347,6 +14594,7 @@
    "canonical_source_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
    "checkpoint_identity": [],
    "checkpoint_selection": "no training; measurement only",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: warm median over repeated passes; the across-pass spread is recorded in the source artefact",
@@ -14417,6 +14665,7 @@
    "canonical_source_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
    "checkpoint_identity": [],
    "checkpoint_selection": "no training; measurement only",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: warm median over repeated passes; the across-pass spread is recorded in the source artefact",
@@ -14485,6 +14734,7 @@
    "canonical_source_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
    "checkpoint_identity": [],
    "checkpoint_selection": "no training; measurement only",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: warm median over repeated passes; the across-pass spread is recorded in the source artefact",
@@ -14550,6 +14800,7 @@
    "canonical_source_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
    "checkpoint_identity": [],
    "checkpoint_selection": "no training; measurement only",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: warm median over repeated passes; the across-pass spread is recorded in the source artefact",
@@ -14617,6 +14868,7 @@
    "canonical_source_sha256": "5d42ae9344fa9d7bcd48589645d62b4d0c20db9a3d9d03288bbddd6832ae2caa",
    "checkpoint_identity": [],
    "checkpoint_selection": "no training; evaluation only",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: warm median over repeated passes; the across-pass spread is recorded in the source artefact",
@@ -14688,6 +14940,7 @@
    "canonical_source_sha256": "5d42ae9344fa9d7bcd48589645d62b4d0c20db9a3d9d03288bbddd6832ae2caa",
    "checkpoint_identity": [],
    "checkpoint_selection": "no training; evaluation only",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: warm median over repeated passes; the across-pass spread is recorded in the source artefact",
@@ -14759,6 +15012,7 @@
    "canonical_source_sha256": "5d42ae9344fa9d7bcd48589645d62b4d0c20db9a3d9d03288bbddd6832ae2caa",
    "checkpoint_identity": [],
    "checkpoint_selection": "no training; evaluation only",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: warm median over repeated passes; the across-pass spread is recorded in the source artefact",
@@ -14830,6 +15084,7 @@
    "canonical_source_sha256": "5d42ae9344fa9d7bcd48589645d62b4d0c20db9a3d9d03288bbddd6832ae2caa",
    "checkpoint_identity": [],
    "checkpoint_selection": "no training; evaluation only",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: warm median over repeated passes; the across-pass spread is recorded in the source artefact",
@@ -14901,6 +15156,7 @@
    "canonical_source_sha256": "5d42ae9344fa9d7bcd48589645d62b4d0c20db9a3d9d03288bbddd6832ae2caa",
    "checkpoint_identity": [],
    "checkpoint_selection": "no training; evaluation only",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: warm median over repeated passes; the across-pass spread is recorded in the source artefact",
@@ -14975,6 +15231,7 @@
    "canonical_source_sha256": "5d42ae9344fa9d7bcd48589645d62b4d0c20db9a3d9d03288bbddd6832ae2caa",
    "checkpoint_identity": [],
    "checkpoint_selection": "no training; evaluation only",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: warm median over repeated passes; the across-pass spread is recorded in the source artefact",
@@ -15049,6 +15306,7 @@
    "canonical_source_sha256": "5d42ae9344fa9d7bcd48589645d62b4d0c20db9a3d9d03288bbddd6832ae2caa",
    "checkpoint_identity": [],
    "checkpoint_selection": "no training; evaluation only",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: warm median over repeated passes; the across-pass spread is recorded in the source artefact",
@@ -15123,6 +15381,7 @@
    "canonical_source_sha256": "5d42ae9344fa9d7bcd48589645d62b4d0c20db9a3d9d03288bbddd6832ae2caa",
    "checkpoint_identity": [],
    "checkpoint_selection": "no training; evaluation only",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: warm median over repeated passes; the across-pass spread is recorded in the source artefact",
@@ -15197,6 +15456,7 @@
    "canonical_source_sha256": "5d42ae9344fa9d7bcd48589645d62b4d0c20db9a3d9d03288bbddd6832ae2caa",
    "checkpoint_identity": [],
    "checkpoint_selection": "no training; evaluation only",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: warm median over repeated passes; the across-pass spread is recorded in the source artefact",
@@ -15268,6 +15528,7 @@
    "canonical_source_sha256": "5d42ae9344fa9d7bcd48589645d62b4d0c20db9a3d9d03288bbddd6832ae2caa",
    "checkpoint_identity": [],
    "checkpoint_selection": "no training; evaluation only",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: warm median over repeated passes; the across-pass spread is recorded in the source artefact",
@@ -15339,6 +15600,7 @@
    "canonical_source_sha256": "5d42ae9344fa9d7bcd48589645d62b4d0c20db9a3d9d03288bbddd6832ae2caa",
    "checkpoint_identity": [],
    "checkpoint_selection": "no training; evaluation only",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: warm median over repeated passes; the across-pass spread is recorded in the source artefact",
@@ -15403,6 +15665,7 @@
    "canonical_source_sha256": "37ffdcd09aa2bcd306ca9b54229a1d0d17ff203b6b0900e09e5f876ad1ed0748",
    "checkpoint_identity": [],
    "checkpoint_selection": "fixed epoch 22, no early stopping; epoch 22 is the sole primary",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -15467,6 +15730,7 @@
    "canonical_source_sha256": "37ffdcd09aa2bcd306ca9b54229a1d0d17ff203b6b0900e09e5f876ad1ed0748",
    "checkpoint_identity": [],
    "checkpoint_selection": "fixed epoch 22, no early stopping; epoch 22 is the sole primary",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -15531,6 +15795,7 @@
    "canonical_source_sha256": "37ffdcd09aa2bcd306ca9b54229a1d0d17ff203b6b0900e09e5f876ad1ed0748",
    "checkpoint_identity": [],
    "checkpoint_selection": "fixed epoch 22, no early stopping; epoch 22 is the sole primary",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -15595,6 +15860,7 @@
    "canonical_source_sha256": "37ffdcd09aa2bcd306ca9b54229a1d0d17ff203b6b0900e09e5f876ad1ed0748",
    "checkpoint_identity": [],
    "checkpoint_selection": "fixed epoch 22, no early stopping; epoch 22 is the sole primary",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -15659,6 +15925,7 @@
    "canonical_source_sha256": "4c51f60890bdac967915aa96dbad08b676262f2dfa13b5d10bfebd46c5af0a96",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -15724,6 +15991,7 @@
    "canonical_source_sha256": "4c51f60890bdac967915aa96dbad08b676262f2dfa13b5d10bfebd46c5af0a96",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -15789,6 +16057,7 @@
    "canonical_source_sha256": "4c51f60890bdac967915aa96dbad08b676262f2dfa13b5d10bfebd46c5af0a96",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -15854,6 +16123,7 @@
    "canonical_source_sha256": "4c51f60890bdac967915aa96dbad08b676262f2dfa13b5d10bfebd46c5af0a96",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -15919,6 +16189,7 @@
    "canonical_source_sha256": "4c51f60890bdac967915aa96dbad08b676262f2dfa13b5d10bfebd46c5af0a96",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -15984,6 +16255,7 @@
    "canonical_source_sha256": "4c51f60890bdac967915aa96dbad08b676262f2dfa13b5d10bfebd46c5af0a96",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -16049,6 +16321,7 @@
    "canonical_source_sha256": "4c51f60890bdac967915aa96dbad08b676262f2dfa13b5d10bfebd46c5af0a96",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -16114,6 +16387,7 @@
    "canonical_source_sha256": "4c51f60890bdac967915aa96dbad08b676262f2dfa13b5d10bfebd46c5af0a96",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -16179,6 +16453,7 @@
    "canonical_source_sha256": "bbdf65f724ee89cc6078628cd85684ad64a06585b6d34bdf0638b364c2a52be6",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -16242,6 +16517,7 @@
    "canonical_source_sha256": "bbdf65f724ee89cc6078628cd85684ad64a06585b6d34bdf0638b364c2a52be6",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -16305,6 +16581,7 @@
    "canonical_source_sha256": "bbdf65f724ee89cc6078628cd85684ad64a06585b6d34bdf0638b364c2a52be6",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -16368,6 +16645,7 @@
    "canonical_source_sha256": "bbdf65f724ee89cc6078628cd85684ad64a06585b6d34bdf0638b364c2a52be6",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -16431,6 +16709,7 @@
    "canonical_source_sha256": "bbdf65f724ee89cc6078628cd85684ad64a06585b6d34bdf0638b364c2a52be6",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -16494,6 +16773,7 @@
    "canonical_source_sha256": "bbdf65f724ee89cc6078628cd85684ad64a06585b6d34bdf0638b364c2a52be6",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -16557,6 +16837,7 @@
    "canonical_source_sha256": "bbdf65f724ee89cc6078628cd85684ad64a06585b6d34bdf0638b364c2a52be6",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -16620,6 +16901,7 @@
    "canonical_source_sha256": "bbdf65f724ee89cc6078628cd85684ad64a06585b6d34bdf0638b364c2a52be6",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -16683,6 +16965,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -16747,6 +17030,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -16811,6 +17095,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -16875,6 +17160,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -16939,6 +17225,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -17003,6 +17290,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -17067,6 +17355,7 @@
    "canonical_source_sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138",
    "checkpoint_identity": [],
    "checkpoint_selection": "fixed epoch 22, no early stopping; epoch 22 is the sole primary",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -17131,6 +17420,7 @@
    "canonical_source_sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138",
    "checkpoint_identity": [],
    "checkpoint_selection": "fixed epoch 22, no early stopping; epoch 22 is the sole primary",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -17195,6 +17485,7 @@
    "canonical_source_sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138",
    "checkpoint_identity": [],
    "checkpoint_selection": "fixed epoch 22, no early stopping; epoch 22 is the sole primary",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -17259,6 +17550,7 @@
    "canonical_source_sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138",
    "checkpoint_identity": [],
    "checkpoint_selection": "fixed epoch 22, no early stopping; epoch 22 is the sole primary",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -17323,6 +17615,7 @@
    "canonical_source_sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138",
    "checkpoint_identity": [],
    "checkpoint_selection": "fixed epoch 22, no early stopping; epoch 22 is the sole primary",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -17387,6 +17680,7 @@
    "canonical_source_sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138",
    "checkpoint_identity": [],
    "checkpoint_selection": "fixed epoch 22, no early stopping; epoch 22 is the sole primary",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -17451,6 +17745,7 @@
    "canonical_source_sha256": "306c1d1bdf31e081c90ab57ef4474b7fc6aeb7c5b34af4697d52a84fd44a8e6d",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -17514,6 +17809,7 @@
    "canonical_source_sha256": "306c1d1bdf31e081c90ab57ef4474b7fc6aeb7c5b34af4697d52a84fd44a8e6d",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -17577,6 +17873,7 @@
    "canonical_source_sha256": "306c1d1bdf31e081c90ab57ef4474b7fc6aeb7c5b34af4697d52a84fd44a8e6d",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -17640,6 +17937,7 @@
    "canonical_source_sha256": "306c1d1bdf31e081c90ab57ef4474b7fc6aeb7c5b34af4697d52a84fd44a8e6d",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -17703,6 +18001,7 @@
    "canonical_source_sha256": "9494f8a706b26dc82a66bb28280411acbd079991f353da8467248ac0c1947f92",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -17766,6 +18065,7 @@
    "canonical_source_sha256": "9494f8a706b26dc82a66bb28280411acbd079991f353da8467248ac0c1947f92",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -17829,6 +18129,7 @@
    "canonical_source_sha256": "3e4a7652dd1e7418b1a19244d85017a4442b6638e86c3d85b1c4888cbceed608",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -17892,6 +18193,7 @@
    "canonical_source_sha256": "3e4a7652dd1e7418b1a19244d85017a4442b6638e86c3d85b1c4888cbceed608",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -17955,6 +18257,7 @@
    "canonical_source_sha256": "3e4a7652dd1e7418b1a19244d85017a4442b6638e86c3d85b1c4888cbceed608",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -18018,6 +18321,7 @@
    "canonical_source_sha256": "3e4a7652dd1e7418b1a19244d85017a4442b6638e86c3d85b1c4888cbceed608",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -18081,6 +18385,7 @@
    "canonical_source_sha256": "45763fe56be11d42421a968922ac3212b5d1a21af77ccd87706ed44549b6a66b",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -18144,6 +18449,7 @@
    "canonical_source_sha256": "45763fe56be11d42421a968922ac3212b5d1a21af77ccd87706ed44549b6a66b",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -18207,6 +18513,7 @@
    "canonical_source_sha256": "45763fe56be11d42421a968922ac3212b5d1a21af77ccd87706ed44549b6a66b",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -18270,6 +18577,7 @@
    "canonical_source_sha256": "45763fe56be11d42421a968922ac3212b5d1a21af77ccd87706ed44549b6a66b",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -18333,6 +18641,7 @@
    "canonical_source_sha256": "45763fe56be11d42421a968922ac3212b5d1a21af77ccd87706ed44549b6a66b",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -18396,6 +18705,7 @@
    "canonical_source_sha256": "45763fe56be11d42421a968922ac3212b5d1a21af77ccd87706ed44549b6a66b",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -18459,6 +18769,7 @@
    "canonical_source_sha256": "45763fe56be11d42421a968922ac3212b5d1a21af77ccd87706ed44549b6a66b",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -18522,6 +18833,7 @@
    "canonical_source_sha256": "45763fe56be11d42421a968922ac3212b5d1a21af77ccd87706ed44549b6a66b",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -18585,6 +18897,7 @@
    "canonical_source_sha256": "45763fe56be11d42421a968922ac3212b5d1a21af77ccd87706ed44549b6a66b",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -18648,6 +18961,7 @@
    "canonical_source_sha256": "45763fe56be11d42421a968922ac3212b5d1a21af77ccd87706ed44549b6a66b",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -18711,6 +19025,7 @@
    "canonical_source_sha256": "852206e1b0a404955ed66c5b56a3b9bd7215c15fb35b438dd703cc6c497b79fc",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -18781,6 +19096,7 @@
    "canonical_source_sha256": "852206e1b0a404955ed66c5b56a3b9bd7215c15fb35b438dd703cc6c497b79fc",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -18851,6 +19167,7 @@
    "canonical_source_sha256": "852206e1b0a404955ed66c5b56a3b9bd7215c15fb35b438dd703cc6c497b79fc",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -18921,6 +19238,7 @@
    "canonical_source_sha256": "852206e1b0a404955ed66c5b56a3b9bd7215c15fb35b438dd703cc6c497b79fc",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -18946,15 +19264,18 @@
    "proposed_dissertation_section": [
     "R1_BASELINES_AND_FUSION",
     "R3_SCALING_BEHAVIOUR",
+    "R5_LATENT_REASONING_AND_REPRESENTATION",
     "R_APPENDIX_REPRESENTATION",
     "R_APPENDIX_STATISTICS"
    ],
    "proposed_figure_use": [
     "VE0-FIG-03",
+    "VE0-FIG-06",
     "VE0-FIG-A2"
    ],
    "proposed_supervisor_slide": [
     "SLIDE-05-SCALE-CLOSES-THE-GAP",
+    "SLIDE-08-BIGGER-REASONER-DID-NOT-PAY",
     "SLIDE-BACKUP-SEED-STABILITY"
    ],
    "proposed_table_use": [
@@ -18991,6 +19312,7 @@
    "canonical_source_sha256": "852206e1b0a404955ed66c5b56a3b9bd7215c15fb35b438dd703cc6c497b79fc",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -19016,15 +19338,18 @@
    "proposed_dissertation_section": [
     "R1_BASELINES_AND_FUSION",
     "R3_SCALING_BEHAVIOUR",
+    "R5_LATENT_REASONING_AND_REPRESENTATION",
     "R_APPENDIX_REPRESENTATION",
     "R_APPENDIX_STATISTICS"
    ],
    "proposed_figure_use": [
     "VE0-FIG-03",
+    "VE0-FIG-06",
     "VE0-FIG-A2"
    ],
    "proposed_supervisor_slide": [
     "SLIDE-05-SCALE-CLOSES-THE-GAP",
+    "SLIDE-08-BIGGER-REASONER-DID-NOT-PAY",
     "SLIDE-BACKUP-SEED-STABILITY"
    ],
    "proposed_table_use": [
@@ -19061,6 +19386,7 @@
    "canonical_source_sha256": "852206e1b0a404955ed66c5b56a3b9bd7215c15fb35b438dd703cc6c497b79fc",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -19086,15 +19412,18 @@
    "proposed_dissertation_section": [
     "R1_BASELINES_AND_FUSION",
     "R3_SCALING_BEHAVIOUR",
+    "R5_LATENT_REASONING_AND_REPRESENTATION",
     "R_APPENDIX_REPRESENTATION",
     "R_APPENDIX_STATISTICS"
    ],
    "proposed_figure_use": [
     "VE0-FIG-03",
+    "VE0-FIG-06",
     "VE0-FIG-A2"
    ],
    "proposed_supervisor_slide": [
     "SLIDE-05-SCALE-CLOSES-THE-GAP",
+    "SLIDE-08-BIGGER-REASONER-DID-NOT-PAY",
     "SLIDE-BACKUP-SEED-STABILITY"
    ],
    "proposed_table_use": [
@@ -19131,6 +19460,7 @@
    "canonical_source_sha256": "852206e1b0a404955ed66c5b56a3b9bd7215c15fb35b438dd703cc6c497b79fc",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -19201,6 +19531,7 @@
    "canonical_source_sha256": "852206e1b0a404955ed66c5b56a3b9bd7215c15fb35b438dd703cc6c497b79fc",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -19271,6 +19602,7 @@
    "canonical_source_sha256": "852206e1b0a404955ed66c5b56a3b9bd7215c15fb35b438dd703cc6c497b79fc",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -19341,6 +19673,7 @@
    "canonical_source_sha256": "852206e1b0a404955ed66c5b56a3b9bd7215c15fb35b438dd703cc6c497b79fc",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -19411,6 +19744,7 @@
    "canonical_source_sha256": "852206e1b0a404955ed66c5b56a3b9bd7215c15fb35b438dd703cc6c497b79fc",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -19481,6 +19815,7 @@
    "canonical_source_sha256": "852206e1b0a404955ed66c5b56a3b9bd7215c15fb35b438dd703cc6c497b79fc",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -19551,6 +19886,7 @@
    "canonical_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -19615,6 +19951,7 @@
    "canonical_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
@@ -19679,6 +20016,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.50017,
@@ -19739,6 +20077,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.58923,
@@ -19799,6 +20138,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.81045,
@@ -19859,6 +20199,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.70117,
@@ -19919,6 +20260,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.58426,
@@ -19979,6 +20321,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.53992,
@@ -20039,6 +20382,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.54215,
@@ -20099,6 +20443,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.69256,
@@ -20159,6 +20504,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.58492,
@@ -20219,6 +20565,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.64953,
@@ -20279,6 +20626,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.56311,
@@ -20339,6 +20687,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.67546,
@@ -20399,6 +20748,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.49685,
@@ -20459,6 +20809,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.59372,
@@ -20519,6 +20870,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.46877,
@@ -20579,6 +20931,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.53364,
@@ -20639,6 +20992,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.76534,
@@ -20699,6 +21053,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.60143,
@@ -20759,6 +21114,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.52537,
@@ -20819,6 +21175,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.49094,
@@ -20879,6 +21236,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.50381,
@@ -20939,6 +21297,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.60188,
@@ -20999,6 +21358,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.53467,
@@ -21059,6 +21419,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.60375,
@@ -21119,6 +21480,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.5625,
@@ -21179,6 +21541,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.58479,
@@ -21239,6 +21602,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.45461,
@@ -21299,6 +21663,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.53109,
@@ -21359,6 +21724,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.48818,
@@ -21419,6 +21785,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.56674,
@@ -21479,6 +21846,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.81687,
@@ -21539,6 +21907,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.65826,
@@ -21599,6 +21968,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.56113,
@@ -21659,6 +22029,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.51646,
@@ -21719,6 +22090,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.5213,
@@ -21779,6 +22151,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.65904,
@@ -21839,6 +22212,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.57193,
@@ -21899,6 +22273,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.62404,
@@ -21959,6 +22334,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.56982,
@@ -22019,6 +22395,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.63589,
@@ -22079,6 +22456,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.48643,
@@ -22139,6 +22517,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.56411,
@@ -22199,6 +22578,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.46625,
@@ -22259,6 +22639,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.53218,
@@ -22319,6 +22700,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.68888,
@@ -22379,6 +22761,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.55063,
@@ -22439,6 +22822,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.52044,
@@ -22499,6 +22883,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.48417,
@@ -22559,6 +22944,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.50736,
@@ -22619,6 +23005,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.54841,
@@ -22679,6 +23066,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.52861,
@@ -22739,6 +23127,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.58279,
@@ -22799,6 +23188,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.56902,
@@ -22859,6 +23249,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.54507,
@@ -22919,6 +23310,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.44792,
@@ -22979,6 +23371,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.52558,
@@ -23039,6 +23432,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.44004,
@@ -23099,6 +23493,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.52739,
@@ -23159,6 +23554,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.76483,
@@ -23219,6 +23615,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.5432,
@@ -23279,6 +23676,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.53444,
@@ -23339,6 +23737,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.47966,
@@ -23399,6 +23798,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.50284,
@@ -23459,6 +23859,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.5382,
@@ -23519,6 +23920,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.52815,
@@ -23579,6 +23981,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.53132,
@@ -23639,6 +24042,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.54468,
@@ -23699,6 +24103,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.52929,
@@ -23759,6 +24164,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.4618,
@@ -23819,6 +24225,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.52865,
@@ -23879,6 +24286,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.41473,
@@ -23939,6 +24347,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.46008,
@@ -23999,6 +24408,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.70614,
@@ -24059,6 +24469,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.52998,
@@ -24119,6 +24530,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.49322,
@@ -24179,6 +24591,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.44394,
@@ -24239,6 +24652,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.47792,
@@ -24299,6 +24713,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.52363,
@@ -24359,6 +24774,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.48634,
@@ -24419,6 +24835,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.45862,
@@ -24479,6 +24896,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.54637,
@@ -24539,6 +24957,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.51933,
@@ -24599,6 +25018,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.42288,
@@ -24659,6 +25079,7 @@
    "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10, at most 100 epochs",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.50748,
@@ -24719,6 +25140,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.4456,
@@ -24783,6 +25205,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.50914,
@@ -24847,6 +25270,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.75404,
@@ -24911,6 +25335,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.5754,
@@ -24975,6 +25400,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.51452,
@@ -25039,6 +25465,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.48805,
@@ -25103,6 +25530,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.47071,
@@ -25167,6 +25595,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.55945,
@@ -25231,6 +25660,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.51247,
@@ -25295,6 +25725,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.55182,
@@ -25359,6 +25790,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.53597,
@@ -25423,6 +25855,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.55481,
@@ -25487,6 +25920,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.45676,
@@ -25551,6 +25985,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.50607,
@@ -25615,6 +26050,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.44697,
@@ -25679,6 +26115,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.51162,
@@ -25743,6 +26180,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.74267,
@@ -25807,6 +26245,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.61682,
@@ -25871,6 +26310,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.53251,
@@ -25935,6 +26375,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.48459,
@@ -25999,6 +26440,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.50284,
@@ -26063,6 +26505,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.59786,
@@ -26127,6 +26570,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.53239,
@@ -26191,6 +26635,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.52733,
@@ -26255,6 +26700,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.50779,
@@ -26319,6 +26765,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.59179,
@@ -26383,6 +26830,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.45799,
@@ -26447,6 +26895,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch (early stopping on development accuracy, best-on-development checkpointing)",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.55042,
@@ -26511,6 +26960,7 @@
    "canonical_source_sha256": "86c7969ec36121ca387cd98da3319e1cd1a6ff9ba021241c85f057bfca11f312",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     -0.00762,
@@ -26575,6 +27025,7 @@
    "canonical_source_sha256": "86c7969ec36121ca387cd98da3319e1cd1a6ff9ba021241c85f057bfca11f312",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     -0.02343,
@@ -26635,6 +27086,7 @@
    "canonical_source_sha256": "86c7969ec36121ca387cd98da3319e1cd1a6ff9ba021241c85f057bfca11f312",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     -0.01639,
@@ -26699,6 +27151,7 @@
    "canonical_source_sha256": "86c7969ec36121ca387cd98da3319e1cd1a6ff9ba021241c85f057bfca11f312",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     -0.02734,
@@ -26759,6 +27212,7 @@
    "canonical_source_sha256": "86c7969ec36121ca387cd98da3319e1cd1a6ff9ba021241c85f057bfca11f312",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     -0.03558,
@@ -26823,6 +27277,7 @@
    "canonical_source_sha256": "86c7969ec36121ca387cd98da3319e1cd1a6ff9ba021241c85f057bfca11f312",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     -0.06876,
@@ -26883,6 +27338,7 @@
    "canonical_source_sha256": "86c7969ec36121ca387cd98da3319e1cd1a6ff9ba021241c85f057bfca11f312",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.023,
@@ -26947,6 +27403,7 @@
    "canonical_source_sha256": "86c7969ec36121ca387cd98da3319e1cd1a6ff9ba021241c85f057bfca11f312",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.01424,
@@ -27007,6 +27464,7 @@
    "canonical_source_sha256": "86c7969ec36121ca387cd98da3319e1cd1a6ff9ba021241c85f057bfca11f312",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.00921,
@@ -27071,6 +27529,7 @@
    "canonical_source_sha256": "86c7969ec36121ca387cd98da3319e1cd1a6ff9ba021241c85f057bfca11f312",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.01043,
@@ -27131,6 +27590,7 @@
    "canonical_source_sha256": "86c7969ec36121ca387cd98da3319e1cd1a6ff9ba021241c85f057bfca11f312",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     -0.01163,
@@ -27195,6 +27655,7 @@
    "canonical_source_sha256": "86c7969ec36121ca387cd98da3319e1cd1a6ff9ba021241c85f057bfca11f312",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     -0.00991,
@@ -27255,6 +27716,7 @@
    "canonical_source_sha256": "86c7969ec36121ca387cd98da3319e1cd1a6ff9ba021241c85f057bfca11f312",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.00912,
@@ -27319,6 +27781,7 @@
    "canonical_source_sha256": "86c7969ec36121ca387cd98da3319e1cd1a6ff9ba021241c85f057bfca11f312",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     -0.00117,
@@ -27379,6 +27842,7 @@
    "canonical_source_sha256": "86c7969ec36121ca387cd98da3319e1cd1a6ff9ba021241c85f057bfca11f312",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.01872,
@@ -27443,6 +27907,7 @@
    "canonical_source_sha256": "86c7969ec36121ca387cd98da3319e1cd1a6ff9ba021241c85f057bfca11f312",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.01297,
@@ -27503,6 +27968,7 @@
    "canonical_source_sha256": "86c7969ec36121ca387cd98da3319e1cd1a6ff9ba021241c85f057bfca11f312",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.00876,
@@ -27567,6 +28033,7 @@
    "canonical_source_sha256": "86c7969ec36121ca387cd98da3319e1cd1a6ff9ba021241c85f057bfca11f312",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     -0.00916,
@@ -27627,6 +28094,7 @@
    "canonical_source_sha256": "86c7969ec36121ca387cd98da3319e1cd1a6ff9ba021241c85f057bfca11f312",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     -0.03669,
@@ -27691,6 +28159,7 @@
    "canonical_source_sha256": "86c7969ec36121ca387cd98da3319e1cd1a6ff9ba021241c85f057bfca11f312",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     -0.03949,
@@ -27751,6 +28220,7 @@
    "canonical_source_sha256": "86c7969ec36121ca387cd98da3319e1cd1a6ff9ba021241c85f057bfca11f312",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     -0.06598,
@@ -27815,6 +28285,7 @@
    "canonical_source_sha256": "86c7969ec36121ca387cd98da3319e1cd1a6ff9ba021241c85f057bfca11f312",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     -0.10065,
@@ -27875,6 +28346,7 @@
    "canonical_source_sha256": "86c7969ec36121ca387cd98da3319e1cd1a6ff9ba021241c85f057bfca11f312",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.01687,
@@ -27939,6 +28411,7 @@
    "canonical_source_sha256": "86c7969ec36121ca387cd98da3319e1cd1a6ff9ba021241c85f057bfca11f312",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.01403,
@@ -27999,6 +28472,7 @@
    "canonical_source_sha256": "86c7969ec36121ca387cd98da3319e1cd1a6ff9ba021241c85f057bfca11f312",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     -0.00711,
@@ -28063,6 +28537,7 @@
    "canonical_source_sha256": "86c7969ec36121ca387cd98da3319e1cd1a6ff9ba021241c85f057bfca11f312",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     -0.01362,
@@ -28123,6 +28598,7 @@
    "canonical_source_sha256": "86c7969ec36121ca387cd98da3319e1cd1a6ff9ba021241c85f057bfca11f312",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.03236,
@@ -28187,6 +28663,7 @@
    "canonical_source_sha256": "86c7969ec36121ca387cd98da3319e1cd1a6ff9ba021241c85f057bfca11f312",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.02111,
@@ -28247,6 +28724,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.08367,
@@ -28309,6 +28787,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.04616,
@@ -28371,6 +28850,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     -0.03542,
@@ -28433,6 +28913,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     -0.01534,
@@ -28495,6 +28976,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.00858,
@@ -28557,6 +29039,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     -0.00245,
@@ -28619,6 +29102,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.20096,
@@ -28681,6 +29165,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.16038,
@@ -28743,6 +29228,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     -0.00046,
@@ -28805,6 +29291,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.02907,
@@ -28867,6 +29354,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.08083,
@@ -28929,6 +29417,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.02595,
@@ -28991,6 +29480,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     -0.04576,
@@ -29053,6 +29543,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     -0.07774,
@@ -29115,6 +29606,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.06784,
@@ -29177,6 +29669,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.0281,
@@ -29239,6 +29732,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.20295,
@@ -29301,6 +29795,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.16325,
@@ -29363,6 +29858,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.04781,
@@ -29425,6 +29921,7 @@
    "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.07835,
@@ -29487,6 +29984,7 @@
    "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.48758,
@@ -29552,6 +30050,7 @@
    "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.47113,
@@ -29617,6 +30116,7 @@
    "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.08915,
@@ -29682,6 +30182,7 @@
    "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.55744,
@@ -29747,6 +30248,7 @@
    "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.51115,
@@ -29812,6 +30314,7 @@
    "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.44511,
@@ -29877,6 +30380,7 @@
    "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.42448,
@@ -29942,6 +30446,7 @@
    "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.08254,
@@ -30007,6 +30512,7 @@
    "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.52055,
@@ -30072,6 +30578,7 @@
    "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.45657,
@@ -30137,6 +30644,7 @@
    "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.48522,
@@ -30202,6 +30710,7 @@
    "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.50177,
@@ -30267,6 +30776,7 @@
    "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.07548,
@@ -30332,6 +30842,7 @@
    "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.59772,
@@ -30397,6 +30908,7 @@
    "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.53147,
@@ -30462,6 +30974,7 @@
    "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.4704,
@@ -30527,6 +31040,7 @@
    "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.45956,
@@ -30592,6 +31106,7 @@
    "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.08901,
@@ -30657,6 +31172,7 @@
    "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.55113,
@@ -30722,6 +31238,7 @@
    "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.51484,
@@ -30787,6 +31304,7 @@
    "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.48935,
@@ -30852,6 +31370,7 @@
    "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.48182,
@@ -30917,6 +31436,7 @@
    "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.0823,
@@ -30982,6 +31502,7 @@
    "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.58418,
@@ -31047,6 +31568,7 @@
    "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.52139,
@@ -31112,6 +31634,7 @@
    "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.3797,
@@ -31177,6 +31700,7 @@
    "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.37775,
@@ -31242,6 +31766,7 @@
    "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.0671,
@@ -31307,6 +31832,7 @@
    "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.57851,
@@ -31372,6 +31898,7 @@
    "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.47688,
@@ -31437,6 +31964,7 @@
    "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.48967,
@@ -31502,6 +32030,7 @@
    "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.49718,
@@ -31567,6 +32096,7 @@
    "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.08236,
@@ -31632,6 +32162,7 @@
    "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.59971,
@@ -31697,6 +32228,7 @@
    "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": [
     0.54307,
@@ -31762,6 +32294,7 @@
    "canonical_source_sha256": "368ba5c2a149953193cf237bdf77023c17b244540ef7b9bfac55cb5a7fdc1a85",
    "checkpoint_identity": [],
    "checkpoint_selection": "no training; measurement only",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NOT_APPLICABLE",
@@ -31827,6 +32360,7 @@
    "canonical_source_sha256": "NOT_AVAILABLE",
    "checkpoint_identity": [],
    "checkpoint_selection": "fixed epoch 22, no early stopping; epoch 22 is the sole primary",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NOT_APPLICABLE",
@@ -31883,6 +32417,7 @@
    "canonical_source_sha256": "fea0d54d6dc9ace959956a9317463f39ca29cd729078f646c0287c06b6f1f0c0",
    "checkpoint_identity": [],
    "checkpoint_selection": "NOT_APPLICABLE",
+   "checkpoint_selection_class": "NOT_APPLICABLE",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NOT_APPLICABLE",
@@ -31941,7 +32476,8 @@
    "canonical_source_path": "results/experiments/v2_01_embeddings/zero_shot.json",
    "canonical_source_sha256": "02e50f8cab36e995177ced375d0ca1cfdb811781b9318b8b4caabae7f67e5987",
    "checkpoint_identity": [],
-   "checkpoint_selection": "NOT_APPLICABLE",
+   "checkpoint_selection": "no training; a zero-shot protocol check",
+   "checkpoint_selection_class": "NO_TRAINING",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NOT_APPLICABLE",
@@ -31997,6 +32533,7 @@
    "canonical_source_sha256": "2600c6fcf885c9a463efff7a4ed4384c7cb2325cea91f55a2406f2f9392e1196",
    "checkpoint_identity": [],
    "checkpoint_selection": "NOT_APPLICABLE",
+   "checkpoint_selection_class": "NOT_APPLICABLE",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NOT_APPLICABLE",
@@ -32054,6 +32591,7 @@
    "canonical_source_sha256": "852206e1b0a404955ed66c5b56a3b9bd7215c15fb35b438dd703cc6c497b79fc",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NOT_APPLICABLE",
@@ -32114,6 +32652,7 @@
    "canonical_source_sha256": "472fe626775d755e1a24ae3da814466773b3e067537201cb88351ea27d8abfd9",
    "checkpoint_identity": [],
    "checkpoint_selection": "best development epoch, patience 10",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
    "checkpoint_sha256": [],
    "ci95": null,
    "ci_type": "NOT_APPLICABLE",

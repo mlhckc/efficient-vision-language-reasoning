@@ -110,14 +110,23 @@ def canonical_json(payload) -> str:
                       ensure_ascii=False) + "\n"
 
 
-def content_digest(payload: dict) -> str:
-    """Hash of the scientific content, with the provenance block removed.
+# Keys excluded from the scientific content hash. "provenance" carries the
+# repository HEAD, the worktree state and library versions, which move for
+# reasons that are not scientific. "content_sha256" is the digest itself and
+# must be excluded or the value could never be re-derived from the bytes it
+# is written into.
+CONTENT_DIGEST_EXCLUDED = ("provenance", "content_sha256")
 
-    The provenance block carries the repository HEAD and library versions,
-    which move for reasons that are not scientific. The content digest is what
-    a later build must reproduce for the evidence contract to be unchanged.
+
+def content_digest(payload: dict) -> str:
+    """Hash of the scientific content alone.
+
+    The digest is what a later build must reproduce for the evidence contract
+    to be unchanged, and it is self-verifying: re-running this function over a
+    written artefact's own parsed bytes reproduces the value stored inside it.
     """
-    stripped = {k: v for k, v in payload.items() if k != "provenance"}
+    stripped = {k: v for k, v in payload.items()
+                if k not in CONTENT_DIGEST_EXCLUDED}
     return sha256_text(canonical_json(stripped))
 
 

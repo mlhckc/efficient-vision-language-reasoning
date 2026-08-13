@@ -595,13 +595,41 @@ def _accuracy_pairing(row_key: str) -> dict:
     }
 
 
+REQUIRED_SCALAR_IDENTITY = (
+    "metric_id", "comparison_class", "analysis_role", "quantity_kind",
+    "ci_type", "counts_provenance",
+)
+
+
 def _descriptive_rows(ctx) -> list:
+    """One row per canonical scalar, each carrying its OWN identity.
+
+    An earlier revision gave the whole class one structural metric identity.
+    That mislabelled three real development accuracies as counted quantities,
+    which in turn defeated the mixed-metric guard on the figure consuming
+    them, because structural counts are legitimately exempt from it. Identity
+    is therefore declared per scalar and the builder refuses an entry that
+    omits any part of it.
+    """
     rows = []
     for spec in pol.DESCRIPTIVE_SCALARS:
+        missing = [f for f in REQUIRED_SCALAR_IDENTITY if not spec.get(f)]
+        if missing:
+            raise AssertionError(
+                f"descriptive scalar {spec['key']} does not declare "
+                f"{missing}; a scalar without a declared identity cannot be "
+                f"guarded by the metric-compatibility rule")
+        if spec["metric_id"] not in pol.METRIC_DEFINITIONS:
+            raise AssertionError(
+                f"descriptive scalar {spec['key']} declares an unknown "
+                f"metric_id: {spec['metric_id']}")
+
         path = vc.PROJECT_ROOT / spec["artefact"]
         payload = vc.read_json(path)
         value = vc.json_pointer(payload, spec["pointer"])
-        allowed, forbidden = _boundaries("DESCRIPTIVE_ONLY")
+        allowed, forbidden = _boundaries(spec["comparison_class"])
+        split_id = spec.get("split")
+        split = SPLITS.get(split_id, {})
         row = _blank_row()
         row.update({
             "evidence_id": vc.evidence_id("DSC", spec["key"]),
@@ -613,23 +641,51 @@ def _descriptive_rows(ctx) -> list:
             "quantity": spec["quantity"],
             "canonical_source_path": spec["artefact"],
             "canonical_source_sha256": vc.sha256_file(path),
+            "split": split_id or vc.NOT_APPLICABLE,
+            "dataset": split.get("dataset", vc.NOT_APPLICABLE),
+            "training_scale": spec.get("training_scale") or vc.NOT_APPLICABLE,
+            "model_system": spec.get("model_system") or _system_from_key(spec),
+            "seed_set": spec.get("seed_set") or vc.NOT_APPLICABLE,
+            "n_training_seeds": (len(spec["seed_set"]) if spec.get("seed_set")
+                                 else None),
+            "n_questions": spec.get("n_questions"),
+            "n_unique_images": spec.get("n_unique_images"),
+            "answer_set_size": split.get("answer_set_size"),
             "point_estimate": value,
             "ci95": None,
-            "ci_type": "NO_INTERVAL: a structural count or share, not an "
-                       "estimate",
-            "metric_id": "structural_count_or_share",
-            "scoring_implementation": f"read from {spec['artefact']} at "
-                                      f"pointer {spec['pointer']}",
-            "analysis_role": "DIAGNOSTIC",
-            "comparison_class": "DESCRIPTIVE_ONLY",
-            "evidence_readiness": "READY",
+            "ci_type": spec["ci_type"],
+            "metric_id": spec["metric_id"],
+            "scoring_implementation":
+                f"{pol.METRIC_DEFINITIONS[spec['metric_id']]} Read from "
+                f"{spec['artefact']} at pointer {spec['pointer']}.",
+            "analysis_role": spec["analysis_role"],
+            "comparison_class": spec["comparison_class"],
+            "evidence_readiness": ("READY" if spec["metric_id"]
+                                   == "structural_count_or_share"
+                                   else "READY_SEED_ONLY_NO_INTERVAL"),
             "allowed_claim": allowed,
             "forbidden_stronger_claim": forbidden,
-            "mandatory_limitation": pol.UNIVERSAL_LIMITATION,
+            "mandatory_limitation": _limitation(spec["family"], spec["key"]),
         })
+        if spec["quantity_kind"] == "TRAINING_SEED_DISPERSION":
+            row["across_training_seed_sd_ddof1"] = value
         row["source_pointer"] = spec["pointer"]
+        row["quantity_kind"] = spec["quantity_kind"]
+        row["counts_provenance"] = spec["counts_provenance"]
+        if spec.get("comparison_class_reason"):
+            row["comparison_class_reason"] = spec["comparison_class_reason"]
         rows.append(row)
     return rows
+
+
+def _system_from_key(spec: dict) -> str:
+    """The system a scalar describes, where the key names one."""
+    key = spec["key"]
+    if key.startswith("v3_01.reasoner_minus_fusion"):
+        return "reasoner minus fusion"
+    if key.startswith("v3_01.reasoner"):
+        return "reasoner"
+    return vc.NOT_APPLICABLE
 
 
 def _supersession_rows(ctx) -> list:
@@ -695,10 +751,14 @@ def build(ctx) -> dict:
 
     for row in rows:
         family = row["experiment_family"] or ""
-        row["checkpoint_selection"] = pol.FAMILY_CHECKPOINT_SELECTION.get(
-            family,
-            pol.FAMILY_CHECKPOINT_SELECTION.get(family.upper(),
-                                                vc.NOT_APPLICABLE))
+        entry = (pol.FAMILY_CHECKPOINT_SELECTION.get(family)
+                 or pol.FAMILY_CHECKPOINT_SELECTION.get(family.upper()))
+        if entry is None:
+            row["checkpoint_selection"] = vc.NOT_APPLICABLE
+            row["checkpoint_selection_class"] = vc.NOT_APPLICABLE
+            continue
+        row["checkpoint_selection"] = entry["detail"]
+        row["checkpoint_selection_class"] = entry["class"]
 
     seen = set()
     for row in rows:

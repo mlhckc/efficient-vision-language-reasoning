@@ -1,15 +1,25 @@
 {
  "clean_test_accessed": false,
- "content_sha256": "6dd11f10d434755aacd652efdb2ea53969c74af968899b5290fda62680b5fb9b",
+ "content_sha256": "dc6867ea1f3fb1374c7c7d7fe0890a7840b2b2f7c838dbc3c776ea163bf76618",
+ "determinism_contract": {
+  "across_a_different_committed_head": "unchanged scientific inputs: scientific content identity is the invariant and provenance-bearing bytes may legitimately differ.",
+  "note": "determinism here is two-tier, and conflating the tiers is what makes a validation suite either too weak or wrong. An earlier revision of this contract claimed byte identity unconditionally; that claim was false as soon as the artefacts were committed and the repository HEAD moved.",
+  "tier_1_scientific_content": "content_sha256 is INVARIANT given unchanged scientific inputs. This is the property that matters and the property the validation suite proves.",
+  "tier_2_provenance_bearing_bytes": "the full-file sha256 covers the provenance block, which records the repository HEAD and the worktree state. Those legitimately move when artefacts are committed.",
+  "why_repository_head_stays": "repository_head is NOT removed from provenance to make the two tiers coincide. Knowing which source state produced an artefact is worth more than a simpler hash rule.",
+  "within_identical_provenance_context": "same HEAD, same worktree state, same inputs: a rebuild is byte-identical."
+ },
  "determinism_rules": [
   "JSON is written with sorted keys and a fixed indent",
-  "no wall-clock timestamp enters any scientific content",
+  "no wall-clock timestamp enters any artefact, scientific content or otherwise",
   "no filesystem iteration order affects output; every collection is sorted by an explicit key",
-  "a second build from unchanged inputs produces identical bytes"
+  "within an identical provenance context, a second build from unchanged inputs produces identical bytes",
+  "across a different committed HEAD with unchanged scientific inputs, content_sha256 is identical and provenance-bearing bytes may differ",
+  "validation rebuilds into an isolated temporary directory and never rewrites the frozen outputs it is checking"
  ],
  "provenance": {
   "builder": "experiments/ve0/run_ve0.py",
-  "builder_sha256": "91d371cbdd09d9dd9362cc3749ae9a4b78bfec311157f1b6fdeda9522dbb539c",
+  "builder_sha256": "3a53114ff7e55ca6d38d92004717da9ccae1320ef411cd6124af5175d790bc42",
   "clean_test_accessed": false,
   "command": "python -m experiments.ve0.run_ve0",
   "deterministic_selection_salt": "P2607-VE0-QUALITATIVE-SALT-20260813-v1",
@@ -83,8 +93,8 @@
   "numpy_version": "2.5.0",
   "pandas_version": "3.0.3",
   "python": "3.12.3",
-  "repository_head": "6f457d12e350c95c85650f17e2a367c70ea32828",
-  "repository_head_short": "6f457d1",
+  "repository_head": "0f4fecb5e7e5a59d1e47d0953ca3127302694852",
+  "repository_head_short": "0f4fecb",
   "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
   "schema_version": 1,
   "selected_any_checkpoint": false,
@@ -140,11 +150,11 @@
   },
   {
    "field": "content_sha256",
-   "note": "hash of the scientific content with the provenance block removed. This is the value a later rebuild must reproduce"
+   "note": "hash of the scientific content, with the provenance block and the digest field itself removed. This is the value a later rebuild must reproduce, and it is self-verifying: recomputing it over a written artefact's own parsed bytes reproduces the value stored inside it"
   },
   {
    "field": "generated_utc",
-   "note": "OPTIONAL metadata. It must not enter content_sha256, and VE-0 writes no timestamp into any artefact at all, so a VE-0 rebuild is byte-identical, not merely content-identical"
+   "note": "OPTIONAL metadata. It must not enter content_sha256. VE-0 writes no wall-clock timestamp into any artefact at all, which is why byte identity holds within an identical provenance context; it does NOT make byte identity hold across a different committed HEAD, because provenance records that HEAD"
   }
  ],
  "rule": "every VE-1 and VE-2 artefact must be reproducible from VE-0 alone, given the repository at the recorded HEAD.",

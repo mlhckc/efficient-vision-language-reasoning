@@ -34,12 +34,26 @@ before E8A, E8B, E9, E10 and the closure, and therefore hash-pins checkpoints
 that could not have been edited to match anything produced later.
 
 The build is one deterministic pass, `python -m experiments.ve0.run_ve0`. It
-reads only JSON, sorts every collection by an explicit key, writes no
-wall-clock timestamp into any artefact, and therefore produces byte-identical
-output on a second run rather than merely equivalent output. Each artefact
-carries both a file SHA-256 and a content SHA-256 computed with the provenance
-block removed, so a later rebuild can be checked for scientific change
-separately from environment drift.
+reads only JSON, sorts every collection by an explicit key and writes no
+wall-clock timestamp into any artefact.
+
+Determinism here is two-tier, and the distinction is load-bearing rather than
+pedantic. Each artefact carries a file SHA-256 and a content SHA-256 computed
+with the provenance block, and the digest field itself, removed. Within an
+identical provenance context, the same repository HEAD, the same worktree
+state and the same inputs, a rebuild is byte-identical. Across a different
+committed HEAD with unchanged scientific inputs, the invariant is scientific
+content identity: `content_sha256` is unchanged while the provenance-bearing
+bytes legitimately move, because provenance records the HEAD that produced the
+artefact. `repository_head` is deliberately not dropped from provenance to
+make the two tiers coincide; knowing which source state produced an artefact
+is worth more than a simpler hash rule. The content digest is self-verifying,
+so recomputing it over a written artefact's own parsed bytes reproduces the
+value stored inside it.
+
+The builder accepts `--out-dir`, which exists so validation can rebuild into
+an isolated directory and check that invariant without rewriting the frozen,
+committed artefacts.
 
 Every quantity becomes one inventory row with a stable identifier of the form
 `EV-<CLASS>-<slug>`, derived from the source artefact's own key, so an
@@ -103,10 +117,23 @@ Two identity fields were added because they are genuine comparability facts
 that no single artefact states. `metric_id` separates the V2-era
 closed-vocabulary scorer from the pinned G21 normalised scorer, and no figure
 axis or table column block may carry both without a declared justification.
-`checkpoint_selection` records that V2, V3, E2, E3 and E8A select the best
-development epoch while E8B and E10 use the frozen fixed-22 rule with no early
-stopping, so a side-by-side reading of those families is a system-level
-comparison rather than a matched one.
+`checkpoint_selection`, with its controlled `checkpoint_selection_class`,
+records that V2, V3, E2, E3 and E8A select the best development epoch while
+E8B and E10 use the frozen fixed-22 rule with no early stopping, so a
+side-by-side reading of those families is a system-level comparison rather
+than a matched one. Both rules are build-time refusals, each with a synthetic
+negative and positive case in the validation suite; six specifications
+legitimately mix checkpoint-selection rules and each names the difference in
+its caveat or footnotes.
+
+Identity is declared per row, not inherited by class. A descriptive scalar
+must state its own metric, comparison class, analysis role, quantity kind,
+interval reason and counts provenance, and the builder refuses one that does
+not. That refusal exists because the alternative was tried and failed: giving
+the whole descriptive class one structural metric identity mislabelled three
+real development accuracies as counted quantities, and structural counts are
+exempt from the mixed-metric guard, so the figure consuming them passed a
+check it should have failed.
 
 ### Supersession
 
@@ -278,7 +305,7 @@ inside the refusal constant itself.
 
 ## Validation
 
-`python -B tests/run_ve0.py` runs 2,847 checks and exits 0.
+`python -B tests/run_ve0.py` runs 3,039 checks and exits 0.
 
 The suite verifies that every figure, table, claim and research-question
 evidence identifier resolves; that no superseded or not-for-reporting evidence
@@ -301,8 +328,17 @@ that the qualitative salt matches the frozen constant and the
 anti-cherry-picking policy is intact; that every canonical source path exists
 and still hashes to the recorded value; that the manifest validates and its
 scope flags are all false; that VE-0 wrote nothing under `results/closure/` or
-`results/experiments/`; and that a second build reproduces every output
-byte-for-byte.
+`results/experiments/`; that an isolated rebuild reproduces every output's
+scientific content while leaving the frozen artefacts untouched; and that
+building the same payloads under two different provenance contexts changes
+provenance-bearing bytes without changing any `content_sha256`.
+
+Four checks exist specifically because a validation rule that is declared but
+never exercised is not a rule. A synthetic specification mixing two scorers is
+refused, and the same specification with a registered justification is
+accepted; a synthetic specification mixing the best-on-development and
+fixed-22 checkpoint rules is refused, and the same specification naming the
+difference is accepted.
 
 Non-regression, all re-run after the VE-0 build:
 
@@ -319,18 +355,30 @@ it globs `tests/*.py`.
 
 ## Decisions and problems
 
-**Two identity fields added.** `metric_id` and `checkpoint_selection` are not
-in any single source artefact but are real comparability constraints. Without
-the first, a V2-era accuracy and a G21 accuracy could share an axis; without
-the second, a best-on-development number and a fixed-epoch number could be
-read as matched. Both are now enforced.
+**Two identity fields added, and both are enforced.** `metric_id` and
+`checkpoint_selection` are not in any single source artefact but are real
+comparability constraints. Without the first, a V2-era accuracy and a G21
+accuracy could share an axis; without the second, a best-on-development number
+and a fixed-epoch number could be read as matched. Each is a build-time
+refusal with a synthetic negative and positive case in the validation suite,
+so neither is a claim without a check behind it. Checkpoint selection is
+compared on a controlled class rather than on its prose description, because
+two families following the identical rule but described at different lengths
+are not a protocol difference.
 
 **The reasoner's 40k accuracy came from v3_01.** The closure reconstructed the
 global-head families only, so no overall 40k reasoner accuracy exists in its
 outputs, and claim C07's 40k half needs one. Three values are read from the
 hash-pinned `v3_01_reasoner/results.json`, whose accuracies the supersession
 map lists as still valid: the seed mean, the seed standard deviation and the
-same-seed gap over fusion. They carry no clustered interval and say so.
+same-seed gap over fusion. They are development accuracies under the V2-era
+closed-vocabulary scorer on the 7,714-row development view over 768
+represented images, across seeds 0, 1 and 2, selected at the best development
+epoch. They carry no clustered interval and say why. Their counts are bound
+from the closure's own v3_02a and v3_03 rows on the same split rather than
+from the v3_01 artefact, which does not record them and whose top-level
+`n_val` field is a stale V1-era configuration value of 8000 that does not
+describe this evaluation; that warning travels with each row.
 
 **Seven efficiency accuracy pairings are unresolved and are not guessed.** For
 the five E9-timed E8B configurations, the stored reference accuracies are the
@@ -370,8 +418,88 @@ and never written, no historical artefact was modified, and the only tracked
 paths VE-0 adds are its own builders, its own tests, its own outputs, this
 report and one `.gitignore` block that tracks the outputs.
 
+## Repair revision, 13 August 2026
+
+The first VE-0 submission, committed at 0f4fecb, received the independent
+verdict VE0_CHANGES_REQUIRED with exactly three blocking findings. This
+revision addresses those three and nothing else. No scientific result changed:
+every contrast, seed value, slice value, efficiency value, source hash, claim
+status and accepted boundary is unchanged, and only metadata fields named
+below moved.
+
+**R-1, committed-state idempotence.** The validation suite rebuilt in place.
+At a committed HEAD that is wrong twice over: it overwrote the frozen
+artefacts with new provenance-bearing bytes, and then failed against the
+manifest it had just invalidated. The underlying error was in the contract
+rather than the test, which claimed byte identity unconditionally when
+provenance legitimately records the repository HEAD. The repair separates the
+two tiers described under Method, gives the builder `--out-dir`, and rewrites
+the test to rebuild into a temporary directory, compare `content_sha256` for
+the JSON outputs and the file hash for the provenance-free CSV, and hash the
+frozen outputs before and after to prove validation never mutates them. A new
+test reproduces the reviewer's scenario directly by writing the same payloads
+under two different provenance contexts and asserting that content is
+identical while provenance-bearing bytes differ. `repository_head` was not
+removed from provenance to make the hashes agree.
+
+Writing that test found a further real defect: `content_sha256` was included
+in its own re-derivation, so the stored digest could never be recomputed from
+the bytes it was written into. The digest now excludes itself and is
+self-verifying.
+
+**S-1, v3_01 scalar identity.** The three v3_01 rows were correct in value and
+wrong in identity. They now carry `v2_closed_vocab_top1_index_match` rather
+than `structural_count_or_share`; the `v2_dev` split, `train_40k` scale, seeds
+0, 1 and 2, 7,714 questions and 768 represented images, with the counts
+provenance recording that they are bound from the closure's own v3_02a and
+v3_03 rows on the same split and warning that the v3_01 artefact's top-level
+`n_val` of 8000 is a stale V1-era configuration value; the best-on-development
+checkpoint-selection class; an interval reason stating that no clustered
+interval exists because the closure reconstructed the global-head families
+only, in place of the incorrect claim that accuracy is a structural count; and
+the v3_01 family limitation, which the descriptive builder had not been
+applying at all. The reasoner-minus-fusion gap is reclassified
+`SYSTEM_LEVEL_COMPARISON`, since it is a contrast between two whole systems;
+the two single-system summaries remain `DESCRIPTIVE_ONLY`, which is the
+narrowest correct class for a quantity that compares nothing. No interval was
+invented and none was reconstructed.
+
+**P-1, VE0-FIG-06 self-containment.** The figure's caption named v2_07 as the
+source of its fusion series while the specification bound none of it, so it
+was not renderable from its declared evidence. It now binds the three v2_07
+fusion seed rows at 40k, 100k and 250k, sets `carries_v2_07_limitation`, and
+states the full v2_07 boundary in its caveat: the historical aggregate and
+seed evidence is used, one of forty reconstruction cells differed by a single
+numerically tied row, the reconstructed clustered family was conservatively
+omitted in full, no image-clustered interval is available, and no post-hoc
+partial-family rescue was performed. The protocol audit the finding invited
+surfaced two further facts now visible in the caption: the two series do not
+share a seed set, three against five, so panel (a) is a juxtaposition rather
+than a matched comparison, while they do share the scorer, the development
+view and the selection rule, which is what makes the juxtaposition legitimate.
+The figure also declared one uncertainty kind for two panels carrying
+different kinds, and now declares them per panel.
+
+After the S-1 identity repair, FIG-06's apparent mixed-metric anomaly is gone:
+all of its accuracy evidence uses one scorer, and the anomaly had been an
+artefact of the mislabelling rather than a real mix.
+
+**Non-blocking, addressed in the same revision.** The reviewer noted that the
+E10 difference in differences sat on an axis labelled "pretrained minus
+random" while being a second-order interaction. FIG-08 now declares four row
+groups, three first-order blocks and one separated second-order block holding
+the difference in differences alone, with a required visual separation and a
+caption sentence saying the axis label above it does not describe it. The
+quantity is neither removed nor reinterpreted.
+
+**Frozen and not revisited:** C19 remains SUPPORTED as a cross-experiment
+synthesis, C02 remains TENTATIVE, the research questions remain clearly
+labelled VE-0 working formulations, the seven unresolved efficiency pairings
+remain unresolved and unguessed, and the seventeen unconsumed inventory rows
+remain unconsumed.
+
 ## Status
 
-VE-0 is complete and submitted for independent review at packet state
+VE-0 is complete and submitted for independent re-review at packet state
 `review_requested`. It authorises nothing. VE-1, VE-2, F1 and F2 have not been
 started, and F1 and F2 remain unauthorised.

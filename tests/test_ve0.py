@@ -519,25 +519,312 @@ def test_closure_artefacts_untouched(art: dict) -> None:
                   f"{source['path']}")
 
 
-def test_idempotent_rebuild(art: dict) -> None:
-    """A second build must reproduce identical scientific content."""
-    before = {}
-    for entry in art["manifest"]["entries"]:
-        if entry["path"].startswith("results/ve0/"):
-            before[entry["path"]] = entry["sha256"]
+def _frozen_hashes() -> dict:
+    return {p.name: vc.sha256_file(p)
+            for p in sorted(VE0_DIR.glob("*")) if p.is_file()}
 
-    done = subprocess.run(
-        [sys.executable, "-B", "-m", "experiments.ve0.run_ve0"],
-        cwd=PROJECT_ROOT, capture_output=True, text=True)
-    check(done.returncode == 0,
-          f"the VE-0 rebuild failed: {done.stderr[-400:]}")
 
-    for path, digest in sorted(before.items()):
-        full = PROJECT_ROOT / path
-        check(full.exists(), f"rebuild lost {path}")
-        if full.exists():
-            check(vc.sha256_file(full) == digest,
-                  f"rebuild changed {path}; VE-0 output is not deterministic")
+def test_isolated_rebuild_is_content_identical(art: dict) -> None:
+    """Scientific content is invariant, and validation never mutates.
+
+    The earlier version of this test rebuilt in place. At a committed HEAD
+    that is wrong twice over: the rebuild overwrites the frozen artefacts
+    with new provenance-bearing bytes, and it then fails against the manifest
+    it just invalidated. The repair is to rebuild into an isolated directory
+    and compare the property that actually has to hold, which is scientific
+    content identity, while proving the frozen outputs were untouched.
+    """
+    before = _frozen_hashes()
+    check(bool(before), "no frozen VE-0 outputs were found to protect")
+
+    with tempfile.TemporaryDirectory() as tmp:
+        done = subprocess.run(
+            [sys.executable, "-B", "-m", "experiments.ve0.run_ve0",
+             "--out-dir", tmp],
+            cwd=PROJECT_ROOT, capture_output=True, text=True)
+        check(done.returncode == 0,
+              f"the isolated VE-0 rebuild failed: {done.stderr[-400:]}")
+
+        rebuilt = Path(tmp)
+        for entry in art["manifest"]["entries"]:
+            name = Path(entry["path"]).name
+            if not entry["path"].startswith("results/ve0/"):
+                continue
+            fresh = rebuilt / name
+            check(fresh.exists(), f"the isolated rebuild did not write {name}")
+            if not fresh.exists():
+                continue
+            if name.endswith(".csv"):
+                # the CSV carries no provenance block, so its file hash is
+                # its scientific content hash and must match exactly
+                check(vc.sha256_file(fresh) == entry["sha256"],
+                      f"isolated rebuild changed the scientific content of "
+                      f"{name}")
+                continue
+            with open(fresh, encoding="utf-8") as handle:
+                payload = json.load(handle)
+            check(payload.get("content_sha256") == entry["content_sha256"],
+                  f"isolated rebuild changed the scientific content of {name}")
+            check(vc.content_digest(payload) == entry["content_sha256"],
+                  f"{name} content_sha256 does not re-derive from its own "
+                  f"bytes")
+
+    after = _frozen_hashes()
+    check(after == before,
+          "running the validation suite mutated the frozen VE-0 outputs; "
+          "validation must never rewrite what it is validating")
+
+
+def test_provenance_divergence_is_content_neutral(art: dict) -> None:
+    """The reviewer's finding, reproduced as a test.
+
+    Build the same scientific payloads twice under two DIFFERENT provenance
+    contexts, as happens when artefacts are committed and the repository HEAD
+    moves. Scientific content must be identical; the provenance-bearing bytes
+    are expected to differ; and neither build may touch the frozen outputs.
+    """
+    from experiments.ve0 import run_ve0
+
+    before = _frozen_hashes()
+    contexts = [
+        {"builder": "experiments/ve0/run_ve0.py", "repository_head": "a" * 40,
+         "worktree_dirty": True, "clean_test_accessed": False,
+         "gpu_hours_charged": 0.0, "inputs": []},
+        {"builder": "experiments/ve0/run_ve0.py", "repository_head": "b" * 40,
+         "worktree_dirty": False, "clean_test_accessed": False,
+         "gpu_hours_charged": 0.0, "inputs": []},
+    ]
+    results = []
+    with tempfile.TemporaryDirectory() as tmp_a, \
+            tempfile.TemporaryDirectory() as tmp_b:
+        for directory, block in zip((tmp_a, tmp_b), contexts):
+            results.append(run_ve0.build_into(directory, provenance=block))
+
+        first, second = results
+        differing_bytes = 0
+        for name in sorted(first["written"]):
+            a, b = first["written"][name], second["written"][name]
+            check(a["content_sha256"] == b["content_sha256"],
+                  f"{name} scientific content moved when only provenance "
+                  f"changed")
+            if name.endswith(".json") and a["sha256"] != b["sha256"]:
+                differing_bytes += 1
+        check(differing_bytes > 0,
+              "no provenance-bearing artefact differed across two different "
+              "repository HEADs, so this test is not exercising the case it "
+              "was written for")
+
+    check(_frozen_hashes() == before,
+          "the provenance-divergence test mutated the frozen VE-0 outputs")
+
+
+def test_metric_compatibility_is_enforced(art: dict) -> None:
+    """The mixed-metric rule must fail closed, and pass when justified.
+
+    The reviewer found the rule declared but not exercised: three real
+    accuracies were carrying a structural metric identity, which is exempt,
+    so the guard never fired on the figure that mixed them. These synthetic
+    cases prove the guard is live in both directions.
+    """
+    from experiments.ve0 import build_specs
+
+    rows = art["inventory"]["rows"]
+    index = {row["evidence_id"]: row for row in rows}
+
+    accuracy_v2 = next(r["evidence_id"] for r in rows
+                       if r["metric_id"] == "v2_closed_vocab_top1_index_match")
+    accuracy_g21 = next(r["evidence_id"] for r in rows
+                        if r["metric_id"]
+                        == "g21_pinned_normalised_exact_match")
+    mixed = [accuracy_v2, accuracy_g21]
+    metrics = build_specs._metrics_of(mixed, index)
+    check(len(build_specs.comparable_metrics(metrics)) == 2,
+          "the synthetic mixed-metric case does not actually mix two scorers")
+
+    try:
+        build_specs._check_metric_mix("SYNTHETIC-MIXED", {}, metrics)
+        check(False, "the mixed-metric rule accepted two scorers on one "
+                     "specification with no justification")
+    except AssertionError as error:
+        check("mixed_metric_justification" in str(error),
+              "the mixed-metric refusal does not name the missing field")
+
+    justified = {"mixed_metric_justification": "synthetic test case"}
+    try:
+        build_specs._check_metric_mix("SYNTHETIC-JUSTIFIED", justified,
+                                      metrics)
+        check(True, "")
+    except AssertionError:
+        check(False, "the mixed-metric rule refused an explicitly justified "
+                     "specification")
+
+    # every real specification's declared metric set matches what it consumes
+    for spec in art["figures"]["figures"] + art["tables"]["tables"]:
+        spec_id = spec.get("figure_id") or spec.get("table_id")
+        recomputed = sorted({index[e]["metric_id"]
+                             for e in spec["consumes_evidence"]}
+                            - {vc.NOT_APPLICABLE})
+        check(recomputed == spec["metric_ids"],
+              f"{spec_id} misreports the metrics it consumes")
+        if len(spec["comparable_metric_ids"]) > 1:
+            check(bool(spec.get("mixed_metric_justification")),
+                  f"{spec_id} mixes scorers without a justification")
+
+
+def test_checkpoint_selection_is_enforced(art: dict) -> None:
+    """The VE-0 report claims this is enforced, so it must be."""
+    from experiments.ve0 import build_specs
+
+    rows = art["inventory"]["rows"]
+    index = {row["evidence_id"]: row for row in rows}
+
+    best = next(r["evidence_id"] for r in rows
+                if r.get("checkpoint_selection_class") == "BEST_ON_DEVELOPMENT")
+    fixed = next(r["evidence_id"] for r in rows
+                 if r.get("checkpoint_selection_class") == "FIXED_EPOCH_22")
+    mixed = [best, fixed]
+    check(len(build_specs.training_selection_rules(mixed, index)) == 2,
+          "the synthetic checkpoint-selection case does not actually mix two "
+          "rules")
+
+    try:
+        build_specs._check_checkpoint_selection_mix(
+            "SYNTHETIC-SELECTION", {"mandatory_caption_caveat": "nothing"},
+            mixed, index)
+        check(False, "the checkpoint-selection rule accepted a mixed "
+                     "specification that says nothing about it")
+    except AssertionError:
+        check(True, "")
+
+    declared = {"footnotes": ["Checkpoint selection differs across rows."]}
+    try:
+        build_specs._check_checkpoint_selection_mix(
+            "SYNTHETIC-SELECTION-OK", declared, mixed, index)
+        check(True, "")
+    except AssertionError:
+        check(False, "the checkpoint-selection rule refused a specification "
+                     "that names the difference")
+
+    for spec in art["figures"]["figures"] + art["tables"]["tables"]:
+        spec_id = spec.get("figure_id") or spec.get("table_id")
+        recomputed = build_specs.training_selection_rules(
+            spec["consumes_evidence"], index)
+        check(recomputed == spec["checkpoint_selection_rules"],
+              f"{spec_id} misreports its checkpoint-selection rules")
+        if spec["mixes_checkpoint_selection"]:
+            check(build_specs._has_selection_caveat(spec),
+                  f"{spec_id} mixes checkpoint-selection rules with no "
+                  f"caveat")
+
+
+def test_fig06_is_self_contained(art: dict) -> None:
+    """P-1: FIG-06 must be renderable from its declared evidence alone."""
+    index = {row["evidence_id"]: row for row in art["inventory"]["rows"]}
+    figure = next(f for f in art["figures"]["figures"]
+                  if f["figure_id"] == "VE0-FIG-06")
+    consumed = figure["consumes_evidence"]
+
+    for evidence in consumed:
+        check(evidence in index, f"VE0-FIG-06 names unresolvable {evidence}")
+
+    fusion = [e for e in consumed
+              if index[e]["experiment_family"] == "v2_07"
+              and index[e]["model_system"] == "fusion"]
+    scales = {index[e]["training_scale"] for e in fusion}
+    check(scales == {"train_40k", "train_100k", "train_250k"},
+          f"VE0-FIG-06 does not bind the full fusion reference series; it "
+          f"binds {sorted(scales)}")
+
+    reasoner_scales = {index[e]["training_scale"] for e in consumed
+                       if index[e]["model_system"] == "reasoner"}
+    check({"train_40k", "train_100k", "train_250k"} <= reasoner_scales
+          | {index[e]["training_scale"] for e in consumed
+             if index[e]["experiment_family"] == "v3_01"},
+          "VE0-FIG-06 does not bind a reasoner point at every plotted scale")
+
+    check(figure["carries_v2_07_limitation"] is True,
+          "VE0-FIG-06 binds v2_07 evidence but does not declare the "
+          "limitation flag")
+    caveat = figure["mandatory_caption_caveat"]
+    for phrase in ("ACCEPTED DOCUMENTED LIMITATION", "numerically tied row",
+                   "conservatively omitted", "no image-clustered",
+                   "no post-hoc"):
+        check(phrase in caveat,
+              f"VE0-FIG-06's caveat does not state '{phrase}'")
+    check("seed set" in caveat and "three seeds" in caveat,
+          "VE0-FIG-06 does not disclose that the two series use different "
+          "seed sets")
+
+    for evidence in fusion:
+        check("ACCEPTED DOCUMENTED LIMITATION"
+              in index[evidence]["mandatory_limitation"],
+              f"{evidence} is consumed by VE0-FIG-06 without the v2_07 "
+              f"limitation")
+        check(index[evidence]["ci95"] is None,
+              f"{evidence} is v2_07 evidence carrying an interval")
+
+    check(len(figure["comparable_metric_ids"]) == 1,
+          "VE0-FIG-06 still mixes scorers after the identity repair")
+    check(figure["uncertainty_shown"].endswith("_BY_PANEL"),
+          "VE0-FIG-06 declares one uncertainty kind for two panels that "
+          "carry different kinds")
+    check(len(figure.get("uncertainty_by_panel") or {}) >= 2,
+          "VE0-FIG-06 does not say what each panel's uncertainty is")
+
+
+def test_v3_01_scalar_identity(art: dict) -> None:
+    """S-1: the three v3_01 scalars must carry their true identity."""
+    index = {row["evidence_id"]: row for row in art["inventory"]["rows"]}
+    expected = {
+        "EV-DSC-v3_01.reasoner.train_40k.seed_mean": "DESCRIPTIVE_ONLY",
+        "EV-DSC-v3_01.reasoner.train_40k.seed_sd": "DESCRIPTIVE_ONLY",
+        "EV-DSC-v3_01.reasoner_minus_fusion.train_40k.seed_mean":
+            "SYSTEM_LEVEL_COMPARISON",
+    }
+    for evidence, comparison in sorted(expected.items()):
+        check(evidence in index, f"{evidence} is missing from the inventory")
+        if evidence not in index:
+            continue
+        row = index[evidence]
+        check(row["metric_id"] == "v2_closed_vocab_top1_index_match",
+              f"{evidence} does not carry the V2-era closed-vocabulary "
+              f"scorer identity")
+        check(row["metric_id"] != "structural_count_or_share",
+              f"{evidence} is still classified as a structural count")
+        check(row["comparison_class"] == comparison,
+              f"{evidence} should be {comparison}")
+        check(row["split"] == "v2_dev", f"{evidence} has no split")
+        check(row["training_scale"] == "train_40k",
+              f"{evidence} has no training scale")
+        check(row["seed_set"] == [0, 1, 2], f"{evidence} has no seed set")
+        check(row["n_questions"] == 7714,
+              f"{evidence} does not carry the development row count")
+        check(row["n_unique_images"] == 768,
+              f"{evidence} does not carry the represented image count")
+        check(bool(row.get("counts_provenance")),
+              f"{evidence} does not say where its counts came from")
+        check("stale V1-era" in row["counts_provenance"],
+              f"{evidence} does not warn about the misleading n_val field in "
+              f"the source artefact")
+        check(row["checkpoint_selection_class"] == "BEST_ON_DEVELOPMENT",
+              f"{evidence} has no checkpoint-selection identity")
+        check(row["ci95"] is None, f"{evidence} carries an invented interval")
+        check("structural count" not in row["ci_type"],
+              f"{evidence} still explains its missing interval as a "
+              f"structural count")
+        check("NO_INTERVAL_AVAILABLE" in row["ci_type"],
+              f"{evidence} does not declare that no interval is available")
+        check("closure reconstructed the global-head families only"
+              in row["ci_type"],
+              f"{evidence} does not give the real reason no interval exists")
+        limitation = row["mandatory_limitation"]
+        for phrase in ("system-level comparison", "token-level access is not "
+                       "isolated", "superseded by v3_02a"):
+            check(phrase in limitation,
+                  f"{evidence} limitation does not convey '{phrase}'")
+        check("pooled step statistics" in limitation,
+              f"{evidence} does not record that the v3_01 pooled step "
+              f"statistics are superseded")
 
 
 def run() -> None:
@@ -559,7 +846,12 @@ def run() -> None:
     test_sources_resolve(art)
     test_manifest(art)
     test_closure_artefacts_untouched(art)
-    test_idempotent_rebuild(art)
+    test_v3_01_scalar_identity(art)
+    test_fig06_is_self_contained(art)
+    test_metric_compatibility_is_enforced(art)
+    test_checkpoint_selection_is_enforced(art)
+    test_isolated_rebuild_is_content_identical(art)
+    test_provenance_divergence_is_content_neutral(art)
 
     if FAILURES:
         for failure in FAILURES:

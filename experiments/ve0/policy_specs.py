@@ -40,6 +40,13 @@ UNCERTAINTY_KINDS = {
     "NONE_MEASURED_MEDIAN": "no interval: a warm median over repeated "
                             "passes; the across-pass spread is stated in the "
                             "caption",
+    "SEED_SD_AND_CLUSTERED_CI95_BY_PANEL": "a multi-panel figure whose panels "
+        "carry DIFFERENT uncertainty kinds. Each panel names its own kind in "
+        "uncertainty_by_panel, the two are never drawn on one glyph or one "
+        "axis, and the caption states which panel carries which. This exists "
+        "so a figure that legitimately shows a seed spread beside a clustered "
+        "interval cannot declare only one of them and leave a reader to "
+        "assume the other",
     "NOT_APPLICABLE": "a schematic; no data",
 }
 
@@ -306,16 +313,40 @@ FIGURES = [
         ],
         "selectors": [
             {"evidence_class": "SEED", "experiment_family": ["v3_03"]},
+            # The fusion reference series. Previously the caption named v2_07
+            # as its source while the specification bound none of it, so the
+            # figure was not renderable from its declared evidence alone.
+            # These three rows ARE that series and are bound explicitly; they
+            # bring the v2_07 accepted documented limitation with them.
+            {"evidence_class": "SEED", "experiment_family": ["v2_07"],
+             "model_system": ["fusion"]},
         ],
         "chart_type": "two panels: (a) reasoner and fusion accuracy against "
                       "training scale, (b) forest of the three paired "
                       "reasoner-minus-fusion deficit differences",
-        "x_axis": "(a) labelled training questions; (b) deficit difference "
-                  "in accuracy points, zero line drawn",
-        "y_axis": "(a) development accuracy; (b) training scale",
-        "grouping": "panel (a) annotates each system's trainable parameter "
-                    "count, because the size difference is the point",
-        "uncertainty_shown": "CLUSTERED_CI95",
+        "x_axis": "(a) labelled training questions, categorical over 40k, "
+                  "100k and 250k; (b) deficit difference in accuracy points, "
+                  "zero line drawn",
+        "y_axis": "(a) development accuracy under the V2-era "
+                  "closed-vocabulary scorer; (b) training scale",
+        "grouping": "panel (a) draws two series, the reasoner and the global "
+                    "fusion reference, and annotates each system's trainable "
+                    "parameter count because the size difference is the "
+                    "point. The two series are drawn with visibly different "
+                    "seed-set labels, because they do not share one",
+        "uncertainty_shown": "SEED_SD_AND_CLUSTERED_CI95_BY_PANEL",
+        "uncertainty_by_panel": {
+            "panel_a": "SEED_SD. Both series carry across-training-seed "
+                       "standard deviation only. No clustered interval exists "
+                       "for either: the reasoner accuracies come from v3_01 "
+                       "and v3_03, which the closure did not reconstruct, and "
+                       "the fusion series comes from the stopped v2_07 "
+                       "family. Neither is drawn as a confidence interval.",
+            "panel_b": "CLUSTERED_CI95. The three paired deficit differences "
+                       "carry image-clustered evaluation-sampling intervals "
+                       "on 7,714 rows over 768 represented development "
+                       "images.",
+        },
         "caption_claim": "The 21.1M-parameter latent-query reasoner does not "
                          "materially outperform the 1.1M global fusion head "
                          "at 40k, and no scale shows it reducing the "
@@ -327,12 +358,34 @@ FIGURES = [
                                     "three deficit-difference intervals "
                                     "include zero, which is an absence of a "
                                     "detected difference, not evidence of "
-                                    "equivalence. The 40k accuracy point and "
-                                    "its gap come from v3_01 and carry a seed "
-                                    "spread only, with no clustered interval. "
-                                    "The fusion side at 100k and 250k comes "
-                                    "from v2_07 and carries its documented "
-                                    "limitation.",
+                                    "equivalence. The 40k reasoner accuracy "
+                                    "and its same-seed gap come from v3_01 "
+                                    "and carry an across-training-seed "
+                                    "standard deviation only, with no "
+                                    "clustered interval. The fusion reference "
+                                    "series is v2_07 historical aggregate and "
+                                    "seed evidence and carries the v2_07 "
+                                    "ACCEPTED DOCUMENTED LIMITATION: one of "
+                                    "forty reconstruction cells differed by a "
+                                    "single numerically tied row, the "
+                                    "reconstructed clustered family was "
+                                    "therefore conservatively omitted in "
+                                    "full, no image-clustered evaluation "
+                                    "interval is available for the affected "
+                                    "scaling evidence, and no post-hoc "
+                                    "partial-family rescue was performed. "
+                                    "PROTOCOL DIFFERENCES that must stay "
+                                    "visible: the two series do not share a "
+                                    "seed set, the reasoner using three seeds "
+                                    "and the fusion reference five, so panel "
+                                    "(a) is a system-level juxtaposition and "
+                                    "not a matched paired comparison. Both "
+                                    "series use the same V2-era "
+                                    "closed-vocabulary scorer on the same "
+                                    "7,714-row development view and the same "
+                                    "best-on-development checkpoint-selection "
+                                    "rule, which is what makes the "
+                                    "juxtaposition legitimate at all.",
         "placement": "MAIN_TEXT",
         "dissertation_section": "R5_LATENT_REASONING_AND_REPRESENTATION",
         "supervisor_slide": "SLIDE-08-BIGGER-REASONER-DID-NOT-PAY",
@@ -420,13 +473,51 @@ FIGURES = [
             "EV-CON-E10.difference_in_differences",
         ],
         "selectors": [],
-        "chart_type": "forest plot in three labelled blocks: question side "
-                      "135M, answer side 135M, answer side 360M",
-        "x_axis": "pretrained minus architecture-matched random, in accuracy "
-                  "points, zero line drawn",
+        "chart_type": "forest plot in three labelled first-order blocks "
+                      "(question side 135M, answer side 135M, answer side "
+                      "360M), plus ONE visually separated second-order block "
+                      "below a rule, holding the E10 difference in "
+                      "differences alone",
+        "x_axis": "first-order blocks: pretrained minus "
+                  "architecture-matched random, in accuracy points, zero line "
+                  "drawn. The second-order block shares the numeric scale but "
+                  "is labelled separately, because a difference of two such "
+                  "differences is not itself a pretrained-minus-random effect "
+                  "and must not be read along that axis label",
         "y_axis": "block and training scale",
         "grouping": "by interface side and language-model size; every row "
                     "states its reference condition and its comparison class",
+        "row_groups": [
+            {"group_id": "G1_question_side_135M",
+             "order": "FIRST_ORDER",
+             "quantity": "pretrained minus architecture-matched random",
+             "evidence_ids": ["EV-CON-E8A.A1_minus_A1r.train_40k",
+                              "EV-CON-E8A.A1_minus_A1r.train_250k"]},
+            {"group_id": "G2_answer_side_135M",
+             "order": "FIRST_ORDER",
+             "quantity": "pretrained minus architecture-matched random",
+             "evidence_ids": ["EV-CON-E8B.B3_-_B2.train_40k",
+                              "EV-CON-E8B.B3_-_B2.train_250k"]},
+            {"group_id": "G3_answer_side_360M",
+             "order": "FIRST_ORDER",
+             "quantity": "pretrained minus architecture-matched random",
+             "evidence_ids": ["EV-CON-E10.pretraining_effect.train_40k",
+                              "EV-CON-E10.pretraining_effect.train_250k"]},
+            {"group_id": "G4_second_order_interaction",
+             "order": "SECOND_ORDER",
+             "quantity": "difference in differences: (B4 minus B4r) at "
+                         "train_250k minus (B4 minus B4r) at train_40k. This "
+                         "is an interaction between the pretraining effect "
+                         "and training scale, NOT a pretraining effect",
+             "separation_requirement": "drawn below a horizontal rule, in its "
+                                       "own labelled block, with its own row "
+                                       "label naming it a second-order "
+                                       "interaction. It must never sit inside "
+                                       "or immediately adjacent to the three "
+                                       "first-order blocks without that "
+                                       "separation",
+             "evidence_ids": ["EV-CON-E10.difference_in_differences"]},
+        ],
         "uncertainty_shown": "CLUSTERED_CI95",
         "caption_claim": "Frozen pretraining helps on the question side at "
                          "both scales, while no reliable positive "
@@ -451,7 +542,14 @@ FIGURES = [
                                     "beside this figure. Checkpoint selection "
                                     "differs: E8A selects the best "
                                     "development epoch, E8B and E10 use the "
-                                    "frozen fixed-22 rule.",
+                                    "frozen fixed-22 rule. The bottom block "
+                                    "is a SECOND-ORDER quantity: the E10 "
+                                    "difference in differences is an "
+                                    "interaction between the pretraining "
+                                    "effect and training scale, not a "
+                                    "pretrained-minus-random effect, so the "
+                                    "axis label above it does not describe "
+                                    "it. It is not directional.",
         "placement": "MAIN_TEXT",
         "dissertation_section": ["R6_QUESTION_SIDE_SLM",
                                  "R7_ANSWER_SIDE_AND_CAPACITY"],
@@ -635,7 +733,13 @@ FIGURES = [
                                     "never pooled across families. Two "
                                     "metrics appear in this figure and are "
                                     "shown as separate blocks, never on one "
-                                    "shared scale.",
+                                    "shared scale. Checkpoint selection also "
+                                    "differs across the blocks: V2, V3, E2, "
+                                    "E3 and E8A select the best development "
+                                    "epoch, while E8B and E10 use the frozen "
+                                    "fixed-22 rule with no early stopping, so "
+                                    "the dispersions are not measured under "
+                                    "one selection protocol.",
         "placement": "APPENDIX",
         "dissertation_section": "R_APPENDIX_STATISTICS",
         "supervisor_slide": "SLIDE-BACKUP-SEED-STABILITY",
@@ -987,6 +1091,15 @@ TABLES = [
             "one linear projection per configuration.",
             "E8A's projected interface is a learned common width, not a "
             "naturally shared pretrained embedding space.",
+            "Checkpoint selection differs across the rows: E8A selects the "
+            "best development epoch with patience 10, while E8B and E10 use "
+            "the frozen fixed-22-epoch rule with no early stopping. A "
+            "best-on-development accuracy and a fixed-epoch accuracy are not "
+            "selected the same way, so reading the arms side by side is a "
+            "system-level juxtaposition, not a matched comparison. The "
+            "within-family pretrained-minus-random contrasts in Table "
+            "VE0-TAB-05 are unaffected, because each of them compares two "
+            "arms selected under the same rule.",
         ],
         "placement": "MAIN_TEXT",
         "dissertation_section": ["R6_QUESTION_SIDE_SLM",
@@ -1027,7 +1140,15 @@ TABLES = [
             "Both E10 intervals contain zero and the seeds disagree in sign; "
             "they establish NEITHER equivalence NOR the absence of an effect.",
             "E10 does not reproduce E8B's directional negative 40k result.",
-            "The difference in differences is not directional.",
+            "The difference in differences is a SECOND-ORDER interaction "
+            "between the pretraining effect and training scale, not a "
+            "pretrained-minus-random effect, and it is not directional.",
+            "Checkpoint selection differs BETWEEN families, E8A selecting the "
+            "best development epoch while E8B and E10 use the frozen "
+            "fixed-22 rule, but not WITHIN any row: every contrast here "
+            "compares two arms selected under the same rule, so each effect "
+            "is internally matched on that axis and only the cross-family "
+            "reading is a juxtaposition.",
         ],
         "placement": "MAIN_TEXT",
         "dissertation_section": "R7_ANSWER_SIDE_AND_CAPACITY",
@@ -1153,6 +1274,11 @@ TABLES = [
             "seeds (ddof=1). It is not a confidence interval and not "
             "evaluation-sampling uncertainty.",
             "Seed sets are never pooled across families.",
+            "Checkpoint selection differs across families: V2, V3, E2, E3 and "
+            "E8A select the best development epoch, E8B and E10 use the "
+            "frozen fixed-22 rule with no early stopping. Dispersion under a "
+            "best-of rule and dispersion under a fixed-epoch rule are not the "
+            "same quantity and are not compared across families here.",
         ],
         "placement": "APPENDIX",
         "dissertation_section": "R_APPENDIX_STATISTICS",
@@ -1214,6 +1340,11 @@ TABLES = [
             "reconstructed number existed and no row was reclassified after "
             "its interval was computed.",
             "Two metrics appear; the family column identifies which.",
+            "Two checkpoint-selection rules appear, best development epoch "
+            "for V2, V3, E2, E3 and E8A and the frozen fixed-22 rule for E8B "
+            "and E10. Every contrast listed is internally matched on that "
+            "axis, comparing two arms selected under the same rule; the "
+            "registry performs no arithmetic across families.",
         ],
         "placement": "APPENDIX",
         "dissertation_section": "R_APPENDIX_STATISTICS",

@@ -1,16 +1,30 @@
 """Build every VE-0 artefact in one deterministic pass.
 
     python -m experiments.ve0.run_ve0
+    python -m experiments.ve0.run_ve0 --out-dir <directory>
 
 Reads only frozen artefacts. Trains nothing, evaluates nothing, measures
-nothing, touches no GPU and never resolves the embargoed clean-test path. A
-second run over unchanged inputs produces byte-identical outputs, because no
-wall-clock timestamp enters any artefact.
+nothing, touches no GPU and never resolves the embargoed clean-test path.
+
+Determinism is two-tier and the distinction matters. Within an identical
+provenance context, the same repository HEAD, the same worktree state and the
+same inputs, a rebuild is byte-identical, because no wall-clock timestamp
+enters any artefact and every collection is sorted by an explicit key. Across
+a DIFFERENT committed HEAD with unchanged scientific inputs, the invariant is
+scientific content identity, measured by content_sha256 with the provenance
+block removed; the provenance-bearing bytes legitimately move, because
+provenance records the HEAD that produced the artefact. repository_head is not
+dropped from provenance to make the two coincide.
+
+`--out-dir` exists so the validation suite can rebuild into an isolated
+directory and prove that property without rewriting the frozen, committed
+artefacts.
 """
 
 from __future__ import annotations
 
 import sys
+from pathlib import Path
 
 from . import build_inventory, build_rest, build_specs
 from . import ve0_common as vc
@@ -131,29 +145,50 @@ def build_all(ctx) -> dict:
     }
 
 
-def write_all(payloads: dict, ctx) -> dict:
-    """Write every artefact and return {relative path: (sha256, content)}."""
+def write_all(payloads: dict, ctx, out_dir=None,
+              provenance: dict | None = None) -> dict:
+    """Write every artefact and return {relative path: identity}.
+
+    `out_dir` lets the validation suite rebuild into an isolated directory so
+    that checking determinism never rewrites the frozen, committed artefacts.
+    `provenance` lets it write the same scientific payloads under a different
+    provenance context, which is how the two-tier determinism contract is
+    demonstrated rather than asserted:
+
+      - scientific content, measured by content_sha256, is invariant given
+        unchanged scientific inputs;
+      - provenance-bearing full-file bytes legitimately move when the
+        repository HEAD or the worktree state moves.
+
+    Neither seam changes what a production build writes.
+    """
+    directory = Path(out_dir) if out_dir else vc.VE0_DIR
     written = {}
-    provenance = vc.provenance("experiments/ve0/run_ve0.py",
-                               inputs=ctx["inputs"])
+    block = provenance or vc.provenance("experiments/ve0/run_ve0.py",
+                                        inputs=ctx["inputs"])
     for key, payload in payloads.items():
-        payload["provenance"] = provenance
+        payload["provenance"] = block
         payload["content_sha256"] = vc.content_digest(payload)
         name = OUTPUTS[key]
-        path = vc.VE0_DIR / name
+        path = directory / name
         digest = vc.write_json(path, payload)
-        written[vc.relpath(path)] = {
+        written[name] = {
+            "path": vc.relpath(path),
             "sha256": digest,
             "content_sha256": payload["content_sha256"],
             "ve0_output": key,
             "bytes": path.stat().st_size,
         }
 
-    csv_path = vc.VE0_DIR / OUTPUTS["A_csv"]
+    csv_name = OUTPUTS["A_csv"]
+    csv_path = directory / csv_name
     csv_digest = vc.write_csv(csv_path, payloads["A"]["rows"],
                               build_inventory.INVENTORY_CSV_COLUMNS)
-    written[vc.relpath(csv_path)] = {
+    written[csv_name] = {
+        "path": vc.relpath(csv_path),
         "sha256": csv_digest,
+        # the CSV carries no provenance block, so its file hash IS its
+        # scientific content hash
         "content_sha256": csv_digest,
         "ve0_output": "B",
         "bytes": csv_path.stat().st_size,
@@ -161,12 +196,38 @@ def write_all(payloads: dict, ctx) -> dict:
     return written
 
 
+DETERMINISM_CONTRACT = {
+    "scientific_content": "content_sha256, computed over the artefact with "
+        "the provenance block removed, is INVARIANT given unchanged "
+        "scientific inputs. This is the property that matters and the one the "
+        "validation suite proves.",
+    "provenance_bearing_bytes": "the full-file sha256 covers the provenance "
+        "block, which records the repository HEAD and the worktree state. "
+        "Those legitimately move when the artefacts are committed, so a "
+        "rebuild AT A DIFFERENT COMMITTED HEAD is expected to produce "
+        "different full-file bytes with identical scientific content.",
+    "within_identical_provenance_context": "given the same repository HEAD, "
+        "the same worktree state and the same inputs, a rebuild is "
+        "byte-identical, because no wall-clock timestamp is written into any "
+        "artefact and every collection is sorted by an explicit key.",
+    "across_a_different_committed_head": "scientific content identity is the "
+        "invariant; provenance metadata may legitimately differ. "
+        "repository_head is NOT removed from provenance to make the two "
+        "coincide, because knowing which source state produced an artefact is "
+        "worth more than a simpler hash rule.",
+    "validation_never_mutates": "the validation suite rebuilds into an "
+        "isolated temporary directory and re-hashes the committed artefacts "
+        "before and after, so running it at a committed HEAD cannot rewrite "
+        "or damage the frozen outputs.",
+}
+
+
 def build_manifest(written: dict, payloads: dict, ctx) -> dict:
     report_path = vc.PROJECT_ROOT / "docs" / "experiments" / \
         "ve0_evidence_contract.md"
     entries = []
-    for path in sorted(written):
-        entries.append({"path": path, **written[path]})
+    for name in sorted(written):
+        entries.append(dict(written[name]))
     if report_path.exists():
         entries.append({
             "path": vc.relpath(report_path),
@@ -183,6 +244,7 @@ def build_manifest(written: dict, payloads: dict, ctx) -> dict:
                 "manifest; a content hash that has moved means the evidence "
                 "contract has changed and any artefact built from the old one "
                 "is stale.",
+        "determinism_contract": DETERMINISM_CONTRACT,
         "entry_count": len(entries),
         "entries": entries,
         "source_inputs": ctx["inputs"],
@@ -216,18 +278,35 @@ def build_manifest(written: dict, payloads: dict, ctx) -> dict:
     }
 
 
-def main() -> int:
+def build_into(out_dir=None, provenance: dict | None = None) -> dict:
+    """One full build. Returns {payloads, written, manifest, out_dir}."""
+    directory = Path(out_dir) if out_dir else vc.VE0_DIR
+    directory.mkdir(parents=True, exist_ok=True)
     ctx = load_context()
     payloads = build_all(ctx)
-    written = write_all(payloads, ctx)
+    written = write_all(payloads, ctx, out_dir=directory,
+                        provenance=provenance)
     manifest = build_manifest(written, payloads, ctx)
-    manifest_digest = vc.write_json(vc.VE0_DIR / MANIFEST_NAME, manifest)
+    manifest_digest = vc.write_json(directory / MANIFEST_NAME, manifest)
+    return {"payloads": payloads, "written": written, "manifest": manifest,
+            "manifest_sha256": manifest_digest, "out_dir": directory}
 
-    print(f"VE-0 wrote {len(written)} artefacts to {vc.relpath(vc.VE0_DIR)}")
-    for path in sorted(written):
-        print(f"  {written[path]['ve0_output']:<5} {path}")
-    print(f"  O     {vc.relpath(vc.VE0_DIR / MANIFEST_NAME)} "
-          f"({manifest_digest[:12]})")
+
+def main(argv=None) -> int:
+    argv = list(sys.argv[1:] if argv is None else argv)
+    out_dir = None
+    if "--out-dir" in argv:
+        out_dir = argv[argv.index("--out-dir") + 1]
+
+    result = build_into(out_dir)
+    written, payloads = result["written"], result["payloads"]
+    directory = result["out_dir"]
+
+    print(f"VE-0 wrote {len(written)} artefacts to {vc.relpath(directory)}")
+    for name in sorted(written):
+        print(f"  {written[name]['ve0_output']:<5} {written[name]['path']}")
+    print(f"  O     {vc.relpath(directory / MANIFEST_NAME)} "
+          f"({result['manifest_sha256'][:12]})")
     print(f"evidence rows: {payloads['A']['row_count']}; "
           f"figures: {payloads['F']['figure_count']}; "
           f"tables: {payloads['G']['table_count']}; "

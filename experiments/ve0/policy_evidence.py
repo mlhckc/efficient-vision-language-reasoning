@@ -194,27 +194,69 @@ MIXED_METRIC_RULE = (
 # selected the same way, so any figure or table that puts them on one axis
 # must carry the caveat below.
 
+# The comparison is on the CLASS, never on the prose. An earlier revision
+# compared the human descriptions, so two families following the identical
+# best-on-development rule but described at different lengths looked like a
+# protocol difference. A controlled class fixes that and keeps the detail.
+
+CHECKPOINT_SELECTION_CLASSES = {
+    "BEST_ON_DEVELOPMENT": "the checkpoint is the epoch with the best "
+        "development accuracy. Legitimate under this protocol, because every "
+        "development decision is allowed to use data/v2/dev.csv, but it means "
+        "the reported development accuracy is selected on the same split it "
+        "is reported on",
+    "FIXED_EPOCH_22": "the checkpoint is epoch 22 by the frozen rule, with no "
+        "early stopping and no best-of selection. E8B and E10 only",
+    "NO_TRAINING": "nothing was trained; evaluation or measurement only",
+}
+
 FAMILY_CHECKPOINT_SELECTION = {
-    "v2_02": "best development epoch (early stopping on development "
-             "accuracy, best-on-development checkpointing)",
-    "v2_03": "best development epoch",
-    "v2_04": "best development epoch",
-    "v2_05c": "best development epoch",
-    "v2_06": "best development epoch",
-    "v2_07": "best development epoch",
-    "v3_01": "best development epoch, patience 10",
-    "v3_02a": "best development epoch, patience 10",
-    "v3_03": "best development epoch, patience 10",
-    "e2": "best development epoch",
-    "E2": "best development epoch",
-    "e3": "best development epoch",
-    "E3": "best development epoch",
-    "E8A": "best development epoch, patience 10, at most 100 epochs",
-    "E8B": "fixed epoch 22, no early stopping; epoch 22 is the sole primary",
-    "E10": "fixed epoch 22, no early stopping; epoch 22 is the sole primary",
-    "E9": "no training; evaluation only",
-    "E7a": "no training; measurement only",
-    "E7b": "no training; measurement only",
+    "v2_02": {"class": "BEST_ON_DEVELOPMENT",
+              "detail": "best development epoch (early stopping on "
+                        "development accuracy, best-on-development "
+                        "checkpointing)"},
+    "v2_03": {"class": "BEST_ON_DEVELOPMENT",
+              "detail": "best development epoch"},
+    "v2_04": {"class": "BEST_ON_DEVELOPMENT",
+              "detail": "best development epoch"},
+    "v2_05c": {"class": "BEST_ON_DEVELOPMENT",
+               "detail": "best development epoch"},
+    "v2_06": {"class": "BEST_ON_DEVELOPMENT",
+              "detail": "best development epoch"},
+    "v2_07": {"class": "BEST_ON_DEVELOPMENT",
+              "detail": "best development epoch"},
+    "v3_01": {"class": "BEST_ON_DEVELOPMENT",
+              "detail": "best development epoch, patience 10"},
+    "v3_02a": {"class": "BEST_ON_DEVELOPMENT",
+               "detail": "best development epoch, patience 10"},
+    "v3_03": {"class": "BEST_ON_DEVELOPMENT",
+              "detail": "best development epoch, patience 10"},
+    "e2": {"class": "BEST_ON_DEVELOPMENT",
+           "detail": "best development epoch"},
+    "E2": {"class": "BEST_ON_DEVELOPMENT",
+           "detail": "best development epoch"},
+    "e3": {"class": "BEST_ON_DEVELOPMENT",
+           "detail": "best development epoch"},
+    "E3": {"class": "BEST_ON_DEVELOPMENT",
+           "detail": "best development epoch"},
+    "E8A": {"class": "BEST_ON_DEVELOPMENT",
+            "detail": "best development epoch, patience 10, at most 100 "
+                      "epochs"},
+    "E8B": {"class": "FIXED_EPOCH_22",
+            "detail": "fixed epoch 22, no early stopping; epoch 22 is the "
+                      "sole primary"},
+    "E10": {"class": "FIXED_EPOCH_22",
+            "detail": "fixed epoch 22, no early stopping; epoch 22 is the "
+                      "sole primary"},
+    "E9": {"class": "NO_TRAINING", "detail": "no training; evaluation only"},
+    "E7a": {"class": "NO_TRAINING",
+            "detail": "no training; measurement only"},
+    "E7b": {"class": "NO_TRAINING",
+            "detail": "no training; measurement only"},
+    "v2_00": {"class": "NO_TRAINING",
+              "detail": "no training; a protocol artefact"},
+    "v2_01": {"class": "NO_TRAINING",
+              "detail": "no training; a zero-shot protocol check"},
 }
 
 CROSS_FAMILY_SELECTION_CAVEAT = (
@@ -426,17 +468,67 @@ CONTRAST_LIMITATION = {
 # A scalar that cannot be resolved from a frozen artefact is not written. No
 # value in this table is typed from memory; the builder reads each one and
 # fails loudly if the pointer does not resolve.
+#
+# Each entry carries its OWN scientific identity. An earlier revision let the
+# whole class inherit one structural metric identity, which mislabelled three
+# real development accuracies as counted quantities and silently defeated the
+# mixed-metric guard on the figure that consumes them. Identity is therefore
+# per scalar, and the builder refuses an entry that does not declare it.
+
+# Where a count is not stated by the scalar's own artefact but is fixed by the
+# split the evaluation ran on, the binding is recorded rather than assumed.
+V3_DEV_VIEW_COUNTS_PROVENANCE = (
+    "n_questions and n_unique_images are NOT read from the v3_01 artefact, "
+    "which does not record them. They are the V3 development view, bound by "
+    "the closure's own v3_02a and v3_03 rows on the same split under the "
+    "identical frozen v3_01 recipe and the same seed set: 7,714 in-vocabulary "
+    "rows over 768 represented development images, with the v3_02a reasoner "
+    "step buckets summing to exactly 7,714. The same-seed reasoner-minus-"
+    "fusion gap additionally requires the same evaluation rows as v2_02's "
+    "fusion arm, which is canonically 7,714 rows over 768 images. WARNING for "
+    "any later reader: the v3_01 artefact carries a top-level n_val field of "
+    "8000, which is a stale V1-era configuration value and does NOT describe "
+    "this evaluation.")
+
+V3_01_NO_INTERVAL_REASON = (
+    "NO_INTERVAL_AVAILABLE: this is a development accuracy under the V2-era "
+    "closed-vocabulary scorer, not a counted quantity. No image-clustered "
+    "evaluation-sampling interval exists for it because the post-E10 closure "
+    "reconstructed the global-head families only, so the V3 families have no "
+    "reconstructed row-level evidence and no clustered interval was ever "
+    "computed for this scalar. The accompanying seed mean and seed sd "
+    "summarise variability across three independent TRAINING runs; they are "
+    "NOT an evaluation-sampling interval. No interval is invented or "
+    "reconstructed here.")
+
+STRUCTURAL_NO_INTERVAL_REASON = (
+    "NO_INTERVAL: a counted quantity or a share of counts read from a frozen "
+    "protocol artefact, not an estimate, so it carries no sampling "
+    "uncertainty.")
+
+_PROTOCOL_SUMMARY = "artifacts/v2_00_protocol/protocol_build_summary.json"
 
 DESCRIPTIVE_SCALARS = [
     {
         "key": "dev.coverage_top100",
-        "artefact": "artifacts/v2_00_protocol/protocol_build_summary.json",
+        "artefact": _PROTOCOL_SUMMARY,
         "pointer": "/dev/v2_coverage",
         "quantity": "share of raw development questions whose answer is in "
                     "the top-100 closed answer set",
+        "quantity_kind": "STRUCTURAL_SHARE",
         "family": "v2_00",
         "story_stage": "S01_BASELINE_REPRESENTATION",
         "scientific_role": "SUPPORTING",
+        "metric_id": "structural_count_or_share",
+        "comparison_class": "DESCRIPTIVE_ONLY",
+        "analysis_role": "DIAGNOSTIC",
+        "split": None,
+        "training_scale": None,
+        "seed_set": None,
+        "n_questions": None,
+        "n_unique_images": None,
+        "counts_provenance": "NOT_APPLICABLE: a protocol-level share",
+        "ci_type": STRUCTURAL_NO_INTERVAL_REASON,
     },
     {
         "key": "dev.coverage_top1000",
@@ -444,100 +536,226 @@ DESCRIPTIVE_SCALARS = [
         "pointer": "/e3_vocab1000/build_summary/dev/coverage_top1000",
         "quantity": "share of raw development questions whose answer is in "
                     "the top-1000 closed answer set",
+        "quantity_kind": "STRUCTURAL_SHARE",
         "family": "E3",
         "story_stage": "S00_OFF_SEQUENCE",
         "scientific_role": "APPENDIX",
+        "metric_id": "structural_count_or_share",
+        "comparison_class": "DESCRIPTIVE_ONLY",
+        "analysis_role": "DIAGNOSTIC",
+        "split": None,
+        "training_scale": None,
+        "seed_set": None,
+        "n_questions": None,
+        "n_unique_images": None,
+        "counts_provenance": "NOT_APPLICABLE: a protocol-level share",
+        "ci_type": STRUCTURAL_NO_INTERVAL_REASON,
     },
     {
         "key": "dev.n_questions_in_vocabulary",
-        "artefact": "artifacts/v2_00_protocol/protocol_build_summary.json",
+        "artefact": _PROTOCOL_SUMMARY,
         "pointer": "/manifests/dev/n_questions",
         "quantity": "in-vocabulary development questions in the top-100 view",
+        "quantity_kind": "STRUCTURAL_COUNT",
         "family": "v2_00",
         "story_stage": "S01_BASELINE_REPRESENTATION",
         "scientific_role": "SUPPORTING",
+        "metric_id": "structural_count_or_share",
+        "comparison_class": "DESCRIPTIVE_ONLY",
+        "analysis_role": "DIAGNOSTIC",
+        "split": "v2_dev",
+        "training_scale": None,
+        "seed_set": None,
+        "n_questions": None,
+        "n_unique_images": None,
+        "counts_provenance": "NOT_APPLICABLE: this scalar IS a count",
+        "ci_type": STRUCTURAL_NO_INTERVAL_REASON,
     },
     {
         "key": "dev.n_raw_questions",
-        "artefact": "artifacts/v2_00_protocol/protocol_build_summary.json",
+        "artefact": _PROTOCOL_SUMMARY,
         "pointer": "/dev/n_raw_questions",
         "quantity": "raw development questions before the vocabulary gate",
+        "quantity_kind": "STRUCTURAL_COUNT",
         "family": "v2_00",
         "story_stage": "S01_BASELINE_REPRESENTATION",
         "scientific_role": "SUPPORTING",
+        "metric_id": "structural_count_or_share",
+        "comparison_class": "DESCRIPTIVE_ONLY",
+        "analysis_role": "DIAGNOSTIC",
+        "split": "v2_dev_raw",
+        "training_scale": None,
+        "seed_set": None,
+        "n_questions": None,
+        "n_unique_images": None,
+        "counts_provenance": "NOT_APPLICABLE: this scalar IS a count",
+        "ci_type": STRUCTURAL_NO_INTERVAL_REASON,
     },
     {
         "key": "dev.n_images",
-        "artefact": "artifacts/v2_00_protocol/protocol_build_summary.json",
+        "artefact": _PROTOCOL_SUMMARY,
         "pointer": "/dev/n_images",
         "quantity": "development images in the image-disjoint partition",
+        "quantity_kind": "STRUCTURAL_COUNT",
         "family": "v2_00",
         "story_stage": "S01_BASELINE_REPRESENTATION",
         "scientific_role": "SUPPORTING",
+        "metric_id": "structural_count_or_share",
+        "comparison_class": "DESCRIPTIVE_ONLY",
+        "analysis_role": "DIAGNOSTIC",
+        "split": "v2_dev_raw",
+        "training_scale": None,
+        "seed_set": None,
+        "n_questions": None,
+        "n_unique_images": None,
+        "counts_provenance": "NOT_APPLICABLE: this scalar IS a count",
+        "ci_type": STRUCTURAL_NO_INTERVAL_REASON,
     },
     {
         "key": "train_40k.n_questions",
-        "artefact": "artifacts/v2_00_protocol/protocol_build_summary.json",
+        "artefact": _PROTOCOL_SUMMARY,
         "pointer": "/manifests/train_40k/n_questions",
         "quantity": "labelled training questions at the 40k scale",
+        "quantity_kind": "STRUCTURAL_COUNT",
         "family": "v2_00",
         "story_stage": "S05_TRAINING_SCALE",
         "scientific_role": "SUPPORTING",
+        "metric_id": "structural_count_or_share",
+        "comparison_class": "DESCRIPTIVE_ONLY",
+        "analysis_role": "DIAGNOSTIC",
+        "split": None,
+        "training_scale": "train_40k",
+        "seed_set": None,
+        "n_questions": None,
+        "n_unique_images": None,
+        "counts_provenance": "NOT_APPLICABLE: this scalar IS a count",
+        "ci_type": STRUCTURAL_NO_INTERVAL_REASON,
     },
     {
         "key": "train_100k.n_questions",
-        "artefact": "artifacts/v2_00_protocol/protocol_build_summary.json",
+        "artefact": _PROTOCOL_SUMMARY,
         "pointer": "/manifests/train_100k/n_questions",
         "quantity": "labelled training questions at the 100k scale",
+        "quantity_kind": "STRUCTURAL_COUNT",
         "family": "v2_00",
         "story_stage": "S05_TRAINING_SCALE",
         "scientific_role": "SUPPORTING",
+        "metric_id": "structural_count_or_share",
+        "comparison_class": "DESCRIPTIVE_ONLY",
+        "analysis_role": "DIAGNOSTIC",
+        "split": None,
+        "training_scale": "train_100k",
+        "seed_set": None,
+        "n_questions": None,
+        "n_unique_images": None,
+        "counts_provenance": "NOT_APPLICABLE: this scalar IS a count",
+        "ci_type": STRUCTURAL_NO_INTERVAL_REASON,
     },
     {
         "key": "train_250k.n_questions",
-        "artefact": "artifacts/v2_00_protocol/protocol_build_summary.json",
+        "artefact": _PROTOCOL_SUMMARY,
         "pointer": "/manifests/train_250k/n_questions",
         "quantity": "labelled training questions at the 250k scale",
+        "quantity_kind": "STRUCTURAL_COUNT",
         "family": "v2_00",
         "story_stage": "S05_TRAINING_SCALE",
         "scientific_role": "SUPPORTING",
+        "metric_id": "structural_count_or_share",
+        "comparison_class": "DESCRIPTIVE_ONLY",
+        "analysis_role": "DIAGNOSTIC",
+        "split": None,
+        "training_scale": "train_250k",
+        "seed_set": None,
+        "n_questions": None,
+        "n_unique_images": None,
+        "counts_provenance": "NOT_APPLICABLE: this scalar IS a count",
+        "ci_type": STRUCTURAL_NO_INTERVAL_REASON,
     },
-    # The 40k latent-query reasoner. The closure registry does not carry an
-    # overall 40k reasoner accuracy, because the closure reconstructed only
-    # the global-head families. These three values are read from the
-    # hash-pinned v3_01 artefact, whose accuracies the supersession map lists
-    # as still valid, and they are the only evidence that supports the 40k
-    # half of the reasoner claim. They carry no clustered interval.
+    # The 40k latent-query reasoner. The closure registry carries no overall
+    # 40k reasoner accuracy, because the closure reconstructed the global-head
+    # families only. These three values are read from the hash-pinned v3_01
+    # artefact, whose accuracies the supersession map lists as still valid,
+    # and they are the only evidence supporting the 40k half of the reasoner
+    # claim. They are development ACCURACIES under the V2-era closed-vocabulary
+    # scorer, not counted quantities, and they carry no clustered interval.
     {
         "key": "v3_01.reasoner.train_40k.seed_mean",
         "artefact": "results/experiments/v3_01_reasoner/results.json",
         "pointer": "/v3_01_reasoner/final/mean",
         "quantity": "mean development accuracy of the 40k latent-query "
-                    "reasoner across three training seeds",
+                    "reasoner across three independent training seeds",
+        "quantity_kind": "DEVELOPMENT_ACCURACY",
         "family": "v3_01",
         "story_stage": "S08_LATENT_REASONER",
         "scientific_role": "CORE",
+        "metric_id": "v2_closed_vocab_top1_index_match",
+        "comparison_class": "DESCRIPTIVE_ONLY",
+        "comparison_class_reason": "a single system's accuracy summary, not a "
+                                   "comparison between systems. The "
+                                   "system-level comparison is carried by the "
+                                   "reasoner-minus-fusion gap row.",
+        "analysis_role": "SECONDARY",
+        "split": "v2_dev",
+        "training_scale": "train_40k",
+        "seed_set": [0, 1, 2],
+        "n_questions": 7714,
+        "n_unique_images": 768,
+        "counts_provenance": V3_DEV_VIEW_COUNTS_PROVENANCE,
+        "ci_type": V3_01_NO_INTERVAL_REASON,
     },
     {
         "key": "v3_01.reasoner.train_40k.seed_sd",
         "artefact": "results/experiments/v3_01_reasoner/results.json",
         "pointer": "/v3_01_reasoner/final/std",
-        "quantity": "across-training-seed standard deviation of the 40k "
-                    "latent-query reasoner. NOT a confidence interval",
+        "quantity": "standard deviation of the 40k latent-query reasoner's "
+                    "development accuracy across three independent TRAINING "
+                    "seeds. This is training-run variability, NOT a confidence "
+                    "interval and NOT evaluation-sampling uncertainty",
+        "quantity_kind": "TRAINING_SEED_DISPERSION",
         "family": "v3_01",
         "story_stage": "S08_LATENT_REASONER",
         "scientific_role": "CORE",
+        "metric_id": "v2_closed_vocab_top1_index_match",
+        "comparison_class": "DESCRIPTIVE_ONLY",
+        "comparison_class_reason": "a dispersion summary for one system, not a "
+                                   "comparison between systems.",
+        "analysis_role": "SECONDARY",
+        "split": "v2_dev",
+        "training_scale": "train_40k",
+        "seed_set": [0, 1, 2],
+        "n_questions": 7714,
+        "n_unique_images": 768,
+        "counts_provenance": V3_DEV_VIEW_COUNTS_PROVENANCE,
+        "ci_type": V3_01_NO_INTERVAL_REASON,
     },
     {
         "key": "v3_01.reasoner_minus_fusion.train_40k.seed_mean",
         "artefact": "results/experiments/v3_01_reasoner/results.json",
         "pointer": "/v3_01_reasoner/gaps_same_seeds/reasoner_minus_fusion/"
                    "mean",
-        "quantity": "same-seed mean accuracy gap of the 40k reasoner over the "
-                    "global fusion head",
+        "quantity": "same-seed mean development accuracy gap of the 40k "
+                    "latent-query reasoner over the global fusion head",
+        "quantity_kind": "DEVELOPMENT_ACCURACY_CONTRAST",
         "family": "v3_01",
         "story_stage": "S08_LATENT_REASONER",
         "scientific_role": "CORE",
+        "metric_id": "v2_closed_vocab_top1_index_match",
+        "comparison_class": "SYSTEM_LEVEL_COMPARISON",
+        "comparison_class_reason": "this row IS a contrast between two whole "
+                                   "systems that differ in input granularity, "
+                                   "architecture and parameter count at once. "
+                                   "DESCRIPTIVE_ONLY would understate what the "
+                                   "quantity is and would drop the "
+                                   "no-single-component boundary that must "
+                                   "travel with it.",
+        "analysis_role": "SECONDARY",
+        "split": "v2_dev",
+        "training_scale": "train_40k",
+        "seed_set": [0, 1, 2],
+        "n_questions": 7714,
+        "n_unique_images": 768,
+        "counts_provenance": V3_DEV_VIEW_COUNTS_PROVENANCE,
+        "ci_type": V3_01_NO_INTERVAL_REASON,
     },
 ]
 
