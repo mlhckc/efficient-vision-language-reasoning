@@ -1,0 +1,1257 @@
+{
+ "appendix_figures": [
+  "VE0-FIG-A1",
+  "VE0-FIG-A2",
+  "VE0-FIG-A3",
+  "VE0-FIG-A4",
+  "VE0-FIG-A5",
+  "VE0-FIG-A6"
+ ],
+ "clean_test_accessed": false,
+ "content_sha256": "a498dec4f37a50188727aebb12da236a65f6ebf30832a7d0b4bd99e1de10f480",
+ "figure_count": 16,
+ "figures": [
+  {
+   "caption_claim": "The systems compared in this dissertation share a frozen encoder and differ in how the question reaches the answer.",
+   "carries_v2_07_limitation": false,
+   "chart_type": "block schematic with an experiment-family legend",
+   "consumes_evidence": [],
+   "consumes_evidence_count": 0,
+   "decision_note": "Kept in main text. Without it a reader cannot tell which experiment a later number belongs to.",
+   "dissertation_section": [
+    "R0_METHOD_OVERVIEW"
+   ],
+   "evidence_free_schematic": true,
+   "evidence_ids": [],
+   "figure_id": "VE0-FIG-01",
+   "grouping": "by experiment family, with frozen and trainable parts visually distinguished",
+   "likely_viva_question": "Is this one system or several?",
+   "mandatory_caption_caveat": "The branches are alternative experimental configurations, not one deployed architecture. Only the parts drawn as trainable were ever trained; every encoder, language model and compact VLM stayed frozen throughout.",
+   "metric_ids": [],
+   "placement": "MAIN_TEXT",
+   "scientific_question": "Which systems were built, which frozen parts they share, and which experiment family each branch belongs to.",
+   "selectors": [],
+   "source_provenance": [],
+   "superseded_evidence_consumed": [],
+   "supervisor_slide": "SLIDE-02-WHAT-WAS-BUILT",
+   "uncertainty_shown": "NOT_APPLICABLE",
+   "viva_answer": "Several. Each branch is a separate controlled configuration sharing the frozen CLIP image path; the diagram exists so a reader does not read them as one pipeline.",
+   "working_title": "System family and evidence chain",
+   "x_axis": "NOT_APPLICABLE",
+   "y_axis": "NOT_APPLICABLE"
+  },
+  {
+   "caption_claim": "At 40k the fusion features give a real gain over concatenation, and capacity explains part of it: at matched budgets the gain shrinks and one of the two matched contrasts no longer excludes zero.",
+   "carries_v2_07_limitation": false,
+   "chart_type": "two panels: (a) accuracy per system with clustered intervals, (b) contrast forest of the four capacity-matched effects plus the unmatched one",
+   "consumes_evidence": [
+    "EV-ARM-v2_02.concat.train_40k",
+    "EV-ARM-v2_02.fusion.train_40k",
+    "EV-ARM-v2_02.image_only.train_40k",
+    "EV-ARM-v2_02.question_only.train_40k",
+    "EV-ARM-v2_03.concat_wide.train_40k",
+    "EV-ARM-v2_03.fusion_narrow.train_40k",
+    "EV-CON-v2_02.concat_minus_question_only.train_40k",
+    "EV-CON-v2_02.fusion_minus_concat.train_40k",
+    "EV-CON-v2_03.concat_wide_minus_concat.train_40k",
+    "EV-CON-v2_03.fusion_minus_concat_wide.train_40k",
+    "EV-CON-v2_03.fusion_minus_fusion_narrow.train_40k",
+    "EV-CON-v2_03.fusion_narrow_minus_concat.train_40k"
+   ],
+   "consumes_evidence_count": 12,
+   "decision_note": "Main text. This is the figure that both makes and bounds the headline low-data claim.",
+   "dissertation_section": [
+    "R1_BASELINES_AND_FUSION"
+   ],
+   "evidence_free_schematic": false,
+   "evidence_ids": [
+    "EV-CON-v2_02.fusion_minus_concat.train_40k",
+    "EV-CON-v2_02.concat_minus_question_only.train_40k",
+    "EV-CON-v2_03.concat_wide_minus_concat.train_40k",
+    "EV-CON-v2_03.fusion_narrow_minus_concat.train_40k",
+    "EV-CON-v2_03.fusion_minus_concat_wide.train_40k",
+    "EV-CON-v2_03.fusion_minus_fusion_narrow.train_40k"
+   ],
+   "figure_id": "VE0-FIG-02",
+   "grouping": "panel (b) marks each contrast CLEAN_PAIRED_CONTROL or CAPACITY_CONFOUNDED",
+   "likely_viva_question": "Is the fusion gain architectural or just more parameters?",
+   "mandatory_caption_caveat": "The unmatched v2_02 contrast is capacity-confounded (1,100,388 against 576,100 trainable parameters). Only the v2_03 matched pairs isolate the feature effect. Development set, train_40k, five training seeds. Intervals are image-clustered evaluation-sampling intervals conditioning on the fixed trained seed set.",
+   "metric_ids": [
+    "v2_closed_vocab_top1_index_match"
+   ],
+   "placement": "MAIN_TEXT",
+   "scientific_question": "Does explicit multimodal interaction beat concatenation at 40k, and how much of that survives at a matched parameter budget?",
+   "selectors": [
+    {
+     "evidence_class": "ARM",
+     "experiment_family": [
+      "v2_02",
+      "v2_03"
+     ],
+     "training_scale": [
+      "train_40k"
+     ]
+    }
+   ],
+   "source_provenance": [
+    {
+     "path": "results/closure/reconstructed_statistics.json",
+     "sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097"
+    }
+   ],
+   "superseded_evidence_consumed": [],
+   "supervisor_slide": "SLIDE-04-FUSION-HELPS-BUT",
+   "uncertainty_shown": "CLUSTERED_CI95",
+   "viva_answer": "Partly architectural at most. At the 576k budget the feature effect survives, +0.00944 excluding zero; at the 1.1M budget fusion minus concat_wide is +0.00578 and includes zero. The evidence supports 'capacity explains part, not necessarily all' and nothing stronger.",
+   "working_title": "Low-data accuracy ladder with capacity-matched controls",
+   "x_axis": "(a) development accuracy; (b) effect in accuracy points, zero line drawn",
+   "y_axis": "system, ordered question_only, image_only, concat, concat_wide, fusion_narrow, fusion"
+  },
+  {
+   "caption_claim": "Accuracy rises with labelled training scale for every head, and the gap between fusion and concatenation narrows as the training set grows.",
+   "carries_v2_07_limitation": true,
+   "chart_type": "line plot, one line per system, per-seed points overplotted",
+   "consumes_evidence": [
+    "EV-DSC-train_100k.n_questions",
+    "EV-DSC-train_250k.n_questions",
+    "EV-DSC-train_40k.n_questions",
+    "EV-SEED-v2_07.concat.train_100k",
+    "EV-SEED-v2_07.concat.train_250k",
+    "EV-SEED-v2_07.concat.train_40k",
+    "EV-SEED-v2_07.fusion.train_100k",
+    "EV-SEED-v2_07.fusion.train_250k",
+    "EV-SEED-v2_07.fusion.train_40k",
+    "EV-SEED-v2_07.product_576k.train_100k",
+    "EV-SEED-v2_07.product_576k.train_250k",
+    "EV-SEED-v2_07.product_576k.train_40k",
+    "EV-SEED-v2_07.question_only.train_100k",
+    "EV-SEED-v2_07.question_only.train_250k",
+    "EV-SEED-v2_07.question_only.train_40k"
+   ],
+   "consumes_evidence_count": 15,
+   "decision_note": "Main text, with the limitation in the caption rather than a footnote, because the missing interval is the single most likely thing an examiner will ask about.",
+   "dissertation_section": [
+    "R3_SCALING_BEHAVIOUR"
+   ],
+   "evidence_free_schematic": false,
+   "evidence_ids": [],
+   "figure_id": "VE0-FIG-03",
+   "grouping": "one line per system: question_only, concat, product_576k, fusion",
+   "likely_viva_question": "Why are there no confidence intervals here?",
+   "mandatory_caption_caveat": "v2_07 ACCEPTED DOCUMENTED LIMITATION. The error bars are the sample standard deviation across five training seeds (ddof=1); they are NOT confidence intervals. No image-clustered evaluation interval exists for this family: row-level reconstruction was attempted and stopped by a point-estimate reproduction mismatch, and one of forty cells differs from reconstruction by one numerically tied row. The 40k end of the narrowing is supported by the clustered evidence in Figure VE0-FIG-02; the 250k end is not.",
+   "metric_ids": [
+    "structural_count_or_share",
+    "v2_closed_vocab_top1_index_match"
+   ],
+   "placement": "MAIN_TEXT",
+   "scientific_question": "How do the baseline, concatenation and fusion heads move from 40k to 100k to 250k labelled questions?",
+   "selectors": [
+    {
+     "evidence_class": "SEED",
+     "experiment_family": [
+      "v2_07"
+     ]
+    },
+    {
+     "evidence_class": "DSC",
+     "source_key_in": [
+      "train_40k.n_questions",
+      "train_100k.n_questions",
+      "train_250k.n_questions"
+     ]
+    }
+   ],
+   "source_provenance": [
+    {
+     "path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+     "sha256": "cfe82a17f0353a9bb6f107f770e59b6b7321ff69ab8d31eda2f49f16d5976e62"
+    },
+    {
+     "path": "results/experiments/v2_07_scaling/results.json",
+     "sha256": "852206e1b0a404955ed66c5b56a3b9bd7215c15fb35b438dd703cc6c497b79fc"
+    }
+   ],
+   "superseded_evidence_consumed": [],
+   "supervisor_slide": "SLIDE-05-SCALE-CLOSES-THE-GAP",
+   "uncertainty_shown": "SEED_SD",
+   "viva_answer": "Because the family's row-level reconstruction was stopped by a one-row float32 argmax tie, and rescuing the 39 cells that passed after seeing which one failed would be outcome-conditioned selection. The seed spread is shown instead and labelled as such.",
+   "working_title": "Training-scale behaviour of the global heads",
+   "x_axis": "labelled training questions (40k, 100k, 250k), stated as a categorical axis, not a log scale, because there are three points",
+   "y_axis": "development accuracy"
+  },
+  {
+   "caption_claim": "A pooled deficit at four or more reasoning steps persists across both frozen encoders, across training scales and across head families.",
+   "carries_v2_07_limitation": false,
+   "chart_type": "two panels: (a) accuracy per step bucket per system, (b) pooled four-or-more-step deficit per system and scale with clustered intervals",
+   "consumes_evidence": [
+    "EV-DEF-e2.pooled_ge4_deficit.concat.train_250k",
+    "EV-DEF-e2.pooled_ge4_deficit.concat.train_40k",
+    "EV-DEF-e2.pooled_ge4_deficit.fusion.train_250k",
+    "EV-DEF-e2.pooled_ge4_deficit.fusion.train_40k",
+    "EV-DEF-e2.pooled_ge4_deficit.product.train_250k",
+    "EV-DEF-e2.pooled_ge4_deficit.product.train_40k",
+    "EV-DEF-e2.pooled_ge4_deficit.question_only.train_250k",
+    "EV-DEF-e2.pooled_ge4_deficit.question_only.train_40k",
+    "EV-DEF-v2_02.pooled_ge4_deficit.concat.train_40k",
+    "EV-DEF-v2_02.pooled_ge4_deficit.fusion.train_40k",
+    "EV-DEF-v2_02.pooled_ge4_deficit.question_only.train_40k",
+    "EV-DEF-v2_04.pooled_ge4_deficit.product_natural.train_40k",
+    "EV-SLC-v3_02a.concat.train_40k.steps-3.accuracy",
+    "EV-SLC-v3_02a.concat.train_40k.steps-4.accuracy",
+    "EV-SLC-v3_02a.concat.train_40k.steps-ge4_combined.deficit",
+    "EV-SLC-v3_02a.concat.train_40k.steps-ge5.accuracy",
+    "EV-SLC-v3_02a.concat.train_40k.steps-le2.accuracy",
+    "EV-SLC-v3_02a.direct_linear.train_40k.steps-3.accuracy",
+    "EV-SLC-v3_02a.direct_linear.train_40k.steps-4.accuracy",
+    "EV-SLC-v3_02a.direct_linear.train_40k.steps-ge4_combined.deficit",
+    "EV-SLC-v3_02a.direct_linear.train_40k.steps-ge5.accuracy",
+    "EV-SLC-v3_02a.direct_linear.train_40k.steps-le2.accuracy",
+    "EV-SLC-v3_02a.fusion.train_40k.steps-3.accuracy",
+    "EV-SLC-v3_02a.fusion.train_40k.steps-4.accuracy",
+    "EV-SLC-v3_02a.fusion.train_40k.steps-ge4_combined.deficit",
+    "EV-SLC-v3_02a.fusion.train_40k.steps-ge5.accuracy",
+    "EV-SLC-v3_02a.fusion.train_40k.steps-le2.accuracy",
+    "EV-SLC-v3_02a.meanpatch_concat.train_40k.steps-3.accuracy",
+    "EV-SLC-v3_02a.meanpatch_concat.train_40k.steps-4.accuracy",
+    "EV-SLC-v3_02a.meanpatch_concat.train_40k.steps-ge4_combined.deficit",
+    "EV-SLC-v3_02a.meanpatch_concat.train_40k.steps-ge5.accuracy",
+    "EV-SLC-v3_02a.meanpatch_concat.train_40k.steps-le2.accuracy",
+    "EV-SLC-v3_02a.product_576k.train_40k.steps-3.accuracy",
+    "EV-SLC-v3_02a.product_576k.train_40k.steps-4.accuracy",
+    "EV-SLC-v3_02a.product_576k.train_40k.steps-ge4_combined.deficit",
+    "EV-SLC-v3_02a.product_576k.train_40k.steps-ge5.accuracy",
+    "EV-SLC-v3_02a.product_576k.train_40k.steps-le2.accuracy",
+    "EV-SLC-v3_02a.question_only.train_40k.steps-3.accuracy",
+    "EV-SLC-v3_02a.question_only.train_40k.steps-4.accuracy",
+    "EV-SLC-v3_02a.question_only.train_40k.steps-ge4_combined.deficit",
+    "EV-SLC-v3_02a.question_only.train_40k.steps-ge5.accuracy",
+    "EV-SLC-v3_02a.question_only.train_40k.steps-le2.accuracy",
+    "EV-SLC-v3_02a.reasoner.train_40k.steps-3.accuracy",
+    "EV-SLC-v3_02a.reasoner.train_40k.steps-4.accuracy",
+    "EV-SLC-v3_02a.reasoner.train_40k.steps-ge4_combined.deficit",
+    "EV-SLC-v3_02a.reasoner.train_40k.steps-ge5.accuracy",
+    "EV-SLC-v3_02a.reasoner.train_40k.steps-le2.accuracy"
+   ],
+   "consumes_evidence_count": 47,
+   "decision_note": "Main text. It is the project's clearest negative finding and negative findings are shown, not omitted.",
+   "dissertation_section": [
+    "R4_DEPTH_AND_RELIANCE"
+   ],
+   "evidence_free_schematic": false,
+   "evidence_ids": [],
+   "figure_id": "VE0-FIG-04",
+   "grouping": "by system; panel (b) groups by encoder and scale",
+   "likely_viva_question": "Does this show the models cannot compose?",
+   "mandatory_caption_caveat": "The deficit is measured against fixed v2_05b per-bucket priors and describes one system's step profile; it is not a contrast between systems and establishes no cause. Buckets are unequal and dependent, so every interval is clustered on the bucket's own represented development images; the per-bucket question and image counts must be printed. Step counts come from the GQA semantic program length, which is a proxy for reasoning depth, not a measure of reasoning.",
+   "metric_ids": [
+    "v2_closed_vocab_top1_index_match"
+   ],
+   "placement": "MAIN_TEXT",
+   "scientific_question": "Where does accuracy fall as the number of reasoning steps grows, and does any system in the set reduce the deficit?",
+   "selectors": [
+    {
+     "evidence_class": "SLC",
+     "experiment_family": [
+      "v3_02a"
+     ],
+     "source_key_contains": [
+      "steps:"
+     ]
+    },
+    {
+     "evidence_class": "DEF"
+    }
+   ],
+   "source_provenance": [
+    {
+     "path": "results/closure/reconstructed_statistics.json",
+     "sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097"
+    },
+    {
+     "path": "results/experiments/v3_02a_refs/step_statistics.json",
+     "sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3"
+    }
+   ],
+   "superseded_evidence_consumed": [],
+   "supervisor_slide": "SLIDE-06-MULTI-STEP-IS-THE-WALL",
+   "uncertainty_shown": "CLUSTERED_CI95",
+   "viva_answer": "No. It shows accuracy degrades with program length relative to fixed priors, on this split, under this closed answer set. Compositional generalisation was never tested out of distribution.",
+   "working_title": "Accuracy by reasoning depth and the pooled four-or-more-step deficit",
+   "x_axis": "(a) step bucket, ordered <=2, 3, 4, >=5; (b) deficit in accuracy points",
+   "y_axis": "(a) development accuracy; (b) system and scale"
+  },
+  {
+   "caption_claim": "The multimodal heads depend on the correct image: replacing it with another development image or with zeros costs accuracy, and the question-only control is provably unaffected.",
+   "carries_v2_07_limitation": false,
+   "chart_type": "grouped horizontal bars, one pair per system (shuffled, zeroed), with clustered intervals",
+   "consumes_evidence": [
+    "EV-CON-v2_06.concat.drop_shuffled.train_40k",
+    "EV-CON-v2_06.concat.drop_zeroed.train_40k",
+    "EV-CON-v2_06.fusion.drop_shuffled.train_40k",
+    "EV-CON-v2_06.fusion.drop_zeroed.train_40k",
+    "EV-CON-v2_06.image_only.drop_shuffled.train_40k",
+    "EV-CON-v2_06.image_only.drop_zeroed.train_40k",
+    "EV-CON-v2_06.product_576k.drop_shuffled.train_40k",
+    "EV-CON-v2_06.product_576k.drop_zeroed.train_40k",
+    "EV-CON-v2_06.question_only.drop_shuffled.train_40k",
+    "EV-CON-v2_06.question_only.drop_zeroed.train_40k"
+   ],
+   "consumes_evidence_count": 10,
+   "decision_note": "Main text. The zero-by-construction control is what makes the other bars interpretable and must be shown with them.",
+   "dissertation_section": [
+    "R4_DEPTH_AND_RELIANCE"
+   ],
+   "evidence_free_schematic": false,
+   "evidence_ids": [],
+   "figure_id": "VE0-FIG-05",
+   "grouping": "by intervention",
+   "likely_viva_question": "Does a large drop mean the model is genuinely grounded?",
+   "mandatory_caption_caveat": "A drop under a wrong or removed image demonstrates reliance on the image. It is NOT proof of robust visual reasoning, of grounding or of compositional understanding. The question-only drop is exactly zero by construction and is a control, not a result.",
+   "metric_ids": [
+    "v2_closed_vocab_top1_index_match"
+   ],
+   "placement": "MAIN_TEXT",
+   "scientific_question": "How much accuracy does each system lose when the image is replaced by another development image or by zeros?",
+   "selectors": [
+    {
+     "evidence_class": "CON",
+     "experiment_family": [
+      "v2_06"
+     ]
+    }
+   ],
+   "source_provenance": [
+    {
+     "path": "results/closure/reconstructed_statistics.json",
+     "sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097"
+    }
+   ],
+   "superseded_evidence_consumed": [],
+   "supervisor_slide": "SLIDE-07-THE-IMAGE-MATTERS",
+   "uncertainty_shown": "CLUSTERED_CI95",
+   "viva_answer": "No. It means the prediction changes when the image changes. Reliance is necessary for grounding but not sufficient, and this experiment cannot distinguish grounding from image-conditioned shortcut use.",
+   "working_title": "Visual reliance under wrong and removed images",
+   "x_axis": "accuracy drop in points, zero line drawn",
+   "y_axis": "system, with question_only drawn last and labelled a control"
+  },
+  {
+   "caption_claim": "The 21.1M-parameter latent-query reasoner does not materially outperform the 1.1M global fusion head at 40k, and no scale shows it reducing the four-or-more-step deficit.",
+   "carries_v2_07_limitation": false,
+   "chart_type": "two panels: (a) reasoner and fusion accuracy against training scale, (b) forest of the three paired reasoner-minus-fusion deficit differences",
+   "consumes_evidence": [
+    "EV-CON-v3_02a.reasoner_minus_fusion_deficit.train_40k",
+    "EV-CON-v3_03.reasoner_minus_fusion_deficit.train_100k",
+    "EV-CON-v3_03.reasoner_minus_fusion_deficit.train_250k",
+    "EV-DSC-v3_01.reasoner.train_40k.seed_mean",
+    "EV-DSC-v3_01.reasoner.train_40k.seed_sd",
+    "EV-DSC-v3_01.reasoner_minus_fusion.train_40k.seed_mean",
+    "EV-SEED-v3_03.reasoner.train_100k",
+    "EV-SEED-v3_03.reasoner.train_250k"
+   ],
+   "consumes_evidence_count": 8,
+   "decision_note": "Main text, and deliberately separated from the representation-quality figure. Pairing V3 with E2 in one panel would imply a shared axis between a system-level comparison and a representation-confounded one.",
+   "dissertation_section": [
+    "R5_LATENT_REASONING_AND_REPRESENTATION"
+   ],
+   "evidence_free_schematic": false,
+   "evidence_ids": [
+    "EV-CON-v3_02a.reasoner_minus_fusion_deficit.train_40k",
+    "EV-CON-v3_03.reasoner_minus_fusion_deficit.train_100k",
+    "EV-CON-v3_03.reasoner_minus_fusion_deficit.train_250k",
+    "EV-DSC-v3_01.reasoner.train_40k.seed_mean",
+    "EV-DSC-v3_01.reasoner.train_40k.seed_sd",
+    "EV-DSC-v3_01.reasoner_minus_fusion.train_40k.seed_mean"
+   ],
+   "figure_id": "VE0-FIG-06",
+   "grouping": "panel (a) annotates each system's trainable parameter count, because the size difference is the point",
+   "likely_viva_question": "So token-level access does not help?",
+   "mandatory_caption_caveat": "A system-level comparison: input granularity, architecture and parameter count change together, so token-level access is not isolated as a cause. All three deficit-difference intervals include zero, which is an absence of a detected difference, not evidence of equivalence. The 40k accuracy point and its gap come from v3_01 and carry a seed spread only, with no clustered interval. The fusion side at 100k and 250k comes from v2_07 and carries its documented limitation.",
+   "metric_ids": [
+    "structural_count_or_share",
+    "v2_closed_vocab_top1_index_match"
+   ],
+   "placement": "MAIN_TEXT",
+   "scientific_question": "Does a question-conditioned latent-query reasoner over token-level visual features beat the far smaller global-embedding fusion head, and does it reduce the multi-step deficit?",
+   "selectors": [
+    {
+     "evidence_class": "SEED",
+     "experiment_family": [
+      "v3_03"
+     ]
+    }
+   ],
+   "source_provenance": [
+    {
+     "path": "results/experiments/v3_01_reasoner/results.json",
+     "sha256": "472fe626775d755e1a24ae3da814466773b3e067537201cb88351ea27d8abfd9"
+    },
+    {
+     "path": "results/experiments/v3_02a_refs/step_statistics.json",
+     "sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3"
+    },
+    {
+     "path": "results/experiments/v3_03_scaling/results.json",
+     "sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339"
+    }
+   ],
+   "superseded_evidence_consumed": [],
+   "supervisor_slide": "SLIDE-08-BIGGER-REASONER-DID-NOT-PAY",
+   "uncertainty_shown": "CLUSTERED_CI95",
+   "viva_answer": "Not in this configuration. Three things changed at once, so the honest statement is about the systems as built, not about token access in isolation.",
+   "working_title": "Token-level latent reasoning against the global heads",
+   "x_axis": "(a) labelled training questions; (b) deficit difference in accuracy points, zero line drawn",
+   "y_axis": "(a) development accuracy; (b) training scale"
+  },
+  {
+   "caption_claim": "Under the tested 40k controlled comparison, the stronger frozen representation improves the multimodal systems: the three multimodal gains exclude zero while the question-only gain does not, supporting representation quality as an important factor acting mainly through the image path.",
+   "carries_v2_07_limitation": false,
+   "chart_type": "forest plot, one row per head, ordered so the question_only row is visually last",
+   "consumes_evidence": [
+    "EV-CON-e2.siglip_minus_clip_concat.train_40k",
+    "EV-CON-e2.siglip_minus_clip_fusion.train_40k",
+    "EV-CON-e2.siglip_minus_clip_product.train_40k",
+    "EV-CON-e2.siglip_minus_clip_question_only.train_40k"
+   ],
+   "consumes_evidence_count": 4,
+   "decision_note": "Main text as its own figure. The question-only row is what licenses 'mainly through the image path' and must be visible.",
+   "dissertation_section": [
+    "R5_LATENT_REASONING_AND_REPRESENTATION"
+   ],
+   "evidence_free_schematic": false,
+   "evidence_ids": [
+    "EV-CON-e2.siglip_minus_clip_concat.train_40k",
+    "EV-CON-e2.siglip_minus_clip_fusion.train_40k",
+    "EV-CON-e2.siglip_minus_clip_product.train_40k",
+    "EV-CON-e2.siglip_minus_clip_question_only.train_40k"
+   ],
+   "figure_id": "VE0-FIG-07",
+   "grouping": "multimodal heads grouped and separated from the question-only head",
+   "likely_viva_question": "Is the frozen representation the bottleneck?",
+   "mandatory_caption_caveat": "Representation quality is NOT isolated: encoder, embedding width (512 against 768) and head input width move together. This does not show representation quality is the sole or even the main bottleneck. The development rows are identical on both sides so the interval is a valid evaluation-sampling interval, but the training streams are not paired and the seed label does not pair two runs. No clustered contrast exists at 250k, because the CLIP partner is the stopped v2_07 family; the 250k direction is reported from stored per-seed means in Table VE0-TAB-A3.",
+   "metric_ids": [
+    "v2_closed_vocab_top1_index_match"
+   ],
+   "placement": "MAIN_TEXT",
+   "scientific_question": "What does a stronger frozen dual encoder change, and does it change the image path or the question path?",
+   "selectors": [],
+   "source_provenance": [
+    {
+     "path": "results/closure/reconstructed_statistics.json",
+     "sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097"
+    }
+   ],
+   "superseded_evidence_consumed": [],
+   "supervisor_slide": "SLIDE-09-REPRESENTATION-QUALITY",
+   "uncertainty_shown": "CLUSTERED_CI95",
+   "viva_answer": "It is an important factor, and the effect is concentrated on the image path. It is not shown to be the sole or main bottleneck, because the encoder and two widths moved together in the same swap.",
+   "working_title": "Representation-quality sensitivity: SigLIP against CLIP at 40k",
+   "x_axis": "SigLIP minus CLIP accuracy difference, zero line drawn",
+   "y_axis": "head"
+  },
+  {
+   "caption_claim": "Frozen pretraining helps on the question side at both scales, while no reliable positive pretrained-over-random advantage is detected for either tested answer-side readout.",
+   "carries_v2_07_limitation": false,
+   "chart_type": "forest plot in three labelled blocks: question side 135M, answer side 135M, answer side 360M",
+   "consumes_evidence": [
+    "EV-CON-E10.difference_in_differences",
+    "EV-CON-E10.pretraining_effect.train_250k",
+    "EV-CON-E10.pretraining_effect.train_40k",
+    "EV-CON-E8A.A1_minus_A1r.train_250k",
+    "EV-CON-E8A.A1_minus_A1r.train_40k",
+    "EV-CON-E8B.B3_-_B2.train_250k",
+    "EV-CON-E8B.B3_-_B2.train_40k"
+   ],
+   "consumes_evidence_count": 7,
+   "decision_note": "Main text. Three families on one forest is justified because all three share the pinned G21 metric, the same development rows and the same effect orientation.",
+   "dissertation_section": [
+    "R6_QUESTION_SIDE_SLM",
+    "R7_ANSWER_SIDE_AND_CAPACITY"
+   ],
+   "evidence_free_schematic": false,
+   "evidence_ids": [
+    "EV-CON-E8A.A1_minus_A1r.train_40k",
+    "EV-CON-E8A.A1_minus_A1r.train_250k",
+    "EV-CON-E8B.B3_-_B2.train_40k",
+    "EV-CON-E8B.B3_-_B2.train_250k",
+    "EV-CON-E10.pretraining_effect.train_40k",
+    "EV-CON-E10.pretraining_effect.train_250k",
+    "EV-CON-E10.difference_in_differences"
+   ],
+   "figure_id": "VE0-FIG-08",
+   "grouping": "by interface side and language-model size; every row states its reference condition and its comparison class",
+   "likely_viva_question": "Does this mean pretraining does not matter for the answer side?",
+   "mandatory_caption_caveat": "Every row is pretrained minus its architecture-matched random control at the same model size; a random 135M model is never the control for a pretrained 360M model. An interval that contains zero is an absence of a detected effect and establishes NEITHER equivalence NOR the absence of an effect. E10 does not reproduce E8B's directional negative 40k result. The 135M to 360M step is whole-system capacity sensitivity, not an isolated causal language-model-size effect: trainable capacity moves too, 21,343,808 to 21,540,800 parameters. E8B B3 at 40k has a seed sd of 0.02795 and its per-seed values must be shown beside this figure. Checkpoint selection differs: E8A selects the best development epoch, E8B and E10 use the frozen fixed-22 rule.",
+   "metric_ids": [
+    "g21_pinned_normalised_exact_match"
+   ],
+   "placement": "MAIN_TEXT",
+   "scientific_question": "Does frozen pretraining help, and does the answer depend on which side of the interface the language model sits?",
+   "selectors": [],
+   "source_provenance": [
+    {
+     "path": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
+     "sha256": "37ffdcd09aa2bcd306ca9b54229a1d0d17ff203b6b0900e09e5f876ad1ed0748"
+    },
+    {
+     "path": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
+     "sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562"
+    },
+    {
+     "path": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+     "sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138"
+    }
+   ],
+   "superseded_evidence_consumed": [],
+   "supervisor_slide": "SLIDE-10-PRETRAINING-IS-INTERFACE-DEPENDENT",
+   "uncertainty_shown": "CLUSTERED_CI95",
+   "viva_answer": "No. It means no reliable positive advantage was detected for these two answer-side interfaces at these scales. The intervals contain zero, which does not establish equivalence or absence, and the finding does not generalise to other interfaces.",
+   "working_title": "Frozen small-language-model pretraining, question side and answer side",
+   "x_axis": "pretrained minus architecture-matched random, in accuracy points, zero line drawn",
+   "y_axis": "block and training scale"
+  },
+  {
+   "caption_claim": "A small global-embedding head reaches comparable accuracy to much larger systems at a small fraction of the measured end-to-end serial latency.",
+   "carries_v2_07_limitation": false,
+   "chart_type": "two side-by-side scatter panels, one per measurement node, never one merged frontier",
+   "consumes_evidence": [
+    "EV-EFF-E7b.concat",
+    "EV-EFF-E7b.e8a_a0p",
+    "EV-EFF-E7b.e8a_a1",
+    "EV-EFF-E7b.fusion",
+    "EV-EFF-E7b.question_only",
+    "EV-EFF-E7b.reasoner",
+    "EV-EFF-E7b.siglip_fusion",
+    "EV-EFF-E7b.vocab1000_product",
+    "EV-EFF-E9.e8b_B1",
+    "EV-EFF-E9.e8b_B2_R2",
+    "EV-EFF-E9.e8b_B2_R3",
+    "EV-EFF-E9.e8b_B3_R2",
+    "EV-EFF-E9.e8b_B3_R3",
+    "EV-EFF-E9.e9_256m_constrained",
+    "EV-EFF-E9.e9_256m_open",
+    "EV-EFF-E9.e9_500m_constrained",
+    "EV-EFF-E9.e9_500m_open",
+    "EV-EFF-E9.fusion",
+    "EV-EFF-E9.vocab1000_product"
+   ],
+   "consumes_evidence_count": 19,
+   "decision_note": "Main text, two panels. A single merged frontier is prohibited by claim C17.",
+   "dissertation_section": [
+    "R8_COMPUTATIONAL_EFFICIENCY"
+   ],
+   "evidence_free_schematic": false,
+   "evidence_ids": [],
+   "figure_id": "VE0-FIG-09",
+   "grouping": "panel (a) E7b on otter155, panel (b) E9 on otter159; each panel carries its own node label and its own frontier",
+   "likely_viva_question": "Why not one Pareto plot?",
+   "mandatory_caption_caveat": "COMPUTATIONAL efficiency only, measured as latency. No power or energy measurement exists anywhere in this project, so no energy-efficiency claim is made. The two panels are two separate frontiers on two different nodes and are NEVER merged: the fusion bridge control failed its pre-registered 10 per cent tolerance at -18.69 per cent and no adjustment factor is applied. Only END_TO_END_SERIAL rows appear; cached and head-only figures are never plotted here. E7a's additive sums and the Pareto fronts built on them are superseded. E9 is contextual positioning, not a fair-protocol superiority claim, and E10's B4/B4r have no timing evidence of any kind.",
+   "metric_ids": [
+    "warm_median_serial_latency_ms"
+   ],
+   "placement": "MAIN_TEXT",
+   "scientific_question": "What does each system cost per query, and which systems are not dominated?",
+   "selectors": [
+    {
+     "evidence_class": "EFF",
+     "timing_kind": [
+      "END_TO_END_SERIAL"
+     ]
+    }
+   ],
+   "source_provenance": [
+    {
+     "path": "results/experiments/e7b_serial_efficiency/e7b_results.json",
+     "sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4"
+    },
+    {
+     "path": "results/experiments/e9_compact_vlm/e9_results.json",
+     "sha256": "5d42ae9344fa9d7bcd48589645d62b4d0c20db9a3d9d03288bbddd6832ae2caa"
+    }
+   ],
+   "superseded_evidence_consumed": [],
+   "supervisor_slide": "SLIDE-11-COST-PER-QUERY",
+   "uncertainty_shown": "NONE_MEASURED_MEDIAN",
+   "viva_answer": "Because the two measurement nodes disagree by 18.7 per cent on the same control system, which is a hardware difference, not a system difference. Merging them would attribute a node effect to a model.",
+   "working_title": "Accuracy against measured end-to-end serial latency, by measurement node",
+   "x_axis": "warm median serial latency, milliseconds, batch 1, log scale permitted and labelled",
+   "y_axis": "accuracy on the denominator stated per point"
+  },
+  {
+   "caption_claim": "Examples selected by a frozen deterministic rule, not chosen for appearance.",
+   "carries_v2_07_limitation": false,
+   "chart_type": "image gallery: image, question, gold answer, each compared system's prediction, correctness marks",
+   "consumes_evidence": [
+    "EV-DSC-dev.n_images",
+    "EV-DSC-dev.n_questions_in_vocabulary"
+   ],
+   "consumes_evidence_count": 2,
+   "decision_note": "Main text but small. Populated in VE-2, not in VE-0.",
+   "dissertation_section": [
+    "R9_QUALITATIVE_AND_ERROR_ANALYSIS"
+   ],
+   "evidence_free_schematic": false,
+   "evidence_ids": [],
+   "figure_id": "VE0-FIG-10",
+   "grouping": "one row per selected example, grouped by selection category",
+   "likely_viva_question": "How did you choose these examples?",
+   "mandatory_caption_caveat": "Development examples only; the clean test is embargoed and unread. Every example is drawn by the deterministic rank defined in the VE-0 qualitative protocol, whose salt was frozen before any example was inspected. Illustrative only: n examples cannot support a quantitative claim, and no scene graph or reasoning chain is shown that is not present in the canonical evidence.",
+   "metric_ids": [
+    "structural_count_or_share"
+   ],
+   "placement": "MAIN_TEXT",
+   "populated_by": "VE-2",
+   "scientific_question": "What do agreements and disagreements between these systems look like on individual development questions?",
+   "selectors": [
+    {
+     "evidence_class": "DSC",
+     "source_key_in": [
+      "dev.n_questions_in_vocabulary",
+      "dev.n_images"
+     ]
+    }
+   ],
+   "source_provenance": [
+    {
+     "path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+     "sha256": "cfe82a17f0353a9bb6f107f770e59b6b7321ff69ab8d31eda2f49f16d5976e62"
+    }
+   ],
+   "superseded_evidence_consumed": [],
+   "supervisor_slide": "SLIDE-12-WHAT-FAILURE-LOOKS-LIKE",
+   "uncertainty_shown": "NOT_APPLICABLE",
+   "viva_answer": "By a SHA-256 rank over a salt frozen before any example was seen, taking the lowest ranks in each pre-declared category. Skips are recorded with a reason; nothing was substituted for looking better.",
+   "working_title": "Qualitative development examples",
+   "x_axis": "NOT_APPLICABLE",
+   "y_axis": "NOT_APPLICABLE"
+  },
+  {
+   "caption_claim": "Either interaction term alone recovers most of the fusion gain at an equal parameter budget, and the two terms behave alike.",
+   "carries_v2_07_limitation": false,
+   "chart_type": "forest plot of all nine published ablation gaps",
+   "consumes_evidence": [
+    "EV-CON-v2_04.difference_576k_minus_concat.train_40k",
+    "EV-CON-v2_04.difference_natural_minus_concat.train_40k",
+    "EV-CON-v2_04.fusion_minus_difference_natural.train_40k",
+    "EV-CON-v2_04.fusion_minus_product_natural.train_40k",
+    "EV-CON-v2_04.fusion_narrow_minus_difference_576k.train_40k",
+    "EV-CON-v2_04.fusion_narrow_minus_product_576k.train_40k",
+    "EV-CON-v2_04.product_576k_minus_concat.train_40k",
+    "EV-CON-v2_04.product_576k_minus_difference_576k.train_40k",
+    "EV-CON-v2_04.product_natural_minus_concat.train_40k"
+   ],
+   "consumes_evidence_count": 9,
+   "decision_note": "Moved out of the main text: its message refines VE0-FIG-02, and a second 40k bar chart in the main text would be redundant. The main-text carrier is Table VE0-TAB-02.",
+   "dissertation_section": [
+    "R2_CAPACITY_AND_FEATURES"
+   ],
+   "evidence_free_schematic": false,
+   "evidence_ids": [],
+   "figure_id": "VE0-FIG-A1",
+   "grouping": "matched-budget contrasts separated from natural-width contrasts",
+   "likely_viva_question": "Did you pick the ablation that worked?",
+   "mandatory_caption_caveat": "Redundancy is inferred from the two terms performing alike at matched capacity, not from a mechanism. The natural-width contrasts are capacity-confounded. Development set, train_40k, five training seeds. The grid is complete: all nine published gaps are shown, including the four whose intervals include zero.",
+   "metric_ids": [
+    "v2_closed_vocab_top1_index_match"
+   ],
+   "placement": "APPENDIX",
+   "scientific_question": "Which interaction term carries the fusion gain, and are the product and absolute difference terms redundant?",
+   "selectors": [
+    {
+     "evidence_class": "CON",
+     "experiment_family": [
+      "v2_04"
+     ]
+    }
+   ],
+   "source_provenance": [
+    {
+     "path": "results/closure/reconstructed_statistics.json",
+     "sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097"
+    }
+   ],
+   "superseded_evidence_consumed": [],
+   "supervisor_slide": "NOT_PRESENTED",
+   "uncertainty_shown": "CLUSTERED_CI95",
+   "viva_answer": "No. The grid is complete and all nine gaps are reported, four of them including zero.",
+   "working_title": "Interaction-feature decomposition at matched capacity",
+   "x_axis": "effect in accuracy points, zero line drawn",
+   "y_axis": "contrast"
+  },
+  {
+   "caption_claim": "Most systems are seed-stable; two rows are not, and are named.",
+   "carries_v2_07_limitation": true,
+   "chart_type": "dot plot, one dot per training seed, mean marked",
+   "consumes_evidence": [
+    "EV-SEED-E10.B4.train_250k",
+    "EV-SEED-E10.B4.train_40k",
+    "EV-SEED-E10.B4r.train_250k",
+    "EV-SEED-E10.B4r.train_40k",
+    "EV-SEED-E2.concat.train_250k",
+    "EV-SEED-E2.concat.train_40k",
+    "EV-SEED-E2.fusion.train_250k",
+    "EV-SEED-E2.fusion.train_40k",
+    "EV-SEED-E2.product.train_250k",
+    "EV-SEED-E2.product.train_40k",
+    "EV-SEED-E2.question_only.train_250k",
+    "EV-SEED-E2.question_only.train_40k",
+    "EV-SEED-E3.concat.train_250k",
+    "EV-SEED-E3.concat.train_40k",
+    "EV-SEED-E3.fusion.train_250k",
+    "EV-SEED-E3.fusion.train_40k",
+    "EV-SEED-E3.product.train_250k",
+    "EV-SEED-E3.product.train_40k",
+    "EV-SEED-E3.question_only.train_250k",
+    "EV-SEED-E3.question_only.train_40k",
+    "EV-SEED-E8A.A0p.train_250k",
+    "EV-SEED-E8A.A0p.train_40k",
+    "EV-SEED-E8A.A1.train_250k",
+    "EV-SEED-E8A.A1.train_40k",
+    "EV-SEED-E8A.A1r.train_250k",
+    "EV-SEED-E8A.A1r.train_40k",
+    "EV-SEED-E8B.B1.train_250k",
+    "EV-SEED-E8B.B1.train_40k",
+    "EV-SEED-E8B.B2.train_250k",
+    "EV-SEED-E8B.B2.train_40k",
+    "EV-SEED-E8B.B3.train_250k",
+    "EV-SEED-E8B.B3.train_40k",
+    "EV-SEED-v2_02.concat.train_40k",
+    "EV-SEED-v2_02.fusion.train_40k",
+    "EV-SEED-v2_02.image_only.train_40k",
+    "EV-SEED-v2_02.question_only.train_40k",
+    "EV-SEED-v2_03.concat_wide.train_40k",
+    "EV-SEED-v2_03.fusion_narrow.train_40k",
+    "EV-SEED-v2_04.difference_576k.train_40k",
+    "EV-SEED-v2_04.difference_natural.train_40k",
+    "EV-SEED-v2_04.product_576k.train_40k",
+    "EV-SEED-v2_04.product_natural.train_40k",
+    "EV-SEED-v2_06.concat.shuffled.train_40k",
+    "EV-SEED-v2_06.concat.zeroed.train_40k",
+    "EV-SEED-v2_06.fusion.shuffled.train_40k",
+    "EV-SEED-v2_06.fusion.zeroed.train_40k",
+    "EV-SEED-v2_06.image_only.shuffled.train_40k",
+    "EV-SEED-v2_06.image_only.zeroed.train_40k",
+    "EV-SEED-v2_06.product_576k.shuffled.train_40k",
+    "EV-SEED-v2_06.product_576k.zeroed.train_40k",
+    "EV-SEED-v2_06.question_only.shuffled.train_40k",
+    "EV-SEED-v2_06.question_only.zeroed.train_40k",
+    "EV-SEED-v2_07.concat.train_100k",
+    "EV-SEED-v2_07.concat.train_250k",
+    "EV-SEED-v2_07.concat.train_40k",
+    "EV-SEED-v2_07.fusion.train_100k",
+    "EV-SEED-v2_07.fusion.train_250k",
+    "EV-SEED-v2_07.fusion.train_40k",
+    "EV-SEED-v2_07.product_576k.train_100k",
+    "EV-SEED-v2_07.product_576k.train_250k",
+    "EV-SEED-v2_07.product_576k.train_40k",
+    "EV-SEED-v2_07.question_only.train_100k",
+    "EV-SEED-v2_07.question_only.train_250k",
+    "EV-SEED-v2_07.question_only.train_40k",
+    "EV-SEED-v3_03.reasoner.train_100k",
+    "EV-SEED-v3_03.reasoner.train_250k"
+   ],
+   "consumes_evidence_count": 66,
+   "decision_note": "Appendix, with a backup slide. It is the honest answer to the most common examiner challenge about small differences.",
+   "dissertation_section": [
+    "R_APPENDIX_STATISTICS"
+   ],
+   "evidence_free_schematic": false,
+   "evidence_ids": [],
+   "figure_id": "VE0-FIG-A2",
+   "grouping": "by family; the two high-dispersion rows are highlighted and named",
+   "likely_viva_question": "How stable are these numbers?",
+   "mandatory_caption_caveat": "The spread here is across independent TRAINING seeds. It is a different quantity from the image-clustered evaluation-sampling intervals used elsewhere and the two are never interchanged. Seed sets differ by family (five seeds for V2, E2 and E3; three for V3, E8A, E8B and E10) and are never pooled across families. Two metrics appear in this figure and are shown as separate blocks, never on one shared scale.",
+   "metric_ids": [
+    "g21_pinned_normalised_exact_match",
+    "v2_closed_vocab_top1_index_match"
+   ],
+   "mixed_metric_justification": "Two metrics appear because the figure is about seed dispersion, not about accuracy level. They are drawn as separate blocks with the metric named on each, and no value is differenced or ranked across the blocks.",
+   "placement": "APPENDIX",
+   "scientific_question": "How much does a result move when only the training seed changes?",
+   "selectors": [
+    {
+     "evidence_class": "SEED"
+    }
+   ],
+   "source_provenance": [
+    {
+     "path": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
+     "sha256": "37ffdcd09aa2bcd306ca9b54229a1d0d17ff203b6b0900e09e5f876ad1ed0748"
+    },
+    {
+     "path": "results/experiments/e2_siglip/results.json",
+     "sha256": "4c51f60890bdac967915aa96dbad08b676262f2dfa13b5d10bfebd46c5af0a96"
+    },
+    {
+     "path": "results/experiments/e3_vocab1000/results.json",
+     "sha256": "bbdf65f724ee89cc6078628cd85684ad64a06585b6d34bdf0638b364c2a52be6"
+    },
+    {
+     "path": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
+     "sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562"
+    },
+    {
+     "path": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+     "sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138"
+    },
+    {
+     "path": "results/experiments/v2_02_multiseed/results.json",
+     "sha256": "306c1d1bdf31e081c90ab57ef4474b7fc6aeb7c5b34af4697d52a84fd44a8e6d"
+    },
+    {
+     "path": "results/experiments/v2_03_param_match/results.json",
+     "sha256": "9494f8a706b26dc82a66bb28280411acbd079991f353da8467248ac0c1947f92"
+    },
+    {
+     "path": "results/experiments/v2_04_ablation/results.json",
+     "sha256": "3e4a7652dd1e7418b1a19244d85017a4442b6638e86c3d85b1c4888cbceed608"
+    },
+    {
+     "path": "results/experiments/v2_06_reliance/results.json",
+     "sha256": "45763fe56be11d42421a968922ac3212b5d1a21af77ccd87706ed44549b6a66b"
+    },
+    {
+     "path": "results/experiments/v2_07_scaling/results.json",
+     "sha256": "852206e1b0a404955ed66c5b56a3b9bd7215c15fb35b438dd703cc6c497b79fc"
+    },
+    {
+     "path": "results/experiments/v3_03_scaling/results.json",
+     "sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339"
+    }
+   ],
+   "superseded_evidence_consumed": [],
+   "supervisor_slide": "SLIDE-BACKUP-SEED-STABILITY",
+   "uncertainty_shown": "SEED_POINTS",
+   "viva_answer": "Stable except for two rows, E8B B3 at 40k with a seed sd of 0.02795 and v2_06 image_only shuffled. Both are flagged and always shown with their spread.",
+   "working_title": "Per-seed dispersion across every trained family",
+   "x_axis": "development accuracy",
+   "y_axis": "family, system and scale"
+  },
+  {
+   "caption_claim": "Growing the closed answer set from 100 to 1000 raises development coverage substantially.",
+   "carries_v2_07_limitation": false,
+   "chart_type": "two panels: coverage bars, and E3-view accuracies by system and scale",
+   "consumes_evidence": [
+    "EV-ARM-e3.concat.train_250k",
+    "EV-ARM-e3.concat.train_40k",
+    "EV-ARM-e3.fusion.train_250k",
+    "EV-ARM-e3.fusion.train_40k",
+    "EV-ARM-e3.product.train_250k",
+    "EV-ARM-e3.product.train_40k",
+    "EV-ARM-e3.question_only.train_250k",
+    "EV-ARM-e3.question_only.train_40k",
+    "EV-CON-e3.concat_minus_question_only.train_250k",
+    "EV-CON-e3.concat_minus_question_only.train_40k",
+    "EV-CON-e3.fusion_minus_concat.train_250k",
+    "EV-CON-e3.fusion_minus_concat.train_40k",
+    "EV-CON-e3.product_minus_concat.train_250k",
+    "EV-CON-e3.product_minus_concat.train_40k",
+    "EV-DSC-dev.coverage_top100",
+    "EV-DSC-dev.coverage_top1000"
+   ],
+   "consumes_evidence_count": 16,
+   "decision_note": "Appendix. E3 is deliberately outside the main sequence: it answers an answer-set question rather than a reasoning or efficiency question.",
+   "dissertation_section": [
+    "R_APPENDIX_ANSWER_SET"
+   ],
+   "evidence_free_schematic": false,
+   "evidence_ids": [
+    "EV-DSC-dev.coverage_top100",
+    "EV-DSC-dev.coverage_top1000"
+   ],
+   "figure_id": "VE0-FIG-A3",
+   "grouping": "by answer-set size, drawn as two clearly separated blocks",
+   "likely_viva_question": "Why not use the 1000-answer set throughout?",
+   "mandatory_caption_caveat": "Top-100 and top-1000 results are NEVER paired: they use different development rows (7,714 against 9,823), a different class count and different training rows. No accuracy is differenced across the two blocks. Class competition and the smaller head-answer share of a fixed budget are confounded in any head-row comparison.",
+   "metric_ids": [
+    "structural_count_or_share",
+    "v2_closed_vocab_top1_index_match"
+   ],
+   "placement": "APPENDIX",
+   "scientific_question": "What does growing the closed answer set from 100 to 1000 buy and cost?",
+   "selectors": [
+    {
+     "evidence_class": "ARM",
+     "experiment_family": [
+      "e3"
+     ]
+    },
+    {
+     "evidence_class": "CON",
+     "experiment_family": [
+      "e3"
+     ]
+    }
+   ],
+   "source_provenance": [
+    {
+     "path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+     "sha256": "cfe82a17f0353a9bb6f107f770e59b6b7321ff69ab8d31eda2f49f16d5976e62"
+    },
+    {
+     "path": "results/closure/reconstructed_statistics.json",
+     "sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097"
+    },
+    {
+     "path": "results/experiments/e3_vocab1000/results.json",
+     "sha256": "bbdf65f724ee89cc6078628cd85684ad64a06585b6d34bdf0638b364c2a52be6"
+    }
+   ],
+   "superseded_evidence_consumed": [],
+   "supervisor_slide": "NOT_PRESENTED",
+   "uncertainty_shown": "CLUSTERED_CI95",
+   "viva_answer": "Because the whole programme's controls, capacity matching and reliance analyses were run on the top-100 view, and the two views are not row-comparable. E3 answers an answer-set-design question and is reported separately.",
+   "working_title": "Answer-set size: coverage against accuracy",
+   "x_axis": "(a) coverage share; (b) development accuracy on the E3 view",
+   "y_axis": "answer-set size and system"
+  },
+  {
+   "caption_claim": "The fusion advantage concentrates in a subset of question types rather than lifting all types equally.",
+   "carries_v2_07_limitation": false,
+   "chart_type": "two panels: per-type accuracy, and per-type gap forest",
+   "consumes_evidence": [
+    "EV-SLC-v2_02.concat.train_40k.semantic-attr.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.semantic-cat.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.semantic-global.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.semantic-obj.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.semantic-rel.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.steps-3.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.steps-4.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.steps-ge5.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.steps-le2.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.structural-choose.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.structural-compare.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.structural-logical.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.structural-query.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.structural-verify.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.semantic-attr.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.semantic-cat.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.semantic-global.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.semantic-obj.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.semantic-rel.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.steps-3.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.steps-4.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.steps-ge5.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.steps-le2.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.structural-choose.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.structural-compare.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.structural-logical.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.structural-query.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.structural-verify.accuracy",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.semantic-attr.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.semantic-attr.seed42",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.semantic-cat.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.semantic-cat.seed42",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.semantic-global.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.semantic-global.seed42",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.semantic-obj.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.semantic-obj.seed42",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.semantic-rel.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.semantic-rel.seed42",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.steps-3.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.steps-3.seed42",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.steps-4.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.steps-4.seed42",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.steps-ge5.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.steps-ge5.seed42",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.steps-le2.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.steps-le2.seed42",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.structural-choose.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.structural-choose.seed42",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.structural-compare.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.structural-compare.seed42",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.structural-logical.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.structural-logical.seed42",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.structural-query.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.structural-query.seed42",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.structural-verify.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.structural-verify.seed42"
+   ],
+   "consumes_evidence_count": 56,
+   "decision_note": "Appendix. The main text carries the pooled depth story; the full type breakdown belongs with the supporting statistics.",
+   "dissertation_section": [
+    "R_APPENDIX_SLICES"
+   ],
+   "evidence_free_schematic": false,
+   "evidence_ids": [],
+   "figure_id": "VE0-FIG-A4",
+   "grouping": "structural and semantic types kept in separate blocks",
+   "likely_viva_question": "Are these per-type differences significant after multiple comparisons?",
+   "mandatory_caption_caveat": "Slices are unequal and dependent; every interval is clustered on the slice's own represented development images and the per-slice question and image counts must be printed. The v2_05b row-level normal-approximation intervals are superseded by these clustered intervals and are never re-quoted. Both the five-seed and the seed-42 conventions exist in the source; only one is plotted and the caption names which.",
+   "metric_ids": [
+    "v2_closed_vocab_top1_index_match"
+   ],
+   "placement": "APPENDIX",
+   "scientific_question": "Which question types carry the fusion advantage?",
+   "selectors": [
+    {
+     "evidence_class": "SLC",
+     "experiment_family": [
+      "v2_02",
+      "v2_05c"
+     ]
+    }
+   ],
+   "source_provenance": [
+    {
+     "path": "results/closure/reconstructed_statistics.json",
+     "sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097"
+    },
+    {
+     "path": "results/experiments/v2_05_types/addendum_clustered.json",
+     "sha256": "86c7969ec36121ca387cd98da3319e1cd1a6ff9ba021241c85f057bfca11f312"
+    }
+   ],
+   "superseded_evidence_consumed": [],
+   "supervisor_slide": "NOT_PRESENTED",
+   "uncertainty_shown": "CLUSTERED_CI95",
+   "viva_answer": "They are nominal 95 per cent intervals, uncorrected for multiplicity, and the report says so. With fourteen slices, some intervals excluding zero by chance is expected, which is why per-type findings are secondary.",
+   "working_title": "Per-type accuracy and the fusion-minus-concat gap by question type",
+   "x_axis": "accuracy, then gap in accuracy points",
+   "y_axis": "question type, structural then semantic"
+  },
+  {
+   "caption_claim": "A frozen compact integrated VLM can be placed in context against these lightweight systems on one node.",
+   "carries_v2_07_limitation": false,
+   "chart_type": "annotated scatter on the E9 node only, accuracy against latency, compact VLMs marked distinctly",
+   "consumes_evidence": [
+    "EV-EFF-E9.e8b_B1",
+    "EV-EFF-E9.e8b_B2_R2",
+    "EV-EFF-E9.e8b_B2_R3",
+    "EV-EFF-E9.e8b_B3_R2",
+    "EV-EFF-E9.e8b_B3_R3",
+    "EV-EFF-E9.e9_256m_constrained",
+    "EV-EFF-E9.e9_256m_open",
+    "EV-EFF-E9.e9_500m_constrained",
+    "EV-EFF-E9.e9_500m_open",
+    "EV-EFF-E9.fusion",
+    "EV-EFF-E9.vocab1000_product"
+   ],
+   "consumes_evidence_count": 11,
+   "decision_note": "Appendix with a backup slide. Main-text prominence would invite exactly the leaderboard reading claim C14 forbids.",
+   "dissertation_section": [
+    "R8_COMPUTATIONAL_EFFICIENCY"
+   ],
+   "evidence_free_schematic": false,
+   "evidence_ids": [],
+   "figure_id": "VE0-FIG-A5",
+   "grouping": "compact VLMs separated from the lightweight systems",
+   "likely_viva_question": "Did you beat SmolVLM?",
+   "mandatory_caption_caveat": "CONTEXTUAL POSITIONING ONLY, never a leaderboard or fair-protocol superiority claim. Training history, multimodal pretraining, answer support and output format all differ, and SmolVLM-256M's text backbone is the Instruct checkpoint where E8A and E8B use base. No comparison is made against published official GQA scores in either direction, because the split, the answer support and the scorer all differ. Single node otter159; these points are never merged with the otter155 frontier.",
+   "metric_ids": [
+    "warm_median_serial_latency_ms"
+   ],
+   "placement": "APPENDIX",
+   "scientific_question": "Where does a frozen compact integrated VLM sit relative to these lightweight systems?",
+   "selectors": [
+    {
+     "evidence_class": "EFF",
+     "experiment_family": [
+      "E9"
+     ]
+    }
+   ],
+   "source_provenance": [
+    {
+     "path": "results/experiments/e9_compact_vlm/e9_results.json",
+     "sha256": "5d42ae9344fa9d7bcd48589645d62b4d0c20db9a3d9d03288bbddd6832ae2caa"
+    }
+   ],
+   "superseded_evidence_consumed": [],
+   "supervisor_slide": "SLIDE-BACKUP-COMPACT-VLM",
+   "uncertainty_shown": "NONE_MEASURED_MEDIAN",
+   "viva_answer": "That is not a question this evidence can answer. The systems differ in training history, answer support and output format, so the comparison is contextual positioning, not a controlled contest.",
+   "working_title": "Compact VLM in context",
+   "x_axis": "warm median serial latency on otter159, milliseconds",
+   "y_axis": "normalised accuracy on the raw development partition"
+  },
+  {
+   "caption_claim": "The frozen encoder dominates a raw query; the trainable head is a small fraction of it.",
+   "carries_v2_07_limitation": false,
+   "chart_type": "grouped bars per system: end-to-end serial, cached-image question side, cached-feature head only, each block labelled with its timing class",
+   "consumes_evidence": [
+    "EV-EFF-E7a.e7a_component_measurements",
+    "EV-EFF-E7b.concat",
+    "EV-EFF-E7b.concat.cached_feature_head_only",
+    "EV-EFF-E7b.concat.cached_image_question_side",
+    "EV-EFF-E7b.e8a_a0p",
+    "EV-EFF-E7b.e8a_a0p.cached_feature_head_only",
+    "EV-EFF-E7b.e8a_a0p.cached_image_question_side",
+    "EV-EFF-E7b.e8a_a1",
+    "EV-EFF-E7b.e8a_a1.cached_feature_head_only",
+    "EV-EFF-E7b.e8a_a1.cached_image_question_side",
+    "EV-EFF-E7b.fusion",
+    "EV-EFF-E7b.fusion.cached_feature_head_only",
+    "EV-EFF-E7b.fusion.cached_image_question_side",
+    "EV-EFF-E7b.question_only",
+    "EV-EFF-E7b.question_only.cached_feature_head_only",
+    "EV-EFF-E7b.reasoner",
+    "EV-EFF-E7b.reasoner.cached_feature_head_only",
+    "EV-EFF-E7b.reasoner.cached_image_question_side",
+    "EV-EFF-E7b.siglip_fusion",
+    "EV-EFF-E7b.siglip_fusion.cached_feature_head_only",
+    "EV-EFF-E7b.siglip_fusion.cached_image_question_side",
+    "EV-EFF-E7b.vocab1000_product",
+    "EV-EFF-E7b.vocab1000_product.cached_feature_head_only",
+    "EV-EFF-E7b.vocab1000_product.cached_image_question_side"
+   ],
+   "consumes_evidence_count": 24,
+   "decision_note": "Appendix. It exists so the main efficiency figure can stay strictly end-to-end without losing the component story.",
+   "dissertation_section": [
+    "R8_COMPUTATIONAL_EFFICIENCY"
+   ],
+   "evidence_free_schematic": false,
+   "evidence_ids": [],
+   "figure_id": "VE0-FIG-A6",
+   "grouping": "by timing class, with the class name printed on every bar",
+   "likely_viva_question": "Could caching make this much faster in deployment?",
+   "mandatory_caption_caveat": "Only the END_TO_END_SERIAL bars are end-to-end query latencies. The cached and head-only bars are partial pipelines and are never quoted as a query cost. E7a's additive gpu_encoder_plus_head_ms, full_pipeline_ms and amortised_ms fields and every Pareto front built on them are SUPERSEDED by E7b's measured serial values and must not appear. Single node otter155.",
+   "metric_ids": [
+    "latency_and_memory_components",
+    "warm_median_serial_latency_ms"
+   ],
+   "placement": "APPENDIX",
+   "scientific_question": "Which stage of the pipeline dominates a query, and how much does feature caching remove?",
+   "selectors": [
+    {
+     "evidence_class": "EFF",
+     "experiment_family": [
+      "E7a",
+      "E7b"
+     ],
+     "timing_kind": [
+      "END_TO_END_SERIAL",
+      "CACHED_FEATURE_HEAD_ONLY",
+      "CACHED_IMAGE_QUESTION_SIDE",
+      "COMPONENT"
+     ]
+    }
+   ],
+   "source_provenance": [
+    {
+     "path": "results/experiments/e7a_efficiency/results.json",
+     "sha256": "368ba5c2a149953193cf237bdf77023c17b244540ef7b9bfac55cb5a7fdc1a85"
+    },
+    {
+     "path": "results/experiments/e7b_serial_efficiency/e7b_results.json",
+     "sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4"
+    }
+   ],
+   "superseded_evidence_consumed": [],
+   "supervisor_slide": "NOT_PRESENTED",
+   "uncertainty_shown": "NONE_MEASURED_MEDIAN",
+   "viva_answer": "Caching image features removes the image-encoder stage for repeated questions about one image, and the cached bars measure that. It is a deployment observation, not the end-to-end cost, and the older amortised figure derived from additive sums is superseded.",
+   "working_title": "Where the time goes: cached and component costs against measured end-to-end",
+   "x_axis": "milliseconds",
+   "y_axis": "system and timing class"
+  }
+ ],
+ "main_text_figures": [
+  "VE0-FIG-01",
+  "VE0-FIG-02",
+  "VE0-FIG-03",
+  "VE0-FIG-04",
+  "VE0-FIG-05",
+  "VE0-FIG-06",
+  "VE0-FIG-07",
+  "VE0-FIG-08",
+  "VE0-FIG-09",
+  "VE0-FIG-10"
+ ],
+ "mixed_metric_rule": "No figure axis and no table column block may place two metric_ids on a shared quantitative scale unless the specification sets mixed_metric_justification and carries the non-comparability footnote. The V2-era closed-vocabulary scorer and the pinned G21 normalised scorer are never averaged, differenced or ranked against each other.",
+ "not_rendered_by_ve0": true,
+ "provenance": {
+  "builder": "experiments/ve0/run_ve0.py",
+  "builder_sha256": "91d371cbdd09d9dd9362cc3749ae9a4b78bfec311157f1b6fdeda9522dbb539c",
+  "clean_test_accessed": false,
+  "command": "python -m experiments.ve0.run_ve0",
+  "deterministic_selection_salt": "P2607-VE0-QUALITATIVE-SALT-20260813-v1",
+  "device": "cpu",
+  "evaluated_anything": false,
+  "gpu_hours_charged": 0.0,
+  "gpu_used": false,
+  "inputs": [
+   {
+    "bytes": 42006,
+    "path": "results/closure/G_claim_evidence.json",
+    "role": "closure output claims",
+    "sha256": "9efc2d34ac91c47120e936e5eb9d609fa04f96ae64c65af79a37832756fe952c"
+   },
+   {
+    "bytes": 127530,
+    "path": "results/closure/B_primary_contrasts.json",
+    "role": "closure output contrasts",
+    "sha256": "cca3c32fb9797123dd644d4ee4e1189e1ca03dcb6c497594774cbe90abd5e18b"
+   },
+   {
+    "bytes": 64983,
+    "path": "results/closure/efficiency_closure_table.json",
+    "role": "closure output efficiency",
+    "sha256": "be1781efeece841cc75df126fab43c9e9946437957c1ea6401ee1f86c8b47d5e"
+   },
+   {
+    "bytes": 4191,
+    "path": "results/closure/F_multiplicity_status.json",
+    "role": "closure output multiplicity",
+    "sha256": "7ab15242d892e02d6c397e96a4b002fe839b311100c61093cc214c2152d2cc41"
+   },
+   {
+    "bytes": 12970,
+    "path": "results/closure/H_evidence_readiness.json",
+    "role": "closure output readiness",
+    "sha256": "b54113dafb37e55c59d5ae0b8c550a33033a02bb54030b43a9416a859b0a3a9f"
+   },
+   {
+    "bytes": 239578,
+    "path": "results/closure/reconstructed_statistics.json",
+    "role": "closure output reconstructed",
+    "sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097"
+   },
+   {
+    "bytes": 441421,
+    "path": "results/closure/C_reconstructed_evidence_manifest.json",
+    "role": "closure output reconstructed_manifest",
+    "sha256": "a7c72050f4032d6f0c1c24e9cf5e334db4e1698c31c83c4907513a290e21dff5"
+   },
+   {
+    "bytes": 20546,
+    "path": "results/closure/A_evidence_registry.json",
+    "role": "closure output registry",
+    "sha256": "b8b47e024c49a599a425894f34c24b4375958998401a311605694027257de122"
+   },
+   {
+    "bytes": 66484,
+    "path": "results/closure/E_seed_variability.json",
+    "role": "closure output seed",
+    "sha256": "6da253c493edaba1a3ecc33b4d3c4d085b7520e51fe87975003c5353dcb65e14"
+   },
+   {
+    "bytes": 198706,
+    "path": "results/closure/D_slice_statistics.json",
+    "role": "closure output slices",
+    "sha256": "0a21059492c9e37b67223757535b379e15d3146cff51d0d378885e9dc39c2088"
+   }
+  ],
+  "measured_anything": false,
+  "numpy_version": "2.5.0",
+  "pandas_version": "3.0.3",
+  "python": "3.12.3",
+  "repository_head": "6f457d12e350c95c85650f17e2a367c70ea32828",
+  "repository_head_short": "6f457d1",
+  "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+  "schema_version": 1,
+  "selected_any_checkpoint": false,
+  "trained_anything": false,
+  "worktree_dirty": true
+ },
+ "rule": "VE-1 renders exactly these figures from exactly these evidence identifiers. A new figure, a new evidence identifier or a changed caption claim requires a change here first, and therefore a new VE-0 manifest.",
+ "title": "frozen figure specifications for VE-1",
+ "uncertainty_kinds": {
+  "CLUSTERED_CI95": "image-clustered 95 per cent evaluation-sampling interval; the cluster unit and the fixed trained seed set must be named",
+  "NONE_MEASURED_MEDIAN": "no interval: a warm median over repeated passes; the across-pass spread is stated in the caption",
+  "NONE_STRUCTURAL": "no uncertainty: a counted quantity",
+  "NOT_APPLICABLE": "a schematic; no data",
+  "SEED_POINTS": "every per-seed value plotted individually, no summary bar hiding the spread",
+  "SEED_SD": "sample standard deviation across independent training seeds (ddof=1), labelled SD, never labelled CI"
+ },
+ "ve0_output": "F"
+}

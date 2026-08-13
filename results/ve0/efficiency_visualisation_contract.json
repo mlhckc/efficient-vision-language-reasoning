@@ -1,0 +1,258 @@
+{
+ "accuracy_pairing": {
+  "denominator": "common 10,004-row raw-distribution development denominator, the convention the closure fixed for both measurement nodes",
+  "resolved": [
+   "EV-EFF-E7b.concat",
+   "EV-EFF-E7b.e8a_a0p",
+   "EV-EFF-E7b.e8a_a1",
+   "EV-EFF-E7b.fusion",
+   "EV-EFF-E7b.question_only",
+   "EV-EFF-E7b.reasoner",
+   "EV-EFF-E7b.siglip_fusion",
+   "EV-EFF-E7b.vocab1000_product",
+   "EV-EFF-E9.e9_256m_constrained",
+   "EV-EFF-E9.e9_256m_open",
+   "EV-EFF-E9.e9_500m_constrained",
+   "EV-EFF-E9.e9_500m_open"
+  ],
+  "resolved_count": 12,
+  "unresolved": [
+   {
+    "evidence_id": "EV-EFF-E9.e8b_B1",
+    "question_ve1_must_answer": "the stored E8B reference accuracies are recorded per training scale (B1/train_40k and B1/train_250k) but the timing row does not name the scale that was timed. VE-1 must establish the timed configuration from the E9 frozen protocol record before plotting a vertical coordinate for this point."
+   },
+   {
+    "evidence_id": "EV-EFF-E9.e8b_B2_R2",
+    "question_ve1_must_answer": "the timed configuration is the R2 constrained-generation readout, while the stored E8B reference accuracy block carries the R1 readout. The training scale is also not named on the timing row. VE-1 must resolve both before plotting a vertical coordinate."
+   },
+   {
+    "evidence_id": "EV-EFF-E9.e8b_B2_R3",
+    "question_ve1_must_answer": "as E9::e8b_B2_R2, for the R3 free bounded-generation readout."
+   },
+   {
+    "evidence_id": "EV-EFF-E9.e8b_B3_R2",
+    "question_ve1_must_answer": "as E9::e8b_B2_R2, for B3."
+   },
+   {
+    "evidence_id": "EV-EFF-E9.e8b_B3_R3",
+    "question_ve1_must_answer": "as E9::e8b_B2_R3, for B3."
+   },
+   {
+    "evidence_id": "EV-EFF-E9.fusion",
+    "question_ve1_must_answer": "E9 re-measured this reference system's latency on its own node. The E9 efficiency artefact does not restate the checkpoint identity behind that measurement, so VE-1 must confirm from the E9 frozen protocol record that it is the same checkpoint whose accuracy E7b reports before reusing that accuracy as the vertical coordinate. Accuracy is node-independent; the constraint is checkpoint identity, not hardware."
+   },
+   {
+    "evidence_id": "EV-EFF-E9.vocab1000_product",
+    "question_ve1_must_answer": "as E9::fusion, for the top-1000 product reference."
+   }
+  ],
+  "unresolved_count": 7,
+  "ve1_precondition": "an unresolved row is NOT paired speculatively. VE-1 must either resolve the recorded question from the frozen artefacts and record the pointer it used, or plot the row latency-only, or omit it and state the omission. Guessing a denominator is forbidden.",
+  "why_this_exists": "the efficiency table carries no accuracy: its 64-row timing sample supports no accuracy claim. An accuracy-against-latency figure therefore needs a vertical coordinate from each system's own frozen artefact, on one stated denominator. Binding the pointer in VE-0 is what prevents VE-1 pairing a latency with an accuracy measured on a different denominator."
+ },
+ "clean_test_accessed": false,
+ "content_sha256": "929c7ba6f2bc8ad681707aacb9d7a22f6ffee12ab543b34d1398e5720b4f99c7",
+ "e7a_status": "PARTLY_SUPERSEDED. Component measurements remain valid as components and may appear in the appendix decomposition figure with their class printed. The additive gpu_encoder_plus_head_ms, full_pipeline_ms and amortised_ms fields and every Pareto front derived from them are superseded by E7b for any end-to-end claim.",
+ "end_to_end_plottable_evidence": [
+  "EV-EFF-E7b.concat",
+  "EV-EFF-E7b.e8a_a0p",
+  "EV-EFF-E7b.e8a_a1",
+  "EV-EFF-E7b.fusion",
+  "EV-EFF-E7b.question_only",
+  "EV-EFF-E7b.reasoner",
+  "EV-EFF-E7b.siglip_fusion",
+  "EV-EFF-E7b.vocab1000_product",
+  "EV-EFF-E9.e8b_B1",
+  "EV-EFF-E9.e8b_B2_R2",
+  "EV-EFF-E9.e8b_B2_R3",
+  "EV-EFF-E9.e8b_B3_R2",
+  "EV-EFF-E9.e8b_B3_R3",
+  "EV-EFF-E9.e9_256m_constrained",
+  "EV-EFF-E9.e9_256m_open",
+  "EV-EFF-E9.e9_500m_constrained",
+  "EV-EFF-E9.e9_500m_open",
+  "EV-EFF-E9.fusion",
+  "EV-EFF-E9.vocab1000_product"
+ ],
+ "energy": "PROHIBITED. No power or energy measurement exists anywhere in this project. Axis labels, captions and slide titles say latency or computational efficiency.",
+ "forbidden_layouts": [
+  "one Pareto frontier spanning both nodes",
+  "any ranking, ordering or 'fastest system' statement that mixes nodes",
+  "any interpolation, adjustment factor or normalisation between nodes",
+  "plotting a cached or head-only figure on an end-to-end axis",
+  "plotting E7a's additive full_pipeline_ms or amortised_ms as current end-to-end evidence"
+ ],
+ "group_count": 3,
+ "hard_rule": "E7b on otter155 and E9 on otter159 are two measurement groups and are NEVER merged into one frontier, one line, one ranking or one scatter with a shared trend.",
+ "mandatory_point_annotations": [
+  "timing_kind",
+  "node",
+  "precision",
+  "batch_size",
+  "serial or cached",
+  "comparable_with_end_to_end",
+  "the accuracy denominator used for the vertical position"
+ ],
+ "measurement_groups": {
+  "otter (E7a session)": [
+   "EV-EFF-E7a.e7a_additive_pipeline_sums",
+   "EV-EFF-E7a.e7a_component_measurements"
+  ],
+  "otter155.eps.surrey.ac.uk": [
+   "EV-EFF-E7b.concat",
+   "EV-EFF-E7b.concat.cached_feature_head_only",
+   "EV-EFF-E7b.concat.cached_image_question_side",
+   "EV-EFF-E7b.e8a_a0p",
+   "EV-EFF-E7b.e8a_a0p.cached_feature_head_only",
+   "EV-EFF-E7b.e8a_a0p.cached_image_question_side",
+   "EV-EFF-E7b.e8a_a1",
+   "EV-EFF-E7b.e8a_a1.cached_feature_head_only",
+   "EV-EFF-E7b.e8a_a1.cached_image_question_side",
+   "EV-EFF-E7b.fusion",
+   "EV-EFF-E7b.fusion.cached_feature_head_only",
+   "EV-EFF-E7b.fusion.cached_image_question_side",
+   "EV-EFF-E7b.question_only",
+   "EV-EFF-E7b.question_only.cached_feature_head_only",
+   "EV-EFF-E7b.reasoner",
+   "EV-EFF-E7b.reasoner.cached_feature_head_only",
+   "EV-EFF-E7b.reasoner.cached_image_question_side",
+   "EV-EFF-E7b.siglip_fusion",
+   "EV-EFF-E7b.siglip_fusion.cached_feature_head_only",
+   "EV-EFF-E7b.siglip_fusion.cached_image_question_side",
+   "EV-EFF-E7b.vocab1000_product",
+   "EV-EFF-E7b.vocab1000_product.cached_feature_head_only",
+   "EV-EFF-E7b.vocab1000_product.cached_image_question_side"
+  ],
+  "otter159.eps.surrey.ac.uk": [
+   "EV-EFF-E9.e8b_B1",
+   "EV-EFF-E9.e8b_B2_R2",
+   "EV-EFF-E9.e8b_B2_R3",
+   "EV-EFF-E9.e8b_B3_R2",
+   "EV-EFF-E9.e8b_B3_R3",
+   "EV-EFF-E9.e9_256m_constrained",
+   "EV-EFF-E9.e9_256m_open",
+   "EV-EFF-E9.e9_500m_constrained",
+   "EV-EFF-E9.e9_500m_open",
+   "EV-EFF-E9.fusion",
+   "EV-EFF-E9.vocab1000_product"
+  ]
+ },
+ "missing_evidence": {
+  "E10": "B4 and B4r have NO timing evidence of any kind. This is recorded, never estimated, and no proxy from E8B may stand in for it.",
+  "E8B_R1": "E8B's canonical R1 readout has no serial latency by design. R2 and R3 are never presented as R1's cost."
+ },
+ "never_plottable_on_an_end_to_end_axis": [
+  "EV-EFF-E7a.e7a_additive_pipeline_sums",
+  "EV-EFF-E7a.e7a_component_measurements",
+  "EV-EFF-E7b.concat.cached_feature_head_only",
+  "EV-EFF-E7b.concat.cached_image_question_side",
+  "EV-EFF-E7b.e8a_a0p.cached_feature_head_only",
+  "EV-EFF-E7b.e8a_a0p.cached_image_question_side",
+  "EV-EFF-E7b.e8a_a1.cached_feature_head_only",
+  "EV-EFF-E7b.e8a_a1.cached_image_question_side",
+  "EV-EFF-E7b.fusion.cached_feature_head_only",
+  "EV-EFF-E7b.fusion.cached_image_question_side",
+  "EV-EFF-E7b.question_only.cached_feature_head_only",
+  "EV-EFF-E7b.reasoner.cached_feature_head_only",
+  "EV-EFF-E7b.reasoner.cached_image_question_side",
+  "EV-EFF-E7b.siglip_fusion.cached_feature_head_only",
+  "EV-EFF-E7b.siglip_fusion.cached_image_question_side",
+  "EV-EFF-E7b.vocab1000_product.cached_feature_head_only",
+  "EV-EFF-E7b.vocab1000_product.cached_image_question_side"
+ ],
+ "permitted_layouts": [
+  "two side-by-side panels, one per node, each with its own axis range and its own node label",
+  "one axis with two independently labelled groups, visually separated, with no connecting line, no shared frontier and no shared trend",
+  "separate contextual markers on a single panel, provided each marker carries its node and no frontier is drawn across nodes"
+ ],
+ "provenance": {
+  "builder": "experiments/ve0/run_ve0.py",
+  "builder_sha256": "91d371cbdd09d9dd9362cc3749ae9a4b78bfec311157f1b6fdeda9522dbb539c",
+  "clean_test_accessed": false,
+  "command": "python -m experiments.ve0.run_ve0",
+  "deterministic_selection_salt": "P2607-VE0-QUALITATIVE-SALT-20260813-v1",
+  "device": "cpu",
+  "evaluated_anything": false,
+  "gpu_hours_charged": 0.0,
+  "gpu_used": false,
+  "inputs": [
+   {
+    "bytes": 42006,
+    "path": "results/closure/G_claim_evidence.json",
+    "role": "closure output claims",
+    "sha256": "9efc2d34ac91c47120e936e5eb9d609fa04f96ae64c65af79a37832756fe952c"
+   },
+   {
+    "bytes": 127530,
+    "path": "results/closure/B_primary_contrasts.json",
+    "role": "closure output contrasts",
+    "sha256": "cca3c32fb9797123dd644d4ee4e1189e1ca03dcb6c497594774cbe90abd5e18b"
+   },
+   {
+    "bytes": 64983,
+    "path": "results/closure/efficiency_closure_table.json",
+    "role": "closure output efficiency",
+    "sha256": "be1781efeece841cc75df126fab43c9e9946437957c1ea6401ee1f86c8b47d5e"
+   },
+   {
+    "bytes": 4191,
+    "path": "results/closure/F_multiplicity_status.json",
+    "role": "closure output multiplicity",
+    "sha256": "7ab15242d892e02d6c397e96a4b002fe839b311100c61093cc214c2152d2cc41"
+   },
+   {
+    "bytes": 12970,
+    "path": "results/closure/H_evidence_readiness.json",
+    "role": "closure output readiness",
+    "sha256": "b54113dafb37e55c59d5ae0b8c550a33033a02bb54030b43a9416a859b0a3a9f"
+   },
+   {
+    "bytes": 239578,
+    "path": "results/closure/reconstructed_statistics.json",
+    "role": "closure output reconstructed",
+    "sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097"
+   },
+   {
+    "bytes": 441421,
+    "path": "results/closure/C_reconstructed_evidence_manifest.json",
+    "role": "closure output reconstructed_manifest",
+    "sha256": "a7c72050f4032d6f0c1c24e9cf5e334db4e1698c31c83c4907513a290e21dff5"
+   },
+   {
+    "bytes": 20546,
+    "path": "results/closure/A_evidence_registry.json",
+    "role": "closure output registry",
+    "sha256": "b8b47e024c49a599a425894f34c24b4375958998401a311605694027257de122"
+   },
+   {
+    "bytes": 66484,
+    "path": "results/closure/E_seed_variability.json",
+    "role": "closure output seed",
+    "sha256": "6da253c493edaba1a3ecc33b4d3c4d085b7520e51fe87975003c5353dcb65e14"
+   },
+   {
+    "bytes": 198706,
+    "path": "results/closure/D_slice_statistics.json",
+    "role": "closure output slices",
+    "sha256": "0a21059492c9e37b67223757535b379e15d3146cff51d0d378885e9dc39c2088"
+   }
+  ],
+  "measured_anything": false,
+  "numpy_version": "2.5.0",
+  "pandas_version": "3.0.3",
+  "python": "3.12.3",
+  "repository_head": "6f457d12e350c95c85650f17e2a367c70ea32828",
+  "repository_head_short": "6f457d1",
+  "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+  "schema_version": 1,
+  "selected_any_checkpoint": false,
+  "trained_anything": false,
+  "worktree_dirty": true
+ },
+ "timing_classes_plottable_on_an_end_to_end_axis": [
+  "END_TO_END_SERIAL"
+ ],
+ "title": "efficiency visualisation contract",
+ "ve0_output": "L",
+ "why": "the fusion bridge control, the same system measured on both nodes, differs by -18.69 per cent against a pre-registered 10 per cent tolerance. A cross-node latency difference is a fact about the hardware, not about the systems, and no adjustment factor is applied."
+}

@@ -1,0 +1,418 @@
+{
+ "appendix_categories": [
+  "QC01_all_correct",
+  "QC04_representation_improvement",
+  "QC06_answer_side_disagreement",
+  "QC08_short_reasoning",
+  "QC10_compact_vlm_disagreement"
+ ],
+ "available_categories": [
+  "QC01_all_correct",
+  "QC02_all_wrong",
+  "QC03_fusion_right_concat_wrong",
+  "QC04_representation_improvement",
+  "QC05_question_side_pretraining",
+  "QC06_answer_side_disagreement",
+  "QC07_visual_reliance",
+  "QC08_short_reasoning",
+  "QC09_deep_reasoning_failure"
+ ],
+ "categories": [
+  {
+   "category_id": "QC01_all_correct",
+   "condition": "normal",
+   "description": "every compared global-embedding system answers correctly",
+   "evidence_gives_prediction_text": true,
+   "evidence_source": "closure_row_evidence",
+   "evidence_source_status": "AVAILABLE",
+   "interpretation_bound": "an easy row for every system; illustrative of the task, not of any system's advantage",
+   "placement": "APPENDIX",
+   "predicate": "correct == 1 for question_only, concat and fusion",
+   "scale": "train_40k",
+   "seed": 0,
+   "status": "AVAILABLE",
+   "systems": [
+    "v2_02/question_only",
+    "v2_02/concat",
+    "v2_02/fusion"
+   ]
+  },
+  {
+   "category_id": "QC02_all_wrong",
+   "condition": "normal",
+   "description": "every compared global-embedding system answers incorrectly",
+   "evidence_gives_prediction_text": true,
+   "evidence_source": "closure_row_evidence",
+   "evidence_source_status": "AVAILABLE",
+   "interpretation_bound": "a shared failure. It does not identify a cause and must not be captioned as a reasoning failure without independent evidence",
+   "placement": "MAIN_TEXT",
+   "predicate": "correct == 0 for question_only, concat and fusion",
+   "scale": "train_40k",
+   "seed": 0,
+   "status": "AVAILABLE",
+   "systems": [
+    "v2_02/question_only",
+    "v2_02/concat",
+    "v2_02/fusion"
+   ]
+  },
+  {
+   "category_id": "QC03_fusion_right_concat_wrong",
+   "condition": "normal",
+   "description": "fusion correct where concatenation is wrong",
+   "evidence_gives_prediction_text": true,
+   "evidence_source": "closure_row_evidence",
+   "evidence_source_status": "AVAILABLE",
+   "interpretation_bound": "one row where the two systems disagree. It illustrates the aggregate contrast; it is not evidence for it, and the aggregate contrast is capacity-confounded",
+   "placement": "MAIN_TEXT",
+   "predicate": "fusion correct == 1 and concat correct == 0",
+   "scale": "train_40k",
+   "seed": 0,
+   "status": "AVAILABLE",
+   "systems": [
+    "v2_02/fusion",
+    "v2_02/concat"
+   ]
+  },
+  {
+   "category_id": "QC04_representation_improvement",
+   "condition": "normal",
+   "description": "the SigLIP fusion head correct where the CLIP fusion head is wrong",
+   "evidence_gives_prediction_text": true,
+   "evidence_source": "closure_row_evidence",
+   "evidence_source_status": "AVAILABLE",
+   "interpretation_bound": "representation quality is not isolated; the encoder and two widths changed together, so the example illustrates a system difference",
+   "placement": "APPENDIX",
+   "predicate": "e2 fusion correct == 1 and v2_02 fusion correct == 0",
+   "scale": "train_40k",
+   "seed": 0,
+   "status": "AVAILABLE",
+   "systems": [
+    "e2/fusion",
+    "v2_02/fusion"
+   ]
+  },
+  {
+   "category_id": "QC05_question_side_pretraining",
+   "condition": "normal",
+   "description": "the pretrained question encoder A1 correct where its random control A1r is wrong",
+   "evidence_gives_prediction_text": true,
+   "evidence_source": "e8a_prediction_tables",
+   "evidence_source_status": "AVAILABLE",
+   "interpretation_bound": "illustrates the only clean within-size question-side pretraining contrast; a single row is not evidence of the effect",
+   "placement": "MAIN_TEXT",
+   "predicate": "A1 normalized_correct == 1 and A1r normalized_correct == 0",
+   "scale": "train_40k",
+   "seed": 0,
+   "status": "AVAILABLE",
+   "systems": [
+    "E8A/A1",
+    "E8A/A1r"
+   ]
+  },
+  {
+   "balance_requirement": "equal numbers of B4-correct and B4r-correct rows, taken by rank within each direction, so the gallery cannot suggest a direction the statistics do not support",
+   "category_id": "QC06_answer_side_disagreement",
+   "condition": "normal",
+   "description": "the pretrained 360M readout B4 and its random control B4r disagree",
+   "evidence_gives_prediction_text": false,
+   "evidence_source": "e10_per_row",
+   "evidence_source_status": "AVAILABLE",
+   "interpretation_bound": "the aggregate contrast is not directional and its interval contains zero. Both directions of disagreement must be shown, and the caption must not imply the pretrained side is better",
+   "placement": "APPENDIX",
+   "predicate": "B4 normalized_correct != B4r normalized_correct",
+   "scale": "train_40k",
+   "seed": 0,
+   "status": "AVAILABLE",
+   "systems": [
+    "E10/B4",
+    "E10/B4r"
+   ]
+  },
+  {
+   "category_id": "QC07_visual_reliance",
+   "condition": "normal and shuffled, paired on the same question",
+   "description": "fusion correct under the normal image and wrong under the shuffled image",
+   "evidence_gives_prediction_text": true,
+   "evidence_source": "closure_row_evidence",
+   "evidence_source_status": "AVAILABLE",
+   "interpretation_bound": "demonstrates reliance on the image for this row. It is not proof of grounding, and the wrong-image partner must be shown so a reader can see what replaced it",
+   "placement": "MAIN_TEXT",
+   "predicate": "v2_06 fusion normal correct == 1 and v2_06 fusion shuffled correct == 0",
+   "scale": "train_40k",
+   "seed": 0,
+   "status": "AVAILABLE",
+   "systems": [
+    "v2_06/fusion"
+   ]
+  },
+  {
+   "category_id": "QC08_short_reasoning",
+   "condition": "normal",
+   "description": "a two-step-or-fewer question",
+   "evidence_gives_prediction_text": true,
+   "evidence_source": "closure_row_evidence",
+   "evidence_source_status": "AVAILABLE",
+   "interpretation_bound": "step count is the GQA semantic program length, a proxy for reasoning depth",
+   "placement": "APPENDIX",
+   "predicate": "n_steps <= 2 in data/v2/metadata/dev_types.csv",
+   "scale": "train_40k",
+   "seed": 0,
+   "status": "AVAILABLE",
+   "systems": [
+    "v2_02/fusion"
+   ]
+  },
+  {
+   "category_id": "QC09_deep_reasoning_failure",
+   "condition": "normal",
+   "description": "a question with four or more program steps that fusion answers incorrectly",
+   "evidence_gives_prediction_text": true,
+   "evidence_source": "closure_row_evidence",
+   "evidence_source_status": "AVAILABLE",
+   "interpretation_bound": "illustrates where the pooled four-or-more-step deficit lives. It does not show the model failed BECAUSE the question was deep; no causal attribution may be made from an example",
+   "placement": "MAIN_TEXT",
+   "predicate": "n_steps >= 4 and v2_02 fusion correct == 0",
+   "scale": "train_40k",
+   "seed": 0,
+   "status": "AVAILABLE",
+   "systems": [
+    "v2_02/fusion"
+   ]
+  },
+  {
+   "category_id": "QC10_compact_vlm_disagreement",
+   "condition": "normal",
+   "description": "the compact VLM and the global-embedding head disagree",
+   "drop_if_unverified": true,
+   "evidence_gives_prediction_text": false,
+   "evidence_source": "e9_tokens",
+   "evidence_source_status": "REQUIRES_VE2_VERIFICATION",
+   "interpretation_bound": "contextual positioning only. The two systems differ in training history, answer support and output format, and the row denominators differ, so the example illustrates a difference and never a superiority",
+   "placement": "APPENDIX",
+   "predicate": "SmolVLM normalised correctness != fusion normalised correctness on the same raw development row",
+   "scale": "NOT_APPLICABLE for the VLM; train_40k for the head",
+   "seed": 0,
+   "status": "CONDITIONAL_REQUIRES_VE2_VERIFICATION",
+   "systems": [
+    "E9/SmolVLM-500M-Instruct",
+    "v2_02/fusion"
+   ]
+  }
+ ],
+ "category_count": 10,
+ "clean_test_accessed": false,
+ "completeness_rule": "not every category must be populated. A category whose canonical prediction evidence does not support it is recorded UNAVAILABLE and dropped, and the drop is reported. Fabricating or approximating the missing evidence is forbidden.",
+ "conditional_categories": [
+  "QC10_compact_vlm_disagreement"
+ ],
+ "content_sha256": "c6ca3aece6f877afefd6d46afd99ab05b60e8d1a5afa172568666dae7150b76d",
+ "development_only": true,
+ "main_text_categories": [
+  "QC02_all_wrong",
+  "QC03_fusion_right_concat_wrong",
+  "QC05_question_side_pretraining",
+  "QC07_visual_reliance",
+  "QC09_deep_reasoning_failure"
+ ],
+ "populated_by": "VE-2",
+ "populated_here": false,
+ "prediction_evidence_sources": {
+  "closure_row_evidence": {
+   "families": [
+    "v2_02",
+    "v2_03",
+    "v2_04",
+    "v2_06",
+    "e2",
+    "e3"
+   ],
+   "fields": [
+    "question_id",
+    "image_id",
+    "gold_answer",
+    "gold_label",
+    "prediction_answer",
+    "prediction_label",
+    "correct"
+   ],
+   "gives_prediction_text": true,
+   "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+   "path_pattern": "results/closure/row_evidence/<family>/<family>__<arm>__<scale>__seed<k>__<condition>.npz",
+   "status": "AVAILABLE"
+  },
+  "e10_per_row": {
+   "families": [
+    "E10"
+   ],
+   "fields": [
+    "question_id",
+    "image_id",
+    "canonical_predictions",
+    "labels",
+    "raw_correct",
+    "normalized_correct",
+    "canonical_margins"
+   ],
+   "gives_prediction_text": false,
+   "hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+   "path_pattern": "results/experiments/e10_capacity_360m_core/e10_core_<arm>_<scale>_seed<k>_per_row.npz",
+   "prediction_text_note": "predictions are stored as answer-vocabulary indices; the answer string is recovered through data/v2/answer_vocab_v2.json, which is a lookup, not a re-evaluation",
+   "read_only_note": "E10 is CLOSED. VE-2 may READ these arrays and must not write into the E10 tree, re-run an E10 cell or touch any E10 source file.",
+   "status": "AVAILABLE"
+  },
+  "e8a_prediction_tables": {
+   "families": [
+    "E8A"
+   ],
+   "fields": [
+    "questionId",
+    "imageId",
+    "gold_answer",
+    "predicted_answer",
+    "normalized_gold_answer",
+    "normalized_predicted_answer",
+    "raw_correct",
+    "normalized_correct"
+   ],
+   "gives_prediction_text": true,
+   "hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+   "path_pattern": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_<arm>_<scale>_seed<k>.csv.gz",
+   "status": "AVAILABLE"
+  },
+  "e8b_per_row": {
+   "families": [
+    "E8B"
+   ],
+   "fields": [
+    "in_vocabulary",
+    "labels",
+    "r1_hits_normal",
+    "r1_hits_fixed_image",
+    "r1_hits_fixed_question",
+    "r1_hits_shuffled_image"
+   ],
+   "gives_prediction_text": false,
+   "hash_bound_in": "results/closure/manifest_e8b_readout_generation.json",
+   "path_pattern": "results/experiments/e8b_readout_generation/e8b_core_<arm>_<scale>_seed<k>_final_eval_per_row.npz",
+   "prediction_text_note": "correctness only. No predicted answer string or index is stored, so an E8B row can be shown as correct or incorrect but its predicted answer cannot be displayed",
+   "row_alignment_note": "these arrays carry no questionId and are positionally aligned to the 10,004-row raw development order in data/v2/dev_raw.csv. VE-2 MUST verify that alignment explicitly before using an E8B row, and must refuse the category if it cannot",
+   "status": "AVAILABLE_CORRECTNESS_ONLY"
+  },
+  "e9_tokens": {
+   "families": [
+    "E9"
+   ],
+   "fields": [
+    "questionIds",
+    "tokens",
+    "lengths"
+   ],
+   "gives_prediction_text": false,
+   "hash_bound_in": "results/experiments/e9_compact_vlm/ARTEFACT_MANIFEST.json",
+   "path_pattern": "results/experiments/e9_compact_vlm/e9_smolvlm_<size>_<mode>_<condition>.tokens.npz",
+   "prediction_text_note": "generated token identifiers only. Turning them into an answer string requires the SmolVLM tokenizer, and per-row correctness is not stored as an array",
+   "status": "REQUIRES_VE2_VERIFICATION",
+   "verification_required": "VE-2 must first establish, from the frozen E9 artefacts alone, whether a per-row correctness vector can be recovered by DECODING stored tokens and comparing them with stored gold answers. Decoding stored bytes is a lookup. RE-SCORING, re-running generation, or loading SmolVLM weights is a NEW EVALUATION and is OUT OF SCOPE without fresh explicit user authorisation. If the verification fails, the category is recorded UNAVAILABLE and dropped, not worked around."
+  }
+ },
+ "provenance": {
+  "builder": "experiments/ve0/run_ve0.py",
+  "builder_sha256": "91d371cbdd09d9dd9362cc3749ae9a4b78bfec311157f1b6fdeda9522dbb539c",
+  "clean_test_accessed": false,
+  "command": "python -m experiments.ve0.run_ve0",
+  "deterministic_selection_salt": "P2607-VE0-QUALITATIVE-SALT-20260813-v1",
+  "device": "cpu",
+  "evaluated_anything": false,
+  "gpu_hours_charged": 0.0,
+  "gpu_used": false,
+  "inputs": [
+   {
+    "bytes": 42006,
+    "path": "results/closure/G_claim_evidence.json",
+    "role": "closure output claims",
+    "sha256": "9efc2d34ac91c47120e936e5eb9d609fa04f96ae64c65af79a37832756fe952c"
+   },
+   {
+    "bytes": 127530,
+    "path": "results/closure/B_primary_contrasts.json",
+    "role": "closure output contrasts",
+    "sha256": "cca3c32fb9797123dd644d4ee4e1189e1ca03dcb6c497594774cbe90abd5e18b"
+   },
+   {
+    "bytes": 64983,
+    "path": "results/closure/efficiency_closure_table.json",
+    "role": "closure output efficiency",
+    "sha256": "be1781efeece841cc75df126fab43c9e9946437957c1ea6401ee1f86c8b47d5e"
+   },
+   {
+    "bytes": 4191,
+    "path": "results/closure/F_multiplicity_status.json",
+    "role": "closure output multiplicity",
+    "sha256": "7ab15242d892e02d6c397e96a4b002fe839b311100c61093cc214c2152d2cc41"
+   },
+   {
+    "bytes": 12970,
+    "path": "results/closure/H_evidence_readiness.json",
+    "role": "closure output readiness",
+    "sha256": "b54113dafb37e55c59d5ae0b8c550a33033a02bb54030b43a9416a859b0a3a9f"
+   },
+   {
+    "bytes": 239578,
+    "path": "results/closure/reconstructed_statistics.json",
+    "role": "closure output reconstructed",
+    "sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097"
+   },
+   {
+    "bytes": 441421,
+    "path": "results/closure/C_reconstructed_evidence_manifest.json",
+    "role": "closure output reconstructed_manifest",
+    "sha256": "a7c72050f4032d6f0c1c24e9cf5e334db4e1698c31c83c4907513a290e21dff5"
+   },
+   {
+    "bytes": 20546,
+    "path": "results/closure/A_evidence_registry.json",
+    "role": "closure output registry",
+    "sha256": "b8b47e024c49a599a425894f34c24b4375958998401a311605694027257de122"
+   },
+   {
+    "bytes": 66484,
+    "path": "results/closure/E_seed_variability.json",
+    "role": "closure output seed",
+    "sha256": "6da253c493edaba1a3ecc33b4d3c4d085b7520e51fe87975003c5353dcb65e14"
+   },
+   {
+    "bytes": 198706,
+    "path": "results/closure/D_slice_statistics.json",
+    "role": "closure output slices",
+    "sha256": "0a21059492c9e37b67223757535b379e15d3146cff51d0d378885e9dc39c2088"
+   }
+  ],
+  "measured_anything": false,
+  "numpy_version": "2.5.0",
+  "pandas_version": "3.0.3",
+  "python": "3.12.3",
+  "repository_head": "6f457d12e350c95c85650f17e2a367c70ea32828",
+  "repository_head_short": "6f457d1",
+  "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+  "schema_version": 1,
+  "selected_any_checkpoint": false,
+  "trained_anything": false,
+  "worktree_dirty": true
+ },
+ "selection_rule": {
+  "candidate_pool": "the in-vocabulary development rows only (data/v2/dev.csv, 7,714 rows over 768 represented images), except where a category explicitly declares the raw development view. The clean test is never a candidate pool.",
+  "clean_test": "NEVER. No qualitative example may come from the clean test, and no VE-2 script may resolve the embargoed path.",
+  "examples_per_category": 2,
+  "formula": "rank_key = SHA256(salt + '|' + category_id + '|' + question_id).hexdigest(); candidates sorted ascending by rank_key; the lowest ranks are taken in order",
+  "method": "deterministic hash rank",
+  "predicate_evaluation": "each category names the exact systems, scale, seed and condition its predicate is evaluated at, fixed here and not chosen after seeing the candidates. Where a category needs a single seed, seed 0 is used, declared in advance.",
+  "salt": "P2607-VE0-QUALITATIVE-SALT-20260813-v1",
+  "salt_freeze_statement": "The salt was fixed in experiments/ve0/ve0_common.py at VE-0 time, before any candidate example was listed, inspected or rendered. Changing it changes every rank, so it is recorded here, in the VE-0 manifest and in the VE-0 report, and a later change would be visible as a manifest difference.",
+  "salt_frozen_before_inspection": true,
+  "substitution_policy": "NO SUBSTITUTION FOR APPEARANCE. An example may be skipped ONLY for a recorded mechanical reason: the image file is unreadable, or the row fails the category predicate on re-check. Every skip is recorded in the VE-2 record with its rank, its question_id and its reason, and the next rank is taken. A skip for any aesthetic, rhetorical or outcome-related reason is forbidden.",
+  "tie_breaking": "rank_key collisions are broken by ascending question_id; a collision has never been observed and would be recorded if it occurred"
+ },
+ "title": "deterministic qualitative-evidence protocol",
+ "ve0_output": "H"
+}

@@ -98,6 +98,16 @@ results/closure/*
 !results/closure/*.csv
 !results/closure/*.md
 
+# VE-0 evidence contract: the same policy again. These artefacts are the
+# registry the dissertation figures, tables and slides must resolve against,
+# so they are small, auditable and tracked in full. VE-0 writes no binary and
+# no per-row array.
+!results/ve0/
+results/ve0/*
+!results/ve0/*.json
+!results/ve0/*.csv
+!results/ve0/*.md
+
 # Python bytecode
 __pycache__/
 *.pyc

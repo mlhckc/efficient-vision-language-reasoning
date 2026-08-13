@@ -1,0 +1,1030 @@
+{
+ "added_by_ve0": [
+  "C18",
+  "C19",
+  "C20",
+  "C21"
+ ],
+ "by_status": {
+  "ESTABLISHED": [
+   "C01",
+   "C04",
+   "C06",
+   "C08",
+   "C15"
+  ],
+  "NOT_SUPPORTED": [
+   "C16",
+   "C17",
+   "C20",
+   "C21"
+  ],
+  "SUPPORTED": [
+   "C03",
+   "C05",
+   "C07",
+   "C09",
+   "C10",
+   "C11",
+   "C12",
+   "C13",
+   "C14",
+   "C18",
+   "C19"
+  ],
+  "TENTATIVE": [
+   "C02"
+  ]
+ },
+ "claim_count": 21,
+ "claims": [
+  {
+   "claim_id": "C01",
+   "claim_text": "At train_40k the fusion features give a real accuracy gain over concatenation, but capacity explains part of it: at matched trainable-parameter budgets the gain shrinks and one of the two matched contrasts no longer excludes zero.",
+   "consumed_by": [
+    "VE0-FIG-02",
+    "VE0-TAB-01",
+    "VE0-TAB-02"
+   ],
+   "directional_evidence_count": 5,
+   "dissertation_sections": [
+    "R1_BASELINES_AND_FUSION",
+    "R2_CAPACITY_AND_FEATURES"
+   ],
+   "evidence_count": 6,
+   "evidence_ids": [
+    "EV-CON-v2_02.concat_minus_question_only.train_40k",
+    "EV-CON-v2_02.fusion_minus_concat.train_40k",
+    "EV-CON-v2_03.concat_wide_minus_concat.train_40k",
+    "EV-CON-v2_03.fusion_minus_concat_wide.train_40k",
+    "EV-CON-v2_03.fusion_minus_fusion_narrow.train_40k",
+    "EV-CON-v2_03.fusion_narrow_minus_concat.train_40k"
+   ],
+   "evidence_with_interval": 6,
+   "families": [
+    "v2_02",
+    "v2_03"
+   ],
+   "forbidden_stronger_version": "that the fusion gain is purely architectural, or that interaction features are shown to be better than capacity.",
+   "is_positive_results_claim": true,
+   "mandatory_caveat": "The unmatched v2_02 contrast is capacity-confounded (1,100,388 against 576,100 trainable parameters). Only the v2_03 matched pairs isolate the feature effect, and fusion minus concat_wide includes zero. Development set, train_40k, five training seeds.",
+   "selectors": [
+    {
+     "evidence_class": "CON",
+     "experiment_family": [
+      "v2_02",
+      "v2_03"
+     ]
+    }
+   ],
+   "source": "closure C01, preserved",
+   "status": "ESTABLISHED",
+   "status_reason": "four capacity-matched paired contrasts with image-clustered intervals, three excluding zero, on identical development rows."
+  },
+  {
+   "claim_id": "C02",
+   "claim_text": "The fusion advantage over concatenation is largest in the lower-data regime and narrows as the training set grows.",
+   "consumed_by": [
+    "VE0-FIG-03",
+    "VE0-TAB-01"
+   ],
+   "directional_evidence_count": 2,
+   "dissertation_sections": [
+    "R3_SCALING_BEHAVIOUR"
+   ],
+   "evidence_count": 14,
+   "evidence_ids": [
+    "EV-CON-v2_02.concat_minus_question_only.train_40k",
+    "EV-CON-v2_02.fusion_minus_concat.train_40k",
+    "EV-SEED-v2_07.concat.train_100k",
+    "EV-SEED-v2_07.concat.train_250k",
+    "EV-SEED-v2_07.concat.train_40k",
+    "EV-SEED-v2_07.fusion.train_100k",
+    "EV-SEED-v2_07.fusion.train_250k",
+    "EV-SEED-v2_07.fusion.train_40k",
+    "EV-SEED-v2_07.product_576k.train_100k",
+    "EV-SEED-v2_07.product_576k.train_250k",
+    "EV-SEED-v2_07.product_576k.train_40k",
+    "EV-SEED-v2_07.question_only.train_100k",
+    "EV-SEED-v2_07.question_only.train_250k",
+    "EV-SEED-v2_07.question_only.train_40k"
+   ],
+   "evidence_with_interval": 2,
+   "families": [
+    "v2_02",
+    "v2_07"
+   ],
+   "forbidden_stronger_version": "quoting a confidence interval for the 250k fusion-minus-concat gap, or presenting the narrowing as statistically demonstrated at 250k.",
+   "is_positive_results_claim": true,
+   "mandatory_caveat": "v2_07 ACCEPTED DOCUMENTED LIMITATION. The narrowing at 250k rests on stored per-seed means and their across-training-seed sample sd alone, with no evaluation-sampling interval, and one of forty cells differs from reconstruction by one numerically tied row. The claim must be written with that asymmetry stated, or restricted to the 40k evidence.",
+   "selectors": [
+    {
+     "evidence_class": "SEED",
+     "experiment_family": [
+      "v2_07"
+     ]
+    },
+    {
+     "evidence_class": "CON",
+     "experiment_family": [
+      "v2_02"
+     ]
+    }
+   ],
+   "source": "closure C02, preserved; status downgraded from READY to TENTATIVE here because the missing interval is a wording constraint on the claim, not only a readiness note.",
+   "status": "TENTATIVE",
+   "status_reason": "the 40k side carries an image-clustered interval; the 250k side does not, because the v2_07 row-level reconstruction was attempted and stopped."
+  },
+  {
+   "claim_id": "C03",
+   "claim_text": "Either interaction term alone recovers most of the fusion gain at an equal parameter budget; the product and absolute difference terms are largely redundant with each other.",
+   "consumed_by": [
+    "VE0-FIG-A1",
+    "VE0-TAB-02"
+   ],
+   "directional_evidence_count": 5,
+   "dissertation_sections": [
+    "R2_CAPACITY_AND_FEATURES"
+   ],
+   "evidence_count": 9,
+   "evidence_ids": [
+    "EV-CON-v2_04.difference_576k_minus_concat.train_40k",
+    "EV-CON-v2_04.difference_natural_minus_concat.train_40k",
+    "EV-CON-v2_04.fusion_minus_difference_natural.train_40k",
+    "EV-CON-v2_04.fusion_minus_product_natural.train_40k",
+    "EV-CON-v2_04.fusion_narrow_minus_difference_576k.train_40k",
+    "EV-CON-v2_04.fusion_narrow_minus_product_576k.train_40k",
+    "EV-CON-v2_04.product_576k_minus_concat.train_40k",
+    "EV-CON-v2_04.product_576k_minus_difference_576k.train_40k",
+    "EV-CON-v2_04.product_natural_minus_concat.train_40k"
+   ],
+   "evidence_with_interval": 9,
+   "families": [
+    "v2_04"
+   ],
+   "forbidden_stronger_version": "that the two terms compute the same function, or that one term is unnecessary in general.",
+   "is_positive_results_claim": true,
+   "mandatory_caveat": "Redundancy is inferred from the two terms performing alike at matched capacity, not from a mechanism. Development set, train_40k only.",
+   "selectors": [
+    {
+     "evidence_class": "CON",
+     "experiment_family": [
+      "v2_04"
+     ]
+    }
+   ],
+   "source": "closure C03, preserved",
+   "status": "SUPPORTED",
+   "status_reason": "the complete nine-contrast grid, with the two term-versus-term contrasts centred on zero."
+  },
+  {
+   "claim_id": "C04",
+   "claim_text": "The multimodal heads depend on the correct image: replacing it with another development image or with zeros costs accuracy, and the question-only control is provably unaffected.",
+   "consumed_by": [
+    "VE0-FIG-05"
+   ],
+   "directional_evidence_count": 7,
+   "dissertation_sections": [
+    "R4_DEPTH_AND_RELIANCE"
+   ],
+   "evidence_count": 10,
+   "evidence_ids": [
+    "EV-CON-v2_06.concat.drop_shuffled.train_40k",
+    "EV-CON-v2_06.concat.drop_zeroed.train_40k",
+    "EV-CON-v2_06.fusion.drop_shuffled.train_40k",
+    "EV-CON-v2_06.fusion.drop_zeroed.train_40k",
+    "EV-CON-v2_06.image_only.drop_shuffled.train_40k",
+    "EV-CON-v2_06.image_only.drop_zeroed.train_40k",
+    "EV-CON-v2_06.product_576k.drop_shuffled.train_40k",
+    "EV-CON-v2_06.product_576k.drop_zeroed.train_40k",
+    "EV-CON-v2_06.question_only.drop_shuffled.train_40k",
+    "EV-CON-v2_06.question_only.drop_zeroed.train_40k"
+   ],
+   "evidence_with_interval": 10,
+   "families": [
+    "v2_06"
+   ],
+   "forbidden_stronger_version": "that the systems reason about the image, ground language in the image, or understand the scene compositionally.",
+   "is_positive_results_claim": true,
+   "mandatory_caveat": "A drop under a wrong or removed image demonstrates reliance on the image. It is NOT proof of robust visual reasoning, of grounding or of compositional understanding. The question-only drop is exactly zero by construction and is a control, not a result.",
+   "selectors": [
+    {
+     "evidence_class": "CON",
+     "experiment_family": [
+      "v2_06"
+     ]
+    }
+   ],
+   "source": "closure C04, preserved",
+   "status": "ESTABLISHED",
+   "status_reason": "ten paired intervention contrasts on identical rows with a zero-by-construction control."
+  },
+  {
+   "claim_id": "C05",
+   "claim_text": "Under the tested train_40k controlled comparison, with both sides evaluated on identical development rows, the stronger frozen representation improves the multimodal systems, supporting representation quality as an important factor acting mainly through the image path.",
+   "consumed_by": [
+    "VE0-FIG-07",
+    "VE0-TAB-A3"
+   ],
+   "directional_evidence_count": 3,
+   "dissertation_sections": [
+    "R5_LATENT_REASONING_AND_REPRESENTATION"
+   ],
+   "evidence_count": 4,
+   "evidence_ids": [
+    "EV-CON-e2.siglip_minus_clip_concat.train_40k",
+    "EV-CON-e2.siglip_minus_clip_fusion.train_40k",
+    "EV-CON-e2.siglip_minus_clip_product.train_40k",
+    "EV-CON-e2.siglip_minus_clip_question_only.train_40k"
+   ],
+   "evidence_with_interval": 4,
+   "families": [
+    "e2"
+   ],
+   "forbidden_stronger_version": "PROHIBITED WORDING: that SigLIP proves representation quality is the sole or the main bottleneck. Any 'sole bottleneck' or 'main bottleneck' phrasing is forbidden.",
+   "is_positive_results_claim": true,
+   "mandatory_caveat": "Representation quality is NOT isolated: encoder, embedding width (512 against 768) and head input width all move together. The training streams are not paired and the seed label does not pair two runs. At train_250k the direction rests on stored per-seed means with no clustered interval.",
+   "selectors": [
+    {
+     "evidence_class": "CON",
+     "experiment_family": [
+      "e2"
+     ],
+     "source_key_contains": [
+      "siglip_minus_clip"
+     ]
+    }
+   ],
+   "source": "closure C05, preserved with the reviewer's exact supported boundary wording",
+   "status": "SUPPORTED",
+   "status_reason": "three multimodal gains exclude zero while the question-only gain does not, on identical rows."
+  },
+  {
+   "claim_id": "C06",
+   "claim_text": "A pooled deficit at four or more reasoning steps persists across both frozen encoders, across training scales and across head families.",
+   "consumed_by": [
+    "VE0-FIG-04",
+    "VE0-FIG-A4"
+   ],
+   "directional_evidence_count": 12,
+   "dissertation_sections": [
+    "R4_DEPTH_AND_RELIANCE"
+   ],
+   "evidence_count": 12,
+   "evidence_ids": [
+    "EV-DEF-e2.pooled_ge4_deficit.concat.train_250k",
+    "EV-DEF-e2.pooled_ge4_deficit.concat.train_40k",
+    "EV-DEF-e2.pooled_ge4_deficit.fusion.train_250k",
+    "EV-DEF-e2.pooled_ge4_deficit.fusion.train_40k",
+    "EV-DEF-e2.pooled_ge4_deficit.product.train_250k",
+    "EV-DEF-e2.pooled_ge4_deficit.product.train_40k",
+    "EV-DEF-e2.pooled_ge4_deficit.question_only.train_250k",
+    "EV-DEF-e2.pooled_ge4_deficit.question_only.train_40k",
+    "EV-DEF-v2_02.pooled_ge4_deficit.concat.train_40k",
+    "EV-DEF-v2_02.pooled_ge4_deficit.fusion.train_40k",
+    "EV-DEF-v2_02.pooled_ge4_deficit.question_only.train_40k",
+    "EV-DEF-v2_04.pooled_ge4_deficit.product_natural.train_40k"
+   ],
+   "evidence_with_interval": 12,
+   "families": [
+    "e2",
+    "v2_02",
+    "v2_04"
+   ],
+   "forbidden_stronger_version": "that the systems cannot compose, that the deficit measures compositional reasoning ability, or that any system reduces it.",
+   "is_positive_results_claim": true,
+   "mandatory_caveat": "The deficit is measured against fixed v2_05b per-bucket priors and describes one system's step profile; it is not a contrast between systems and establishes no cause. The reasoner-minus-fusion paired deficit differences all include zero, so no system in the set has been SHOWN to reduce the deficit, which is not the same as showing the systems equivalent. The v2_07 250k CLIP arm of this claim has no interval. Step counts are GQA semantic program lengths, a proxy for reasoning depth.",
+   "selectors": [
+    {
+     "evidence_class": "DEF"
+    }
+   ],
+   "source": "closure C06, preserved",
+   "status": "ESTABLISHED",
+   "status_reason": "twelve pooled deficits, every interval excluding zero, across two encoders, two scales and four head families."
+  },
+  {
+   "claim_id": "C07",
+   "claim_text": "The lightweight question-conditioned latent-query reasoner over token-level visual features does not materially outperform the far smaller global-embedding fusion head at train_40k, and does not reduce the multi-step deficit at any tested scale.",
+   "consumed_by": [
+    "VE0-FIG-06"
+   ],
+   "directional_evidence_count": 0,
+   "dissertation_sections": [
+    "R5_LATENT_REASONING_AND_REPRESENTATION"
+   ],
+   "evidence_count": 6,
+   "evidence_ids": [
+    "EV-CON-v3_02a.reasoner_minus_fusion_deficit.train_40k",
+    "EV-CON-v3_03.reasoner_minus_fusion_deficit.train_100k",
+    "EV-CON-v3_03.reasoner_minus_fusion_deficit.train_250k",
+    "EV-DSC-v3_01.reasoner.train_40k.seed_mean",
+    "EV-DSC-v3_01.reasoner.train_40k.seed_sd",
+    "EV-DSC-v3_01.reasoner_minus_fusion.train_40k.seed_mean"
+   ],
+   "evidence_with_interval": 3,
+   "families": [
+    "v3_01",
+    "v3_02a",
+    "v3_03"
+   ],
+   "forbidden_stronger_version": "that token-level visual access does not help, as a general statement, or that the reasoner and the fusion head are equivalent.",
+   "is_positive_results_claim": true,
+   "mandatory_caveat": "A system-level comparison. It does not isolate token access causally: the reasoner differs from the fusion head in input granularity, architecture and parameter count at once. All three deficit-difference intervals include zero, which is an absence of a detected difference, not evidence of equivalence. The 40k accuracy comparison carries a training-seed spread only, with no clustered interval.",
+   "selectors": [
+    {
+     "evidence_class": "CON",
+     "experiment_family": [
+      "v3_02a",
+      "v3_03"
+     ]
+    },
+    {
+     "evidence_class": "DSC",
+     "experiment_family": [
+      "v3_01"
+     ]
+    }
+   ],
+   "source": "closure C07, preserved",
+   "status": "SUPPORTED",
+   "status_reason": "three paired deficit-difference contrasts all including zero, plus the v3_01 same-seed 40k gap of +0.00307 with seeds disagreeing in sign."
+  },
+  {
+   "claim_id": "C08",
+   "claim_text": "On the question side, a frozen pretrained SmolLM2-135M encoder beats its architecture-matched random control at both tested training scales.",
+   "consumed_by": [
+    "VE0-FIG-08",
+    "VE0-TAB-04",
+    "VE0-TAB-05"
+   ],
+   "directional_evidence_count": 2,
+   "dissertation_sections": [
+    "R6_QUESTION_SIDE_SLM"
+   ],
+   "evidence_count": 2,
+   "evidence_ids": [
+    "EV-CON-E8A.A1_minus_A1r.train_250k",
+    "EV-CON-E8A.A1_minus_A1r.train_40k"
+   ],
+   "evidence_with_interval": 2,
+   "families": [
+    "E8A"
+   ],
+   "forbidden_stronger_version": "that pretrained language models are better question encoders in general, or that this transfers to the answer side.",
+   "is_positive_results_claim": true,
+   "mandatory_caveat": "A1 minus A1r is the only clean within-size question-side pretraining contrast. It says nothing about the answer side, and nothing about whether the pretrained encoder beats the CLIP text tower. E8A's projected interface is a learned common width, not a naturally shared pretrained embedding space.",
+   "selectors": [
+    {
+     "evidence_class": "CON",
+     "experiment_family": [
+      "E8A"
+     ],
+     "source_key_contains": [
+      "A1_minus_A1r"
+     ]
+    }
+   ],
+   "source": "closure C08, preserved",
+   "status": "ESTABLISHED",
+   "status_reason": "two within-size paired contrasts, both intervals excluding zero, +0.03820 at 40k and +0.04835 at 250k."
+  },
+  {
+   "claim_id": "C09",
+   "claim_text": "The frozen CLIP text tower (A0p) outperforms the frozen SmolLM2-135M question encoder (A1) on this task.",
+   "consumed_by": [
+    "VE0-TAB-05"
+   ],
+   "directional_evidence_count": 2,
+   "dissertation_sections": [
+    "R6_QUESTION_SIDE_SLM"
+   ],
+   "evidence_count": 2,
+   "evidence_ids": [
+    "EV-CON-E8A.A1_minus_A0p.train_250k",
+    "EV-CON-E8A.A1_minus_A0p.train_40k"
+   ],
+   "evidence_with_interval": 2,
+   "families": [
+    "E8A"
+   ],
+   "forbidden_stronger_version": "that shared pretrained space causes the advantage, or that language-model semantics are worse than CLIP text semantics.",
+   "is_positive_results_claim": true,
+   "mandatory_caveat": "This is a system comparison, NOT an isolated causal semantics or alignment effect. The two sides differ in representation space, in interface and in whether the text representation shares a pretrained space with the image representation.",
+   "selectors": [
+    {
+     "evidence_class": "CON",
+     "experiment_family": [
+      "E8A"
+     ],
+     "source_key_contains": [
+      "A1_minus_A0p"
+     ]
+    }
+   ],
+   "source": "closure C09, preserved",
+   "status": "SUPPORTED",
+   "status_reason": "two paired contrasts with intervals excluding zero, but the two sides differ in more than one factor."
+  },
+  {
+   "claim_id": "C10",
+   "claim_text": "On the answer side, this frozen-SLM readout interface shows no reliable positive pretrained-over-random advantage, at 135M (E8B) or at 360M (E10).",
+   "consumed_by": [
+    "VE0-FIG-08",
+    "VE0-TAB-05"
+   ],
+   "directional_evidence_count": 1,
+   "dissertation_sections": [
+    "R7_ANSWER_SIDE_AND_CAPACITY"
+   ],
+   "evidence_count": 4,
+   "evidence_ids": [
+    "EV-CON-E10.pretraining_effect.train_250k",
+    "EV-CON-E10.pretraining_effect.train_40k",
+    "EV-CON-E8B.B3_-_B2.train_250k",
+    "EV-CON-E8B.B3_-_B2.train_40k"
+   ],
+   "evidence_with_interval": 4,
+   "families": [
+    "E10",
+    "E8B"
+   ],
+   "forbidden_stronger_version": "PROHIBITED: 'pretraining has no effect', 'the two are equivalent', or 'we prove the absence of an effect'. Also prohibited: generalising to all small language models or all multimodal interfaces.",
+   "is_positive_results_claim": true,
+   "mandatory_caveat": "Both E10 intervals include zero and the seeds disagree in sign; they establish NEITHER equivalence NOR the absence of an effect. E10 does NOT reproduce E8B's directional negative 40k result: E8B's B3 minus B2 at 40k is -0.02463 with an interval excluding zero and all three seeds negative, against E10's uncertain -0.00683 with mixed seed signs. E8B B3 at train_40k has a seed sd of 0.02795 and must always be shown with its seed spread.",
+   "selectors": [
+    {
+     "evidence_class": "CON",
+     "experiment_family": [
+      "E8B"
+     ],
+     "source_key_contains": [
+      "B3 - B2"
+     ]
+    },
+    {
+     "evidence_class": "CON",
+     "experiment_family": [
+      "E10"
+     ],
+     "source_key_contains": [
+      "pretraining_effect"
+     ]
+    }
+   ],
+   "source": "closure C10, preserved",
+   "status": "SUPPORTED",
+   "status_reason": "an absence-of-detection claim, not a positive one: the E10 intervals contain zero with seeds disagreeing in sign, and E8B's 250k interval also contains zero."
+  },
+  {
+   "claim_id": "C11",
+   "claim_text": "Moving the answer-side frozen language model from 135M to 360M does not change the pretraining conclusion, and training-set size is what moves accuracy.",
+   "consumed_by": [
+    "VE0-FIG-08",
+    "VE0-TAB-03",
+    "VE0-TAB-05"
+   ],
+   "directional_evidence_count": 2,
+   "dissertation_sections": [
+    "R7_ANSWER_SIDE_AND_CAPACITY"
+   ],
+   "evidence_count": 5,
+   "evidence_ids": [
+    "EV-CON-E10.difference_in_differences",
+    "EV-CON-E10.pretraining_effect.train_250k",
+    "EV-CON-E10.pretraining_effect.train_40k",
+    "EV-CON-E10.scale_effect_B4",
+    "EV-CON-E10.scale_effect_B4r"
+   ],
+   "evidence_with_interval": 5,
+   "families": [
+    "E10"
+   ],
+   "forbidden_stronger_version": "that language-model size does not matter, or that the difference in differences shows the pretraining contribution is flat in scale.",
+   "is_positive_results_claim": true,
+   "mandatory_caveat": "135M to 360M is whole-system capacity sensitivity, not an isolated causal language-model-size effect: trainable capacity also moves, 21,343,808 to 21,540,800 parameters, because the projection width follows the hidden size. The difference in differences is not directional.",
+   "selectors": [
+    {
+     "evidence_class": "CON",
+     "experiment_family": [
+      "E10"
+     ]
+    }
+   ],
+   "source": "closure C11, preserved",
+   "status": "SUPPORTED",
+   "status_reason": "two scale effects with intervals excluding zero against a difference in differences that does not."
+  },
+  {
+   "claim_id": "C12",
+   "claim_text": "Growing the closed answer set from 100 to 1000 raises development coverage and raises raw-distribution accuracy, while costing accuracy on the shared head rows.",
+   "consumed_by": [
+    "VE0-FIG-A3"
+   ],
+   "directional_evidence_count": 5,
+   "dissertation_sections": [
+    "R_APPENDIX_ANSWER_SET"
+   ],
+   "evidence_count": 8,
+   "evidence_ids": [
+    "EV-CON-e3.concat_minus_question_only.train_250k",
+    "EV-CON-e3.concat_minus_question_only.train_40k",
+    "EV-CON-e3.fusion_minus_concat.train_250k",
+    "EV-CON-e3.fusion_minus_concat.train_40k",
+    "EV-CON-e3.product_minus_concat.train_250k",
+    "EV-CON-e3.product_minus_concat.train_40k",
+    "EV-DSC-dev.coverage_top100",
+    "EV-DSC-dev.coverage_top1000"
+   ],
+   "evidence_with_interval": 6,
+   "families": [
+    "E3",
+    "e3",
+    "v2_00"
+   ],
+   "forbidden_stronger_version": "differencing a top-100 accuracy against a top-1000 accuracy, or presenting the two as one scaling curve.",
+   "is_positive_results_claim": true,
+   "mandatory_caveat": "Top-100 and top-1000 results are NEVER paired: they use different development rows (7,714 against 9,823), a different class count and different training rows. Class competition and the smaller head-answer share of a fixed budget are confounded in the head-row loss. The side-by-side comparison is context only.",
+   "selectors": [
+    {
+     "evidence_class": "CON",
+     "experiment_family": [
+      "e3"
+     ]
+    },
+    {
+     "evidence_class": "DSC",
+     "source_key_in": [
+      "dev.coverage_top100",
+      "dev.coverage_top1000"
+     ]
+    }
+   ],
+   "source": "closure C12, preserved",
+   "status": "SUPPORTED",
+   "status_reason": "coverage read from the frozen protocol artefacts; the accuracy movements are within-view contrasts."
+  },
+  {
+   "claim_id": "C13",
+   "claim_text": "A small global-embedding head reaches comparable raw-distribution accuracy to far larger systems at a small fraction of the measured end-to-end serial latency.",
+   "consumed_by": [
+    "VE0-FIG-09",
+    "VE0-FIG-A6",
+    "VE0-TAB-06"
+   ],
+   "directional_evidence_count": 0,
+   "dissertation_sections": [
+    "R8_COMPUTATIONAL_EFFICIENCY"
+   ],
+   "evidence_count": 19,
+   "evidence_ids": [
+    "EV-EFF-E7b.concat",
+    "EV-EFF-E7b.e8a_a0p",
+    "EV-EFF-E7b.e8a_a1",
+    "EV-EFF-E7b.fusion",
+    "EV-EFF-E7b.question_only",
+    "EV-EFF-E7b.reasoner",
+    "EV-EFF-E7b.siglip_fusion",
+    "EV-EFF-E7b.vocab1000_product",
+    "EV-EFF-E9.e8b_B1",
+    "EV-EFF-E9.e8b_B2_R2",
+    "EV-EFF-E9.e8b_B2_R3",
+    "EV-EFF-E9.e8b_B3_R2",
+    "EV-EFF-E9.e8b_B3_R3",
+    "EV-EFF-E9.e9_256m_constrained",
+    "EV-EFF-E9.e9_256m_open",
+    "EV-EFF-E9.e9_500m_constrained",
+    "EV-EFF-E9.e9_500m_open",
+    "EV-EFF-E9.fusion",
+    "EV-EFF-E9.vocab1000_product"
+   ],
+   "evidence_with_interval": 0,
+   "families": [
+    "E7b",
+    "E9"
+   ],
+   "forbidden_stronger_version": "any energy or power claim, any merged cross-node frontier, any use of E7a's additive full_pipeline_ms or amortised_ms as current end-to-end evidence.",
+   "is_positive_results_claim": true,
+   "mandatory_caveat": "Latency efficiency only, from measured warm serial batch-1 queries on ONE node per frontier. E7b (otter155) and E9 (otter159) are two separate frontiers and are never merged: E9's fusion bridge control failed its pre-registered 10 per cent tolerance at -18.69 per cent and no adjustment factor is applied. Cached and head-only figures are never quoted as end-to-end. No serial latency exists for E8B's canonical R1 readout, and R2/R3 are never presented as R1's cost. E10 has no timing evidence at all.",
+   "selectors": [
+    {
+     "evidence_class": "EFF",
+     "timing_kind": [
+      "END_TO_END_SERIAL"
+     ]
+    }
+   ],
+   "source": "closure C13, preserved",
+   "status": "SUPPORTED",
+   "status_reason": "directly measured on one node under one protocol; the accuracy side is a cross-family comparison rather than a matched contrast."
+  },
+  {
+   "claim_id": "C14",
+   "claim_text": "A frozen compact integrated VLM can be placed in context against these lightweight systems.",
+   "consumed_by": [
+    "VE0-FIG-A5",
+    "VE0-TAB-06"
+   ],
+   "directional_evidence_count": 0,
+   "dissertation_sections": [
+    "R8_COMPUTATIONAL_EFFICIENCY"
+   ],
+   "evidence_count": 11,
+   "evidence_ids": [
+    "EV-EFF-E9.e8b_B1",
+    "EV-EFF-E9.e8b_B2_R2",
+    "EV-EFF-E9.e8b_B2_R3",
+    "EV-EFF-E9.e8b_B3_R2",
+    "EV-EFF-E9.e8b_B3_R3",
+    "EV-EFF-E9.e9_256m_constrained",
+    "EV-EFF-E9.e9_256m_open",
+    "EV-EFF-E9.e9_500m_constrained",
+    "EV-EFF-E9.e9_500m_open",
+    "EV-EFF-E9.fusion",
+    "EV-EFF-E9.vocab1000_product"
+   ],
+   "evidence_with_interval": 0,
+   "families": [
+    "E9"
+   ],
+   "forbidden_stronger_version": "that this project beats or is beaten by SmolVLM, or any comparison against a published GQA leaderboard number.",
+   "is_positive_results_claim": true,
+   "mandatory_caveat": "CONTEXTUAL POSITIONING ONLY, never a leaderboard or fair-protocol superiority claim. Training history, multimodal pretraining, answer support and output format all differ, and SmolVLM-256M's text backbone is the Instruct checkpoint where E8A and E8B use base. No comparison is made against published official GQA scores in either direction, because the split, the answer support and the scorer all differ.",
+   "selectors": [
+    {
+     "evidence_class": "EFF",
+     "experiment_family": [
+      "E9"
+     ]
+    }
+   ],
+   "source": "closure C14, preserved; the empty supporting_artefacts list the closure review flagged as a LOW observation is repaired here by binding the E9 efficiency evidence explicitly.",
+   "status": "SUPPORTED",
+   "status_reason": "measured on the E9 node under the imported protocol; contextual by construction."
+  },
+  {
+   "claim_id": "C15",
+   "claim_text": "This project makes no claim of general vision-language reasoning.",
+   "consumed_by": [
+    "VE0-TAB-07"
+   ],
+   "directional_evidence_count": 0,
+   "dissertation_sections": [
+    "R_LIMITATIONS"
+   ],
+   "evidence_count": 0,
+   "evidence_free_scope_statement": true,
+   "evidence_ids": [],
+   "evidence_with_interval": 0,
+   "families": [],
+   "forbidden_stronger_version": "NOT_APPLICABLE: this claim only narrows scope.",
+   "is_positive_results_claim": true,
+   "mandatory_caveat": "The task studied is controlled GQA answer classification over a closed answer set, with reasoning-related analyses layered on it. Every result is a development-set result on one dataset subset; the clean test remains embargoed and unread.",
+   "selectors": [],
+   "source": "closure C15, preserved",
+   "status": "ESTABLISHED",
+   "status_reason": "a self-limiting statement about scope."
+  },
+  {
+   "claim_id": "C16",
+   "claim_text": "PROHIBITED: no claim that any system here is energy-efficient.",
+   "consumed_by": [
+    "VE0-TAB-07"
+   ],
+   "directional_evidence_count": 0,
+   "dissertation_sections": [
+    "R_LIMITATIONS"
+   ],
+   "evidence_count": 0,
+   "evidence_free_scope_statement": true,
+   "evidence_ids": [],
+   "evidence_with_interval": 0,
+   "families": [],
+   "forbidden_stronger_version": "any use of the words energy, power, watt, joule or carbon as a property of a system measured here.",
+   "is_positive_results_claim": false,
+   "mandatory_caveat": "Permitted wording is 'computationally efficient', 'latency-efficient', or the directly measured term. This row exists to record the prohibition.",
+   "selectors": [],
+   "source": "closure C16, preserved",
+   "status": "NOT_SUPPORTED",
+   "status_reason": "no direct power or energy measurement exists anywhere in this project."
+  },
+  {
+   "claim_id": "C17",
+   "claim_text": "PROHIBITED: no merged cross-node efficiency frontier, and no equivalence claim from an interval that includes zero.",
+   "consumed_by": [
+    "VE0-FIG-09",
+    "VE0-TAB-06",
+    "VE0-TAB-07"
+   ],
+   "directional_evidence_count": 0,
+   "dissertation_sections": [
+    "R_LIMITATIONS"
+   ],
+   "evidence_count": 0,
+   "evidence_free_scope_statement": true,
+   "evidence_ids": [],
+   "evidence_with_interval": 0,
+   "families": [],
+   "forbidden_stronger_version": "NOT_APPLICABLE: this row is itself the prohibition.",
+   "is_positive_results_claim": false,
+   "mandatory_caveat": "The E7b and E9 measurements are on different nodes and the bridge control failed its tolerance, so they are never merged. An interval containing zero is an absence of a detected effect and never establishes equivalence or the absence of an effect.",
+   "selectors": [],
+   "source": "closure C17, preserved",
+   "status": "NOT_SUPPORTED",
+   "status_reason": "the two nodes disagree by -18.69 per cent on the same control system, and an interval containing zero is an absence of detection."
+  },
+  {
+   "claim_id": "C18",
+   "claim_text": "Closed-set visual question answering on this GQA subset can be performed by a small trainable head over frozen encoder features, reaching accuracy comparable to much larger systems at a small fraction of the measured per-query latency.",
+   "consumed_by": [
+    "VE0-FIG-02",
+    "VE0-FIG-09",
+    "VE0-TAB-06"
+   ],
+   "directional_evidence_count": 4,
+   "dissertation_sections": [
+    "R1_BASELINES_AND_FUSION",
+    "R8_COMPUTATIONAL_EFFICIENCY",
+    "R_DISCUSSION"
+   ],
+   "evidence_count": 23,
+   "evidence_ids": [
+    "EV-ARM-v2_02.concat.train_40k",
+    "EV-ARM-v2_02.fusion.train_40k",
+    "EV-ARM-v2_02.image_only.train_40k",
+    "EV-ARM-v2_02.question_only.train_40k",
+    "EV-EFF-E7b.concat",
+    "EV-EFF-E7b.e8a_a0p",
+    "EV-EFF-E7b.e8a_a1",
+    "EV-EFF-E7b.fusion",
+    "EV-EFF-E7b.question_only",
+    "EV-EFF-E7b.reasoner",
+    "EV-EFF-E7b.siglip_fusion",
+    "EV-EFF-E7b.vocab1000_product",
+    "EV-EFF-E9.e8b_B1",
+    "EV-EFF-E9.e8b_B2_R2",
+    "EV-EFF-E9.e8b_B2_R3",
+    "EV-EFF-E9.e8b_B3_R2",
+    "EV-EFF-E9.e8b_B3_R3",
+    "EV-EFF-E9.e9_256m_constrained",
+    "EV-EFF-E9.e9_256m_open",
+    "EV-EFF-E9.e9_500m_constrained",
+    "EV-EFF-E9.e9_500m_open",
+    "EV-EFF-E9.fusion",
+    "EV-EFF-E9.vocab1000_product"
+   ],
+   "evidence_with_interval": 4,
+   "families": [
+    "E7b",
+    "E9",
+    "v2_02"
+   ],
+   "forbidden_stronger_version": "that embedding-space reasoning replaces autoregressive vision-language models, that the result holds for open-ended VQA, or that it generalises beyond this dataset subset and answer set.",
+   "is_positive_results_claim": true,
+   "mandatory_caveat": "Closed-set classification over a fixed answer vocabulary, on one image-disjoint development partition of GQA, with the clean test embargoed and unread. 'Comparable accuracy' and 'a fraction of the latency' are measured on different axes and, for the compact VLM comparison, under a contextual rather than a matched protocol. Computational efficiency only; no energy was measured.",
+   "selectors": [
+    {
+     "evidence_class": "ARM",
+     "experiment_family": [
+      "v2_02"
+     ]
+    },
+    {
+     "evidence_class": "EFF",
+     "timing_kind": [
+      "END_TO_END_SERIAL"
+     ]
+    }
+   ],
+   "source": "VE-0, thesis-level claim. Not present in the closure ledger, which scoped itself to per-experiment claims.",
+   "status": "SUPPORTED",
+   "status_reason": "the thesis-level statement, assembled from the accuracy evidence and the measured latency evidence. It is an assembly of two separately measured axes, not a single controlled contrast."
+  },
+  {
+   "claim_id": "C19",
+   "claim_text": "Taken together, the frozen small-language-model results are interface-dependent: pretraining is useful on the question side in the tested setting, while no reliable positive advantage is detected for either tested answer-side interface.",
+   "consumed_by": [
+    "VE0-FIG-08",
+    "VE0-TAB-04",
+    "VE0-TAB-05"
+   ],
+   "directional_evidence_count": 3,
+   "dissertation_sections": [
+    "R6_QUESTION_SIDE_SLM",
+    "R7_ANSWER_SIDE_AND_CAPACITY",
+    "R_DISCUSSION"
+   ],
+   "evidence_count": 6,
+   "evidence_ids": [
+    "EV-CON-E10.pretraining_effect.train_250k",
+    "EV-CON-E10.pretraining_effect.train_40k",
+    "EV-CON-E8A.A1_minus_A1r.train_250k",
+    "EV-CON-E8A.A1_minus_A1r.train_40k",
+    "EV-CON-E8B.B3_-_B2.train_250k",
+    "EV-CON-E8B.B3_-_B2.train_40k"
+   ],
+   "evidence_with_interval": 6,
+   "families": [
+    "E10",
+    "E8A",
+    "E8B"
+   ],
+   "forbidden_stronger_version": "PROHIBITED: generalising to all small language models, all vision-language models, or all multimodal interfaces; or stating that answer-side pretraining is useless.",
+   "is_positive_results_claim": true,
+   "mandatory_caveat": "'Interface-dependent' is an INTERPRETATION across three experiments, not a measured factor: no single controlled experiment varied the interface side while holding everything else fixed. The question-side and answer-side arms differ in architecture, in what the projection maps, in readout and in checkpoint-selection rule. The answer-side half is an absence-of-detection result that establishes neither equivalence nor absence.",
+   "selectors": [
+    {
+     "evidence_class": "CON",
+     "experiment_family": [
+      "E8A"
+     ],
+     "source_key_contains": [
+      "A1_minus_A1r"
+     ]
+    },
+    {
+     "evidence_class": "CON",
+     "experiment_family": [
+      "E8B"
+     ],
+     "source_key_contains": [
+      "B3 - B2"
+     ]
+    },
+    {
+     "evidence_class": "CON",
+     "experiment_family": [
+      "E10"
+     ],
+     "source_key_contains": [
+      "pretraining_effect"
+     ]
+    }
+   ],
+   "source": "VE-0, cross-experiment synthesis claim.",
+   "status": "SUPPORTED",
+   "status_reason": "the question-side contrasts exclude zero at both scales while all four answer-side contrasts at two model sizes fail to establish a positive effect."
+  },
+  {
+   "claim_id": "C20",
+   "claim_text": "PLACEHOLDER, NOT YET CLAIMABLE: performance on the held-out clean test.",
+   "consumed_by": [
+    "VE0-TAB-07"
+   ],
+   "directional_evidence_count": 0,
+   "dissertation_sections": [
+    "R10_HELD_OUT_EVALUATION_PLACEHOLDER"
+   ],
+   "evidence_count": 0,
+   "evidence_free_scope_statement": true,
+   "evidence_ids": [],
+   "evidence_with_interval": 0,
+   "families": [],
+   "forbidden_stronger_version": "any statement, estimate, projection or expectation about clean-test performance.",
+   "is_positive_results_claim": false,
+   "mandatory_caveat": "No clean-test number exists anywhere in this project. Section R10 stays a placeholder until F2 has been authorised and executed. Nothing in VE-0, VE-1 or VE-2 may contain a clean-test value, statistic, coverage figure or answer distribution.",
+   "selectors": [],
+   "source": "VE-0, embargo firewall claim.",
+   "status": "NOT_SUPPORTED",
+   "status_reason": "the clean test is embargoed and unread. F1 (model freeze) and F2 (blinded clean-test evaluation) are unauthorised and unstarted."
+  },
+  {
+   "claim_id": "C21",
+   "claim_text": "PROHIBITED: no claim of out-of-distribution compositional generalisation.",
+   "consumed_by": [
+    "VE0-FIG-04",
+    "VE0-TAB-07"
+   ],
+   "directional_evidence_count": 0,
+   "dissertation_sections": [
+    "R_LIMITATIONS"
+   ],
+   "evidence_count": 0,
+   "evidence_free_scope_statement": true,
+   "evidence_ids": [],
+   "evidence_with_interval": 0,
+   "families": [],
+   "forbidden_stronger_version": "presenting the step-bucket deficit as evidence about compositional generalisation, or the clean test as an out-of-distribution test.",
+   "is_positive_results_claim": false,
+   "mandatory_caveat": "Three concepts must be kept distinct and never substituted for one another: (1) held-out GQA evaluation, which is F2 and has not happened; (2) reasoning-depth analysis, which is the step-bucket evidence and is in-distribution; and (3) true out-of-distribution compositional generalisation, which this project never tested. The step-bucket deficit is a within-distribution profile against fixed priors.",
+   "selectors": [],
+   "source": "VE-0, concept-separation claim.",
+   "status": "NOT_SUPPORTED",
+   "status_reason": "no out-of-distribution split was constructed and no compositional generalisation test was run."
+  }
+ ],
+ "clean_test_accessed": false,
+ "content_sha256": "38dfa22ecda64a6c8c7a5b34e67e29b88f0141dd2f9e1213534d673e0f39f801",
+ "governing_rule": "this ledger controls the Results, the Discussion, the Abstract, the Conclusion, the supervisor deck and the viva preparation. None of them may state a stronger version of a row here, and the forbidden_stronger_version field says what stronger would look like so the boundary is checkable rather than a matter of taste.",
+ "preserved_from_closure": [
+  "C01",
+  "C02",
+  "C03",
+  "C04",
+  "C05",
+  "C06",
+  "C07",
+  "C08",
+  "C09",
+  "C10",
+  "C11",
+  "C12",
+  "C13",
+  "C14",
+  "C15",
+  "C16",
+  "C17"
+ ],
+ "provenance": {
+  "builder": "experiments/ve0/run_ve0.py",
+  "builder_sha256": "91d371cbdd09d9dd9362cc3749ae9a4b78bfec311157f1b6fdeda9522dbb539c",
+  "clean_test_accessed": false,
+  "command": "python -m experiments.ve0.run_ve0",
+  "deterministic_selection_salt": "P2607-VE0-QUALITATIVE-SALT-20260813-v1",
+  "device": "cpu",
+  "evaluated_anything": false,
+  "gpu_hours_charged": 0.0,
+  "gpu_used": false,
+  "inputs": [
+   {
+    "bytes": 42006,
+    "path": "results/closure/G_claim_evidence.json",
+    "role": "closure output claims",
+    "sha256": "9efc2d34ac91c47120e936e5eb9d609fa04f96ae64c65af79a37832756fe952c"
+   },
+   {
+    "bytes": 127530,
+    "path": "results/closure/B_primary_contrasts.json",
+    "role": "closure output contrasts",
+    "sha256": "cca3c32fb9797123dd644d4ee4e1189e1ca03dcb6c497594774cbe90abd5e18b"
+   },
+   {
+    "bytes": 64983,
+    "path": "results/closure/efficiency_closure_table.json",
+    "role": "closure output efficiency",
+    "sha256": "be1781efeece841cc75df126fab43c9e9946437957c1ea6401ee1f86c8b47d5e"
+   },
+   {
+    "bytes": 4191,
+    "path": "results/closure/F_multiplicity_status.json",
+    "role": "closure output multiplicity",
+    "sha256": "7ab15242d892e02d6c397e96a4b002fe839b311100c61093cc214c2152d2cc41"
+   },
+   {
+    "bytes": 12970,
+    "path": "results/closure/H_evidence_readiness.json",
+    "role": "closure output readiness",
+    "sha256": "b54113dafb37e55c59d5ae0b8c550a33033a02bb54030b43a9416a859b0a3a9f"
+   },
+   {
+    "bytes": 239578,
+    "path": "results/closure/reconstructed_statistics.json",
+    "role": "closure output reconstructed",
+    "sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097"
+   },
+   {
+    "bytes": 441421,
+    "path": "results/closure/C_reconstructed_evidence_manifest.json",
+    "role": "closure output reconstructed_manifest",
+    "sha256": "a7c72050f4032d6f0c1c24e9cf5e334db4e1698c31c83c4907513a290e21dff5"
+   },
+   {
+    "bytes": 20546,
+    "path": "results/closure/A_evidence_registry.json",
+    "role": "closure output registry",
+    "sha256": "b8b47e024c49a599a425894f34c24b4375958998401a311605694027257de122"
+   },
+   {
+    "bytes": 66484,
+    "path": "results/closure/E_seed_variability.json",
+    "role": "closure output seed",
+    "sha256": "6da253c493edaba1a3ecc33b4d3c4d085b7520e51fe87975003c5353dcb65e14"
+   },
+   {
+    "bytes": 198706,
+    "path": "results/closure/D_slice_statistics.json",
+    "role": "closure output slices",
+    "sha256": "0a21059492c9e37b67223757535b379e15d3146cff51d0d378885e9dc39c2088"
+   }
+  ],
+  "measured_anything": false,
+  "numpy_version": "2.5.0",
+  "pandas_version": "3.0.3",
+  "python": "3.12.3",
+  "repository_head": "6f457d12e350c95c85650f17e2a367c70ea32828",
+  "repository_head_short": "6f457d1",
+  "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+  "schema_version": 1,
+  "selected_any_checkpoint": false,
+  "trained_anything": false,
+  "worktree_dirty": true
+ },
+ "statuses": {
+  "ESTABLISHED": "a controlled contrast whose interval excludes zero, or a self-limiting statement",
+  "NOT_SUPPORTED": "not supported, or an explicit prohibition",
+  "SUPPORTED": "backed as worded, with a named confound or a named absence-of-detection reading",
+  "TENTATIVE": "part of the supporting evidence is missing or weaker; the wording must show the asymmetry"
+ },
+ "title": "final claim ledger",
+ "ve0_output": "D"
+}
