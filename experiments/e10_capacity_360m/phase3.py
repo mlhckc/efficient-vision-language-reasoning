@@ -435,7 +435,7 @@ def authorization_contract() -> dict:
         "grant_outside_bound_digests": assert_grant_cannot_move_source_digest(),
         "entry_gate": assert_entry_gate_requires_grant(),
         "scientific_core": phase1.assert_scientific_core_refused(),
-        "no_scientific_execution": e10.assert_no_scientific_cells(),
+        "core_execution_state": e10.assert_core_execution_state_is_legitimate(),
         # Reported, not asserted: a verifier must describe the authorised state
         # as truthfully as the closed one. The hand-back proof that nothing is
         # authorised stays in write_phase3_records and in the tests.

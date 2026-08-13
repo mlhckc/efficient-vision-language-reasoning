@@ -31,6 +31,7 @@ from tests.test_e10 import (
     _temporary_shared_paths,
     _write_ledgers,
     mirror_governance,
+    pre_authorization_state,
     write_core_authorization_grant,
     write_retry_authorization,
 )
@@ -78,30 +79,36 @@ def _authorized_core(stack_paths: dict):
 # 1. The scientific core still refuses.
 
 def test_scientific_core_still_refuses() -> None:
+    # R3. Asserted inside an explicitly declared PRE-AUTHORISATION state. The
+    # invariant is unchanged: with no valid external grant, every one of the
+    # twelve frozen cells refuses at every authoritative entry point.
     assert e10.E10_TRAINING_AUTHORIZED is None
-    refused = phase1.assert_scientific_core_refused()
-    assert refused["refused"] is True
-    assert refused["e10_training_authorized"] is None
-    assert refused["core_authorization_grant_present"] is False
-    assert refused["refusal"].startswith(
-        "E10 CORE REFUSED: scientific authorization grant is absent"
-    )
-    for arm, scale, seed in FROZEN_ORDER:
-        _must_raise(
-            SystemExit,
-            lambda a=arm, s=scale, d=seed: e10.assert_core_entry_authorized(a, s, d),
-            "scientific authorization",
-        )
-    _must_raise(
-        SystemExit,
-        lambda: e10_run.core_cell("B4", "train_40k", 0),
-        "scientific authorization",
-    )
-    _must_raise(
-        SystemExit,
-        lambda: e10.authorize_cell_execution("B4", "train_40k", 0),
-        "scientific authorization",
-    )
+    with tempfile.TemporaryDirectory() as directory:
+        with pre_authorization_state(Path(directory)):
+            refused = phase1.assert_scientific_core_refused()
+            assert refused["refused"] is True
+            assert refused["e10_training_authorized"] is None
+            assert refused["core_authorization_grant_present"] is False
+            assert refused["refusal"].startswith(
+                "E10 CORE REFUSED: scientific authorization grant is absent"
+            )
+            for arm, scale, seed in FROZEN_ORDER:
+                _must_raise(
+                    SystemExit,
+                    lambda a=arm, s=scale, d=seed:
+                        e10.assert_core_entry_authorized(a, s, d),
+                    "scientific authorization",
+                )
+            _must_raise(
+                SystemExit,
+                lambda: e10_run.core_cell("B4", "train_40k", 0),
+                "scientific authorization",
+            )
+            _must_raise(
+                SystemExit,
+                lambda: e10.authorize_cell_execution("B4", "train_40k", 0),
+                "scientific authorization",
+            )
 
 
 # 2. The 12 h wall comes from the authoritative constant.
@@ -693,20 +700,31 @@ def test_embargo_and_output_guards_still_pass() -> None:
 # 14. This authorization task created no scientific artefact.
 
 def test_no_scientific_artifact_was_created() -> None:
-    assert sorted(e10.OUT_DIR.rglob("*.pt")) == []
-    assert sorted(e10.OUT_DIR.glob("cell_*.json")) == []
+    """The Phase-1 hand-back proof, asserted in the state it describes.
+
+    R3. This is a PRE-AUTHORISATION statement, so it is made inside a declared
+    pre-authorisation state rather than against whatever the repository now
+    contains. The two facts that are permanent regardless of lifecycle state --
+    the source constants and the frozen recipe contract's authorised-cell count
+    -- are still asserted against the real tree.
+    """
     assert e10.E10_TRAINING_AUTHORIZED is None
     assert e10.E10_CALIBRATION_AUTHORIZED is None
-    ledger = e10.read_spend_ledger()
-    assert [entry for entry in ledger["entries"]
-            if entry["context"] == "e10_core_cell"] == []
-    assert e10.read_retry_ledger()["retries"] == []
-    assert not e10.RETRY_AUTHORIZATION_DIR.exists()
     contract = json.loads(
-        (e10.OUT_DIR / "recipe_contract_20260810.json").read_text()
+        (e10.REAL_OUT_DIR / "recipe_contract_20260810.json").read_text()
     )["e10_recipe_contract"]
     assert contract["scientific_cells_authorized"] == 0
     assert contract["e10_training_authorized"] is None
+    with tempfile.TemporaryDirectory() as directory:
+        with pre_authorization_state(Path(directory)):
+            assert sorted(e10.OUT_DIR.rglob("*.pt")) == []
+            assert sorted(e10.OUT_DIR.glob("cell_*.json")) == []
+            ledger = e10.read_spend_ledger()
+            assert [entry for entry in ledger["entries"]
+                    if entry["context"] == "e10_core_cell"] == []
+            assert e10.read_retry_ledger()["retries"] == []
+            assert not e10.RETRY_AUTHORIZATION_DIR.exists()
+            assert e10.core_execution_state()["state"] == e10.PRE_AUTHORIZATION
 
 
 TESTS = (

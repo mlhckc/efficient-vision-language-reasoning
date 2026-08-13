@@ -91,6 +91,22 @@ def _write_ledgers(spend_path: Path, retry_path: Path) -> None:
     e10.atomic_write_json(retry_path, e10._initial_retry_ledger())
 
 
+def write_pre_execution_ledgers(spend_path: Path, retry_path: Path) -> None:
+    """Empty of scientific cells, but still consistent with shared state.
+
+    R3. The real Phase-0 calibration charge is carried over, because
+    assert_shared_state_healthy cross-checks the completion record against the
+    ledger and a wholly empty ledger contradicts it. Every core-cell charge is
+    dropped, which is what makes this the pre-execution state.
+    """
+    real = json.loads(Path(e10.SPEND_LEDGER).read_text()) \
+        if Path(e10.SPEND_LEDGER).exists() else e10._initial_spend_ledger()
+    ledger = {**real, "entries": [entry for entry in real["entries"]
+                                  if entry["context"] == "phase0_calibration"]}
+    e10.atomic_write_json(spend_path, ledger)
+    e10.atomic_write_json(retry_path, e10._initial_retry_ledger())
+
+
 def _valid_grant() -> dict:
     return {
         "schema_version": 1,
@@ -125,6 +141,14 @@ def _temporary_shared_paths(root: Path):
         "GATE1_PATH": root / "gate1.json",
         "RETRY_AUTHORIZATION_DIR": root / "retry-authorizations",
         "CORE_AUTHORIZATION_DIR": root / "core-authorization",
+        # R3. The scientific artefact tree is part of the lifecycle state a
+        # test declares, not something it inherits. Before R3 these resolved to
+        # the real tree, so once the twelve real cells existed every test that
+        # meant to simulate the pre-execution state silently saw a completed
+        # matrix. A test that wants the completed matrix now builds it, or
+        # mirrors it explicitly.
+        "CORE_OUT_DIR": root / "core-results",
+        "CORE_CHECKPOINT_DIR": root / "core-results" / "checkpoints",
     }
     with ExitStack() as stack:
         for name, path in paths.items():
@@ -132,22 +156,76 @@ def _temporary_shared_paths(root: Path):
         yield paths
 
 
-def mirror_governance(output: Path) -> Path:
+def mirror_governance(output: Path, *, terminal_records: bool = False) -> Path:
     """Mirror the immutable governance tree into a temporary OUT_DIR.
 
     The provenance chain the authorization grant binds resolves its preserved
     records through OUT_DIR, so a test that redirects OUT_DIR has to carry those
     records with it. The copy is byte-identical and the real tree is untouched.
+
+    R3. By default the real terminal completion records are EXCLUDED. Before
+    R3 this copied the whole tree unconditionally, so once the twelve real
+    cells existed every test that meant to simulate the pre-execution or
+    pre-authorisation state inherited real `cell_completed_*.json` records and
+    then asserted against them. A test that genuinely needs the terminal state
+    asks for it with `terminal_records=True`, which makes the intent explicit
+    at the call site instead of depending on what the repository happens to
+    contain.
     """
     output = Path(output)
-    shutil.copytree(e10.OUT_DIR, output, dirs_exist_ok=True)
+
+    def ignore(directory, names):
+        if terminal_records:
+            return set()
+        return {name for name in names if name.startswith("cell_completed_")}
+
+    shutil.copytree(e10.OUT_DIR, output, dirs_exist_ok=True, ignore=ignore)
     return output
+
+
+@contextmanager
+def pre_authorization_state(root: Path):
+    """Declare the PRE-AUTHORISATION lifecycle state explicitly.
+
+    R3. Every invariant that holds only before authorisation and execution is
+    now asserted inside this fixture, against state the test itself builds:
+    empty shared ledgers, an empty scientific artefact tree, a governance
+    mirror carrying no terminal completion records, and no authorisation grant.
+    Before R3 these tests asserted against the live repository, so once the
+    twelve real cells existed they silently became assertions about a completed
+    experiment and failed. The substantive assertions are unchanged; what
+    changed is that the state under test is declared rather than inherited.
+    """
+    root = Path(root)
+    with _temporary_shared_paths(root) as paths, ExitStack() as stack:
+        governance = mirror_governance(root / "governance")
+        stack.enter_context(mock.patch.object(e10, "OUT_DIR", governance))
+        write_pre_execution_ledgers(paths["SPEND_LEDGER"],
+                                    paths["RETRY_LEDGER"])
+        yield {**paths, "OUT_DIR": governance}
+
+
+def mirror_completed_matrix(core_out: Path) -> Path:
+    """Mirror the real completed twelve-cell artefact tree for a terminal test.
+
+    The counterpart to `mirror_governance(terminal_records=True)`: a test that
+    exercises the AUTHORIZED_COMPLETE state needs the real cell records,
+    checkpoints and per-row arrays, because terminal acceptance re-hashes every
+    one of them. The real tree is read only and never written.
+    """
+    core_out = Path(core_out)
+    shutil.copytree(_REAL_CORE_OUT_DIR, core_out, dirs_exist_ok=True)
+    return core_out
 
 
 # The real shared-state authorization path, captured before any test patches
 # it, so a test that forgets to redirect CORE_AUTHORIZATION_DIR fails loudly
 # instead of writing a real scientific authorization.
 _REAL_CORE_AUTHORIZATION_DIR = e10.CORE_AUTHORIZATION_DIR
+# The real scientific artefact tree, captured for the same reason: a terminal
+# test reads it, and no test may ever write it.
+_REAL_CORE_OUT_DIR = e10.CORE_OUT_DIR
+_REAL_OUT_DIR = e10.OUT_DIR
 
 
 def write_core_authorization_grant(**overrides) -> Path:
@@ -323,15 +401,19 @@ def test_authorization_isolation_and_exact_arms() -> None:
     assert e10.E10_TRAINING_AUTHORIZED is None
     assert e10.E10_CALIBRATION_AUTHORIZED is None
     assert e8b_run.TRAINING_AUTHORIZED != e10.CORE_AUTHORIZATION_TOKEN
-    with (
-        mock.patch.object(config, "E10_PER_IDENTITY_CEILING_HOURS", 10.0),
-        mock.patch.object(config, "E10_PER_CELL_WALL_CLOCK_HOURS", 2.0),
-    ):
-        _must_raise(
-            SystemExit,
-            lambda: e10.assert_core_entry_authorized("B4", "train_40k", 0),
-            "scientific authorization",
-        )
+    # R3. Declared pre-authorisation state. Before R3 this read the REAL
+    # authorization directory, so once the real grant existed the refusal came
+    # from the patched wall disagreeing with the grant rather than from the
+    # absent authorisation the test means to exercise.
+    with tempfile.TemporaryDirectory() as directory:
+        with pre_authorization_state(Path(directory)), mock.patch.object(
+            config, "E10_PER_IDENTITY_CEILING_HOURS", 10.0
+        ), mock.patch.object(config, "E10_PER_CELL_WALL_CLOCK_HOURS", 2.0):
+            _must_raise(
+                SystemExit,
+                lambda: e10.assert_core_entry_authorized("B4", "train_40k", 0),
+                "scientific authorization",
+            )
 
 
 def test_pair_order_and_size_qualified_identities() -> None:

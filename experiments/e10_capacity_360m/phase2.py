@@ -257,6 +257,43 @@ def assert_frozen_recipe_reproduced() -> dict:
             "canonical_epoch": science.CANONICAL_EPOCH}
 
 
+def assert_analysis_gate_is_correct() -> dict:
+    """The analysis refuses an incomplete matrix and reproduces a complete one.
+
+    Before R3 this asserted only the refusal, which made the verifier
+    permanently red after a legitimate completed execution. The invariant is now
+    stated for the lifecycle state the repository is actually in, and neither
+    branch is permissive: outside the exact completed authorised matrix the
+    analysis must still refuse, and inside it the analysis must positively
+    reconcile all twelve cells from their own per-row evidence.
+    """
+    state = e10.core_execution_state()
+    if state["state"] == e10.AUTHORIZED_COMPLETE:
+        matrix = analysis.load_matrix()
+        cells = matrix["cells"] if isinstance(matrix, dict) else {}
+        if len(cells) != len(e10.CORE_CELLS):
+            raise PipelineError(
+                f"the completed E10 matrix reconciled {len(cells)} cells, "
+                f"not {len(e10.CORE_CELLS)}")
+        return {"lifecycle_state": state["state"], "refused": False,
+                "reconciled_cells": len(cells),
+                "rule": "a complete authorised matrix must reproduce"}
+    try:
+        analysis.load_matrix()
+    except analysis.AnalysisRefused as error:
+        return {"lifecycle_state": state["state"], "refused": True,
+                "refusal": str(error),
+                "rule": "anything short of the complete matrix must refuse"}
+    except AssertionError as error:
+        return {"lifecycle_state": state["state"], "refused": True,
+                "refusal": f"{type(error).__name__}: {error}",
+                "rule": "anything short of the complete matrix must refuse"}
+    raise PipelineError(
+        "the E10 analysis accepted an incomplete matrix; it must refuse")
+
+
+# Retained name for the pre-execution invariant, which is unchanged and is what
+# a fresh repository and the record writers still assert.
 def assert_analysis_refuses_incomplete() -> dict:
     """The analysis refuses while the twelve-cell evidence set is absent."""
     try:
@@ -303,9 +340,9 @@ def pipeline_contract() -> dict:
         "frozen_plan": phase1.assert_frozen_execution_plan(),
         "resource_policy": phase1.resource_policy(),
         "no_automatic_retry": phase1.assert_no_automatic_retry(),
-        "analysis_refuses_incomplete_matrix": assert_analysis_refuses_incomplete(),
+        "analysis_gate": assert_analysis_gate_is_correct(),
         "scientific_core": phase1.assert_scientific_core_refused(),
-        "no_scientific_execution": e10.assert_no_scientific_cells(),
+        "core_execution_state": e10.assert_core_execution_state_is_legitimate(),
         "evaluation_pass_accounting": EVALUATION_PASS_ACCOUNTING,
         "data_contract": {
             "manifests": {key: e10.MANIFEST_SHA256[key]

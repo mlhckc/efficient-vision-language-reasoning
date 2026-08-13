@@ -301,25 +301,44 @@ hash no longer matches the worktree.
   pass is added, a residual of 0.5969439077898893; core actual is 82.17 per
   cent of the corresponding CORE stress budget of 62.15956802330354, which is
   not the calibration-inclusive 62.19228220657687 total. KNOWN DEFECT, for the
-  reviewer and deliberately not repaired: the terminal state is phase1-verify
-  PASS, phase2-verify FAIL and phase3-verify FAIL. Phase 3 does not fail only
-  transitively: phase3.authorization_contract() has its own direct call to the
-  stale assert_no_scientific_cells() invariant at phase3.py:438. Fifteen E10
-  tests fail and 82 pass (test_e10 1/21, test_e10_phase1 4/15,
-  test_e10_phase2 6/38, test_e10_phase3 4/23); all twelve non-E10 modules
-  pass. The principal mechanism is mirror_governance(), which copies the real
-  completed governance tree, including real cell_completed_*.json records,
-  into temporary test trees and so invalidates tests whose intended state is
-  pre-execution or pre-authorisation. All fifteen are lifecycle and
-  state-coupling failures, not scientific regressions. Repairing them is R3,
-  separately authorised and not started. The grant remains present and
-  historically valid; all twelve authorised cells now refuse further execution
-  because completed cells are immutable, and non-authorised
-  arms/scales/seeds refuse at the entry gate. See
-  docs/experiments/e10_core_matrix.md and the immutable addendum
-  results/experiments/e10_capacity_360m_core/e10_core_execution_correction_20260813.json.
-  The clean test remains embargoed and F1/F2 remain unstarted and
-  unauthorised.
+  reviewer and REPAIRED IN R3 on 13 August 2026 under separate explicit user
+  authorisation: the pre-R3 terminal state was phase1-verify PASS,
+  phase2-verify FAIL, phase3-verify FAIL (phase 3 not only transitively:
+  phase3.authorization_contract had its own direct stale
+  assert_no_scientific_cells call at phase3.py:438) and 15 of 97 E10 tests
+  failing, all lifecycle and state-coupling failures rather than scientific
+  regressions, principally through mirror_governance() copying the real
+  completed governance tree into temporary test trees. R3 made
+  phase2.pipeline_contract and the phase3 call execution-aware behind one
+  narrow helper, e10_common.core_execution_state, with three explicit
+  lifecycle states (PRE_AUTHORIZATION, AUTHORIZED_INCOMPLETE,
+  AUTHORIZED_COMPLETE) and terminal acceptance only on positive proof of the
+  exact completed matrix via assert_exact_completed_matrix. The strict
+  pre-execution invariants are unchanged and the record writers still use
+  them verbatim. All three verifiers now PASS, all 100 E10 tests and all
+  twelve non-E10 modules pass, and tests/run_all.py exits 0. R3 intentionally
+  moved the live source digest from 857ec44e to cdc57315 because the repaired
+  files are inside SOURCE_PATHS; the config digest 4b9fa43c is unchanged. The
+  completed evidence is carried across that move by the immutable
+  post-execution binding amendment
+  results/experiments/e10_capacity_360m/post_execution_binding_amendment_20260813.json,
+  the newest link in _amendment_chain, which binds the grant, the twelve cell
+  records, their checkpoints and per-row arrays and the frozen analysis by
+  name and by bytes. No historical record was rewritten and the new digest was
+  not backdated into any of them. GRANT TERMINAL POLICY, binding: the original
+  grant stays historically valid as provenance for the twelve completed cells
+  and is operationally SPENT; every authorised cell now refuses with
+  "operationally SPENT", unauthorised arms/scales/seeds still refuse at the
+  entry gate, retries remain zero, completed cells remain immutable, and any
+  further scientific work requires a fresh explicit user authorisation and a
+  new valid grant. R3 changed no accuracy, contrast, interval, checkpoint,
+  per-row array or result record. See docs/experiments/e10_core_matrix.md, the
+  immutable addendum
+  results/experiments/e10_capacity_360m_core/e10_core_execution_correction_20260813.json
+  and the R3 record
+  results/experiments/e10_capacity_360m_core/e10_core_r3_terminal_state_20260813.json.
+  R3 is review_requested and no final E10 PASS is declared. The clean test
+  remains embargoed and F1/F2 remain unstarted and unauthorised.
 - Current gate, updated 2 August 2026 (E8A/E8B/E9 programme). The user
   authorized the E8A frozen-SLM question-encoder branch, the E8B frozen-SLM
   readout and bounded-generation branch, and the E9 evaluation-only compact-VLM

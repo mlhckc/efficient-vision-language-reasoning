@@ -414,6 +414,107 @@ PHASE2_R2_RECORD_SHA256 = {
     "phase2_review_closure_20260810.json":
         "d0e48a987d0a274add54d6c42e7d99118158f06ade0d747c847de7f0be32392f",
 }
+# --- the post-execution (R3) historical binding -------------------------------
+# The digests in force while the twelve authorised scientific cells actually
+# executed, at HEAD 0b4ed2b7885ca6789d55c8ccb1b8a613a6081560. R3 repairs the
+# terminal-state verifiers and their tests, all of which are inside
+# SOURCE_PATHS, so the live source digest necessarily moves. The already
+# published execution evidence must keep validating under the digests it was
+# produced under, so this pair is carried forward by the post-execution
+# amendment below. It is PROVENANCE, never authorisation: the amendment records
+# that the matrix is complete and that its grant is operationally spent, and no
+# code path treats it as a permission to execute.
+EXECUTION_SOURCE_DIGEST = (
+    "857ec44e8f5275569a5369b0dfbcd0cbff660b038d5b9cd39c67083ceb0a6b98"
+)
+EXECUTION_CONFIG_DIGEST = (
+    "4b9fa43cb74b511c0bb6fda3c7c043d6047ef5e5e220c1abad6e35138f3df9ab"
+)
+POSTEXECUTION_TASK_ID = "e10-r3-terminal-state-repair"
+# The real trees, captured once at import. The post-execution amendment pins
+# immutable historical evidence, so its resolution must not follow a test
+# redirect of OUT_DIR, CORE_OUT_DIR or CORE_AUTHORIZATION_DIR.
+REAL_OUT_DIR = OUT_DIR
+REAL_CORE_OUT_DIR = CORE_OUT_DIR
+REAL_CORE_AUTHORIZATION_GRANT_PATH = (
+    CORE_AUTHORIZATION_DIR / CORE_AUTHORIZATION_GRANT_NAME
+)
+POSTEXECUTION_AMENDMENT_PATH = (
+    OUT_DIR / "post_execution_binding_amendment_20260813.json"
+)
+EXECUTION_GRANT_ID = (
+    "7ce353d7ec9d93b61925e735fdef2817f18a6c051221c3208cc52e6e3b7589d2"
+)
+# Every record the completed execution produced, plus the Phase-3 links that
+# must keep validating across the R3 source move. Location decides which tree
+# the file is resolved in; the bytes are pinned so a stale binding can never be
+# waved through on its own.
+POSTEXECUTION_RECORD_SHA256 = {
+    "phase3_binding_amendment_20260811.json":
+        ("governance", "a49cb8022f5b985e37fd26a984efb37bfe805ea173f4304a23d3249af55cbc05"),
+    "phase3_authorization_binding_20260811.json":
+        ("governance", "46acab175d7e09dad504ebfb9341fe04e190dde4d2ceb6f1620b5866f1777713"),
+    "phase3_review_closure_20260811.json":
+        ("governance", "0b55be10a24b89facba13817dd52a9673ca6689354af1df89ae83b94df83c432"),
+    "cell_completed_B4_train_250k_seed0_20260811T194730Z.json":
+        ("governance", "91b5b1b504ab51f68192b050cf6351154d1a25404ed87fb4e0cbb06ad64f76a6"),
+    "cell_completed_B4_train_250k_seed1_20260812T084523Z.json":
+        ("governance", "69fd36c5a0b6d782549340be49b92d96fa3f5b9a6d9814dac4cd0fa42cd8d0a5"),
+    "cell_completed_B4_train_250k_seed2_20260812T214201Z.json":
+        ("governance", "b62873b827fafdff6aa36884d2a7dee62c5203eaaa0243ff953b56980a716e33"),
+    "cell_completed_B4_train_40k_seed0_20260811T030736Z.json":
+        ("governance", "0de58237242b0ba98f540a401289dd72747e61a2802b37b147d0a6c24d7d76a5"),
+    "cell_completed_B4_train_40k_seed1_20260811T071043Z.json":
+        ("governance", "b1133817ef3eda5660f77f3f588cd68fd8ecf40f8e5d1926185e4f34560d946a"),
+    "cell_completed_B4_train_40k_seed2_20260811T111404Z.json":
+        ("governance", "41e546d1d0012d9498bb9d451dff6122ed3ba6d6c63380e90e2ec8a455656542"),
+    "cell_completed_B4r_train_250k_seed0_20260812T021701Z.json":
+        ("governance", "a6c6755022636a48bc2d93e5b19360af6cbb94c527a74f4c00bc18b140328c79"),
+    "cell_completed_B4r_train_250k_seed1_20260812T151309Z.json":
+        ("governance", "4e9c6c22b6148ef9cb265ef934534f15cc1525cb600bb9c90cb1f6aabbe1a693"),
+    "cell_completed_B4r_train_250k_seed2_20260813T041055Z.json":
+        ("governance", "464dd10ba7d199ff32a4fdb699ce0d6e764f75a02b340cea4e8d8f4bf208ac36"),
+    "cell_completed_B4r_train_40k_seed0_20260811T050902Z.json":
+        ("governance", "fa8b316a82b140302a80cdc18da6abc2c81e86f3d7132d112d2fde2a44c25ca8"),
+    "cell_completed_B4r_train_40k_seed1_20260811T091211Z.json":
+        ("governance", "f9ac24496434bd805b0f16b9889486e997ca28471bceec675667d4305da44b7a"),
+    "cell_completed_B4r_train_40k_seed2_20260811T131616Z.json":
+        ("governance", "3a1c1d421d59e140bcb2fb4b78e81425eba3401c94b394ecf2fea7df4c02bff4"),
+    "e10_core_B4_train_40k_seed0.json":
+        ("core", "3f7e3ef2bd73a860ca00b0f62ff73572c710fc9f0ed54006054943d50b0b5d22"),
+    "e10_core_B4r_train_40k_seed0.json":
+        ("core", "6ad47230bfbde18c6d1a16eb1ebc9403ead65ddfd4fd6fdab7c2bee2f9327201"),
+    "e10_core_B4_train_40k_seed1.json":
+        ("core", "511ca0225d16d4c3e1f2d42670760f3df42382bec4cd97d8659fff3a71ecd825"),
+    "e10_core_B4r_train_40k_seed1.json":
+        ("core", "66c545dec22af44ffc628bd07d2ba2bd8714246578d90a75b63abced13ba753c"),
+    "e10_core_B4_train_40k_seed2.json":
+        ("core", "d9161eff616cd42aafbdcf9691b30600fafac1d124a443b681513c988edf0832"),
+    "e10_core_B4r_train_40k_seed2.json":
+        ("core", "9e4f875f97a8719c10eb14dddd8f4871f5040b045ae49579d6ea5a8af787f1f8"),
+    "e10_core_B4_train_250k_seed0.json":
+        ("core", "658caaabdbf4ea2bb2ccdd1c401d9ed1987a4e4a67dd2374de2e4a79565b35ff"),
+    "e10_core_B4r_train_250k_seed0.json":
+        ("core", "981cdf3d7691e5e5c45ca7c667d5571e3d48ac7d81ea19abc8b87541c0ec1990"),
+    "e10_core_B4_train_250k_seed1.json":
+        ("core", "9bc543ab6a1ded3351e9437f8f88865593c43e29fb1d18d7be01f6da76095324"),
+    "e10_core_B4r_train_250k_seed1.json":
+        ("core", "e61ef639125bb93533567f0cf6be460fc49436bcece20469a7747964bba3c1eb"),
+    "e10_core_B4_train_250k_seed2.json":
+        ("core", "2520b7d665d09242c8da4f82a0d81126bb1b91135e5340d4a169b54ecbaa7263"),
+    "e10_core_B4r_train_250k_seed2.json":
+        ("core", "2781a3b92fc395b73d2ece78c39011ce55b873180478dd9312a60caf7ecdb8c6"),
+    "e10_core_analysis.json":
+        ("core", "37ffdcd09aa2bcd306ca9b54229a1d0d17ff203b6b0900e09e5f876ad1ed0748"),
+    "e10_core_execution_20260813.json":
+        ("core", "b7734dddcab1dd40e91e1860ace253ff491a2b370aa9cde984cf496a8e029430"),
+    "e10_core_execution_correction_20260813.json":
+        ("core", "5d7d281fecb4505332b7d773e2ccc5c2ea1bcaabd9e6add22879b62ce3674b4d"),
+    "e10-core-authorization-grant.json":
+        ("shared_state", "24736bbfd5ad491927e2d447983439b84f3462bbb4301f5509216da2e62ad2af"),
+}
+
+
 PHASE0_SOURCE_DIGEST = (
     "06f5583ae847cdc327b4099599895619af8d3350a2c0a88c89ff6aac0c6f323a"
 )
@@ -713,6 +814,12 @@ def assert_current_binding(record: dict, context: str) -> dict:
 def accepted_historical_bindings() -> tuple[tuple[str, str], ...]:
     """The (source, config) digest pairs a superseded record may still carry."""
     return (
+        # The execution-time pair. R3 moved the live source digest by repairing
+        # the terminal-state verifiers, so the twelve completed cell records,
+        # their governance outcomes, the frozen analysis and the grant all carry
+        # this pair. It is admitted for PROVENANCE only, and only for records
+        # the post-execution amendment names by name and by bytes.
+        (EXECUTION_SOURCE_DIGEST, EXECUTION_CONFIG_DIGEST),
         (PHASE2_R2_SOURCE_DIGEST, PHASE2_R2_CONFIG_DIGEST),
         (PHASE1_R2_SOURCE_DIGEST, PHASE1_R2_CONFIG_DIGEST),
         (PHASE1_R1_SOURCE_DIGEST, PHASE1_R1_CONFIG_DIGEST),
@@ -724,12 +831,124 @@ def accepted_historical_bindings() -> tuple[tuple[str, str], ...]:
 def _amendment_chain() -> tuple[tuple[Path, Any], ...]:
     """Newest first. Each link carries the records the next one bound."""
     return (
+        (POSTEXECUTION_AMENDMENT_PATH, validate_post_execution_amendment),
         (PHASE3_AMENDMENT_PATH, validate_phase3_amendment),
         (PHASE2_AMENDMENT_PATH, validate_phase2_amendment),
         (PHASE1_REPAIR_PATH, validate_phase1_repair),
         (PHASE1_AMENDMENT_PATH, validate_phase1_amendment),
         (SOURCE_CORRECTION_PATH, validate_source_correction),
     )
+
+
+def postexecution_record_path(filename: str, location: str) -> Path:
+    """Resolve one pinned post-execution record to the tree it lives in.
+
+    Deliberately resolved against the REAL trees captured at import rather than
+    against OUT_DIR, CORE_OUT_DIR or CORE_AUTHORIZATION_DIR. This record pins
+    the actual immutable evidence of the completed experiment, so what it
+    proves must not depend on a redirect: a test that points those directories
+    at a temporary tree is declaring its own lifecycle state, not relocating
+    the finished experiment.
+    """
+    if location == "governance":
+        return REAL_OUT_DIR / filename
+    if location == "core":
+        return REAL_CORE_OUT_DIR / filename
+    if location == "shared_state":
+        return REAL_CORE_AUTHORIZATION_GRANT_PATH
+    raise AssertionError(f"unknown post-execution record location {location!r}")
+
+
+def validate_post_execution_amendment() -> dict:
+    """The immutable record that carries the completed E10 evidence across R3.
+
+    R3 repairs the terminal-state verifiers and their tests, which are inside
+    SOURCE_PATHS, so the live source digest moves after a completed execution.
+    Without this link every one of the twelve cell records, the frozen analysis
+    and the grant would look stale and the finished experiment would stop
+    validating. This is the newest link in the chain, so it is the one record
+    validated against the LIVE binding; every record it names is admitted only
+    through assert_recorded_binding and its pinned bytes.
+
+    It is provenance, not permission. It records that the exact authorised
+    matrix is complete and that its grant is therefore operationally SPENT, and
+    assert_core_entry_authorized reads that state as a REFUSAL of any further
+    scientific execution.
+    """
+    amendment = read_json_mapping(POSTEXECUTION_AMENDMENT_PATH)
+    required = {
+        "schema_version", "record_type", "task_id", "status", "NON_SCIENTIFIC",
+        "utc", "binding", "reason", "change_scope", "execution_source_digest",
+        "execution_config_digest", "preserved_records", "completed_execution",
+        "grant_terminal_policy",
+    }
+    _require_exact_keys(amendment, required, "E10 post-execution amendment")
+    if amendment["schema_version"] != 1 \
+            or amendment["record_type"] != "e10_post_execution_binding_amendment" \
+            or amendment["task_id"] != POSTEXECUTION_TASK_ID \
+            or amendment["status"] != "COMPLETED_EXECUTION_EVIDENCE_CARRIED_FORWARD" \
+            or amendment["NON_SCIENTIFIC"] is not True \
+            or amendment["execution_source_digest"] != EXECUTION_SOURCE_DIGEST \
+            or amendment["execution_config_digest"] != EXECUTION_CONFIG_DIGEST \
+            or amendment["completed_execution"] != {
+                "scientific_cells_completed": len(CORE_CELLS),
+                "cells": [list(cell) for cell in pair_preserving_order()],
+                "grant_id": EXECUTION_GRANT_ID,
+                "automatic_retries": 0,
+                "authorized_retries_consumed": 0,
+                "e10_training_authorized": None,
+            }:
+        raise AssertionError("E10 post-execution amendment semantics mismatch")
+    _require_utc(amendment["utc"], "E10 post-execution amendment utc")
+    assert_current_binding(amendment, "E10 post-execution amendment")
+    if amendment["change_scope"] != {
+        "terminal_state_verifiers_repaired": True,
+        "lifecycle_tests_repaired": True,
+        "scientific_results_changed": False,
+        "cell_records_rewritten": False,
+        "checkpoints_changed": False,
+        "per_row_evidence_changed": False,
+        "frozen_analysis_changed": False,
+        "grant_rewritten": False,
+        "resource_constants_changed": False,
+        "scientific_recipe_changed": False,
+        "core_matrix_changed": False,
+        "model_pin_changed": False,
+        "dev_evaluation_cadence_changed": False,
+        "new_scientific_authorization_granted": False,
+    }:
+        raise AssertionError("E10 post-execution amendment scope mismatch")
+    if amendment["grant_terminal_policy"] != {
+        "historically_valid_for_the_completed_execution": True,
+        "operationally_spent": True,
+        "authorizes_new_scientific_execution": False,
+        "authorizes_retry": False,
+        "completed_cells_remain_immutable": True,
+        "new_work_requires": (
+            "a fresh explicit user authorization and a new valid grant"
+        ),
+    }:
+        raise AssertionError("E10 post-execution amendment grant policy mismatch")
+    preserved = amendment["preserved_records"]
+    if not isinstance(preserved, dict) \
+            or set(preserved) != set(POSTEXECUTION_RECORD_SHA256):
+        raise AssertionError(
+            "E10 post-execution amendment record set mismatch")
+    for filename, (location, expected_sha) in POSTEXECUTION_RECORD_SHA256.items():
+        reference = preserved[filename]
+        _require_exact_keys(
+            reference, {"location", "sha256"},
+            f"post-execution amendment {filename}")
+        if reference["sha256"] != expected_sha \
+                or reference["location"] != location:
+            raise AssertionError(
+                f"E10 post-execution amendment preserved record mismatch: "
+                f"{filename}")
+        path = postexecution_record_path(filename, location)
+        if not path.is_file() or sha256_file(path) != expected_sha:
+            raise AssertionError(
+                f"E10 completed-execution record changed under R3: {filename}")
+    return amendment
 
 
 def validate_phase3_amendment() -> dict:
@@ -762,7 +981,13 @@ def validate_phase3_amendment() -> dict:
             }:
         raise AssertionError("E10 Phase-3 amendment semantics mismatch")
     _require_utc(amendment["utc"], "E10 Phase-3 amendment utc")
-    assert_current_binding(amendment, "E10 Phase-3 amendment")
+    # Was assert_current_binding while this record was the newest link in the
+    # chain. R3 adds a newer link, so this record is now admitted exactly like
+    # every other superseded record: the live binding, or the one historical
+    # pair an immutable amendment names together with these bytes.
+    assert_recorded_binding(
+        amendment, "E10 Phase-3 amendment", PHASE3_AMENDMENT_PATH
+    )
     if amendment["change_scope"] != {
         "authorization_binding_implemented": True,
         "resource_constants_changed": False,
@@ -1993,10 +2218,17 @@ def validate_core_authorization_grant(arm: str | None = None,
             "E10 core authorization grant bytes do not match its grant_id; "
             "the record was modified after it was written"
         )
-    # A grant is only ever created after the review of the source it opens, so
-    # a superseded binding is always a refusal: there is no historical pair an
-    # authorization may fall back on.
-    assert_current_binding(grant, "E10 core authorization grant")
+    # A grant is created after the review of the source it opens, so while it
+    # is live it must carry the live binding. R3 adds exactly one narrow
+    # exception, for PROVENANCE only: once the authorised matrix has completed
+    # and the post-execution amendment names this grant by name and by bytes,
+    # the grant keeps validating under the digests it authorised execution
+    # under. That is what lets the finished experiment be revalidated after the
+    # terminal-state repair; it grants nothing, because
+    # assert_core_entry_authorized refuses a spent grant below.
+    assert_recorded_binding(
+        grant, "E10 core authorization grant", path
+    )
     # The matrix is judged on its own terms first, so a missing pair, an extra
     # cell or a reordered matrix refuses with the reason rather than as a
     # generic field mismatch. The pairing rule is recomputed, not inferred.
@@ -2119,6 +2351,21 @@ def assert_core_entry_authorized(arm: str, scale: str, seed: int) -> dict:
         grant = validate_core_authorization_grant(arm, scale, seed)
     except (AssertionError, OSError, ValueError) as error:
         raise SystemExit(f"E10 CORE REFUSED: {error}") from None
+    # R3, the grant terminal policy. A grant funds the exact authorised matrix
+    # ONCE. Once that matrix is complete it remains historically valid as the
+    # provenance of the twelve finished cells, but it is operationally SPENT and
+    # admits no further scientific execution. Any further work needs a fresh
+    # explicit user authorization and a new valid grant. This fires before the
+    # shared-state health check and long before any model, dataset, CUDA context
+    # or output directory is touched.
+    if core_execution_state()["state"] == AUTHORIZED_COMPLETE:
+        raise SystemExit(
+            f"E10 CORE REFUSED: the authorised twelve-cell matrix is complete "
+            f"and grant {grant['grant_id']} is operationally SPENT; it remains "
+            f"valid as provenance for the completed cells but authorises no "
+            f"further scientific execution. New work requires a fresh explicit "
+            f"user authorization and a new valid grant."
+        )
     # Only reached after the side-effect-free budget, sentinel and grant
     # refusals; no model, dataset, CUDA context or output directory is touched.
     assert_shared_state_healthy(require_calibration_complete=True)
@@ -3693,12 +3940,161 @@ def charged_core_cells(ledger: dict | None = None) -> list:
     ]
 
 
+PRE_AUTHORIZATION = "PRE_AUTHORIZATION"
+AUTHORIZED_INCOMPLETE = "AUTHORIZED_INCOMPLETE"
+AUTHORIZED_COMPLETE = "AUTHORIZED_COMPLETE"
+
+
+def assert_exact_completed_matrix() -> dict:
+    """Positive proof of the exact authorised twelve-cell completed matrix.
+
+    This is the only route to terminal acceptance, and it is deliberately
+    expensive: nothing here infers completion from the absence of a failure.
+    Every cell must be published AND charged completed, every recipe digest
+    must be the frozen one, every checkpoint and per-row array must still hash
+    to what its own record claims, the ledger must hold exactly the twelve core
+    charges and nothing else, no failure or halt record may exist, and no retry
+    may ever have been taken. A partial, extra, altered or unreconciled matrix
+    fails here rather than being waved through as "not pre-execution".
+    """
+    problems = []
+    published, charged_completed = [], []
+    for arm, scale, seed in CORE_CELLS:
+        paths = core_cell_paths(arm, scale, seed)
+        if paths["result"].is_file():
+            published.append((arm, scale, seed))
+        if paths["failed"].exists():
+            problems.append(f"failure record for {arm}/{scale}/seed{seed}")
+    if CORE_OUT_DIR.exists() and sorted(CORE_OUT_DIR.glob("HALT_*.json")):
+        problems.append("gate halt records exist")
+    if len(published) != len(CORE_CELLS):
+        missing = [list(c) for c in CORE_CELLS if c not in published]
+        problems.append(f"cells without a published result: {missing}")
+    charges = charged_core_cells()
+    for entry in charges:
+        if entry["outcome"] == "completed":
+            charged_completed.append(tuple(entry["cell"]))
+    if len(charges) != len(CORE_CELLS):
+        problems.append(
+            f"the ledger holds {len(charges)} core charges, not "
+            f"{len(CORE_CELLS)}")
+    if sorted(charged_completed) != sorted(CORE_CELLS):
+        problems.append("the completed ledger charges are not the frozen matrix")
+    if read_retry_ledger(allow_missing=True).get("retries"):
+        problems.append("a retry was taken")
+    if problems:
+        raise AssertionError(
+            f"E10 terminal matrix is not the exact completed matrix: "
+            f"{problems}")
+    # Only now, with the set proven, is the per-cell evidence re-hashed.
+    for arm, scale, seed in CORE_CELLS:
+        paths = core_cell_paths(arm, scale, seed)
+        record = read_json_mapping(paths["result"])
+        assert_recorded_binding(
+            record["metadata"], f"E10 cell {arm}/{scale}/seed{seed}",
+            paths["result"])
+        cell = record["e10_core_cell"]
+        if cell["cell"] != [arm, scale, seed] \
+                or cell["recipe_sha256"] != recipe_sha256(
+                    build_recipe(arm, scale, seed)) \
+                or cell["epochs_run"] != 22 or cell["canonical_epoch"] != 22 \
+                or cell["early_stopping"] is not False \
+                or cell["resumed"] is not False:
+            problems.append(f"{arm}/{scale}/seed{seed} is not the frozen cell")
+            continue
+        for name, reference in cell["checkpoints"].items():
+            path = PROJECT_ROOT / reference["path"]
+            if not path.is_file() or sha256_file(path) != reference["sha256"]:
+                problems.append(
+                    f"{arm}/{scale}/seed{seed} {name} checkpoint digest")
+        per_row = PROJECT_ROOT / cell["per_row"]["path"]
+        if not per_row.is_file() \
+                or sha256_file(per_row) != cell["per_row"]["sha256"]:
+            problems.append(f"{arm}/{scale}/seed{seed} per-row digest")
+    if problems:
+        raise AssertionError(
+            f"E10 terminal matrix evidence does not reconcile: {problems}")
+    return {
+        "state": AUTHORIZED_COMPLETE,
+        "cells_complete": len(CORE_CELLS),
+        "cells": [list(cell) for cell in pair_preserving_order()],
+        "failure_records": 0,
+        "halt_records": 0,
+        "retries_taken": 0,
+        "grant_operationally_spent": True,
+    }
+
+
+def core_execution_state() -> dict:
+    """Which lifecycle state the repository is actually in.
+
+    Three states, distinguished by positive evidence rather than by the absence
+    of the other two, because the verifiers must hold a strict pre-execution
+    invariant in one of them and an equally strict completed-matrix invariant in
+    another.
+    """
+    published = [cell for cell in CORE_CELLS
+                 if core_cell_paths(*cell)["result"].is_file()]
+    charged = charged_core_cells()
+    checkpoints = sorted(
+        path.name for path in CORE_CHECKPOINT_DIR.glob("*")
+    ) if CORE_CHECKPOINT_DIR.exists() else []
+    if not published and not charged and not checkpoints:
+        return {
+            "state": PRE_AUTHORIZATION,
+            "published_cell_records": 0,
+            "charged_core_cells": 0,
+            "checkpoint_files": 0,
+            "e10_training_authorized": E10_TRAINING_AUTHORIZED,
+        }
+    try:
+        complete = assert_exact_completed_matrix()
+    except (AssertionError, OSError, ValueError) as error:
+        return {
+            "state": AUTHORIZED_INCOMPLETE,
+            "published_cell_records": len(published),
+            "charged_core_cells": len(charged),
+            "checkpoint_files": len(checkpoints),
+            "reason": str(error),
+            "e10_training_authorized": E10_TRAINING_AUTHORIZED,
+        }
+    return {
+        **complete,
+        "published_cell_records": len(published),
+        "charged_core_cells": len(charged),
+        "checkpoint_files": len(checkpoints),
+        "e10_training_authorized": E10_TRAINING_AUTHORIZED,
+    }
+
+
+def assert_core_execution_state_is_legitimate() -> dict:
+    """Either nothing has executed, or exactly the authorised matrix has.
+
+    The single terminal-state helper the Phase-2 and Phase-3 contracts share.
+    It is NOT permissive: an incomplete, extra or unreconciled scientific state
+    raises exactly as it did before R3. What changed is that a legitimately
+    completed authorised matrix is now recognised as a successful terminal
+    state instead of being reported as a violated pre-execution invariant.
+    """
+    state = core_execution_state()
+    if state["state"] == PRE_AUTHORIZATION:
+        return {**assert_no_scientific_cells(), "state": PRE_AUTHORIZATION}
+    if state["state"] == AUTHORIZED_COMPLETE:
+        return state
+    raise AssertionError(
+        f"E10 scientific artefacts exist but are not the exact completed "
+        f"authorised matrix: {state.get('reason')}")
+
+
 def assert_no_scientific_cells() -> dict:
     """Prove no E10 scientific cell has ever executed or been published.
 
-    This is the Phase-2 hand-back proof. It is a statement about the CURRENT
-    state, not a guardrail against future authorised execution: once the user
-    authorises the core matrix and a cell runs, this stops holding by design.
+    The strict PRE-AUTHORISATION invariant, unchanged by R3 and still used
+    verbatim by the record writers, which may only ever run before execution.
+    It is a statement about the CURRENT state, not a guardrail against future
+    authorised execution: once the user authorises the core matrix and a cell
+    runs, this stops holding by design, and
+    assert_core_execution_state_is_legitimate is what the verifiers consult.
     """
     published = sorted(
         path.name for path in CORE_OUT_DIR.glob("*.json")

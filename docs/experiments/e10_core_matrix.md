@@ -89,6 +89,11 @@ After the twelfth cell the frozen analysis ran unchanged and refused nothing.
   size and SHA-256 of every artefact, including the local binaries.
 - `results/experiments/e10_capacity_360m/cell_completed_*.json`, twelve guard
   outcome records.
+- `results/experiments/e10_capacity_360m/post_execution_binding_amendment_20260813.json`,
+  the immutable R3 link that carries the completed execution evidence across
+  the R3 source-digest move and records the grant's spent status.
+- `results/experiments/e10_capacity_360m_core/e10_core_r3_terminal_state_20260813.json`,
+  the R3 terminal-state repair record.
 - Local, not version controlled: twelve per-row `.npz` arrays and
   thirty-six checkpoints under `checkpoints/`, each pinned by a SHA-256
   recorded inside its cell record and in the artefact manifest.
@@ -281,16 +286,38 @@ evidence rather than by their own fixtures. The remaining failures assert
 directly that no grant exists, that no scientific cell exists, or that the
 analysis refuses.
 
-None of this affects the executed science. The source and config digests are
-byte-identical to the reviewed ones before the grant, after the grant, after
-all twelve cells and after this repair; the frozen E8A, E8B and E9 result trees
-are unchanged; all twelve recipe digests, the pinned manifests, the token
-stores and the model verification still match. The correct repair is to make
-these assertions execution-aware, exactly as the Phase-3 repair made the
-refusal invariant grant-aware, together with the `mirror_governance()` fixture.
-That work is R3. It is deliberately not done in this packet, which is
-documentation-only and digest-neutral, and it requires separate authorisation
-and independent re-review.
+None of this affected the executed science. The frozen E8A, E8B and E9 result
+trees are unchanged; all twelve recipe digests, the pinned manifests, the token
+stores and the model verification still match.
+
+**Repaired in R3, 13 August 2026.** The defect described above has since been
+fixed under separate explicit user authorisation, and the paragraphs above are
+retained as the record of what the terminal state was before that repair.
+`phase2.pipeline_contract` and the direct call in
+`phase3.authorization_contract` are now execution-aware, `mirror_governance()`
+no longer leaks real completion records into tests that declare a
+pre-execution state, and all 100 E10 tests and all twelve non-E10 modules pass
+with `tests/run_all.py` exiting 0. R3 deliberately moved the live source digest
+from `857ec44e…` to `cdc57315…`, because the files it repairs are inside
+`SOURCE_PATHS`; the config digest is unchanged. The completed evidence is
+carried across that move by an immutable post-execution binding amendment,
+`results/experiments/e10_capacity_360m/post_execution_binding_amendment_20260813.json`,
+which names the twelve cell records, their checkpoints and per-row arrays, the
+frozen analysis and the grant, by name and by bytes. No historical record was
+rewritten: every one of them still carries the execution-time digest, and the
+new digest was not backdated into any of them.
+
+R3 also settled the grant's terminal status as policy rather than observation.
+The grant remains historically valid as the provenance of the twelve completed
+cells and is operationally **spent**: `assert_core_entry_authorized` now refuses
+every authorised cell with `the authorised twelve-cell matrix is complete and
+grant … is operationally SPENT`, unauthorised arms, scales and seeds still
+refuse at the entry gate, retries remain at zero, and any further work needs a
+fresh explicit user authorisation and a new valid grant. The details are in
+`results/experiments/e10_capacity_360m_core/e10_core_r3_terminal_state_20260813.json`.
+R3 changed no accuracy, contrast, interval, checkpoint, per-row array or
+result record, and the frozen analysis still reproduces all twelve cells from
+their own per-row evidence.
 
 The second observation is the memory figure above. Peak reserved memory was
 consistently about 0.15 higher than the Gate-1 projection predicted. The gate

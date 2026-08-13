@@ -36,6 +36,8 @@ from experiments.e10_capacity_360m import run as e10_run
 from experiments.e10_capacity_360m import science
 from tests.test_e10 import (
     _must_raise,
+    pre_authorization_state,
+    write_pre_execution_ledgers,
     _strict_state_restored,
     _temporary_shared_paths,
     _write_ledgers,
@@ -279,12 +281,18 @@ def test_wrong_recipe_or_source_digest_refuses() -> None:
              recipe_contract={"path": "results/experiments/e10_capacity_360m/"
                                       "recipe_contract_20260810.json",
                               "sha256": "1" * 64})
+    # R3. A historical pair is admitted only when an amendment names the exact
+    # bytes, so a grant carrying one refuses for that reason; a pair that was
+    # never recorded at all refuses earlier and more bluntly. Both are stronger
+    # than the pre-R3 message check, which only proved the digest differed.
     stale_source = {**e10.binding_record(),
                     "source_digest": e10.PHASE2_R2_SOURCE_DIGEST}
-    _refuses("stale source_digest", binding=stale_source)
+    _refuses("no amendment binds this record", binding=stale_source)
+    _refuses("unrecorded stale binding refused",
+             binding={**e10.binding_record(), "source_digest": "3" * 64})
     stale_config = {**e10.binding_record(), "config_digest": "2" * 64}
-    _refuses("stale config_digest", binding=stale_config)
-    _refuses("stale protocol_family",
+    _refuses("unrecorded stale binding refused", binding=stale_config)
+    _refuses("unrecorded stale binding refused",
              binding={**e10.binding_record(), "protocol_family": "e8b"})
     _refuses("mismatch for protocol_family", protocol_family="e8b-family")
     _refuses("mismatch for experiment", experiment="e8b_readout_generation")
@@ -478,27 +486,73 @@ def test_permit_path_works_with_the_valid_external_grant() -> None:
 
 # 17. No real scientific grant exists.
 
-def test_no_real_scientific_grant_exists() -> None:
-    proof = e10.assert_no_core_authorization_grant()
-    assert proof["grant_present"] is False
-    assert proof["records_in_authorization_directory"] == 0
-    assert proof["e10_training_authorized"] is None
-    assert not e10.core_authorization_grant_path().exists()
+def test_grant_terminal_policy_historically_valid_and_operationally_spent() -> None:
+    """R3. What the real grant means now that its matrix is complete.
+
+    Before R3 this test asserted that no real grant exists, which was the
+    truthful pre-authorisation statement and became false the moment the user
+    authorised the matrix. The permanent invariants it protected are kept and
+    asserted in a declared pre-authorisation state; the terminal statement is
+    asserted against the real repository.
+    """
+    assert e10.E10_TRAINING_AUTHORIZED is None
     assert str(e10.CORE_AUTHORIZATION_DIR).startswith(str(e10.SHARED_STATE_DIR))
-    refusal = phase1.assert_scientific_core_refused()
-    assert refusal["core_authorization_grant_present"] is False
-    proof_cells = e10.assert_no_scientific_cells()
-    assert proof_cells == {"published_cell_records": 0, "checkpoint_files": 0,
-                           "charged_core_cells": 0,
-                           "e10_training_authorized": None}
+
+    # Pre-authorisation: the strict proof still holds where it applies.
+    with tempfile.TemporaryDirectory() as directory:
+        with pre_authorization_state(Path(directory)):
+            proof = e10.assert_no_core_authorization_grant()
+            assert proof["grant_present"] is False
+            assert proof["records_in_authorization_directory"] == 0
+            assert proof["e10_training_authorized"] is None
+            assert not e10.core_authorization_grant_path().exists()
+            assert phase1.assert_scientific_core_refused()[
+                "core_authorization_grant_present"] is False
+            assert e10.assert_no_scientific_cells() == {
+                "published_cell_records": 0, "checkpoint_files": 0,
+                "charged_core_cells": 0, "e10_training_authorized": None}
+
+    # Terminal: the real grant is still valid provenance for the completed
+    # matrix, and it funds nothing further.
+    state = e10.core_execution_state()
+    if state["state"] != e10.AUTHORIZED_COMPLETE:
+        return
+    grant = e10.validate_core_authorization_grant()
+    assert grant["grant_id"] == e10.EXECUTION_GRANT_ID
+    assert e10.core_authorization_state()["grant_valid"] is True
+    assert state["grant_operationally_spent"] is True
+    policy = e10.validate_post_execution_amendment()["grant_terminal_policy"]
+    assert policy["historically_valid_for_the_completed_execution"] is True
+    assert policy["operationally_spent"] is True
+    assert policy["authorizes_new_scientific_execution"] is False
+    assert policy["authorizes_retry"] is False
+    # Every authorised cell refuses further execution, and says why.
+    for arm, scale, seed in FROZEN_ORDER:
+        _must_raise(
+            SystemExit,
+            lambda a=arm, s=scale, d=seed:
+                e10.assert_core_entry_authorized(a, s, d),
+            "operationally SPENT")
+    # Unauthorised combinations still refuse at the entry gate, unchanged.
+    for arm, scale, seed in (("B3", "train_40k", 0), ("B4", "train_100k", 0),
+                             ("B4", "train_40k", 3)):
+        _must_raise(
+            SystemExit,
+            lambda a=arm, s=scale, d=seed:
+                e10.assert_core_entry_authorized(a, s, d),
+            "unknown cell")
 
 
 # --- the Phase-3 amendment chain ----------------------------------------------
 
-def test_phase3_amendment_is_the_newest_chain_link() -> None:
+def test_phase3_amendment_is_carried_by_the_newest_chain_link() -> None:
+    # R3 adds a newer link, the post-execution amendment, so the Phase-3
+    # amendment is no longer the newest and is now admitted exactly like every
+    # other superseded record: through the link that carries it, by bytes.
     chain = e10._amendment_chain()
-    assert chain[0][0] == e10.PHASE3_AMENDMENT_PATH
+    assert chain[0][0] == e10.POSTEXECUTION_AMENDMENT_PATH
     assert [path.name for path, _ in chain] == [
+        "post_execution_binding_amendment_20260813.json",
         "phase3_binding_amendment_20260811.json",
         "phase2_binding_amendment_20260810.json",
         "phase1_whole_cell_wall_repair_20260810.json",
@@ -509,7 +563,9 @@ def test_phase3_amendment_is_the_newest_chain_link() -> None:
     assert amendment["record_type"] == "e10_phase3_binding_amendment"
     assert amendment["status"] == "PHASE2_EVIDENCE_CARRIED_FORWARD"
     assert amendment["NON_SCIENTIFIC"] is True
-    assert amendment["binding"]["source_digest"] == e10.source_digest()[0]
+    assert amendment["binding"]["source_digest"] == e10.EXECUTION_SOURCE_DIGEST
+    assert e10.POSTEXECUTION_AMENDMENT_PATH.name in [
+        path.name for path, _ in chain]
     assert amendment["phase2_r2_source_digest"] == e10.PHASE2_R2_SOURCE_DIGEST
     assert set(amendment["preserved_records"]) == set(
         e10.PHASE2_R2_RECORD_SHA256)
@@ -581,14 +637,32 @@ PRODUCTION_VERIFIERS = (
 
 
 @contextmanager
-def _temporary_grant_directory(root: Path):
-    """Redirect ONLY the authorization directory.
+def _temporary_grant_directory(root: Path, *, empty_scientific_tree: bool = False):
+    """Redirect the authorization directory, and optionally the artefact tree.
 
     The production verifiers read real shared state, real ledgers and the real
     immutable governance tree; the grant is the single synthetic element, so
     what is exercised is the production verifier against a real repository.
+
+    R3. ``empty_scientific_tree`` additionally declares the AUTHORISED BUT
+    INCOMPLETE lifecycle state: a valid grant with nothing yet executed. It is
+    needed by the tests that open cell entry, because a completed matrix now
+    correctly refuses entry under the spent-grant policy.
     """
-    with mock.patch.object(e10, "CORE_AUTHORIZATION_DIR", Path(root)):
+    with ExitStack() as stack:
+        stack.enter_context(
+            mock.patch.object(e10, "CORE_AUTHORIZATION_DIR", Path(root)))
+        if empty_scientific_tree:
+            tree = Path(root) / "core-results"
+            stack.enter_context(mock.patch.object(e10, "CORE_OUT_DIR", tree))
+            stack.enter_context(mock.patch.object(
+                e10, "CORE_CHECKPOINT_DIR", tree / "checkpoints"))
+            ledgers = Path(root) / "ledgers"
+            ledgers.mkdir(parents=True, exist_ok=True)
+            spend, retry = ledgers / "spend.json", ledgers / "retry.json"
+            write_pre_execution_ledgers(spend, retry)
+            stack.enter_context(mock.patch.object(e10, "SPEND_LEDGER", spend))
+            stack.enter_context(mock.patch.object(e10, "RETRY_LEDGER", retry))
         yield Path(root)
 
 
@@ -608,18 +682,24 @@ def test_all_three_verifiers_pass_with_and_without_a_valid_grant() -> None:
     None, assert_scientific_core_refused raised, and all three verifiers failed
     on a legitimately authorised state.
     """
-    # CASE A: no grant. Every verifier passes and the core refuses.
-    assert _all_verifiers_pass() == {"phase1-verify": "PASS",
-                                     "phase2-verify": "PASS",
-                                     "phase3-verify": "PASS"}
-    assert phase1.scientific_refusal() is not None
-    closed = phase1.assert_scientific_core_refused()
-    assert closed["refused"] is True
-    assert closed["core_authorization_grant_present"] is False
-    assert closed["core_authorization_grant_valid"] is False
+    # CASE A: no grant. Every verifier passes and the core refuses. R3: the
+    # absent-grant state is declared, because the real repository now holds the
+    # real grant of a completed matrix.
+    with tempfile.TemporaryDirectory() as directory:
+        with _temporary_grant_directory(Path(directory),
+                                        empty_scientific_tree=True):
+            assert _all_verifiers_pass() == {"phase1-verify": "PASS",
+                                             "phase2-verify": "PASS",
+                                             "phase3-verify": "PASS"}
+            assert phase1.scientific_refusal() is not None
+            closed = phase1.assert_scientific_core_refused()
+            assert closed["refused"] is True
+            assert closed["core_authorization_grant_present"] is False
+            assert closed["core_authorization_grant_valid"] is False
 
     with tempfile.TemporaryDirectory() as directory:
-        with _temporary_grant_directory(Path(directory)):
+        with _temporary_grant_directory(Path(directory),
+                                        empty_scientific_tree=True):
             # CASE B: one valid exact grant. Every verifier still passes.
             write_core_authorization_grant()
             assert _all_verifiers_pass() == {"phase1-verify": "PASS",
@@ -688,22 +768,34 @@ def test_all_three_verifiers_pass_with_and_without_a_valid_grant() -> None:
                             "B4", "train_40k", 0),
                         "grant is absent")
 
-    # The real production state is untouched by any of it.
-    assert e10.assert_no_core_authorization_grant()["grant_present"] is False
-    assert phase1.scientific_refusal() is not None
+    # The real production state is untouched by any of it. R3: the real state
+    # is now the completed terminal one, so what "untouched" means is that the
+    # real grant is still there, still valid as provenance, and still refuses.
+    real = e10.core_authorization_state()
+    if real["grant_present"]:
+        assert real["grant_valid"] is True
+        assert e10.core_execution_state()["state"] == e10.AUTHORIZED_COMPLETE
+        assert "operationally SPENT" in phase1.scientific_refusal()
+    else:
+        assert e10.assert_no_core_authorization_grant()["grant_present"] is False
+        assert phase1.scientific_refusal() is not None
 
 
 def test_phase3_acceptance_sequence() -> None:
     """The full Phase-3 acceptance case, in one sequence, on temp state only."""
     steps = []
-    # 1-2. No grant; all three verifiers pass.
-    assert not e10.core_authorization_grant_path().exists()
-    steps.append(("no_grant_verifiers", _all_verifiers_pass()))
     # 3. Digests recorded.
     before_source, before_files = e10.source_digest()
     before_config, before_config_files = e10.config_digest()
     with tempfile.TemporaryDirectory() as directory:
-        with _temporary_grant_directory(Path(directory)):
+        # R3. The whole sequence runs in a declared AUTHORISED BUT INCOMPLETE
+        # state: it opens all twelve cells, which a completed matrix must and
+        # does refuse under the spent-grant policy.
+        with _temporary_grant_directory(Path(directory),
+                                        empty_scientific_tree=True):
+            # 1-2. No grant; all three verifiers pass.
+            assert not e10.core_authorization_grant_path().exists()
+            steps.append(("no_grant_verifiers", _all_verifiers_pass()))
             # 4. A valid exact synthetic external grant.
             path = write_core_authorization_grant()
             grant = e10.validate_core_authorization_grant()
@@ -731,15 +823,27 @@ def test_phase3_acceptance_sequence() -> None:
             path.unlink()
             assert not path.exists()
             steps.append(("grant_removed_verifiers", _all_verifiers_pass()))
-    # 10. The production real state is still unauthorised, and the digests are
-    # still exactly what they were before any grant existed.
+    # 10. The synthetic sequence left the production state exactly as it found
+    # it, and the digests are still exactly what they were. R3: the production
+    # state is the completed terminal one, so "unchanged" means the real grant
+    # is still present, still valid as provenance, and still refuses execution
+    # because it is spent. Nothing here may open a real cell.
     assert e10.source_digest() == (before_source, before_files)
     assert e10.config_digest() == (before_config, before_config_files)
-    assert e10.assert_no_core_authorization_grant()["grant_present"] is False
     assert e10.E10_TRAINING_AUTHORIZED is None
-    assert e10.assert_no_scientific_cells()["charged_core_cells"] == 0
-    _must_raise(SystemExit, lambda: e10_run.core_cell("B4", "train_40k", 0),
-                "grant is absent")
+    real = e10.core_execution_state()
+    if real["state"] == e10.AUTHORIZED_COMPLETE:
+        assert real["cells_complete"] == len(e10.CORE_CELLS)
+        assert real["grant_operationally_spent"] is True
+        _must_raise(SystemExit,
+                    lambda: e10_run.core_cell("B4", "train_40k", 0),
+                    "operationally SPENT")
+    else:
+        assert e10.assert_no_core_authorization_grant()["grant_present"] is False
+        assert e10.assert_no_scientific_cells()["charged_core_cells"] == 0
+        _must_raise(SystemExit,
+                    lambda: e10_run.core_cell("B4", "train_40k", 0),
+                    "grant is absent")
     assert [name for name, _ in steps] == ["no_grant_verifiers",
                                            "grant_present_verifiers",
                                            "grant_removed_verifiers"]
@@ -792,15 +896,107 @@ def test_no_e10_source_assigns_the_authorization_constant() -> None:
     assert assignments == ["e10_common.py"]
 
 
+def test_post_execution_amendment_carries_the_completed_evidence() -> None:
+    """R3. The completed experiment still validates after the source moved.
+
+    R3 edits files inside SOURCE_PATHS, so the live source digest necessarily
+    differs from the one every completed cell, the frozen analysis and the
+    grant were written under. This proves the amendment is what carries them,
+    and that it carries them by exact bytes rather than by waiving the check.
+    """
+    if e10.core_execution_state()["state"] != e10.AUTHORIZED_COMPLETE:
+        return
+    # The source digest really did move, and the config digest really did not.
+    assert e10.source_digest()[0] != e10.EXECUTION_SOURCE_DIGEST
+    assert e10.config_digest()[0] == e10.EXECUTION_CONFIG_DIGEST
+    # The execution pair is accepted, and the amendment is the newest link.
+    assert (e10.EXECUTION_SOURCE_DIGEST, e10.EXECUTION_CONFIG_DIGEST) in \
+        e10.accepted_historical_bindings()
+    amendment = e10.validate_post_execution_amendment()
+    assert amendment["record_type"] == "e10_post_execution_binding_amendment"
+    assert amendment["NON_SCIENTIFIC"] is True
+    assert amendment["binding"]["source_digest"] == e10.source_digest()[0]
+    assert amendment["execution_source_digest"] == e10.EXECUTION_SOURCE_DIGEST
+    assert amendment["change_scope"]["scientific_results_changed"] is False
+    assert amendment["change_scope"]["cell_records_rewritten"] is False
+    assert amendment["change_scope"]["grant_rewritten"] is False
+    assert amendment["change_scope"][
+        "new_scientific_authorization_granted"] is False
+    assert amendment["completed_execution"]["scientific_cells_completed"] == 12
+    assert amendment["completed_execution"]["automatic_retries"] == 0
+    # Every carried record still hashes to the pinned bytes, in its real tree.
+    for filename, (location, digest) in e10.POSTEXECUTION_RECORD_SHA256.items():
+        path = e10.postexecution_record_path(filename, location)
+        assert path.is_file(), filename
+        assert e10.sha256_file(path) == digest, filename
+    # And the things that depend on it validate: every cell record, the grant,
+    # the frozen analysis and the older links in the chain.
+    for arm, scale, seed in FROZEN_ORDER:
+        record = e10.read_json_mapping(
+            e10.core_cell_paths(arm, scale, seed)["result"])
+        assert record["metadata"]["binding"]["source_digest"] == \
+            e10.EXECUTION_SOURCE_DIGEST
+        e10.assert_recorded_binding(
+            record["metadata"], f"cell {arm}/{scale}/{seed}",
+            e10.core_cell_paths(arm, scale, seed)["result"])
+    assert e10.validate_core_authorization_grant()["grant_id"] == \
+        e10.EXECUTION_GRANT_ID
+    assert e10.validate_phase3_amendment()["record_type"] == \
+        "e10_phase3_binding_amendment"
+    assert e10.validate_phase2_amendment()["record_type"] == \
+        "e10_phase2_binding_amendment"
+
+
+def test_spent_grant_cannot_fund_new_execution() -> None:
+    """R3. A completed matrix's grant is provenance, never a second permit."""
+    if e10.core_execution_state()["state"] != e10.AUTHORIZED_COMPLETE:
+        return
+    # Valid for provenance.
+    assert e10.core_authorization_state()["grant_valid"] is True
+    # Spent for execution, at every authoritative entry point.
+    for entry in (
+        lambda: e10.assert_core_entry_authorized("B4", "train_40k", 0),
+        lambda: e10.authorize_cell_execution("B4", "train_40k", 0),
+        lambda: e10_run.core_cell("B4r", "train_250k", 2),
+    ):
+        _must_raise(SystemExit, entry, "operationally SPENT")
+    # The refusal names the policy rather than pretending the grant is absent.
+    refusal = phase1.scientific_refusal()
+    assert "SPENT" in refusal and "grant is absent" not in refusal
+    assert "fresh explicit user authorization" in refusal
+    # A completed cell is still immutable, independently of the grant policy.
+    assert e10.core_cell_paths("B4", "train_40k", 0)["result"].is_file()
+    # And no retry became available.
+    assert e10.read_retry_ledger()["retries"] == []
+    assert config.E10_AUTOMATIC_RETRIES_PER_IDENTITY == 0
+
+
 def test_phase3_verify_reports_the_real_state() -> None:
     contract = phase3.authorization_contract()
-    assert contract["entry_gate"]["cells_refused"] == 12
-    assert contract["entry_gate"]["cells_authorised"] == 0
-    assert contract["entry_gate"]["external_grant_present"] is False
-    assert contract["scientific_core"]["refused"] is True
-    assert contract["core_authorization_state"]["grant_present"] is False
-    assert contract["core_authorization_state"]["grant_valid"] is False
-    assert contract["no_scientific_execution"]["charged_core_cells"] == 0
+    state = contract["core_execution_state"]
+    if state["state"] == e10.AUTHORIZED_COMPLETE:
+        # R3 terminal state: the grant is present and valid as provenance, the
+        # matrix is complete, and every cell refuses further execution.
+        assert state["cells_complete"] == len(e10.CORE_CELLS)
+        assert state["grant_operationally_spent"] is True
+        assert contract["entry_gate"]["external_grant_present"] is True
+        assert contract["entry_gate"]["cells_authorised"] == 0
+        assert contract["entry_gate"]["cells_refused"] == 12
+        assert contract["core_authorization_state"]["grant_present"] is True
+        assert contract["core_authorization_state"]["grant_valid"] is True
+        # The core still refuses, and for the right reason: the grant is spent,
+        # not absent. That distinction is the whole point of the policy.
+        assert contract["scientific_core"]["refused"] is True
+        assert "operationally SPENT" in contract["scientific_core"]["refusal"]
+    else:
+        assert state["state"] == e10.PRE_AUTHORIZATION
+        assert contract["entry_gate"]["cells_refused"] == 12
+        assert contract["entry_gate"]["cells_authorised"] == 0
+        assert contract["entry_gate"]["external_grant_present"] is False
+        assert contract["scientific_core"]["refused"] is True
+        assert contract["core_authorization_state"]["grant_present"] is False
+        assert contract["core_authorization_state"]["grant_valid"] is False
+        assert state["charged_core_cells"] == 0
     assert contract["grant_schema"]["partial_authorization"] is False
     assert contract["grant_schema"]["contains_scientific_results"] is False
     assert contract["clean_test_accessed"] is False
@@ -828,14 +1024,16 @@ TESTS = (
     test_stale_predecessor_provenance_refuses,
     test_source_constant_mutation_is_not_a_grant_route,
     test_permit_path_works_with_the_valid_external_grant,
-    test_no_real_scientific_grant_exists,
+    test_grant_terminal_policy_historically_valid_and_operationally_spent,
     test_all_three_verifiers_pass_with_and_without_a_valid_grant,
     test_phase3_acceptance_sequence,
-    test_phase3_amendment_is_the_newest_chain_link,
+    test_phase3_amendment_is_carried_by_the_newest_chain_link,
     test_older_link_cannot_carry_itself_or_a_newer_one,
     test_phase3_records_are_immutable_and_write_once,
     test_frozen_scientific_protocol_is_unchanged,
     test_no_e10_source_assigns_the_authorization_constant,
+    test_post_execution_amendment_carries_the_completed_evidence,
+    test_spent_grant_cannot_fund_new_execution,
     test_phase3_verify_reports_the_real_state,
 )
 

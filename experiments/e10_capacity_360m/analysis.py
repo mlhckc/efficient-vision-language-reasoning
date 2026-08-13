@@ -104,7 +104,11 @@ def _load_cell(arm: str, scale: str, seed: int, reference: dict) -> dict:
             f"cell {arm}/{scale}/seed{seed} has no published result at "
             f"{paths['result']}; a missing cell is never imputed")
     record = e10.read_json_mapping(paths["result"])
-    e10.assert_current_binding(record["metadata"], f"E10 cell {arm}/{scale}/{seed}")
+    # The execution-time binding is admitted through the post-execution
+    # amendment, which names this exact record and its bytes; a cell record
+    # no amendment binds is still refused.
+    e10.assert_recorded_binding(
+        record["metadata"], f"E10 cell {arm}/{scale}/{seed}", paths["result"])
     cell = record["e10_core_cell"]
     if cell["cell"] != [arm, scale, seed]:
         raise AnalysisRefused(

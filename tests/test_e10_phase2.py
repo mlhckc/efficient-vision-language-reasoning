@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import ast
 import json
+import shutil
 import os
 import sys
 import tempfile
@@ -39,6 +40,8 @@ from experiments.e10_capacity_360m import run as e10_run
 from experiments.e10_capacity_360m import science
 from tests.test_e10 import (
     _must_raise,
+    pre_authorization_state,
+    write_pre_execution_ledgers,
     _strict_state_restored,
     _temporary_shared_paths,
     _write_ledgers,
@@ -77,6 +80,31 @@ def _patched_core_tree(stack: ExitStack, root: Path) -> dict:
     stack.enter_context(mock.patch.object(science, "CELL_LOCK_DIR",
                                           root / "cell-locks"))
     return paths
+
+
+def _completed_core_entry(arm: str, scale: str, seed: int) -> dict:
+    """A minimal ledger charge for one completed cell, for lifecycle fixtures."""
+    body = {
+        "identity": e10.model_identity(arm),
+        "arm": arm,
+        "context": "e10_core_cell",
+        "cell": [arm, scale, seed],
+        "gpu_occupancy_ns": 7_200_000_000_000,
+        "measurement": "process_monotonic_ns",
+        "outcome": "completed",
+        "host": "lifecycle-fixture",
+        "pid": 1,
+        "started_utc": "2026-08-11T00:00:00Z",
+        "ended_utc": "2026-08-11T02:00:00Z",
+        "source_digest": e10.EXECUTION_SOURCE_DIGEST,
+        "config_digest": e10.EXECUTION_CONFIG_DIGEST,
+        "protocol_family": e10.PROTOCOL_FAMILY,
+        "claim_sha256": None,
+        "recipe_digests": {
+            f"{arm}_{scale}_seed{seed}":
+                e10.recipe_sha256(e10.build_recipe(arm, scale, seed))},
+    }
+    return {"entry_id": e10.sha256_bytes(e10.canonical_json_bytes(body)), **body}
 
 
 def _synthetic_dev_frame():
@@ -569,11 +597,22 @@ def test_missing_required_artefact_prevents_completion() -> None:
 # --- the frozen analysis ------------------------------------------------------
 
 def test_analysis_refuses_an_incomplete_matrix() -> None:
-    result = phase2.assert_analysis_refuses_incomplete()
-    assert result["refused"] is True
+    # R3. The refusal invariant is asserted against an empty scientific tree,
+    # which is the state it describes, and the lifecycle-aware gate is asserted
+    # to agree with it there.
     with tempfile.TemporaryDirectory() as directory, ExitStack() as stack:
         root = Path(directory)
         _patched_core_tree(stack, root)
+        stack.enter_context(mock.patch.object(e10, "SPEND_LEDGER",
+                                              root / "spend.json"))
+        stack.enter_context(mock.patch.object(e10, "RETRY_LEDGER",
+                                              root / "retry.json"))
+        _write_ledgers(root / "spend.json", root / "retry.json")
+        result = phase2.assert_analysis_refuses_incomplete()
+        assert result["refused"] is True
+        gate = phase2.assert_analysis_gate_is_correct()
+        assert gate["refused"] is True
+        assert gate["lifecycle_state"] == e10.PRE_AUTHORIZATION
         _must_raise(analysis.AnalysisRefused, analysis.load_matrix,
                     "no published result")
 
@@ -742,49 +781,138 @@ def test_no_e8_frozen_result_is_modified() -> None:
 
 
 def test_scientific_authorization_remains_closed() -> None:
+    # R3. Declared pre-authorisation state; the invariant is unchanged.
     assert e10.E10_TRAINING_AUTHORIZED is None
     assert e10.E10_CALIBRATION_AUTHORIZED is None
-    refusal = phase1.assert_scientific_core_refused()
-    assert refusal["refused"] is True
-    assert refusal["core_authorization_grant_present"] is False
-    assert "scientific authorization grant is absent" in refusal["refusal"]
-    _must_raise(SystemExit,
-                lambda: e10_run.core_cell("B4", "train_40k", 0),
-                "E10 CORE REFUSED")
-    _must_raise(SystemExit,
-                lambda: e10.authorize_cell_execution("B4", "train_40k", 0),
-                "E10 CORE REFUSED")
+    with tempfile.TemporaryDirectory() as directory:
+        with pre_authorization_state(Path(directory)):
+            refusal = phase1.assert_scientific_core_refused()
+            assert refusal["refused"] is True
+            assert refusal["core_authorization_grant_present"] is False
+            assert "scientific authorization grant is absent" in refusal["refusal"]
+            _must_raise(SystemExit,
+                        lambda: e10_run.core_cell("B4", "train_40k", 0),
+                        "E10 CORE REFUSED")
+            _must_raise(SystemExit,
+                        lambda: e10.authorize_cell_execution("B4", "train_40k", 0),
+                        "E10 CORE REFUSED")
 
 
 def test_no_scientific_cell_has_executed() -> None:
-    proof = e10.assert_no_scientific_cells()
-    assert proof == {"published_cell_records": 0, "checkpoint_files": 0,
-                     "charged_core_cells": 0, "e10_training_authorized": None}
-    outputs = e10.assert_no_scientific_outputs()
+    """The strict pre-execution proof, in the state it describes.
+
+    R3. assert_no_scientific_cells is unchanged and is still strict; what it
+    describes is the PRE-AUTHORISATION state, so the test declares that state
+    instead of asserting it about a repository that has since executed.
+    """
+    with tempfile.TemporaryDirectory() as directory:
+        with pre_authorization_state(Path(directory)):
+            proof = e10.assert_no_scientific_cells()
+            assert proof == {"published_cell_records": 0,
+                             "checkpoint_files": 0,
+                             "charged_core_cells": 0,
+                             "e10_training_authorized": None}
+            legitimate = e10.assert_core_execution_state_is_legitimate()
+            assert legitimate["state"] == e10.PRE_AUTHORIZATION
+    # The governance tree never acquires a checkpoint or a metric field in any
+    # lifecycle state, so that proof is made against the real tree.
+    outputs = e10.assert_no_scientific_outputs(e10.REAL_OUT_DIR)
     assert outputs["checkpoint_files"] == 0
     assert outputs["forbidden_metric_fields"] == 0
 
 
 def test_core_cell_refuses_before_any_scientific_side_effect() -> None:
-    """The refusal precedes model, data, CUDA, optimizer and output creation."""
+    """The refusal precedes model, data, CUDA, optimizer and output creation.
+
+    R3. Declared in a pre-authorisation state so the refusal under test is the
+    authorisation refusal, and so the "no output directory was created" clause
+    is a statement about this test's own tree rather than about the real one.
+    """
     calls = []
-    with ExitStack() as stack:
-        for module, name in ((e10, "load_frozen_causal_lm"),
-                             (e10, "build_trainable"),
-                             (science, "build_scientific_loaders"),
-                             (science, "build_answer_cache"),
-                             (science, "_preflight_refusals"),
-                             (science, "_acquire_cell_lock")):
+    with tempfile.TemporaryDirectory() as directory:
+        with pre_authorization_state(Path(directory)), ExitStack() as stack:
+            for module, name in ((e10, "load_frozen_causal_lm"),
+                                 (e10, "build_trainable"),
+                                 (science, "build_scientific_loaders"),
+                                 (science, "build_answer_cache"),
+                                 (science, "_preflight_refusals"),
+                                 (science, "_acquire_cell_lock")):
+                stack.enter_context(mock.patch.object(
+                    module, name,
+                    mock.Mock(side_effect=AssertionError(f"{name} was reached"))))
+                calls.append(name)
             stack.enter_context(mock.patch.object(
-                module, name,
-                mock.Mock(side_effect=AssertionError(f"{name} was reached"))))
-            calls.append(name)
-        stack.enter_context(mock.patch.object(
-            torch.cuda, "is_available", lambda: True))
-        _must_raise(SystemExit,
-                    lambda: e10_run.core_cell("B4", "train_40k", 0),
-                    "E10 CORE REFUSED")
-    assert not e10.CORE_OUT_DIR.exists(), e10.CORE_OUT_DIR
+                torch.cuda, "is_available", lambda: True))
+            _must_raise(SystemExit,
+                        lambda: e10_run.core_cell("B4", "train_40k", 0),
+                        "E10 CORE REFUSED")
+            assert not e10.CORE_OUT_DIR.exists(), e10.CORE_OUT_DIR
+
+
+def test_terminal_completed_matrix_is_accepted_only_on_positive_proof() -> None:
+    """R3. AUTHORIZED_COMPLETE requires the exact matrix, proven, not assumed.
+
+    The repaired verifiers must not be satisfied by "something executed". This
+    exercises all three lifecycle states: an empty tree is PRE_AUTHORIZATION, a
+    partial tree is AUTHORIZED_INCOMPLETE and is REFUSED by the shared terminal
+    helper, and only the real, complete, reconciled matrix is accepted.
+    """
+    # 1. Empty scientific tree: pre-authorisation, and terminal proof refuses.
+    with tempfile.TemporaryDirectory() as directory, ExitStack() as stack:
+        root = Path(directory)
+        _patched_core_tree(stack, root)
+        spend, retry = root / "spend.json", root / "retry.json"
+        write_pre_execution_ledgers(spend, retry)
+        stack.enter_context(mock.patch.object(e10, "SPEND_LEDGER", spend))
+        stack.enter_context(mock.patch.object(e10, "RETRY_LEDGER", retry))
+        assert e10.core_execution_state()["state"] == e10.PRE_AUTHORIZATION
+        _must_raise(AssertionError, e10.assert_exact_completed_matrix,
+                    "not the exact completed matrix")
+        assert e10.assert_core_execution_state_is_legitimate()["state"] == \
+            e10.PRE_AUTHORIZATION
+
+    # 2. Half the matrix published and charged: incomplete, and REFUSED.
+    with tempfile.TemporaryDirectory() as directory, ExitStack() as stack:
+        root = Path(directory)
+        paths = _patched_core_tree(stack, root)
+        core = Path(paths["CORE_OUT_DIR"])
+        core.mkdir(parents=True, exist_ok=True)
+        half = list(e10.pair_preserving_order())[:6]
+        for arm, scale, seed in half:
+            name = e10.core_run_name(arm, scale, seed)
+            shutil.copy2(e10.REAL_CORE_OUT_DIR / f"{name}.json",
+                         core / f"{name}.json")
+        spend, retry = root / "spend.json", root / "retry.json"
+        write_pre_execution_ledgers(spend, retry)
+        ledger = json.loads(spend.read_text())
+        for arm, scale, seed in half:
+            ledger["entries"].append(_completed_core_entry(arm, scale, seed))
+        spend.unlink()
+        e10.atomic_write_json(spend, ledger)
+        stack.enter_context(mock.patch.object(e10, "SPEND_LEDGER", spend))
+        stack.enter_context(mock.patch.object(e10, "RETRY_LEDGER", retry))
+        assert e10.core_execution_state()["state"] == e10.AUTHORIZED_INCOMPLETE
+        _must_raise(AssertionError, e10.assert_exact_completed_matrix,
+                    "cells without a published result")
+        _must_raise(AssertionError,
+                    e10.assert_core_execution_state_is_legitimate,
+                    "not the exact completed authorised matrix")
+        _must_raise(analysis.AnalysisRefused, analysis.load_matrix,
+                    "no published result")
+
+    # 3. The real tree: the exact completed matrix, proven from its own bytes.
+    if e10.core_execution_state()["state"] == e10.AUTHORIZED_COMPLETE:
+        proof = e10.assert_exact_completed_matrix()
+        assert proof["cells_complete"] == len(e10.CORE_CELLS)
+        assert proof["cells"] == [list(c) for c in e10.pair_preserving_order()]
+        assert proof["failure_records"] == 0 and proof["halt_records"] == 0
+        assert proof["retries_taken"] == 0
+        assert proof["grant_operationally_spent"] is True
+        matrix = analysis.load_matrix()
+        assert len(matrix["cells"]) == len(e10.CORE_CELLS)
+        gate = phase2.assert_analysis_gate_is_correct()
+        assert gate["refused"] is False
+        assert gate["reconciled_cells"] == len(e10.CORE_CELLS)
 
 
 def test_phase2_pipeline_contract_reports_the_real_state() -> None:
@@ -793,8 +921,23 @@ def test_phase2_pipeline_contract_reports_the_real_state() -> None:
         FROZEN_CADENCE)
     assert contract["frozen_recipe"]["cells"] == 12
     assert contract["stage_coverage"]["unguarded"] == 0
-    assert contract["scientific_core"]["refused"] is True
-    assert contract["no_scientific_execution"]["charged_core_cells"] == 0
+    # R3. In the completed terminal state the contract reports the exact
+    # authorised matrix rather than a violated pre-execution invariant, and
+    # the analysis gate reports a reproducing matrix rather than a refusal.
+    state = contract["core_execution_state"]
+    if state["state"] == e10.AUTHORIZED_COMPLETE:
+        assert state["cells_complete"] == len(e10.CORE_CELLS)
+        assert state["grant_operationally_spent"] is True
+        assert contract["analysis_gate"]["refused"] is False
+        assert contract["analysis_gate"]["reconciled_cells"] == len(e10.CORE_CELLS)
+        # Still refused, but because the grant is spent rather than absent.
+        assert contract["scientific_core"]["refused"] is True
+        assert "operationally SPENT" in contract["scientific_core"]["refusal"]
+    else:
+        assert state["state"] == e10.PRE_AUTHORIZATION
+        assert state["charged_core_cells"] == 0
+        assert contract["analysis_gate"]["refused"] is True
+        assert contract["scientific_core"]["refused"] is True
     assert contract["clean_test_accessed"] is False
     assert contract["data_contract"]["clean_test_resolvable"] is False
     assert "g8_overfit_gate" in contract["deliberate_e10_differences"]
@@ -1370,6 +1513,7 @@ TESTS = (
     test_scientific_authorization_remains_closed,
     test_no_scientific_cell_has_executed,
     test_core_cell_refuses_before_any_scientific_side_effect,
+    test_terminal_completed_matrix_is_accepted_only_on_positive_proof,
     test_phase2_pipeline_contract_reports_the_real_state,
 )
 
