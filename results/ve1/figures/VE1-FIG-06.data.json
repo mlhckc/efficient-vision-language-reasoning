@@ -1,0 +1,431 @@
+{
+ "artefact_id": "VE1-FIG-06",
+ "bound_scalars_used": {
+  "parameters_label.fusion_head": "1.1M",
+  "parameters_label.reasoner": "21.1M"
+ },
+ "caption_claim": "The 21.1M-parameter latent-query reasoner does not materially outperform the 1.1M global fusion head at 40k, and no scale shows it reducing the four-or-more-step deficit.",
+ "carries_v2_07_limitation": true,
+ "clean_test_accessed": false,
+ "consumed_evidence_ids": [
+  "EV-CON-v3_02a.reasoner_minus_fusion_deficit.train_40k",
+  "EV-CON-v3_03.reasoner_minus_fusion_deficit.train_100k",
+  "EV-CON-v3_03.reasoner_minus_fusion_deficit.train_250k",
+  "EV-DSC-v3_01.reasoner.train_40k.seed_mean",
+  "EV-DSC-v3_01.reasoner.train_40k.seed_sd",
+  "EV-DSC-v3_01.reasoner_minus_fusion.train_40k.seed_mean",
+  "EV-SEED-v2_07.fusion.train_100k",
+  "EV-SEED-v2_07.fusion.train_250k",
+  "EV-SEED-v2_07.fusion.train_40k",
+  "EV-SEED-v3_03.reasoner.train_100k",
+  "EV-SEED-v3_03.reasoner.train_250k"
+ ],
+ "content_sha256": "d56af1a4e954437b9e6abbbc85b4cef397257eb9eaf68b3e2b3a4a096f40915b",
+ "development_set_only": true,
+ "dissertation_section": [
+  "R5_LATENT_REASONING_AND_REPRESENTATION"
+ ],
+ "drawn_value_count": 11,
+ "drawn_values": [
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_01_reasoner/results.json",
+   "canonical_source_sha256": "472fe626775d755e1a24ae3da814466773b3e067537201cb88351ea27d8abfd9",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL_AVAILABLE: this is a development accuracy under the V2-era closed-vocabulary scorer, not a counted quantity. No image-clustered evaluation-sampling interval exists for it because the post-E10 closure reconstructed the global-head families only, so the V3 families have no reconstructed row-level evidence and no clustered interval was ever computed for this scalar. The accompanying seed mean and seed sd summarise variability across three independent TRAINING runs; they are NOT an evaluation-sampling interval. No interval is invented or reconstructed here.",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-DSC-v3_01.reasoner.train_40k.seed_mean",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "reasoner",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "role": "panel_a reasoner mean at train_40k",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.54222
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00366,
+   "canonical_source_path": "results/experiments/v3_01_reasoner/results.json",
+   "canonical_source_sha256": "472fe626775d755e1a24ae3da814466773b3e067537201cb88351ea27d8abfd9",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL_AVAILABLE: this is a development accuracy under the V2-era closed-vocabulary scorer, not a counted quantity. No image-clustered evaluation-sampling interval exists for it because the post-E10 closure reconstructed the global-head families only, so the V3 families have no reconstructed row-level evidence and no clustered interval was ever computed for this scalar. The accompanying seed mean and seed sd summarise variability across three independent TRAINING runs; they are NOT an evaluation-sampling interval. No interval is invented or reconstructed here.",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-DSC-v3_01.reasoner.train_40k.seed_sd",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "reasoner",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "role": "panel_a reasoner across-seed SD at train_40k",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.00366
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.0002,
+   "canonical_source_path": "results/experiments/v3_03_scaling/results.json",
+   "canonical_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-v3_03.reasoner.train_100k",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "reasoner",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "role": "panel_a reasoner mean",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_100k",
+   "value": 0.57061
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00741,
+   "canonical_source_path": "results/experiments/v3_03_scaling/results.json",
+   "canonical_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-v3_03.reasoner.train_250k",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "reasoner",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "role": "panel_a reasoner mean",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_250k",
+   "value": 0.5958
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00218,
+   "canonical_source_path": "results/experiments/v2_07_scaling/results.json",
+   "canonical_source_sha256": "852206e1b0a404955ed66c5b56a3b9bd7215c15fb35b438dd703cc6c497b79fc",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-v2_07.fusion.train_40k",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "fusion",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "role": "panel_a fusion reference mean",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.5384
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00268,
+   "canonical_source_path": "results/experiments/v2_07_scaling/results.json",
+   "canonical_source_sha256": "852206e1b0a404955ed66c5b56a3b9bd7215c15fb35b438dd703cc6c497b79fc",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-v2_07.fusion.train_100k",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "fusion",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "role": "panel_a fusion reference mean",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_100k",
+   "value": 0.56308
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00197,
+   "canonical_source_path": "results/experiments/v2_07_scaling/results.json",
+   "canonical_source_sha256": "852206e1b0a404955ed66c5b56a3b9bd7215c15fb35b438dd703cc6c497b79fc",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-v2_07.fusion.train_250k",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "fusion",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "role": "panel_a fusion reference mean",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_250k",
+   "value": 0.58226
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_01_reasoner/results.json",
+   "canonical_source_sha256": "472fe626775d755e1a24ae3da814466773b3e067537201cb88351ea27d8abfd9",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL_AVAILABLE: this is a development accuracy under the V2-era closed-vocabulary scorer, not a counted quantity. No image-clustered evaluation-sampling interval exists for it because the post-E10 closure reconstructed the global-head families only, so the V3 families have no reconstructed row-level evidence and no clustered interval was ever computed for this scalar. The accompanying seed mean and seed sd summarise variability across three independent TRAINING runs; they are NOT an evaluation-sampling interval. No interval is invented or reconstructed here.",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "SYSTEM_LEVEL_COMPARISON",
+   "evidence_id": "EV-DSC-v3_01.reasoner_minus_fusion.train_40k.seed_mean",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "reasoner minus fusion",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "role": "panel_a same-seed reasoner minus fusion gap at train_40k, annotated",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.00307
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_02a_refs/step_statistics.json",
+   "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    -0.00672,
+    0.01702
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented development imageId",
+   "comparison_class": "SYSTEM_LEVEL_COMPARISON",
+   "evidence_id": "EV-CON-v3_02a.reasoner_minus_fusion_deficit.train_40k",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "reasoner_minus_fusion_deficit",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "role": "panel_b reasoner minus fusion deficit difference",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.00473
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_03_scaling/results.json",
+   "canonical_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    -0.01211,
+    0.01057
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented development imageId",
+   "comparison_class": "SYSTEM_LEVEL_COMPARISON",
+   "evidence_id": "EV-CON-v3_03.reasoner_minus_fusion_deficit.train_100k",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "reasoner_minus_fusion_deficit",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "role": "panel_b reasoner minus fusion deficit difference",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_100k",
+   "value": -0.00037
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_03_scaling/results.json",
+   "canonical_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    -0.01323,
+    0.0076
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented development imageId",
+   "comparison_class": "SYSTEM_LEVEL_COMPARISON",
+   "evidence_id": "EV-CON-v3_03.reasoner_minus_fusion_deficit.train_250k",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "reasoner_minus_fusion_deficit",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "role": "panel_b reasoner minus fusion deficit difference",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_250k",
+   "value": -0.00275
+  }
+ ],
+ "mandatory_caption_caveat": "A system-level comparison: input granularity, architecture and parameter count change together, so token-level access is not isolated as a cause. All three deficit-difference intervals include zero, which is an absence of a detected difference, not evidence of equivalence. The 40k reasoner accuracy and its same-seed gap come from v3_01 and carry an across-training-seed standard deviation only, with no clustered interval. The fusion reference series is v2_07 historical aggregate and seed evidence and carries the v2_07 ACCEPTED DOCUMENTED LIMITATION: one of forty reconstruction cells differed by a single numerically tied row, the reconstructed clustered family was therefore conservatively omitted in full, no image-clustered evaluation interval is available for the affected scaling evidence, and no post-hoc partial-family rescue was performed. PROTOCOL DIFFERENCES that must stay visible: the two series do not share a seed set, the reasoner using three seeds and the fusion reference five, so panel (a) is a system-level juxtaposition and not a matched paired comparison. Both series use the same V2-era closed-vocabulary scorer on the same 7,714-row development view and the same best-on-development checkpoint-selection rule, which is what makes the juxtaposition legitimate at all.",
+ "metric_ids": [
+  "v2_closed_vocab_top1_index_match"
+ ],
+ "mixes_checkpoint_selection": false,
+ "panels": {
+  "panel_a": "reasoner and global fusion accuracy against training scale, SEED_SD only",
+  "panel_b": "the three paired reasoner-minus-fusion deficit differences, CLUSTERED_CI95"
+ },
+ "placement": "MAIN_TEXT",
+ "provenance": {
+  "build_command": "python -m experiments.ve1.run_ve1",
+  "builder": "experiments/ve1/figures.py",
+  "builder_sha256": "e568681a005d9e611a002b3e97cd67d34f0f8f9640fafcfe9794a25ea3456469",
+  "clean_test_accessed": false,
+  "device": "cpu",
+  "evaluated_anything": false,
+  "gpu_hours_charged": 0.0,
+  "gpu_used": false,
+  "inputs": [
+   {
+    "path": "results/experiments/v2_07_scaling/results.json",
+    "sha256": "852206e1b0a404955ed66c5b56a3b9bd7215c15fb35b438dd703cc6c497b79fc"
+   },
+   {
+    "path": "results/experiments/v3_01_reasoner/results.json",
+    "sha256": "472fe626775d755e1a24ae3da814466773b3e067537201cb88351ea27d8abfd9"
+   },
+   {
+    "path": "results/experiments/v3_02a_refs/step_statistics.json",
+    "sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3"
+   },
+   {
+    "path": "results/experiments/v3_03_scaling/results.json",
+    "sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339"
+   }
+  ],
+  "matplotlib_version": "3.11.0",
+  "measured_anything": false,
+  "numpy_version": "2.5.0",
+  "python": "3.12.3",
+  "read_any_checkpoint": false,
+  "read_any_embedding_store": false,
+  "repository_head": "d58cd66b0b3e7e64fd49b10b0a0342588df367fd",
+  "repository_head_short": "d58cd66",
+  "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+  "schema_version": 1,
+  "selected_any_checkpoint": false,
+  "trained_anything": false,
+  "worktree_dirty": true
+ },
+ "scientific_question": "Does a question-conditioned latent-query reasoner over token-level visual features beat the far smaller global-embedding fusion head, and does it reduce the multi-step deficit?",
+ "unbound_cells": [],
+ "uncertainty_by_panel": {
+  "panel_a": "SEED_SD. Both series carry across-training-seed standard deviation only. No clustered interval exists for either: the reasoner accuracies come from v3_01 and v3_03, which the closure did not reconstruct, and the fusion series comes from the stopped v2_07 family. Neither is drawn as a confidence interval.",
+  "panel_b": "CLUSTERED_CI95. The three paired deficit differences carry image-clustered evaluation-sampling intervals on 7,714 rows over 768 represented development images."
+ },
+ "uncertainty_shown": "SEED_SD_AND_CLUSTERED_CI95_BY_PANEL",
+ "ve0_source_artefacts": [
+  {
+   "path": "results/ve0/canonical_evidence_inventory.json",
+   "role": "VE-0 output A",
+   "sha256": "18eaa5355cf2252f0f74b1090f03404881d526bc2588391a866f4ed6fdd22462"
+  },
+  {
+   "path": "results/ve0/canonical_evidence_inventory.csv",
+   "role": "VE-0 output A_csv",
+   "sha256": "30e1b82090573758947026407ff4d05b5dcb4e12cde827d0e02040d6787cd9d9"
+  },
+  {
+   "path": "results/ve0/supersession_map.json",
+   "role": "VE-0 output C",
+   "sha256": "5eddcfdec886ae3b246fab02c076e523f62a77611916695bfbf5363076ee2d4a"
+  },
+  {
+   "path": "results/ve0/claim_ledger.json",
+   "role": "VE-0 output D",
+   "sha256": "15e3ffc4a487068e9a556ada04a96e6967dc6d8e9f1364babbc353decca1c94d"
+  },
+  {
+   "path": "results/ve0/rq_evidence_matrix.json",
+   "role": "VE-0 output E",
+   "sha256": "c8f6d7d99db9f41fd98821dafc880f9b709f9ba8757a53c40b65b8bf23e27b86"
+  },
+  {
+   "path": "results/ve0/figure_specifications.json",
+   "role": "VE-0 output F",
+   "sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92"
+  },
+  {
+   "path": "results/ve0/table_specifications.json",
+   "role": "VE-0 output G",
+   "sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0"
+  },
+  {
+   "path": "results/ve0/qualitative_protocol.json",
+   "role": "VE-0 output H",
+   "sha256": "d15fc69c7a6a4e6721874bf43ae017a105c1a8b3b694b759a88043ff2664b975"
+  },
+  {
+   "path": "results/ve0/qualitative_record_schema.json",
+   "role": "VE-0 output I",
+   "sha256": "c2f0742c0c936a2a11fb71f5dc364633bda329c632b52744150f047d95d81984"
+  },
+  {
+   "path": "results/ve0/reporting_style_contract.json",
+   "role": "VE-0 output J",
+   "sha256": "e2a8767fe477e9ac8a5bf8544c3ecbff19f63f1f8a59c9b7ddaa350221c7fc4c"
+  },
+  {
+   "path": "results/ve0/provenance_contract.json",
+   "role": "VE-0 output K",
+   "sha256": "65e66b78cae76cf713f11073f4847062c0e252c4319b30b3a9d58e63a0689159"
+  },
+  {
+   "path": "results/ve0/efficiency_visualisation_contract.json",
+   "role": "VE-0 output L",
+   "sha256": "b39a6c4ae080eebf1c0ed0cb65d01a98f1993d162ade704287c53c298b56902e"
+  },
+  {
+   "path": "results/ve0/results_section_mapping.json",
+   "role": "VE-0 output M",
+   "sha256": "f2153f7f45c71fdd69a0e96555184d3b2608a63685afe42f40a5800b6f2d7738"
+  },
+  {
+   "path": "results/ve0/VE0_MANIFEST.json",
+   "role": "VE-0 output O",
+   "sha256": "31a572db0b3e9ab85a74fefe88232f1112641d113dc421083d09137d79a0a594"
+  }
+ ],
+ "ve0_specification_id": "VE0-FIG-06",
+ "working_title": "Token-level latent reasoning against the global heads"
+}

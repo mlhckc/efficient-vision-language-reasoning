@@ -1,0 +1,323 @@
+{
+ "checklist": [
+  "no clipped text at any canvas edge",
+  "no overlapping or unreadable labels",
+  "no legend covering data",
+  "font sizes legible at print size",
+  "colour and marker semantics consistent across panels",
+  "uncertainty bars are the kind the specification declares",
+  "reference line present where a contrast is drawn",
+  "aspect ratio and panel sizes do not distort a comparison",
+  "no accidental scientific implication from layout or adjacency",
+  "sample and seed context visible on or under the panel",
+  "axis origin stated where it is not zero",
+  "every arm code expanded somewhere the reader can see"
+ ],
+ "clean_test_accessed": false,
+ "content_sha256": "6c0cf62776a67041db8e511fe572c2b818872f865cd1159aefcff63b7d4a0c15",
+ "development_set_only": true,
+ "figures_inspected": 13,
+ "programmatic_validation_is_not_sufficient": "the validation suite proves that a plotted number matches VE-0. It cannot see a label on a label, a legend on an interval or a layout that implies an unsupported comparison, which is why this pass exists.",
+ "provenance": {
+  "build_command": "python -m experiments.ve1.run_ve1",
+  "builder": "experiments/ve1/run_ve1.py",
+  "builder_sha256": "2c9aecc4e40d6fb6b00d46ce3fd088a397276ed19579446c907720e3c029287d",
+  "clean_test_accessed": false,
+  "device": "cpu",
+  "evaluated_anything": false,
+  "gpu_hours_charged": 0.0,
+  "gpu_used": false,
+  "inputs": [
+   {
+    "path": "results/ve0/canonical_evidence_inventory.json",
+    "role": "VE-0 output A",
+    "sha256": "18eaa5355cf2252f0f74b1090f03404881d526bc2588391a866f4ed6fdd22462"
+   },
+   {
+    "path": "results/ve0/canonical_evidence_inventory.csv",
+    "role": "VE-0 output A_csv",
+    "sha256": "30e1b82090573758947026407ff4d05b5dcb4e12cde827d0e02040d6787cd9d9"
+   },
+   {
+    "path": "results/ve0/supersession_map.json",
+    "role": "VE-0 output C",
+    "sha256": "5eddcfdec886ae3b246fab02c076e523f62a77611916695bfbf5363076ee2d4a"
+   },
+   {
+    "path": "results/ve0/claim_ledger.json",
+    "role": "VE-0 output D",
+    "sha256": "15e3ffc4a487068e9a556ada04a96e6967dc6d8e9f1364babbc353decca1c94d"
+   },
+   {
+    "path": "results/ve0/rq_evidence_matrix.json",
+    "role": "VE-0 output E",
+    "sha256": "c8f6d7d99db9f41fd98821dafc880f9b709f9ba8757a53c40b65b8bf23e27b86"
+   },
+   {
+    "path": "results/ve0/figure_specifications.json",
+    "role": "VE-0 output F",
+    "sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92"
+   },
+   {
+    "path": "results/ve0/table_specifications.json",
+    "role": "VE-0 output G",
+    "sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0"
+   },
+   {
+    "path": "results/ve0/qualitative_protocol.json",
+    "role": "VE-0 output H",
+    "sha256": "d15fc69c7a6a4e6721874bf43ae017a105c1a8b3b694b759a88043ff2664b975"
+   },
+   {
+    "path": "results/ve0/qualitative_record_schema.json",
+    "role": "VE-0 output I",
+    "sha256": "c2f0742c0c936a2a11fb71f5dc364633bda329c632b52744150f047d95d81984"
+   },
+   {
+    "path": "results/ve0/reporting_style_contract.json",
+    "role": "VE-0 output J",
+    "sha256": "e2a8767fe477e9ac8a5bf8544c3ecbff19f63f1f8a59c9b7ddaa350221c7fc4c"
+   },
+   {
+    "path": "results/ve0/provenance_contract.json",
+    "role": "VE-0 output K",
+    "sha256": "65e66b78cae76cf713f11073f4847062c0e252c4319b30b3a9d58e63a0689159"
+   },
+   {
+    "path": "results/ve0/efficiency_visualisation_contract.json",
+    "role": "VE-0 output L",
+    "sha256": "b39a6c4ae080eebf1c0ed0cb65d01a98f1993d162ade704287c53c298b56902e"
+   },
+   {
+    "path": "results/ve0/results_section_mapping.json",
+    "role": "VE-0 output M",
+    "sha256": "f2153f7f45c71fdd69a0e96555184d3b2608a63685afe42f40a5800b6f2d7738"
+   },
+   {
+    "path": "results/ve0/VE0_MANIFEST.json",
+    "role": "VE-0 output O",
+    "sha256": "31a572db0b3e9ab85a74fefe88232f1112641d113dc421083d09137d79a0a594"
+   }
+  ],
+  "matplotlib_version": "3.11.0",
+  "measured_anything": false,
+  "numpy_version": "2.5.0",
+  "python": "3.12.3",
+  "read_any_checkpoint": false,
+  "read_any_embedding_store": false,
+  "repository_head": "d58cd66b0b3e7e64fd49b10b0a0342588df367fd",
+  "repository_head_short": "d58cd66",
+  "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+  "schema_version": 1,
+  "selected_any_checkpoint": false,
+  "trained_anything": false,
+  "worktree_dirty": true
+ },
+ "records": [
+  {
+   "artefact_id": "VE1-FIG-01",
+   "disposition": "row pitch increased and the separator moved above the row title; box padding reduced from 0.012 to 0.002 of the axes width so the inter-column gaps and their arrows are visible; legend swatch and label spacing widened.",
+   "findings": [
+    "row titles collided with the column headers and with the boxes of the row above",
+    "the flow arrows between columns were hidden underneath the box padding, so the diagram read as five disconnected grids",
+    "the legend swatches overlapped their own labels"
+   ],
+   "outcome": "PASS after repair",
+   "residual": "none"
+  },
+  {
+   "artefact_id": "VE1-FIG-02",
+   "disposition": "the layout system was changed for every figure: the saved bounding box is no longer tight, footer space is reserved before layout, and the notes are written at a computed height.",
+   "findings": [
+    "the whole figure was squashed into two narrow columns because the footer notes sat outside the axes and a tight bounding box grew the canvas around them",
+    "x tick labels collided in the squashed panel"
+   ],
+   "outcome": "PASS after repair",
+   "residual": "the panel (b) legend sits in the empty lower right; it covers no interval."
+  },
+  {
+   "artefact_id": "VE1-FIG-03",
+   "disposition": "the legend was removed and the direct labels are now repelled, each stacked to a minimum separation and joined to its line end by a thin leader.",
+   "findings": [
+    "the end-of-line direct labels for fusion, product and concat overlapped each other at 250k, where the three series converge",
+    "a legend box and direct labels both named the same four series"
+   ],
+   "outcome": "PASS after repair",
+   "residual": "none"
+  },
+  {
+   "artefact_id": "VE1-FIG-04",
+   "disposition": "axis labels shortened with the qualifying text moved into the footer; legend moved to the empty upper left with added headroom; group titles moved onto their separating rules with an opaque background, in the empty left band of the panel.",
+   "findings": [
+    "both panel x-axis labels were clipped at the canvas edges",
+    "the panel (a) legend overlapped the top of the >=5-step data",
+    "the panel (b) group titles landed on data rows and on row labels"
+   ],
+   "outcome": "PASS after repair",
+   "residual": "panel (a) carries seven series, above the three-series cap for an all-pairs colour comparison. Identity is carried by marker shape and by the legend as well as by colour, and no pairwise colour discrimination is asked of the reader."
+  },
+  {
+   "artefact_id": "VE1-FIG-05",
+   "disposition": "no change needed.",
+   "findings": [],
+   "outcome": "PASS",
+   "residual": "the question-only control is drawn at exactly zero with an interval of exactly zero width. That is a measured zero by construction, not a missing interval, and it is annotated as such so it cannot be read as an absent bar."
+  },
+  {
+   "artefact_id": "VE1-FIG-06",
+   "disposition": "annotation moved above the point; axis label wrapped to two lines.",
+   "findings": [
+    "the same-seed gap annotation overlapped the 40k x tick label",
+    "the panel (b) axis label was clipped at the right edge"
+   ],
+   "outcome": "PASS after repair",
+   "residual": "the two series in panel (a) do not share a seed set. That is stated in the legend, in the footer and in the caption, and the panel is described as a juxtaposition rather than a paired comparison."
+  },
+  {
+   "artefact_id": "VE1-FIG-07",
+   "disposition": "the x range was extended so the lower right is empty and the legend sits clear of every interval.",
+   "findings": [
+    "the legend covered the right end of the question-only interval"
+   ],
+   "outcome": "PASS after repair",
+   "residual": "none"
+  },
+  {
+   "artefact_id": "VE1-FIG-08",
+   "disposition": "tick labels reduced to the training scale alone with the wording moved to the y-axis label; title and axis label shortened with the qualifying text moved to the footer, and a second title line added stating that this is a cross-experiment synthesis; block titles moved onto their rules with an opaque background; vertical headroom added below the last row so the legend sits under the data rather than on any of them.",
+   "findings": [
+    "the title and the two-line axis label overflowed the canvas",
+    "the y tick labels were long enough to crush the plotting area into a narrow strip",
+    "the block titles sat across the rules and were cut by them",
+    "the legend covered the difference-in-differences interval, which is the one row a reader must be able to see clearly",
+    "moved to the upper left, the legend then covered the first block title"
+   ],
+   "outcome": "PASS after repair",
+   "residual": "the second-order block is separated by a thicker rule in its own colour, is labelled a second-order interaction, and its row label reads '250k minus 40k' rather than a training scale. The axis label disclaimer is in the footer and in the caption."
+  },
+  {
+   "artefact_id": "VE1-FIG-09",
+   "disposition": "the figure was redesigned. Each node now has an accuracy panel above and a latency-only strip below it sharing the same latency axis, so an unresolved row keeps its system name and its measured latency without ever receiving a vertical coordinate. Point labels are repelled with leaders, the x range reserves room for them, ticks are plain milliseconds, and each panel's legend is built from what that panel actually drew.",
+   "findings": [
+    "the latency-only rows were drawn as rotated labels below the accuracy axis, which overflowed the canvas and made the panel unreadable",
+    "point labels overlapped badly in the 7.6 to 9.8 ms cluster",
+    "labels ran off the right edge of both panels",
+    "the log axis showed exponent-formatted minor ticks",
+    "the panel (b) legend named a lightweight accuracy marker that the panel does not contain, because every lightweight row on that node is latency-only"
+   ],
+   "outcome": "PASS after redesign",
+   "residual": "panel (a)'s strip is empty by construction and carries a note saying so. The whitespace is deliberate: it makes visible that the unresolved pairings are all on the other node."
+  },
+  {
+   "artefact_id": "VE1-FIG-A1",
+   "disposition": "the x range was extended so the legend sits in empty space.",
+   "findings": [
+    "the legend covered the bottom natural-width row"
+   ],
+   "outcome": "PASS after repair",
+   "residual": "none"
+  },
+  {
+   "artefact_id": "VE1-FIG-A3",
+   "disposition": "axis label shortened; the qualifying text is in the footer.",
+   "findings": [
+    "the panel (c) axis label was clipped at the right edge"
+   ],
+   "outcome": "PASS after repair",
+   "residual": "the figure has three panels where the specification describes two. The third carries the six E3 contrast rows the specification binds but does not place; dropping bound evidence was judged worse than adding a panel, and the deviation is recorded in the manifest."
+  },
+  {
+   "artefact_id": "VE1-FIG-A4",
+   "disposition": "no change needed.",
+   "findings": [],
+   "outcome": "PASS",
+   "residual": "fourteen slices with nominal uncorrected intervals. The multiplicity disclosure is in the footer and in the caption."
+  },
+  {
+   "artefact_id": "VE1-FIG-A5",
+   "disposition": "y-axis label shortened; legend moved to the empty centre left and built from what was actually drawn.",
+   "findings": [
+    "the two-line y-axis label was clipped at the top of the canvas",
+    "the legend covered a compact-VLM point label",
+    "the legend named a lightweight accuracy marker the panel does not contain"
+   ],
+   "outcome": "PASS after repair",
+   "residual": "every lightweight row on this node is latency-only, so the panel shows compact VLMs alone above the strip. The caption states that this is contextual positioning and not a leaderboard."
+  }
+ ],
+ "rule": "every rendered figure was displayed and inspected against the checklist below. Findings are kept after repair rather than deleted, because a defect found and fixed is the evidence that the pass was real.",
+ "title": "VE-1 visual quality-assurance record",
+ "ve0_source_artefacts": [
+  {
+   "path": "results/ve0/canonical_evidence_inventory.json",
+   "role": "VE-0 output A",
+   "sha256": "18eaa5355cf2252f0f74b1090f03404881d526bc2588391a866f4ed6fdd22462"
+  },
+  {
+   "path": "results/ve0/canonical_evidence_inventory.csv",
+   "role": "VE-0 output A_csv",
+   "sha256": "30e1b82090573758947026407ff4d05b5dcb4e12cde827d0e02040d6787cd9d9"
+  },
+  {
+   "path": "results/ve0/supersession_map.json",
+   "role": "VE-0 output C",
+   "sha256": "5eddcfdec886ae3b246fab02c076e523f62a77611916695bfbf5363076ee2d4a"
+  },
+  {
+   "path": "results/ve0/claim_ledger.json",
+   "role": "VE-0 output D",
+   "sha256": "15e3ffc4a487068e9a556ada04a96e6967dc6d8e9f1364babbc353decca1c94d"
+  },
+  {
+   "path": "results/ve0/rq_evidence_matrix.json",
+   "role": "VE-0 output E",
+   "sha256": "c8f6d7d99db9f41fd98821dafc880f9b709f9ba8757a53c40b65b8bf23e27b86"
+  },
+  {
+   "path": "results/ve0/figure_specifications.json",
+   "role": "VE-0 output F",
+   "sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92"
+  },
+  {
+   "path": "results/ve0/table_specifications.json",
+   "role": "VE-0 output G",
+   "sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0"
+  },
+  {
+   "path": "results/ve0/qualitative_protocol.json",
+   "role": "VE-0 output H",
+   "sha256": "d15fc69c7a6a4e6721874bf43ae017a105c1a8b3b694b759a88043ff2664b975"
+  },
+  {
+   "path": "results/ve0/qualitative_record_schema.json",
+   "role": "VE-0 output I",
+   "sha256": "c2f0742c0c936a2a11fb71f5dc364633bda329c632b52744150f047d95d81984"
+  },
+  {
+   "path": "results/ve0/reporting_style_contract.json",
+   "role": "VE-0 output J",
+   "sha256": "e2a8767fe477e9ac8a5bf8544c3ecbff19f63f1f8a59c9b7ddaa350221c7fc4c"
+  },
+  {
+   "path": "results/ve0/provenance_contract.json",
+   "role": "VE-0 output K",
+   "sha256": "65e66b78cae76cf713f11073f4847062c0e252c4319b30b3a9d58e63a0689159"
+  },
+  {
+   "path": "results/ve0/efficiency_visualisation_contract.json",
+   "role": "VE-0 output L",
+   "sha256": "b39a6c4ae080eebf1c0ed0cb65d01a98f1993d162ade704287c53c298b56902e"
+  },
+  {
+   "path": "results/ve0/results_section_mapping.json",
+   "role": "VE-0 output M",
+   "sha256": "f2153f7f45c71fdd69a0e96555184d3b2608a63685afe42f40a5800b6f2d7738"
+  },
+  {
+   "path": "results/ve0/VE0_MANIFEST.json",
+   "role": "VE-0 output O",
+   "sha256": "31a572db0b3e9ab85a74fefe88232f1112641d113dc421083d09137d79a0a594"
+  }
+ ],
+ "ve1_output": "visual_qa"
+}

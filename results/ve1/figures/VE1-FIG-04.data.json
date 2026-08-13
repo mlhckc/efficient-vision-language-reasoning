@@ -1,0 +1,1430 @@
+{
+ "artefact_id": "VE1-FIG-04",
+ "caption_claim": "A pooled deficit at four or more reasoning steps persists across both frozen encoders, across training scales and across head families.",
+ "carries_v2_07_limitation": false,
+ "clean_test_accessed": false,
+ "consumed_evidence_ids": [
+  "EV-DEF-e2.pooled_ge4_deficit.concat.train_250k",
+  "EV-DEF-e2.pooled_ge4_deficit.concat.train_40k",
+  "EV-DEF-e2.pooled_ge4_deficit.fusion.train_250k",
+  "EV-DEF-e2.pooled_ge4_deficit.fusion.train_40k",
+  "EV-DEF-e2.pooled_ge4_deficit.product.train_250k",
+  "EV-DEF-e2.pooled_ge4_deficit.product.train_40k",
+  "EV-DEF-e2.pooled_ge4_deficit.question_only.train_250k",
+  "EV-DEF-e2.pooled_ge4_deficit.question_only.train_40k",
+  "EV-DEF-v2_02.pooled_ge4_deficit.concat.train_40k",
+  "EV-DEF-v2_02.pooled_ge4_deficit.fusion.train_40k",
+  "EV-DEF-v2_02.pooled_ge4_deficit.question_only.train_40k",
+  "EV-DEF-v2_04.pooled_ge4_deficit.product_natural.train_40k",
+  "EV-SLC-v3_02a.concat.train_40k.steps-3.accuracy",
+  "EV-SLC-v3_02a.concat.train_40k.steps-4.accuracy",
+  "EV-SLC-v3_02a.concat.train_40k.steps-ge4_combined.deficit",
+  "EV-SLC-v3_02a.concat.train_40k.steps-ge5.accuracy",
+  "EV-SLC-v3_02a.concat.train_40k.steps-le2.accuracy",
+  "EV-SLC-v3_02a.direct_linear.train_40k.steps-3.accuracy",
+  "EV-SLC-v3_02a.direct_linear.train_40k.steps-4.accuracy",
+  "EV-SLC-v3_02a.direct_linear.train_40k.steps-ge4_combined.deficit",
+  "EV-SLC-v3_02a.direct_linear.train_40k.steps-ge5.accuracy",
+  "EV-SLC-v3_02a.direct_linear.train_40k.steps-le2.accuracy",
+  "EV-SLC-v3_02a.fusion.train_40k.steps-3.accuracy",
+  "EV-SLC-v3_02a.fusion.train_40k.steps-4.accuracy",
+  "EV-SLC-v3_02a.fusion.train_40k.steps-ge4_combined.deficit",
+  "EV-SLC-v3_02a.fusion.train_40k.steps-ge5.accuracy",
+  "EV-SLC-v3_02a.fusion.train_40k.steps-le2.accuracy",
+  "EV-SLC-v3_02a.meanpatch_concat.train_40k.steps-3.accuracy",
+  "EV-SLC-v3_02a.meanpatch_concat.train_40k.steps-4.accuracy",
+  "EV-SLC-v3_02a.meanpatch_concat.train_40k.steps-ge4_combined.deficit",
+  "EV-SLC-v3_02a.meanpatch_concat.train_40k.steps-ge5.accuracy",
+  "EV-SLC-v3_02a.meanpatch_concat.train_40k.steps-le2.accuracy",
+  "EV-SLC-v3_02a.product_576k.train_40k.steps-3.accuracy",
+  "EV-SLC-v3_02a.product_576k.train_40k.steps-4.accuracy",
+  "EV-SLC-v3_02a.product_576k.train_40k.steps-ge4_combined.deficit",
+  "EV-SLC-v3_02a.product_576k.train_40k.steps-ge5.accuracy",
+  "EV-SLC-v3_02a.product_576k.train_40k.steps-le2.accuracy",
+  "EV-SLC-v3_02a.question_only.train_40k.steps-3.accuracy",
+  "EV-SLC-v3_02a.question_only.train_40k.steps-4.accuracy",
+  "EV-SLC-v3_02a.question_only.train_40k.steps-ge4_combined.deficit",
+  "EV-SLC-v3_02a.question_only.train_40k.steps-ge5.accuracy",
+  "EV-SLC-v3_02a.question_only.train_40k.steps-le2.accuracy",
+  "EV-SLC-v3_02a.reasoner.train_40k.steps-3.accuracy",
+  "EV-SLC-v3_02a.reasoner.train_40k.steps-4.accuracy",
+  "EV-SLC-v3_02a.reasoner.train_40k.steps-ge4_combined.deficit",
+  "EV-SLC-v3_02a.reasoner.train_40k.steps-ge5.accuracy",
+  "EV-SLC-v3_02a.reasoner.train_40k.steps-le2.accuracy"
+ ],
+ "content_sha256": "9ba2689ffbe40a3e7aaa10bd548b41be2c8b799649739e5678bb3201249441e2",
+ "development_set_only": true,
+ "dissertation_section": [
+  "R4_DEPTH_AND_RELIANCE"
+ ],
+ "drawn_value_count": 47,
+ "drawn_values": [
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_02a_refs/step_statistics.json",
+   "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.47688,
+    0.51065
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented dev imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SLC-v3_02a.question_only.train_40k.steps-le2.accuracy",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "question_only",
+   "n_questions": 2400,
+   "n_unique_images": 674,
+   "role": "panel_a bucket accuracy",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.49425
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_02a_refs/step_statistics.json",
+   "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.3797,
+    0.41225
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented dev imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SLC-v3_02a.question_only.train_40k.steps-3.accuracy",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "question_only",
+   "n_questions": 3330,
+   "n_unique_images": 658,
+   "role": "panel_a bucket accuracy",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.39592
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_02a_refs/step_statistics.json",
+   "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.37775,
+    0.43747
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented dev imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SLC-v3_02a.question_only.train_40k.steps-4.accuracy",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "question_only",
+   "n_questions": 870,
+   "n_unique_images": 396,
+   "role": "panel_a bucket accuracy",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.40851
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_02a_refs/step_statistics.json",
+   "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.57851,
+    0.62886
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented dev imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SLC-v3_02a.question_only.train_40k.steps-ge5.accuracy",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "question_only",
+   "n_questions": 1114,
+   "n_unique_images": 531,
+   "role": "panel_a bucket accuracy",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.60395
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_02a_refs/step_statistics.json",
+   "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.45657,
+    0.49737
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented dev imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SLC-v3_02a.direct_linear.train_40k.steps-le2.accuracy",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "direct_linear",
+   "n_questions": 2400,
+   "n_unique_images": 674,
+   "role": "panel_a bucket accuracy",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.47642
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_02a_refs/step_statistics.json",
+   "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.44511,
+    0.4861
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented dev imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SLC-v3_02a.direct_linear.train_40k.steps-3.accuracy",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "direct_linear",
+   "n_questions": 3330,
+   "n_unique_images": 658,
+   "role": "panel_a bucket accuracy",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.46625
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_02a_refs/step_statistics.json",
+   "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.42448,
+    0.49805
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented dev imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SLC-v3_02a.direct_linear.train_40k.steps-4.accuracy",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "direct_linear",
+   "n_questions": 870,
+   "n_unique_images": 396,
+   "role": "panel_a bucket accuracy",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.46184
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_02a_refs/step_statistics.json",
+   "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.52055,
+    0.582
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented dev imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SLC-v3_02a.direct_linear.train_40k.steps-ge5.accuracy",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "direct_linear",
+   "n_questions": 1114,
+   "n_unique_images": 531,
+   "role": "panel_a bucket accuracy",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.55171
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_02a_refs/step_statistics.json",
+   "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.51484,
+    0.54732
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented dev imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SLC-v3_02a.meanpatch_concat.train_40k.steps-le2.accuracy",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "meanpatch_concat",
+   "n_questions": 2400,
+   "n_unique_images": 674,
+   "role": "panel_a bucket accuracy",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.53092
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_02a_refs/step_statistics.json",
+   "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.4704,
+    0.5045
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented dev imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SLC-v3_02a.meanpatch_concat.train_40k.steps-3.accuracy",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "meanpatch_concat",
+   "n_questions": 3330,
+   "n_unique_images": 658,
+   "role": "panel_a bucket accuracy",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.48751
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_02a_refs/step_statistics.json",
+   "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.45956,
+    0.52534
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented dev imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SLC-v3_02a.meanpatch_concat.train_40k.steps-4.accuracy",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "meanpatch_concat",
+   "n_questions": 870,
+   "n_unique_images": 396,
+   "role": "panel_a bucket accuracy",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.49241
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_02a_refs/step_statistics.json",
+   "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.55113,
+    0.6024
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented dev imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SLC-v3_02a.meanpatch_concat.train_40k.steps-ge5.accuracy",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "meanpatch_concat",
+   "n_questions": 1114,
+   "n_unique_images": 531,
+   "role": "panel_a bucket accuracy",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.57702
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_02a_refs/step_statistics.json",
+   "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.51115,
+    0.54615
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented dev imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SLC-v3_02a.concat.train_40k.steps-le2.accuracy",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "concat",
+   "n_questions": 2400,
+   "n_unique_images": 674,
+   "role": "panel_a bucket accuracy",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.52867
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_02a_refs/step_statistics.json",
+   "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.48758,
+    0.52263
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented dev imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SLC-v3_02a.concat.train_40k.steps-3.accuracy",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "concat",
+   "n_questions": 3330,
+   "n_unique_images": 658,
+   "role": "panel_a bucket accuracy",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.50559
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_02a_refs/step_statistics.json",
+   "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.47113,
+    0.53689
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented dev imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SLC-v3_02a.concat.train_40k.steps-4.accuracy",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "concat",
+   "n_questions": 870,
+   "n_unique_images": 396,
+   "role": "panel_a bucket accuracy",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.5046
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_02a_refs/step_statistics.json",
+   "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.55744,
+    0.60933
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented dev imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SLC-v3_02a.concat.train_40k.steps-ge5.accuracy",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "concat",
+   "n_questions": 1114,
+   "n_unique_images": 531,
+   "role": "panel_a bucket accuracy",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.58402
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_02a_refs/step_statistics.json",
+   "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.52139,
+    0.55702
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented dev imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SLC-v3_02a.product_576k.train_40k.steps-le2.accuracy",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "product_576k",
+   "n_questions": 2400,
+   "n_unique_images": 674,
+   "role": "panel_a bucket accuracy",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.53925
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_02a_refs/step_statistics.json",
+   "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.48935,
+    0.52559
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented dev imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SLC-v3_02a.product_576k.train_40k.steps-3.accuracy",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "product_576k",
+   "n_questions": 3330,
+   "n_unique_images": 658,
+   "role": "panel_a bucket accuracy",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.50823
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_02a_refs/step_statistics.json",
+   "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.48182,
+    0.54868
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented dev imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SLC-v3_02a.product_576k.train_40k.steps-4.accuracy",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "product_576k",
+   "n_questions": 870,
+   "n_unique_images": 396,
+   "role": "panel_a bucket accuracy",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.5154
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_02a_refs/step_statistics.json",
+   "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.58418,
+    0.63618
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented dev imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SLC-v3_02a.product_576k.train_40k.steps-ge5.accuracy",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "product_576k",
+   "n_questions": 1114,
+   "n_unique_images": 531,
+   "role": "panel_a bucket accuracy",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.61113
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_02a_refs/step_statistics.json",
+   "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.53147,
+    0.56744
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented dev imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SLC-v3_02a.fusion.train_40k.steps-le2.accuracy",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "fusion",
+   "n_questions": 2400,
+   "n_unique_images": 674,
+   "role": "panel_a bucket accuracy",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.54942
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_02a_refs/step_statistics.json",
+   "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.48522,
+    0.52139
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented dev imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SLC-v3_02a.fusion.train_40k.steps-3.accuracy",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "fusion",
+   "n_questions": 3330,
+   "n_unique_images": 658,
+   "role": "panel_a bucket accuracy",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.50312
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_02a_refs/step_statistics.json",
+   "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.50177,
+    0.56433
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented dev imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SLC-v3_02a.fusion.train_40k.steps-4.accuracy",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "fusion",
+   "n_questions": 870,
+   "n_unique_images": 396,
+   "role": "panel_a bucket accuracy",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.53425
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_02a_refs/step_statistics.json",
+   "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.59772,
+    0.6496
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented dev imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SLC-v3_02a.fusion.train_40k.steps-ge5.accuracy",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "fusion",
+   "n_questions": 1114,
+   "n_unique_images": 531,
+   "role": "panel_a bucket accuracy",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.62334
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_02a_refs/step_statistics.json",
+   "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.54307,
+    0.57576
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented dev imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SLC-v3_02a.reasoner.train_40k.steps-le2.accuracy",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "reasoner",
+   "n_questions": 2400,
+   "n_unique_images": 674,
+   "role": "panel_a bucket accuracy",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.55944
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_02a_refs/step_statistics.json",
+   "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.48967,
+    0.52502
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented dev imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SLC-v3_02a.reasoner.train_40k.steps-3.accuracy",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "reasoner",
+   "n_questions": 3330,
+   "n_unique_images": 658,
+   "role": "panel_a bucket accuracy",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.50791
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_02a_refs/step_statistics.json",
+   "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.49718,
+    0.55341
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented dev imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SLC-v3_02a.reasoner.train_40k.steps-4.accuracy",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "reasoner",
+   "n_questions": 870,
+   "n_unique_images": 396,
+   "role": "panel_a bucket accuracy",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.52605
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_02a_refs/step_statistics.json",
+   "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.59971,
+    0.63998
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented dev imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SLC-v3_02a.reasoner.train_40k.steps-ge5.accuracy",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "reasoner",
+   "n_questions": 1114,
+   "n_unique_images": 531,
+   "role": "panel_a bucket accuracy",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.62029
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_02a_refs/step_statistics.json",
+   "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.08915,
+    0.12065
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented dev imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SLC-v3_02a.concat.train_40k.steps-ge4_combined.deficit",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "concat",
+   "n_questions": 1984,
+   "n_unique_images": null,
+   "role": "panel_b pooled >=4-step deficit",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.10502
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_02a_refs/step_statistics.json",
+   "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.08254,
+    0.11827
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented dev imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SLC-v3_02a.direct_linear.train_40k.steps-ge4_combined.deficit",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "direct_linear",
+   "n_questions": 1984,
+   "n_unique_images": null,
+   "role": "panel_b pooled >=4-step deficit",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.10025
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_02a_refs/step_statistics.json",
+   "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.07548,
+    0.10771
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented dev imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SLC-v3_02a.fusion.train_40k.steps-ge4_combined.deficit",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "fusion",
+   "n_questions": 1984,
+   "n_unique_images": null,
+   "role": "panel_b pooled >=4-step deficit",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.09175
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_02a_refs/step_statistics.json",
+   "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.08901,
+    0.12247
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented dev imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SLC-v3_02a.meanpatch_concat.train_40k.steps-ge4_combined.deficit",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "meanpatch_concat",
+   "n_questions": 1984,
+   "n_unique_images": null,
+   "role": "panel_b pooled >=4-step deficit",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.10554
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_02a_refs/step_statistics.json",
+   "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.0823,
+    0.11449
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented dev imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SLC-v3_02a.product_576k.train_40k.steps-ge4_combined.deficit",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "product_576k",
+   "n_questions": 1984,
+   "n_unique_images": null,
+   "role": "panel_b pooled >=4-step deficit",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.09784
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_02a_refs/step_statistics.json",
+   "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.0671,
+    0.09561
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented dev imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SLC-v3_02a.question_only.train_40k.steps-ge4_combined.deficit",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "question_only",
+   "n_questions": 1984,
+   "n_unique_images": null,
+   "role": "panel_b pooled >=4-step deficit",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.0809
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/v3_02a_refs/step_statistics.json",
+   "canonical_source_sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.08236,
+    0.11434
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented dev imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SLC-v3_02a.reasoner.train_40k.steps-ge4_combined.deficit",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "reasoner",
+   "n_questions": 1984,
+   "n_unique_images": null,
+   "role": "panel_b pooled >=4-step deficit",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.09795
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00216,
+   "canonical_source_path": "results/closure/reconstructed_statistics.json",
+   "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.09335,
+    0.11658
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented development imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-DEF-v2_02.pooled_ge4_deficit.concat.train_40k",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "concat",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "role": "panel_b pooled >=4-step deficit",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.10502
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00256,
+   "canonical_source_path": "results/closure/reconstructed_statistics.json",
+   "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.08003,
+    0.10387
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented development imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-DEF-v2_02.pooled_ge4_deficit.fusion.train_40k",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "fusion",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "role": "panel_b pooled >=4-step deficit",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.09175
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00366,
+   "canonical_source_path": "results/closure/reconstructed_statistics.json",
+   "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.07013,
+    0.09192
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented development imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-DEF-v2_02.pooled_ge4_deficit.question_only.train_40k",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "question_only",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "role": "panel_b pooled >=4-step deficit",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.0809
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00336,
+   "canonical_source_path": "results/closure/reconstructed_statistics.json",
+   "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.08379,
+    0.10712
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented development imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-DEF-v2_04.pooled_ge4_deficit.product_natural.train_40k",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "product_natural",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "role": "panel_b pooled >=4-step deficit",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.09523
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.0053,
+   "canonical_source_path": "results/closure/reconstructed_statistics.json",
+   "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.07207,
+    0.09308
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented development imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-DEF-e2.pooled_ge4_deficit.concat.train_250k",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "concat",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "role": "panel_b pooled >=4-step deficit",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_250k",
+   "value": 0.08263
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00487,
+   "canonical_source_path": "results/closure/reconstructed_statistics.json",
+   "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.09138,
+    0.11385
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented development imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-DEF-e2.pooled_ge4_deficit.concat.train_40k",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "concat",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "role": "panel_b pooled >=4-step deficit",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.10241
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00428,
+   "canonical_source_path": "results/closure/reconstructed_statistics.json",
+   "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.07208,
+    0.09489
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented development imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-DEF-e2.pooled_ge4_deficit.fusion.train_250k",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "fusion",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "role": "panel_b pooled >=4-step deficit",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_250k",
+   "value": 0.0838
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00126,
+   "canonical_source_path": "results/closure/reconstructed_statistics.json",
+   "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.07424,
+    0.09914
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented development imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-DEF-e2.pooled_ge4_deficit.fusion.train_40k",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "fusion",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "role": "panel_b pooled >=4-step deficit",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.08659
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00386,
+   "canonical_source_path": "results/closure/reconstructed_statistics.json",
+   "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.06786,
+    0.09042
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented development imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-DEF-e2.pooled_ge4_deficit.product.train_250k",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "product",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "role": "panel_b pooled >=4-step deficit",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_250k",
+   "value": 0.07926
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00264,
+   "canonical_source_path": "results/closure/reconstructed_statistics.json",
+   "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.08085,
+    0.10393
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented development imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-DEF-e2.pooled_ge4_deficit.product.train_40k",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "product",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "role": "panel_b pooled >=4-step deficit",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.09219
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00665,
+   "canonical_source_path": "results/closure/reconstructed_statistics.json",
+   "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.05195,
+    0.07328
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented development imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-DEF-e2.pooled_ge4_deficit.question_only.train_250k",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "question_only",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "role": "panel_b pooled >=4-step deficit",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_250k",
+   "value": 0.06284
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00271,
+   "canonical_source_path": "results/closure/reconstructed_statistics.json",
+   "canonical_source_sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.07273,
+    0.09541
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented development imageId",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-DEF-e2.pooled_ge4_deficit.question_only.train_40k",
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "question_only",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "role": "panel_b pooled >=4-step deficit",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.0838
+  }
+ ],
+ "mandatory_caption_caveat": "The deficit is measured against fixed v2_05b per-bucket priors and describes one system's step profile; it is not a contrast between systems and establishes no cause. Buckets are unequal and dependent, so every interval is clustered on the bucket's own represented development images; the per-bucket question and image counts must be printed. Step counts come from the GQA semantic program length, which is a proxy for reasoning depth, not a measure of reasoning.",
+ "metric_ids": [
+  "v2_closed_vocab_top1_index_match"
+ ],
+ "mixes_checkpoint_selection": false,
+ "panels": {
+  "panel_a": "accuracy per program-length bucket per system, with image-clustered 95% intervals and printed bucket counts",
+  "panel_b": "the pooled four-or-more-step deficit per system and scale, grouped by family and encoder"
+ },
+ "placement": "MAIN_TEXT",
+ "provenance": {
+  "build_command": "python -m experiments.ve1.run_ve1",
+  "builder": "experiments/ve1/figures.py",
+  "builder_sha256": "e568681a005d9e611a002b3e97cd67d34f0f8f9640fafcfe9794a25ea3456469",
+  "clean_test_accessed": false,
+  "device": "cpu",
+  "evaluated_anything": false,
+  "gpu_hours_charged": 0.0,
+  "gpu_used": false,
+  "inputs": [
+   {
+    "path": "results/closure/reconstructed_statistics.json",
+    "sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097"
+   },
+   {
+    "path": "results/experiments/v3_02a_refs/step_statistics.json",
+    "sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3"
+   }
+  ],
+  "matplotlib_version": "3.11.0",
+  "measured_anything": false,
+  "numpy_version": "2.5.0",
+  "python": "3.12.3",
+  "read_any_checkpoint": false,
+  "read_any_embedding_store": false,
+  "repository_head": "d58cd66b0b3e7e64fd49b10b0a0342588df367fd",
+  "repository_head_short": "d58cd66",
+  "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+  "schema_version": 1,
+  "selected_any_checkpoint": false,
+  "trained_anything": false,
+  "worktree_dirty": true
+ },
+ "scientific_question": "Where does accuracy fall as the number of reasoning steps grows, and does any system in the set reduce the deficit?",
+ "unbound_cells": [],
+ "uncertainty_by_panel": null,
+ "uncertainty_shown": "CLUSTERED_CI95",
+ "ve0_source_artefacts": [
+  {
+   "path": "results/ve0/canonical_evidence_inventory.json",
+   "role": "VE-0 output A",
+   "sha256": "18eaa5355cf2252f0f74b1090f03404881d526bc2588391a866f4ed6fdd22462"
+  },
+  {
+   "path": "results/ve0/canonical_evidence_inventory.csv",
+   "role": "VE-0 output A_csv",
+   "sha256": "30e1b82090573758947026407ff4d05b5dcb4e12cde827d0e02040d6787cd9d9"
+  },
+  {
+   "path": "results/ve0/supersession_map.json",
+   "role": "VE-0 output C",
+   "sha256": "5eddcfdec886ae3b246fab02c076e523f62a77611916695bfbf5363076ee2d4a"
+  },
+  {
+   "path": "results/ve0/claim_ledger.json",
+   "role": "VE-0 output D",
+   "sha256": "15e3ffc4a487068e9a556ada04a96e6967dc6d8e9f1364babbc353decca1c94d"
+  },
+  {
+   "path": "results/ve0/rq_evidence_matrix.json",
+   "role": "VE-0 output E",
+   "sha256": "c8f6d7d99db9f41fd98821dafc880f9b709f9ba8757a53c40b65b8bf23e27b86"
+  },
+  {
+   "path": "results/ve0/figure_specifications.json",
+   "role": "VE-0 output F",
+   "sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92"
+  },
+  {
+   "path": "results/ve0/table_specifications.json",
+   "role": "VE-0 output G",
+   "sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0"
+  },
+  {
+   "path": "results/ve0/qualitative_protocol.json",
+   "role": "VE-0 output H",
+   "sha256": "d15fc69c7a6a4e6721874bf43ae017a105c1a8b3b694b759a88043ff2664b975"
+  },
+  {
+   "path": "results/ve0/qualitative_record_schema.json",
+   "role": "VE-0 output I",
+   "sha256": "c2f0742c0c936a2a11fb71f5dc364633bda329c632b52744150f047d95d81984"
+  },
+  {
+   "path": "results/ve0/reporting_style_contract.json",
+   "role": "VE-0 output J",
+   "sha256": "e2a8767fe477e9ac8a5bf8544c3ecbff19f63f1f8a59c9b7ddaa350221c7fc4c"
+  },
+  {
+   "path": "results/ve0/provenance_contract.json",
+   "role": "VE-0 output K",
+   "sha256": "65e66b78cae76cf713f11073f4847062c0e252c4319b30b3a9d58e63a0689159"
+  },
+  {
+   "path": "results/ve0/efficiency_visualisation_contract.json",
+   "role": "VE-0 output L",
+   "sha256": "b39a6c4ae080eebf1c0ed0cb65d01a98f1993d162ade704287c53c298b56902e"
+  },
+  {
+   "path": "results/ve0/results_section_mapping.json",
+   "role": "VE-0 output M",
+   "sha256": "f2153f7f45c71fdd69a0e96555184d3b2608a63685afe42f40a5800b6f2d7738"
+  },
+  {
+   "path": "results/ve0/VE0_MANIFEST.json",
+   "role": "VE-0 output O",
+   "sha256": "31a572db0b3e9ab85a74fefe88232f1112641d113dc421083d09137d79a0a594"
+  }
+ ],
+ "ve0_specification_id": "VE0-FIG-04",
+ "working_title": "Accuracy by reasoning depth and the pooled four-or-more-step deficit"
+}

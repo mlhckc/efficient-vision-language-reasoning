@@ -1,0 +1,2163 @@
+{
+ "clean_test_accessed": false,
+ "content_sha256": "6fff63d757d2d250d9dbc59d65a761dfe4b942b8a143f133de72c49cb0d590e3",
+ "development_set_only": true,
+ "provenance": {
+  "build_command": "python -m experiments.ve1.run_ve1",
+  "builder": "experiments/ve1/run_ve1.py",
+  "builder_sha256": "2c9aecc4e40d6fb6b00d46ce3fd088a397276ed19579446c907720e3c029287d",
+  "clean_test_accessed": false,
+  "device": "cpu",
+  "evaluated_anything": false,
+  "gpu_hours_charged": 0.0,
+  "gpu_used": false,
+  "inputs": [
+   {
+    "path": "results/ve0/canonical_evidence_inventory.json",
+    "role": "VE-0 output A",
+    "sha256": "18eaa5355cf2252f0f74b1090f03404881d526bc2588391a866f4ed6fdd22462"
+   },
+   {
+    "path": "results/ve0/canonical_evidence_inventory.csv",
+    "role": "VE-0 output A_csv",
+    "sha256": "30e1b82090573758947026407ff4d05b5dcb4e12cde827d0e02040d6787cd9d9"
+   },
+   {
+    "path": "results/ve0/supersession_map.json",
+    "role": "VE-0 output C",
+    "sha256": "5eddcfdec886ae3b246fab02c076e523f62a77611916695bfbf5363076ee2d4a"
+   },
+   {
+    "path": "results/ve0/claim_ledger.json",
+    "role": "VE-0 output D",
+    "sha256": "15e3ffc4a487068e9a556ada04a96e6967dc6d8e9f1364babbc353decca1c94d"
+   },
+   {
+    "path": "results/ve0/rq_evidence_matrix.json",
+    "role": "VE-0 output E",
+    "sha256": "c8f6d7d99db9f41fd98821dafc880f9b709f9ba8757a53c40b65b8bf23e27b86"
+   },
+   {
+    "path": "results/ve0/figure_specifications.json",
+    "role": "VE-0 output F",
+    "sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92"
+   },
+   {
+    "path": "results/ve0/table_specifications.json",
+    "role": "VE-0 output G",
+    "sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0"
+   },
+   {
+    "path": "results/ve0/qualitative_protocol.json",
+    "role": "VE-0 output H",
+    "sha256": "d15fc69c7a6a4e6721874bf43ae017a105c1a8b3b694b759a88043ff2664b975"
+   },
+   {
+    "path": "results/ve0/qualitative_record_schema.json",
+    "role": "VE-0 output I",
+    "sha256": "c2f0742c0c936a2a11fb71f5dc364633bda329c632b52744150f047d95d81984"
+   },
+   {
+    "path": "results/ve0/reporting_style_contract.json",
+    "role": "VE-0 output J",
+    "sha256": "e2a8767fe477e9ac8a5bf8544c3ecbff19f63f1f8a59c9b7ddaa350221c7fc4c"
+   },
+   {
+    "path": "results/ve0/provenance_contract.json",
+    "role": "VE-0 output K",
+    "sha256": "65e66b78cae76cf713f11073f4847062c0e252c4319b30b3a9d58e63a0689159"
+   },
+   {
+    "path": "results/ve0/efficiency_visualisation_contract.json",
+    "role": "VE-0 output L",
+    "sha256": "b39a6c4ae080eebf1c0ed0cb65d01a98f1993d162ade704287c53c298b56902e"
+   },
+   {
+    "path": "results/ve0/results_section_mapping.json",
+    "role": "VE-0 output M",
+    "sha256": "f2153f7f45c71fdd69a0e96555184d3b2608a63685afe42f40a5800b6f2d7738"
+   },
+   {
+    "path": "results/ve0/VE0_MANIFEST.json",
+    "role": "VE-0 output O",
+    "sha256": "31a572db0b3e9ab85a74fefe88232f1112641d113dc421083d09137d79a0a594"
+   }
+  ],
+  "matplotlib_version": "3.11.0",
+  "measured_anything": false,
+  "numpy_version": "2.5.0",
+  "python": "3.12.3",
+  "read_any_checkpoint": false,
+  "read_any_embedding_store": false,
+  "repository_head": "d58cd66b0b3e7e64fd49b10b0a0342588df367fd",
+  "repository_head_short": "d58cd66",
+  "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+  "schema_version": 1,
+  "selected_any_checkpoint": false,
+  "trained_anything": false,
+  "worktree_dirty": true
+ },
+ "record_count": 25,
+ "records": [
+  {
+   "artefact_id": "VE1-FIG-01",
+   "carries_v2_07_limitation": false,
+   "consumed_evidence_ids": [],
+   "context": {
+    "checkpoint_selection_classes": [],
+    "metric_ids": [],
+    "n_questions": [],
+    "n_unique_images": [],
+    "seed_sets": [],
+    "training_scales": []
+   },
+   "dissertation_caption": "VE1-FIG-01. System family and evidence chain. The systems compared in this dissertation share a frozen encoder and differ in how the question reaches the answer. Quantity: a schematic; no measured quantity is drawn. Uncertainty: not applicable. This is a schematic and carries no data. Sample and seed context: not applicable. The branches are alternative experimental configurations, not one deployed architecture. Only the parts drawn as trainable were ever trained; every encoder, language model and compact VLM stayed frozen throughout.",
+   "dissertation_section": [
+    "R0_METHOD_OVERVIEW"
+   ],
+   "kind": "figure",
+   "likely_viva_question": "Is this one system or several?",
+   "mandatory_caveat": "The branches are alternative experimental configurations, not one deployed architecture. Only the parts drawn as trainable were ever trained; every encoder, language model and compact VLM stayed frozen throughout.",
+   "message": "The systems compared in this dissertation share a frozen encoder and differ in how the question reaches the answer.",
+   "placement": "MAIN_TEXT",
+   "presentation_caption": "System family and evidence chain. The systems compared in this dissertation share a frozen encoder and differ in how the question reaches the answer. Uncertainty: not applicable. This is a schematic and carries no data. The branches are alternative experimental configurations, not one deployed architecture. Only the parts drawn as trainable were ever trained; every encoder, language model and compact VLM stayed frozen throughout.",
+   "presentation_caption_is_not_stronger": "the presentation caption carries the identical claim sentence and the identical mandatory caveat as the dissertation caption",
+   "quantity": "Quantity: a schematic; no measured quantity is drawn.",
+   "sample_and_seed_context": "Sample and seed context: not applicable.",
+   "supervisor_slide": "SLIDE-02-WHAT-WAS-BUILT",
+   "uncertainty": "Uncertainty: not applicable. This is a schematic and carries no data.",
+   "ve0_specification_id": "VE0-FIG-01",
+   "viva_answer": "Several. Each branch is a separate controlled configuration sharing the frozen CLIP image path; the diagram exists so a reader does not read them as one pipeline.",
+   "working_title": "System family and evidence chain"
+  },
+  {
+   "artefact_id": "VE1-FIG-02",
+   "carries_v2_07_limitation": false,
+   "consumed_evidence_ids": [
+    "EV-ARM-v2_02.concat.train_40k",
+    "EV-ARM-v2_02.fusion.train_40k",
+    "EV-ARM-v2_02.image_only.train_40k",
+    "EV-ARM-v2_02.question_only.train_40k",
+    "EV-ARM-v2_03.concat_wide.train_40k",
+    "EV-ARM-v2_03.fusion_narrow.train_40k",
+    "EV-CON-v2_02.concat_minus_question_only.train_40k",
+    "EV-CON-v2_02.fusion_minus_concat.train_40k",
+    "EV-CON-v2_03.concat_wide_minus_concat.train_40k",
+    "EV-CON-v2_03.fusion_minus_concat_wide.train_40k",
+    "EV-CON-v2_03.fusion_minus_fusion_narrow.train_40k",
+    "EV-CON-v2_03.fusion_narrow_minus_concat.train_40k"
+   ],
+   "context": {
+    "checkpoint_selection_classes": [
+     "BEST_ON_DEVELOPMENT"
+    ],
+    "metric_ids": [
+     "v2_closed_vocab_top1_index_match"
+    ],
+    "n_questions": [
+     7714
+    ],
+    "n_unique_images": [
+     768
+    ],
+    "seed_sets": [
+     [
+      0,
+      1,
+      2,
+      3,
+      42
+     ]
+    ],
+    "training_scales": [
+     "train_40k"
+    ]
+   },
+   "dissertation_caption": "VE1-FIG-02. Low-data accuracy ladder with capacity-matched controls. At 40k the fusion features give a real gain over concatenation, and capacity explains part of it: at matched budgets the gain shrinks and one of the two matched contrasts no longer excludes zero. Quantity: system, ordered question_only, image_only, concat, concat_wide, fusion_narrow, fusion against (a) development accuracy; (b) effect in accuracy points, zero line drawn. Uncertainty: image-clustered 95 per cent evaluation-sampling intervals, clustered on the represented development imageId and conditioning on the fixed trained seed set. Nominal and uncorrected for multiplicity. Sample and seed context: development questions: 7,714; represented development images: 768; training seed sets: [0, 1, 2, 3, 42]; training scales: 40k. The unmatched v2_02 contrast is capacity-confounded (1,100,388 against 576,100 trainable parameters). Only the v2_03 matched pairs isolate the feature effect. Development set, train_40k, five training seeds. Intervals are image-clustered evaluation-sampling intervals conditioning on the fixed trained seed set.",
+   "dissertation_section": [
+    "R1_BASELINES_AND_FUSION"
+   ],
+   "kind": "figure",
+   "likely_viva_question": "Is the fusion gain architectural or just more parameters?",
+   "mandatory_caveat": "The unmatched v2_02 contrast is capacity-confounded (1,100,388 against 576,100 trainable parameters). Only the v2_03 matched pairs isolate the feature effect. Development set, train_40k, five training seeds. Intervals are image-clustered evaluation-sampling intervals conditioning on the fixed trained seed set.",
+   "message": "At 40k the fusion features give a real gain over concatenation, and capacity explains part of it: at matched budgets the gain shrinks and one of the two matched contrasts no longer excludes zero.",
+   "placement": "MAIN_TEXT",
+   "presentation_caption": "Low-data accuracy ladder with capacity-matched controls. At 40k the fusion features give a real gain over concatenation, and capacity explains part of it: at matched budgets the gain shrinks and one of the two matched contrasts no longer excludes zero. Uncertainty: image-clustered 95 per cent evaluation-sampling intervals, clustered on the represented development imageId and conditioning on the fixed trained seed set. Nominal and uncorrected for multiplicity. The unmatched v2_02 contrast is capacity-confounded (1,100,388 against 576,100 trainable parameters). Only the v2_03 matched pairs isolate the feature effect. Development set, train_40k, five training seeds. Intervals are image-clustered evaluation-sampling intervals conditioning on the fixed trained seed set.",
+   "presentation_caption_is_not_stronger": "the presentation caption carries the identical claim sentence and the identical mandatory caveat as the dissertation caption",
+   "quantity": "Quantity: system, ordered question_only, image_only, concat, concat_wide, fusion_narrow, fusion against (a) development accuracy; (b) effect in accuracy points, zero line drawn.",
+   "sample_and_seed_context": "Sample and seed context: development questions: 7,714; represented development images: 768; training seed sets: [0, 1, 2, 3, 42]; training scales: 40k.",
+   "supervisor_slide": "SLIDE-04-FUSION-HELPS-BUT",
+   "uncertainty": "Uncertainty: image-clustered 95 per cent evaluation-sampling intervals, clustered on the represented development imageId and conditioning on the fixed trained seed set. Nominal and uncorrected for multiplicity.",
+   "ve0_specification_id": "VE0-FIG-02",
+   "viva_answer": "Partly architectural at most. At the 576k budget the feature effect survives, +0.00944 excluding zero; at the 1.1M budget fusion minus concat_wide is +0.00578 and includes zero. The evidence supports 'capacity explains part, not necessarily all' and nothing stronger.",
+   "working_title": "Low-data accuracy ladder with capacity-matched controls"
+  },
+  {
+   "artefact_id": "VE1-FIG-03",
+   "carries_v2_07_limitation": true,
+   "consumed_evidence_ids": [
+    "EV-DSC-train_100k.n_questions",
+    "EV-DSC-train_250k.n_questions",
+    "EV-DSC-train_40k.n_questions",
+    "EV-SEED-v2_07.concat.train_100k",
+    "EV-SEED-v2_07.concat.train_250k",
+    "EV-SEED-v2_07.concat.train_40k",
+    "EV-SEED-v2_07.fusion.train_100k",
+    "EV-SEED-v2_07.fusion.train_250k",
+    "EV-SEED-v2_07.fusion.train_40k",
+    "EV-SEED-v2_07.product_576k.train_100k",
+    "EV-SEED-v2_07.product_576k.train_250k",
+    "EV-SEED-v2_07.product_576k.train_40k",
+    "EV-SEED-v2_07.question_only.train_100k",
+    "EV-SEED-v2_07.question_only.train_250k",
+    "EV-SEED-v2_07.question_only.train_40k"
+   ],
+   "context": {
+    "checkpoint_selection_classes": [
+     "BEST_ON_DEVELOPMENT",
+     "NO_TRAINING"
+    ],
+    "metric_ids": [
+     "structural_count_or_share",
+     "v2_closed_vocab_top1_index_match"
+    ],
+    "n_questions": [
+     7714
+    ],
+    "n_unique_images": [
+     768
+    ],
+    "seed_sets": [
+     [
+      0,
+      1,
+      2,
+      3,
+      42
+     ]
+    ],
+    "training_scales": [
+     "train_100k",
+     "train_250k",
+     "train_40k"
+    ]
+   },
+   "dissertation_caption": "VE1-FIG-03. Training-scale behaviour of the global heads. Accuracy rises with labelled training scale for every head, and the gap between fusion and concatenation narrows as the training set grows. Quantity: development accuracy against labelled training questions (40k, 100k, 250k), stated as a categorical axis, not a log scale, because there are three points. Uncertainty: the sample standard deviation across independent training seeds (ddof=1), labelled SD. It is not a confidence interval and not evaluation-sampling uncertainty. Sample and seed context: development questions: 7,714; represented development images: 768; training seed sets: [0, 1, 2, 3, 42]; training scales: 100k, 250k, 40k; checkpoint selection differs across the rows: BEST_ON_DEVELOPMENT, NO_TRAINING. v2_07 ACCEPTED DOCUMENTED LIMITATION. The error bars are the sample standard deviation across five training seeds (ddof=1); they are NOT confidence intervals. No image-clustered evaluation interval exists for this family: row-level reconstruction was attempted and stopped by a point-estimate reproduction mismatch, and one of forty cells differs from reconstruction by one numerically tied row. The 40k end of the narrowing is supported by the clustered evidence in Figure VE0-FIG-02; the 250k end is not.",
+   "dissertation_section": [
+    "R3_SCALING_BEHAVIOUR"
+   ],
+   "kind": "figure",
+   "likely_viva_question": "Why are there no confidence intervals here?",
+   "mandatory_caveat": "v2_07 ACCEPTED DOCUMENTED LIMITATION. The error bars are the sample standard deviation across five training seeds (ddof=1); they are NOT confidence intervals. No image-clustered evaluation interval exists for this family: row-level reconstruction was attempted and stopped by a point-estimate reproduction mismatch, and one of forty cells differs from reconstruction by one numerically tied row. The 40k end of the narrowing is supported by the clustered evidence in Figure VE0-FIG-02; the 250k end is not.",
+   "message": "Accuracy rises with labelled training scale for every head, and the gap between fusion and concatenation narrows as the training set grows.",
+   "placement": "MAIN_TEXT",
+   "presentation_caption": "Training-scale behaviour of the global heads. Accuracy rises with labelled training scale for every head, and the gap between fusion and concatenation narrows as the training set grows. Uncertainty: the sample standard deviation across independent training seeds (ddof=1), labelled SD. It is not a confidence interval and not evaluation-sampling uncertainty. v2_07 ACCEPTED DOCUMENTED LIMITATION. The error bars are the sample standard deviation across five training seeds (ddof=1); they are NOT confidence intervals. No image-clustered evaluation interval exists for this family: row-level reconstruction was attempted and stopped by a point-estimate reproduction mismatch, and one of forty cells differs from reconstruction by one numerically tied row. The 40k end of the narrowing is supported by the clustered evidence in Figure VE0-FIG-02; the 250k end is not.",
+   "presentation_caption_is_not_stronger": "the presentation caption carries the identical claim sentence and the identical mandatory caveat as the dissertation caption",
+   "quantity": "Quantity: development accuracy against labelled training questions (40k, 100k, 250k), stated as a categorical axis, not a log scale, because there are three points.",
+   "sample_and_seed_context": "Sample and seed context: development questions: 7,714; represented development images: 768; training seed sets: [0, 1, 2, 3, 42]; training scales: 100k, 250k, 40k; checkpoint selection differs across the rows: BEST_ON_DEVELOPMENT, NO_TRAINING.",
+   "supervisor_slide": "SLIDE-05-SCALE-CLOSES-THE-GAP",
+   "uncertainty": "Uncertainty: the sample standard deviation across independent training seeds (ddof=1), labelled SD. It is not a confidence interval and not evaluation-sampling uncertainty.",
+   "ve0_specification_id": "VE0-FIG-03",
+   "viva_answer": "Because the family's row-level reconstruction was stopped by a one-row float32 argmax tie, and rescuing the 39 cells that passed after seeing which one failed would be outcome-conditioned selection. The seed spread is shown instead and labelled as such.",
+   "working_title": "Training-scale behaviour of the global heads"
+  },
+  {
+   "artefact_id": "VE1-FIG-04",
+   "carries_v2_07_limitation": false,
+   "consumed_evidence_ids": [
+    "EV-DEF-e2.pooled_ge4_deficit.concat.train_250k",
+    "EV-DEF-e2.pooled_ge4_deficit.concat.train_40k",
+    "EV-DEF-e2.pooled_ge4_deficit.fusion.train_250k",
+    "EV-DEF-e2.pooled_ge4_deficit.fusion.train_40k",
+    "EV-DEF-e2.pooled_ge4_deficit.product.train_250k",
+    "EV-DEF-e2.pooled_ge4_deficit.product.train_40k",
+    "EV-DEF-e2.pooled_ge4_deficit.question_only.train_250k",
+    "EV-DEF-e2.pooled_ge4_deficit.question_only.train_40k",
+    "EV-DEF-v2_02.pooled_ge4_deficit.concat.train_40k",
+    "EV-DEF-v2_02.pooled_ge4_deficit.fusion.train_40k",
+    "EV-DEF-v2_02.pooled_ge4_deficit.question_only.train_40k",
+    "EV-DEF-v2_04.pooled_ge4_deficit.product_natural.train_40k",
+    "EV-SLC-v3_02a.concat.train_40k.steps-3.accuracy",
+    "EV-SLC-v3_02a.concat.train_40k.steps-4.accuracy",
+    "EV-SLC-v3_02a.concat.train_40k.steps-ge4_combined.deficit",
+    "EV-SLC-v3_02a.concat.train_40k.steps-ge5.accuracy",
+    "EV-SLC-v3_02a.concat.train_40k.steps-le2.accuracy",
+    "EV-SLC-v3_02a.direct_linear.train_40k.steps-3.accuracy",
+    "EV-SLC-v3_02a.direct_linear.train_40k.steps-4.accuracy",
+    "EV-SLC-v3_02a.direct_linear.train_40k.steps-ge4_combined.deficit",
+    "EV-SLC-v3_02a.direct_linear.train_40k.steps-ge5.accuracy",
+    "EV-SLC-v3_02a.direct_linear.train_40k.steps-le2.accuracy",
+    "EV-SLC-v3_02a.fusion.train_40k.steps-3.accuracy",
+    "EV-SLC-v3_02a.fusion.train_40k.steps-4.accuracy",
+    "EV-SLC-v3_02a.fusion.train_40k.steps-ge4_combined.deficit",
+    "EV-SLC-v3_02a.fusion.train_40k.steps-ge5.accuracy",
+    "EV-SLC-v3_02a.fusion.train_40k.steps-le2.accuracy",
+    "EV-SLC-v3_02a.meanpatch_concat.train_40k.steps-3.accuracy",
+    "EV-SLC-v3_02a.meanpatch_concat.train_40k.steps-4.accuracy",
+    "EV-SLC-v3_02a.meanpatch_concat.train_40k.steps-ge4_combined.deficit",
+    "EV-SLC-v3_02a.meanpatch_concat.train_40k.steps-ge5.accuracy",
+    "EV-SLC-v3_02a.meanpatch_concat.train_40k.steps-le2.accuracy",
+    "EV-SLC-v3_02a.product_576k.train_40k.steps-3.accuracy",
+    "EV-SLC-v3_02a.product_576k.train_40k.steps-4.accuracy",
+    "EV-SLC-v3_02a.product_576k.train_40k.steps-ge4_combined.deficit",
+    "EV-SLC-v3_02a.product_576k.train_40k.steps-ge5.accuracy",
+    "EV-SLC-v3_02a.product_576k.train_40k.steps-le2.accuracy",
+    "EV-SLC-v3_02a.question_only.train_40k.steps-3.accuracy",
+    "EV-SLC-v3_02a.question_only.train_40k.steps-4.accuracy",
+    "EV-SLC-v3_02a.question_only.train_40k.steps-ge4_combined.deficit",
+    "EV-SLC-v3_02a.question_only.train_40k.steps-ge5.accuracy",
+    "EV-SLC-v3_02a.question_only.train_40k.steps-le2.accuracy",
+    "EV-SLC-v3_02a.reasoner.train_40k.steps-3.accuracy",
+    "EV-SLC-v3_02a.reasoner.train_40k.steps-4.accuracy",
+    "EV-SLC-v3_02a.reasoner.train_40k.steps-ge4_combined.deficit",
+    "EV-SLC-v3_02a.reasoner.train_40k.steps-ge5.accuracy",
+    "EV-SLC-v3_02a.reasoner.train_40k.steps-le2.accuracy"
+   ],
+   "context": {
+    "checkpoint_selection_classes": [
+     "BEST_ON_DEVELOPMENT"
+    ],
+    "metric_ids": [
+     "v2_closed_vocab_top1_index_match"
+    ],
+    "n_questions": [
+     870,
+     1114,
+     1984,
+     2400,
+     3330,
+     7714
+    ],
+    "n_unique_images": [
+     396,
+     531,
+     658,
+     674,
+     768
+    ],
+    "seed_sets": [
+     [
+      0,
+      1,
+      2
+     ],
+     [
+      0,
+      1,
+      2,
+      3,
+      42
+     ]
+    ],
+    "training_scales": [
+     "train_250k",
+     "train_40k"
+    ]
+   },
+   "dissertation_caption": "VE1-FIG-04. Accuracy by reasoning depth and the pooled four-or-more-step deficit. A pooled deficit at four or more reasoning steps persists across both frozen encoders, across training scales and across head families. Quantity: (a) development accuracy; (b) system and scale against (a) step bucket, ordered <=2, 3, 4, >=5; (b) deficit in accuracy points. Uncertainty: image-clustered 95 per cent evaluation-sampling intervals, clustered on the represented development imageId and conditioning on the fixed trained seed set. Nominal and uncorrected for multiplicity. Sample and seed context: development questions: 870, 1,114, 1,984, 2,400, 3,330, 7,714; represented development images: 396, 531, 658, 674, 768; training seed sets: [0, 1, 2]; [0, 1, 2, 3, 42]; training scales: 250k, 40k. The deficit is measured against fixed v2_05b per-bucket priors and describes one system's step profile; it is not a contrast between systems and establishes no cause. Buckets are unequal and dependent, so every interval is clustered on the bucket's own represented development images; the per-bucket question and image counts must be printed. Step counts come from the GQA semantic program length, which is a proxy for reasoning depth, not a measure of reasoning.",
+   "dissertation_section": [
+    "R4_DEPTH_AND_RELIANCE"
+   ],
+   "kind": "figure",
+   "likely_viva_question": "Does this show the models cannot compose?",
+   "mandatory_caveat": "The deficit is measured against fixed v2_05b per-bucket priors and describes one system's step profile; it is not a contrast between systems and establishes no cause. Buckets are unequal and dependent, so every interval is clustered on the bucket's own represented development images; the per-bucket question and image counts must be printed. Step counts come from the GQA semantic program length, which is a proxy for reasoning depth, not a measure of reasoning.",
+   "message": "A pooled deficit at four or more reasoning steps persists across both frozen encoders, across training scales and across head families.",
+   "placement": "MAIN_TEXT",
+   "presentation_caption": "Accuracy by reasoning depth and the pooled four-or-more-step deficit. A pooled deficit at four or more reasoning steps persists across both frozen encoders, across training scales and across head families. Uncertainty: image-clustered 95 per cent evaluation-sampling intervals, clustered on the represented development imageId and conditioning on the fixed trained seed set. Nominal and uncorrected for multiplicity. The deficit is measured against fixed v2_05b per-bucket priors and describes one system's step profile; it is not a contrast between systems and establishes no cause. Buckets are unequal and dependent, so every interval is clustered on the bucket's own represented development images; the per-bucket question and image counts must be printed. Step counts come from the GQA semantic program length, which is a proxy for reasoning depth, not a measure of reasoning.",
+   "presentation_caption_is_not_stronger": "the presentation caption carries the identical claim sentence and the identical mandatory caveat as the dissertation caption",
+   "quantity": "Quantity: (a) development accuracy; (b) system and scale against (a) step bucket, ordered <=2, 3, 4, >=5; (b) deficit in accuracy points.",
+   "sample_and_seed_context": "Sample and seed context: development questions: 870, 1,114, 1,984, 2,400, 3,330, 7,714; represented development images: 396, 531, 658, 674, 768; training seed sets: [0, 1, 2]; [0, 1, 2, 3, 42]; training scales: 250k, 40k.",
+   "supervisor_slide": "SLIDE-06-MULTI-STEP-IS-THE-WALL",
+   "uncertainty": "Uncertainty: image-clustered 95 per cent evaluation-sampling intervals, clustered on the represented development imageId and conditioning on the fixed trained seed set. Nominal and uncorrected for multiplicity.",
+   "ve0_specification_id": "VE0-FIG-04",
+   "viva_answer": "No. It shows accuracy degrades with program length relative to fixed priors, on this split, under this closed answer set. Compositional generalisation was never tested out of distribution.",
+   "working_title": "Accuracy by reasoning depth and the pooled four-or-more-step deficit"
+  },
+  {
+   "artefact_id": "VE1-FIG-05",
+   "carries_v2_07_limitation": false,
+   "consumed_evidence_ids": [
+    "EV-CON-v2_06.concat.drop_shuffled.train_40k",
+    "EV-CON-v2_06.concat.drop_zeroed.train_40k",
+    "EV-CON-v2_06.fusion.drop_shuffled.train_40k",
+    "EV-CON-v2_06.fusion.drop_zeroed.train_40k",
+    "EV-CON-v2_06.image_only.drop_shuffled.train_40k",
+    "EV-CON-v2_06.image_only.drop_zeroed.train_40k",
+    "EV-CON-v2_06.product_576k.drop_shuffled.train_40k",
+    "EV-CON-v2_06.product_576k.drop_zeroed.train_40k",
+    "EV-CON-v2_06.question_only.drop_shuffled.train_40k",
+    "EV-CON-v2_06.question_only.drop_zeroed.train_40k"
+   ],
+   "context": {
+    "checkpoint_selection_classes": [
+     "BEST_ON_DEVELOPMENT"
+    ],
+    "metric_ids": [
+     "v2_closed_vocab_top1_index_match"
+    ],
+    "n_questions": [
+     7714
+    ],
+    "n_unique_images": [
+     768
+    ],
+    "seed_sets": [
+     [
+      0,
+      1,
+      2,
+      3,
+      42
+     ]
+    ],
+    "training_scales": [
+     "train_40k"
+    ]
+   },
+   "dissertation_caption": "VE1-FIG-05. Visual reliance under wrong and removed images. The multimodal heads depend on the correct image: replacing it with another development image or with zeros costs accuracy, and the question-only control is provably unaffected. Quantity: system, with question_only drawn last and labelled a control against accuracy drop in points, zero line drawn. Uncertainty: image-clustered 95 per cent evaluation-sampling intervals, clustered on the represented development imageId and conditioning on the fixed trained seed set. Nominal and uncorrected for multiplicity. Sample and seed context: development questions: 7,714; represented development images: 768; training seed sets: [0, 1, 2, 3, 42]; training scales: 40k. A drop under a wrong or removed image demonstrates reliance on the image. It is NOT proof of robust visual reasoning, of grounding or of compositional understanding. The question-only drop is exactly zero by construction and is a control, not a result.",
+   "dissertation_section": [
+    "R4_DEPTH_AND_RELIANCE"
+   ],
+   "kind": "figure",
+   "likely_viva_question": "Does a large drop mean the model is genuinely grounded?",
+   "mandatory_caveat": "A drop under a wrong or removed image demonstrates reliance on the image. It is NOT proof of robust visual reasoning, of grounding or of compositional understanding. The question-only drop is exactly zero by construction and is a control, not a result.",
+   "message": "The multimodal heads depend on the correct image: replacing it with another development image or with zeros costs accuracy, and the question-only control is provably unaffected.",
+   "placement": "MAIN_TEXT",
+   "presentation_caption": "Visual reliance under wrong and removed images. The multimodal heads depend on the correct image: replacing it with another development image or with zeros costs accuracy, and the question-only control is provably unaffected. Uncertainty: image-clustered 95 per cent evaluation-sampling intervals, clustered on the represented development imageId and conditioning on the fixed trained seed set. Nominal and uncorrected for multiplicity. A drop under a wrong or removed image demonstrates reliance on the image. It is NOT proof of robust visual reasoning, of grounding or of compositional understanding. The question-only drop is exactly zero by construction and is a control, not a result.",
+   "presentation_caption_is_not_stronger": "the presentation caption carries the identical claim sentence and the identical mandatory caveat as the dissertation caption",
+   "quantity": "Quantity: system, with question_only drawn last and labelled a control against accuracy drop in points, zero line drawn.",
+   "sample_and_seed_context": "Sample and seed context: development questions: 7,714; represented development images: 768; training seed sets: [0, 1, 2, 3, 42]; training scales: 40k.",
+   "supervisor_slide": "SLIDE-07-THE-IMAGE-MATTERS",
+   "uncertainty": "Uncertainty: image-clustered 95 per cent evaluation-sampling intervals, clustered on the represented development imageId and conditioning on the fixed trained seed set. Nominal and uncorrected for multiplicity.",
+   "ve0_specification_id": "VE0-FIG-05",
+   "viva_answer": "No. It means the prediction changes when the image changes. Reliance is necessary for grounding but not sufficient, and this experiment cannot distinguish grounding from image-conditioned shortcut use.",
+   "working_title": "Visual reliance under wrong and removed images"
+  },
+  {
+   "artefact_id": "VE1-FIG-06",
+   "carries_v2_07_limitation": true,
+   "consumed_evidence_ids": [
+    "EV-CON-v3_02a.reasoner_minus_fusion_deficit.train_40k",
+    "EV-CON-v3_03.reasoner_minus_fusion_deficit.train_100k",
+    "EV-CON-v3_03.reasoner_minus_fusion_deficit.train_250k",
+    "EV-DSC-v3_01.reasoner.train_40k.seed_mean",
+    "EV-DSC-v3_01.reasoner.train_40k.seed_sd",
+    "EV-DSC-v3_01.reasoner_minus_fusion.train_40k.seed_mean",
+    "EV-SEED-v2_07.fusion.train_100k",
+    "EV-SEED-v2_07.fusion.train_250k",
+    "EV-SEED-v2_07.fusion.train_40k",
+    "EV-SEED-v3_03.reasoner.train_100k",
+    "EV-SEED-v3_03.reasoner.train_250k"
+   ],
+   "context": {
+    "checkpoint_selection_classes": [
+     "BEST_ON_DEVELOPMENT"
+    ],
+    "metric_ids": [
+     "v2_closed_vocab_top1_index_match"
+    ],
+    "n_questions": [
+     7714
+    ],
+    "n_unique_images": [
+     768
+    ],
+    "seed_sets": [
+     [
+      0,
+      1,
+      2
+     ],
+     [
+      0,
+      1,
+      2,
+      3,
+      42
+     ]
+    ],
+    "training_scales": [
+     "train_100k",
+     "train_250k",
+     "train_40k"
+    ]
+   },
+   "dissertation_caption": "VE1-FIG-06. Token-level latent reasoning against the global heads. The 21.1M-parameter latent-query reasoner does not materially outperform the 1.1M global fusion head at 40k, and no scale shows it reducing the four-or-more-step deficit. Quantity: (a) development accuracy under the V2-era closed-vocabulary scorer; (b) training scale against (a) labelled training questions, categorical over 40k, 100k and 250k; (b) deficit difference in accuracy points, zero line drawn. Uncertainty: the panels carry DIFFERENT kinds and are never drawn on one glyph or one axis. Each panel names its own kind. panel a: SEED_SD. Both series carry across-training-seed standard deviation only. No clustered interval exists for either: the reasoner accuracies come from v3_01 and v3_03, which the closure did not reconstruct, and the fusion series comes from the stopped v2_07 family. Neither is drawn as a confidence interval. panel b: CLUSTERED_CI95. The three paired deficit differences carry image-clustered evaluation-sampling intervals on 7,714 rows over 768 represented development images. Sample and seed context: development questions: 7,714; represented development images: 768; training seed sets: [0, 1, 2]; [0, 1, 2, 3, 42]; training scales: 100k, 250k, 40k. A system-level comparison: input granularity, architecture and parameter count change together, so token-level access is not isolated as a cause. All three deficit-difference intervals include zero, which is an absence of a detected difference, not evidence of equivalence. The 40k reasoner accuracy and its same-seed gap come from v3_01 and carry an across-training-seed standard deviation only, with no clustered interval. The fusion reference series is v2_07 historical aggregate and seed evidence and carries the v2_07 ACCEPTED DOCUMENTED LIMITATION: one of forty reconstruction cells differed by a single numerically tied row, the reconstructed clustered family was therefore conservatively omitted in full, no image-clustered evaluation interval is available for the affected scaling evidence, and no post-hoc partial-family rescue was performed. PROTOCOL DIFFERENCES that must stay visible: the two series do not share a seed set, the reasoner using three seeds and the fusion reference five, so panel (a) is a system-level juxtaposition and not a matched paired comparison. Both series use the same V2-era closed-vocabulary scorer on the same 7,714-row development view and the same best-on-development checkpoint-selection rule, which is what makes the juxtaposition legitimate at all.",
+   "dissertation_section": [
+    "R5_LATENT_REASONING_AND_REPRESENTATION"
+   ],
+   "kind": "figure",
+   "likely_viva_question": "So token-level access does not help?",
+   "mandatory_caveat": "A system-level comparison: input granularity, architecture and parameter count change together, so token-level access is not isolated as a cause. All three deficit-difference intervals include zero, which is an absence of a detected difference, not evidence of equivalence. The 40k reasoner accuracy and its same-seed gap come from v3_01 and carry an across-training-seed standard deviation only, with no clustered interval. The fusion reference series is v2_07 historical aggregate and seed evidence and carries the v2_07 ACCEPTED DOCUMENTED LIMITATION: one of forty reconstruction cells differed by a single numerically tied row, the reconstructed clustered family was therefore conservatively omitted in full, no image-clustered evaluation interval is available for the affected scaling evidence, and no post-hoc partial-family rescue was performed. PROTOCOL DIFFERENCES that must stay visible: the two series do not share a seed set, the reasoner using three seeds and the fusion reference five, so panel (a) is a system-level juxtaposition and not a matched paired comparison. Both series use the same V2-era closed-vocabulary scorer on the same 7,714-row development view and the same best-on-development checkpoint-selection rule, which is what makes the juxtaposition legitimate at all.",
+   "message": "The 21.1M-parameter latent-query reasoner does not materially outperform the 1.1M global fusion head at 40k, and no scale shows it reducing the four-or-more-step deficit.",
+   "placement": "MAIN_TEXT",
+   "presentation_caption": "Token-level latent reasoning against the global heads. The 21.1M-parameter latent-query reasoner does not materially outperform the 1.1M global fusion head at 40k, and no scale shows it reducing the four-or-more-step deficit. Uncertainty: the panels carry DIFFERENT kinds and are never drawn on one glyph or one axis. Each panel names its own kind. panel a: SEED_SD. Both series carry across-training-seed standard deviation only. No clustered interval exists for either: the reasoner accuracies come from v3_01 and v3_03, which the closure did not reconstruct, and the fusion series comes from the stopped v2_07 family. Neither is drawn as a confidence interval. panel b: CLUSTERED_CI95. The three paired deficit differences carry image-clustered evaluation-sampling intervals on 7,714 rows over 768 represented development images. A system-level comparison: input granularity, architecture and parameter count change together, so token-level access is not isolated as a cause. All three deficit-difference intervals include zero, which is an absence of a detected difference, not evidence of equivalence. The 40k reasoner accuracy and its same-seed gap come from v3_01 and carry an across-training-seed standard deviation only, with no clustered interval. The fusion reference series is v2_07 historical aggregate and seed evidence and carries the v2_07 ACCEPTED DOCUMENTED LIMITATION: one of forty reconstruction cells differed by a single numerically tied row, the reconstructed clustered family was therefore conservatively omitted in full, no image-clustered evaluation interval is available for the affected scaling evidence, and no post-hoc partial-family rescue was performed. PROTOCOL DIFFERENCES that must stay visible: the two series do not share a seed set, the reasoner using three seeds and the fusion reference five, so panel (a) is a system-level juxtaposition and not a matched paired comparison. Both series use the same V2-era closed-vocabulary scorer on the same 7,714-row development view and the same best-on-development checkpoint-selection rule, which is what makes the juxtaposition legitimate at all.",
+   "presentation_caption_is_not_stronger": "the presentation caption carries the identical claim sentence and the identical mandatory caveat as the dissertation caption",
+   "quantity": "Quantity: (a) development accuracy under the V2-era closed-vocabulary scorer; (b) training scale against (a) labelled training questions, categorical over 40k, 100k and 250k; (b) deficit difference in accuracy points, zero line drawn.",
+   "sample_and_seed_context": "Sample and seed context: development questions: 7,714; represented development images: 768; training seed sets: [0, 1, 2]; [0, 1, 2, 3, 42]; training scales: 100k, 250k, 40k.",
+   "supervisor_slide": "SLIDE-08-BIGGER-REASONER-DID-NOT-PAY",
+   "uncertainty": "Uncertainty: the panels carry DIFFERENT kinds and are never drawn on one glyph or one axis. Each panel names its own kind. panel a: SEED_SD. Both series carry across-training-seed standard deviation only. No clustered interval exists for either: the reasoner accuracies come from v3_01 and v3_03, which the closure did not reconstruct, and the fusion series comes from the stopped v2_07 family. Neither is drawn as a confidence interval. panel b: CLUSTERED_CI95. The three paired deficit differences carry image-clustered evaluation-sampling intervals on 7,714 rows over 768 represented development images.",
+   "ve0_specification_id": "VE0-FIG-06",
+   "viva_answer": "Not in this configuration. Three things changed at once, so the honest statement is about the systems as built, not about token access in isolation.",
+   "working_title": "Token-level latent reasoning against the global heads"
+  },
+  {
+   "artefact_id": "VE1-FIG-07",
+   "carries_v2_07_limitation": false,
+   "consumed_evidence_ids": [
+    "EV-CON-e2.siglip_minus_clip_concat.train_40k",
+    "EV-CON-e2.siglip_minus_clip_fusion.train_40k",
+    "EV-CON-e2.siglip_minus_clip_product.train_40k",
+    "EV-CON-e2.siglip_minus_clip_question_only.train_40k"
+   ],
+   "context": {
+    "checkpoint_selection_classes": [
+     "BEST_ON_DEVELOPMENT"
+    ],
+    "metric_ids": [
+     "v2_closed_vocab_top1_index_match"
+    ],
+    "n_questions": [
+     7714
+    ],
+    "n_unique_images": [
+     768
+    ],
+    "seed_sets": [
+     [
+      0,
+      1,
+      2,
+      3,
+      42
+     ]
+    ],
+    "training_scales": [
+     "train_40k"
+    ]
+   },
+   "dissertation_caption": "VE1-FIG-07. Representation-quality sensitivity: SigLIP against CLIP at 40k. Under the tested 40k controlled comparison, the stronger frozen representation improves the multimodal systems: the three multimodal gains exclude zero while the question-only gain does not, supporting representation quality as an important factor acting mainly through the image path. Quantity: head against SigLIP minus CLIP accuracy difference, zero line drawn. Uncertainty: image-clustered 95 per cent evaluation-sampling intervals, clustered on the represented development imageId and conditioning on the fixed trained seed set. Nominal and uncorrected for multiplicity. Sample and seed context: development questions: 7,714; represented development images: 768; training seed sets: [0, 1, 2, 3, 42]; training scales: 40k. Representation quality is NOT isolated: encoder, embedding width (512 against 768) and head input width move together. This does not show representation quality is the sole or even the main bottleneck. The development rows are identical on both sides so the interval is a valid evaluation-sampling interval, but the training streams are not paired and the seed label does not pair two runs. No clustered contrast exists at 250k, because the CLIP partner is the stopped v2_07 family; the 250k direction is reported from stored per-seed means in Table VE0-TAB-A3.",
+   "dissertation_section": [
+    "R5_LATENT_REASONING_AND_REPRESENTATION"
+   ],
+   "kind": "figure",
+   "likely_viva_question": "Is the frozen representation the bottleneck?",
+   "mandatory_caveat": "Representation quality is NOT isolated: encoder, embedding width (512 against 768) and head input width move together. This does not show representation quality is the sole or even the main bottleneck. The development rows are identical on both sides so the interval is a valid evaluation-sampling interval, but the training streams are not paired and the seed label does not pair two runs. No clustered contrast exists at 250k, because the CLIP partner is the stopped v2_07 family; the 250k direction is reported from stored per-seed means in Table VE0-TAB-A3.",
+   "message": "Under the tested 40k controlled comparison, the stronger frozen representation improves the multimodal systems: the three multimodal gains exclude zero while the question-only gain does not, supporting representation quality as an important factor acting mainly through the image path.",
+   "placement": "MAIN_TEXT",
+   "presentation_caption": "Representation-quality sensitivity: SigLIP against CLIP at 40k. Under the tested 40k controlled comparison, the stronger frozen representation improves the multimodal systems: the three multimodal gains exclude zero while the question-only gain does not, supporting representation quality as an important factor acting mainly through the image path. Uncertainty: image-clustered 95 per cent evaluation-sampling intervals, clustered on the represented development imageId and conditioning on the fixed trained seed set. Nominal and uncorrected for multiplicity. Representation quality is NOT isolated: encoder, embedding width (512 against 768) and head input width move together. This does not show representation quality is the sole or even the main bottleneck. The development rows are identical on both sides so the interval is a valid evaluation-sampling interval, but the training streams are not paired and the seed label does not pair two runs. No clustered contrast exists at 250k, because the CLIP partner is the stopped v2_07 family; the 250k direction is reported from stored per-seed means in Table VE0-TAB-A3.",
+   "presentation_caption_is_not_stronger": "the presentation caption carries the identical claim sentence and the identical mandatory caveat as the dissertation caption",
+   "quantity": "Quantity: head against SigLIP minus CLIP accuracy difference, zero line drawn.",
+   "sample_and_seed_context": "Sample and seed context: development questions: 7,714; represented development images: 768; training seed sets: [0, 1, 2, 3, 42]; training scales: 40k.",
+   "supervisor_slide": "SLIDE-09-REPRESENTATION-QUALITY",
+   "uncertainty": "Uncertainty: image-clustered 95 per cent evaluation-sampling intervals, clustered on the represented development imageId and conditioning on the fixed trained seed set. Nominal and uncorrected for multiplicity.",
+   "ve0_specification_id": "VE0-FIG-07",
+   "viva_answer": "It is an important factor, and the effect is concentrated on the image path. It is not shown to be the sole or main bottleneck, because the encoder and two widths moved together in the same swap.",
+   "working_title": "Representation-quality sensitivity: SigLIP against CLIP at 40k"
+  },
+  {
+   "artefact_id": "VE1-FIG-08",
+   "carries_v2_07_limitation": false,
+   "consumed_evidence_ids": [
+    "EV-CON-E10.difference_in_differences",
+    "EV-CON-E10.pretraining_effect.train_250k",
+    "EV-CON-E10.pretraining_effect.train_40k",
+    "EV-CON-E8A.A1_minus_A1r.train_250k",
+    "EV-CON-E8A.A1_minus_A1r.train_40k",
+    "EV-CON-E8B.B3_-_B2.train_250k",
+    "EV-CON-E8B.B3_-_B2.train_40k"
+   ],
+   "context": {
+    "checkpoint_selection_classes": [
+     "BEST_ON_DEVELOPMENT",
+     "FIXED_EPOCH_22"
+    ],
+    "metric_ids": [
+     "g21_pinned_normalised_exact_match"
+    ],
+    "n_questions": [
+     7714
+    ],
+    "n_unique_images": [
+     768
+    ],
+    "seed_sets": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "training_scales": [
+     "train_250k",
+     "train_40k",
+     "train_40k vs train_250k"
+    ]
+   },
+   "dissertation_caption": "VE1-FIG-08. Frozen small-language-model pretraining, question side and answer side. Frozen pretraining helps on the question side at both scales, while no reliable positive pretrained-over-random advantage is detected for either tested answer-side readout. Quantity: block and training scale against first-order blocks: pretrained minus architecture-matched random, in accuracy points, zero line drawn. The second-order block shares the numeric scale but is labelled separately, because a difference of two such differences is not itself a pretrained-minus-random effect and must not be read along that axis label. Uncertainty: image-clustered 95 per cent evaluation-sampling intervals, clustered on the represented development imageId and conditioning on the fixed trained seed set. Nominal and uncorrected for multiplicity. Sample and seed context: development questions: 7,714; represented development images: 768; training seed sets: [0, 1, 2]; training scales: 250k, 40k, train_40k vs train_250k; checkpoint selection differs across the rows: BEST_ON_DEVELOPMENT, FIXED_EPOCH_22. Every row is pretrained minus its architecture-matched random control at the same model size; a random 135M model is never the control for a pretrained 360M model. An interval that contains zero is an absence of a detected effect and establishes NEITHER equivalence NOR the absence of an effect. E10 does not reproduce E8B's directional negative 40k result. The 135M to 360M step is whole-system capacity sensitivity, not an isolated causal language-model-size effect: trainable capacity moves too, 21,343,808 to 21,540,800 parameters. E8B B3 at 40k has a seed sd of 0.02795 and its per-seed values must be shown beside this figure. Checkpoint selection differs: E8A selects the best development epoch, E8B and E10 use the frozen fixed-22 rule. The bottom block is a SECOND-ORDER quantity: the E10 difference in differences is an interaction between the pretraining effect and training scale, not a pretrained-minus-random effect, so the axis label above it does not describe it. It is not directional.",
+   "dissertation_section": [
+    "R6_QUESTION_SIDE_SLM",
+    "R7_ANSWER_SIDE_AND_CAPACITY"
+   ],
+   "kind": "figure",
+   "likely_viva_question": "Does this mean pretraining does not matter for the answer side?",
+   "mandatory_caveat": "Every row is pretrained minus its architecture-matched random control at the same model size; a random 135M model is never the control for a pretrained 360M model. An interval that contains zero is an absence of a detected effect and establishes NEITHER equivalence NOR the absence of an effect. E10 does not reproduce E8B's directional negative 40k result. The 135M to 360M step is whole-system capacity sensitivity, not an isolated causal language-model-size effect: trainable capacity moves too, 21,343,808 to 21,540,800 parameters. E8B B3 at 40k has a seed sd of 0.02795 and its per-seed values must be shown beside this figure. Checkpoint selection differs: E8A selects the best development epoch, E8B and E10 use the frozen fixed-22 rule. The bottom block is a SECOND-ORDER quantity: the E10 difference in differences is an interaction between the pretraining effect and training scale, not a pretrained-minus-random effect, so the axis label above it does not describe it. It is not directional.",
+   "message": "Frozen pretraining helps on the question side at both scales, while no reliable positive pretrained-over-random advantage is detected for either tested answer-side readout.",
+   "placement": "MAIN_TEXT",
+   "presentation_caption": "Frozen small-language-model pretraining, question side and answer side. Frozen pretraining helps on the question side at both scales, while no reliable positive pretrained-over-random advantage is detected for either tested answer-side readout. Uncertainty: image-clustered 95 per cent evaluation-sampling intervals, clustered on the represented development imageId and conditioning on the fixed trained seed set. Nominal and uncorrected for multiplicity. Every row is pretrained minus its architecture-matched random control at the same model size; a random 135M model is never the control for a pretrained 360M model. An interval that contains zero is an absence of a detected effect and establishes NEITHER equivalence NOR the absence of an effect. E10 does not reproduce E8B's directional negative 40k result. The 135M to 360M step is whole-system capacity sensitivity, not an isolated causal language-model-size effect: trainable capacity moves too, 21,343,808 to 21,540,800 parameters. E8B B3 at 40k has a seed sd of 0.02795 and its per-seed values must be shown beside this figure. Checkpoint selection differs: E8A selects the best development epoch, E8B and E10 use the frozen fixed-22 rule. The bottom block is a SECOND-ORDER quantity: the E10 difference in differences is an interaction between the pretraining effect and training scale, not a pretrained-minus-random effect, so the axis label above it does not describe it. It is not directional.",
+   "presentation_caption_is_not_stronger": "the presentation caption carries the identical claim sentence and the identical mandatory caveat as the dissertation caption",
+   "quantity": "Quantity: block and training scale against first-order blocks: pretrained minus architecture-matched random, in accuracy points, zero line drawn. The second-order block shares the numeric scale but is labelled separately, because a difference of two such differences is not itself a pretrained-minus-random effect and must not be read along that axis label.",
+   "sample_and_seed_context": "Sample and seed context: development questions: 7,714; represented development images: 768; training seed sets: [0, 1, 2]; training scales: 250k, 40k, train_40k vs train_250k; checkpoint selection differs across the rows: BEST_ON_DEVELOPMENT, FIXED_EPOCH_22.",
+   "supervisor_slide": "SLIDE-10-PRETRAINING-IS-INTERFACE-DEPENDENT",
+   "uncertainty": "Uncertainty: image-clustered 95 per cent evaluation-sampling intervals, clustered on the represented development imageId and conditioning on the fixed trained seed set. Nominal and uncorrected for multiplicity.",
+   "ve0_specification_id": "VE0-FIG-08",
+   "viva_answer": "No. It means no reliable positive advantage was detected for these two answer-side interfaces at these scales. The intervals contain zero, which does not establish equivalence or absence, and the finding does not generalise to other interfaces.",
+   "working_title": "Frozen small-language-model pretraining, question side and answer side"
+  },
+  {
+   "artefact_id": "VE1-FIG-09",
+   "carries_v2_07_limitation": false,
+   "consumed_evidence_ids": [
+    "EV-EFF-E7b.concat",
+    "EV-EFF-E7b.e8a_a0p",
+    "EV-EFF-E7b.e8a_a1",
+    "EV-EFF-E7b.fusion",
+    "EV-EFF-E7b.question_only",
+    "EV-EFF-E7b.reasoner",
+    "EV-EFF-E7b.siglip_fusion",
+    "EV-EFF-E7b.vocab1000_product",
+    "EV-EFF-E9.e8b_B1",
+    "EV-EFF-E9.e8b_B2_R2",
+    "EV-EFF-E9.e8b_B2_R3",
+    "EV-EFF-E9.e8b_B3_R2",
+    "EV-EFF-E9.e8b_B3_R3",
+    "EV-EFF-E9.e9_256m_constrained",
+    "EV-EFF-E9.e9_256m_open",
+    "EV-EFF-E9.e9_500m_constrained",
+    "EV-EFF-E9.e9_500m_open",
+    "EV-EFF-E9.fusion",
+    "EV-EFF-E9.vocab1000_product"
+   ],
+   "context": {
+    "checkpoint_selection_classes": [
+     "NO_TRAINING"
+    ],
+    "metric_ids": [
+     "warm_median_serial_latency_ms"
+    ],
+    "n_questions": [],
+    "n_unique_images": [],
+    "seed_sets": [],
+    "training_scales": []
+   },
+   "dissertation_caption": "VE1-FIG-09. Accuracy against measured end-to-end serial latency, by measurement node. A small global-embedding head reaches comparable accuracy to much larger systems at a small fraction of the measured end-to-end serial latency. Quantity: accuracy on the denominator stated per point against warm median serial latency, milliseconds, batch 1, log scale permitted and labelled. Uncertainty: none is drawn. Each latency is a warm median over repeated passes, not an estimate carrying sampling uncertainty. Sample and seed context: not applicable. COMPUTATIONAL efficiency only, measured as latency. No power or energy measurement exists anywhere in this project, so no energy-efficiency claim is made. The two panels are two separate frontiers on two different nodes and are NEVER merged: the fusion bridge control failed its pre-registered 10 per cent tolerance at -18.69 per cent and no adjustment factor is applied. Only END_TO_END_SERIAL rows appear; cached and head-only figures are never plotted here. E7a's additive sums and the Pareto fronts built on them are superseded. E9 is contextual positioning, not a fair-protocol superiority claim, and E10's B4/B4r have no timing evidence of any kind.",
+   "dissertation_section": [
+    "R8_COMPUTATIONAL_EFFICIENCY"
+   ],
+   "kind": "figure",
+   "likely_viva_question": "Why not one Pareto plot?",
+   "mandatory_caveat": "COMPUTATIONAL efficiency only, measured as latency. No power or energy measurement exists anywhere in this project, so no energy-efficiency claim is made. The two panels are two separate frontiers on two different nodes and are NEVER merged: the fusion bridge control failed its pre-registered 10 per cent tolerance at -18.69 per cent and no adjustment factor is applied. Only END_TO_END_SERIAL rows appear; cached and head-only figures are never plotted here. E7a's additive sums and the Pareto fronts built on them are superseded. E9 is contextual positioning, not a fair-protocol superiority claim, and E10's B4/B4r have no timing evidence of any kind.",
+   "message": "A small global-embedding head reaches comparable accuracy to much larger systems at a small fraction of the measured end-to-end serial latency.",
+   "placement": "MAIN_TEXT",
+   "presentation_caption": "Accuracy against measured end-to-end serial latency, by measurement node. A small global-embedding head reaches comparable accuracy to much larger systems at a small fraction of the measured end-to-end serial latency. Uncertainty: none is drawn. Each latency is a warm median over repeated passes, not an estimate carrying sampling uncertainty. COMPUTATIONAL efficiency only, measured as latency. No power or energy measurement exists anywhere in this project, so no energy-efficiency claim is made. The two panels are two separate frontiers on two different nodes and are NEVER merged: the fusion bridge control failed its pre-registered 10 per cent tolerance at -18.69 per cent and no adjustment factor is applied. Only END_TO_END_SERIAL rows appear; cached and head-only figures are never plotted here. E7a's additive sums and the Pareto fronts built on them are superseded. E9 is contextual positioning, not a fair-protocol superiority claim, and E10's B4/B4r have no timing evidence of any kind.",
+   "presentation_caption_is_not_stronger": "the presentation caption carries the identical claim sentence and the identical mandatory caveat as the dissertation caption",
+   "quantity": "Quantity: accuracy on the denominator stated per point against warm median serial latency, milliseconds, batch 1, log scale permitted and labelled.",
+   "sample_and_seed_context": "Sample and seed context: not applicable.",
+   "supervisor_slide": "SLIDE-11-COST-PER-QUERY",
+   "uncertainty": "Uncertainty: none is drawn. Each latency is a warm median over repeated passes, not an estimate carrying sampling uncertainty.",
+   "ve0_specification_id": "VE0-FIG-09",
+   "viva_answer": "Because the two measurement nodes disagree by 18.7 per cent on the same control system, which is a hardware difference, not a system difference. Merging them would attribute a node effect to a model.",
+   "working_title": "Accuracy against measured end-to-end serial latency, by measurement node"
+  },
+  {
+   "artefact_id": "VE1-FIG-10",
+   "consumed_evidence_ids": [
+    "EV-DSC-dev.n_images",
+    "EV-DSC-dev.n_questions_in_vocabulary"
+   ],
+   "context": {
+    "checkpoint_selection_classes": [
+     "NO_TRAINING"
+    ],
+    "metric_ids": [
+     "structural_count_or_share"
+    ],
+    "n_questions": [],
+    "n_unique_images": [],
+    "seed_sets": [],
+    "training_scales": []
+   },
+   "dissertation_caption": "VE1-FIG-10. Qualitative development examples. Examples selected by a frozen deterministic rule, not chosen for appearance. Development examples only; the clean test is embargoed and unread. Every example is drawn by the deterministic rank defined in the VE-0 qualitative protocol, whose salt was frozen before any example was inspected. Illustrative only: n examples cannot support a quantitative claim, and no scene graph or reasoning chain is shown that is not present in the canonical evidence.",
+   "dissertation_section": [
+    "R9_QUALITATIVE_AND_ERROR_ANALYSIS"
+   ],
+   "kind": "figure",
+   "likely_viva_question": "How did you choose these examples?",
+   "mandatory_caveat": "Development examples only; the clean test is embargoed and unread. Every example is drawn by the deterministic rank defined in the VE-0 qualitative protocol, whose salt was frozen before any example was inspected. Illustrative only: n examples cannot support a quantitative claim, and no scene graph or reasoning chain is shown that is not present in the canonical evidence.",
+   "message": "Examples selected by a frozen deterministic rule, not chosen for appearance.",
+   "note": "VE-1 renders no image for this specification. The examples are selected and composed by VE-2 under the frozen VE-0 qualitative protocol and its deterministic salt. This record exists so VE-2 inherits the caption unchanged.",
+   "placement": "MAIN_TEXT",
+   "presentation_caption": "Qualitative development examples. Examples selected by a frozen deterministic rule, not chosen for appearance. Development examples only; the clean test is embargoed and unread. Every example is drawn by the deterministic rank defined in the VE-0 qualitative protocol, whose salt was frozen before any example was inspected. Illustrative only: n examples cannot support a quantitative claim, and no scene graph or reasoning chain is shown that is not present in the canonical evidence.",
+   "presentation_caption_is_not_stronger": "identical claim and identical caveat",
+   "quantity": "Quantity: individual development examples with the gold answer and each compared system's prediction. No summary statistic.",
+   "sample_and_seed_context": "Sample and seed context: not applicable.",
+   "status": "DEFERRED_TO_VE2",
+   "supervisor_slide": "SLIDE-12-WHAT-FAILURE-LOOKS-LIKE",
+   "uncertainty": "Uncertainty: not applicable. This is a schematic and carries no data.",
+   "ve0_specification_id": "VE0-FIG-10",
+   "viva_answer": "By a SHA-256 rank over a salt frozen before any example was seen, taking the lowest ranks in each pre-declared category. Skips are recorded with a reason; nothing was substituted for looking better.",
+   "working_title": "Qualitative development examples"
+  },
+  {
+   "artefact_id": "VE1-FIG-A1",
+   "carries_v2_07_limitation": false,
+   "consumed_evidence_ids": [
+    "EV-CON-v2_04.difference_576k_minus_concat.train_40k",
+    "EV-CON-v2_04.difference_natural_minus_concat.train_40k",
+    "EV-CON-v2_04.fusion_minus_difference_natural.train_40k",
+    "EV-CON-v2_04.fusion_minus_product_natural.train_40k",
+    "EV-CON-v2_04.fusion_narrow_minus_difference_576k.train_40k",
+    "EV-CON-v2_04.fusion_narrow_minus_product_576k.train_40k",
+    "EV-CON-v2_04.product_576k_minus_concat.train_40k",
+    "EV-CON-v2_04.product_576k_minus_difference_576k.train_40k",
+    "EV-CON-v2_04.product_natural_minus_concat.train_40k"
+   ],
+   "context": {
+    "checkpoint_selection_classes": [
+     "BEST_ON_DEVELOPMENT"
+    ],
+    "metric_ids": [
+     "v2_closed_vocab_top1_index_match"
+    ],
+    "n_questions": [
+     7714
+    ],
+    "n_unique_images": [
+     768
+    ],
+    "seed_sets": [
+     [
+      0,
+      1,
+      2,
+      3,
+      42
+     ]
+    ],
+    "training_scales": [
+     "train_40k"
+    ]
+   },
+   "dissertation_caption": "VE1-FIG-A1. Interaction-feature decomposition at matched capacity. Either interaction term alone recovers most of the fusion gain at an equal parameter budget, and the two terms behave alike. Quantity: contrast against effect in accuracy points, zero line drawn. Uncertainty: image-clustered 95 per cent evaluation-sampling intervals, clustered on the represented development imageId and conditioning on the fixed trained seed set. Nominal and uncorrected for multiplicity. Sample and seed context: development questions: 7,714; represented development images: 768; training seed sets: [0, 1, 2, 3, 42]; training scales: 40k. Redundancy is inferred from the two terms performing alike at matched capacity, not from a mechanism. The natural-width contrasts are capacity-confounded. Development set, train_40k, five training seeds. The grid is complete: all nine published gaps are shown, including the four whose intervals include zero.",
+   "dissertation_section": [
+    "R2_CAPACITY_AND_FEATURES"
+   ],
+   "kind": "figure",
+   "likely_viva_question": "Did you pick the ablation that worked?",
+   "mandatory_caveat": "Redundancy is inferred from the two terms performing alike at matched capacity, not from a mechanism. The natural-width contrasts are capacity-confounded. Development set, train_40k, five training seeds. The grid is complete: all nine published gaps are shown, including the four whose intervals include zero.",
+   "message": "Either interaction term alone recovers most of the fusion gain at an equal parameter budget, and the two terms behave alike.",
+   "placement": "APPENDIX",
+   "presentation_caption": "Interaction-feature decomposition at matched capacity. Either interaction term alone recovers most of the fusion gain at an equal parameter budget, and the two terms behave alike. Uncertainty: image-clustered 95 per cent evaluation-sampling intervals, clustered on the represented development imageId and conditioning on the fixed trained seed set. Nominal and uncorrected for multiplicity. Redundancy is inferred from the two terms performing alike at matched capacity, not from a mechanism. The natural-width contrasts are capacity-confounded. Development set, train_40k, five training seeds. The grid is complete: all nine published gaps are shown, including the four whose intervals include zero.",
+   "presentation_caption_is_not_stronger": "the presentation caption carries the identical claim sentence and the identical mandatory caveat as the dissertation caption",
+   "quantity": "Quantity: contrast against effect in accuracy points, zero line drawn.",
+   "sample_and_seed_context": "Sample and seed context: development questions: 7,714; represented development images: 768; training seed sets: [0, 1, 2, 3, 42]; training scales: 40k.",
+   "supervisor_slide": "NOT_PRESENTED",
+   "uncertainty": "Uncertainty: image-clustered 95 per cent evaluation-sampling intervals, clustered on the represented development imageId and conditioning on the fixed trained seed set. Nominal and uncorrected for multiplicity.",
+   "ve0_specification_id": "VE0-FIG-A1",
+   "viva_answer": "No. The grid is complete and all nine gaps are reported, four of them including zero.",
+   "working_title": "Interaction-feature decomposition at matched capacity"
+  },
+  {
+   "artefact_id": "VE1-FIG-A3",
+   "carries_v2_07_limitation": false,
+   "consumed_evidence_ids": [
+    "EV-ARM-e3.concat.train_250k",
+    "EV-ARM-e3.concat.train_40k",
+    "EV-ARM-e3.fusion.train_250k",
+    "EV-ARM-e3.fusion.train_40k",
+    "EV-ARM-e3.product.train_250k",
+    "EV-ARM-e3.product.train_40k",
+    "EV-ARM-e3.question_only.train_250k",
+    "EV-ARM-e3.question_only.train_40k",
+    "EV-CON-e3.concat_minus_question_only.train_250k",
+    "EV-CON-e3.concat_minus_question_only.train_40k",
+    "EV-CON-e3.fusion_minus_concat.train_250k",
+    "EV-CON-e3.fusion_minus_concat.train_40k",
+    "EV-CON-e3.product_minus_concat.train_250k",
+    "EV-CON-e3.product_minus_concat.train_40k",
+    "EV-DSC-dev.coverage_top100",
+    "EV-DSC-dev.coverage_top1000"
+   ],
+   "context": {
+    "checkpoint_selection_classes": [
+     "BEST_ON_DEVELOPMENT",
+     "NO_TRAINING"
+    ],
+    "metric_ids": [
+     "structural_count_or_share",
+     "v2_closed_vocab_top1_index_match"
+    ],
+    "n_questions": [
+     9823
+    ],
+    "n_unique_images": [
+     776
+    ],
+    "seed_sets": [
+     [
+      0,
+      1,
+      2,
+      3,
+      42
+     ]
+    ],
+    "training_scales": [
+     "train_250k",
+     "train_40k"
+    ]
+   },
+   "dissertation_caption": "VE1-FIG-A3. Answer-set size: coverage against accuracy. Growing the closed answer set from 100 to 1000 raises development coverage substantially. Quantity: answer-set size and system against (a) coverage share; (b) development accuracy on the E3 view. Uncertainty: image-clustered 95 per cent evaluation-sampling intervals, clustered on the represented development imageId and conditioning on the fixed trained seed set. Nominal and uncorrected for multiplicity. Sample and seed context: development questions: 9,823; represented development images: 776; training seed sets: [0, 1, 2, 3, 42]; training scales: 250k, 40k; checkpoint selection differs across the rows: BEST_ON_DEVELOPMENT, NO_TRAINING. Top-100 and top-1000 results are NEVER paired: they use different development rows (7,714 against 9,823), a different class count and different training rows. No accuracy is differenced across the two blocks. Class competition and the smaller head-answer share of a fixed budget are confounded in any head-row comparison.",
+   "dissertation_section": [
+    "R_APPENDIX_ANSWER_SET"
+   ],
+   "kind": "figure",
+   "likely_viva_question": "Why not use the 1000-answer set throughout?",
+   "mandatory_caveat": "Top-100 and top-1000 results are NEVER paired: they use different development rows (7,714 against 9,823), a different class count and different training rows. No accuracy is differenced across the two blocks. Class competition and the smaller head-answer share of a fixed budget are confounded in any head-row comparison.",
+   "message": "Growing the closed answer set from 100 to 1000 raises development coverage substantially.",
+   "placement": "APPENDIX",
+   "presentation_caption": "Answer-set size: coverage against accuracy. Growing the closed answer set from 100 to 1000 raises development coverage substantially. Uncertainty: image-clustered 95 per cent evaluation-sampling intervals, clustered on the represented development imageId and conditioning on the fixed trained seed set. Nominal and uncorrected for multiplicity. Top-100 and top-1000 results are NEVER paired: they use different development rows (7,714 against 9,823), a different class count and different training rows. No accuracy is differenced across the two blocks. Class competition and the smaller head-answer share of a fixed budget are confounded in any head-row comparison.",
+   "presentation_caption_is_not_stronger": "the presentation caption carries the identical claim sentence and the identical mandatory caveat as the dissertation caption",
+   "quantity": "Quantity: answer-set size and system against (a) coverage share; (b) development accuracy on the E3 view.",
+   "sample_and_seed_context": "Sample and seed context: development questions: 9,823; represented development images: 776; training seed sets: [0, 1, 2, 3, 42]; training scales: 250k, 40k; checkpoint selection differs across the rows: BEST_ON_DEVELOPMENT, NO_TRAINING.",
+   "supervisor_slide": "NOT_PRESENTED",
+   "uncertainty": "Uncertainty: image-clustered 95 per cent evaluation-sampling intervals, clustered on the represented development imageId and conditioning on the fixed trained seed set. Nominal and uncorrected for multiplicity.",
+   "ve0_specification_id": "VE0-FIG-A3",
+   "viva_answer": "Because the whole programme's controls, capacity matching and reliance analyses were run on the top-100 view, and the two views are not row-comparable. E3 answers an answer-set-design question and is reported separately.",
+   "working_title": "Answer-set size: coverage against accuracy"
+  },
+  {
+   "artefact_id": "VE1-FIG-A4",
+   "carries_v2_07_limitation": false,
+   "consumed_evidence_ids": [
+    "EV-SLC-v2_02.concat.train_40k.semantic-attr.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.semantic-cat.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.semantic-global.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.semantic-obj.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.semantic-rel.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.steps-3.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.steps-4.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.steps-ge5.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.steps-le2.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.structural-choose.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.structural-compare.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.structural-logical.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.structural-query.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.structural-verify.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.semantic-attr.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.semantic-cat.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.semantic-global.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.semantic-obj.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.semantic-rel.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.steps-3.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.steps-4.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.steps-ge5.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.steps-le2.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.structural-choose.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.structural-compare.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.structural-logical.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.structural-query.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.structural-verify.accuracy",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.semantic-attr.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.semantic-cat.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.semantic-global.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.semantic-obj.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.semantic-rel.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.steps-3.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.steps-4.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.steps-ge5.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.steps-le2.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.structural-choose.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.structural-compare.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.structural-logical.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.structural-query.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.structural-verify.five_seed"
+   ],
+   "context": {
+    "checkpoint_selection_classes": [
+     "BEST_ON_DEVELOPMENT"
+    ],
+    "metric_ids": [
+     "v2_closed_vocab_top1_index_match"
+    ],
+    "n_questions": [
+     163,
+     302,
+     439,
+     870,
+     1042,
+     1114,
+     1170,
+     1236,
+     2030,
+     2400,
+     2964,
+     2978,
+     3104,
+     3330
+    ],
+    "n_unique_images": [
+     133,
+     219,
+     226,
+     396,
+     465,
+     531,
+     547,
+     561,
+     570,
+     615,
+     658,
+     674,
+     687,
+     691
+    ],
+    "seed_sets": [
+     [
+      0,
+      1,
+      2,
+      3,
+      42
+     ]
+    ],
+    "training_scales": [
+     "train_40k"
+    ]
+   },
+   "dissertation_caption": "VE1-FIG-A4. Per-type accuracy and the fusion-minus-concat gap by question type. The fusion advantage concentrates in a subset of question types rather than lifting all types equally. Quantity: question type, structural then semantic against accuracy, then gap in accuracy points. Uncertainty: image-clustered 95 per cent evaluation-sampling intervals, clustered on the represented development imageId and conditioning on the fixed trained seed set. Nominal and uncorrected for multiplicity. Sample and seed context: development questions: 163, 302, 439, 870, 1,042, 1,114, 1,170, 1,236, 2,030, 2,400, 2,964, 2,978, 3,104, 3,330; represented development images: 133, 219, 226, 396, 465, 531, 547, 561, 570, 615, 658, 674, 687, 691; training seed sets: [0, 1, 2, 3, 42]; training scales: 40k. Slices are unequal and dependent; every interval is clustered on the slice's own represented development images and the per-slice question and image counts must be printed. The v2_05b row-level normal-approximation intervals are superseded by these clustered intervals and are never re-quoted. Both the five-seed and the seed-42 conventions exist in the source; only one is plotted and the caption names which.",
+   "dissertation_section": [
+    "R_APPENDIX_SLICES"
+   ],
+   "kind": "figure",
+   "likely_viva_question": "Are these per-type differences significant after multiple comparisons?",
+   "mandatory_caveat": "Slices are unequal and dependent; every interval is clustered on the slice's own represented development images and the per-slice question and image counts must be printed. The v2_05b row-level normal-approximation intervals are superseded by these clustered intervals and are never re-quoted. Both the five-seed and the seed-42 conventions exist in the source; only one is plotted and the caption names which.",
+   "message": "The fusion advantage concentrates in a subset of question types rather than lifting all types equally.",
+   "placement": "APPENDIX",
+   "presentation_caption": "Per-type accuracy and the fusion-minus-concat gap by question type. The fusion advantage concentrates in a subset of question types rather than lifting all types equally. Uncertainty: image-clustered 95 per cent evaluation-sampling intervals, clustered on the represented development imageId and conditioning on the fixed trained seed set. Nominal and uncorrected for multiplicity. Slices are unequal and dependent; every interval is clustered on the slice's own represented development images and the per-slice question and image counts must be printed. The v2_05b row-level normal-approximation intervals are superseded by these clustered intervals and are never re-quoted. Both the five-seed and the seed-42 conventions exist in the source; only one is plotted and the caption names which.",
+   "presentation_caption_is_not_stronger": "the presentation caption carries the identical claim sentence and the identical mandatory caveat as the dissertation caption",
+   "quantity": "Quantity: question type, structural then semantic against accuracy, then gap in accuracy points.",
+   "sample_and_seed_context": "Sample and seed context: development questions: 163, 302, 439, 870, 1,042, 1,114, 1,170, 1,236, 2,030, 2,400, 2,964, 2,978, 3,104, 3,330; represented development images: 133, 219, 226, 396, 465, 531, 547, 561, 570, 615, 658, 674, 687, 691; training seed sets: [0, 1, 2, 3, 42]; training scales: 40k.",
+   "supervisor_slide": "NOT_PRESENTED",
+   "uncertainty": "Uncertainty: image-clustered 95 per cent evaluation-sampling intervals, clustered on the represented development imageId and conditioning on the fixed trained seed set. Nominal and uncorrected for multiplicity.",
+   "ve0_specification_id": "VE0-FIG-A4",
+   "viva_answer": "They are nominal 95 per cent intervals, uncorrected for multiplicity, and the report says so. With fourteen slices, some intervals excluding zero by chance is expected, which is why per-type findings are secondary.",
+   "working_title": "Per-type accuracy and the fusion-minus-concat gap by question type"
+  },
+  {
+   "artefact_id": "VE1-FIG-A5",
+   "carries_v2_07_limitation": false,
+   "consumed_evidence_ids": [
+    "EV-EFF-E9.e8b_B1",
+    "EV-EFF-E9.e8b_B2_R2",
+    "EV-EFF-E9.e8b_B2_R3",
+    "EV-EFF-E9.e8b_B3_R2",
+    "EV-EFF-E9.e8b_B3_R3",
+    "EV-EFF-E9.e9_256m_constrained",
+    "EV-EFF-E9.e9_256m_open",
+    "EV-EFF-E9.e9_500m_constrained",
+    "EV-EFF-E9.e9_500m_open",
+    "EV-EFF-E9.fusion",
+    "EV-EFF-E9.vocab1000_product"
+   ],
+   "context": {
+    "checkpoint_selection_classes": [
+     "NO_TRAINING"
+    ],
+    "metric_ids": [
+     "warm_median_serial_latency_ms"
+    ],
+    "n_questions": [],
+    "n_unique_images": [],
+    "seed_sets": [],
+    "training_scales": []
+   },
+   "dissertation_caption": "VE1-FIG-A5. Compact VLM in context. A frozen compact integrated VLM can be placed in context against these lightweight systems on one node. Quantity: normalised accuracy on the raw development partition against warm median serial latency on otter159, milliseconds. Uncertainty: none is drawn. Each latency is a warm median over repeated passes, not an estimate carrying sampling uncertainty. Sample and seed context: not applicable. CONTEXTUAL POSITIONING ONLY, never a leaderboard or fair-protocol superiority claim. Training history, multimodal pretraining, answer support and output format all differ, and SmolVLM-256M's text backbone is the Instruct checkpoint where E8A and E8B use base. No comparison is made against published official GQA scores in either direction, because the split, the answer support and the scorer all differ. Single node otter159; these points are never merged with the otter155 frontier.",
+   "dissertation_section": [
+    "R8_COMPUTATIONAL_EFFICIENCY"
+   ],
+   "kind": "figure",
+   "likely_viva_question": "Did you beat SmolVLM?",
+   "mandatory_caveat": "CONTEXTUAL POSITIONING ONLY, never a leaderboard or fair-protocol superiority claim. Training history, multimodal pretraining, answer support and output format all differ, and SmolVLM-256M's text backbone is the Instruct checkpoint where E8A and E8B use base. No comparison is made against published official GQA scores in either direction, because the split, the answer support and the scorer all differ. Single node otter159; these points are never merged with the otter155 frontier.",
+   "message": "A frozen compact integrated VLM can be placed in context against these lightweight systems on one node.",
+   "placement": "APPENDIX",
+   "presentation_caption": "Compact VLM in context. A frozen compact integrated VLM can be placed in context against these lightweight systems on one node. Uncertainty: none is drawn. Each latency is a warm median over repeated passes, not an estimate carrying sampling uncertainty. CONTEXTUAL POSITIONING ONLY, never a leaderboard or fair-protocol superiority claim. Training history, multimodal pretraining, answer support and output format all differ, and SmolVLM-256M's text backbone is the Instruct checkpoint where E8A and E8B use base. No comparison is made against published official GQA scores in either direction, because the split, the answer support and the scorer all differ. Single node otter159; these points are never merged with the otter155 frontier.",
+   "presentation_caption_is_not_stronger": "the presentation caption carries the identical claim sentence and the identical mandatory caveat as the dissertation caption",
+   "quantity": "Quantity: normalised accuracy on the raw development partition against warm median serial latency on otter159, milliseconds.",
+   "sample_and_seed_context": "Sample and seed context: not applicable.",
+   "supervisor_slide": "SLIDE-BACKUP-COMPACT-VLM",
+   "uncertainty": "Uncertainty: none is drawn. Each latency is a warm median over repeated passes, not an estimate carrying sampling uncertainty.",
+   "ve0_specification_id": "VE0-FIG-A5",
+   "viva_answer": "That is not a question this evidence can answer. The systems differ in training history, answer support and output format, so the comparison is contextual positioning, not a controlled contest.",
+   "working_title": "Compact VLM in context"
+  },
+  {
+   "artefact_id": "VE1-TAB-01",
+   "bolding_rule": "no bolding. Bolding a maximum in a table where some rows have no interval would imply a comparison the evidence does not support",
+   "carries_v2_07_limitation": true,
+   "consumed_evidence_ids": [
+    "EV-ARM-v2_02.concat.train_40k",
+    "EV-ARM-v2_02.fusion.train_40k",
+    "EV-ARM-v2_02.image_only.train_40k",
+    "EV-ARM-v2_02.question_only.train_40k",
+    "EV-ARM-v2_03.concat_wide.train_40k",
+    "EV-ARM-v2_03.fusion_narrow.train_40k",
+    "EV-SEED-v2_07.concat.train_100k",
+    "EV-SEED-v2_07.concat.train_250k",
+    "EV-SEED-v2_07.concat.train_40k",
+    "EV-SEED-v2_07.fusion.train_100k",
+    "EV-SEED-v2_07.fusion.train_250k",
+    "EV-SEED-v2_07.fusion.train_40k",
+    "EV-SEED-v2_07.product_576k.train_100k",
+    "EV-SEED-v2_07.product_576k.train_250k",
+    "EV-SEED-v2_07.product_576k.train_40k",
+    "EV-SEED-v2_07.question_only.train_100k",
+    "EV-SEED-v2_07.question_only.train_250k",
+    "EV-SEED-v2_07.question_only.train_40k"
+   ],
+   "context": {
+    "checkpoint_selection_classes": [
+     "BEST_ON_DEVELOPMENT"
+    ],
+    "metric_ids": [
+     "v2_closed_vocab_top1_index_match"
+    ],
+    "n_questions": [
+     7714
+    ],
+    "n_unique_images": [
+     768
+    ],
+    "seed_sets": [
+     [
+      0,
+      1,
+      2,
+      3,
+      42
+     ]
+    ],
+    "training_scales": [
+     "train_100k",
+     "train_250k",
+     "train_40k"
+    ]
+   },
+   "dissertation_caption": "VE1-TAB-01. Main experimental progression: global-embedding heads. What accuracy does each global-embedding head reach at each training scale? Quantity: system, trainable parameters, training scale, seeds, mean accuracy, sd across training seeds (ddof=1), 95% image-clustered interval, interval available. Precision: accuracies and effects to 5 decimal places, matching the canonical stored precision; never rounded further in a way that changes a reported comparison. Uncertainty notation: SD in a column headed 'sd (training seeds)', interval in a separate column headed '95% CI (image-clustered)'. Where no interval exists the cell reads 'not available' and never a dash that could be read as zero width. Sample and seed context: development questions: 7,714; represented development images: 768; training seed sets: [0, 1, 2, 3, 42]; training scales: 100k, 250k, 40k. Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. v2_07 ACCEPTED DOCUMENTED LIMITATION. No image-clustered evaluation interval is available for this family: row-level reconstruction was attempted and stopped by a point-estimate reproduction mismatch, and one of forty cells differs from reconstruction by one numerically tied row (v2_07::question_only::train_250k::seed2::normal, stored 0.49767 against recomputed 0.49754, a single float32 argmax tie on row index 6213 of 7,714). Report per-seed means and the across-training-seed sample sd only. No post-hoc partial-family reconstruction is authorised.",
+   "dissertation_section": [
+    "R1_BASELINES_AND_FUSION"
+   ],
+   "footnotes": [
+    "v2_07 rows carry the ACCEPTED DOCUMENTED LIMITATION: no image-clustered evaluation interval exists for that family, and one of forty cells differs from reconstruction by one numerically tied row.",
+    "All rows use the V2-era closed-vocabulary scorer on the 7,714 in-vocabulary development rows over 768 represented images.",
+    "Checkpoints were selected at the best development epoch."
+   ],
+   "kind": "table",
+   "mandatory_caveat": "Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. v2_07 ACCEPTED DOCUMENTED LIMITATION. No image-clustered evaluation interval is available for this family: row-level reconstruction was attempted and stopped by a point-estimate reproduction mismatch, and one of forty cells differs from reconstruction by one numerically tied row (v2_07::question_only::train_250k::seed2::normal, stored 0.49767 against recomputed 0.49754, a single float32 argmax tie on row index 6213 of 7,714). Report per-seed means and the across-training-seed sample sd only. No post-hoc partial-family reconstruction is authorised.",
+   "message": "What accuracy does each global-embedding head reach at each training scale?",
+   "placement": "MAIN_TEXT",
+   "presentation_caption": "Main experimental progression: global-embedding heads. What accuracy does each global-embedding head reach at each training scale? Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. v2_07 ACCEPTED DOCUMENTED LIMITATION. No image-clustered evaluation interval is available for this family: row-level reconstruction was attempted and stopped by a point-estimate reproduction mismatch, and one of forty cells differs from reconstruction by one numerically tied row (v2_07::question_only::train_250k::seed2::normal, stored 0.49767 against recomputed 0.49754, a single float32 argmax tie on row index 6213 of 7,714). Report per-seed means and the across-training-seed sample sd only. No post-hoc partial-family reconstruction is authorised.",
+   "presentation_caption_is_not_stronger": "the presentation caption carries the identical mandatory caveat",
+   "quantity": "Quantity: system, trainable parameters, training scale, seeds, mean accuracy, sd across training seeds (ddof=1), 95% image-clustered interval, interval available. Precision: accuracies and effects to 5 decimal places, matching the canonical stored precision; never rounded further in a way that changes a reported comparison.",
+   "sample_and_seed_context": "Sample and seed context: development questions: 7,714; represented development images: 768; training seed sets: [0, 1, 2, 3, 42]; training scales: 100k, 250k, 40k.",
+   "supervisor_slide": "NOT_PRESENTED",
+   "uncertainty": "Uncertainty notation: SD in a column headed 'sd (training seeds)', interval in a separate column headed '95% CI (image-clustered)'. Where no interval exists the cell reads 'not available' and never a dash that could be read as zero width.",
+   "ve0_specification_id": "VE0-TAB-01",
+   "working_title": "Main experimental progression: global-embedding heads"
+  },
+  {
+   "artefact_id": "VE1-TAB-02",
+   "bolding_rule": "no bolding by outcome. The comparison-class column carries the emphasis instead, because whether a contrast is capacity-matched matters more than whether it is positive",
+   "carries_v2_07_limitation": false,
+   "consumed_evidence_ids": [
+    "EV-CON-v2_02.concat_minus_question_only.train_40k",
+    "EV-CON-v2_02.fusion_minus_concat.train_40k",
+    "EV-CON-v2_03.concat_wide_minus_concat.train_40k",
+    "EV-CON-v2_03.fusion_minus_concat_wide.train_40k",
+    "EV-CON-v2_03.fusion_minus_fusion_narrow.train_40k",
+    "EV-CON-v2_03.fusion_narrow_minus_concat.train_40k",
+    "EV-CON-v2_04.difference_576k_minus_concat.train_40k",
+    "EV-CON-v2_04.difference_natural_minus_concat.train_40k",
+    "EV-CON-v2_04.fusion_minus_difference_natural.train_40k",
+    "EV-CON-v2_04.fusion_minus_product_natural.train_40k",
+    "EV-CON-v2_04.fusion_narrow_minus_difference_576k.train_40k",
+    "EV-CON-v2_04.fusion_narrow_minus_product_576k.train_40k",
+    "EV-CON-v2_04.product_576k_minus_concat.train_40k",
+    "EV-CON-v2_04.product_576k_minus_difference_576k.train_40k",
+    "EV-CON-v2_04.product_natural_minus_concat.train_40k"
+   ],
+   "context": {
+    "checkpoint_selection_classes": [
+     "BEST_ON_DEVELOPMENT"
+    ],
+    "metric_ids": [
+     "v2_closed_vocab_top1_index_match"
+    ],
+    "n_questions": [
+     7714
+    ],
+    "n_unique_images": [
+     768
+    ],
+    "seed_sets": [
+     [
+      0,
+      1,
+      2,
+      3,
+      42
+     ]
+    ],
+    "training_scales": [
+     "train_40k"
+    ]
+   },
+   "dissertation_caption": "VE1-TAB-02. Capacity-matched controls and interaction-feature decomposition. How much of the fusion advantage survives at a matched budget, and which term carries it? Quantity: contrast, comparison class, effect, 95% image-clustered interval, excludes zero, sd across training seeds (ddof=1), n questions, n images. Precision: 5 decimal places. Uncertainty notation: interval as [lower, upper] with the cluster unit stated in the caption; SD in its own column and never inside the brackets Sample and seed context: development questions: 7,714; represented development images: 768; training seed sets: [0, 1, 2, 3, 42]; training scales: 40k. Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. Capacity-confounded: fusion carries 1,100,388 trainable parameters against concat's 576,100. Only the v2_03 matched pairs isolate the feature effect, and fusion minus concat_wide includes zero.",
+   "dissertation_section": [
+    "R2_CAPACITY_AND_FEATURES"
+   ],
+   "footnotes": [
+    "Every interval is nominal 95 per cent, image-clustered and UNCORRECTED for multiplicity. No p-value is computed anywhere in this project.",
+    "An interval containing zero is an absence of a detected effect. It never establishes equivalence or the absence of an effect.",
+    "Trainable parameter counts: concat 576,100; fusion 1,100,388; concat_wide and fusion_narrow are the matched budgets."
+   ],
+   "kind": "table",
+   "mandatory_caveat": "Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. Capacity-confounded: fusion carries 1,100,388 trainable parameters against concat's 576,100. Only the v2_03 matched pairs isolate the feature effect, and fusion minus concat_wide includes zero.",
+   "message": "How much of the fusion advantage survives at a matched budget, and which term carries it?",
+   "placement": "MAIN_TEXT",
+   "presentation_caption": "Capacity-matched controls and interaction-feature decomposition. How much of the fusion advantage survives at a matched budget, and which term carries it? Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. Capacity-confounded: fusion carries 1,100,388 trainable parameters against concat's 576,100. Only the v2_03 matched pairs isolate the feature effect, and fusion minus concat_wide includes zero.",
+   "presentation_caption_is_not_stronger": "the presentation caption carries the identical mandatory caveat",
+   "quantity": "Quantity: contrast, comparison class, effect, 95% image-clustered interval, excludes zero, sd across training seeds (ddof=1), n questions, n images. Precision: 5 decimal places.",
+   "sample_and_seed_context": "Sample and seed context: development questions: 7,714; represented development images: 768; training seed sets: [0, 1, 2, 3, 42]; training scales: 40k.",
+   "supervisor_slide": "NOT_PRESENTED",
+   "uncertainty": "Uncertainty notation: interval as [lower, upper] with the cluster unit stated in the caption; SD in its own column and never inside the brackets",
+   "ve0_specification_id": "VE0-TAB-02",
+   "working_title": "Capacity-matched controls and interaction-feature decomposition"
+  },
+  {
+   "artefact_id": "VE1-TAB-03",
+   "bolding_rule": "no bolding",
+   "carries_v2_07_limitation": false,
+   "consumed_evidence_ids": [
+    "EV-CON-E10.scale_effect_B4",
+    "EV-CON-E10.scale_effect_B4r",
+    "EV-CON-E8B.scale_effect_B1",
+    "EV-CON-E8B.scale_effect_B2",
+    "EV-CON-E8B.scale_effect_B3"
+   ],
+   "context": {
+    "checkpoint_selection_classes": [
+     "FIXED_EPOCH_22"
+    ],
+    "metric_ids": [
+     "g21_pinned_normalised_exact_match"
+    ],
+    "n_questions": [
+     7714
+    ],
+    "n_unique_images": [
+     768
+    ],
+    "seed_sets": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "training_scales": [
+     "train_40k vs train_250k"
+    ]
+   },
+   "dissertation_caption": "VE1-TAB-03. Training-scale effects, frozen-SLM families. How much does labelled training scale move each SLM-interface system? Quantity: system, language model, effect (250k minus 40k), 95% image-clustered interval, excludes zero, sd across training seeds (ddof=1). Precision: 5 decimal places. Uncertainty notation: as VE0-TAB-02 Sample and seed context: development questions: 7,714; represented development images: 768; training seed sets: [0, 1, 2]; training scales: train_40k vs train_250k. Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. Both pretraining-effect intervals contain zero and the seeds disagree in sign; they establish neither equivalence nor the absence of an effect. The 135M-to-360M step is whole-system capacity sensitivity, not an isolated causal language-model-size effect: trainable capacity moves too, 21,343,808 to 21,540,800 parameters, because the projection width follows the hidden size. An interval containing zero is an absence of a detected effect and establishes neither equivalence nor the absence of an effect. B3 at train_40k has an across-training-seed sd of 0.02795 and must always be shown with its seed spread.",
+   "dissertation_section": [
+    "R3_SCALING_BEHAVIOUR"
+   ],
+   "footnotes": [
+    "All rows use the pinned G21 normalised scorer. They are never placed on a shared scale with the V2-era closed-vocabulary scorer used by Table VE0-TAB-01.",
+    "E8B and E10 use the frozen fixed-22-epoch rule with no early stopping."
+   ],
+   "kind": "table",
+   "mandatory_caveat": "Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. Both pretraining-effect intervals contain zero and the seeds disagree in sign; they establish neither equivalence nor the absence of an effect. The 135M-to-360M step is whole-system capacity sensitivity, not an isolated causal language-model-size effect: trainable capacity moves too, 21,343,808 to 21,540,800 parameters, because the projection width follows the hidden size. An interval containing zero is an absence of a detected effect and establishes neither equivalence nor the absence of an effect. B3 at train_40k has an across-training-seed sd of 0.02795 and must always be shown with its seed spread.",
+   "message": "How much does labelled training scale move each SLM-interface system?",
+   "placement": "MAIN_TEXT",
+   "presentation_caption": "Training-scale effects, frozen-SLM families. How much does labelled training scale move each SLM-interface system? Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. Both pretraining-effect intervals contain zero and the seeds disagree in sign; they establish neither equivalence nor the absence of an effect. The 135M-to-360M step is whole-system capacity sensitivity, not an isolated causal language-model-size effect: trainable capacity moves too, 21,343,808 to 21,540,800 parameters, because the projection width follows the hidden size. An interval containing zero is an absence of a detected effect and establishes neither equivalence nor the absence of an effect. B3 at train_40k has an across-training-seed sd of 0.02795 and must always be shown with its seed spread.",
+   "presentation_caption_is_not_stronger": "the presentation caption carries the identical mandatory caveat",
+   "quantity": "Quantity: system, language model, effect (250k minus 40k), 95% image-clustered interval, excludes zero, sd across training seeds (ddof=1). Precision: 5 decimal places.",
+   "sample_and_seed_context": "Sample and seed context: development questions: 7,714; represented development images: 768; training seed sets: [0, 1, 2]; training scales: train_40k vs train_250k.",
+   "supervisor_slide": "NOT_PRESENTED",
+   "uncertainty": "Uncertainty notation: as VE0-TAB-02",
+   "ve0_specification_id": "VE0-TAB-03",
+   "working_title": "Training-scale effects, frozen-SLM families"
+  },
+  {
+   "artefact_id": "VE1-TAB-04",
+   "bolding_rule": "no bolding",
+   "carries_v2_07_limitation": false,
+   "consumed_evidence_ids": [
+    "EV-SEED-E10.B4.train_250k",
+    "EV-SEED-E10.B4.train_40k",
+    "EV-SEED-E10.B4r.train_250k",
+    "EV-SEED-E10.B4r.train_40k",
+    "EV-SEED-E8A.A0p.train_250k",
+    "EV-SEED-E8A.A0p.train_40k",
+    "EV-SEED-E8A.A1.train_250k",
+    "EV-SEED-E8A.A1.train_40k",
+    "EV-SEED-E8A.A1r.train_250k",
+    "EV-SEED-E8A.A1r.train_40k",
+    "EV-SEED-E8B.B1.train_250k",
+    "EV-SEED-E8B.B1.train_40k",
+    "EV-SEED-E8B.B2.train_250k",
+    "EV-SEED-E8B.B2.train_40k",
+    "EV-SEED-E8B.B3.train_250k",
+    "EV-SEED-E8B.B3.train_40k"
+   ],
+   "context": {
+    "checkpoint_selection_classes": [
+     "BEST_ON_DEVELOPMENT",
+     "FIXED_EPOCH_22"
+    ],
+    "metric_ids": [
+     "g21_pinned_normalised_exact_match"
+    ],
+    "n_questions": [
+     7714
+    ],
+    "n_unique_images": [
+     768
+    ],
+    "seed_sets": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "training_scales": [
+     "train_250k",
+     "train_40k"
+    ]
+   },
+   "dissertation_caption": "VE1-TAB-04. Frozen-SLM interface comparison. What does each frozen-SLM configuration reach, on each side of the interface? Quantity: arm, interface side, language model, pretrained or random, training scale, seeds, mean accuracy, sd across training seeds (ddof=1), per-seed values. Precision: 5 decimal places. Uncertainty notation: SD only; this table reports no interval, because it reports systems rather than contrasts. The contrasts are in VE0-TAB-05 and Figure VE0-FIG-08 Sample and seed context: development questions: 7,714; represented development images: 768; training seed sets: [0, 1, 2]; training scales: 250k, 40k; checkpoint selection differs across the rows: BEST_ON_DEVELOPMENT, FIXED_EPOCH_22. Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. Both pretraining-effect intervals contain zero and the seeds disagree in sign; they establish neither equivalence nor the absence of an effect. The 135M-to-360M step is whole-system capacity sensitivity, not an isolated causal language-model-size effect: trainable capacity moves too, 21,343,808 to 21,540,800 parameters, because the projection width follows the hidden size. E8A's projected interface is a learned common width, not a naturally shared pretrained embedding space. A1 minus A1r is the only clean within-size question-side pretraining contrast; A1 minus A0p also changes the representation space and the interface. An interval containing zero is an absence of a detected effect and establishes neither equivalence nor the absence of an effect. B3 at train_40k has an across-training-seed sd of 0.02795 and must always be shown with its seed spread. HIGH SEED DISPERSION: sd 0.02795 across 3 seeds, range 0.05341. This row must always be shown with its per-seed spread; its mean alone is misleading.",
+   "dissertation_section": [
+    "R6_QUESTION_SIDE_SLM",
+    "R7_ANSWER_SIDE_AND_CAPACITY"
+   ],
+   "footnotes": [
+    "The per-seed column is mandatory: E8B B3 at train_40k has a seed sd of 0.02795 and its mean alone is misleading.",
+    "Every language model is frozen and was never trained or fine-tuned. The only newly trainable component in these paths is one linear projection per configuration.",
+    "E8A's projected interface is a learned common width, not a naturally shared pretrained embedding space.",
+    "Checkpoint selection differs across the rows: E8A selects the best development epoch with patience 10, while E8B and E10 use the frozen fixed-22-epoch rule with no early stopping. A best-on-development accuracy and a fixed-epoch accuracy are not selected the same way, so reading the arms side by side is a system-level juxtaposition, not a matched comparison. The within-family pretrained-minus-random contrasts in Table VE0-TAB-05 are unaffected, because each of them compares two arms selected under the same rule."
+   ],
+   "kind": "table",
+   "mandatory_caveat": "Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. Both pretraining-effect intervals contain zero and the seeds disagree in sign; they establish neither equivalence nor the absence of an effect. The 135M-to-360M step is whole-system capacity sensitivity, not an isolated causal language-model-size effect: trainable capacity moves too, 21,343,808 to 21,540,800 parameters, because the projection width follows the hidden size. E8A's projected interface is a learned common width, not a naturally shared pretrained embedding space. A1 minus A1r is the only clean within-size question-side pretraining contrast; A1 minus A0p also changes the representation space and the interface. An interval containing zero is an absence of a detected effect and establishes neither equivalence nor the absence of an effect. B3 at train_40k has an across-training-seed sd of 0.02795 and must always be shown with its seed spread. HIGH SEED DISPERSION: sd 0.02795 across 3 seeds, range 0.05341. This row must always be shown with its per-seed spread; its mean alone is misleading.",
+   "message": "What does each frozen-SLM configuration reach, on each side of the interface?",
+   "placement": "MAIN_TEXT",
+   "presentation_caption": "Frozen-SLM interface comparison. What does each frozen-SLM configuration reach, on each side of the interface? Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. Both pretraining-effect intervals contain zero and the seeds disagree in sign; they establish neither equivalence nor the absence of an effect. The 135M-to-360M step is whole-system capacity sensitivity, not an isolated causal language-model-size effect: trainable capacity moves too, 21,343,808 to 21,540,800 parameters, because the projection width follows the hidden size. E8A's projected interface is a learned common width, not a naturally shared pretrained embedding space. A1 minus A1r is the only clean within-size question-side pretraining contrast; A1 minus A0p also changes the representation space and the interface. An interval containing zero is an absence of a detected effect and establishes neither equivalence nor the absence of an effect. B3 at train_40k has an across-training-seed sd of 0.02795 and must always be shown with its seed spread. HIGH SEED DISPERSION: sd 0.02795 across 3 seeds, range 0.05341. This row must always be shown with its per-seed spread; its mean alone is misleading.",
+   "presentation_caption_is_not_stronger": "the presentation caption carries the identical mandatory caveat",
+   "quantity": "Quantity: arm, interface side, language model, pretrained or random, training scale, seeds, mean accuracy, sd across training seeds (ddof=1), per-seed values. Precision: 5 decimal places.",
+   "sample_and_seed_context": "Sample and seed context: development questions: 7,714; represented development images: 768; training seed sets: [0, 1, 2]; training scales: 250k, 40k; checkpoint selection differs across the rows: BEST_ON_DEVELOPMENT, FIXED_EPOCH_22.",
+   "supervisor_slide": "NOT_PRESENTED",
+   "uncertainty": "Uncertainty notation: SD only; this table reports no interval, because it reports systems rather than contrasts. The contrasts are in VE0-TAB-05 and Figure VE0-FIG-08",
+   "ve0_specification_id": "VE0-TAB-04",
+   "working_title": "Frozen-SLM interface comparison"
+  },
+  {
+   "artefact_id": "VE1-TAB-05",
+   "bolding_rule": "no bolding. Bolding the question-side row because it is positive would visually assert the very asymmetry the reader should judge from the intervals",
+   "carries_v2_07_limitation": false,
+   "consumed_evidence_ids": [
+    "EV-CON-E10.difference_in_differences",
+    "EV-CON-E10.pretraining_effect.train_250k",
+    "EV-CON-E10.pretraining_effect.train_40k",
+    "EV-CON-E8A.A1_minus_A1r.train_250k",
+    "EV-CON-E8A.A1_minus_A1r.train_40k",
+    "EV-CON-E8B.B3_-_B2.train_250k",
+    "EV-CON-E8B.B3_-_B2.train_40k"
+   ],
+   "context": {
+    "checkpoint_selection_classes": [
+     "BEST_ON_DEVELOPMENT",
+     "FIXED_EPOCH_22"
+    ],
+    "metric_ids": [
+     "g21_pinned_normalised_exact_match"
+    ],
+    "n_questions": [
+     7714
+    ],
+    "n_unique_images": [
+     768
+    ],
+    "seed_sets": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "training_scales": [
+     "train_250k",
+     "train_40k",
+     "train_40k vs train_250k"
+    ]
+   },
+   "dissertation_caption": "VE1-TAB-05. Primary pretraining contrasts and the difference in differences. Is there a reliable pretrained-over-random advantage, and does it grow with scale? Quantity: contrast, interface side, language model size, reference condition, effect, 95% image-clustered interval, excludes zero, per-seed effects, comparison class. Precision: 5 decimal places. Uncertainty notation: interval as [lower, upper]; per-seed effects printed so a reader can see where seeds disagree in sign Sample and seed context: development questions: 7,714; represented development images: 768; training seed sets: [0, 1, 2]; training scales: 250k, 40k, train_40k vs train_250k; checkpoint selection differs across the rows: BEST_ON_DEVELOPMENT, FIXED_EPOCH_22. Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. Both pretraining-effect intervals contain zero and the seeds disagree in sign; they establish neither equivalence nor the absence of an effect. The 135M-to-360M step is whole-system capacity sensitivity, not an isolated causal language-model-size effect: trainable capacity moves too, 21,343,808 to 21,540,800 parameters, because the projection width follows the hidden size. The difference in differences is not directional; its interval contains zero. It gives no reliable evidence that any answer-side pretraining contribution grows with training scale. E8A's projected interface is a learned common width, not a naturally shared pretrained embedding space. A1 minus A1r is the only clean within-size question-side pretraining contrast; A1 minus A0p also changes the representation space and the interface. An interval containing zero is an absence of a detected effect and establishes neither equivalence nor the absence of an effect. B3 at train_40k has an across-training-seed sd of 0.02795 and must always be shown with its seed spread.",
+   "dissertation_section": [
+    "R7_ANSWER_SIDE_AND_CAPACITY"
+   ],
+   "footnotes": [
+    "Every contrast is pretrained minus its architecture-matched random control at the SAME model size.",
+    "Both E10 intervals contain zero and the seeds disagree in sign; they establish NEITHER equivalence NOR the absence of an effect.",
+    "E10 does not reproduce E8B's directional negative 40k result.",
+    "The difference in differences is a SECOND-ORDER interaction between the pretraining effect and training scale, not a pretrained-minus-random effect, and it is not directional.",
+    "Checkpoint selection differs BETWEEN families, E8A selecting the best development epoch while E8B and E10 use the frozen fixed-22 rule, but not WITHIN any row: every contrast here compares two arms selected under the same rule, so each effect is internally matched on that axis and only the cross-family reading is a juxtaposition."
+   ],
+   "kind": "table",
+   "mandatory_caveat": "Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. Both pretraining-effect intervals contain zero and the seeds disagree in sign; they establish neither equivalence nor the absence of an effect. The 135M-to-360M step is whole-system capacity sensitivity, not an isolated causal language-model-size effect: trainable capacity moves too, 21,343,808 to 21,540,800 parameters, because the projection width follows the hidden size. The difference in differences is not directional; its interval contains zero. It gives no reliable evidence that any answer-side pretraining contribution grows with training scale. E8A's projected interface is a learned common width, not a naturally shared pretrained embedding space. A1 minus A1r is the only clean within-size question-side pretraining contrast; A1 minus A0p also changes the representation space and the interface. An interval containing zero is an absence of a detected effect and establishes neither equivalence nor the absence of an effect. B3 at train_40k has an across-training-seed sd of 0.02795 and must always be shown with its seed spread.",
+   "message": "Is there a reliable pretrained-over-random advantage, and does it grow with scale?",
+   "placement": "MAIN_TEXT",
+   "presentation_caption": "Primary pretraining contrasts and the difference in differences. Is there a reliable pretrained-over-random advantage, and does it grow with scale? Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. Both pretraining-effect intervals contain zero and the seeds disagree in sign; they establish neither equivalence nor the absence of an effect. The 135M-to-360M step is whole-system capacity sensitivity, not an isolated causal language-model-size effect: trainable capacity moves too, 21,343,808 to 21,540,800 parameters, because the projection width follows the hidden size. The difference in differences is not directional; its interval contains zero. It gives no reliable evidence that any answer-side pretraining contribution grows with training scale. E8A's projected interface is a learned common width, not a naturally shared pretrained embedding space. A1 minus A1r is the only clean within-size question-side pretraining contrast; A1 minus A0p also changes the representation space and the interface. An interval containing zero is an absence of a detected effect and establishes neither equivalence nor the absence of an effect. B3 at train_40k has an across-training-seed sd of 0.02795 and must always be shown with its seed spread.",
+   "presentation_caption_is_not_stronger": "the presentation caption carries the identical mandatory caveat",
+   "quantity": "Quantity: contrast, interface side, language model size, reference condition, effect, 95% image-clustered interval, excludes zero, per-seed effects, comparison class. Precision: 5 decimal places.",
+   "sample_and_seed_context": "Sample and seed context: development questions: 7,714; represented development images: 768; training seed sets: [0, 1, 2]; training scales: 250k, 40k, train_40k vs train_250k; checkpoint selection differs across the rows: BEST_ON_DEVELOPMENT, FIXED_EPOCH_22.",
+   "supervisor_slide": "NOT_PRESENTED",
+   "uncertainty": "Uncertainty notation: interval as [lower, upper]; per-seed effects printed so a reader can see where seeds disagree in sign",
+   "ve0_specification_id": "VE0-TAB-05",
+   "working_title": "Primary pretraining contrasts and the difference in differences"
+  },
+  {
+   "artefact_id": "VE1-TAB-06",
+   "bolding_rule": "no bolding of the fastest system. The table spans two nodes and three timing classes, and a bold minimum would invite exactly the cross-node reading that is prohibited",
+   "carries_v2_07_limitation": false,
+   "consumed_evidence_ids": [
+    "EV-EFF-E7a.e7a_additive_pipeline_sums",
+    "EV-EFF-E7a.e7a_component_measurements",
+    "EV-EFF-E7b.concat",
+    "EV-EFF-E7b.concat.cached_feature_head_only",
+    "EV-EFF-E7b.concat.cached_image_question_side",
+    "EV-EFF-E7b.e8a_a0p",
+    "EV-EFF-E7b.e8a_a0p.cached_feature_head_only",
+    "EV-EFF-E7b.e8a_a0p.cached_image_question_side",
+    "EV-EFF-E7b.e8a_a1",
+    "EV-EFF-E7b.e8a_a1.cached_feature_head_only",
+    "EV-EFF-E7b.e8a_a1.cached_image_question_side",
+    "EV-EFF-E7b.fusion",
+    "EV-EFF-E7b.fusion.cached_feature_head_only",
+    "EV-EFF-E7b.fusion.cached_image_question_side",
+    "EV-EFF-E7b.question_only",
+    "EV-EFF-E7b.question_only.cached_feature_head_only",
+    "EV-EFF-E7b.reasoner",
+    "EV-EFF-E7b.reasoner.cached_feature_head_only",
+    "EV-EFF-E7b.reasoner.cached_image_question_side",
+    "EV-EFF-E7b.siglip_fusion",
+    "EV-EFF-E7b.siglip_fusion.cached_feature_head_only",
+    "EV-EFF-E7b.siglip_fusion.cached_image_question_side",
+    "EV-EFF-E7b.vocab1000_product",
+    "EV-EFF-E7b.vocab1000_product.cached_feature_head_only",
+    "EV-EFF-E7b.vocab1000_product.cached_image_question_side",
+    "EV-EFF-E9.e8b_B1",
+    "EV-EFF-E9.e8b_B2_R2",
+    "EV-EFF-E9.e8b_B2_R3",
+    "EV-EFF-E9.e8b_B3_R2",
+    "EV-EFF-E9.e8b_B3_R3",
+    "EV-EFF-E9.e9_256m_constrained",
+    "EV-EFF-E9.e9_256m_open",
+    "EV-EFF-E9.e9_500m_constrained",
+    "EV-EFF-E9.e9_500m_open",
+    "EV-EFF-E9.fusion",
+    "EV-EFF-E9.vocab1000_product"
+   ],
+   "context": {
+    "checkpoint_selection_classes": [
+     "NO_TRAINING"
+    ],
+    "metric_ids": [
+     "latency_and_memory_components",
+     "warm_median_serial_latency_ms"
+    ],
+    "n_questions": [],
+    "n_unique_images": [],
+    "seed_sets": [],
+    "training_scales": []
+   },
+   "dissertation_caption": "VE1-TAB-06. Measured efficiency, by node and timing class. What does each system cost per query, and under exactly which measurement conditions? Quantity: system, experiment family, timing class, node, precision, batch size, warm median serial latency (ms), comparable with end-to-end, evidence status. Precision: latency to 4 decimal places as stored. Uncertainty notation: no interval; a warm median. The across-pass spread is stated in the caption Sample and seed context: not applicable. Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. Component measurements only. The additive gpu_encoder_plus_head_ms, full_pipeline_ms and amortised_ms fields and their Pareto fronts are SUPERSEDED for any end-to-end claim by the measured serial values of E7b. timing_kind=ADDITIVE_COMPONENT_SUM_SUPERSEDED; node=otter (E7a session); precision=fp32 inference; batch_size=1; comparable_with_end_to_end=false. timing_kind=COMPONENT; node=otter (E7a session); precision=fp32 inference; batch_size=1; comparable_with_end_to_end=false. Latency efficiency only, measured on one node. No power or energy measurement exists anywhere in this project. E7b (otter155) and E9 (otter159) are separate frontiers and are never merged: the fusion bridge control failed its pre-registered 10 per cent tolerance at -18.69 per cent and no adjustment factor is applied. timing_kind=END_TO_END_SERIAL; node=otter155.eps.surrey.ac.uk; precision=fp32 inference; batch_size=1; comparable_with_end_to_end=true. timing_kind=CACHED_FEATURE_HEAD_ONLY; node=otter155.eps.surrey.ac.uk; precision=fp32 inference; batch_size=1; comparable_with_end_to_end=false. timing_kind=CACHED_IMAGE_QUESTION_SIDE; node=otter155.eps.surrey.ac.uk; precision=fp32 inference; batch_size=1; comparable_with_end_to_end=false. Contextual positioning only, never a leaderboard or fair-protocol superiority claim. Training history, multimodal pretraining, answer support and output format all differ, and SmolVLM-256M's text backbone is the Instruct checkpoint where E8A and E8B use base. No comparison is made against published official GQA scores in either direction. timing_kind=END_TO_END_SERIAL; node=otter159.eps.surrey.ac.uk; precision=fp32 inference; batch_size=1; comparable_with_end_to_end=true.",
+   "dissertation_section": [
+    "R8_COMPUTATIONAL_EFFICIENCY"
+   ],
+   "footnotes": [
+    "COMPUTATIONAL efficiency only. No power or energy measurement exists anywhere in this project.",
+    "E7b (otter155) and E9 (otter159) are separate measurement groups and are never merged: the fusion bridge control failed its pre-registered 10 per cent tolerance at -18.69 per cent and no adjustment factor is applied.",
+    "Only END_TO_END_SERIAL rows support an end-to-end latency claim. E7a's additive sums are superseded and appear here only as a recorded supersession.",
+    "E8B's canonical R1 readout has no serial latency by design; R2 and R3 are never presented as R1's cost. E10's B4 and B4r have no timing evidence of any kind."
+   ],
+   "kind": "table",
+   "mandatory_caveat": "Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. Component measurements only. The additive gpu_encoder_plus_head_ms, full_pipeline_ms and amortised_ms fields and their Pareto fronts are SUPERSEDED for any end-to-end claim by the measured serial values of E7b. timing_kind=ADDITIVE_COMPONENT_SUM_SUPERSEDED; node=otter (E7a session); precision=fp32 inference; batch_size=1; comparable_with_end_to_end=false. timing_kind=COMPONENT; node=otter (E7a session); precision=fp32 inference; batch_size=1; comparable_with_end_to_end=false. Latency efficiency only, measured on one node. No power or energy measurement exists anywhere in this project. E7b (otter155) and E9 (otter159) are separate frontiers and are never merged: the fusion bridge control failed its pre-registered 10 per cent tolerance at -18.69 per cent and no adjustment factor is applied. timing_kind=END_TO_END_SERIAL; node=otter155.eps.surrey.ac.uk; precision=fp32 inference; batch_size=1; comparable_with_end_to_end=true. timing_kind=CACHED_FEATURE_HEAD_ONLY; node=otter155.eps.surrey.ac.uk; precision=fp32 inference; batch_size=1; comparable_with_end_to_end=false. timing_kind=CACHED_IMAGE_QUESTION_SIDE; node=otter155.eps.surrey.ac.uk; precision=fp32 inference; batch_size=1; comparable_with_end_to_end=false. Contextual positioning only, never a leaderboard or fair-protocol superiority claim. Training history, multimodal pretraining, answer support and output format all differ, and SmolVLM-256M's text backbone is the Instruct checkpoint where E8A and E8B use base. No comparison is made against published official GQA scores in either direction. timing_kind=END_TO_END_SERIAL; node=otter159.eps.surrey.ac.uk; precision=fp32 inference; batch_size=1; comparable_with_end_to_end=true.",
+   "message": "What does each system cost per query, and under exactly which measurement conditions?",
+   "placement": "MAIN_TEXT",
+   "presentation_caption": "Measured efficiency, by node and timing class. What does each system cost per query, and under exactly which measurement conditions? Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. Component measurements only. The additive gpu_encoder_plus_head_ms, full_pipeline_ms and amortised_ms fields and their Pareto fronts are SUPERSEDED for any end-to-end claim by the measured serial values of E7b. timing_kind=ADDITIVE_COMPONENT_SUM_SUPERSEDED; node=otter (E7a session); precision=fp32 inference; batch_size=1; comparable_with_end_to_end=false. timing_kind=COMPONENT; node=otter (E7a session); precision=fp32 inference; batch_size=1; comparable_with_end_to_end=false. Latency efficiency only, measured on one node. No power or energy measurement exists anywhere in this project. E7b (otter155) and E9 (otter159) are separate frontiers and are never merged: the fusion bridge control failed its pre-registered 10 per cent tolerance at -18.69 per cent and no adjustment factor is applied. timing_kind=END_TO_END_SERIAL; node=otter155.eps.surrey.ac.uk; precision=fp32 inference; batch_size=1; comparable_with_end_to_end=true. timing_kind=CACHED_FEATURE_HEAD_ONLY; node=otter155.eps.surrey.ac.uk; precision=fp32 inference; batch_size=1; comparable_with_end_to_end=false. timing_kind=CACHED_IMAGE_QUESTION_SIDE; node=otter155.eps.surrey.ac.uk; precision=fp32 inference; batch_size=1; comparable_with_end_to_end=false. Contextual positioning only, never a leaderboard or fair-protocol superiority claim. Training history, multimodal pretraining, answer support and output format all differ, and SmolVLM-256M's text backbone is the Instruct checkpoint where E8A and E8B use base. No comparison is made against published official GQA scores in either direction. timing_kind=END_TO_END_SERIAL; node=otter159.eps.surrey.ac.uk; precision=fp32 inference; batch_size=1; comparable_with_end_to_end=true.",
+   "presentation_caption_is_not_stronger": "the presentation caption carries the identical mandatory caveat",
+   "quantity": "Quantity: system, experiment family, timing class, node, precision, batch size, warm median serial latency (ms), comparable with end-to-end, evidence status. Precision: latency to 4 decimal places as stored.",
+   "sample_and_seed_context": "Sample and seed context: not applicable.",
+   "supervisor_slide": "NOT_PRESENTED",
+   "uncertainty": "Uncertainty notation: no interval; a warm median. The across-pass spread is stated in the caption",
+   "ve0_specification_id": "VE0-TAB-06",
+   "working_title": "Measured efficiency, by node and timing class"
+  },
+  {
+   "artefact_id": "VE1-TAB-07",
+   "bolding_rule": "no bolding",
+   "carries_v2_07_limitation": false,
+   "consumed_evidence_ids": [],
+   "context": {
+    "checkpoint_selection_classes": [],
+    "metric_ids": [],
+    "n_questions": [],
+    "n_unique_images": [],
+    "seed_sets": [],
+    "training_scales": []
+   },
+   "dissertation_caption": "VE1-TAB-07. Claim, evidence and limitation ledger. What exactly does this dissertation claim, on what evidence, and with what boundary? Quantity: claim id, claim as stated, status, evidence ids, mandatory caveat, forbidden stronger version. Precision: NOT_APPLICABLE. Uncertainty notation: NOT_APPLICABLE Sample and seed context: not applicable. Generated from the frozen VE-0 claim ledger. The Abstract, Discussion and Conclusion may not state a stronger version of any row here. NOT_SUPPORTED rows are prohibitions and are kept in the table rather than deleted from it. Every row is a development-set result: the clean test is embargoed and unread and no held-out generalisation is claimed.",
+   "dissertation_section": [
+    "R_LIMITATIONS"
+   ],
+   "footnotes": [
+    "This table is generated from the VE-0 claim ledger. The Abstract, Discussion and Conclusion may not state a stronger version of any row here."
+   ],
+   "kind": "table",
+   "mandatory_caveat": "Generated from the frozen VE-0 claim ledger. The Abstract, Discussion and Conclusion may not state a stronger version of any row here. NOT_SUPPORTED rows are prohibitions and are kept in the table rather than deleted from it. Every row is a development-set result: the clean test is embargoed and unread and no held-out generalisation is claimed.",
+   "message": "What exactly does this dissertation claim, on what evidence, and with what boundary?",
+   "placement": "MAIN_TEXT",
+   "presentation_caption": "Claim, evidence and limitation ledger. What exactly does this dissertation claim, on what evidence, and with what boundary? Generated from the frozen VE-0 claim ledger. The Abstract, Discussion and Conclusion may not state a stronger version of any row here. NOT_SUPPORTED rows are prohibitions and are kept in the table rather than deleted from it. Every row is a development-set result: the clean test is embargoed and unread and no held-out generalisation is claimed.",
+   "presentation_caption_is_not_stronger": "the presentation caption carries the identical mandatory caveat",
+   "quantity": "Quantity: claim id, claim as stated, status, evidence ids, mandatory caveat, forbidden stronger version. Precision: NOT_APPLICABLE.",
+   "sample_and_seed_context": "Sample and seed context: not applicable.",
+   "supervisor_slide": "NOT_PRESENTED",
+   "uncertainty": "Uncertainty notation: NOT_APPLICABLE",
+   "ve0_specification_id": "VE0-TAB-07",
+   "working_title": "Claim, evidence and limitation ledger"
+  },
+  {
+   "artefact_id": "VE1-TAB-A1",
+   "bolding_rule": "no bolding",
+   "carries_v2_07_limitation": false,
+   "consumed_evidence_ids": [
+    "EV-SLC-E8A.A0p.train_250k.semantic-attr.accuracy",
+    "EV-SLC-E8A.A0p.train_250k.semantic-cat.accuracy",
+    "EV-SLC-E8A.A0p.train_250k.semantic-global.accuracy",
+    "EV-SLC-E8A.A0p.train_250k.semantic-obj.accuracy",
+    "EV-SLC-E8A.A0p.train_250k.semantic-rel.accuracy",
+    "EV-SLC-E8A.A0p.train_250k.steps-3.accuracy",
+    "EV-SLC-E8A.A0p.train_250k.steps-4.accuracy",
+    "EV-SLC-E8A.A0p.train_250k.steps-ge5.accuracy",
+    "EV-SLC-E8A.A0p.train_250k.steps-le2.accuracy",
+    "EV-SLC-E8A.A0p.train_250k.structural-choose.accuracy",
+    "EV-SLC-E8A.A0p.train_250k.structural-compare.accuracy",
+    "EV-SLC-E8A.A0p.train_250k.structural-logical.accuracy",
+    "EV-SLC-E8A.A0p.train_250k.structural-query.accuracy",
+    "EV-SLC-E8A.A0p.train_250k.structural-verify.accuracy",
+    "EV-SLC-E8A.A0p.train_40k.semantic-attr.accuracy",
+    "EV-SLC-E8A.A0p.train_40k.semantic-cat.accuracy",
+    "EV-SLC-E8A.A0p.train_40k.semantic-global.accuracy",
+    "EV-SLC-E8A.A0p.train_40k.semantic-obj.accuracy",
+    "EV-SLC-E8A.A0p.train_40k.semantic-rel.accuracy",
+    "EV-SLC-E8A.A0p.train_40k.steps-3.accuracy",
+    "EV-SLC-E8A.A0p.train_40k.steps-4.accuracy",
+    "EV-SLC-E8A.A0p.train_40k.steps-ge5.accuracy",
+    "EV-SLC-E8A.A0p.train_40k.steps-le2.accuracy",
+    "EV-SLC-E8A.A0p.train_40k.structural-choose.accuracy",
+    "EV-SLC-E8A.A0p.train_40k.structural-compare.accuracy",
+    "EV-SLC-E8A.A0p.train_40k.structural-logical.accuracy",
+    "EV-SLC-E8A.A0p.train_40k.structural-query.accuracy",
+    "EV-SLC-E8A.A0p.train_40k.structural-verify.accuracy",
+    "EV-SLC-E8A.A1.train_250k.semantic-attr.accuracy",
+    "EV-SLC-E8A.A1.train_250k.semantic-cat.accuracy",
+    "EV-SLC-E8A.A1.train_250k.semantic-global.accuracy",
+    "EV-SLC-E8A.A1.train_250k.semantic-obj.accuracy",
+    "EV-SLC-E8A.A1.train_250k.semantic-rel.accuracy",
+    "EV-SLC-E8A.A1.train_250k.steps-3.accuracy",
+    "EV-SLC-E8A.A1.train_250k.steps-4.accuracy",
+    "EV-SLC-E8A.A1.train_250k.steps-ge5.accuracy",
+    "EV-SLC-E8A.A1.train_250k.steps-le2.accuracy",
+    "EV-SLC-E8A.A1.train_250k.structural-choose.accuracy",
+    "EV-SLC-E8A.A1.train_250k.structural-compare.accuracy",
+    "EV-SLC-E8A.A1.train_250k.structural-logical.accuracy",
+    "EV-SLC-E8A.A1.train_250k.structural-query.accuracy",
+    "EV-SLC-E8A.A1.train_250k.structural-verify.accuracy",
+    "EV-SLC-E8A.A1.train_40k.semantic-attr.accuracy",
+    "EV-SLC-E8A.A1.train_40k.semantic-cat.accuracy",
+    "EV-SLC-E8A.A1.train_40k.semantic-global.accuracy",
+    "EV-SLC-E8A.A1.train_40k.semantic-obj.accuracy",
+    "EV-SLC-E8A.A1.train_40k.semantic-rel.accuracy",
+    "EV-SLC-E8A.A1.train_40k.steps-3.accuracy",
+    "EV-SLC-E8A.A1.train_40k.steps-4.accuracy",
+    "EV-SLC-E8A.A1.train_40k.steps-ge5.accuracy",
+    "EV-SLC-E8A.A1.train_40k.steps-le2.accuracy",
+    "EV-SLC-E8A.A1.train_40k.structural-choose.accuracy",
+    "EV-SLC-E8A.A1.train_40k.structural-compare.accuracy",
+    "EV-SLC-E8A.A1.train_40k.structural-logical.accuracy",
+    "EV-SLC-E8A.A1.train_40k.structural-query.accuracy",
+    "EV-SLC-E8A.A1.train_40k.structural-verify.accuracy",
+    "EV-SLC-E8A.A1r.train_250k.semantic-attr.accuracy",
+    "EV-SLC-E8A.A1r.train_250k.semantic-cat.accuracy",
+    "EV-SLC-E8A.A1r.train_250k.semantic-global.accuracy",
+    "EV-SLC-E8A.A1r.train_250k.semantic-obj.accuracy",
+    "EV-SLC-E8A.A1r.train_250k.semantic-rel.accuracy",
+    "EV-SLC-E8A.A1r.train_250k.steps-3.accuracy",
+    "EV-SLC-E8A.A1r.train_250k.steps-4.accuracy",
+    "EV-SLC-E8A.A1r.train_250k.steps-ge5.accuracy",
+    "EV-SLC-E8A.A1r.train_250k.steps-le2.accuracy",
+    "EV-SLC-E8A.A1r.train_250k.structural-choose.accuracy",
+    "EV-SLC-E8A.A1r.train_250k.structural-compare.accuracy",
+    "EV-SLC-E8A.A1r.train_250k.structural-logical.accuracy",
+    "EV-SLC-E8A.A1r.train_250k.structural-query.accuracy",
+    "EV-SLC-E8A.A1r.train_250k.structural-verify.accuracy",
+    "EV-SLC-E8A.A1r.train_40k.semantic-attr.accuracy",
+    "EV-SLC-E8A.A1r.train_40k.semantic-cat.accuracy",
+    "EV-SLC-E8A.A1r.train_40k.semantic-global.accuracy",
+    "EV-SLC-E8A.A1r.train_40k.semantic-obj.accuracy",
+    "EV-SLC-E8A.A1r.train_40k.semantic-rel.accuracy",
+    "EV-SLC-E8A.A1r.train_40k.steps-3.accuracy",
+    "EV-SLC-E8A.A1r.train_40k.steps-4.accuracy",
+    "EV-SLC-E8A.A1r.train_40k.steps-ge5.accuracy",
+    "EV-SLC-E8A.A1r.train_40k.steps-le2.accuracy",
+    "EV-SLC-E8A.A1r.train_40k.structural-choose.accuracy",
+    "EV-SLC-E8A.A1r.train_40k.structural-compare.accuracy",
+    "EV-SLC-E8A.A1r.train_40k.structural-logical.accuracy",
+    "EV-SLC-E8A.A1r.train_40k.structural-query.accuracy",
+    "EV-SLC-E8A.A1r.train_40k.structural-verify.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.semantic-attr.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.semantic-cat.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.semantic-global.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.semantic-obj.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.semantic-rel.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.steps-3.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.steps-4.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.steps-ge5.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.steps-le2.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.structural-choose.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.structural-compare.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.structural-logical.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.structural-query.accuracy",
+    "EV-SLC-v2_02.concat.train_40k.structural-verify.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.semantic-attr.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.semantic-cat.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.semantic-global.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.semantic-obj.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.semantic-rel.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.steps-3.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.steps-4.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.steps-ge5.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.steps-le2.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.structural-choose.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.structural-compare.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.structural-logical.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.structural-query.accuracy",
+    "EV-SLC-v2_02.fusion.train_40k.structural-verify.accuracy",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.semantic-attr.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.semantic-attr.seed42",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.semantic-cat.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.semantic-cat.seed42",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.semantic-global.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.semantic-global.seed42",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.semantic-obj.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.semantic-obj.seed42",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.semantic-rel.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.semantic-rel.seed42",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.steps-3.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.steps-3.seed42",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.steps-4.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.steps-4.seed42",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.steps-ge5.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.steps-ge5.seed42",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.steps-le2.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.steps-le2.seed42",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.structural-choose.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.structural-choose.seed42",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.structural-compare.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.structural-compare.seed42",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.structural-logical.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.structural-logical.seed42",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.structural-query.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.structural-query.seed42",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.structural-verify.five_seed",
+    "EV-SLC-v2_05c.fusion_minus_concat.train_40k.structural-verify.seed42",
+    "EV-SLC-v2_06.concat.train_40k.structural-choose.drop_shuffled",
+    "EV-SLC-v2_06.concat.train_40k.structural-choose.drop_zeroed",
+    "EV-SLC-v2_06.concat.train_40k.structural-compare.drop_shuffled",
+    "EV-SLC-v2_06.concat.train_40k.structural-compare.drop_zeroed",
+    "EV-SLC-v2_06.concat.train_40k.structural-logical.drop_shuffled",
+    "EV-SLC-v2_06.concat.train_40k.structural-logical.drop_zeroed",
+    "EV-SLC-v2_06.concat.train_40k.structural-query.drop_shuffled",
+    "EV-SLC-v2_06.concat.train_40k.structural-query.drop_zeroed",
+    "EV-SLC-v2_06.concat.train_40k.structural-verify.drop_shuffled",
+    "EV-SLC-v2_06.concat.train_40k.structural-verify.drop_zeroed",
+    "EV-SLC-v2_06.fusion.train_40k.structural-choose.drop_shuffled",
+    "EV-SLC-v2_06.fusion.train_40k.structural-choose.drop_zeroed",
+    "EV-SLC-v2_06.fusion.train_40k.structural-compare.drop_shuffled",
+    "EV-SLC-v2_06.fusion.train_40k.structural-compare.drop_zeroed",
+    "EV-SLC-v2_06.fusion.train_40k.structural-logical.drop_shuffled",
+    "EV-SLC-v2_06.fusion.train_40k.structural-logical.drop_zeroed",
+    "EV-SLC-v2_06.fusion.train_40k.structural-query.drop_shuffled",
+    "EV-SLC-v2_06.fusion.train_40k.structural-query.drop_zeroed",
+    "EV-SLC-v2_06.fusion.train_40k.structural-verify.drop_shuffled",
+    "EV-SLC-v2_06.fusion.train_40k.structural-verify.drop_zeroed",
+    "EV-SLC-v3_02a.concat.train_40k.steps-3.accuracy",
+    "EV-SLC-v3_02a.concat.train_40k.steps-4.accuracy",
+    "EV-SLC-v3_02a.concat.train_40k.steps-ge4_combined.deficit",
+    "EV-SLC-v3_02a.concat.train_40k.steps-ge5.accuracy",
+    "EV-SLC-v3_02a.concat.train_40k.steps-le2.accuracy",
+    "EV-SLC-v3_02a.direct_linear.train_40k.steps-3.accuracy",
+    "EV-SLC-v3_02a.direct_linear.train_40k.steps-4.accuracy",
+    "EV-SLC-v3_02a.direct_linear.train_40k.steps-ge4_combined.deficit",
+    "EV-SLC-v3_02a.direct_linear.train_40k.steps-ge5.accuracy",
+    "EV-SLC-v3_02a.direct_linear.train_40k.steps-le2.accuracy",
+    "EV-SLC-v3_02a.fusion.train_40k.steps-3.accuracy",
+    "EV-SLC-v3_02a.fusion.train_40k.steps-4.accuracy",
+    "EV-SLC-v3_02a.fusion.train_40k.steps-ge4_combined.deficit",
+    "EV-SLC-v3_02a.fusion.train_40k.steps-ge5.accuracy",
+    "EV-SLC-v3_02a.fusion.train_40k.steps-le2.accuracy",
+    "EV-SLC-v3_02a.meanpatch_concat.train_40k.steps-3.accuracy",
+    "EV-SLC-v3_02a.meanpatch_concat.train_40k.steps-4.accuracy",
+    "EV-SLC-v3_02a.meanpatch_concat.train_40k.steps-ge4_combined.deficit",
+    "EV-SLC-v3_02a.meanpatch_concat.train_40k.steps-ge5.accuracy",
+    "EV-SLC-v3_02a.meanpatch_concat.train_40k.steps-le2.accuracy",
+    "EV-SLC-v3_02a.product_576k.train_40k.steps-3.accuracy",
+    "EV-SLC-v3_02a.product_576k.train_40k.steps-4.accuracy",
+    "EV-SLC-v3_02a.product_576k.train_40k.steps-ge4_combined.deficit",
+    "EV-SLC-v3_02a.product_576k.train_40k.steps-ge5.accuracy",
+    "EV-SLC-v3_02a.product_576k.train_40k.steps-le2.accuracy",
+    "EV-SLC-v3_02a.question_only.train_40k.steps-3.accuracy",
+    "EV-SLC-v3_02a.question_only.train_40k.steps-4.accuracy",
+    "EV-SLC-v3_02a.question_only.train_40k.steps-ge4_combined.deficit",
+    "EV-SLC-v3_02a.question_only.train_40k.steps-ge5.accuracy",
+    "EV-SLC-v3_02a.question_only.train_40k.steps-le2.accuracy",
+    "EV-SLC-v3_02a.reasoner.train_40k.steps-3.accuracy",
+    "EV-SLC-v3_02a.reasoner.train_40k.steps-4.accuracy",
+    "EV-SLC-v3_02a.reasoner.train_40k.steps-ge4_combined.deficit",
+    "EV-SLC-v3_02a.reasoner.train_40k.steps-ge5.accuracy",
+    "EV-SLC-v3_02a.reasoner.train_40k.steps-le2.accuracy"
+   ],
+   "context": {
+    "checkpoint_selection_classes": [
+     "BEST_ON_DEVELOPMENT"
+    ],
+    "metric_ids": [
+     "g21_pinned_normalised_exact_match",
+     "v2_closed_vocab_top1_index_match"
+    ],
+    "n_questions": [
+     163,
+     302,
+     439,
+     870,
+     1042,
+     1114,
+     1170,
+     1236,
+     1984,
+     2030,
+     2400,
+     2964,
+     2978,
+     3104,
+     3330
+    ],
+    "n_unique_images": [
+     133,
+     219,
+     226,
+     396,
+     465,
+     531,
+     547,
+     561,
+     570,
+     615,
+     658,
+     674,
+     687,
+     691
+    ],
+    "seed_sets": [
+     [
+      0,
+      1,
+      2
+     ],
+     [
+      0,
+      1,
+      2,
+      3,
+      42
+     ],
+     [
+      42
+     ]
+    ],
+    "training_scales": [
+     "train_250k",
+     "train_40k"
+    ]
+   },
+   "dissertation_caption": "VE1-TAB-A1. Full slice statistics. What is every per-type, per-structure and per-step-bucket value, with its counts? Quantity: slice id, family, system, scale, slice kind, slice, quantity, point estimate, 95% image-clustered interval, n questions, n images, counts provenance. Precision: 5 decimal places. Uncertainty notation: interval as [lower, upper]; the n questions and n images columns are mandatory and are never hidden Sample and seed context: development questions: 163, 302, 439, 870, 1,042, 1,114, 1,170, 1,236, 1,984, 2,030, 2,400, 2,964, 2,978, 3,104, 3,330; represented development images: 133, 219, 226, 396, 465, 531, 547, 561, 570, 615, 658, 674, 687, 691; training seed sets: [0, 1, 2]; [0, 1, 2, 3, 42]; [42]; training scales: 250k, 40k. Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. E8A's projected interface is a learned common width, not a naturally shared pretrained embedding space. A1 minus A1r is the only clean within-size question-side pretraining contrast; A1 minus A0p also changes the representation space and the interface. Slices are unequal and dependent; every interval is clustered on the slice's own represented development images, never on rows. A drop under a wrong or removed image demonstrates reliance on the image. It is NOT proof of robust visual reasoning, of grounding or of compositional understanding. The question-only drop is exactly zero by construction and is a control, not a result. A system-level comparison. Input granularity, architecture and parameter count change together, so token-level access is not isolated as the cause.",
+   "dissertation_section": [
+    "R_APPENDIX_SLICES"
+   ],
+   "footnotes": [
+    "Slices are unequal and dependent; clustering is on each slice's own represented development images.",
+    "Intervals are uncorrected for multiplicity.",
+    "Two metrics appear; the family column identifies which, and no value is compared across metrics."
+   ],
+   "kind": "table",
+   "mandatory_caveat": "Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. E8A's projected interface is a learned common width, not a naturally shared pretrained embedding space. A1 minus A1r is the only clean within-size question-side pretraining contrast; A1 minus A0p also changes the representation space and the interface. Slices are unequal and dependent; every interval is clustered on the slice's own represented development images, never on rows. A drop under a wrong or removed image demonstrates reliance on the image. It is NOT proof of robust visual reasoning, of grounding or of compositional understanding. The question-only drop is exactly zero by construction and is a control, not a result. A system-level comparison. Input granularity, architecture and parameter count change together, so token-level access is not isolated as the cause.",
+   "message": "What is every per-type, per-structure and per-step-bucket value, with its counts?",
+   "placement": "APPENDIX",
+   "presentation_caption": "Full slice statistics. What is every per-type, per-structure and per-step-bucket value, with its counts? Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. E8A's projected interface is a learned common width, not a naturally shared pretrained embedding space. A1 minus A1r is the only clean within-size question-side pretraining contrast; A1 minus A0p also changes the representation space and the interface. Slices are unequal and dependent; every interval is clustered on the slice's own represented development images, never on rows. A drop under a wrong or removed image demonstrates reliance on the image. It is NOT proof of robust visual reasoning, of grounding or of compositional understanding. The question-only drop is exactly zero by construction and is a control, not a result. A system-level comparison. Input granularity, architecture and parameter count change together, so token-level access is not isolated as the cause.",
+   "presentation_caption_is_not_stronger": "the presentation caption carries the identical mandatory caveat",
+   "quantity": "Quantity: slice id, family, system, scale, slice kind, slice, quantity, point estimate, 95% image-clustered interval, n questions, n images, counts provenance. Precision: 5 decimal places.",
+   "sample_and_seed_context": "Sample and seed context: development questions: 163, 302, 439, 870, 1,042, 1,114, 1,170, 1,236, 1,984, 2,030, 2,400, 2,964, 2,978, 3,104, 3,330; represented development images: 133, 219, 226, 396, 465, 531, 547, 561, 570, 615, 658, 674, 687, 691; training seed sets: [0, 1, 2]; [0, 1, 2, 3, 42]; [42]; training scales: 250k, 40k.",
+   "supervisor_slide": "NOT_PRESENTED",
+   "uncertainty": "Uncertainty notation: interval as [lower, upper]; the n questions and n images columns are mandatory and are never hidden",
+   "ve0_specification_id": "VE0-TAB-A1",
+   "working_title": "Full slice statistics"
+  },
+  {
+   "artefact_id": "VE1-TAB-A2",
+   "bolding_rule": "no bolding",
+   "carries_v2_07_limitation": true,
+   "consumed_evidence_ids": [
+    "EV-SEED-E10.B4.train_250k",
+    "EV-SEED-E10.B4.train_40k",
+    "EV-SEED-E10.B4r.train_250k",
+    "EV-SEED-E10.B4r.train_40k",
+    "EV-SEED-E2.concat.train_250k",
+    "EV-SEED-E2.concat.train_40k",
+    "EV-SEED-E2.fusion.train_250k",
+    "EV-SEED-E2.fusion.train_40k",
+    "EV-SEED-E2.product.train_250k",
+    "EV-SEED-E2.product.train_40k",
+    "EV-SEED-E2.question_only.train_250k",
+    "EV-SEED-E2.question_only.train_40k",
+    "EV-SEED-E3.concat.train_250k",
+    "EV-SEED-E3.concat.train_40k",
+    "EV-SEED-E3.fusion.train_250k",
+    "EV-SEED-E3.fusion.train_40k",
+    "EV-SEED-E3.product.train_250k",
+    "EV-SEED-E3.product.train_40k",
+    "EV-SEED-E3.question_only.train_250k",
+    "EV-SEED-E3.question_only.train_40k",
+    "EV-SEED-E8A.A0p.train_250k",
+    "EV-SEED-E8A.A0p.train_40k",
+    "EV-SEED-E8A.A1.train_250k",
+    "EV-SEED-E8A.A1.train_40k",
+    "EV-SEED-E8A.A1r.train_250k",
+    "EV-SEED-E8A.A1r.train_40k",
+    "EV-SEED-E8B.B1.train_250k",
+    "EV-SEED-E8B.B1.train_40k",
+    "EV-SEED-E8B.B2.train_250k",
+    "EV-SEED-E8B.B2.train_40k",
+    "EV-SEED-E8B.B3.train_250k",
+    "EV-SEED-E8B.B3.train_40k",
+    "EV-SEED-v2_02.concat.train_40k",
+    "EV-SEED-v2_02.fusion.train_40k",
+    "EV-SEED-v2_02.image_only.train_40k",
+    "EV-SEED-v2_02.question_only.train_40k",
+    "EV-SEED-v2_03.concat_wide.train_40k",
+    "EV-SEED-v2_03.fusion_narrow.train_40k",
+    "EV-SEED-v2_04.difference_576k.train_40k",
+    "EV-SEED-v2_04.difference_natural.train_40k",
+    "EV-SEED-v2_04.product_576k.train_40k",
+    "EV-SEED-v2_04.product_natural.train_40k",
+    "EV-SEED-v2_06.concat.shuffled.train_40k",
+    "EV-SEED-v2_06.concat.zeroed.train_40k",
+    "EV-SEED-v2_06.fusion.shuffled.train_40k",
+    "EV-SEED-v2_06.fusion.zeroed.train_40k",
+    "EV-SEED-v2_06.image_only.shuffled.train_40k",
+    "EV-SEED-v2_06.image_only.zeroed.train_40k",
+    "EV-SEED-v2_06.product_576k.shuffled.train_40k",
+    "EV-SEED-v2_06.product_576k.zeroed.train_40k",
+    "EV-SEED-v2_06.question_only.shuffled.train_40k",
+    "EV-SEED-v2_06.question_only.zeroed.train_40k",
+    "EV-SEED-v2_07.concat.train_100k",
+    "EV-SEED-v2_07.concat.train_250k",
+    "EV-SEED-v2_07.concat.train_40k",
+    "EV-SEED-v2_07.fusion.train_100k",
+    "EV-SEED-v2_07.fusion.train_250k",
+    "EV-SEED-v2_07.fusion.train_40k",
+    "EV-SEED-v2_07.product_576k.train_100k",
+    "EV-SEED-v2_07.product_576k.train_250k",
+    "EV-SEED-v2_07.product_576k.train_40k",
+    "EV-SEED-v2_07.question_only.train_100k",
+    "EV-SEED-v2_07.question_only.train_250k",
+    "EV-SEED-v2_07.question_only.train_40k",
+    "EV-SEED-v3_03.reasoner.train_100k",
+    "EV-SEED-v3_03.reasoner.train_250k"
+   ],
+   "context": {
+    "checkpoint_selection_classes": [
+     "BEST_ON_DEVELOPMENT",
+     "FIXED_EPOCH_22"
+    ],
+    "metric_ids": [
+     "g21_pinned_normalised_exact_match",
+     "v2_closed_vocab_top1_index_match"
+    ],
+    "n_questions": [
+     7714,
+     9823
+    ],
+    "n_unique_images": [
+     768,
+     776
+    ],
+    "seed_sets": [
+     [
+      0,
+      1,
+      2
+     ],
+     [
+      0,
+      1,
+      2,
+      3,
+      42
+     ]
+    ],
+    "training_scales": [
+     "train_100k",
+     "train_250k",
+     "train_40k"
+    ]
+   },
+   "dissertation_caption": "VE1-TAB-A2. Full training-seed variability table. What is the per-seed value behind every reported mean? Quantity: row id, family, system, scale, seed set, per-seed accuracies, mean, sd across training seeds (ddof=1), range, high dispersion flag. Precision: 5 decimal places. Uncertainty notation: SD only. This table contains no confidence interval and no column may be headed CI Sample and seed context: development questions: 7,714, 9,823; represented development images: 768, 776; training seed sets: [0, 1, 2]; [0, 1, 2, 3, 42]; training scales: 100k, 250k, 40k; checkpoint selection differs across the rows: BEST_ON_DEVELOPMENT, FIXED_EPOCH_22. Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. Both pretraining-effect intervals contain zero and the seeds disagree in sign; they establish neither equivalence nor the absence of an effect. The 135M-to-360M step is whole-system capacity sensitivity, not an isolated causal language-model-size effect: trainable capacity moves too, 21,343,808 to 21,540,800 parameters, because the projection width follows the hidden size. Representation quality is not isolated: encoder, embedding width (512 against 768) and head input width all move together. At train_250k the direction rests on stored per-seed means with no clustered interval. Top-100 and top-1000 results are never paired: different development rows (7,714 against 9,823), a different class count and different training rows. E8A's projected interface is a learned common width, not a naturally shared pretrained embedding space. A1 minus A1r is the only clean within-size question-side pretraining contrast; A1 minus A0p also changes the representation space and the interface. An interval containing zero is an absence of a detected effect and establishes neither equivalence nor the absence of an effect. B3 at train_40k has an across-training-seed sd of 0.02795 and must always be shown with its seed spread. HIGH SEED DISPERSION: sd 0.02795 across 3 seeds, range 0.05341. This row must always be shown with its per-seed spread; its mean alone is misleading. A drop under a wrong or removed image demonstrates reliance on the image. It is NOT proof of robust visual reasoning, of grounding or of compositional understanding. The question-only drop is exactly zero by construction and is a control, not a result. HIGH SEED DISPERSION: sd 0.01012 across 5 seeds, range 0.02593. v2_07 ACCEPTED DOCUMENTED LIMITATION. No image-clustered evaluation interval is available for this family: row-level reconstruction was attempted and stopped by a point-estimate reproduction mismatch, and one of forty cells differs from reconstruction by one numerically tied row (v2_07::question_only::train_250k::seed2::normal, stored 0.49767 against recomputed 0.49754, a single float32 argmax tie on row index 6213 of 7,714). Report per-seed means and the across-training-seed sample sd only. No post-hoc partial-family reconstruction is authorised. A system-level comparison. Input granularity, architecture and parameter count change together, so token-level access is not isolated as the cause.",
+   "dissertation_section": [
+    "R_APPENDIX_STATISTICS"
+   ],
+   "footnotes": [
+    "The standard deviation here is across independent TRAINING seeds (ddof=1). It is not a confidence interval and not evaluation-sampling uncertainty.",
+    "Seed sets are never pooled across families.",
+    "Checkpoint selection differs across families: V2, V3, E2, E3 and E8A select the best development epoch, E8B and E10 use the frozen fixed-22 rule with no early stopping. Dispersion under a best-of rule and dispersion under a fixed-epoch rule are not the same quantity and are not compared across families here."
+   ],
+   "kind": "table",
+   "mandatory_caveat": "Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. Both pretraining-effect intervals contain zero and the seeds disagree in sign; they establish neither equivalence nor the absence of an effect. The 135M-to-360M step is whole-system capacity sensitivity, not an isolated causal language-model-size effect: trainable capacity moves too, 21,343,808 to 21,540,800 parameters, because the projection width follows the hidden size. Representation quality is not isolated: encoder, embedding width (512 against 768) and head input width all move together. At train_250k the direction rests on stored per-seed means with no clustered interval. Top-100 and top-1000 results are never paired: different development rows (7,714 against 9,823), a different class count and different training rows. E8A's projected interface is a learned common width, not a naturally shared pretrained embedding space. A1 minus A1r is the only clean within-size question-side pretraining contrast; A1 minus A0p also changes the representation space and the interface. An interval containing zero is an absence of a detected effect and establishes neither equivalence nor the absence of an effect. B3 at train_40k has an across-training-seed sd of 0.02795 and must always be shown with its seed spread. HIGH SEED DISPERSION: sd 0.02795 across 3 seeds, range 0.05341. This row must always be shown with its per-seed spread; its mean alone is misleading. A drop under a wrong or removed image demonstrates reliance on the image. It is NOT proof of robust visual reasoning, of grounding or of compositional understanding. The question-only drop is exactly zero by construction and is a control, not a result. HIGH SEED DISPERSION: sd 0.01012 across 5 seeds, range 0.02593. v2_07 ACCEPTED DOCUMENTED LIMITATION. No image-clustered evaluation interval is available for this family: row-level reconstruction was attempted and stopped by a point-estimate reproduction mismatch, and one of forty cells differs from reconstruction by one numerically tied row (v2_07::question_only::train_250k::seed2::normal, stored 0.49767 against recomputed 0.49754, a single float32 argmax tie on row index 6213 of 7,714). Report per-seed means and the across-training-seed sample sd only. No post-hoc partial-family reconstruction is authorised. A system-level comparison. Input granularity, architecture and parameter count change together, so token-level access is not isolated as the cause.",
+   "message": "What is the per-seed value behind every reported mean?",
+   "placement": "APPENDIX",
+   "presentation_caption": "Full training-seed variability table. What is the per-seed value behind every reported mean? Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. Both pretraining-effect intervals contain zero and the seeds disagree in sign; they establish neither equivalence nor the absence of an effect. The 135M-to-360M step is whole-system capacity sensitivity, not an isolated causal language-model-size effect: trainable capacity moves too, 21,343,808 to 21,540,800 parameters, because the projection width follows the hidden size. Representation quality is not isolated: encoder, embedding width (512 against 768) and head input width all move together. At train_250k the direction rests on stored per-seed means with no clustered interval. Top-100 and top-1000 results are never paired: different development rows (7,714 against 9,823), a different class count and different training rows. E8A's projected interface is a learned common width, not a naturally shared pretrained embedding space. A1 minus A1r is the only clean within-size question-side pretraining contrast; A1 minus A0p also changes the representation space and the interface. An interval containing zero is an absence of a detected effect and establishes neither equivalence nor the absence of an effect. B3 at train_40k has an across-training-seed sd of 0.02795 and must always be shown with its seed spread. HIGH SEED DISPERSION: sd 0.02795 across 3 seeds, range 0.05341. This row must always be shown with its per-seed spread; its mean alone is misleading. A drop under a wrong or removed image demonstrates reliance on the image. It is NOT proof of robust visual reasoning, of grounding or of compositional understanding. The question-only drop is exactly zero by construction and is a control, not a result. HIGH SEED DISPERSION: sd 0.01012 across 5 seeds, range 0.02593. v2_07 ACCEPTED DOCUMENTED LIMITATION. No image-clustered evaluation interval is available for this family: row-level reconstruction was attempted and stopped by a point-estimate reproduction mismatch, and one of forty cells differs from reconstruction by one numerically tied row (v2_07::question_only::train_250k::seed2::normal, stored 0.49767 against recomputed 0.49754, a single float32 argmax tie on row index 6213 of 7,714). Report per-seed means and the across-training-seed sample sd only. No post-hoc partial-family reconstruction is authorised. A system-level comparison. Input granularity, architecture and parameter count change together, so token-level access is not isolated as the cause.",
+   "presentation_caption_is_not_stronger": "the presentation caption carries the identical mandatory caveat",
+   "quantity": "Quantity: row id, family, system, scale, seed set, per-seed accuracies, mean, sd across training seeds (ddof=1), range, high dispersion flag. Precision: 5 decimal places.",
+   "sample_and_seed_context": "Sample and seed context: development questions: 7,714, 9,823; represented development images: 768, 776; training seed sets: [0, 1, 2]; [0, 1, 2, 3, 42]; training scales: 100k, 250k, 40k; checkpoint selection differs across the rows: BEST_ON_DEVELOPMENT, FIXED_EPOCH_22.",
+   "supervisor_slide": "NOT_PRESENTED",
+   "uncertainty": "Uncertainty notation: SD only. This table contains no confidence interval and no column may be headed CI",
+   "ve0_specification_id": "VE0-TAB-A2",
+   "working_title": "Full training-seed variability table"
+  },
+  {
+   "artefact_id": "VE1-TAB-A3",
+   "bolding_rule": "no bolding",
+   "carries_v2_07_limitation": true,
+   "consumed_evidence_ids": [
+    "EV-ARM-e2.concat.train_250k",
+    "EV-ARM-e2.concat.train_40k",
+    "EV-ARM-e2.fusion.train_250k",
+    "EV-ARM-e2.fusion.train_40k",
+    "EV-ARM-e2.product.train_250k",
+    "EV-ARM-e2.product.train_40k",
+    "EV-ARM-e2.question_only.train_250k",
+    "EV-ARM-e2.question_only.train_40k",
+    "EV-SEED-E2.concat.train_250k",
+    "EV-SEED-E2.concat.train_40k",
+    "EV-SEED-E2.fusion.train_250k",
+    "EV-SEED-E2.fusion.train_40k",
+    "EV-SEED-E2.product.train_250k",
+    "EV-SEED-E2.product.train_40k",
+    "EV-SEED-E2.question_only.train_250k",
+    "EV-SEED-E2.question_only.train_40k",
+    "EV-SEED-v2_07.concat.train_100k",
+    "EV-SEED-v2_07.concat.train_250k",
+    "EV-SEED-v2_07.concat.train_40k",
+    "EV-SEED-v2_07.fusion.train_100k",
+    "EV-SEED-v2_07.fusion.train_250k",
+    "EV-SEED-v2_07.fusion.train_40k",
+    "EV-SEED-v2_07.product_576k.train_100k",
+    "EV-SEED-v2_07.product_576k.train_250k",
+    "EV-SEED-v2_07.product_576k.train_40k",
+    "EV-SEED-v2_07.question_only.train_100k",
+    "EV-SEED-v2_07.question_only.train_250k",
+    "EV-SEED-v2_07.question_only.train_40k"
+   ],
+   "context": {
+    "checkpoint_selection_classes": [
+     "BEST_ON_DEVELOPMENT"
+    ],
+    "metric_ids": [
+     "v2_closed_vocab_top1_index_match"
+    ],
+    "n_questions": [
+     7714
+    ],
+    "n_unique_images": [
+     768
+    ],
+    "seed_sets": [
+     [
+      0,
+      1,
+      2,
+      3,
+      42
+     ]
+    ],
+    "training_scales": [
+     "train_100k",
+     "train_250k",
+     "train_40k"
+    ]
+   },
+   "dissertation_caption": "VE1-TAB-A3. SigLIP against CLIP: full arm accuracies at both scales. What is the encoder-swap direction at 250k, where no clustered contrast exists? Quantity: encoder, system, scale, seeds, mean accuracy, sd across training seeds (ddof=1), 95% image-clustered interval, interval available. Precision: 5 decimal places. Uncertainty notation: interval where it exists; the words 'not available' where it does not Sample and seed context: development questions: 7,714; represented development images: 768; training seed sets: [0, 1, 2, 3, 42]; training scales: 100k, 250k, 40k. Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. Representation quality is not isolated: encoder, embedding width (512 against 768) and head input width all move together. The training streams are not paired and the seed label does not pair two runs. At train_250k no clustered contrast exists, because the CLIP partner is the stopped v2_07 family. At train_250k the direction rests on stored per-seed means with no clustered interval. v2_07 ACCEPTED DOCUMENTED LIMITATION. No image-clustered evaluation interval is available for this family: row-level reconstruction was attempted and stopped by a point-estimate reproduction mismatch, and one of forty cells differs from reconstruction by one numerically tied row (v2_07::question_only::train_250k::seed2::normal, stored 0.49767 against recomputed 0.49754, a single float32 argmax tie on row index 6213 of 7,714). Report per-seed means and the across-training-seed sample sd only. No post-hoc partial-family reconstruction is authorised.",
+   "dissertation_section": [
+    "R_APPENDIX_REPRESENTATION"
+   ],
+   "footnotes": [
+    "At train_250k no SigLIP-minus-CLIP clustered contrast can be formed, because the CLIP partner is the stopped v2_07 family. The 250k direction rests on stored per-seed means alone.",
+    "Encoder, embedding width (512 against 768) and head input width move together; representation quality is not isolated and is not shown to be the sole or main bottleneck."
+   ],
+   "kind": "table",
+   "mandatory_caveat": "Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. Representation quality is not isolated: encoder, embedding width (512 against 768) and head input width all move together. The training streams are not paired and the seed label does not pair two runs. At train_250k no clustered contrast exists, because the CLIP partner is the stopped v2_07 family. At train_250k the direction rests on stored per-seed means with no clustered interval. v2_07 ACCEPTED DOCUMENTED LIMITATION. No image-clustered evaluation interval is available for this family: row-level reconstruction was attempted and stopped by a point-estimate reproduction mismatch, and one of forty cells differs from reconstruction by one numerically tied row (v2_07::question_only::train_250k::seed2::normal, stored 0.49767 against recomputed 0.49754, a single float32 argmax tie on row index 6213 of 7,714). Report per-seed means and the across-training-seed sample sd only. No post-hoc partial-family reconstruction is authorised.",
+   "message": "What is the encoder-swap direction at 250k, where no clustered contrast exists?",
+   "placement": "APPENDIX",
+   "presentation_caption": "SigLIP against CLIP: full arm accuracies at both scales. What is the encoder-swap direction at 250k, where no clustered contrast exists? Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. Representation quality is not isolated: encoder, embedding width (512 against 768) and head input width all move together. The training streams are not paired and the seed label does not pair two runs. At train_250k no clustered contrast exists, because the CLIP partner is the stopped v2_07 family. At train_250k the direction rests on stored per-seed means with no clustered interval. v2_07 ACCEPTED DOCUMENTED LIMITATION. No image-clustered evaluation interval is available for this family: row-level reconstruction was attempted and stopped by a point-estimate reproduction mismatch, and one of forty cells differs from reconstruction by one numerically tied row (v2_07::question_only::train_250k::seed2::normal, stored 0.49767 against recomputed 0.49754, a single float32 argmax tie on row index 6213 of 7,714). Report per-seed means and the across-training-seed sample sd only. No post-hoc partial-family reconstruction is authorised.",
+   "presentation_caption_is_not_stronger": "the presentation caption carries the identical mandatory caveat",
+   "quantity": "Quantity: encoder, system, scale, seeds, mean accuracy, sd across training seeds (ddof=1), 95% image-clustered interval, interval available. Precision: 5 decimal places.",
+   "sample_and_seed_context": "Sample and seed context: development questions: 7,714; represented development images: 768; training seed sets: [0, 1, 2, 3, 42]; training scales: 100k, 250k, 40k.",
+   "supervisor_slide": "NOT_PRESENTED",
+   "uncertainty": "Uncertainty notation: interval where it exists; the words 'not available' where it does not",
+   "ve0_specification_id": "VE0-TAB-A3",
+   "working_title": "SigLIP against CLIP: full arm accuracies at both scales"
+  },
+  {
+   "artefact_id": "VE1-TAB-A4",
+   "bolding_rule": "no bolding",
+   "carries_v2_07_limitation": false,
+   "consumed_evidence_ids": [
+    "EV-CON-E10.difference_in_differences",
+    "EV-CON-E10.pretraining_effect.train_250k",
+    "EV-CON-E10.pretraining_effect.train_40k",
+    "EV-CON-E10.scale_effect_B4",
+    "EV-CON-E10.scale_effect_B4r",
+    "EV-CON-E8A.A0p_minus_A1r.train_250k",
+    "EV-CON-E8A.A0p_minus_A1r.train_40k",
+    "EV-CON-E8A.A1_minus_A0p.train_250k",
+    "EV-CON-E8A.A1_minus_A0p.train_40k",
+    "EV-CON-E8A.A1_minus_A1r.train_250k",
+    "EV-CON-E8A.A1_minus_A1r.train_40k",
+    "EV-CON-E8B.B2_-_B1.train_250k",
+    "EV-CON-E8B.B2_-_B1.train_40k",
+    "EV-CON-E8B.B3_-_B1.train_250k",
+    "EV-CON-E8B.B3_-_B1.train_40k",
+    "EV-CON-E8B.B3_-_B2.train_250k",
+    "EV-CON-E8B.B3_-_B2.train_40k",
+    "EV-CON-E8B.image_reliance.B1.train_250k",
+    "EV-CON-E8B.image_reliance.B1.train_40k",
+    "EV-CON-E8B.image_reliance.B2.train_250k",
+    "EV-CON-E8B.image_reliance.B2.train_40k",
+    "EV-CON-E8B.image_reliance.B3.train_250k",
+    "EV-CON-E8B.image_reliance.B3.train_40k",
+    "EV-CON-E8B.scale_effect_B1",
+    "EV-CON-E8B.scale_effect_B2",
+    "EV-CON-E8B.scale_effect_B3",
+    "EV-CON-e2.concat_minus_question_only.train_250k",
+    "EV-CON-e2.concat_minus_question_only.train_40k",
+    "EV-CON-e2.fusion_minus_concat.train_250k",
+    "EV-CON-e2.fusion_minus_concat.train_40k",
+    "EV-CON-e2.product_minus_concat.train_250k",
+    "EV-CON-e2.product_minus_concat.train_40k",
+    "EV-CON-e2.siglip_minus_clip_concat.train_40k",
+    "EV-CON-e2.siglip_minus_clip_fusion.train_40k",
+    "EV-CON-e2.siglip_minus_clip_product.train_40k",
+    "EV-CON-e2.siglip_minus_clip_question_only.train_40k",
+    "EV-CON-e3.concat_minus_question_only.train_250k",
+    "EV-CON-e3.concat_minus_question_only.train_40k",
+    "EV-CON-e3.fusion_minus_concat.train_250k",
+    "EV-CON-e3.fusion_minus_concat.train_40k",
+    "EV-CON-e3.product_minus_concat.train_250k",
+    "EV-CON-e3.product_minus_concat.train_40k",
+    "EV-CON-v2_02.concat_minus_question_only.train_40k",
+    "EV-CON-v2_02.fusion_minus_concat.train_40k",
+    "EV-CON-v2_03.concat_wide_minus_concat.train_40k",
+    "EV-CON-v2_03.fusion_minus_concat_wide.train_40k",
+    "EV-CON-v2_03.fusion_minus_fusion_narrow.train_40k",
+    "EV-CON-v2_03.fusion_narrow_minus_concat.train_40k",
+    "EV-CON-v2_04.difference_576k_minus_concat.train_40k",
+    "EV-CON-v2_04.difference_natural_minus_concat.train_40k",
+    "EV-CON-v2_04.fusion_minus_difference_natural.train_40k",
+    "EV-CON-v2_04.fusion_minus_product_natural.train_40k",
+    "EV-CON-v2_04.fusion_narrow_minus_difference_576k.train_40k",
+    "EV-CON-v2_04.fusion_narrow_minus_product_576k.train_40k",
+    "EV-CON-v2_04.product_576k_minus_concat.train_40k",
+    "EV-CON-v2_04.product_576k_minus_difference_576k.train_40k",
+    "EV-CON-v2_04.product_natural_minus_concat.train_40k",
+    "EV-CON-v2_06.concat.drop_shuffled.train_40k",
+    "EV-CON-v2_06.concat.drop_zeroed.train_40k",
+    "EV-CON-v2_06.fusion.drop_shuffled.train_40k",
+    "EV-CON-v2_06.fusion.drop_zeroed.train_40k",
+    "EV-CON-v2_06.image_only.drop_shuffled.train_40k",
+    "EV-CON-v2_06.image_only.drop_zeroed.train_40k",
+    "EV-CON-v2_06.product_576k.drop_shuffled.train_40k",
+    "EV-CON-v2_06.product_576k.drop_zeroed.train_40k",
+    "EV-CON-v2_06.question_only.drop_shuffled.train_40k",
+    "EV-CON-v2_06.question_only.drop_zeroed.train_40k",
+    "EV-CON-v3_02a.reasoner_minus_fusion_deficit.train_40k",
+    "EV-CON-v3_03.reasoner_minus_fusion_deficit.train_100k",
+    "EV-CON-v3_03.reasoner_minus_fusion_deficit.train_250k"
+   ],
+   "context": {
+    "checkpoint_selection_classes": [
+     "BEST_ON_DEVELOPMENT",
+     "FIXED_EPOCH_22"
+    ],
+    "metric_ids": [
+     "g21_pinned_normalised_exact_match",
+     "v2_closed_vocab_top1_index_match"
+    ],
+    "n_questions": [
+     7714,
+     9823
+    ],
+    "n_unique_images": [
+     768,
+     776
+    ],
+    "seed_sets": [
+     [
+      0,
+      1,
+      2
+     ],
+     [
+      0,
+      1,
+      2,
+      3,
+      42
+     ]
+    ],
+    "training_scales": [
+     "train_100k",
+     "train_250k",
+     "train_40k",
+     "train_40k vs train_250k"
+    ]
+   },
+   "dissertation_caption": "VE1-TAB-A4. Complete contrast registry. What is every contrast this project computed, including the ones whose intervals contain zero? Quantity: contrast id, family, analysis role, comparison class, effect, 95% image-clustered interval, excludes zero, n questions, n images, training seeds. Precision: 5 decimal places. Uncertainty notation: interval as [lower, upper] Sample and seed context: development questions: 7,714, 9,823; represented development images: 768, 776; training seed sets: [0, 1, 2]; [0, 1, 2, 3, 42]; training scales: 100k, 250k, 40k, train_40k vs train_250k; checkpoint selection differs across the rows: BEST_ON_DEVELOPMENT, FIXED_EPOCH_22. Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. Both pretraining-effect intervals contain zero and the seeds disagree in sign; they establish neither equivalence nor the absence of an effect. The 135M-to-360M step is whole-system capacity sensitivity, not an isolated causal language-model-size effect: trainable capacity moves too, 21,343,808 to 21,540,800 parameters, because the projection width follows the hidden size. The difference in differences is not directional; its interval contains zero. It gives no reliable evidence that any answer-side pretraining contribution grows with training scale. E8A's projected interface is a learned common width, not a naturally shared pretrained embedding space. A1 minus A1r is the only clean within-size question-side pretraining contrast; A1 minus A0p also changes the representation space and the interface. Not a pure causal semantics or alignment effect: the two sides differ in representation space, in interface, and in whether the text representation shares a pretrained space with the image representation. An interval containing zero is an absence of a detected effect and establishes neither equivalence nor the absence of an effect. B3 at train_40k has an across-training-seed sd of 0.02795 and must always be shown with its seed spread. Representation quality is not isolated: encoder, embedding width (512 against 768) and head input width all move together. The training streams are not paired and the seed label does not pair two runs. At train_250k no clustered contrast exists, because the CLIP partner is the stopped v2_07 family. Top-100 and top-1000 results are never paired: different development rows (7,714 against 9,823), a different class count and different training rows. Class competition and the smaller head-answer share of a fixed budget are confounded. Capacity-confounded: fusion carries 1,100,388 trainable parameters against concat's 576,100. Only the v2_03 matched pairs isolate the feature effect, and fusion minus concat_wide includes zero. A drop under a wrong or removed image demonstrates reliance on the image. It is NOT proof of robust visual reasoning, of grounding or of compositional understanding. The question-only drop is exactly zero by construction and is a control, not a result. Exactly zero by construction. This is a control that proves the intervention touched only the image path; it is not a result. A system-level comparison. Input granularity, architecture and parameter count change together, so token-level access is not isolated as the cause.",
+   "dissertation_section": [
+    "R_APPENDIX_STATISTICS"
+   ],
+   "footnotes": [
+    "Multiplicity is disclosed and deliberately uncorrected. No p-value is computed and no new hypothesis test was introduced.",
+    "Analysis role and comparison class were fixed before any reconstructed number existed and no row was reclassified after its interval was computed.",
+    "Two metrics appear; the family column identifies which.",
+    "Two checkpoint-selection rules appear, best development epoch for V2, V3, E2, E3 and E8A and the frozen fixed-22 rule for E8B and E10. Every contrast listed is internally matched on that axis, comparing two arms selected under the same rule; the registry performs no arithmetic across families."
+   ],
+   "kind": "table",
+   "mandatory_caveat": "Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. Both pretraining-effect intervals contain zero and the seeds disagree in sign; they establish neither equivalence nor the absence of an effect. The 135M-to-360M step is whole-system capacity sensitivity, not an isolated causal language-model-size effect: trainable capacity moves too, 21,343,808 to 21,540,800 parameters, because the projection width follows the hidden size. The difference in differences is not directional; its interval contains zero. It gives no reliable evidence that any answer-side pretraining contribution grows with training scale. E8A's projected interface is a learned common width, not a naturally shared pretrained embedding space. A1 minus A1r is the only clean within-size question-side pretraining contrast; A1 minus A0p also changes the representation space and the interface. Not a pure causal semantics or alignment effect: the two sides differ in representation space, in interface, and in whether the text representation shares a pretrained space with the image representation. An interval containing zero is an absence of a detected effect and establishes neither equivalence nor the absence of an effect. B3 at train_40k has an across-training-seed sd of 0.02795 and must always be shown with its seed spread. Representation quality is not isolated: encoder, embedding width (512 against 768) and head input width all move together. The training streams are not paired and the seed label does not pair two runs. At train_250k no clustered contrast exists, because the CLIP partner is the stopped v2_07 family. Top-100 and top-1000 results are never paired: different development rows (7,714 against 9,823), a different class count and different training rows. Class competition and the smaller head-answer share of a fixed budget are confounded. Capacity-confounded: fusion carries 1,100,388 trainable parameters against concat's 576,100. Only the v2_03 matched pairs isolate the feature effect, and fusion minus concat_wide includes zero. A drop under a wrong or removed image demonstrates reliance on the image. It is NOT proof of robust visual reasoning, of grounding or of compositional understanding. The question-only drop is exactly zero by construction and is a control, not a result. Exactly zero by construction. This is a control that proves the intervention touched only the image path; it is not a result. A system-level comparison. Input granularity, architecture and parameter count change together, so token-level access is not isolated as the cause.",
+   "message": "What is every contrast this project computed, including the ones whose intervals contain zero?",
+   "placement": "APPENDIX",
+   "presentation_caption": "Complete contrast registry. What is every contrast this project computed, including the ones whose intervals contain zero? Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. Both pretraining-effect intervals contain zero and the seeds disagree in sign; they establish neither equivalence nor the absence of an effect. The 135M-to-360M step is whole-system capacity sensitivity, not an isolated causal language-model-size effect: trainable capacity moves too, 21,343,808 to 21,540,800 parameters, because the projection width follows the hidden size. The difference in differences is not directional; its interval contains zero. It gives no reliable evidence that any answer-side pretraining contribution grows with training scale. E8A's projected interface is a learned common width, not a naturally shared pretrained embedding space. A1 minus A1r is the only clean within-size question-side pretraining contrast; A1 minus A0p also changes the representation space and the interface. Not a pure causal semantics or alignment effect: the two sides differ in representation space, in interface, and in whether the text representation shares a pretrained space with the image representation. An interval containing zero is an absence of a detected effect and establishes neither equivalence nor the absence of an effect. B3 at train_40k has an across-training-seed sd of 0.02795 and must always be shown with its seed spread. Representation quality is not isolated: encoder, embedding width (512 against 768) and head input width all move together. The training streams are not paired and the seed label does not pair two runs. At train_250k no clustered contrast exists, because the CLIP partner is the stopped v2_07 family. Top-100 and top-1000 results are never paired: different development rows (7,714 against 9,823), a different class count and different training rows. Class competition and the smaller head-answer share of a fixed budget are confounded. Capacity-confounded: fusion carries 1,100,388 trainable parameters against concat's 576,100. Only the v2_03 matched pairs isolate the feature effect, and fusion minus concat_wide includes zero. A drop under a wrong or removed image demonstrates reliance on the image. It is NOT proof of robust visual reasoning, of grounding or of compositional understanding. The question-only drop is exactly zero by construction and is a control, not a result. Exactly zero by construction. This is a control that proves the intervention touched only the image path; it is not a result. A system-level comparison. Input granularity, architecture and parameter count change together, so token-level access is not isolated as the cause.",
+   "presentation_caption_is_not_stronger": "the presentation caption carries the identical mandatory caveat",
+   "quantity": "Quantity: contrast id, family, analysis role, comparison class, effect, 95% image-clustered interval, excludes zero, n questions, n images, training seeds. Precision: 5 decimal places.",
+   "sample_and_seed_context": "Sample and seed context: development questions: 7,714, 9,823; represented development images: 768, 776; training seed sets: [0, 1, 2]; [0, 1, 2, 3, 42]; training scales: 100k, 250k, 40k, train_40k vs train_250k; checkpoint selection differs across the rows: BEST_ON_DEVELOPMENT, FIXED_EPOCH_22.",
+   "supervisor_slide": "NOT_PRESENTED",
+   "uncertainty": "Uncertainty notation: interval as [lower, upper]",
+   "ve0_specification_id": "VE0-TAB-A4",
+   "working_title": "Complete contrast registry"
+  }
+ ],
+ "rule": "every main-text figure and table carries a MESSAGE, the exact scientific QUANTITY, the UNCERTAINTY with its kind named, the sample and seed context, and the mandatory CAVEAT. A presentation caption is never the stronger of the two: it repeats the identical claim sentence and the identical mandatory caveat.",
+ "title": "VE-1 canonical caption records",
+ "ve0_source_artefacts": [
+  {
+   "path": "results/ve0/canonical_evidence_inventory.json",
+   "role": "VE-0 output A",
+   "sha256": "18eaa5355cf2252f0f74b1090f03404881d526bc2588391a866f4ed6fdd22462"
+  },
+  {
+   "path": "results/ve0/canonical_evidence_inventory.csv",
+   "role": "VE-0 output A_csv",
+   "sha256": "30e1b82090573758947026407ff4d05b5dcb4e12cde827d0e02040d6787cd9d9"
+  },
+  {
+   "path": "results/ve0/supersession_map.json",
+   "role": "VE-0 output C",
+   "sha256": "5eddcfdec886ae3b246fab02c076e523f62a77611916695bfbf5363076ee2d4a"
+  },
+  {
+   "path": "results/ve0/claim_ledger.json",
+   "role": "VE-0 output D",
+   "sha256": "15e3ffc4a487068e9a556ada04a96e6967dc6d8e9f1364babbc353decca1c94d"
+  },
+  {
+   "path": "results/ve0/rq_evidence_matrix.json",
+   "role": "VE-0 output E",
+   "sha256": "c8f6d7d99db9f41fd98821dafc880f9b709f9ba8757a53c40b65b8bf23e27b86"
+  },
+  {
+   "path": "results/ve0/figure_specifications.json",
+   "role": "VE-0 output F",
+   "sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92"
+  },
+  {
+   "path": "results/ve0/table_specifications.json",
+   "role": "VE-0 output G",
+   "sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0"
+  },
+  {
+   "path": "results/ve0/qualitative_protocol.json",
+   "role": "VE-0 output H",
+   "sha256": "d15fc69c7a6a4e6721874bf43ae017a105c1a8b3b694b759a88043ff2664b975"
+  },
+  {
+   "path": "results/ve0/qualitative_record_schema.json",
+   "role": "VE-0 output I",
+   "sha256": "c2f0742c0c936a2a11fb71f5dc364633bda329c632b52744150f047d95d81984"
+  },
+  {
+   "path": "results/ve0/reporting_style_contract.json",
+   "role": "VE-0 output J",
+   "sha256": "e2a8767fe477e9ac8a5bf8544c3ecbff19f63f1f8a59c9b7ddaa350221c7fc4c"
+  },
+  {
+   "path": "results/ve0/provenance_contract.json",
+   "role": "VE-0 output K",
+   "sha256": "65e66b78cae76cf713f11073f4847062c0e252c4319b30b3a9d58e63a0689159"
+  },
+  {
+   "path": "results/ve0/efficiency_visualisation_contract.json",
+   "role": "VE-0 output L",
+   "sha256": "b39a6c4ae080eebf1c0ed0cb65d01a98f1993d162ade704287c53c298b56902e"
+  },
+  {
+   "path": "results/ve0/results_section_mapping.json",
+   "role": "VE-0 output M",
+   "sha256": "f2153f7f45c71fdd69a0e96555184d3b2608a63685afe42f40a5800b6f2d7738"
+  },
+  {
+   "path": "results/ve0/VE0_MANIFEST.json",
+   "role": "VE-0 output O",
+   "sha256": "31a572db0b3e9ab85a74fefe88232f1112641d113dc421083d09137d79a0a594"
+  }
+ ],
+ "ve1_output": "captions"
+}

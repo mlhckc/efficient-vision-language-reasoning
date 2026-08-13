@@ -1,0 +1,282 @@
+{
+ "any_value_bolded": false,
+ "artefact_id": "VE1-TAB-05",
+ "bolding_rule": "no bolding. Bolding the question-side row because it is positive would visually assert the very asymmetry the reader should judge from the intervals",
+ "carries_v2_07_limitation": false,
+ "clean_test_accessed": false,
+ "columns": [
+  "contrast",
+  "order",
+  "interface side",
+  "language model size",
+  "reference condition",
+  "training scale",
+  "effect",
+  "95% CI (image-clustered)",
+  "excludes zero",
+  "per-seed effects",
+  "comparison class",
+  "evidence id"
+ ],
+ "consumed_evidence_ids": [
+  "EV-CON-E10.difference_in_differences",
+  "EV-CON-E10.pretraining_effect.train_250k",
+  "EV-CON-E10.pretraining_effect.train_40k",
+  "EV-CON-E8A.A1_minus_A1r.train_250k",
+  "EV-CON-E8A.A1_minus_A1r.train_40k",
+  "EV-CON-E8B.B3_-_B2.train_250k",
+  "EV-CON-E8B.B3_-_B2.train_40k"
+ ],
+ "content_sha256": "4015cc5dd25a65ea4fe209ade9132f9cb6562aef2799628c95dee9c7d95af111",
+ "development_set_only": true,
+ "dissertation_section": [
+  "R7_ANSWER_SIDE_AND_CAPACITY"
+ ],
+ "footnotes": [
+  "Every contrast is pretrained minus its architecture-matched random control at the SAME model size.",
+  "Both E10 intervals contain zero and the seeds disagree in sign; they establish NEITHER equivalence NOR the absence of an effect.",
+  "E10 does not reproduce E8B's directional negative 40k result.",
+  "The difference in differences is a SECOND-ORDER interaction between the pretraining effect and training scale, not a pretrained-minus-random effect, and it is not directional.",
+  "Checkpoint selection differs BETWEEN families, E8A selecting the best development epoch while E8B and E10 use the frozen fixed-22 rule, but not WITHIN any row: every contrast here compares two arms selected under the same rule, so each effect is internally matched on that axis and only the cross-family reading is a juxtaposition."
+ ],
+ "highlight_rule": "none; direction is carried by the sign and the interval, not by colour",
+ "mandatory_caveat": "Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. Both pretraining-effect intervals contain zero and the seeds disagree in sign; they establish neither equivalence nor the absence of an effect. The 135M-to-360M step is whole-system capacity sensitivity, not an isolated causal language-model-size effect: trainable capacity moves too, 21,343,808 to 21,540,800 parameters, because the projection width follows the hidden size. The difference in differences is not directional; its interval contains zero. It gives no reliable evidence that any answer-side pretraining contribution grows with training scale. E8A's projected interface is a learned common width, not a naturally shared pretrained embedding space. A1 minus A1r is the only clean within-size question-side pretraining contrast; A1 minus A0p also changes the representation space and the interface. An interval containing zero is an absence of a detected effect and establishes neither equivalence nor the absence of an effect. B3 at train_40k has an across-training-seed sd of 0.02795 and must always be shown with its seed spread.",
+ "metric_ids": [
+  "g21_pinned_normalised_exact_match"
+ ],
+ "mixed_metric_justification": null,
+ "mixes_checkpoint_selection": true,
+ "placement": "MAIN_TEXT",
+ "precision": "5 decimal places",
+ "provenance": {
+  "build_command": "python -m experiments.ve1.run_ve1",
+  "builder": "experiments/ve1/tables.py",
+  "builder_sha256": "8ba42a83bbc46fa056eebbd31715b536f3a9f9b05c066e7059b2cc28052a8733",
+  "clean_test_accessed": false,
+  "device": "cpu",
+  "evaluated_anything": false,
+  "gpu_hours_charged": 0.0,
+  "gpu_used": false,
+  "inputs": [
+   {
+    "path": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
+    "sha256": "37ffdcd09aa2bcd306ca9b54229a1d0d17ff203b6b0900e09e5f876ad1ed0748"
+   },
+   {
+    "path": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
+    "sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562"
+   },
+   {
+    "path": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+    "sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138"
+   }
+  ],
+  "matplotlib_version": "3.11.0",
+  "measured_anything": false,
+  "numpy_version": "2.5.0",
+  "python": "3.12.3",
+  "read_any_checkpoint": false,
+  "read_any_embedding_store": false,
+  "repository_head": "d58cd66b0b3e7e64fd49b10b0a0342588df367fd",
+  "repository_head_short": "d58cd66",
+  "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+  "schema_version": 1,
+  "selected_any_checkpoint": false,
+  "trained_anything": false,
+  "worktree_dirty": true
+ },
+ "row_count": 7,
+ "rows": [
+  {
+   "95% CI (image-clustered)": "[0.02947, 0.04680]",
+   "comparison class": "CLEAN_PAIRED_CONTROL",
+   "contrast": "A1 minus A1r",
+   "effect": "0.03820",
+   "evidence id": "EV-CON-E8A.A1_minus_A1r.train_40k",
+   "excludes zero": "true",
+   "interface side": "question side",
+   "language model size": "135M",
+   "order": "FIRST_ORDER",
+   "per-seed effects": "not bound in VE-0",
+   "reference condition": "A1r, architecture-matched random SmolLM2-135M",
+   "training scale": "40k"
+  },
+  {
+   "95% CI (image-clustered)": "[0.03935, 0.05803]",
+   "comparison class": "CLEAN_PAIRED_CONTROL",
+   "contrast": "A1 minus A1r",
+   "effect": "0.04835",
+   "evidence id": "EV-CON-E8A.A1_minus_A1r.train_250k",
+   "excludes zero": "true",
+   "interface side": "question side",
+   "language model size": "135M",
+   "order": "FIRST_ORDER",
+   "per-seed effects": "not bound in VE-0",
+   "reference condition": "A1r, architecture-matched random SmolLM2-135M",
+   "training scale": "250k"
+  },
+  {
+   "95% CI (image-clustered)": "[-0.03333, -0.01619]",
+   "comparison class": "CLEAN_PAIRED_CONTROL",
+   "contrast": "B3 - B2",
+   "effect": "-0.02463",
+   "evidence id": "EV-CON-E8B.B3_-_B2.train_40k",
+   "excludes zero": "true",
+   "interface side": "answer side",
+   "language model size": "135M",
+   "order": "FIRST_ORDER",
+   "per-seed effects": "not bound in VE-0",
+   "reference condition": "B2, architecture-matched random SmolLM2-135M",
+   "training scale": "40k"
+  },
+  {
+   "95% CI (image-clustered)": "[-0.01208, 0.00297]",
+   "comparison class": "CLEAN_PAIRED_CONTROL",
+   "contrast": "B3 - B2",
+   "effect": "-0.00475",
+   "evidence id": "EV-CON-E8B.B3_-_B2.train_250k",
+   "excludes zero": "false",
+   "interface side": "answer side",
+   "language model size": "135M",
+   "order": "FIRST_ORDER",
+   "per-seed effects": "not bound in VE-0",
+   "reference condition": "B2, architecture-matched random SmolLM2-135M",
+   "training scale": "250k"
+  },
+  {
+   "95% CI (image-clustered)": "[-0.01508, 0.00114]",
+   "comparison class": "CLEAN_PAIRED_CONTROL",
+   "contrast": "pretraining effect",
+   "effect": "-0.00683",
+   "evidence id": "EV-CON-E10.pretraining_effect.train_40k",
+   "excludes zero": "false",
+   "interface side": "answer side",
+   "language model size": "360M",
+   "order": "FIRST_ORDER",
+   "per-seed effects": "not bound in VE-0",
+   "reference condition": "B4r, architecture-matched random SmolLM2-360M",
+   "training scale": "40k"
+  },
+  {
+   "95% CI (image-clustered)": "[-0.01071, 0.00588]",
+   "comparison class": "CLEAN_PAIRED_CONTROL",
+   "contrast": "pretraining effect",
+   "effect": "-0.00238",
+   "evidence id": "EV-CON-E10.pretraining_effect.train_250k",
+   "excludes zero": "false",
+   "interface side": "answer side",
+   "language model size": "360M",
+   "order": "FIRST_ORDER",
+   "per-seed effects": "not bound in VE-0",
+   "reference condition": "B4r, architecture-matched random SmolLM2-360M",
+   "training scale": "250k"
+  },
+  {
+   "95% CI (image-clustered)": "[-0.00709, 0.01641]",
+   "comparison class": "CLEAN_PAIRED_CONTROL",
+   "contrast": "(pretrained minus random) at 250k minus the same at 40k",
+   "effect": "0.00445",
+   "evidence id": "EV-CON-E10.difference_in_differences",
+   "excludes zero": "false",
+   "interface side": "answer side",
+   "language model size": "360M",
+   "order": "SECOND_ORDER interaction",
+   "per-seed effects": "not bound in VE-0",
+   "reference condition": "the same effect at train_40k (SECOND-ORDER)",
+   "training scale": "250k against 40k"
+  }
+ ],
+ "scientific_question": "Is there a reliable pretrained-over-random advantage, and does it grow with scale?",
+ "unbound_cells": [
+  {
+   "affected_cells": 7,
+   "column_or_series": "per-seed effects",
+   "detail": "the VE0-TAB-05 specification asks for per-seed effects so a reader can see where seeds disagree in sign. No VE-0 inventory row binds per-seed contrast values; the seed disagreement is recorded in prose in the row's mandatory limitation and is reproduced in this table's caveat.",
+   "evidence_ids": [
+    "EV-CON-E10.difference_in_differences",
+    "EV-CON-E10.pretraining_effect.train_250k",
+    "EV-CON-E10.pretraining_effect.train_40k",
+    "EV-CON-E8A.A1_minus_A1r.train_250k",
+    "EV-CON-E8A.A1_minus_A1r.train_40k",
+    "EV-CON-E8B.B3_-_B2.train_250k",
+    "EV-CON-E8B.B3_-_B2.train_40k"
+   ],
+   "specification": "VE0-TAB-05"
+  }
+ ],
+ "uncertainty_notation": "interval as [lower, upper]; per-seed effects printed so a reader can see where seeds disagree in sign",
+ "ve0_source_artefacts": [
+  {
+   "path": "results/ve0/canonical_evidence_inventory.json",
+   "role": "VE-0 output A",
+   "sha256": "18eaa5355cf2252f0f74b1090f03404881d526bc2588391a866f4ed6fdd22462"
+  },
+  {
+   "path": "results/ve0/canonical_evidence_inventory.csv",
+   "role": "VE-0 output A_csv",
+   "sha256": "30e1b82090573758947026407ff4d05b5dcb4e12cde827d0e02040d6787cd9d9"
+  },
+  {
+   "path": "results/ve0/supersession_map.json",
+   "role": "VE-0 output C",
+   "sha256": "5eddcfdec886ae3b246fab02c076e523f62a77611916695bfbf5363076ee2d4a"
+  },
+  {
+   "path": "results/ve0/claim_ledger.json",
+   "role": "VE-0 output D",
+   "sha256": "15e3ffc4a487068e9a556ada04a96e6967dc6d8e9f1364babbc353decca1c94d"
+  },
+  {
+   "path": "results/ve0/rq_evidence_matrix.json",
+   "role": "VE-0 output E",
+   "sha256": "c8f6d7d99db9f41fd98821dafc880f9b709f9ba8757a53c40b65b8bf23e27b86"
+  },
+  {
+   "path": "results/ve0/figure_specifications.json",
+   "role": "VE-0 output F",
+   "sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92"
+  },
+  {
+   "path": "results/ve0/table_specifications.json",
+   "role": "VE-0 output G",
+   "sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0"
+  },
+  {
+   "path": "results/ve0/qualitative_protocol.json",
+   "role": "VE-0 output H",
+   "sha256": "d15fc69c7a6a4e6721874bf43ae017a105c1a8b3b694b759a88043ff2664b975"
+  },
+  {
+   "path": "results/ve0/qualitative_record_schema.json",
+   "role": "VE-0 output I",
+   "sha256": "c2f0742c0c936a2a11fb71f5dc364633bda329c632b52744150f047d95d81984"
+  },
+  {
+   "path": "results/ve0/reporting_style_contract.json",
+   "role": "VE-0 output J",
+   "sha256": "e2a8767fe477e9ac8a5bf8544c3ecbff19f63f1f8a59c9b7ddaa350221c7fc4c"
+  },
+  {
+   "path": "results/ve0/provenance_contract.json",
+   "role": "VE-0 output K",
+   "sha256": "65e66b78cae76cf713f11073f4847062c0e252c4319b30b3a9d58e63a0689159"
+  },
+  {
+   "path": "results/ve0/efficiency_visualisation_contract.json",
+   "role": "VE-0 output L",
+   "sha256": "b39a6c4ae080eebf1c0ed0cb65d01a98f1993d162ade704287c53c298b56902e"
+  },
+  {
+   "path": "results/ve0/results_section_mapping.json",
+   "role": "VE-0 output M",
+   "sha256": "f2153f7f45c71fdd69a0e96555184d3b2608a63685afe42f40a5800b6f2d7738"
+  },
+  {
+   "path": "results/ve0/VE0_MANIFEST.json",
+   "role": "VE-0 output O",
+   "sha256": "31a572db0b3e9ab85a74fefe88232f1112641d113dc421083d09137d79a0a594"
+  }
+ ],
+ "ve0_specification_id": "VE0-TAB-05",
+ "working_title": "Primary pretraining contrasts and the difference in differences"
+}

@@ -1,0 +1,401 @@
+{
+ "artefact_id": "VE1-FIG-08",
+ "bound_scalars_used": {
+  "trainable_parameters.e10_B4": 21343808,
+  "trainable_parameters.e10_B4r": 21540800
+ },
+ "caption_claim": "Frozen pretraining helps on the question side at both scales, while no reliable positive pretrained-over-random advantage is detected for either tested answer-side readout.",
+ "carries_v2_07_limitation": false,
+ "central_interpretation": "Within the tested interfaces, the value of frozen small-language-model pretraining appears interface-dependent.",
+ "clean_test_accessed": false,
+ "consumed_evidence_ids": [
+  "EV-CON-E10.difference_in_differences",
+  "EV-CON-E10.pretraining_effect.train_250k",
+  "EV-CON-E10.pretraining_effect.train_40k",
+  "EV-CON-E8A.A1_minus_A1r.train_250k",
+  "EV-CON-E8A.A1_minus_A1r.train_40k",
+  "EV-CON-E8B.B3_-_B2.train_250k",
+  "EV-CON-E8B.B3_-_B2.train_40k"
+ ],
+ "content_sha256": "10672cf770af866d35b3390288cf9725d72c0012205748f90fc14e9d2704bff4",
+ "cross_experiment_synthesis": "A cross-experiment synthesis of three separately run experiments, not one factorial interface experiment. E8A, E8B and E10 share the pinned G21 metric, the same development rows and the same effect orientation, which is what makes one forest legitimate; they do not share a training history, a checkpoint-selection rule or a trainable-capacity budget.",
+ "development_set_only": true,
+ "dissertation_section": [
+  "R6_QUESTION_SIDE_SLM",
+  "R7_ANSWER_SIDE_AND_CAPACITY"
+ ],
+ "drawn_value_count": 7,
+ "drawn_values": [
+  {
+   "across_training_seed_sd_ddof1": 0.00419,
+   "canonical_source_path": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
+   "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.02947,
+    0.0468
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented development imageId",
+   "comparison_class": "CLEAN_PAIRED_CONTROL",
+   "evidence_id": "EV-CON-E8A.A1_minus_A1r.train_40k",
+   "metric_id": "g21_pinned_normalised_exact_match",
+   "model_system": "A1_minus_A1r",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "order": "FIRST_ORDER",
+   "quantity": "pretrained minus architecture-matched random",
+   "role": "G1_question_side_135M effect",
+   "row_group": "G1_question_side_135M",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.0382
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00345,
+   "canonical_source_path": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
+   "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": [
+    0.03935,
+    0.05803
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented development imageId",
+   "comparison_class": "CLEAN_PAIRED_CONTROL",
+   "evidence_id": "EV-CON-E8A.A1_minus_A1r.train_250k",
+   "metric_id": "g21_pinned_normalised_exact_match",
+   "model_system": "A1_minus_A1r",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "order": "FIRST_ORDER",
+   "quantity": "pretrained minus architecture-matched random",
+   "role": "G1_question_side_135M effect",
+   "row_group": "G1_question_side_135M",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_250k",
+   "value": 0.04835
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+   "canonical_source_sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
+   "ci95": [
+    -0.03333,
+    -0.01619
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented development imageId",
+   "comparison_class": "CLEAN_PAIRED_CONTROL",
+   "evidence_id": "EV-CON-E8B.B3_-_B2.train_40k",
+   "metric_id": "g21_pinned_normalised_exact_match",
+   "model_system": "B3 - B2",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "order": "FIRST_ORDER",
+   "quantity": "pretrained minus architecture-matched random",
+   "role": "G2_answer_side_135M effect",
+   "row_group": "G2_answer_side_135M",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": -0.02463
+  },
+  {
+   "across_training_seed_sd_ddof1": null,
+   "canonical_source_path": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+   "canonical_source_sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
+   "ci95": [
+    -0.01208,
+    0.00297
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented development imageId",
+   "comparison_class": "CLEAN_PAIRED_CONTROL",
+   "evidence_id": "EV-CON-E8B.B3_-_B2.train_250k",
+   "metric_id": "g21_pinned_normalised_exact_match",
+   "model_system": "B3 - B2",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "order": "FIRST_ORDER",
+   "quantity": "pretrained minus architecture-matched random",
+   "role": "G2_answer_side_135M effect",
+   "row_group": "G2_answer_side_135M",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_250k",
+   "value": -0.00475
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00939,
+   "canonical_source_path": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
+   "canonical_source_sha256": "37ffdcd09aa2bcd306ca9b54229a1d0d17ff203b6b0900e09e5f876ad1ed0748",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
+   "ci95": [
+    -0.01508,
+    0.00114
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented development imageId",
+   "comparison_class": "CLEAN_PAIRED_CONTROL",
+   "evidence_id": "EV-CON-E10.pretraining_effect.train_40k",
+   "metric_id": "g21_pinned_normalised_exact_match",
+   "model_system": "pretraining_effect",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "order": "FIRST_ORDER",
+   "quantity": "pretrained minus architecture-matched random",
+   "role": "G3_answer_side_360M effect",
+   "row_group": "G3_answer_side_360M",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": -0.00683
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.01105,
+   "canonical_source_path": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
+   "canonical_source_sha256": "37ffdcd09aa2bcd306ca9b54229a1d0d17ff203b6b0900e09e5f876ad1ed0748",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
+   "ci95": [
+    -0.01071,
+    0.00588
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented development imageId",
+   "comparison_class": "CLEAN_PAIRED_CONTROL",
+   "evidence_id": "EV-CON-E10.pretraining_effect.train_250k",
+   "metric_id": "g21_pinned_normalised_exact_match",
+   "model_system": "pretraining_effect",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "order": "FIRST_ORDER",
+   "quantity": "pretrained minus architecture-matched random",
+   "role": "G3_answer_side_360M effect",
+   "row_group": "G3_answer_side_360M",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_250k",
+   "value": -0.00238
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.01815,
+   "canonical_source_path": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
+   "canonical_source_sha256": "37ffdcd09aa2bcd306ca9b54229a1d0d17ff203b6b0900e09e5f876ad1ed0748",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
+   "ci95": [
+    -0.00709,
+    0.01641
+   ],
+   "ci_type": "evaluation-sampling, image-clustered",
+   "cluster_unit": "represented development imageId",
+   "comparison_class": "CLEAN_PAIRED_CONTROL",
+   "evidence_id": "EV-CON-E10.difference_in_differences",
+   "metric_id": "g21_pinned_normalised_exact_match",
+   "model_system": "E10/difference_in_differences",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "order": "SECOND_ORDER",
+   "quantity": "difference in differences: (B4 minus B4r) at train_250k minus (B4 minus B4r) at train_40k. This is an interaction between the pretraining effect and training scale, NOT a pretraining effect",
+   "role": "G4_second_order_interaction effect",
+   "row_group": "G4_second_order_interaction",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k vs train_250k",
+   "value": 0.00445
+  }
+ ],
+ "interpretations_this_figure_does_not_support": [
+  "a universal law about language-model interfaces",
+  "that answer-side pretraining has no effect",
+  "equivalence between a pretrained arm and its random control",
+  "an isolated causal language-model-size effect from the 135M to 360M step"
+ ],
+ "mandatory_caption_caveat": "Every row is pretrained minus its architecture-matched random control at the same model size; a random 135M model is never the control for a pretrained 360M model. An interval that contains zero is an absence of a detected effect and establishes NEITHER equivalence NOR the absence of an effect. E10 does not reproduce E8B's directional negative 40k result. The 135M to 360M step is whole-system capacity sensitivity, not an isolated causal language-model-size effect: trainable capacity moves too, 21,343,808 to 21,540,800 parameters. E8B B3 at 40k has a seed sd of 0.02795 and its per-seed values must be shown beside this figure. Checkpoint selection differs: E8A selects the best development epoch, E8B and E10 use the frozen fixed-22 rule. The bottom block is a SECOND-ORDER quantity: the E10 difference in differences is an interaction between the pretraining effect and training scale, not a pretrained-minus-random effect, so the axis label above it does not describe it. It is not directional.",
+ "metric_ids": [
+  "g21_pinned_normalised_exact_match"
+ ],
+ "mixes_checkpoint_selection": true,
+ "panels": {
+  "row_groups": [
+   {
+    "evidence_ids": [
+     "EV-CON-E8A.A1_minus_A1r.train_40k",
+     "EV-CON-E8A.A1_minus_A1r.train_250k"
+    ],
+    "group_id": "G1_question_side_135M",
+    "order": "FIRST_ORDER",
+    "quantity": "pretrained minus architecture-matched random"
+   },
+   {
+    "evidence_ids": [
+     "EV-CON-E8B.B3_-_B2.train_40k",
+     "EV-CON-E8B.B3_-_B2.train_250k"
+    ],
+    "group_id": "G2_answer_side_135M",
+    "order": "FIRST_ORDER",
+    "quantity": "pretrained minus architecture-matched random"
+   },
+   {
+    "evidence_ids": [
+     "EV-CON-E10.pretraining_effect.train_40k",
+     "EV-CON-E10.pretraining_effect.train_250k"
+    ],
+    "group_id": "G3_answer_side_360M",
+    "order": "FIRST_ORDER",
+    "quantity": "pretrained minus architecture-matched random"
+   },
+   {
+    "evidence_ids": [
+     "EV-CON-E10.difference_in_differences"
+    ],
+    "group_id": "G4_second_order_interaction",
+    "order": "SECOND_ORDER",
+    "quantity": "difference in differences: (B4 minus B4r) at train_250k minus (B4 minus B4r) at train_40k. This is an interaction between the pretraining effect and training scale, NOT a pretraining effect",
+    "separation_requirement": "drawn below a horizontal rule, in its own labelled block, with its own row label naming it a second-order interaction. It must never sit inside or immediately adjacent to the three first-order blocks without that separation"
+   }
+  ],
+  "single_panel": "three first-order blocks above a rule and one separated second-order block below it"
+ },
+ "placement": "MAIN_TEXT",
+ "provenance": {
+  "build_command": "python -m experiments.ve1.run_ve1",
+  "builder": "experiments/ve1/figures.py",
+  "builder_sha256": "e568681a005d9e611a002b3e97cd67d34f0f8f9640fafcfe9794a25ea3456469",
+  "clean_test_accessed": false,
+  "device": "cpu",
+  "evaluated_anything": false,
+  "gpu_hours_charged": 0.0,
+  "gpu_used": false,
+  "inputs": [
+   {
+    "path": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
+    "sha256": "37ffdcd09aa2bcd306ca9b54229a1d0d17ff203b6b0900e09e5f876ad1ed0748"
+   },
+   {
+    "path": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
+    "sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562"
+   },
+   {
+    "path": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+    "sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138"
+   }
+  ],
+  "matplotlib_version": "3.11.0",
+  "measured_anything": false,
+  "numpy_version": "2.5.0",
+  "python": "3.12.3",
+  "read_any_checkpoint": false,
+  "read_any_embedding_store": false,
+  "repository_head": "d58cd66b0b3e7e64fd49b10b0a0342588df367fd",
+  "repository_head_short": "d58cd66",
+  "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+  "schema_version": 1,
+  "selected_any_checkpoint": false,
+  "trained_anything": false,
+  "worktree_dirty": true
+ },
+ "scientific_question": "Does frozen pretraining help, and does the answer depend on which side of the interface the language model sits?",
+ "unbound_cells": [],
+ "uncertainty_by_panel": null,
+ "uncertainty_shown": "CLUSTERED_CI95",
+ "ve0_source_artefacts": [
+  {
+   "path": "results/ve0/canonical_evidence_inventory.json",
+   "role": "VE-0 output A",
+   "sha256": "18eaa5355cf2252f0f74b1090f03404881d526bc2588391a866f4ed6fdd22462"
+  },
+  {
+   "path": "results/ve0/canonical_evidence_inventory.csv",
+   "role": "VE-0 output A_csv",
+   "sha256": "30e1b82090573758947026407ff4d05b5dcb4e12cde827d0e02040d6787cd9d9"
+  },
+  {
+   "path": "results/ve0/supersession_map.json",
+   "role": "VE-0 output C",
+   "sha256": "5eddcfdec886ae3b246fab02c076e523f62a77611916695bfbf5363076ee2d4a"
+  },
+  {
+   "path": "results/ve0/claim_ledger.json",
+   "role": "VE-0 output D",
+   "sha256": "15e3ffc4a487068e9a556ada04a96e6967dc6d8e9f1364babbc353decca1c94d"
+  },
+  {
+   "path": "results/ve0/rq_evidence_matrix.json",
+   "role": "VE-0 output E",
+   "sha256": "c8f6d7d99db9f41fd98821dafc880f9b709f9ba8757a53c40b65b8bf23e27b86"
+  },
+  {
+   "path": "results/ve0/figure_specifications.json",
+   "role": "VE-0 output F",
+   "sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92"
+  },
+  {
+   "path": "results/ve0/table_specifications.json",
+   "role": "VE-0 output G",
+   "sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0"
+  },
+  {
+   "path": "results/ve0/qualitative_protocol.json",
+   "role": "VE-0 output H",
+   "sha256": "d15fc69c7a6a4e6721874bf43ae017a105c1a8b3b694b759a88043ff2664b975"
+  },
+  {
+   "path": "results/ve0/qualitative_record_schema.json",
+   "role": "VE-0 output I",
+   "sha256": "c2f0742c0c936a2a11fb71f5dc364633bda329c632b52744150f047d95d81984"
+  },
+  {
+   "path": "results/ve0/reporting_style_contract.json",
+   "role": "VE-0 output J",
+   "sha256": "e2a8767fe477e9ac8a5bf8544c3ecbff19f63f1f8a59c9b7ddaa350221c7fc4c"
+  },
+  {
+   "path": "results/ve0/provenance_contract.json",
+   "role": "VE-0 output K",
+   "sha256": "65e66b78cae76cf713f11073f4847062c0e252c4319b30b3a9d58e63a0689159"
+  },
+  {
+   "path": "results/ve0/efficiency_visualisation_contract.json",
+   "role": "VE-0 output L",
+   "sha256": "b39a6c4ae080eebf1c0ed0cb65d01a98f1993d162ade704287c53c298b56902e"
+  },
+  {
+   "path": "results/ve0/results_section_mapping.json",
+   "role": "VE-0 output M",
+   "sha256": "f2153f7f45c71fdd69a0e96555184d3b2608a63685afe42f40a5800b6f2d7738"
+  },
+  {
+   "path": "results/ve0/VE0_MANIFEST.json",
+   "role": "VE-0 output O",
+   "sha256": "31a572db0b3e9ab85a74fefe88232f1112641d113dc421083d09137d79a0a594"
+  }
+ ],
+ "ve0_specification_id": "VE0-FIG-08",
+ "working_title": "Frozen small-language-model pretraining, question side and answer side"
+}

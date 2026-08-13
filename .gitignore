@@ -108,6 +108,28 @@ results/ve0/*
 !results/ve0/*.csv
 !results/ve0/*.md
 
+# VE-1 figures and tables: the rendered dissertation artefacts. The vector
+# PDFs and the preview PNGs are tracked on the same footing as E7b's png,
+# because they are the deliverable and a clone could not otherwise see the
+# figure a report cites. Each figure's data sidecar, each table's CSV,
+# Markdown and JSON record, and the caption, provenance, visual-QA and
+# manifest records are tracked in full: together they are what makes every
+# drawn number checkable without re-running the build. Nothing here is a
+# checkpoint, an embedding store or a per-row array.
+!results/ve1/
+results/ve1/*
+!results/ve1/*.json
+!results/ve1/figures/
+results/ve1/figures/*
+!results/ve1/figures/*.json
+!results/ve1/figures/*.pdf
+!results/ve1/figures/*.png
+!results/ve1/tables/
+results/ve1/tables/*
+!results/ve1/tables/*.json
+!results/ve1/tables/*.csv
+!results/ve1/tables/*.md
+
 # Python bytecode
 __pycache__/
 *.pyc
