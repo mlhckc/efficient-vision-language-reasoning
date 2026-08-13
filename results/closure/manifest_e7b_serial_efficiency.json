@@ -1,0 +1,298 @@
+{
+  "closure_output": "reproducibility manifest for E7b",
+  "entries": [
+    {
+      "bytes": 14444,
+      "experiment_family": "E7b",
+      "path": "results/experiments/e7b_serial_efficiency/audit_verdicts.json",
+      "role": "gate and audit record",
+      "sha256": "d8df78208a4a542d9446c266139062cfee365452d056d6c05ea06c54ec9c2572"
+    },
+    {
+      "bytes": 19715,
+      "experiment_family": "E7b",
+      "path": "results/experiments/e7b_serial_efficiency/benchmark_rows.json",
+      "role": "timing sample definition",
+      "sha256": "ca370a7dc0885fa69df2b1fa6076ca2f647d8a7047e4c1d9fbcb30d40e5621a5"
+    },
+    {
+      "bytes": 3805,
+      "experiment_family": "E7b",
+      "path": "results/experiments/e7b_serial_efficiency/cache_hashes_after.txt",
+      "role": "model-cache integrity evidence",
+      "sha256": "da3ce51b6f5cc45e18a0991834d68ec201fea91890e6b580aa7234bcec2e0750"
+    },
+    {
+      "bytes": 3805,
+      "experiment_family": "E7b",
+      "path": "results/experiments/e7b_serial_efficiency/cache_hashes_before.txt",
+      "role": "model-cache integrity evidence",
+      "sha256": "da3ce51b6f5cc45e18a0991834d68ec201fea91890e6b580aa7234bcec2e0750"
+    },
+    {
+      "bytes": 26662,
+      "experiment_family": "E7b",
+      "path": "results/experiments/e7b_serial_efficiency/e7b_results.json",
+      "role": "canonical analysis: serial end-to-end latency and memory",
+      "sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4"
+    },
+    {
+      "bytes": 192501,
+      "experiment_family": "E7b",
+      "path": "results/experiments/e7b_serial_efficiency/e7b_run_concat_pass1.json",
+      "role": "per-system per-pass raw measurement",
+      "sha256": "d10d7ccf094718e3f9946b74e9340ce28ea66c55683a0d616cfbee99a8a18f69"
+    },
+    {
+      "bytes": 192507,
+      "experiment_family": "E7b",
+      "path": "results/experiments/e7b_serial_efficiency/e7b_run_concat_pass2.json",
+      "role": "per-system per-pass raw measurement",
+      "sha256": "1def4b8eaf67cff56a411ddd4bff9d910dc1d6e12cb202cffac89fe3feb19d6d"
+    },
+    {
+      "bytes": 192509,
+      "experiment_family": "E7b",
+      "path": "results/experiments/e7b_serial_efficiency/e7b_run_concat_pass3.json",
+      "role": "per-system per-pass raw measurement",
+      "sha256": "36bf4f211cfe8bb7f46cd7cca8b471bc17bad4565cc52c5210f293844162a1fb"
+    },
+    {
+      "bytes": 192948,
+      "experiment_family": "E7b",
+      "path": "results/experiments/e7b_serial_efficiency/e7b_run_e8a_a0p_pass1.json",
+      "role": "per-system per-pass raw measurement",
+      "sha256": "d1e3ebee30561e00e7e56d2546b960d90266064ee27b4dffca2165a6f249acc5"
+    },
+    {
+      "bytes": 192947,
+      "experiment_family": "E7b",
+      "path": "results/experiments/e7b_serial_efficiency/e7b_run_e8a_a0p_pass2.json",
+      "role": "per-system per-pass raw measurement",
+      "sha256": "eaaad976be7f7854480fd06e045e60f6fff34bec019c2001c6b502362357a2d1"
+    },
+    {
+      "bytes": 192945,
+      "experiment_family": "E7b",
+      "path": "results/experiments/e7b_serial_efficiency/e7b_run_e8a_a0p_pass3.json",
+      "role": "per-system per-pass raw measurement",
+      "sha256": "e6256d49b161ffb80db921ccded7f5da3e6e20d4f8796605e2ac3a84b9f5bfd1"
+    },
+    {
+      "bytes": 193959,
+      "experiment_family": "E7b",
+      "path": "results/experiments/e7b_serial_efficiency/e7b_run_e8a_a1_pass1.json",
+      "role": "per-system per-pass raw measurement",
+      "sha256": "5d5dd4fe02b313441d16490d43911b6ab082a6fe44669ded238fadf064164b2a"
+    },
+    {
+      "bytes": 193955,
+      "experiment_family": "E7b",
+      "path": "results/experiments/e7b_serial_efficiency/e7b_run_e8a_a1_pass2.json",
+      "role": "per-system per-pass raw measurement",
+      "sha256": "32cebe7829e5ef7dcb560775f9cbe9dd8bf8162598e9a54e7c663bbafd01a4b5"
+    },
+    {
+      "bytes": 193956,
+      "experiment_family": "E7b",
+      "path": "results/experiments/e7b_serial_efficiency/e7b_run_e8a_a1_pass3.json",
+      "role": "per-system per-pass raw measurement",
+      "sha256": "371b10347ac5cbed0ce9cd4090592dcfabdc325d7c33428fc6ddb70bc17d97c6"
+    },
+    {
+      "bytes": 192069,
+      "experiment_family": "E7b",
+      "path": "results/experiments/e7b_serial_efficiency/e7b_run_fusion_pass1.json",
+      "role": "per-system per-pass raw measurement",
+      "sha256": "a26c1f2a2fb07c3109c86b2ec7bd33f048b00d46d438cbac7969ca17415a9f57"
+    },
+    {
+      "bytes": 192069,
+      "experiment_family": "E7b",
+      "path": "results/experiments/e7b_serial_efficiency/e7b_run_fusion_pass2.json",
+      "role": "per-system per-pass raw measurement",
+      "sha256": "1ef3e498045a063962e2f84ae54ee3bebe37d0c30451aeabd357b290d3ad2a09"
+    },
+    {
+      "bytes": 192064,
+      "experiment_family": "E7b",
+      "path": "results/experiments/e7b_serial_efficiency/e7b_run_fusion_pass3.json",
+      "role": "per-system per-pass raw measurement",
+      "sha256": "63b9801d26c431cf1f9d800a7d9d8572d4950e8c83296473f6fd9f1255efb98e"
+    },
+    {
+      "bytes": 191813,
+      "experiment_family": "E7b",
+      "path": "results/experiments/e7b_serial_efficiency/e7b_run_question_only_pass1.json",
+      "role": "per-system per-pass raw measurement",
+      "sha256": "6c8e901bb557afa2be8ae8c2f6f36cdee6615ea5f349e9168ad4a05c3316bb30"
+    },
+    {
+      "bytes": 191813,
+      "experiment_family": "E7b",
+      "path": "results/experiments/e7b_serial_efficiency/e7b_run_question_only_pass2.json",
+      "role": "per-system per-pass raw measurement",
+      "sha256": "3173c45c7af7844ad4b9f88664bb4cdc76347c465b5c441d93fc93a03d40987d"
+    },
+    {
+      "bytes": 191812,
+      "experiment_family": "E7b",
+      "path": "results/experiments/e7b_serial_efficiency/e7b_run_question_only_pass3.json",
+      "role": "per-system per-pass raw measurement",
+      "sha256": "f441af579cbe0ac493f82261956d84f7e0f4870e3f5bc2ecda531b8f7aee4f25"
+    },
+    {
+      "bytes": 193322,
+      "experiment_family": "E7b",
+      "path": "results/experiments/e7b_serial_efficiency/e7b_run_reasoner_pass1.json",
+      "role": "per-system per-pass raw measurement",
+      "sha256": "0158b21b14bb596fcc23c78454931066b5efe27984b28f9e820fe2d6f114ce36"
+    },
+    {
+      "bytes": 193326,
+      "experiment_family": "E7b",
+      "path": "results/experiments/e7b_serial_efficiency/e7b_run_reasoner_pass2.json",
+      "role": "per-system per-pass raw measurement",
+      "sha256": "451d11cf59f003b5e6b73ac8afb9ee661d16f22d8d864f7509d9823ea0bd5f7c"
+    },
+    {
+      "bytes": 193324,
+      "experiment_family": "E7b",
+      "path": "results/experiments/e7b_serial_efficiency/e7b_run_reasoner_pass3.json",
+      "role": "per-system per-pass raw measurement",
+      "sha256": "8443ec097e25763bade3eee7564015795c27a8f84dfa53d83f779e340ef4f79e"
+    },
+    {
+      "bytes": 192466,
+      "experiment_family": "E7b",
+      "path": "results/experiments/e7b_serial_efficiency/e7b_run_siglip_fusion_pass1.json",
+      "role": "per-system per-pass raw measurement",
+      "sha256": "d62703395b4fc7c319fe5cfcb32ce84c3778fab954b6ff63e96327cc65edc1ee"
+    },
+    {
+      "bytes": 192467,
+      "experiment_family": "E7b",
+      "path": "results/experiments/e7b_serial_efficiency/e7b_run_siglip_fusion_pass2.json",
+      "role": "per-system per-pass raw measurement",
+      "sha256": "475f35c524fb55ac93a194e1d5d52df5146565a6ff7ce34be994d49096254a66"
+    },
+    {
+      "bytes": 192465,
+      "experiment_family": "E7b",
+      "path": "results/experiments/e7b_serial_efficiency/e7b_run_siglip_fusion_pass3.json",
+      "role": "per-system per-pass raw measurement",
+      "sha256": "1d9d3205dd0c5013054b49b3966c06f52977e2f955f5383c9b3fffd7d80cca4e"
+    },
+    {
+      "bytes": 1835879,
+      "experiment_family": "E7b",
+      "path": "results/experiments/e7b_serial_efficiency/e7b_run_vocab1000_product_pass1.json",
+      "role": "per-system per-pass raw measurement",
+      "sha256": "0e82d6da90b03189afca3330b775ca617fee60cb2e98205d5b0ca2840ad12c25"
+    },
+    {
+      "bytes": 1835876,
+      "experiment_family": "E7b",
+      "path": "results/experiments/e7b_serial_efficiency/e7b_run_vocab1000_product_pass2.json",
+      "role": "per-system per-pass raw measurement",
+      "sha256": "8be8e0525f04fa533a7e4c5557ed4dcc76f7d3f6d6823a98334668fc57fa0589"
+    },
+    {
+      "bytes": 1835877,
+      "experiment_family": "E7b",
+      "path": "results/experiments/e7b_serial_efficiency/e7b_run_vocab1000_product_pass3.json",
+      "role": "per-system per-pass raw measurement",
+      "sha256": "4bc431d642d69fbe7247c5fce32b8b91bca318c4fb480f07387b44e9684cfff5"
+    },
+    {
+      "bytes": 1157,
+      "experiment_family": "E7b",
+      "path": "results/experiments/e7b_serial_efficiency/latency_memory.csv",
+      "role": "rendered analysis table cited by the report",
+      "sha256": "deb4a67e793612c822e645d78d314081b9413bc83579d8694d6a83ff647942cc"
+    },
+    {
+      "bytes": 60018,
+      "experiment_family": "E7b",
+      "path": "results/experiments/e7b_serial_efficiency/pareto_serial.png",
+      "role": "figure",
+      "sha256": "c65631ea318ff712ef26380edda7c91de2dfbc562f2d37bef059655e65c9ffb5"
+    },
+    {
+      "bytes": 749632,
+      "experiment_family": "E7b",
+      "path": "results/experiments/e7b_serial_efficiency/pilot_e8a_a1.json",
+      "role": "pilot evidence",
+      "sha256": "792cef85bb5b0f4ff410b130ffe6631b87ddaa47a2d736f27d41a4fd62c3180c"
+    },
+    {
+      "bytes": 193958,
+      "experiment_family": "E7b",
+      "path": "results/experiments/e7b_serial_efficiency/pilot_evidence/e7b_run_e8a_a1_pass1.json",
+      "role": "per-system per-pass raw measurement",
+      "sha256": "570990f5e129c60545e9ec505931bbf428af221b738b22833e872fdf70859adc"
+    },
+    {
+      "bytes": 193959,
+      "experiment_family": "E7b",
+      "path": "results/experiments/e7b_serial_efficiency/pilot_evidence/e7b_run_e8a_a1_pass2.json",
+      "role": "per-system per-pass raw measurement",
+      "sha256": "494064aeec7ba524d4c04b8f0df32b1517246c7d463def72b477c22aa221b697"
+    },
+    {
+      "bytes": 193959,
+      "experiment_family": "E7b",
+      "path": "results/experiments/e7b_serial_efficiency/pilot_evidence/e7b_run_e8a_a1_pass3.json",
+      "role": "per-system per-pass raw measurement",
+      "sha256": "938bef44f39609fe1fe4bb8c73bcbeb0714fbc90b7d08b9f9f754b9c7ec81733"
+    },
+    {
+      "bytes": 3593743,
+      "experiment_family": "E7b",
+      "path": "results/experiments/e7b_serial_efficiency/preflight.json",
+      "role": "gate and audit record",
+      "sha256": "9c96a04d1602117fe0c7b3f27b0368355c6f2c6b5f487e8455e4ec53e6df00d7"
+    },
+    {
+      "bytes": 12950331,
+      "experiment_family": "E7b",
+      "path": "results/experiments/e7b_serial_efficiency/results.json",
+      "role": "gate and audit record",
+      "sha256": "fddf880fc6a023ffe8255e6a8001f225dc4a253d6f87d0d1db2136c81bd672b9"
+    },
+    {
+      "bytes": 887,
+      "experiment_family": "E7b",
+      "path": "results/experiments/e7b_serial_efficiency/stage_timings.csv",
+      "role": "rendered analysis table cited by the report",
+      "sha256": "aeb9f7ef15230278faa1f1a5e5c24430f87506b0e1f1135b8b61eb5ac11cd266"
+    }
+  ],
+  "entry_count": 38,
+  "experiment_family": "E7b",
+  "note": "This manifest hashes existing bytes at the current repository HEAD. It creates no artefact, modifies no artefact and regenerates no artefact. It exists because this family had no SHA-256 identity manifest, unlike E8A, E9 and E10.",
+  "provenance": {
+    "clean_test_accessed": false,
+    "command": "python -m experiments.closure.build_registry",
+    "device": "cpu",
+    "gpu_hours_charged": 0.0,
+    "gpu_used": false,
+    "h5py_version": "3.16.0",
+    "inputs": [],
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "python": "3.12.3",
+    "repository_head": "8cce6a6b8b3f5101d369fd7b6c82e685e68c7bf7",
+    "repository_head_short": "8cce6a6",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "schema_version": 1,
+    "script": "experiments/closure/build_registry.py",
+    "script_sha256": "3342304d058d082971907aae1a257764c3c16d20db8caa40b47e6d4db5a78392",
+    "selected_any_checkpoint": false,
+    "torch_version": "2.12.1",
+    "trained_anything": false,
+    "worktree_dirty": true
+  },
+  "source_directory": "results/experiments/e7b_serial_efficiency",
+  "total_bytes": 27560944
+}

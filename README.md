@@ -10,34 +10,55 @@ classifies the answer from a fixed set of the most frequent answers, on a
 subset of GQA. No large vision-language model is trained, and the encoders are
 never unfrozen.
 
-Status: V1 is a completed legacy prototype. V2 is complete through global-head
-scaling at 40k/100k/250k, and V3 is complete through the 40k latent-query
-reasoner and v3_02a reference/statistical/CLS diagnostics. The reasoner did not
-materially improve on the much smaller fusion head at 40k. E1 (100k/250k
-reasoner scaling under the frozen recipe) completed on 31 July 2026: at both
-scales the reasoner overtakes every global head in every seed, while the
-multi-step deficit persists and remains statistically indistinguishable from
-fusion's. E2 (a frozen SigLIP-B/16 encoder swap on the global-embedding
-path) also completed on 31 July 2026: the comparable multimodal heads gain
-about +1.2 to +1.5 points over their CLIP counterparts in every seed while
-the multi-step deficit stays in the same range, so the compositional
-deficit now persists across two frozen encoders. E3 (the 1000-answer
-vocabulary experiment) completed on 1 August 2026: coverage of the raw dev
-distribution rises from 77.1% to 98.2%, and on that full distribution the
-1000-answer heads answer about 3.6 to 4.1 points more questions correctly,
-despite a roughly 2-point cost on the shared rows. The
-strengthening programme (E1-E3) is complete. E7a (1 August 2026) then
-measured the efficiency axis for the first time under one protocol: the
-frozen encoder dominates every query (about 4.0 ms of GPU tower time plus
-2.3 ms of CPU image decode for CLIP, against 0.02-0.05 ms for the heads),
-caching image features across the questions about one image cuts a query
-from 6.35 to 2.25 ms, and on both end-to-end latency Pareto fronts the
-only optimal models are small global heads with the 1000-answer
-vocabulary. The model-list freeze and the blinded clean-test evaluation
-are the remaining steps.
-Supervisor design feedback will be recorded when available. The clean-test
-embargo remains unchanged: the clean test remains blinded and no confirmatory
-result has been reported.
+Status, current to 13 August 2026. V1 is a completed legacy prototype. V2 is
+complete through global-head scaling at 40k/100k/250k, and V3 through the
+latent-query reasoner and its 100k/250k scaling (E1): the reasoner overtakes
+every global head at the larger scales but did not materially improve on the
+much smaller fusion head at 40k, and it does not reduce the multi-step
+deficit at any scale. E2 (a frozen SigLIP-B/16 encoder swap on the
+global-embedding path) gains about +1.2 to +1.5 points over the CLIP
+counterparts in every seed while the multi-step deficit stays in the same
+range, so the compositional deficit persists across two frozen encoders. E3
+(the 1000-answer vocabulary) raises coverage of the raw development
+distribution from 77.1% to 98.2% and answers about 3.6 to 4.1 points more
+questions correctly on that full distribution, at a roughly 2-point cost on
+the shared rows.
+
+Since then the programme has moved to frozen small language models and one
+compact VLM. E8A puts a frozen SmolLM2-135M on the question side; E8B and
+E10 put frozen SmolLM2-135M and SmolLM2-360M on the answer side; E9 places
+two frozen SmolVLM checkpoints in context, evaluation only. The answer-side
+result is consistent at both sizes: no reliable positive
+pretrained-over-random advantage was detected, and the intervals that
+include zero establish neither equivalence nor the absence of an effect.
+Training-set size is what moves accuracy. E10 completed its frozen twelve-cell
+matrix on 13 August 2026 and is closed.
+
+On efficiency, E7b is the authoritative end-to-end evidence: it measures a
+warm serial batch-1 query from raw image and raw question to answer, and it
+supersedes E7a's additive `full_pipeline_ms` and `amortised_ms` fields and
+their Pareto fronts for any end-to-end claim. E7a's component measurements
+remain valid as components. On E7b's node the small global heads sit at about
+7.6 ms per query against 9.2-20.1 ms for the larger systems, and cached or
+head-only figures (0.02-0.05 ms for the global heads) are partial-pipeline
+measurements that are never end-to-end costs. E7b (otter155) and E9 (otter159) were measured on
+different nodes; E9's bridge control missed its pre-registered 10 per cent
+tolerance by -18.7 per cent, so the two sets are kept as two frontiers, are
+never merged, and no adjustment factor is applied. The E9 comparison against
+the compact VLMs is contextual positioning, not a fair-protocol superiority
+claim. No energy or power measurement exists, so no claim of energy
+efficiency is made anywhere.
+
+The statistical and efficiency evidence closure (13 August 2026) re-verified
+every hash-manifested artefact, reconstructed the row-level correctness
+evidence the V2/E2/E3 families never stored, and attached image-clustered
+intervals to the contrasts that carry a claim; its outputs are under
+`results/closure/` and its report is
+`docs/experiments/closure_statistical_efficiency.md`. The model-list freeze
+and the blinded clean-test evaluation are the remaining steps. Supervisor
+design feedback will be recorded when available. The clean-test embargo
+remains unchanged: the clean test remains blinded and no confirmatory result
+has been reported. Every result above is a development-set result.
 
 The current project map and audit findings are in collab/PROJECT_CONTEXT.md.
 Claude-Codex planning, execution and review follow collab/PROTOCOL.md.
@@ -169,12 +190,14 @@ See `docs/REPRODUCIBILITY.md` for the full account and its caveats.
     check_env.sh              per-session environment check
     1_..5_*.py                the five V1 stage scripts (legacy, complete)
     src/                      reusable code: data, models, train, utils, efficiency
-    experiments/              V2 experiment code (v2_00_protocol: build and verify)
+    experiments/              V2/V3/E-series experiment code, and closure/
     artifacts/                small tracked evidence files (v2_00_protocol)
     docs/                     reports, protocol documents, study guide
     data/                     GQA data and V1/V2 manifests (git-ignored)
     embeddings/               cached CLIP vectors (git-ignored)
-    results/                  trained heads, metrics, figures, reports (git-ignored)
+    results/                  trained heads, metrics, figures (git-ignored,
+                              except the small auditable JSON/CSV records of
+                              E7b, E8A, E8B, E9, E10 and closure/)
 
 ## Reports
 

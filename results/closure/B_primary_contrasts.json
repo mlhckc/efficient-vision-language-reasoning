@@ -1,0 +1,2842 @@
+{
+  "by_role": {
+    "DIAGNOSTIC": 0,
+    "EXPLORATORY": 0,
+    "PRIMARY": 28,
+    "SECONDARY": 42
+  },
+  "by_status": {
+    "CAPACITY_CONFOUNDED": 18,
+    "CLEAN_PAIRED_CONTROL": 37,
+    "DESCRIPTIVE_ONLY": 0,
+    "REPRESENTATION_CONFOUNDED": 6,
+    "SYSTEM_LEVEL_COMPARISON": 9
+  },
+  "classification_note": "analysis_role and comparison_status were fixed in the planning audit before any reconstructed number existed, and no row was reclassified after its interval was computed",
+  "clean_test_accessed": false,
+  "closure_output": "B",
+  "contrast_count": 70,
+  "contrasts": [
+    {
+      "across_training_seed_sd_ddof1": 0.01815,
+      "analysis_role": "PRIMARY",
+      "analysis_status": "READ_FROM_SOURCE",
+      "ci95_image_clustered": [
+        -0.00709,
+        0.01641
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "contrast_id": "E10/difference_in_differences",
+      "directional_rule_outcome": "uncertain or mixed evidence",
+      "effect": 0.00445,
+      "excludes_zero": false,
+      "family": "E10",
+      "interpretation_bound": "not directional; the interval includes zero. The full-magnitude form, after the Phase-2 halving repair",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "G21 pinned normalised exact match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": [
+        0.01919,
+        -0.01582,
+        0.00998
+      ],
+      "point_estimate": 0.00445,
+      "resampling_method": "image-clustered percentile bootstrap, clusters resampled with replacement, percentiles 2.5/97.5",
+      "rng_seed": 0,
+      "source_artefact": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
+      "training_seeds": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.01105,
+      "analysis_role": "PRIMARY",
+      "analysis_status": "READ_FROM_SOURCE",
+      "ci95_image_clustered": [
+        -0.01071,
+        0.00588
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "contrast_id": "E10/pretraining_effect/train_250k",
+      "directional_rule_outcome": "uncertain or mixed evidence",
+      "effect": -0.00238,
+      "excludes_zero": false,
+      "family": "E10",
+      "interpretation_bound": "no reliable positive pretrained-over-random advantage was detected. The interval includes zero; this establishes neither equivalence nor the absence of an effect",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "G21 pinned normalised exact match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": [
+        0.00959,
+        -0.01219,
+        -0.00454
+      ],
+      "point_estimate": -0.00238,
+      "resampling_method": "image-clustered percentile bootstrap, clusters resampled with replacement, percentiles 2.5/97.5",
+      "rng_seed": 0,
+      "source_artefact": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
+      "training_seeds": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.00939,
+      "analysis_role": "PRIMARY",
+      "analysis_status": "READ_FROM_SOURCE",
+      "ci95_image_clustered": [
+        -0.01508,
+        0.00114
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "contrast_id": "E10/pretraining_effect/train_40k",
+      "directional_rule_outcome": "uncertain or mixed evidence",
+      "effect": -0.00683,
+      "excludes_zero": false,
+      "family": "E10",
+      "interpretation_bound": "no reliable positive pretrained-over-random advantage was detected. The interval includes zero and the seeds disagree in sign; this establishes neither equivalence nor the absence of an effect. It does NOT reproduce E8B's directional negative 40k result",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "G21 pinned normalised exact match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": [
+        -0.00959,
+        0.00363,
+        -0.01452
+      ],
+      "point_estimate": -0.00683,
+      "resampling_method": "image-clustered percentile bootstrap, clusters resampled with replacement, percentiles 2.5/97.5",
+      "rng_seed": 0,
+      "source_artefact": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
+      "training_seeds": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.01208,
+      "analysis_role": "PRIMARY",
+      "analysis_status": "READ_FROM_SOURCE",
+      "ci95_image_clustered": [
+        0.058,
+        0.07738
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "contrast_id": "E10/scale_effect_B4",
+      "directional_rule_outcome": "positive directional evidence",
+      "effect": 0.06771,
+      "excludes_zero": true,
+      "family": "E10",
+      "interpretation_bound": "training-set size is what moves accuracy",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "G21 pinned normalised exact match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": [
+        0.077,
+        0.05406,
+        0.07208
+      ],
+      "point_estimate": 0.06771,
+      "resampling_method": "image-clustered percentile bootstrap, clusters resampled with replacement, percentiles 2.5/97.5",
+      "rng_seed": 0,
+      "source_artefact": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
+      "training_seeds": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.00611,
+      "analysis_role": "PRIMARY",
+      "analysis_status": "READ_FROM_SOURCE",
+      "ci95_image_clustered": [
+        0.05287,
+        0.07296
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "contrast_id": "E10/scale_effect_B4r",
+      "directional_rule_outcome": "positive directional evidence",
+      "effect": 0.06326,
+      "excludes_zero": true,
+      "family": "E10",
+      "interpretation_bound": "training-set size is what moves accuracy",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "G21 pinned normalised exact match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": [
+        0.05782,
+        0.06987,
+        0.06209
+      ],
+      "point_estimate": 0.06326,
+      "resampling_method": "image-clustered percentile bootstrap, clusters resampled with replacement, percentiles 2.5/97.5",
+      "rng_seed": 0,
+      "source_artefact": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
+      "training_seeds": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.00481,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "READ_FROM_SOURCE",
+      "ci95_image_clustered": [
+        0.05951,
+        0.0792
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "SYSTEM_LEVEL_COMPARISON",
+      "contrast_id": "E8A/A0p_minus_A1r/train_250k",
+      "directional_rule_outcome": "positive directional evidence",
+      "effect": 0.06966,
+      "excludes_zero": true,
+      "family": "E8A",
+      "interpretation_bound": "a system-level comparison across two interfaces",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "G21 pinned normalised exact match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": [
+        0.06443,
+        0.07065,
+        0.07389
+      ],
+      "point_estimate": 0.06966,
+      "resampling_method": "image-clustered percentile bootstrap, clusters resampled with replacement, percentiles 2.5/97.5",
+      "rng_seed": 0,
+      "source_artefact": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
+      "training_seeds": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.00546,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "READ_FROM_SOURCE",
+      "ci95_image_clustered": [
+        0.04144,
+        0.05864
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "SYSTEM_LEVEL_COMPARISON",
+      "contrast_id": "E8A/A0p_minus_A1r/train_40k",
+      "directional_rule_outcome": "positive directional evidence",
+      "effect": 0.05004,
+      "excludes_zero": true,
+      "family": "E8A",
+      "interpretation_bound": "a system-level comparison across two interfaces",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "G21 pinned normalised exact match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": [
+        0.04602,
+        0.05626,
+        0.04784
+      ],
+      "point_estimate": 0.05004,
+      "resampling_method": "image-clustered percentile bootstrap, clusters resampled with replacement, percentiles 2.5/97.5",
+      "rng_seed": 0,
+      "source_artefact": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
+      "training_seeds": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.0014,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "READ_FROM_SOURCE",
+      "ci95_image_clustered": [
+        -0.02983,
+        -0.01253
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "REPRESENTATION_CONFOUNDED",
+      "contrast_id": "E8A/A1_minus_A0p/train_250k",
+      "directional_rule_outcome": "negative directional evidence",
+      "effect": -0.0213,
+      "excludes_zero": true,
+      "family": "E8A",
+      "interpretation_bound": "a system comparison, not a pure causal semantics or alignment effect: the two sides differ in representation space and in interface as well as in the question encoder",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "G21 pinned normalised exact match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": [
+        -0.0197,
+        -0.02191,
+        -0.0223
+      ],
+      "point_estimate": -0.0213,
+      "resampling_method": "image-clustered percentile bootstrap, clusters resampled with replacement, percentiles 2.5/97.5",
+      "rng_seed": 0,
+      "source_artefact": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
+      "training_seeds": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.00143,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "READ_FROM_SOURCE",
+      "ci95_image_clustered": [
+        -0.01996,
+        -0.00427
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "REPRESENTATION_CONFOUNDED",
+      "contrast_id": "E8A/A1_minus_A0p/train_40k",
+      "directional_rule_outcome": "negative directional evidence",
+      "effect": -0.01184,
+      "excludes_zero": true,
+      "family": "E8A",
+      "interpretation_bound": "a system comparison, not a pure causal semantics or alignment effect: the two sides differ in representation space and in interface as well as in the question encoder",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "G21 pinned normalised exact match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": [
+        -0.01037,
+        -0.01322,
+        -0.01193
+      ],
+      "point_estimate": -0.01184,
+      "resampling_method": "image-clustered percentile bootstrap, clusters resampled with replacement, percentiles 2.5/97.5",
+      "rng_seed": 0,
+      "source_artefact": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
+      "training_seeds": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.00345,
+      "analysis_role": "PRIMARY",
+      "analysis_status": "READ_FROM_SOURCE",
+      "ci95_image_clustered": [
+        0.03935,
+        0.05803
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "contrast_id": "E8A/A1_minus_A1r/train_250k",
+      "directional_rule_outcome": "positive directional evidence",
+      "effect": 0.04835,
+      "excludes_zero": true,
+      "family": "E8A",
+      "interpretation_bound": "the clean within-size question-side pretraining contrast: identical architecture and tokenizer, pretrained weights against a pinned random initialisation",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "G21 pinned normalised exact match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": [
+        0.04472,
+        0.04874,
+        0.05159
+      ],
+      "point_estimate": 0.04835,
+      "resampling_method": "image-clustered percentile bootstrap, clusters resampled with replacement, percentiles 2.5/97.5",
+      "rng_seed": 0,
+      "source_artefact": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
+      "training_seeds": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.00419,
+      "analysis_role": "PRIMARY",
+      "analysis_status": "READ_FROM_SOURCE",
+      "ci95_image_clustered": [
+        0.02947,
+        0.0468
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "contrast_id": "E8A/A1_minus_A1r/train_40k",
+      "directional_rule_outcome": "positive directional evidence",
+      "effect": 0.0382,
+      "excludes_zero": true,
+      "family": "E8A",
+      "interpretation_bound": "the clean within-size question-side pretraining contrast: identical architecture and tokenizer, pretrained weights against a pinned random initialisation",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "G21 pinned normalised exact match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": [
+        0.03565,
+        0.04304,
+        0.03591
+      ],
+      "point_estimate": 0.0382,
+      "resampling_method": "image-clustered percentile bootstrap, clusters resampled with replacement, percentiles 2.5/97.5",
+      "rng_seed": 0,
+      "source_artefact": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
+      "training_seeds": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": null,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "READ_FROM_SOURCE",
+      "ci95_image_clustered": [
+        -0.00112,
+        0.01491
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "SYSTEM_LEVEL_COMPARISON",
+      "contrast_id": "E8B/B2 - B1/train_250k",
+      "directional_rule_outcome": "uncertain or mixed evidence",
+      "effect": 0.00691,
+      "excludes_zero": false,
+      "family": "E8B",
+      "interpretation_bound": "B1 keeps its own frozen section 7.3 classifier recipe and is not forced onto the fixed-22-epoch rule that governs B2 and B3, so any contrast against B1 compares two different checkpoint-selection rules as well as two architectures. It is a system-level comparison, not a clean causal architecture contrast",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "G21 pinned normalised exact match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": [
+        0.00752,
+        0.00272,
+        0.0105
+      ],
+      "point_estimate": 0.00691,
+      "resampling_method": "image-clustered percentile bootstrap, clusters resampled with replacement, percentiles 2.5/97.5",
+      "rng_seed": 0,
+      "source_artefact": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+      "training_seeds": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": null,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "READ_FROM_SOURCE",
+      "ci95_image_clustered": [
+        -0.01965,
+        -0.00299
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "SYSTEM_LEVEL_COMPARISON",
+      "contrast_id": "E8B/B2 - B1/train_40k",
+      "directional_rule_outcome": "negative directional evidence",
+      "effect": -0.01115,
+      "excludes_zero": true,
+      "family": "E8B",
+      "interpretation_bound": "B1 keeps its own frozen section 7.3 classifier recipe and is not forced onto the fixed-22-epoch rule that governs B2 and B3, so any contrast against B1 compares two different checkpoint-selection rules as well as two architectures. It is a system-level comparison, not a clean causal architecture contrast",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "G21 pinned normalised exact match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": [
+        -0.01737,
+        -0.0057,
+        -0.01037
+      ],
+      "point_estimate": -0.01115,
+      "resampling_method": "image-clustered percentile bootstrap, clusters resampled with replacement, percentiles 2.5/97.5",
+      "rng_seed": 0,
+      "source_artefact": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+      "training_seeds": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": null,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "READ_FROM_SOURCE",
+      "ci95_image_clustered": [
+        -0.00511,
+        0.00952
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "SYSTEM_LEVEL_COMPARISON",
+      "contrast_id": "E8B/B3 - B1/train_250k",
+      "directional_rule_outcome": "uncertain or mixed evidence",
+      "effect": 0.00216,
+      "excludes_zero": false,
+      "family": "E8B",
+      "interpretation_bound": "B1 keeps its own frozen section 7.3 classifier recipe and is not forced onto the fixed-22-epoch rule that governs B2 and B3, so any contrast against B1 compares two different checkpoint-selection rules as well as two architectures. It is a system-level comparison, not a clean causal architecture contrast",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "G21 pinned normalised exact match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": [
+        0.00985,
+        -0.00052,
+        -0.00285
+      ],
+      "point_estimate": 0.00216,
+      "resampling_method": "image-clustered percentile bootstrap, clusters resampled with replacement, percentiles 2.5/97.5",
+      "rng_seed": 0,
+      "source_artefact": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+      "training_seeds": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": null,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "READ_FROM_SOURCE",
+      "ci95_image_clustered": [
+        -0.0442,
+        -0.02749
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "SYSTEM_LEVEL_COMPARISON",
+      "contrast_id": "E8B/B3 - B1/train_40k",
+      "directional_rule_outcome": "negative directional evidence",
+      "effect": -0.03578,
+      "excludes_zero": true,
+      "family": "E8B",
+      "interpretation_bound": "B1 keeps its own frozen section 7.3 classifier recipe and is not forced onto the fixed-22-epoch rule that governs B2 and B3, so any contrast against B1 compares two different checkpoint-selection rules as well as two architectures. It is a system-level comparison, not a clean causal architecture contrast",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "G21 pinned normalised exact match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": [
+        -0.01828,
+        -0.06443,
+        -0.02463
+      ],
+      "point_estimate": -0.03578,
+      "resampling_method": "image-clustered percentile bootstrap, clusters resampled with replacement, percentiles 2.5/97.5",
+      "rng_seed": 0,
+      "source_artefact": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+      "training_seeds": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": null,
+      "analysis_role": "PRIMARY",
+      "analysis_status": "READ_FROM_SOURCE",
+      "ci95_image_clustered": [
+        -0.01208,
+        0.00297
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "contrast_id": "E8B/B3 - B2/train_250k",
+      "directional_rule_outcome": "uncertain or mixed evidence",
+      "effect": -0.00475,
+      "excludes_zero": false,
+      "family": "E8B",
+      "interpretation_bound": "the clean within-size answer-side pretraining contrast. It does not support a reliable positive pretrained advantage",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "G21 pinned normalised exact match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": [
+        0.00233,
+        -0.00324,
+        -0.01335
+      ],
+      "point_estimate": -0.00475,
+      "resampling_method": "image-clustered percentile bootstrap, clusters resampled with replacement, percentiles 2.5/97.5",
+      "rng_seed": 0,
+      "source_artefact": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+      "training_seeds": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": null,
+      "analysis_role": "PRIMARY",
+      "analysis_status": "READ_FROM_SOURCE",
+      "ci95_image_clustered": [
+        -0.03333,
+        -0.01619
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "contrast_id": "E8B/B3 - B2/train_40k",
+      "directional_rule_outcome": "negative directional evidence",
+      "effect": -0.02463,
+      "excludes_zero": true,
+      "family": "E8B",
+      "interpretation_bound": "the clean within-size answer-side pretraining contrast. It does not support a reliable positive pretrained advantage",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "G21 pinned normalised exact match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": [
+        -0.00091,
+        -0.05872,
+        -0.01426
+      ],
+      "point_estimate": -0.02463,
+      "resampling_method": "image-clustered percentile bootstrap, clusters resampled with replacement, percentiles 2.5/97.5",
+      "rng_seed": 0,
+      "source_artefact": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+      "training_seeds": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": null,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "READ_FROM_SOURCE",
+      "ci95_image_clustered": [
+        0.10654,
+        0.12915
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "contrast_id": "E8B/image_reliance/B1/train_250k",
+      "directional_rule_outcome": "positive directional evidence",
+      "effect": 0.11752,
+      "excludes_zero": true,
+      "family": "E8B",
+      "interpretation_bound": "a drop under a deranged image shows the answer depends on the correct image. It does not show visual reasoning",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "G21 pinned normalised exact match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": [
+        0.11485,
+        0.12305,
+        0.11465
+      ],
+      "point_estimate": 0.11752,
+      "resampling_method": "image-clustered percentile bootstrap, clusters resampled with replacement, percentiles 2.5/97.5",
+      "rng_seed": 0,
+      "source_artefact": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+      "training_seeds": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": null,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "READ_FROM_SOURCE",
+      "ci95_image_clustered": [
+        0.08153,
+        0.10227
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "contrast_id": "E8B/image_reliance/B1/train_40k",
+      "directional_rule_outcome": "positive directional evidence",
+      "effect": 0.09166,
+      "excludes_zero": true,
+      "family": "E8B",
+      "interpretation_bound": "a drop under a deranged image shows the answer depends on the correct image. It does not show visual reasoning",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "G21 pinned normalised exact match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": [
+        0.09906,
+        0.08637,
+        0.08956
+      ],
+      "point_estimate": 0.09166,
+      "resampling_method": "image-clustered percentile bootstrap, clusters resampled with replacement, percentiles 2.5/97.5",
+      "rng_seed": 0,
+      "source_artefact": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+      "training_seeds": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": null,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "READ_FROM_SOURCE",
+      "ci95_image_clustered": [
+        0.11477,
+        0.1375
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "contrast_id": "E8B/image_reliance/B2/train_250k",
+      "directional_rule_outcome": "positive directional evidence",
+      "effect": 0.12598,
+      "excludes_zero": true,
+      "family": "E8B",
+      "interpretation_bound": "a drop under a deranged image shows the answer depends on the correct image. It does not show visual reasoning",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "G21 pinned normalised exact match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": [
+        0.12005,
+        0.12545,
+        0.13245
+      ],
+      "point_estimate": 0.12598,
+      "resampling_method": "image-clustered percentile bootstrap, clusters resampled with replacement, percentiles 2.5/97.5",
+      "rng_seed": 0,
+      "source_artefact": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+      "training_seeds": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": null,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "READ_FROM_SOURCE",
+      "ci95_image_clustered": [
+        0.07515,
+        0.09776
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "contrast_id": "E8B/image_reliance/B2/train_40k",
+      "directional_rule_outcome": "positive directional evidence",
+      "effect": 0.0861,
+      "excludes_zero": true,
+      "family": "E8B",
+      "interpretation_bound": "a drop under a deranged image shows the answer depends on the correct image. It does not show visual reasoning",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "G21 pinned normalised exact match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": [
+        0.08507,
+        0.09086,
+        0.08237
+      ],
+      "point_estimate": 0.0861,
+      "resampling_method": "image-clustered percentile bootstrap, clusters resampled with replacement, percentiles 2.5/97.5",
+      "rng_seed": 0,
+      "source_artefact": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+      "training_seeds": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": null,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "READ_FROM_SOURCE",
+      "ci95_image_clustered": [
+        0.11146,
+        0.13443
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "contrast_id": "E8B/image_reliance/B3/train_250k",
+      "directional_rule_outcome": "positive directional evidence",
+      "effect": 0.12275,
+      "excludes_zero": true,
+      "family": "E8B",
+      "interpretation_bound": "a drop under a deranged image shows the answer depends on the correct image. It does not show visual reasoning",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "G21 pinned normalised exact match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": [
+        0.12025,
+        0.12215,
+        0.12585
+      ],
+      "point_estimate": 0.12275,
+      "resampling_method": "image-clustered percentile bootstrap, clusters resampled with replacement, percentiles 2.5/97.5",
+      "rng_seed": 0,
+      "source_artefact": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+      "training_seeds": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": null,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "READ_FROM_SOURCE",
+      "ci95_image_clustered": [
+        0.07447,
+        0.09506
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "contrast_id": "E8B/image_reliance/B3/train_40k",
+      "directional_rule_outcome": "positive directional evidence",
+      "effect": 0.08443,
+      "excludes_zero": true,
+      "family": "E8B",
+      "interpretation_bound": "a drop under a deranged image shows the answer depends on the correct image. It does not show visual reasoning",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "G21 pinned normalised exact match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": [
+        0.08816,
+        0.08507,
+        0.08007
+      ],
+      "point_estimate": 0.08443,
+      "resampling_method": "image-clustered percentile bootstrap, clusters resampled with replacement, percentiles 2.5/97.5",
+      "rng_seed": 0,
+      "source_artefact": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+      "training_seeds": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": null,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "READ_FROM_SOURCE",
+      "ci95_image_clustered": [
+        0.03943,
+        0.05801
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "contrast_id": "E8B/scale_effect_B1",
+      "directional_rule_outcome": "positive directional evidence",
+      "effect": 0.04887,
+      "excludes_zero": true,
+      "family": "E8B",
+      "interpretation_bound": "the same development rows; only the training set size differs",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "G21 pinned normalised exact match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": [
+        0.03889,
+        0.05522,
+        0.0525
+      ],
+      "point_estimate": 0.04887,
+      "resampling_method": "image-clustered percentile bootstrap, clusters resampled with replacement, percentiles 2.5/97.5",
+      "rng_seed": 0,
+      "source_artefact": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+      "training_seeds": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": null,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "READ_FROM_SOURCE",
+      "ci95_image_clustered": [
+        0.05683,
+        0.07633
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "contrast_id": "E8B/scale_effect_B2",
+      "directional_rule_outcome": "positive directional evidence",
+      "effect": 0.06693,
+      "excludes_zero": true,
+      "family": "E8B",
+      "interpretation_bound": "the same development rows; only the training set size differs",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "G21 pinned normalised exact match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": [
+        0.06378,
+        0.06365,
+        0.07337
+      ],
+      "point_estimate": 0.06693,
+      "resampling_method": "image-clustered percentile bootstrap, clusters resampled with replacement, percentiles 2.5/97.5",
+      "rng_seed": 0,
+      "source_artefact": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+      "training_seeds": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": null,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "READ_FROM_SOURCE",
+      "ci95_image_clustered": [
+        0.07781,
+        0.0964
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "contrast_id": "E8B/scale_effect_B3",
+      "directional_rule_outcome": "positive directional evidence",
+      "effect": 0.08681,
+      "excludes_zero": true,
+      "family": "E8B",
+      "interpretation_bound": "the same development rows; only the training set size differs",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "G21 pinned normalised exact match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": [
+        0.06702,
+        0.11913,
+        0.07428
+      ],
+      "point_estimate": 0.08681,
+      "resampling_method": "image-clustered percentile bootstrap, clusters resampled with replacement, percentiles 2.5/97.5",
+      "rng_seed": 0,
+      "source_artefact": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+      "training_seeds": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.00699,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        0.07692,
+        0.10131
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CAPACITY_CONFOUNDED",
+      "contrast_id": "e2/concat_minus_question_only/train_250k",
+      "directional_rule_outcome": null,
+      "effect": 0.0894,
+      "excludes_zero": true,
+      "family": "e2",
+      "interpretation_bound": "within the SigLIP path; the arms differ in trainable parameters as well as in fusion input",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": {
+        "0": 0.09308,
+        "1": 0.09982,
+        "2": 0.08595,
+        "3": 0.08258,
+        "42": 0.08556
+      },
+      "point_estimate": 0.0894,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.00477,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        0.06128,
+        0.08566
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CAPACITY_CONFOUNDED",
+      "contrast_id": "e2/concat_minus_question_only/train_40k",
+      "directional_rule_outcome": null,
+      "effect": 0.07327,
+      "excludes_zero": true,
+      "family": "e2",
+      "interpretation_bound": "within the SigLIP path; the arms differ in trainable parameters as well as in fusion input",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": {
+        "0": 0.07467,
+        "1": 0.07324,
+        "2": 0.07454,
+        "3": 0.06547,
+        "42": 0.07843
+      },
+      "point_estimate": 0.07327,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.0024,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        -0.00387,
+        0.00804
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CAPACITY_CONFOUNDED",
+      "contrast_id": "e2/fusion_minus_concat/train_250k",
+      "directional_rule_outcome": null,
+      "effect": 0.00213,
+      "excludes_zero": false,
+      "family": "e2",
+      "interpretation_bound": "within the SigLIP path; the arms differ in trainable parameters as well as in fusion input",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": {
+        "0": -0.00026,
+        "1": 0.00272,
+        "2": 0.00596,
+        "3": 0.00078,
+        "42": 0.00143
+      },
+      "point_estimate": 0.00213,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.00345,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        0.00674,
+        0.02051
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CAPACITY_CONFOUNDED",
+      "contrast_id": "e2/fusion_minus_concat/train_40k",
+      "directional_rule_outcome": null,
+      "effect": 0.01377,
+      "excludes_zero": true,
+      "family": "e2",
+      "interpretation_bound": "within the SigLIP path; the arms differ in trainable parameters as well as in fusion input",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": {
+        "0": 0.01206,
+        "1": 0.01452,
+        "2": 0.00998,
+        "3": 0.01919,
+        "42": 0.01309
+      },
+      "point_estimate": 0.01377,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.0057,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        0.00069,
+        0.01182
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CAPACITY_CONFOUNDED",
+      "contrast_id": "e2/product_minus_concat/train_250k",
+      "directional_rule_outcome": null,
+      "effect": 0.00627,
+      "excludes_zero": true,
+      "family": "e2",
+      "interpretation_bound": "within the SigLIP path; the arms differ in trainable parameters as well as in fusion input",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": {
+        "0": 0.00493,
+        "1": -0.00298,
+        "2": 0.01115,
+        "3": 0.01024,
+        "42": 0.00804
+      },
+      "point_estimate": 0.00627,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.00542,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        0.00618,
+        0.01585
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CAPACITY_CONFOUNDED",
+      "contrast_id": "e2/product_minus_concat/train_40k",
+      "directional_rule_outcome": null,
+      "effect": 0.01089,
+      "excludes_zero": true,
+      "family": "e2",
+      "interpretation_bound": "within the SigLIP path; the arms differ in trainable parameters as well as in fusion input",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": {
+        "0": 0.01556,
+        "1": 0.00856,
+        "2": 0.00933,
+        "3": 0.01711,
+        "42": 0.00389
+      },
+      "point_estimate": 0.01089,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.00308,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        0.00592,
+        0.02481
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "REPRESENTATION_CONFOUNDED",
+      "contrast_id": "e2/siglip_minus_clip_concat/train_40k",
+      "directional_rule_outcome": null,
+      "effect": 0.0154,
+      "excludes_zero": true,
+      "family": "e2",
+      "interpretation_bound": "the two sides are evaluated on identical development rows, so the interval is a valid evaluation-sampling interval on the row-paired difference. The TRAINING streams are not paired: the 768-d and 512-d inputs make identical initialisation and shuffle streams impossible, so the seed label does not pair two runs. Encoder, representation width and head width all move together",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": {
+        "0": 0.01556,
+        "1": 0.014,
+        "2": 0.01465,
+        "3": 0.01232,
+        "42": 0.02048
+      },
+      "point_estimate": 0.0154,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.00298,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        0.00601,
+        0.02401
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "REPRESENTATION_CONFOUNDED",
+      "contrast_id": "e2/siglip_minus_clip_fusion/train_40k",
+      "directional_rule_outcome": null,
+      "effect": 0.01475,
+      "excludes_zero": true,
+      "family": "e2",
+      "interpretation_bound": "the two sides are evaluated on identical development rows, so the interval is a valid evaluation-sampling interval on the row-paired difference. The TRAINING streams are not paired: the 768-d and 512-d inputs make identical initialisation and shuffle streams impossible, so the seed label does not pair two runs. Encoder, representation width and head width all move together",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": {
+        "0": 0.01374,
+        "1": 0.01439,
+        "2": 0.01141,
+        "3": 0.01465,
+        "42": 0.01957
+      },
+      "point_estimate": 0.01475,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.00346,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        0.00403,
+        0.02282
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "REPRESENTATION_CONFOUNDED",
+      "contrast_id": "e2/siglip_minus_clip_product/train_40k",
+      "directional_rule_outcome": null,
+      "effect": 0.01356,
+      "excludes_zero": true,
+      "family": "e2",
+      "interpretation_bound": "the two sides are evaluated on identical development rows, so the interval is a valid evaluation-sampling interval on the row-paired difference. The TRAINING streams are not paired: the 768-d and 512-d inputs make identical initialisation and shuffle streams impossible, so the seed label does not pair two runs. Encoder, representation width and head width all move together",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": {
+        "0": 0.01802,
+        "1": 0.01206,
+        "2": 0.01478,
+        "3": 0.01426,
+        "42": 0.00869
+      },
+      "point_estimate": 0.01356,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.0019,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        -6e-05,
+        0.01586
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "REPRESENTATION_CONFOUNDED",
+      "contrast_id": "e2/siglip_minus_clip_question_only/train_40k",
+      "directional_rule_outcome": null,
+      "effect": 0.00814,
+      "excludes_zero": false,
+      "family": "e2",
+      "interpretation_bound": "the two sides are evaluated on identical development rows, so the interval is a valid evaluation-sampling interval on the row-paired difference. The TRAINING streams are not paired: the 768-d and 512-d inputs make identical initialisation and shuffle streams impossible, so the seed label does not pair two runs. Encoder, representation width and head width all move together",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": {
+        "0": 0.01011,
+        "1": 0.00674,
+        "2": 0.0092,
+        "3": 0.00907,
+        "42": 0.00557
+      },
+      "point_estimate": 0.00814,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.00287,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        0.07413,
+        0.09498
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CAPACITY_CONFOUNDED",
+      "contrast_id": "e3/concat_minus_question_only/train_250k",
+      "directional_rule_outcome": null,
+      "effect": 0.08486,
+      "excludes_zero": true,
+      "family": "e3",
+      "interpretation_bound": "within the top-1000 path; the arms differ in trainable parameters as well as in fusion input",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 9823,
+      "n_resamples": 2000,
+      "n_unique_images": 776,
+      "per_seed_effect": {
+        "0": 0.08755,
+        "1": 0.08195,
+        "2": 0.08226,
+        "3": 0.08806,
+        "42": 0.0845
+      },
+      "point_estimate": 0.08486,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.0024,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        0.05578,
+        0.07423
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CAPACITY_CONFOUNDED",
+      "contrast_id": "e3/concat_minus_question_only/train_40k",
+      "directional_rule_outcome": null,
+      "effect": 0.06523,
+      "excludes_zero": true,
+      "family": "e3",
+      "interpretation_bound": "within the top-1000 path; the arms differ in trainable parameters as well as in fusion input",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 9823,
+      "n_resamples": 2000,
+      "n_unique_images": 776,
+      "per_seed_effect": {
+        "0": 0.06576,
+        "1": 0.06302,
+        "2": 0.06912,
+        "3": 0.06454,
+        "42": 0.06373
+      },
+      "point_estimate": 0.06523,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.00387,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        -0.00138,
+        0.00995
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CAPACITY_CONFOUNDED",
+      "contrast_id": "e3/fusion_minus_concat/train_250k",
+      "directional_rule_outcome": null,
+      "effect": 0.00436,
+      "excludes_zero": false,
+      "family": "e3",
+      "interpretation_bound": "within the top-1000 path; the arms differ in trainable parameters as well as in fusion input",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 9823,
+      "n_resamples": 2000,
+      "n_unique_images": 776,
+      "per_seed_effect": {
+        "0": 0.00285,
+        "1": 0.00875,
+        "2": -0.00122,
+        "3": 0.00702,
+        "42": 0.00438
+      },
+      "point_estimate": 0.00436,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.00271,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        0.00871,
+        0.02022
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CAPACITY_CONFOUNDED",
+      "contrast_id": "e3/fusion_minus_concat/train_40k",
+      "directional_rule_outcome": null,
+      "effect": 0.01429,
+      "excludes_zero": true,
+      "family": "e3",
+      "interpretation_bound": "within the top-1000 path; the arms differ in trainable parameters as well as in fusion input",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 9823,
+      "n_resamples": 2000,
+      "n_unique_images": 776,
+      "per_seed_effect": {
+        "0": 0.01181,
+        "1": 0.0169,
+        "2": 0.0115,
+        "3": 0.0172,
+        "42": 0.01405
+      },
+      "point_estimate": 0.01429,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.00313,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        0.00334,
+        0.01286
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CAPACITY_CONFOUNDED",
+      "contrast_id": "e3/product_minus_concat/train_250k",
+      "directional_rule_outcome": null,
+      "effect": 0.00835,
+      "excludes_zero": true,
+      "family": "e3",
+      "interpretation_bound": "within the top-1000 path; the arms differ in trainable parameters as well as in fusion input",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 9823,
+      "n_resamples": 2000,
+      "n_unique_images": 776,
+      "per_seed_effect": {
+        "0": 0.00723,
+        "1": 0.00733,
+        "2": 0.00428,
+        "3": 0.01222,
+        "42": 0.01069
+      },
+      "point_estimate": 0.00835,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.00287,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        0.00745,
+        0.01502
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CAPACITY_CONFOUNDED",
+      "contrast_id": "e3/product_minus_concat/train_40k",
+      "directional_rule_outcome": null,
+      "effect": 0.0112,
+      "excludes_zero": true,
+      "family": "e3",
+      "interpretation_bound": "within the top-1000 path; the arms differ in trainable parameters as well as in fusion input",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 9823,
+      "n_resamples": 2000,
+      "n_unique_images": 776,
+      "per_seed_effect": {
+        "0": 0.01517,
+        "1": 0.01079,
+        "2": 0.00794,
+        "3": 0.00926,
+        "42": 0.01283
+      },
+      "point_estimate": 0.0112,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.00318,
+      "analysis_role": "PRIMARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        0.05395,
+        0.07747
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CAPACITY_CONFOUNDED",
+      "contrast_id": "v2_02/concat_minus_question_only/train_40k",
+      "directional_rule_outcome": null,
+      "effect": 0.06601,
+      "excludes_zero": true,
+      "family": "v2_02",
+      "interpretation_bound": "the image-using head also has more parameters (576,100 against 313,956); v2_06's zeroed-image intervention is the capacity-matched form of the same question",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": {
+        "0": 0.06922,
+        "1": 0.06598,
+        "2": 0.0691,
+        "3": 0.06222,
+        "42": 0.06352
+      },
+      "point_estimate": 0.06601,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.00141,
+      "analysis_role": "PRIMARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        0.00794,
+        0.02095
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CAPACITY_CONFOUNDED",
+      "contrast_id": "v2_02/fusion_minus_concat/train_40k",
+      "directional_rule_outcome": null,
+      "effect": 0.01442,
+      "excludes_zero": true,
+      "family": "v2_02",
+      "interpretation_bound": "fusion carries 1,100,388 trainable parameters against concat's 576,100; v2_03 is the capacity-matched form of this comparison",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": {
+        "0": 0.01387,
+        "1": 0.01413,
+        "2": 0.01322,
+        "3": 0.01685,
+        "42": 0.014
+      },
+      "point_estimate": 0.01442,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.00302,
+      "analysis_role": "PRIMARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        0.00376,
+        0.01378
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "contrast_id": "v2_03/concat_wide_minus_concat/train_40k",
+      "directional_rule_outcome": null,
+      "effect": 0.00863,
+      "excludes_zero": true,
+      "family": "v2_03",
+      "interpretation_bound": "same input, more capacity: isolates the capacity term alone",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": {
+        "0": 0.01335,
+        "1": 0.00778,
+        "2": 0.00557,
+        "3": 0.00959,
+        "42": 0.00687
+      },
+      "point_estimate": 0.00863,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.00298,
+      "analysis_role": "PRIMARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        -0.00116,
+        0.01226
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "contrast_id": "v2_03/fusion_minus_concat_wide/train_40k",
+      "directional_rule_outcome": null,
+      "effect": 0.00578,
+      "excludes_zero": false,
+      "family": "v2_03",
+      "interpretation_bound": "matched at about 1.1M trainable parameters: fusion 1,100,388 against concat_wide 1,101,475",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": {
+        "0": 0.00052,
+        "1": 0.00635,
+        "2": 0.00765,
+        "3": 0.00726,
+        "42": 0.00713
+      },
+      "point_estimate": 0.00578,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.0017,
+      "analysis_role": "PRIMARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        0.00025,
+        0.00967
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "contrast_id": "v2_03/fusion_minus_fusion_narrow/train_40k",
+      "directional_rule_outcome": null,
+      "effect": 0.00498,
+      "excludes_zero": true,
+      "family": "v2_03",
+      "interpretation_bound": "same input, more capacity: isolates the capacity term alone",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": {
+        "0": 0.00389,
+        "1": 0.00713,
+        "2": 0.00493,
+        "3": 0.00609,
+        "42": 0.00285
+      },
+      "point_estimate": 0.00498,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.00175,
+      "analysis_role": "PRIMARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        0.00285,
+        0.01592
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "contrast_id": "v2_03/fusion_narrow_minus_concat/train_40k",
+      "directional_rule_outcome": null,
+      "effect": 0.00944,
+      "excludes_zero": true,
+      "family": "v2_03",
+      "interpretation_bound": "matched at about 576k trainable parameters: fusion_narrow 576,032 against concat 576,100",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": {
+        "0": 0.00998,
+        "1": 0.007,
+        "2": 0.0083,
+        "3": 0.01076,
+        "42": 0.01115
+      },
+      "point_estimate": 0.00944,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.00355,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        0.00338,
+        0.01569
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "contrast_id": "v2_04/difference_576k_minus_concat/train_40k",
+      "directional_rule_outcome": null,
+      "effect": 0.00944,
+      "excludes_zero": true,
+      "family": "v2_04",
+      "interpretation_bound": "equal-budget arms at the 576k head target",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": {
+        "0": 0.01076,
+        "1": 0.00532,
+        "2": 0.00622,
+        "3": 0.01374,
+        "42": 0.01115
+      },
+      "point_estimate": 0.00944,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.00282,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        0.0037,
+        0.01626
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CAPACITY_CONFOUNDED",
+      "contrast_id": "v2_04/difference_natural_minus_concat/train_40k",
+      "directional_rule_outcome": null,
+      "effect": 0.01001,
+      "excludes_zero": true,
+      "family": "v2_04",
+      "interpretation_bound": "natural-width ladder: the arms differ in trainable parameters as well as in input",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": {
+        "0": 0.01128,
+        "1": 0.00726,
+        "2": 0.00674,
+        "3": 0.01296,
+        "42": 0.0118
+      },
+      "point_estimate": 0.01001,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.00217,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        0.00077,
+        0.00784
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CAPACITY_CONFOUNDED",
+      "contrast_id": "v2_04/fusion_minus_difference_natural/train_40k",
+      "directional_rule_outcome": null,
+      "effect": 0.00441,
+      "excludes_zero": true,
+      "family": "v2_04",
+      "interpretation_bound": "natural-width ladder: the arms differ in trainable parameters as well as in input",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": {
+        "0": 0.00259,
+        "1": 0.00687,
+        "2": 0.00648,
+        "3": 0.00389,
+        "42": 0.0022
+      },
+      "point_estimate": 0.00441,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.00232,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        -0.00383,
+        0.00734
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CAPACITY_CONFOUNDED",
+      "contrast_id": "v2_04/fusion_minus_product_natural/train_40k",
+      "directional_rule_outcome": null,
+      "effect": 0.00169,
+      "excludes_zero": false,
+      "family": "v2_04",
+      "interpretation_bound": "natural-width ladder: the arms differ in trainable parameters as well as in input",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": {
+        "0": 0.00078,
+        "1": 0.00363,
+        "2": 0.00402,
+        "3": 0.00169,
+        "42": -0.00169
+      },
+      "point_estimate": 0.00169,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.00204,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        -0.00402,
+        0.00398
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "contrast_id": "v2_04/fusion_narrow_minus_difference_576k/train_40k",
+      "directional_rule_outcome": null,
+      "effect": -0.0,
+      "excludes_zero": false,
+      "family": "v2_04",
+      "interpretation_bound": "equal-budget arms at the 576k head target",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": {
+        "0": -0.00078,
+        "1": 0.00169,
+        "2": 0.00207,
+        "3": -0.00298,
+        "42": 0.0
+      },
+      "point_estimate": -0.0,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.00293,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        -0.00654,
+        0.00551
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "contrast_id": "v2_04/fusion_narrow_minus_product_576k/train_40k",
+      "directional_rule_outcome": null,
+      "effect": -0.00013,
+      "excludes_zero": false,
+      "family": "v2_04",
+      "interpretation_bound": "equal-budget arms at the 576k head target",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": {
+        "0": 0.00156,
+        "1": 0.00091,
+        "2": -0.00169,
+        "3": -0.00441,
+        "42": 0.00298
+      },
+      "point_estimate": -0.00013,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.00342,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        0.00495,
+        0.01415
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "contrast_id": "v2_04/product_576k_minus_concat/train_40k",
+      "directional_rule_outcome": null,
+      "effect": 0.00957,
+      "excludes_zero": true,
+      "family": "v2_04",
+      "interpretation_bound": "equal-budget arms at the 576k head target",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": {
+        "0": 0.00843,
+        "1": 0.00609,
+        "2": 0.00998,
+        "3": 0.01517,
+        "42": 0.00817
+      },
+      "point_estimate": 0.00957,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.00278,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        -0.00552,
+        0.00569
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "contrast_id": "v2_04/product_576k_minus_difference_576k/train_40k",
+      "directional_rule_outcome": null,
+      "effect": 0.00013,
+      "excludes_zero": false,
+      "family": "v2_04",
+      "interpretation_bound": "equal-budget arms at the 576k head target",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": {
+        "0": -0.00233,
+        "1": 0.00078,
+        "2": 0.00376,
+        "3": 0.00143,
+        "42": -0.00298
+      },
+      "point_estimate": 0.00013,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.00284,
+      "analysis_role": "SECONDARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        0.00811,
+        0.01741
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CAPACITY_CONFOUNDED",
+      "contrast_id": "v2_04/product_natural_minus_concat/train_40k",
+      "directional_rule_outcome": null,
+      "effect": 0.01273,
+      "excludes_zero": true,
+      "family": "v2_04",
+      "interpretation_bound": "natural-width ladder: the arms differ in trainable parameters as well as in input",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": {
+        "0": 0.01309,
+        "1": 0.0105,
+        "2": 0.0092,
+        "3": 0.01517,
+        "42": 0.01569
+      },
+      "point_estimate": 0.01273,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.0049,
+      "analysis_role": "PRIMARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        0.10295,
+        0.13035
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "contrast_id": "v2_06/concat/drop_shuffled/train_40k",
+      "directional_rule_outcome": null,
+      "effect": 0.11709,
+      "excludes_zero": true,
+      "family": "v2_06",
+      "interpretation_bound": "the same frozen head on the same rows under an image intervention; the question side is untouched. A drop shows the answer depends on the correct image. It does not show that the model reasons about the image",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": {
+        "0": 0.11719,
+        "1": 0.11784,
+        "2": 0.12328,
+        "3": 0.10954,
+        "42": 0.11758
+      },
+      "point_estimate": 0.11709,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.004,
+      "analysis_role": "PRIMARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        0.08697,
+        0.11228
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "contrast_id": "v2_06/concat/drop_zeroed/train_40k",
+      "directional_rule_outcome": null,
+      "effect": 0.09987,
+      "excludes_zero": true,
+      "family": "v2_06",
+      "interpretation_bound": "the same frozen head on the same rows under an image intervention; the question side is untouched. A drop shows the answer depends on the correct image. It does not show that the model reasons about the image",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": {
+        "0": 0.09891,
+        "1": 0.10397,
+        "2": 0.1028,
+        "3": 0.09995,
+        "42": 0.09373
+      },
+      "point_estimate": 0.09987,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.00239,
+      "analysis_role": "PRIMARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        0.12769,
+        0.15759
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "contrast_id": "v2_06/fusion/drop_shuffled/train_40k",
+      "directional_rule_outcome": null,
+      "effect": 0.1427,
+      "excludes_zero": true,
+      "family": "v2_06",
+      "interpretation_bound": "the same frozen head on the same rows under an image intervention; the question side is untouched. A drop shows the answer depends on the correct image. It does not show that the model reasons about the image",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": {
+        "0": 0.14493,
+        "1": 0.14325,
+        "2": 0.14467,
+        "3": 0.14143,
+        "42": 0.13923
+      },
+      "point_estimate": 0.1427,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.00514,
+      "analysis_role": "PRIMARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        0.10403,
+        0.13305
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "contrast_id": "v2_06/fusion/drop_zeroed/train_40k",
+      "directional_rule_outcome": null,
+      "effect": 0.1188,
+      "excludes_zero": true,
+      "family": "v2_06",
+      "interpretation_bound": "the same frozen head on the same rows under an image intervention; the question side is untouched. A drop shows the answer depends on the correct image. It does not show that the model reasons about the image",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": {
+        "0": 0.12004,
+        "1": 0.11862,
+        "2": 0.12588,
+        "3": 0.11149,
+        "42": 0.11797
+      },
+      "point_estimate": 0.1188,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.01023,
+      "analysis_role": "PRIMARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        0.01565,
+        0.03154
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "contrast_id": "v2_06/image_only/drop_shuffled/train_40k",
+      "directional_rule_outcome": null,
+      "effect": 0.02362,
+      "excludes_zero": true,
+      "family": "v2_06",
+      "interpretation_bound": "the same frozen head on the same rows under an image intervention; the question side is untouched. A drop shows the answer depends on the correct image. It does not show that the model reasons about the image",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": {
+        "0": 0.03267,
+        "1": 0.02256,
+        "2": 0.02839,
+        "3": 0.00648,
+        "42": 0.028
+      },
+      "point_estimate": 0.02362,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.00274,
+      "analysis_role": "PRIMARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        -0.00093,
+        0.01774
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "contrast_id": "v2_06/image_only/drop_zeroed/train_40k",
+      "directional_rule_outcome": null,
+      "effect": 0.0085,
+      "excludes_zero": false,
+      "family": "v2_06",
+      "interpretation_bound": "the same frozen head on the same rows under an image intervention; the question side is untouched. A drop shows the answer depends on the correct image. It does not show that the model reasons about the image",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": {
+        "0": 0.00959,
+        "1": 0.01024,
+        "2": 0.00972,
+        "3": 0.00933,
+        "42": 0.00363
+      },
+      "point_estimate": 0.0085,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.00328,
+      "analysis_role": "PRIMARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        0.11355,
+        0.14209
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "contrast_id": "v2_06/product_576k/drop_shuffled/train_40k",
+      "directional_rule_outcome": null,
+      "effect": 0.12816,
+      "excludes_zero": true,
+      "family": "v2_06",
+      "interpretation_bound": "the same frozen head on the same rows under an image intervention; the question side is untouched. A drop shows the answer depends on the correct image. It does not show that the model reasons about the image",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": {
+        "0": 0.1251,
+        "1": 0.12847,
+        "2": 0.13352,
+        "3": 0.12769,
+        "42": 0.126
+      },
+      "point_estimate": 0.12816,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.00453,
+      "analysis_role": "PRIMARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        0.09854,
+        0.12576
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "contrast_id": "v2_06/product_576k/drop_zeroed/train_40k",
+      "directional_rule_outcome": null,
+      "effect": 0.11242,
+      "excludes_zero": true,
+      "family": "v2_06",
+      "interpretation_bound": "the same frozen head on the same rows under an image intervention; the question side is untouched. A drop shows the answer depends on the correct image. It does not show that the model reasons about the image",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": {
+        "0": 0.10552,
+        "1": 0.11045,
+        "2": 0.11654,
+        "3": 0.11589,
+        "42": 0.11369
+      },
+      "point_estimate": 0.11242,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.0,
+      "analysis_role": "PRIMARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        0.0,
+        0.0
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "contrast_id": "v2_06/question_only/drop_shuffled/train_40k",
+      "directional_rule_outcome": null,
+      "effect": 0.0,
+      "excludes_zero": false,
+      "family": "v2_06",
+      "interpretation_bound": "the same frozen head on the same rows under an image intervention; the question side is untouched. A drop shows the answer depends on the correct image. It does not show that the model reasons about the image",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": {
+        "0": 0.0,
+        "1": 0.0,
+        "2": 0.0,
+        "3": 0.0,
+        "42": 0.0
+      },
+      "point_estimate": 0.0,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": 0.0,
+      "analysis_role": "PRIMARY",
+      "analysis_status": "COMPUTED_FROM_REPRODUCED_ROW_EVIDENCE",
+      "ci95_image_clustered": [
+        0.0,
+        0.0
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "contrast_id": "v2_06/question_only/drop_zeroed/train_40k",
+      "directional_rule_outcome": null,
+      "effect": 0.0,
+      "excludes_zero": false,
+      "family": "v2_06",
+      "interpretation_bound": "the same frozen head on the same rows under an image intervention; the question side is untouched. A drop shows the answer depends on the correct image. It does not show that the model reasons about the image",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": {
+        "0": 0.0,
+        "1": 0.0,
+        "2": 0.0,
+        "3": 0.0,
+        "42": 0.0
+      },
+      "point_estimate": 0.0,
+      "resampling_method": "image-clustered percentile bootstrap, 2000 draws, numpy.random.default_rng(0), clusters are the slice's represented development imageIds resampled with replacement, percentiles 2.5/97.5; multi-seed rows combine seeds by the within-draw mean",
+      "rng_seed": 0,
+      "source_artefact": "results/closure/reconstructed_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2,
+        3,
+        42
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": null,
+      "analysis_role": "PRIMARY",
+      "analysis_status": "READ_FROM_SOURCE",
+      "ci95_image_clustered": [
+        -0.00672,
+        0.01702
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "SYSTEM_LEVEL_COMPARISON",
+      "contrast_id": "v3_02a/reasoner_minus_fusion_deficit/train_40k",
+      "directional_rule_outcome": null,
+      "effect": 0.00473,
+      "excludes_zero": false,
+      "family": "v3_02a",
+      "interpretation_bound": "a system-level comparison of a latent-query reasoner over token features against a global-embedding fusion head. It does not isolate token access causally. The interval includes zero: no model in the set has been shown to reduce the deficit, which is not the same as showing the models equivalent",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": null,
+      "point_estimate": 0.00473,
+      "resampling_method": "image-clustered percentile bootstrap, clusters resampled with replacement, percentiles 2.5/97.5",
+      "rng_seed": 0,
+      "source_artefact": "results/experiments/v3_02a_refs/step_statistics.json",
+      "training_seeds": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": null,
+      "analysis_role": "PRIMARY",
+      "analysis_status": "READ_FROM_SOURCE",
+      "ci95_image_clustered": [
+        -0.01211,
+        0.01057
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "SYSTEM_LEVEL_COMPARISON",
+      "contrast_id": "v3_03/reasoner_minus_fusion_deficit/train_100k",
+      "directional_rule_outcome": null,
+      "effect": -0.00037,
+      "excludes_zero": false,
+      "family": "v3_03",
+      "interpretation_bound": "a system-level comparison of a latent-query reasoner over token features against a global-embedding fusion head. It does not isolate token access causally. The interval includes zero: no model in the set has been shown to reduce the deficit, which is not the same as showing the models equivalent",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": null,
+      "point_estimate": -0.00037,
+      "resampling_method": "image-clustered percentile bootstrap, clusters resampled with replacement, percentiles 2.5/97.5",
+      "rng_seed": 0,
+      "source_artefact": "results/experiments/v3_03_scaling/results.json",
+      "training_seeds": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "across_training_seed_sd_ddof1": null,
+      "analysis_role": "PRIMARY",
+      "analysis_status": "READ_FROM_SOURCE",
+      "ci95_image_clustered": [
+        -0.01323,
+        0.0076
+      ],
+      "cluster_unit": "represented development imageId",
+      "comparison_status": "SYSTEM_LEVEL_COMPARISON",
+      "contrast_id": "v3_03/reasoner_minus_fusion_deficit/train_250k",
+      "directional_rule_outcome": null,
+      "effect": -0.00275,
+      "excludes_zero": false,
+      "family": "v3_03",
+      "interpretation_bound": "a system-level comparison of a latent-query reasoner over token features against a global-embedding fusion head. It does not isolate token access causally. The interval includes zero: no model in the set has been shown to reduce the deficit, which is not the same as showing the models equivalent",
+      "interval_caveat": "the 95 per cent interval is image-clustered over the development images and conditions on the fixed trained seed set: it carries sampling variation over questions and images, not training-seed variation. The across-seed standard deviation is reported beside it as a separate quantity",
+      "interval_kind": "evaluation-sampling, image-clustered",
+      "metric": "v2_closed_vocab_top1_index_match",
+      "n_questions": 7714,
+      "n_resamples": 2000,
+      "n_unique_images": 768,
+      "per_seed_effect": null,
+      "point_estimate": -0.00275,
+      "resampling_method": "image-clustered percentile bootstrap, clusters resampled with replacement, percentiles 2.5/97.5",
+      "rng_seed": 0,
+      "source_artefact": "results/experiments/v3_03_scaling/results.json",
+      "training_seeds": [
+        0,
+        1,
+        2
+      ]
+    }
+  ],
+  "not_computed": [
+    {
+      "contrast": "e2/siglip_minus_clip_*/train_250k",
+      "reason": "the CLIP partner at 250k is v2_07, which is stopped by a point-estimate reproduction mismatch, so no row-paired difference can be formed at that scale",
+      "status": "NOT_COMPUTED"
+    },
+    {
+      "contrast": "v2_07/* (all scaling contrasts)",
+      "reason": "family stopped by a reproduction mismatch",
+      "status": "NOT_COMPUTED"
+    },
+    {
+      "contrast": "v2_07 addendum_pooled >=4 deficit",
+      "reason": "depends on v2_07 250k checkpoints; the family is stopped. The stored value remains a seed-42, 250k, no-interval figure and is not upgraded here",
+      "status": "NOT_COMPUTED"
+    }
+  ],
+  "policy": "contrasts that already carry a correct image-clustered interval are READ from their canonical artefact, never recomputed. This closure does not produce a competing re-analysis of E8A, E8B, E10, v2_05c, v3_02a or v3_03",
+  "provenance": {
+    "clean_test_accessed": false,
+    "command": "python -m experiments.closure.build_contrast_table",
+    "device": "cpu",
+    "gpu_hours_charged": 0.0,
+    "gpu_used": false,
+    "h5py_version": "3.16.0",
+    "inputs": [
+      {
+        "bytes": 239578,
+        "path": "results/closure/reconstructed_statistics.json",
+        "role": "reconstructed statistics",
+        "sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097"
+      },
+      {
+        "bytes": 31033,
+        "path": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
+        "role": "E10 canonical analysis",
+        "sha256": "37ffdcd09aa2bcd306ca9b54229a1d0d17ff203b6b0900e09e5f876ad1ed0748"
+      },
+      {
+        "bytes": 81729,
+        "path": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
+        "role": "E8A core analysis",
+        "sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562"
+      },
+      {
+        "bytes": 68739,
+        "path": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+        "role": "E8B final report",
+        "sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138"
+      },
+      {
+        "bytes": 11447,
+        "path": "results/experiments/v3_02a_refs/step_statistics.json",
+        "role": "v3_02a step statistics",
+        "sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3"
+      },
+      {
+        "bytes": 26595,
+        "path": "results/experiments/v3_03_scaling/results.json",
+        "role": "v3_03 scaling",
+        "sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339"
+      }
+    ],
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "python": "3.12.3",
+    "repository_head": "8cce6a6b8b3f5101d369fd7b6c82e685e68c7bf7",
+    "repository_head_short": "8cce6a6",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "schema_version": 1,
+    "script": "experiments/closure/build_contrast_table.py",
+    "script_sha256": "0902d849f54bde05310f904b7e998543be926d125a003f89b865f63376e35ada",
+    "selected_any_checkpoint": false,
+    "torch_version": "2.12.1",
+    "trained_anything": false,
+    "worktree_dirty": true
+  },
+  "title": "canonical primary-contrast table",
+  "uncertainty_note": "every interval here is an image-clustered evaluation-sampling interval. It conditions on the fixed trained seed set and carries evaluation-sampling variation only. The across-seed standard deviation reported beside it is a different quantity: the sample sd over independent training seeds (ddof=1). Neither is a substitute for the other and neither is described as the other anywhere in the closure outputs"
+}

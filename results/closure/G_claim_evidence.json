@@ -1,0 +1,1183 @@
+{
+  "claim_count": 17,
+  "claims": [
+    {
+      "analysis_role": "PRIMARY",
+      "blocked": false,
+      "claim_id": "C01",
+      "claim_text": "At train_40k the fusion features give a real accuracy gain over concatenation, but capacity explains part of it: at matched trainable-parameter budgets the gain shrinks and one of the two matched contrasts no longer excludes zero.",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "evidence_status": "READY",
+      "limitation": "The unmatched v2_02 contrast is capacity-confounded: fusion carries 1,100,388 trainable parameters against concat's 576,100. Only the v2_03 matched pairs isolate the feature effect, and fusion minus concat_wide includes zero. Development set only, train_40k only, five training seeds.",
+      "supporting_artefacts": [
+        {
+          "path": "results/closure/reconstructed_statistics.json",
+          "sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097"
+        }
+      ],
+      "supporting_figures": [
+        {
+          "across_training_seed_sd_ddof1": 0.00141,
+          "ci95_image_clustered": [
+            0.00794,
+            0.02095
+          ],
+          "cluster_unit": "represented development imageId",
+          "comparison_status": "CAPACITY_CONFOUNDED",
+          "contrast_id": "v2_02/fusion_minus_concat/train_40k",
+          "effect": 0.01442,
+          "excludes_zero": true,
+          "n_questions": 7714,
+          "n_unique_images": 768,
+          "training_seeds": [
+            0,
+            1,
+            2,
+            3,
+            42
+          ]
+        },
+        {
+          "across_training_seed_sd_ddof1": 0.00298,
+          "ci95_image_clustered": [
+            -0.00116,
+            0.01226
+          ],
+          "cluster_unit": "represented development imageId",
+          "comparison_status": "CLEAN_PAIRED_CONTROL",
+          "contrast_id": "v2_03/fusion_minus_concat_wide/train_40k",
+          "effect": 0.00578,
+          "excludes_zero": false,
+          "n_questions": 7714,
+          "n_unique_images": 768,
+          "training_seeds": [
+            0,
+            1,
+            2,
+            3,
+            42
+          ]
+        },
+        {
+          "across_training_seed_sd_ddof1": 0.00175,
+          "ci95_image_clustered": [
+            0.00285,
+            0.01592
+          ],
+          "cluster_unit": "represented development imageId",
+          "comparison_status": "CLEAN_PAIRED_CONTROL",
+          "contrast_id": "v2_03/fusion_narrow_minus_concat/train_40k",
+          "effect": 0.00944,
+          "excludes_zero": true,
+          "n_questions": 7714,
+          "n_unique_images": 768,
+          "training_seeds": [
+            0,
+            1,
+            2,
+            3,
+            42
+          ]
+        },
+        {
+          "across_training_seed_sd_ddof1": 0.00302,
+          "ci95_image_clustered": [
+            0.00376,
+            0.01378
+          ],
+          "cluster_unit": "represented development imageId",
+          "comparison_status": "CLEAN_PAIRED_CONTROL",
+          "contrast_id": "v2_03/concat_wide_minus_concat/train_40k",
+          "effect": 0.00863,
+          "excludes_zero": true,
+          "n_questions": 7714,
+          "n_unique_images": 768,
+          "training_seeds": [
+            0,
+            1,
+            2,
+            3,
+            42
+          ]
+        }
+      ]
+    },
+    {
+      "analysis_role": "PRIMARY",
+      "blocked": true,
+      "claim_id": "C02",
+      "claim_text": "The fusion advantage over concatenation is largest in the lower-data regime and narrows as the training set grows.",
+      "comparison_status": "CAPACITY_CONFOUNDED",
+      "evidence_status": "READY_AFTER_CPU_STATS",
+      "limitation": "The 40k side carries an image-clustered interval. The 250k side does NOT: v2_07 row-level reconstruction was stopped by a point-estimate reproduction mismatch, so the narrowing rests on stored per-seed means and their across-seed sd alone, with no evaluation-sampling interval. The claim must be written with that asymmetry stated, or restricted to the 40k evidence.",
+      "supporting_artefacts": [
+        {
+          "path": "results/closure/reconstructed_statistics.json",
+          "sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097"
+        }
+      ],
+      "supporting_figures": [
+        {
+          "across_training_seed_sd_ddof1": 0.00141,
+          "ci95_image_clustered": [
+            0.00794,
+            0.02095
+          ],
+          "cluster_unit": "represented development imageId",
+          "comparison_status": "CAPACITY_CONFOUNDED",
+          "contrast_id": "v2_02/fusion_minus_concat/train_40k",
+          "effect": 0.01442,
+          "excludes_zero": true,
+          "n_questions": 7714,
+          "n_unique_images": 768,
+          "training_seeds": [
+            0,
+            1,
+            2,
+            3,
+            42
+          ]
+        }
+      ]
+    },
+    {
+      "analysis_role": "SECONDARY",
+      "blocked": false,
+      "claim_id": "C03",
+      "claim_text": "Either interaction term alone recovers most of the fusion gain at an equal parameter budget; the product and absolute difference terms are largely redundant with each other.",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "evidence_status": "READY",
+      "limitation": "Redundancy is inferred from the two terms performing alike at matched capacity, not from a mechanism. Development set only, train_40k only.",
+      "supporting_artefacts": [
+        {
+          "path": "results/closure/reconstructed_statistics.json",
+          "sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097"
+        }
+      ],
+      "supporting_figures": [
+        {
+          "across_training_seed_sd_ddof1": 0.00342,
+          "ci95_image_clustered": [
+            0.00495,
+            0.01415
+          ],
+          "cluster_unit": "represented development imageId",
+          "comparison_status": "CLEAN_PAIRED_CONTROL",
+          "contrast_id": "v2_04/product_576k_minus_concat/train_40k",
+          "effect": 0.00957,
+          "excludes_zero": true,
+          "n_questions": 7714,
+          "n_unique_images": 768,
+          "training_seeds": [
+            0,
+            1,
+            2,
+            3,
+            42
+          ]
+        },
+        {
+          "across_training_seed_sd_ddof1": 0.00355,
+          "ci95_image_clustered": [
+            0.00338,
+            0.01569
+          ],
+          "cluster_unit": "represented development imageId",
+          "comparison_status": "CLEAN_PAIRED_CONTROL",
+          "contrast_id": "v2_04/difference_576k_minus_concat/train_40k",
+          "effect": 0.00944,
+          "excludes_zero": true,
+          "n_questions": 7714,
+          "n_unique_images": 768,
+          "training_seeds": [
+            0,
+            1,
+            2,
+            3,
+            42
+          ]
+        },
+        {
+          "across_training_seed_sd_ddof1": 0.00278,
+          "ci95_image_clustered": [
+            -0.00552,
+            0.00569
+          ],
+          "cluster_unit": "represented development imageId",
+          "comparison_status": "CLEAN_PAIRED_CONTROL",
+          "contrast_id": "v2_04/product_576k_minus_difference_576k/train_40k",
+          "effect": 0.00013,
+          "excludes_zero": false,
+          "n_questions": 7714,
+          "n_unique_images": 768,
+          "training_seeds": [
+            0,
+            1,
+            2,
+            3,
+            42
+          ]
+        },
+        {
+          "across_training_seed_sd_ddof1": 0.00293,
+          "ci95_image_clustered": [
+            -0.00654,
+            0.00551
+          ],
+          "cluster_unit": "represented development imageId",
+          "comparison_status": "CLEAN_PAIRED_CONTROL",
+          "contrast_id": "v2_04/fusion_narrow_minus_product_576k/train_40k",
+          "effect": -0.00013,
+          "excludes_zero": false,
+          "n_questions": 7714,
+          "n_unique_images": 768,
+          "training_seeds": [
+            0,
+            1,
+            2,
+            3,
+            42
+          ]
+        }
+      ]
+    },
+    {
+      "analysis_role": "PRIMARY",
+      "blocked": false,
+      "claim_id": "C04",
+      "claim_text": "The multimodal heads depend on the correct image: replacing it with another development image or with zeros costs accuracy, and the question-only control is provably unaffected.",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "evidence_status": "READY",
+      "limitation": "A drop under a wrong or removed image demonstrates reliance on the image. It is NOT proof of robust visual reasoning, of grounding, or of compositional understanding. The question-only drop is exactly zero by construction and is a control, not a result.",
+      "supporting_artefacts": [
+        {
+          "path": "results/closure/reconstructed_statistics.json",
+          "sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097"
+        }
+      ],
+      "supporting_figures": [
+        {
+          "across_training_seed_sd_ddof1": 0.00239,
+          "ci95_image_clustered": [
+            0.12769,
+            0.15759
+          ],
+          "cluster_unit": "represented development imageId",
+          "comparison_status": "CLEAN_PAIRED_CONTROL",
+          "contrast_id": "v2_06/fusion/drop_shuffled/train_40k",
+          "effect": 0.1427,
+          "excludes_zero": true,
+          "n_questions": 7714,
+          "n_unique_images": 768,
+          "training_seeds": [
+            0,
+            1,
+            2,
+            3,
+            42
+          ]
+        },
+        {
+          "across_training_seed_sd_ddof1": 0.00514,
+          "ci95_image_clustered": [
+            0.10403,
+            0.13305
+          ],
+          "cluster_unit": "represented development imageId",
+          "comparison_status": "CLEAN_PAIRED_CONTROL",
+          "contrast_id": "v2_06/fusion/drop_zeroed/train_40k",
+          "effect": 0.1188,
+          "excludes_zero": true,
+          "n_questions": 7714,
+          "n_unique_images": 768,
+          "training_seeds": [
+            0,
+            1,
+            2,
+            3,
+            42
+          ]
+        },
+        {
+          "across_training_seed_sd_ddof1": 0.0049,
+          "ci95_image_clustered": [
+            0.10295,
+            0.13035
+          ],
+          "cluster_unit": "represented development imageId",
+          "comparison_status": "CLEAN_PAIRED_CONTROL",
+          "contrast_id": "v2_06/concat/drop_shuffled/train_40k",
+          "effect": 0.11709,
+          "excludes_zero": true,
+          "n_questions": 7714,
+          "n_unique_images": 768,
+          "training_seeds": [
+            0,
+            1,
+            2,
+            3,
+            42
+          ]
+        },
+        {
+          "across_training_seed_sd_ddof1": 0.004,
+          "ci95_image_clustered": [
+            0.08697,
+            0.11228
+          ],
+          "cluster_unit": "represented development imageId",
+          "comparison_status": "CLEAN_PAIRED_CONTROL",
+          "contrast_id": "v2_06/concat/drop_zeroed/train_40k",
+          "effect": 0.09987,
+          "excludes_zero": true,
+          "n_questions": 7714,
+          "n_unique_images": 768,
+          "training_seeds": [
+            0,
+            1,
+            2,
+            3,
+            42
+          ]
+        },
+        {
+          "across_training_seed_sd_ddof1": 0.0,
+          "ci95_image_clustered": [
+            0.0,
+            0.0
+          ],
+          "cluster_unit": "represented development imageId",
+          "comparison_status": "CLEAN_PAIRED_CONTROL",
+          "contrast_id": "v2_06/question_only/drop_shuffled/train_40k",
+          "effect": 0.0,
+          "excludes_zero": false,
+          "n_questions": 7714,
+          "n_unique_images": 768,
+          "training_seeds": [
+            0,
+            1,
+            2,
+            3,
+            42
+          ]
+        }
+      ]
+    },
+    {
+      "analysis_role": "SECONDARY",
+      "blocked": false,
+      "claim_id": "C05",
+      "claim_text": "A frozen SigLIP-B/16 encoder outperforms frozen CLIP ViT-B/32 on the same global-embedding heads at train_40k.",
+      "comparison_status": "REPRESENTATION_CONFOUNDED",
+      "evidence_status": "READY",
+      "limitation": "Representation quality is not isolated: encoder, embedding width (512 against 768) and head input width all move together, so this does not show representation quality is the sole or even the main bottleneck. The development rows are identical on both sides, so the interval is a valid evaluation-sampling interval, but the TRAINING streams are not paired and the seed label does not pair two runs. The 250k version of this contrast could not be computed because its CLIP partner is v2_07.",
+      "supporting_artefacts": [
+        {
+          "path": "results/closure/reconstructed_statistics.json",
+          "sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097"
+        }
+      ],
+      "supporting_figures": [
+        {
+          "across_training_seed_sd_ddof1": 0.00308,
+          "ci95_image_clustered": [
+            0.00592,
+            0.02481
+          ],
+          "cluster_unit": "represented development imageId",
+          "comparison_status": "REPRESENTATION_CONFOUNDED",
+          "contrast_id": "e2/siglip_minus_clip_concat/train_40k",
+          "effect": 0.0154,
+          "excludes_zero": true,
+          "n_questions": 7714,
+          "n_unique_images": 768,
+          "training_seeds": [
+            0,
+            1,
+            2,
+            3,
+            42
+          ]
+        },
+        {
+          "across_training_seed_sd_ddof1": 0.00298,
+          "ci95_image_clustered": [
+            0.00601,
+            0.02401
+          ],
+          "cluster_unit": "represented development imageId",
+          "comparison_status": "REPRESENTATION_CONFOUNDED",
+          "contrast_id": "e2/siglip_minus_clip_fusion/train_40k",
+          "effect": 0.01475,
+          "excludes_zero": true,
+          "n_questions": 7714,
+          "n_unique_images": 768,
+          "training_seeds": [
+            0,
+            1,
+            2,
+            3,
+            42
+          ]
+        },
+        {
+          "across_training_seed_sd_ddof1": 0.00346,
+          "ci95_image_clustered": [
+            0.00403,
+            0.02282
+          ],
+          "cluster_unit": "represented development imageId",
+          "comparison_status": "REPRESENTATION_CONFOUNDED",
+          "contrast_id": "e2/siglip_minus_clip_product/train_40k",
+          "effect": 0.01356,
+          "excludes_zero": true,
+          "n_questions": 7714,
+          "n_unique_images": 768,
+          "training_seeds": [
+            0,
+            1,
+            2,
+            3,
+            42
+          ]
+        },
+        {
+          "across_training_seed_sd_ddof1": 0.0019,
+          "ci95_image_clustered": [
+            -6e-05,
+            0.01586
+          ],
+          "cluster_unit": "represented development imageId",
+          "comparison_status": "REPRESENTATION_CONFOUNDED",
+          "contrast_id": "e2/siglip_minus_clip_question_only/train_40k",
+          "effect": 0.00814,
+          "excludes_zero": false,
+          "n_questions": 7714,
+          "n_unique_images": 768,
+          "training_seeds": [
+            0,
+            1,
+            2,
+            3,
+            42
+          ]
+        }
+      ]
+    },
+    {
+      "analysis_role": "PRIMARY",
+      "blocked": false,
+      "claim_id": "C06",
+      "claim_text": "A pooled deficit at four or more reasoning steps persists across both frozen encoders, across scales and across head families.",
+      "comparison_status": "DESCRIPTIVE_ONLY",
+      "evidence_status": "READY",
+      "limitation": "The deficit is measured against fixed v2_05b per-bucket priors and describes one model's step profile; it is not a contrast between models and establishes no cause. The reasoner-minus-fusion paired deficit differences all include zero, so no model in the set has been SHOWN to reduce the deficit — which is not the same as showing the models equivalent. The v2_07 250k CLIP arm of this claim has no interval.",
+      "supporting_artefacts": [
+        {
+          "path": "results/closure/reconstructed_statistics.json",
+          "sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097"
+        },
+        {
+          "path": "results/experiments/v3_02a_refs/step_statistics.json",
+          "sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3"
+        }
+      ],
+      "supporting_figures": [
+        {
+          "ci95_image_clustered": [
+            0.07207,
+            0.09308
+          ],
+          "deficit_id": "e2/pooled_ge4_deficit/concat/train_250k",
+          "effect": 0.08263,
+          "excludes_zero": true,
+          "n_questions": 7714,
+          "n_unique_images": 768
+        },
+        {
+          "ci95_image_clustered": [
+            0.09138,
+            0.11385
+          ],
+          "deficit_id": "e2/pooled_ge4_deficit/concat/train_40k",
+          "effect": 0.10241,
+          "excludes_zero": true,
+          "n_questions": 7714,
+          "n_unique_images": 768
+        },
+        {
+          "ci95_image_clustered": [
+            0.07208,
+            0.09489
+          ],
+          "deficit_id": "e2/pooled_ge4_deficit/fusion/train_250k",
+          "effect": 0.0838,
+          "excludes_zero": true,
+          "n_questions": 7714,
+          "n_unique_images": 768
+        },
+        {
+          "ci95_image_clustered": [
+            0.07424,
+            0.09914
+          ],
+          "deficit_id": "e2/pooled_ge4_deficit/fusion/train_40k",
+          "effect": 0.08659,
+          "excludes_zero": true,
+          "n_questions": 7714,
+          "n_unique_images": 768
+        },
+        {
+          "ci95_image_clustered": [
+            0.06786,
+            0.09042
+          ],
+          "deficit_id": "e2/pooled_ge4_deficit/product/train_250k",
+          "effect": 0.07926,
+          "excludes_zero": true,
+          "n_questions": 7714,
+          "n_unique_images": 768
+        },
+        {
+          "ci95_image_clustered": [
+            0.08085,
+            0.10393
+          ],
+          "deficit_id": "e2/pooled_ge4_deficit/product/train_40k",
+          "effect": 0.09219,
+          "excludes_zero": true,
+          "n_questions": 7714,
+          "n_unique_images": 768
+        },
+        {
+          "ci95_image_clustered": [
+            0.05195,
+            0.07328
+          ],
+          "deficit_id": "e2/pooled_ge4_deficit/question_only/train_250k",
+          "effect": 0.06284,
+          "excludes_zero": true,
+          "n_questions": 7714,
+          "n_unique_images": 768
+        },
+        {
+          "ci95_image_clustered": [
+            0.07273,
+            0.09541
+          ],
+          "deficit_id": "e2/pooled_ge4_deficit/question_only/train_40k",
+          "effect": 0.0838,
+          "excludes_zero": true,
+          "n_questions": 7714,
+          "n_unique_images": 768
+        },
+        {
+          "ci95_image_clustered": [
+            0.09335,
+            0.11658
+          ],
+          "deficit_id": "v2_02/pooled_ge4_deficit/concat/train_40k",
+          "effect": 0.10502,
+          "excludes_zero": true,
+          "n_questions": 7714,
+          "n_unique_images": 768
+        },
+        {
+          "ci95_image_clustered": [
+            0.08003,
+            0.10387
+          ],
+          "deficit_id": "v2_02/pooled_ge4_deficit/fusion/train_40k",
+          "effect": 0.09175,
+          "excludes_zero": true,
+          "n_questions": 7714,
+          "n_unique_images": 768
+        },
+        {
+          "ci95_image_clustered": [
+            0.07013,
+            0.09192
+          ],
+          "deficit_id": "v2_02/pooled_ge4_deficit/question_only/train_40k",
+          "effect": 0.0809,
+          "excludes_zero": true,
+          "n_questions": 7714,
+          "n_unique_images": 768
+        },
+        {
+          "ci95_image_clustered": [
+            0.08379,
+            0.10712
+          ],
+          "deficit_id": "v2_04/pooled_ge4_deficit/product_natural/train_40k",
+          "effect": 0.09523,
+          "excludes_zero": true,
+          "n_questions": 7714,
+          "n_unique_images": 768
+        }
+      ]
+    },
+    {
+      "analysis_role": "PRIMARY",
+      "blocked": false,
+      "claim_id": "C07",
+      "claim_text": "The lightweight question-conditioned latent-query reasoner over token-level visual features does not materially outperform the far smaller global-embedding fusion head at 40k, and does not reduce the multi-step deficit at any scale.",
+      "comparison_status": "SYSTEM_LEVEL_COMPARISON",
+      "evidence_status": "READY",
+      "limitation": "A system-level comparison. It does not isolate token access causally: the reasoner differs from the fusion head in input granularity, architecture and parameter count at once. All three deficit-difference intervals include zero, which is an absence of detected difference, not evidence of equivalence.",
+      "supporting_artefacts": [
+        {
+          "path": "results/experiments/v3_02a_refs/step_statistics.json",
+          "sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3"
+        },
+        {
+          "path": "results/experiments/v3_03_scaling/results.json",
+          "sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339"
+        }
+      ],
+      "supporting_figures": [
+        {
+          "across_training_seed_sd_ddof1": null,
+          "ci95_image_clustered": [
+            -0.00672,
+            0.01702
+          ],
+          "cluster_unit": "represented development imageId",
+          "comparison_status": "SYSTEM_LEVEL_COMPARISON",
+          "contrast_id": "v3_02a/reasoner_minus_fusion_deficit/train_40k",
+          "effect": 0.00473,
+          "excludes_zero": false,
+          "n_questions": 7714,
+          "n_unique_images": 768,
+          "training_seeds": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "across_training_seed_sd_ddof1": null,
+          "ci95_image_clustered": [
+            -0.01211,
+            0.01057
+          ],
+          "cluster_unit": "represented development imageId",
+          "comparison_status": "SYSTEM_LEVEL_COMPARISON",
+          "contrast_id": "v3_03/reasoner_minus_fusion_deficit/train_100k",
+          "effect": -0.00037,
+          "excludes_zero": false,
+          "n_questions": 7714,
+          "n_unique_images": 768,
+          "training_seeds": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "across_training_seed_sd_ddof1": null,
+          "ci95_image_clustered": [
+            -0.01323,
+            0.0076
+          ],
+          "cluster_unit": "represented development imageId",
+          "comparison_status": "SYSTEM_LEVEL_COMPARISON",
+          "contrast_id": "v3_03/reasoner_minus_fusion_deficit/train_250k",
+          "effect": -0.00275,
+          "excludes_zero": false,
+          "n_questions": 7714,
+          "n_unique_images": 768,
+          "training_seeds": [
+            0,
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "analysis_role": "PRIMARY",
+      "blocked": false,
+      "claim_id": "C08",
+      "claim_text": "On the question side, a frozen pretrained SmolLM2-135M encoder beats its architecture-matched random control.",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "evidence_status": "READY",
+      "limitation": "A1 minus A1r is the only clean within-size question-side pretraining contrast. It says nothing about the answer side, and nothing about whether the pretrained encoder beats the CLIP text tower.",
+      "supporting_artefacts": [
+        {
+          "path": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
+          "sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562"
+        }
+      ],
+      "supporting_figures": [
+        {
+          "across_training_seed_sd_ddof1": 0.00419,
+          "ci95_image_clustered": [
+            0.02947,
+            0.0468
+          ],
+          "cluster_unit": "represented development imageId",
+          "comparison_status": "CLEAN_PAIRED_CONTROL",
+          "contrast_id": "E8A/A1_minus_A1r/train_40k",
+          "effect": 0.0382,
+          "excludes_zero": true,
+          "n_questions": 7714,
+          "n_unique_images": 768,
+          "training_seeds": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "across_training_seed_sd_ddof1": 0.00345,
+          "ci95_image_clustered": [
+            0.03935,
+            0.05803
+          ],
+          "cluster_unit": "represented development imageId",
+          "comparison_status": "CLEAN_PAIRED_CONTROL",
+          "contrast_id": "E8A/A1_minus_A1r/train_250k",
+          "effect": 0.04835,
+          "excludes_zero": true,
+          "n_questions": 7714,
+          "n_unique_images": 768,
+          "training_seeds": [
+            0,
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "analysis_role": "SECONDARY",
+      "blocked": false,
+      "claim_id": "C09",
+      "claim_text": "The frozen CLIP text tower (A0p) outperforms the frozen SmolLM2-135M question encoder (A1) on this task.",
+      "comparison_status": "REPRESENTATION_CONFOUNDED",
+      "evidence_status": "READY",
+      "limitation": "This is a system comparison, NOT an isolated causal semantics or alignment effect. The two sides differ in representation space, in interface and in whether the text representation shares a pretrained space with the image representation. E8A's projected interface is a learned common width, not a naturally shared pretrained embedding space.",
+      "supporting_artefacts": [
+        {
+          "path": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
+          "sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562"
+        }
+      ],
+      "supporting_figures": [
+        {
+          "across_training_seed_sd_ddof1": 0.00143,
+          "ci95_image_clustered": [
+            -0.01996,
+            -0.00427
+          ],
+          "cluster_unit": "represented development imageId",
+          "comparison_status": "REPRESENTATION_CONFOUNDED",
+          "contrast_id": "E8A/A1_minus_A0p/train_40k",
+          "effect": -0.01184,
+          "excludes_zero": true,
+          "n_questions": 7714,
+          "n_unique_images": 768,
+          "training_seeds": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "across_training_seed_sd_ddof1": 0.0014,
+          "ci95_image_clustered": [
+            -0.02983,
+            -0.01253
+          ],
+          "cluster_unit": "represented development imageId",
+          "comparison_status": "REPRESENTATION_CONFOUNDED",
+          "contrast_id": "E8A/A1_minus_A0p/train_250k",
+          "effect": -0.0213,
+          "excludes_zero": true,
+          "n_questions": 7714,
+          "n_unique_images": 768,
+          "training_seeds": [
+            0,
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "analysis_role": "PRIMARY",
+      "blocked": false,
+      "claim_id": "C10",
+      "claim_text": "On the answer side, this frozen-SLM readout interface shows no reliable positive pretrained-over-random advantage, at 135M (E8B) or at 360M (E10).",
+      "comparison_status": "CLEAN_PAIRED_CONTROL",
+      "evidence_status": "READY",
+      "limitation": "Both E10 intervals include zero and the seeds disagree in sign; they establish NEITHER equivalence NOR the absence of an effect. E10 does NOT reproduce E8B's directional negative 40k result: E8B's B3-B2 at 40k is -0.02463 with an interval excluding zero and all three seeds negative, against E10's uncertain -0.00683 with mixed seed signs. E8B B3 at train_40k has a seed sd of 0.02795 and must always be shown with its seed spread.",
+      "supporting_artefacts": [
+        {
+          "path": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
+          "sha256": "37ffdcd09aa2bcd306ca9b54229a1d0d17ff203b6b0900e09e5f876ad1ed0748"
+        },
+        {
+          "path": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+          "sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138"
+        }
+      ],
+      "supporting_figures": [
+        {
+          "across_training_seed_sd_ddof1": null,
+          "ci95_image_clustered": [
+            -0.03333,
+            -0.01619
+          ],
+          "cluster_unit": "represented development imageId",
+          "comparison_status": "CLEAN_PAIRED_CONTROL",
+          "contrast_id": "E8B/B3 - B2/train_40k",
+          "effect": -0.02463,
+          "excludes_zero": true,
+          "n_questions": 7714,
+          "n_unique_images": 768,
+          "training_seeds": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "across_training_seed_sd_ddof1": null,
+          "ci95_image_clustered": [
+            -0.01208,
+            0.00297
+          ],
+          "cluster_unit": "represented development imageId",
+          "comparison_status": "CLEAN_PAIRED_CONTROL",
+          "contrast_id": "E8B/B3 - B2/train_250k",
+          "effect": -0.00475,
+          "excludes_zero": false,
+          "n_questions": 7714,
+          "n_unique_images": 768,
+          "training_seeds": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "across_training_seed_sd_ddof1": 0.00939,
+          "ci95_image_clustered": [
+            -0.01508,
+            0.00114
+          ],
+          "cluster_unit": "represented development imageId",
+          "comparison_status": "CLEAN_PAIRED_CONTROL",
+          "contrast_id": "E10/pretraining_effect/train_40k",
+          "effect": -0.00683,
+          "excludes_zero": false,
+          "n_questions": 7714,
+          "n_unique_images": 768,
+          "training_seeds": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "across_training_seed_sd_ddof1": 0.01105,
+          "ci95_image_clustered": [
+            -0.01071,
+            0.00588
+          ],
+          "cluster_unit": "represented development imageId",
+          "comparison_status": "CLEAN_PAIRED_CONTROL",
+          "contrast_id": "E10/pretraining_effect/train_250k",
+          "effect": -0.00238,
+          "excludes_zero": false,
+          "n_questions": 7714,
+          "n_unique_images": 768,
+          "training_seeds": [
+            0,
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "analysis_role": "SECONDARY",
+      "blocked": false,
+      "claim_id": "C11",
+      "claim_text": "Moving the answer-side frozen language model from 135M to 360M does not change the pretraining conclusion, and training-set size is what moves accuracy.",
+      "comparison_status": "CAPACITY_CONFOUNDED",
+      "evidence_status": "READY",
+      "limitation": "135M to 360M is whole-system capacity sensitivity, not an isolated causal language-model-size effect: trainable capacity also moves, 21,343,808 to 21,540,800 parameters, because the projection width follows the hidden size. The difference in differences is not directional.",
+      "supporting_artefacts": [
+        {
+          "path": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
+          "sha256": "37ffdcd09aa2bcd306ca9b54229a1d0d17ff203b6b0900e09e5f876ad1ed0748"
+        }
+      ],
+      "supporting_figures": [
+        {
+          "across_training_seed_sd_ddof1": 0.01208,
+          "ci95_image_clustered": [
+            0.058,
+            0.07738
+          ],
+          "cluster_unit": "represented development imageId",
+          "comparison_status": "CLEAN_PAIRED_CONTROL",
+          "contrast_id": "E10/scale_effect_B4",
+          "effect": 0.06771,
+          "excludes_zero": true,
+          "n_questions": 7714,
+          "n_unique_images": 768,
+          "training_seeds": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "across_training_seed_sd_ddof1": 0.00611,
+          "ci95_image_clustered": [
+            0.05287,
+            0.07296
+          ],
+          "cluster_unit": "represented development imageId",
+          "comparison_status": "CLEAN_PAIRED_CONTROL",
+          "contrast_id": "E10/scale_effect_B4r",
+          "effect": 0.06326,
+          "excludes_zero": true,
+          "n_questions": 7714,
+          "n_unique_images": 768,
+          "training_seeds": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "across_training_seed_sd_ddof1": 0.01815,
+          "ci95_image_clustered": [
+            -0.00709,
+            0.01641
+          ],
+          "cluster_unit": "represented development imageId",
+          "comparison_status": "CLEAN_PAIRED_CONTROL",
+          "contrast_id": "E10/difference_in_differences",
+          "effect": 0.00445,
+          "excludes_zero": false,
+          "n_questions": 7714,
+          "n_unique_images": 768,
+          "training_seeds": [
+            0,
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "analysis_role": "SECONDARY",
+      "blocked": false,
+      "claim_id": "C12",
+      "claim_text": "Growing the closed answer set from 100 to 1000 raises development coverage from 0.7711 to 0.9819 and raises raw-distribution accuracy, while costing accuracy on the shared head rows.",
+      "comparison_status": "DESCRIPTIVE_ONLY",
+      "evidence_status": "READY",
+      "limitation": "Top-100 and top-1000 results are NEVER paired: they use different development rows (7,714 against 9,823), a different class count and different training rows. Class competition and the smaller head-answer share of a fixed budget are confounded in the head-row loss. The side-by-side comparison is context only.",
+      "supporting_artefacts": [
+        {
+          "path": "results/closure/reconstructed_statistics.json",
+          "sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097"
+        }
+      ],
+      "supporting_figures": [
+        {
+          "across_training_seed_sd_ddof1": 0.00387,
+          "ci95_image_clustered": [
+            -0.00138,
+            0.00995
+          ],
+          "cluster_unit": "represented development imageId",
+          "comparison_status": "CAPACITY_CONFOUNDED",
+          "contrast_id": "e3/fusion_minus_concat/train_250k",
+          "effect": 0.00436,
+          "excludes_zero": false,
+          "n_questions": 9823,
+          "n_unique_images": 776,
+          "training_seeds": [
+            0,
+            1,
+            2,
+            3,
+            42
+          ]
+        },
+        {
+          "across_training_seed_sd_ddof1": 0.00287,
+          "ci95_image_clustered": [
+            0.07413,
+            0.09498
+          ],
+          "cluster_unit": "represented development imageId",
+          "comparison_status": "CAPACITY_CONFOUNDED",
+          "contrast_id": "e3/concat_minus_question_only/train_250k",
+          "effect": 0.08486,
+          "excludes_zero": true,
+          "n_questions": 9823,
+          "n_unique_images": 776,
+          "training_seeds": [
+            0,
+            1,
+            2,
+            3,
+            42
+          ]
+        }
+      ]
+    },
+    {
+      "analysis_role": "PRIMARY",
+      "blocked": false,
+      "claim_id": "C13",
+      "claim_text": "A small global-embedding head reaches comparable raw-distribution accuracy to far larger systems at a small fraction of the end-to-end serial latency.",
+      "comparison_status": "SYSTEM_LEVEL_COMPARISON",
+      "evidence_status": "READY",
+      "limitation": "Latency-efficiency only, from measured warm serial batch-1 queries on ONE node. E7b (otter155) and E9 (otter159) are two separate frontiers and are never merged: E9's fusion bridge control failed its pre-registered 10 per cent tolerance at -18.69 per cent and no adjustment factor is applied. Cached and head-only figures are never quoted as end-to-end. No serial latency exists for E8B's canonical R1 readout, and R2/R3 are never presented as R1's cost.",
+      "supporting_artefacts": [
+        {
+          "path": "results/closure/efficiency_closure_table.json",
+          "sha256": "be1781efeece841cc75df126fab43c9e9946437957c1ea6401ee1f86c8b47d5e"
+        }
+      ],
+      "supporting_figures": [
+        {
+          "frontier": "E7b/otter155",
+          "members": [
+            "E7b::concat",
+            "E7b::e8a_a0p",
+            "E7b::e8a_a1",
+            "E7b::fusion",
+            "E7b::reasoner",
+            "E7b::siglip_fusion",
+            "E7b::vocab1000_product"
+          ],
+          "node": "otter155.eps.surrey.ac.uk",
+          "timing_kind": "END_TO_END_SERIAL"
+        },
+        {
+          "frontier": "E9/otter159",
+          "members": [
+            "E9::e8b_B1",
+            "E9::e8b_B2_R2",
+            "E9::e8b_B2_R3",
+            "E9::e8b_B3_R2",
+            "E9::e8b_B3_R3",
+            "E9::e9_256m_constrained",
+            "E9::e9_256m_open",
+            "E9::e9_500m_constrained",
+            "E9::e9_500m_open",
+            "E9::fusion",
+            "E9::vocab1000_product"
+          ],
+          "node": "otter159.eps.surrey.ac.uk",
+          "timing_kind": "END_TO_END_SERIAL"
+        }
+      ]
+    },
+    {
+      "analysis_role": "SECONDARY",
+      "blocked": false,
+      "claim_id": "C14",
+      "claim_text": "A frozen compact integrated VLM can be placed in context against these lightweight systems.",
+      "comparison_status": "DESCRIPTIVE_ONLY",
+      "evidence_status": "READY",
+      "limitation": "CONTEXTUAL POSITIONING ONLY, never a leaderboard or fair-protocol superiority claim. Training history, multimodal pretraining, answer support and output format all differ, and SmolVLM-256M's text backbone is the Instruct checkpoint where E8A and E8B use base. No comparison is made against published official GQA scores in either direction, because the split, the answer support and the scorer all differ.",
+      "supporting_artefacts": [],
+      "supporting_figures": []
+    },
+    {
+      "analysis_role": "PRIMARY",
+      "blocked": false,
+      "claim_id": "C15",
+      "claim_text": "This project makes no claim of general vision-language reasoning.",
+      "comparison_status": "DESCRIPTIVE_ONLY",
+      "evidence_status": "READY",
+      "limitation": "The task studied is controlled GQA answer classification over a closed answer set, with reasoning-related analyses layered on it. Every result is a development-set result on one dataset subset; the clean test remains embargoed and unread.",
+      "supporting_artefacts": [],
+      "supporting_figures": []
+    },
+    {
+      "analysis_role": "PRIMARY",
+      "blocked": false,
+      "claim_id": "C16",
+      "claim_text": "PROHIBITED: no claim that any system here is energy-efficient.",
+      "comparison_status": "DESCRIPTIVE_ONLY",
+      "evidence_status": "NOT_SUPPORTED",
+      "limitation": "No direct power or energy measurement exists anywhere in this project. Permitted wording is 'computationally efficient', 'latency-efficient', or the directly measured term. This row exists to record the prohibition.",
+      "supporting_artefacts": [],
+      "supporting_figures": []
+    },
+    {
+      "analysis_role": "PRIMARY",
+      "blocked": false,
+      "claim_id": "C17",
+      "claim_text": "PROHIBITED: no merged cross-node efficiency frontier, and no equivalence claim from an interval that includes zero.",
+      "comparison_status": "DESCRIPTIVE_ONLY",
+      "evidence_status": "NOT_SUPPORTED",
+      "limitation": "The E7b and E9 measurements are on different nodes and the bridge control failed its tolerance, so they are never merged. An interval containing zero is an absence of detected effect and never establishes equivalence or the absence of an effect.",
+      "supporting_artefacts": [],
+      "supporting_figures": []
+    }
+  ],
+  "clean_test_accessed": false,
+  "closure_output": "G",
+  "provenance": {
+    "clean_test_accessed": false,
+    "command": "python -m experiments.closure.build_claim_table",
+    "device": "cpu",
+    "gpu_hours_charged": 0.0,
+    "gpu_used": false,
+    "h5py_version": "3.16.0",
+    "inputs": [
+      {
+        "bytes": 20546,
+        "path": "results/closure/A_evidence_registry.json",
+        "role": "evidence registry",
+        "sha256": "b8b47e024c49a599a425894f34c24b4375958998401a311605694027257de122"
+      },
+      {
+        "bytes": 127530,
+        "path": "results/closure/B_primary_contrasts.json",
+        "role": "closure contrast table",
+        "sha256": "cca3c32fb9797123dd644d4ee4e1189e1ca03dcb6c497594774cbe90abd5e18b"
+      },
+      {
+        "bytes": 64983,
+        "path": "results/closure/efficiency_closure_table.json",
+        "role": "efficiency closure table",
+        "sha256": "be1781efeece841cc75df126fab43c9e9946437957c1ea6401ee1f86c8b47d5e"
+      },
+      {
+        "bytes": 239578,
+        "path": "results/closure/reconstructed_statistics.json",
+        "role": "reconstructed statistics",
+        "sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097"
+      }
+    ],
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "python": "3.12.3",
+    "repository_head": "8cce6a6b8b3f5101d369fd7b6c82e685e68c7bf7",
+    "repository_head_short": "8cce6a6",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "schema_version": 1,
+    "script": "experiments/closure/build_claim_table.py",
+    "script_sha256": "cb67cbaa916b47f751a54e07b4c008f763753f612bf9de42f337456e090fbe00",
+    "selected_any_checkpoint": false,
+    "torch_version": "2.12.1",
+    "trained_anything": false,
+    "worktree_dirty": true
+  },
+  "rule": "every row carries a non-empty limitation. A claim without a limitation is not a claim this project has earned",
+  "title": "claim -> evidence -> limitation table"
+}

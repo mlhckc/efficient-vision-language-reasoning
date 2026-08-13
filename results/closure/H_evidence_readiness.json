@@ -1,0 +1,264 @@
+{
+  "clean_test_accessed": false,
+  "closure_output": "H",
+  "counts": {
+    "NOT_SUPPORTED": 2,
+    "OPTIONAL_EVALUATION_ONLY": 3,
+    "READY": 14,
+    "READY_AFTER_CPU_STATS": 1,
+    "SUPERSEDED": 1
+  },
+  "optional_items": [
+    {
+      "estimated_cost": "a short evaluation-only measurement; no training, no optimizer, no checkpoint written",
+      "executed": false,
+      "id": "O01",
+      "item": "E10 B4/B4r serial latency and memory",
+      "protocol": "the frozen E7b serial protocol, batch 1, warm median, three passes, on one node",
+      "recommendation": "NOT recommended now. The dissertation can rest project-wide efficiency on E7b and E9 and use E10 for capacity and pretraining science. Recommend only if a central claim comes to require a 360M cost point.",
+      "would_support": "an accuracy-latency point for the 360M answer-side family, which currently has no timing evidence at all"
+    },
+    {
+      "estimated_cost": "a re-measurement of eight systems, evaluation only",
+      "executed": false,
+      "id": "O02",
+      "item": "single-node re-measurement of the E7b otter155 systems on otter159",
+      "protocol": "the same E7b serial protocol, re-run on the E9 node",
+      "recommendation": "NOT recommended now. Two clearly labelled frontiers are honest and sufficient; a merged frontier is a presentation convenience, not a scientific need.",
+      "would_support": "resolving the -18.69 per cent bridge failure and permitting ONE merged frontier instead of two"
+    },
+    {
+      "estimated_cost": "roughly a sixth of the E9 branch budget, per E9's own recorded estimate",
+      "executed": false,
+      "id": "O03",
+      "item": "E8B R1 serial latency under a batch-1-appropriate scorer",
+      "protocol": "a batch-1 rewrite of the R1 scorer under the E7b protocol",
+      "recommendation": "NOT recommended. E9 recorded that timing it would measure an implementation choice rather than a system property. Keep the exclusion and never present R2/R3 as R1's cost.",
+      "would_support": "a serial cost for E8B's canonical R1 readout, which is currently excluded by design"
+    }
+  ],
+  "optional_items_executed": 0,
+  "outstanding_after_this_closure": [
+    {
+      "blocked": true,
+      "blocker_reference": "results/closure/C_reconstructed_evidence_manifest.json blockers[0]: v2_07 point-estimate reproduction mismatch",
+      "claim_id": "C02",
+      "claim_text_short": "The fusion advantage over concatenation is largest in the lower-data regime and narrows as the training set gr",
+      "remaining_work": "the point estimates are frozen and correct, but the evaluation-sampling interval requires the deterministic CPU recomputation, which was attempted and stopped by the recorded reproduction mismatch",
+      "status": "READY_AFTER_CPU_STATS"
+    }
+  ],
+  "outstanding_note": "the goal was no READY_AFTER_CPU_STATS entry left for a retained dissertation claim. One remains, C02, and it remains because the recomputation was ATTEMPTED and STOPPED by a point-estimate reproduction mismatch in v2_07, not because it was skipped. It is recorded as a blocker for review rather than repaired",
+  "provenance": {
+    "clean_test_accessed": false,
+    "command": "python -m experiments.closure.build_claim_table",
+    "device": "cpu",
+    "gpu_hours_charged": 0.0,
+    "gpu_used": false,
+    "h5py_version": "3.16.0",
+    "inputs": [],
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "python": "3.12.3",
+    "repository_head": "8cce6a6b8b3f5101d369fd7b6c82e685e68c7bf7",
+    "repository_head_short": "8cce6a6",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "schema_version": 1,
+    "script": "experiments/closure/build_claim_table.py",
+    "script_sha256": "cb67cbaa916b47f751a54e07b4c008f763753f612bf9de42f337456e090fbe00",
+    "selected_any_checkpoint": false,
+    "torch_version": "2.12.1",
+    "trained_anything": false,
+    "worktree_dirty": true
+  },
+  "rows": [
+    {
+      "blocked": false,
+      "blocker_reference": null,
+      "claim_id": "C01",
+      "claim_text_short": "At train_40k the fusion features give a real accuracy gain over concatenation, but capacity explains part of i",
+      "remaining_work": "none; the evidence is correct as it stands",
+      "status": "READY"
+    },
+    {
+      "blocked": true,
+      "blocker_reference": "results/closure/C_reconstructed_evidence_manifest.json blockers[0]: v2_07 point-estimate reproduction mismatch",
+      "claim_id": "C02",
+      "claim_text_short": "The fusion advantage over concatenation is largest in the lower-data regime and narrows as the training set gr",
+      "remaining_work": "the point estimates are frozen and correct, but the evaluation-sampling interval requires the deterministic CPU recomputation, which was attempted and stopped by the recorded reproduction mismatch",
+      "status": "READY_AFTER_CPU_STATS"
+    },
+    {
+      "blocked": false,
+      "blocker_reference": null,
+      "claim_id": "C03",
+      "claim_text_short": "Either interaction term alone recovers most of the fusion gain at an equal parameter budget; the product and a",
+      "remaining_work": "none; the evidence is correct as it stands",
+      "status": "READY"
+    },
+    {
+      "blocked": false,
+      "blocker_reference": null,
+      "claim_id": "C04",
+      "claim_text_short": "The multimodal heads depend on the correct image: replacing it with another development image or with zeros co",
+      "remaining_work": "none; the evidence is correct as it stands",
+      "status": "READY"
+    },
+    {
+      "blocked": false,
+      "blocker_reference": null,
+      "claim_id": "C05",
+      "claim_text_short": "A frozen SigLIP-B/16 encoder outperforms frozen CLIP ViT-B/32 on the same global-embedding heads at train_40k.",
+      "remaining_work": "none; the evidence is correct as it stands",
+      "status": "READY"
+    },
+    {
+      "blocked": false,
+      "blocker_reference": null,
+      "claim_id": "C06",
+      "claim_text_short": "A pooled deficit at four or more reasoning steps persists across both frozen encoders, across scales and acros",
+      "remaining_work": "none; the evidence is correct as it stands",
+      "status": "READY"
+    },
+    {
+      "blocked": false,
+      "blocker_reference": null,
+      "claim_id": "C07",
+      "claim_text_short": "The lightweight question-conditioned latent-query reasoner over token-level visual features does not materiall",
+      "remaining_work": "none; the evidence is correct as it stands",
+      "status": "READY"
+    },
+    {
+      "blocked": false,
+      "blocker_reference": null,
+      "claim_id": "C08",
+      "claim_text_short": "On the question side, a frozen pretrained SmolLM2-135M encoder beats its architecture-matched random control.",
+      "remaining_work": "none; the evidence is correct as it stands",
+      "status": "READY"
+    },
+    {
+      "blocked": false,
+      "blocker_reference": null,
+      "claim_id": "C09",
+      "claim_text_short": "The frozen CLIP text tower (A0p) outperforms the frozen SmolLM2-135M question encoder (A1) on this task.",
+      "remaining_work": "none; the evidence is correct as it stands",
+      "status": "READY"
+    },
+    {
+      "blocked": false,
+      "blocker_reference": null,
+      "claim_id": "C10",
+      "claim_text_short": "On the answer side, this frozen-SLM readout interface shows no reliable positive pretrained-over-random advant",
+      "remaining_work": "none; the evidence is correct as it stands",
+      "status": "READY"
+    },
+    {
+      "blocked": false,
+      "blocker_reference": null,
+      "claim_id": "C11",
+      "claim_text_short": "Moving the answer-side frozen language model from 135M to 360M does not change the pretraining conclusion, and",
+      "remaining_work": "none; the evidence is correct as it stands",
+      "status": "READY"
+    },
+    {
+      "blocked": false,
+      "blocker_reference": null,
+      "claim_id": "C12",
+      "claim_text_short": "Growing the closed answer set from 100 to 1000 raises development coverage from 0.7711 to 0.9819 and raises ra",
+      "remaining_work": "none; the evidence is correct as it stands",
+      "status": "READY"
+    },
+    {
+      "blocked": false,
+      "blocker_reference": null,
+      "claim_id": "C13",
+      "claim_text_short": "A small global-embedding head reaches comparable raw-distribution accuracy to far larger systems at a small fr",
+      "remaining_work": "none; the evidence is correct as it stands",
+      "status": "READY"
+    },
+    {
+      "blocked": false,
+      "blocker_reference": null,
+      "claim_id": "C14",
+      "claim_text_short": "A frozen compact integrated VLM can be placed in context against these lightweight systems.",
+      "remaining_work": "none; the evidence is correct as it stands",
+      "status": "READY"
+    },
+    {
+      "blocked": false,
+      "blocker_reference": null,
+      "claim_id": "C15",
+      "claim_text_short": "This project makes no claim of general vision-language reasoning.",
+      "remaining_work": "none; the evidence is correct as it stands",
+      "status": "READY"
+    },
+    {
+      "blocked": false,
+      "blocker_reference": null,
+      "claim_id": "C16",
+      "claim_text_short": "PROHIBITED: no claim that any system here is energy-efficient.",
+      "remaining_work": "none permitted; this row records a prohibition",
+      "status": "NOT_SUPPORTED"
+    },
+    {
+      "blocked": false,
+      "blocker_reference": null,
+      "claim_id": "C17",
+      "claim_text_short": "PROHIBITED: no merged cross-node efficiency frontier, and no equivalence claim from an interval that includes ",
+      "remaining_work": "none permitted; this row records a prohibition",
+      "status": "NOT_SUPPORTED"
+    },
+    {
+      "blocked": false,
+      "blocker_reference": null,
+      "claim_id": "O01",
+      "claim_text_short": "E10 B4/B4r serial latency and memory",
+      "estimated_cost": "a short evaluation-only measurement; no training, no optimizer, no checkpoint written",
+      "executed": false,
+      "protocol": "the frozen E7b serial protocol, batch 1, warm median, three passes, on one node",
+      "recommendation": "NOT recommended now. The dissertation can rest project-wide efficiency on E7b and E9 and use E10 for capacity and pretraining science. Recommend only if a central claim comes to require a 360M cost point.",
+      "remaining_work": "an accuracy-latency point for the 360M answer-side family, which currently has no timing evidence at all",
+      "status": "OPTIONAL_EVALUATION_ONLY"
+    },
+    {
+      "blocked": false,
+      "blocker_reference": null,
+      "claim_id": "O02",
+      "claim_text_short": "single-node re-measurement of the E7b otter155 systems on otter159",
+      "estimated_cost": "a re-measurement of eight systems, evaluation only",
+      "executed": false,
+      "protocol": "the same E7b serial protocol, re-run on the E9 node",
+      "recommendation": "NOT recommended now. Two clearly labelled frontiers are honest and sufficient; a merged frontier is a presentation convenience, not a scientific need.",
+      "remaining_work": "resolving the -18.69 per cent bridge failure and permitting ONE merged frontier instead of two",
+      "status": "OPTIONAL_EVALUATION_ONLY"
+    },
+    {
+      "blocked": false,
+      "blocker_reference": null,
+      "claim_id": "O03",
+      "claim_text_short": "E8B R1 serial latency under a batch-1-appropriate scorer",
+      "estimated_cost": "roughly a sixth of the E9 branch budget, per E9's own recorded estimate",
+      "executed": false,
+      "protocol": "a batch-1 rewrite of the R1 scorer under the E7b protocol",
+      "recommendation": "NOT recommended. E9 recorded that timing it would measure an implementation choice rather than a system property. Keep the exclusion and never present R2/R3 as R1's cost.",
+      "remaining_work": "a serial cost for E8B's canonical R1 readout, which is currently excluded by design",
+      "status": "OPTIONAL_EVALUATION_ONLY"
+    },
+    {
+      "blocked": false,
+      "blocker_reference": null,
+      "claim_id": "S01",
+      "claim_text_short": "v2_05b row-level normal-approximation intervals",
+      "remaining_work": "none; superseded by v2_05c image-clustered intervals and never re-quoted",
+      "status": "SUPERSEDED"
+    }
+  ],
+  "status_definitions": {
+    "NOT_SUPPORTED": "the evidence does not support the claim and no permitted work here would change that",
+    "OPTIONAL_EVALUATION_ONLY": "a missing value obtainable by a small evaluation-only measurement under an already-established protocol; NOT executed by this task",
+    "READY": "point estimate and uncertainty are both correct as they stand",
+    "READY_AFTER_CPU_STATS": "the point estimate is frozen and correct, but the uncertainty model still needs the deterministic evaluation-only recomputation",
+    "SUPERSEDED": "replaced by a later artefact; never re-quoted"
+  },
+  "title": "evidence readiness table"
+}

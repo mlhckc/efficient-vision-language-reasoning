@@ -86,6 +86,18 @@ results/experiments/e10_capacity_360m_core/*
 !results/experiments/e10_capacity_360m_core/*.json
 !results/experiments/e10_capacity_360m_core/*.md
 
+# Post-experiment statistical and efficiency closure: the same policy again.
+# The registry, contrast, slice, seed, multiplicity, claim, readiness and
+# efficiency tables are small and auditable, so they are tracked and a clone
+# can check every closure number. The reconstructed per-row npz arrays under
+# row_evidence/ are binaries and stay local; each one's path, size and
+# SHA-256 is recorded in C_reconstructed_evidence_manifest.json.
+!results/closure/
+results/closure/*
+!results/closure/*.json
+!results/closure/*.csv
+!results/closure/*.md
+
 # Python bytecode
 __pycache__/
 *.pyc

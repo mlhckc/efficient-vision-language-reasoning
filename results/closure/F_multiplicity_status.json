@@ -1,0 +1,113 @@
+{
+  "by_family": {
+    "E10": {
+      "contrasts": 5,
+      "primary": 5
+    },
+    "E8A": {
+      "contrasts": 6,
+      "primary": 2
+    },
+    "E8B": {
+      "contrasts": 15,
+      "primary": 2
+    },
+    "e2": {
+      "contrasts": 10,
+      "primary": 0
+    },
+    "e3": {
+      "contrasts": 6,
+      "primary": 0
+    },
+    "v2_02": {
+      "contrasts": 2,
+      "primary": 2
+    },
+    "v2_03": {
+      "contrasts": 4,
+      "primary": 4
+    },
+    "v2_04": {
+      "contrasts": 9,
+      "primary": 0
+    },
+    "v2_06": {
+      "contrasts": 10,
+      "primary": 10
+    },
+    "v3_02a": {
+      "contrasts": 1,
+      "primary": 1
+    },
+    "v3_03": {
+      "contrasts": 2,
+      "primary": 2
+    }
+  },
+  "by_role": {
+    "DIAGNOSTIC": 0,
+    "EXPLORATORY": 0,
+    "PRIMARY": 28,
+    "SECONDARY": 42
+  },
+  "by_status": {
+    "CAPACITY_CONFOUNDED": 18,
+    "CLEAN_PAIRED_CONTROL": 37,
+    "DESCRIPTIVE_ONLY": 0,
+    "REPRESENTATION_CONFOUNDED": 6,
+    "SYSTEM_LEVEL_COMPARISON": 9
+  },
+  "clean_test_accessed": false,
+  "closure_output": "F",
+  "exploratory_evidence_permanently_invalidated": {
+    "E8B grid points 1-3": "exploratory protocol-diagnostic evidence only. Every statistic derived from them for ranking purposes is invalidated and supports no superiority claim in either direction. Grid points 4-8 were permanently abandoned and never ran"
+  },
+  "interval_counts": {
+    "E10_in_core_analysis": 5,
+    "E8A_constructed_in_source": 102,
+    "E8A_headline": 18,
+    "E8A_per_slice": 84,
+    "E8B_in_final_report": 15,
+    "constructed_by_this_closure": 132,
+    "in_output_B": 70
+  },
+  "multiplicity_statement": "every interval in this project is nominal 95 per cent, image-clustered and UNCORRECTED for multiplicity. No family-wise correction is applied by any experiment or by this closure, no p-value is computed anywhere, and directional rules rather than significance tests govern every conclusion. This is a disclosure, not a defect to be repaired by an undeclared correction",
+  "no_fishing_statement": "no new hypothesis test was introduced by this closure, no analysis was chosen after seeing its outcome, and no result was reported or withheld on the basis of whether its interval excludes zero. The reconstructed contrast list is the list the source experiments already published as their own gaps, plus the arm accuracies those gaps are built from",
+  "provenance": {
+    "clean_test_accessed": false,
+    "command": "python -m experiments.closure.build_contrast_table",
+    "device": "cpu",
+    "gpu_hours_charged": 0.0,
+    "gpu_used": false,
+    "h5py_version": "3.16.0",
+    "inputs": [],
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "python": "3.12.3",
+    "repository_head": "8cce6a6b8b3f5101d369fd7b6c82e685e68c7bf7",
+    "repository_head_short": "8cce6a6",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "schema_version": 1,
+    "script": "experiments/closure/build_contrast_table.py",
+    "script_sha256": "0902d849f54bde05310f904b7e998543be926d125a003f89b865f63376e35ada",
+    "selected_any_checkpoint": false,
+    "torch_version": "2.12.1",
+    "trained_anything": false,
+    "worktree_dirty": true
+  },
+  "role_definitions": {
+    "DIAGNOSTIC": "descriptive detail; supports no comparative claim",
+    "EXPLORATORY": "protocol-diagnostic evidence; never a core result and never a basis for selection",
+    "PRIMARY": "a contrast a central dissertation claim rests on",
+    "SECONDARY": "a supporting contrast, reported with its claim"
+  },
+  "status_definitions": {
+    "CAPACITY_CONFOUNDED": "trainable capacity moves with the factor under study",
+    "CLEAN_PAIRED_CONTROL": "the two sides differ in the one factor under study, with the control matched on architecture and size",
+    "DESCRIPTIVE_ONLY": "different denominators, rows or supports; no paired contrast is defined",
+    "REPRESENTATION_CONFOUNDED": "the representation space or width moves with the factor under study",
+    "SYSTEM_LEVEL_COMPARISON": "the two sides differ in more than the named factor; the comparison is between whole systems"
+  },
+  "title": "multiplicity and comparison-status table"
+}
