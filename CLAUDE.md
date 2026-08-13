@@ -278,22 +278,48 @@ hash no longer matches the worktree.
   (-0.00683 at 40k, -0.00238 at 250k, both intervals containing zero, seeds
   disagreeing in sign at both scales), and the difference in differences,
   (B4-B4r)@250k - (B4-B4r)@40k, is +0.00445 [-0.00709, 0.01641], also not
-  directional. At 360M the pretrained readout weights buy nothing measurable
-  over an architecture-matched random initialisation; training-set size is
-  what moves accuracy. This reproduces E8B's 135M finding at a larger
-  capacity. Cost: 51.07838 core GPU-hours, 25.56327 on the pretrained and
+  directional. NO RELIABLE POSITIVE pretrained-over-random advantage was
+  detected at either scale; both pretraining-effect intervals include zero and
+  establish neither equivalence nor the absence of an effect. Training-set
+  size is what moves accuracy. E10 qualitatively reproduces E8B's finding that
+  this answer-side frozen-SLM interface shows no reliable positive
+  pretrained-over-random advantage, now at 360M; it does NOT reproduce E8B's
+  directional negative 40k effect (E8B B3-B2 at 40k was -0.02463 with interval
+  [-0.03333, -0.01619] excluding zero and all three seeds negative, against
+  E10's uncertain -0.00683 with mixed seed signs). The 135M-to-360M comparison
+  is whole-system capacity sensitivity, not an isolated causal LM-size effect:
+  trainable capacity also moves, 21,343,808 to 21,540,800 parameters, about
+  0.923 per cent, because the projection width follows the hidden size. The sd
+  figures above are the sample standard deviation across the three training
+  seeds (ddof=1) and are not confidence intervals; the bracketed intervals are
+  image-clustered bootstrap intervals that condition on the fixed trained seed
+  set and carry evaluation-sampling variation, not training-seed variation.
+  Cost: 51.07838121415333 core GPU-hours, 25.56327 on the pretrained and
   25.54783 on the random identity, both against the 40.0 hour ceiling, 2.72
-  per cent above the Gate-1 projection and 1.18 per cent above it once the
-  known fourteenth development pass is added. KNOWN DEFECT, for the reviewer
-  and deliberately not repaired here: phase2-verify and, through it,
-  phase3-verify now fail on two clauses of phase2.pipeline_contract that
-  assert the pre-execution state rather than the contract
-  (assert_analysis_refuses_incomplete and assert_no_scientific_cells), and
-  four test modules fail on pre-authorisation-state assertions or on
-  mirroring the real governance tree; phase1-verify and every other clause
-  still pass, and no source was modified. See
-  docs/experiments/e10_core_matrix.md. The clean test remains embargoed and
-  F1/F2 remain unstarted and unauthorised.
+  per cent above the Gate-1 projection of 49.72765441864283 and 1.18 per cent
+  above the adjusted 50.48143730636344 once the known fourteenth development
+  pass is added, a residual of 0.5969439077898893; core actual is 82.17 per
+  cent of the corresponding CORE stress budget of 62.15956802330354, which is
+  not the calibration-inclusive 62.19228220657687 total. KNOWN DEFECT, for the
+  reviewer and deliberately not repaired: the terminal state is phase1-verify
+  PASS, phase2-verify FAIL and phase3-verify FAIL. Phase 3 does not fail only
+  transitively: phase3.authorization_contract() has its own direct call to the
+  stale assert_no_scientific_cells() invariant at phase3.py:438. Fifteen E10
+  tests fail and 82 pass (test_e10 1/21, test_e10_phase1 4/15,
+  test_e10_phase2 6/38, test_e10_phase3 4/23); all twelve non-E10 modules
+  pass. The principal mechanism is mirror_governance(), which copies the real
+  completed governance tree, including real cell_completed_*.json records,
+  into temporary test trees and so invalidates tests whose intended state is
+  pre-execution or pre-authorisation. All fifteen are lifecycle and
+  state-coupling failures, not scientific regressions. Repairing them is R3,
+  separately authorised and not started. The grant remains present and
+  historically valid; all twelve authorised cells now refuse further execution
+  because completed cells are immutable, and non-authorised
+  arms/scales/seeds refuse at the entry gate. See
+  docs/experiments/e10_core_matrix.md and the immutable addendum
+  results/experiments/e10_capacity_360m_core/e10_core_execution_correction_20260813.json.
+  The clean test remains embargoed and F1/F2 remain unstarted and
+  unauthorised.
 - Current gate, updated 2 August 2026 (E8A/E8B/E9 programme). The user
   authorized the E8A frozen-SLM question-encoder branch, the E8B frozen-SLM
   readout and bounded-generation branch, and the E9 evaluation-only compact-VLM

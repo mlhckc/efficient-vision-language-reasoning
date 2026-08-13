@@ -1,0 +1,342 @@
+{
+  "metadata": {
+    "timestamp": "2026-08-13T08:42:13",
+    "git_commit": "0b4ed2b",
+    "git_dirty": true,
+    "open_clip_version": "3.3.0",
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "h5py_version": "3.16.0",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 0,
+    "deterministic": true,
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "embed_dim": 512,
+    "top_k_answers": 100,
+    "n_train": 40000,
+    "n_val": 8000,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "hidden_dim": 512,
+    "dropout": 0.3,
+    "weight_decay": 0.0001,
+    "task_id": "e10-core-matrix-record-correction",
+    "protocol_family": "e10-fp32-fixed22-core-360m-2026-08-10",
+    "binding": {
+      "source_digest": "857ec44e8f5275569a5369b0dfbcd0cbff660b038d5b9cd39c67083ceb0a6b98",
+      "source_files": {
+        "experiments/e10_capacity_360m/e10_common.py": "2410464c632dc2a87fb573a004d38a92db060ec0c2c903bd206e034f56407b3e",
+        "experiments/e10_capacity_360m/run.py": "f5aaa7ae35a85f061921e21835184b0766ae64a3b6a0663b547686ae09a2f61f",
+        "experiments/e10_capacity_360m/calibration.py": "8280a161bcd829521f660379f2f0dafc6fe04c7a8ab0ba75a1f6dcd544428b49",
+        "experiments/e10_capacity_360m/projection.py": "f3e3d4a911896b5d7403eeb0cc32f034cfafa5293f30310257516d4043211a0a",
+        "experiments/e10_capacity_360m/phase1.py": "f0bac21674e99bfabe3b16bb1f1e923d2a571db75e5f12db07de75fee6c73b31",
+        "experiments/e10_capacity_360m/phase2.py": "264327a4f6296e8b8be92781a627643e4666ebdd05b5ffe997aed7ba8cba95ce",
+        "experiments/e10_capacity_360m/phase3.py": "3d94734c6b8898adb8091e077a711cd23eccded63cfac7e38942e7b766019645",
+        "experiments/e10_capacity_360m/science.py": "4d1d88ea842f38a27059fbf911c72dfea6d39dd999cf3df67cae4d2ebbc54d06",
+        "experiments/e10_capacity_360m/analysis.py": "0faccc49e1191f42c4287377b587ffce0c89988e59053d7e177553478ca9a056",
+        "experiments/e8b_readout_generation/latents.py": "051604b60d1c8fce65e1fa2e9ec53b155fb4af41b7fe9377d009f39f04f0502f",
+        "experiments/e8b_readout_generation/readouts.py": "28acdf21c87b286c78dcc2ff2be24a4834dd21b265f4420b4014f8a9d1254ca6",
+        "experiments/e8b_readout_generation/training.py": "5ec731105db87b6b5aa16bca02e9c2e3705050a59ef297a4956480fccec44ce3",
+        "experiments/e8b_readout_generation/run.py": "d05c79a749f6c4dc17e37d81f4f7598ea7f74d2e6573c4feae8243c2253e1430",
+        "experiments/e8a_question_encoder/e8a_common.py": "cd6c8ce0f0f9d93ec367d9e4c9ec611e5768e334964fe6d7c18bb3a04a70ba20",
+        "experiments/e8a_question_encoder/g21_scorer.py": "22ea9c59082840a60568d7b804a3cb66ac0daccb7b503a6c50305d1354f2f40d",
+        "src/reasoner.py": "3faafcd25e3f9e233c5173b71c1e1bbdd92859047d7b701d97ee16049892062c",
+        "src/tokens_data.py": "9e24a76e177ca8d8145995d1224d611d7de9303d0ea2b79552b3e106c01caf05",
+        "src/utils.py": "3e9af4431b68f96c10d1d6d7842a82ffe34e9100c09e1206d05bbb112c01d3ee",
+        "tests/test_e10.py": "53258283f3b232682d6a65987bbab3a9cf99cb2d39e3510953bccef67d021bbd",
+        "tests/test_e10_phase1.py": "a472e60d351a70d5c4ed93653ea0c6e7977ba90874f6333e1a419605c4883b7d",
+        "tests/test_e10_phase2.py": "ecf03ea6224d5bf14eb62a96a33819b405aea34da6086e96f6ab9004496b77c6",
+        "tests/test_e10_phase3.py": "521ae79cc7cb7c9c5506ae6a8671286e6c23a1bfa5e4d74609ba7a0a251f3f95",
+        "tests/run_all.py": "0a53250ac3c10edd788ea756a64dff54e83d2dec824ad557a6f8ea629e741786"
+      },
+      "config_digest": "4b9fa43cb74b511c0bb6fda3c7c043d6047ef5e5e220c1abad6e35138f3df9ab",
+      "config_files": {
+        "config.py": "2612dfeaa2a2ca54888bd0be2004a90efaa533c16c75db2ed08baadf3f060574",
+        "requirements.lock.txt": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be"
+      },
+      "protocol_family": "e10-fp32-fixed22-core-360m-2026-08-10"
+    }
+  },
+  "e10_core_execution_correction": {
+    "schema_version": 1,
+    "record_type": "e10_core_execution_correction",
+    "status": "RECORD_CORRECTED_NO_SCIENTIFIC_CHANGE",
+    "repair_scope": "R1_R2_DOCUMENTATION_AND_COLLABORATION_ONLY",
+    "review_state": "review_requested",
+    "utc": "2026-08-13T07:42:13Z",
+    "binding": {
+      "source_digest": "857ec44e8f5275569a5369b0dfbcd0cbff660b038d5b9cd39c67083ceb0a6b98",
+      "source_files": {
+        "experiments/e10_capacity_360m/e10_common.py": "2410464c632dc2a87fb573a004d38a92db060ec0c2c903bd206e034f56407b3e",
+        "experiments/e10_capacity_360m/run.py": "f5aaa7ae35a85f061921e21835184b0766ae64a3b6a0663b547686ae09a2f61f",
+        "experiments/e10_capacity_360m/calibration.py": "8280a161bcd829521f660379f2f0dafc6fe04c7a8ab0ba75a1f6dcd544428b49",
+        "experiments/e10_capacity_360m/projection.py": "f3e3d4a911896b5d7403eeb0cc32f034cfafa5293f30310257516d4043211a0a",
+        "experiments/e10_capacity_360m/phase1.py": "f0bac21674e99bfabe3b16bb1f1e923d2a571db75e5f12db07de75fee6c73b31",
+        "experiments/e10_capacity_360m/phase2.py": "264327a4f6296e8b8be92781a627643e4666ebdd05b5ffe997aed7ba8cba95ce",
+        "experiments/e10_capacity_360m/phase3.py": "3d94734c6b8898adb8091e077a711cd23eccded63cfac7e38942e7b766019645",
+        "experiments/e10_capacity_360m/science.py": "4d1d88ea842f38a27059fbf911c72dfea6d39dd999cf3df67cae4d2ebbc54d06",
+        "experiments/e10_capacity_360m/analysis.py": "0faccc49e1191f42c4287377b587ffce0c89988e59053d7e177553478ca9a056",
+        "experiments/e8b_readout_generation/latents.py": "051604b60d1c8fce65e1fa2e9ec53b155fb4af41b7fe9377d009f39f04f0502f",
+        "experiments/e8b_readout_generation/readouts.py": "28acdf21c87b286c78dcc2ff2be24a4834dd21b265f4420b4014f8a9d1254ca6",
+        "experiments/e8b_readout_generation/training.py": "5ec731105db87b6b5aa16bca02e9c2e3705050a59ef297a4956480fccec44ce3",
+        "experiments/e8b_readout_generation/run.py": "d05c79a749f6c4dc17e37d81f4f7598ea7f74d2e6573c4feae8243c2253e1430",
+        "experiments/e8a_question_encoder/e8a_common.py": "cd6c8ce0f0f9d93ec367d9e4c9ec611e5768e334964fe6d7c18bb3a04a70ba20",
+        "experiments/e8a_question_encoder/g21_scorer.py": "22ea9c59082840a60568d7b804a3cb66ac0daccb7b503a6c50305d1354f2f40d",
+        "src/reasoner.py": "3faafcd25e3f9e233c5173b71c1e1bbdd92859047d7b701d97ee16049892062c",
+        "src/tokens_data.py": "9e24a76e177ca8d8145995d1224d611d7de9303d0ea2b79552b3e106c01caf05",
+        "src/utils.py": "3e9af4431b68f96c10d1d6d7842a82ffe34e9100c09e1206d05bbb112c01d3ee",
+        "tests/test_e10.py": "53258283f3b232682d6a65987bbab3a9cf99cb2d39e3510953bccef67d021bbd",
+        "tests/test_e10_phase1.py": "a472e60d351a70d5c4ed93653ea0c6e7977ba90874f6333e1a419605c4883b7d",
+        "tests/test_e10_phase2.py": "ecf03ea6224d5bf14eb62a96a33819b405aea34da6086e96f6ab9004496b77c6",
+        "tests/test_e10_phase3.py": "521ae79cc7cb7c9c5506ae6a8671286e6c23a1bfa5e4d74609ba7a0a251f3f95",
+        "tests/run_all.py": "0a53250ac3c10edd788ea756a64dff54e83d2dec824ad557a6f8ea629e741786"
+      },
+      "config_digest": "4b9fa43cb74b511c0bb6fda3c7c043d6047ef5e5e220c1abad6e35138f3df9ab",
+      "config_files": {
+        "config.py": "2612dfeaa2a2ca54888bd0be2004a90efaa533c16c75db2ed08baadf3f060574",
+        "requirements.lock.txt": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be"
+      },
+      "protocol_family": "e10-fp32-fixed22-core-360m-2026-08-10"
+    },
+    "corrects": {
+      "execution_record": {
+        "path": "results/experiments/e10_capacity_360m_core/e10_core_execution_20260813.json",
+        "sha256": "b7734dddcab1dd40e91e1860ace253ff491a2b370aa9cde984cf496a8e029430",
+        "mutated": false,
+        "note": "the original execution record is immutable and was NOT edited; this addendum sits beside it so the fact that the first report contained inaccuracies stays visible"
+      },
+      "report": "docs/experiments/e10_core_matrix.md",
+      "status_entry": "CLAUDE.md, the E10 core matrix EXECUTED entry"
+    },
+    "provenance": {
+      "execution_start_head": "028531e910f0abff7d45c992d1efd2ca149036b6",
+      "execution_report_head_reviewed": "0b4ed2b7885ca6789d55c8ccb1b8a613a6081560",
+      "repair_base_head": "0b4ed2b7885ca6789d55c8ccb1b8a613a6081560",
+      "repair_head_at_write": "0b4ed2b7885ca6789d55c8ccb1b8a613a6081560",
+      "independent_review_verdict": "CHANGES_REQUIRED",
+      "independent_review_record": ".agent-bridge/tasks/e10-core-matrix/32-review-changes-required.md",
+      "scientific_blockers": 0,
+      "execution_integrity_blockers": 0,
+      "governance_reproducibility_blockers": [
+        "documentation and record accuracy (R1, repaired here)",
+        "missing collaboration packet (R2, created here)",
+        "digest-bound terminal-state verifier defect (R3, deferred)"
+      ],
+      "independent_reproduction": "all twelve primary results and all five preregistered contrasts were independently reproduced from the per-row evidence by the reviewer"
+    },
+    "corrected_terminal_state_verifiers": {
+      "phase1_verify": "PASS",
+      "phase2_verify": "FAIL",
+      "phase3_verify": "FAIL",
+      "phase3_fails_independently_of_phase2": true,
+      "phase3_direct_stale_invariant_site": "phase3.py:438",
+      "phase3_direct_stale_invariant_call": "e10.assert_no_scientific_cells() inside phase3.authorization_contract()",
+      "phase3_site_confirmed_against_live_file_at_head": "0b4ed2b7885ca6789d55c8ccb1b8a613a6081560",
+      "phase2_stale_clauses": [
+        "phase2.assert_analysis_refuses_incomplete (requires the real analysis to refuse)",
+        "e10.assert_no_scientific_cells (requires zero scientific artefacts)"
+      ],
+      "withdrawn_claim": "the first report stated that every other clause of all three phases passes individually. That claim is WITHDRAWN. A subset of clauses was checked individually and passed, which does not license the general statement."
+    },
+    "corrected_test_terminal_state": {
+      "per_module": {
+        "test_e10": {
+          "failing": 1,
+          "total": 21,
+          "passing": 20,
+          "failing_tests": [
+            "test_authorization_isolation_and_exact_arms"
+          ]
+        },
+        "test_e10_phase1": {
+          "failing": 4,
+          "total": 15,
+          "passing": 11,
+          "failing_tests": [
+            "test_scientific_core_still_refuses",
+            "test_unguarded_tail_crossing_the_wall_cannot_complete",
+            "test_completed_requires_every_stage_inside_the_wall",
+            "test_no_scientific_artifact_was_created"
+          ]
+        },
+        "test_e10_phase2": {
+          "failing": 6,
+          "total": 38,
+          "passing": 32,
+          "failing_tests": [
+            "test_production_entry_enables_determinism_before_the_first_stage",
+            "test_analysis_refuses_an_incomplete_matrix",
+            "test_scientific_authorization_remains_closed",
+            "test_no_scientific_cell_has_executed",
+            "test_core_cell_refuses_before_any_scientific_side_effect",
+            "test_phase2_pipeline_contract_reports_the_real_state"
+          ]
+        },
+        "test_e10_phase3": {
+          "failing": 4,
+          "total": 23,
+          "passing": 19,
+          "failing_tests": [
+            "test_no_real_scientific_grant_exists",
+            "test_all_three_verifiers_pass_with_and_without_a_valid_grant",
+            "test_phase3_acceptance_sequence",
+            "test_phase3_verify_reports_the_real_state"
+          ]
+        }
+      },
+      "e10_failing_total": 15,
+      "e10_passing_total": 82,
+      "e10_tests_total": 97,
+      "non_e10_modules_passing_measured": 12,
+      "non_e10_modules_passing_as_stated_by_review": 10,
+      "non_e10_discrepancy_note": "the independent review recorded ten non-E10 modules; the measured count at this HEAD is twelve. The measured figure is recorded because a number in this repository must come from a real run. The review's E10 per-module figures reproduced exactly.",
+      "classification": "all fifteen are lifecycle and state-coupling failures, not scientific regressions",
+      "principal_mechanism": "mirror_governance() copies the real completed governance tree, including the real cell_completed_*.json records, into temporary test trees, which invalidates tests whose intended state is pre-execution or pre-authorisation",
+      "repaired_here": false,
+      "repair_reserved_for": "R3"
+    },
+    "corrected_resource_figures": {
+      "core_actual_gpu_hours": 51.07838121415333,
+      "gate1_projected_core_gpu_hours": 49.72765441864283,
+      "adjusted_projection_gpu_hours": 50.48143730636344,
+      "residual_above_adjusted_projection_gpu_hours": 0.5969439077898893,
+      "core_stress_budget_gpu_hours": 62.15956802330354,
+      "core_actual_over_core_stress_fraction": 0.8217299900637037,
+      "core_actual_over_core_stress_percent": 82.17,
+      "stress_basis": "the reported approximately 82.2 per cent is CORE actual GPU-hours relative to the corresponding CORE stress budget, six cells at each scale at the Gate-1 1.25-times-measured figure. It is NOT relative to view_1_e10_only.stress_total_gpu_hours = 62.19228220657687, which additionally includes the Phase-0 calibration charge.",
+      "superseded_report_figures": {
+        "50.48153": "mis-rounded; canonical is 50.48143730636344",
+        "0.59685": "mis-rounded; canonical is 0.5969439077898893",
+        "82.2 per cent of the 62.19228 hour stress scenario": "wrong denominator pairing; core actual was compared against the calibration-inclusive total"
+      },
+      "rounded_figures_are_rounded_from_these_canonical_values": true,
+      "immutable_execution_json_changed": false
+    },
+    "interpretation_narrowing": {
+      "withdrawn_wordings": [
+        "pretraining has no measurable effect",
+        "pretrained weights buy nothing measurable"
+      ],
+      "adopted_wording": "No reliable positive pretrained-over-random advantage was detected at either training scale. Both pretraining-effect intervals include zero and do not establish equivalence or absence of an effect.",
+      "numerical_results_unchanged": true
+    },
+    "e8b_comparison_narrowing": {
+      "withdrawn_wording": "this reproduces at 360M what E8B found at 135M",
+      "adopted_wording": "E10 qualitatively reproduces the earlier E8B finding that the tested answer-side frozen-SLM interface does not exhibit a reliable positive pretrained-over-random advantage, now at the larger 360M configuration. It does not reproduce E8B's directional negative 40k effect.",
+      "e8b_b3_minus_b2_train_40k": {
+        "mean": -0.02463,
+        "interval": [
+          -0.03333,
+          -0.01619
+        ],
+        "excludes_zero": true,
+        "seeds_below_zero": 3,
+        "outcome": "negative directional evidence"
+      },
+      "e8b_b3_minus_b2_train_250k": {
+        "mean": -0.00475,
+        "interval": [
+          -0.01208,
+          0.00297
+        ],
+        "excludes_zero": false,
+        "outcome": "uncertain or mixed evidence"
+      },
+      "e10_b4_minus_b4r_train_40k": {
+        "mean": -0.00683,
+        "interval": [
+          -0.01508,
+          0.00114
+        ],
+        "excludes_zero": false,
+        "outcome": "uncertain or mixed evidence"
+      },
+      "e10_b4_minus_b4r_train_250k": {
+        "mean": -0.00238,
+        "interval": [
+          -0.01071,
+          0.00588
+        ],
+        "excludes_zero": false,
+        "outcome": "uncertain or mixed evidence"
+      },
+      "source": "already-published E8B record results/experiments/e8b_readout_generation/e8b_core_analysis_20260809.json; no new statistic computed"
+    },
+    "cross_size_wording": {
+      "required_description": "whole-system capacity sensitivity",
+      "forbidden_description": "an isolated causal LM-size effect",
+      "trainable_parameters_135m": 21343808,
+      "trainable_parameters_360m": 21540800,
+      "difference": 196992,
+      "relative_change_percent": 0.9229297648599512,
+      "reason": "the projection dimensions change with the frozen model's hidden size, so trainable capacity moves with the backbone and the two configurations differ in more than the backbone"
+    },
+    "seed_sd_and_clustered_interval": {
+      "sd_definition": "sample standard deviation across the three training seeds (ddof=1)",
+      "mean_plus_minus_sd_is_a_confidence_interval": false,
+      "clustered_interval_caveat": "The image-clustered intervals condition on the fixed trained seed set. They propagate evaluation-sampling variation over images and questions and do not represent uncertainty over possible training seeds.",
+      "distinct_quantities": [
+        "training-seed variability, carried by the per-seed columns and by sd",
+        "image-clustered evaluation-sampling uncertainty, carried by the bracketed intervals"
+      ]
+    },
+    "grant_terminal_status_observation": {
+      "grant_present": true,
+      "grant_historically_valid_for_completed_execution": true,
+      "authorized_cells_now_refuse_further_execution": true,
+      "reason": "a completed scientific cell is immutable and is never overwritten",
+      "observed_refusal_authorized_cell": "E10 CELL REFUSED: ...e10_core_B4_train_40k_seed0.json already exists; a completed scientific cell is immutable and is never overwritten",
+      "observed_refusal_non_authorized_arm": "E10 CORE REFUSED: unknown cell B3/train_40k/seed0",
+      "observed_refusal_non_authorized_seed": "E10 CORE REFUSED: unknown cell B4/train_40k/seed3",
+      "grant_modified_in_this_packet": false,
+      "operational_grant_state_change": "deferred to R3, not decided"
+    },
+    "no_scientific_change": {
+      "cell_records_changed": 0,
+      "checkpoints_changed": 0,
+      "per_row_arrays_changed": 0,
+      "analysis_changed": false,
+      "grant_changed": false,
+      "recipe_changed": false,
+      "configuration_changed": false,
+      "scientific_source_changed": false,
+      "verifier_source_changed": false,
+      "test_source_changed": false,
+      "source_paths_changed": false,
+      "config_paths_changed": false,
+      "clean_test_accessed": false,
+      "f1_started": false,
+      "f2_started": false,
+      "a5_implemented": false,
+      "a8c_implemented": false,
+      "numbers_altered": "none except the exact reporting mismatches against the canonical machine record that the independent review identified, listed under corrected_resource_figures"
+    },
+    "digest_neutrality": {
+      "required_source_digest": "857ec44e8f5275569a5369b0dfbcd0cbff660b038d5b9cd39c67083ceb0a6b98",
+      "required_config_digest": "4b9fa43cb74b511c0bb6fda3c7c043d6047ef5e5e220c1abad6e35138f3df9ab",
+      "observed_source_digest": "857ec44e8f5275569a5369b0dfbcd0cbff660b038d5b9cd39c67083ceb0a6b98",
+      "observed_config_digest": "4b9fa43cb74b511c0bb6fda3c7c043d6047ef5e5e220c1abad6e35138f3df9ab",
+      "source_digest_unchanged": true,
+      "config_digest_unchanged": true,
+      "paths_modified_are_outside_the_digest_binding": true
+    },
+    "r3_pending": {
+      "status": "NOT STARTED, separately authorised",
+      "scope": [
+        "make phase2.pipeline_contract execution-aware",
+        "make the direct phase3.authorization_contract call at phase3.py:438 execution-aware",
+        "repair mirror_governance() and the fifteen lifecycle tests",
+        "decide the operational grant-state question"
+      ],
+      "note": "R3 touches digest-bound source and therefore cannot be part of a digest-neutral packet"
+    }
+  }
+}
