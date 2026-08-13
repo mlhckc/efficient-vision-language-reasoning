@@ -1,0 +1,844 @@
+{
+  "metadata": {
+    "timestamp": "2026-08-13T05:11:02",
+    "git_commit": "028531e",
+    "git_dirty": true,
+    "open_clip_version": "3.3.0",
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "h5py_version": "3.16.0",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 0,
+    "deterministic": true,
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "embed_dim": 512,
+    "top_k_answers": 100,
+    "n_train": 40000,
+    "n_val": 8000,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "hidden_dim": 512,
+    "dropout": 0.3,
+    "weight_decay": 0.0001,
+    "task_id": "e10-phase2-scientific-pipeline",
+    "protocol_family": "e10-fp32-fixed22-core-360m-2026-08-10",
+    "binding": {
+      "source_digest": "857ec44e8f5275569a5369b0dfbcd0cbff660b038d5b9cd39c67083ceb0a6b98",
+      "source_files": {
+        "experiments/e10_capacity_360m/e10_common.py": "2410464c632dc2a87fb573a004d38a92db060ec0c2c903bd206e034f56407b3e",
+        "experiments/e10_capacity_360m/run.py": "f5aaa7ae35a85f061921e21835184b0766ae64a3b6a0663b547686ae09a2f61f",
+        "experiments/e10_capacity_360m/calibration.py": "8280a161bcd829521f660379f2f0dafc6fe04c7a8ab0ba75a1f6dcd544428b49",
+        "experiments/e10_capacity_360m/projection.py": "f3e3d4a911896b5d7403eeb0cc32f034cfafa5293f30310257516d4043211a0a",
+        "experiments/e10_capacity_360m/phase1.py": "f0bac21674e99bfabe3b16bb1f1e923d2a571db75e5f12db07de75fee6c73b31",
+        "experiments/e10_capacity_360m/phase2.py": "264327a4f6296e8b8be92781a627643e4666ebdd05b5ffe997aed7ba8cba95ce",
+        "experiments/e10_capacity_360m/phase3.py": "3d94734c6b8898adb8091e077a711cd23eccded63cfac7e38942e7b766019645",
+        "experiments/e10_capacity_360m/science.py": "4d1d88ea842f38a27059fbf911c72dfea6d39dd999cf3df67cae4d2ebbc54d06",
+        "experiments/e10_capacity_360m/analysis.py": "0faccc49e1191f42c4287377b587ffce0c89988e59053d7e177553478ca9a056",
+        "experiments/e8b_readout_generation/latents.py": "051604b60d1c8fce65e1fa2e9ec53b155fb4af41b7fe9377d009f39f04f0502f",
+        "experiments/e8b_readout_generation/readouts.py": "28acdf21c87b286c78dcc2ff2be24a4834dd21b265f4420b4014f8a9d1254ca6",
+        "experiments/e8b_readout_generation/training.py": "5ec731105db87b6b5aa16bca02e9c2e3705050a59ef297a4956480fccec44ce3",
+        "experiments/e8b_readout_generation/run.py": "d05c79a749f6c4dc17e37d81f4f7598ea7f74d2e6573c4feae8243c2253e1430",
+        "experiments/e8a_question_encoder/e8a_common.py": "cd6c8ce0f0f9d93ec367d9e4c9ec611e5768e334964fe6d7c18bb3a04a70ba20",
+        "experiments/e8a_question_encoder/g21_scorer.py": "22ea9c59082840a60568d7b804a3cb66ac0daccb7b503a6c50305d1354f2f40d",
+        "src/reasoner.py": "3faafcd25e3f9e233c5173b71c1e1bbdd92859047d7b701d97ee16049892062c",
+        "src/tokens_data.py": "9e24a76e177ca8d8145995d1224d611d7de9303d0ea2b79552b3e106c01caf05",
+        "src/utils.py": "3e9af4431b68f96c10d1d6d7842a82ffe34e9100c09e1206d05bbb112c01d3ee",
+        "tests/test_e10.py": "53258283f3b232682d6a65987bbab3a9cf99cb2d39e3510953bccef67d021bbd",
+        "tests/test_e10_phase1.py": "a472e60d351a70d5c4ed93653ea0c6e7977ba90874f6333e1a419605c4883b7d",
+        "tests/test_e10_phase2.py": "ecf03ea6224d5bf14eb62a96a33819b405aea34da6086e96f6ab9004496b77c6",
+        "tests/test_e10_phase3.py": "521ae79cc7cb7c9c5506ae6a8671286e6c23a1bfa5e4d74609ba7a0a251f3f95",
+        "tests/run_all.py": "0a53250ac3c10edd788ea756a64dff54e83d2dec824ad557a6f8ea629e741786"
+      },
+      "config_digest": "4b9fa43cb74b511c0bb6fda3c7c043d6047ef5e5e220c1abad6e35138f3df9ab",
+      "config_files": {
+        "config.py": "2612dfeaa2a2ca54888bd0be2004a90efaa533c16c75db2ed08baadf3f060574",
+        "requirements.lock.txt": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be"
+      },
+      "protocol_family": "e10-fp32-fixed22-core-360m-2026-08-10"
+    }
+  },
+  "e10_core_analysis": {
+    "schema_version": 1,
+    "record_type": "e10_core_matrix_analysis",
+    "status": "COMPLETE_TWELVE_CELL_MATRIX",
+    "utc": "2026-08-13T04:11:02Z",
+    "cells": [
+      [
+        "B4",
+        "train_40k",
+        0
+      ],
+      [
+        "B4r",
+        "train_40k",
+        0
+      ],
+      [
+        "B4",
+        "train_40k",
+        1
+      ],
+      [
+        "B4r",
+        "train_40k",
+        1
+      ],
+      [
+        "B4",
+        "train_40k",
+        2
+      ],
+      [
+        "B4r",
+        "train_40k",
+        2
+      ],
+      [
+        "B4",
+        "train_250k",
+        0
+      ],
+      [
+        "B4r",
+        "train_250k",
+        0
+      ],
+      [
+        "B4",
+        "train_250k",
+        1
+      ],
+      [
+        "B4r",
+        "train_250k",
+        1
+      ],
+      [
+        "B4",
+        "train_250k",
+        2
+      ],
+      [
+        "B4r",
+        "train_250k",
+        2
+      ]
+    ],
+    "development_reference": {
+      "path": "/scratch/Efficient Vision-Language Reasoning with Small Language Models/data/v2/dev.csv",
+      "sha256": "95d1b504dcc4deb7d69ba0c9e293d1c00bae93df4b6907174a1dd615cb93cdc9",
+      "rows": 7714,
+      "images": 768
+    },
+    "cell_records": {
+      "B4_train_40k_0": "3f7e3ef2bd73a860ca00b0f62ff73572c710fc9f0ed54006054943d50b0b5d22",
+      "B4r_train_40k_0": "6ad47230bfbde18c6d1a16eb1ebc9403ead65ddfd4fd6fdab7c2bee2f9327201",
+      "B4_train_40k_1": "511ca0225d16d4c3e1f2d42670760f3df42382bec4cd97d8659fff3a71ecd825",
+      "B4r_train_40k_1": "66c545dec22af44ffc628bd07d2ba2bd8714246578d90a75b63abced13ba753c",
+      "B4_train_40k_2": "d9161eff616cd42aafbdcf9691b30600fafac1d124a443b681513c988edf0832",
+      "B4r_train_40k_2": "9e4f875f97a8719c10eb14dddd8f4871f5040b045ae49579d6ea5a8af787f1f8",
+      "B4_train_250k_0": "658caaabdbf4ea2bb2ccdd1c401d9ed1987a4e4a67dd2374de2e4a79565b35ff",
+      "B4r_train_250k_0": "981cdf3d7691e5e5c45ca7c667d5571e3d48ac7d81ea19abc8b87541c0ec1990",
+      "B4_train_250k_1": "9bc543ab6a1ded3351e9437f8f88865593c43e29fb1d18d7be01f6da76095324",
+      "B4r_train_250k_1": "e61ef639125bb93533567f0cf6be460fc49436bcece20469a7747964bba3c1eb",
+      "B4_train_250k_2": "2520b7d665d09242c8da4f82a0d81126bb1b91135e5340d4a169b54ecbaa7263",
+      "B4r_train_250k_2": "2781a3b92fc395b73d2ece78c39011ce55b873180478dd9312a60caf7ecdb8c6"
+    },
+    "metrics": {
+      "canonical_r1_correct": "canonical FP32 development R1 accuracy of the epoch-22 checkpoint (the registered primary)",
+      "g21_normalized_correct": "the pinned G21 VQA-style normalised exact match over the same rows"
+    },
+    "seed_summaries": {
+      "B4_train_40k": {
+        "canonical_r1_correct": {
+          "per_seed": [
+            0.52515,
+            0.5315,
+            0.52243
+          ],
+          "mean": 0.52636,
+          "sd": 0.00466
+        },
+        "g21_normalized_correct": {
+          "per_seed": [
+            0.52515,
+            0.5315,
+            0.52243
+          ],
+          "mean": 0.52636,
+          "sd": 0.00466
+        },
+        "secondary_diagnostic_best_of_evaluated_epochs": {
+          "0": {
+            "label": "SECONDARY DIAGNOSTIC ONLY",
+            "best_of_evaluated_epochs": 10,
+            "best_dev_accuracy": 0.53163,
+            "never_primary": true
+          },
+          "1": {
+            "label": "SECONDARY DIAGNOSTIC ONLY",
+            "best_of_evaluated_epochs": 13,
+            "best_dev_accuracy": 0.53785,
+            "never_primary": true
+          },
+          "2": {
+            "label": "SECONDARY DIAGNOSTIC ONLY",
+            "best_of_evaluated_epochs": 5,
+            "best_dev_accuracy": 0.53176,
+            "never_primary": true
+          }
+        }
+      },
+      "B4_train_250k": {
+        "canonical_r1_correct": {
+          "per_seed": [
+            0.60215,
+            0.58556,
+            0.5945
+          ],
+          "mean": 0.59407,
+          "sd": 0.00831
+        },
+        "g21_normalized_correct": {
+          "per_seed": [
+            0.60215,
+            0.58556,
+            0.5945
+          ],
+          "mean": 0.59407,
+          "sd": 0.00831
+        },
+        "secondary_diagnostic_best_of_evaluated_epochs": {
+          "0": {
+            "label": "SECONDARY DIAGNOSTIC ONLY",
+            "best_of_evaluated_epochs": 10,
+            "best_dev_accuracy": 0.60591,
+            "never_primary": true
+          },
+          "1": {
+            "label": "SECONDARY DIAGNOSTIC ONLY",
+            "best_of_evaluated_epochs": 10,
+            "best_dev_accuracy": 0.59282,
+            "never_primary": true
+          },
+          "2": {
+            "label": "SECONDARY DIAGNOSTIC ONLY",
+            "best_of_evaluated_epochs": 22,
+            "best_dev_accuracy": 0.5945,
+            "never_primary": true
+          }
+        }
+      },
+      "B4r_train_40k": {
+        "canonical_r1_correct": {
+          "per_seed": [
+            0.53474,
+            0.52787,
+            0.53695
+          ],
+          "mean": 0.53319,
+          "sd": 0.00473
+        },
+        "g21_normalized_correct": {
+          "per_seed": [
+            0.53474,
+            0.52787,
+            0.53695
+          ],
+          "mean": 0.53319,
+          "sd": 0.00473
+        },
+        "secondary_diagnostic_best_of_evaluated_epochs": {
+          "0": {
+            "label": "SECONDARY DIAGNOSTIC ONLY",
+            "best_of_evaluated_epochs": 19,
+            "best_dev_accuracy": 0.54071,
+            "never_primary": true
+          },
+          "1": {
+            "label": "SECONDARY DIAGNOSTIC ONLY",
+            "best_of_evaluated_epochs": 8,
+            "best_dev_accuracy": 0.5363,
+            "never_primary": true
+          },
+          "2": {
+            "label": "SECONDARY DIAGNOSTIC ONLY",
+            "best_of_evaluated_epochs": 8,
+            "best_dev_accuracy": 0.53708,
+            "never_primary": true
+          }
+        }
+      },
+      "B4r_train_250k": {
+        "canonical_r1_correct": {
+          "per_seed": [
+            0.59256,
+            0.59774,
+            0.59904
+          ],
+          "mean": 0.59645,
+          "sd": 0.00343
+        },
+        "g21_normalized_correct": {
+          "per_seed": [
+            0.59256,
+            0.59774,
+            0.59904
+          ],
+          "mean": 0.59645,
+          "sd": 0.00343
+        },
+        "secondary_diagnostic_best_of_evaluated_epochs": {
+          "0": {
+            "label": "SECONDARY DIAGNOSTIC ONLY",
+            "best_of_evaluated_epochs": 22,
+            "best_dev_accuracy": 0.59256,
+            "never_primary": true
+          },
+          "1": {
+            "label": "SECONDARY DIAGNOSTIC ONLY",
+            "best_of_evaluated_epochs": 22,
+            "best_dev_accuracy": 0.59774,
+            "never_primary": true
+          },
+          "2": {
+            "label": "SECONDARY DIAGNOSTIC ONLY",
+            "best_of_evaluated_epochs": 13,
+            "best_dev_accuracy": 0.61032,
+            "never_primary": true
+          }
+        }
+      }
+    },
+    "contrasts": {
+      "pretraining_effect_train_40k": {
+        "description": "B4 minus B4r within train_40k",
+        "metrics": {
+          "canonical_r1_correct": {
+            "metric": "canonical_r1_correct",
+            "positive": [
+              [
+                "B4",
+                "train_40k"
+              ]
+            ],
+            "negative": [
+              [
+                "B4r",
+                "train_40k"
+              ]
+            ],
+            "aggregation": "sum over the positive sides minus the sum over the negative sides; identical to a mean for the one-element contrasts",
+            "per_seed_differences": [
+              -0.00959,
+              0.00363,
+              -0.01452
+            ],
+            "mean_difference": -0.00683,
+            "sd_difference": 0.00939,
+            "interval_95": [
+              -0.01508,
+              0.00114
+            ],
+            "directional_rule": "uncertain or mixed evidence",
+            "bootstrap": {
+              "draws": 2000,
+              "seed": 0,
+              "alpha": 0.05,
+              "clustering": "development imageId",
+              "implementation": "experiments/e8a_question_encoder/analyse_core.py"
+            },
+            "caveat": "the 95 per cent interval is image-clustered over the development images and CONDITIONS ON THE FIXED TRAINED SEED SET: it propagates sampling variation over questions and images, not training variance. The three per-seed differences are reported beside it, as the canonical rule requires."
+          },
+          "g21_normalized_correct": {
+            "metric": "g21_normalized_correct",
+            "positive": [
+              [
+                "B4",
+                "train_40k"
+              ]
+            ],
+            "negative": [
+              [
+                "B4r",
+                "train_40k"
+              ]
+            ],
+            "aggregation": "sum over the positive sides minus the sum over the negative sides; identical to a mean for the one-element contrasts",
+            "per_seed_differences": [
+              -0.00959,
+              0.00363,
+              -0.01452
+            ],
+            "mean_difference": -0.00683,
+            "sd_difference": 0.00939,
+            "interval_95": [
+              -0.01508,
+              0.00114
+            ],
+            "directional_rule": "uncertain or mixed evidence",
+            "bootstrap": {
+              "draws": 2000,
+              "seed": 0,
+              "alpha": 0.05,
+              "clustering": "development imageId",
+              "implementation": "experiments/e8a_question_encoder/analyse_core.py"
+            },
+            "caveat": "the 95 per cent interval is image-clustered over the development images and CONDITIONS ON THE FIXED TRAINED SEED SET: it propagates sampling variation over questions and images, not training variance. The three per-seed differences are reported beside it, as the canonical rule requires."
+          }
+        }
+      },
+      "pretraining_effect_train_250k": {
+        "description": "B4 minus B4r within train_250k",
+        "metrics": {
+          "canonical_r1_correct": {
+            "metric": "canonical_r1_correct",
+            "positive": [
+              [
+                "B4",
+                "train_250k"
+              ]
+            ],
+            "negative": [
+              [
+                "B4r",
+                "train_250k"
+              ]
+            ],
+            "aggregation": "sum over the positive sides minus the sum over the negative sides; identical to a mean for the one-element contrasts",
+            "per_seed_differences": [
+              0.00959,
+              -0.01219,
+              -0.00454
+            ],
+            "mean_difference": -0.00238,
+            "sd_difference": 0.01105,
+            "interval_95": [
+              -0.01071,
+              0.00588
+            ],
+            "directional_rule": "uncertain or mixed evidence",
+            "bootstrap": {
+              "draws": 2000,
+              "seed": 0,
+              "alpha": 0.05,
+              "clustering": "development imageId",
+              "implementation": "experiments/e8a_question_encoder/analyse_core.py"
+            },
+            "caveat": "the 95 per cent interval is image-clustered over the development images and CONDITIONS ON THE FIXED TRAINED SEED SET: it propagates sampling variation over questions and images, not training variance. The three per-seed differences are reported beside it, as the canonical rule requires."
+          },
+          "g21_normalized_correct": {
+            "metric": "g21_normalized_correct",
+            "positive": [
+              [
+                "B4",
+                "train_250k"
+              ]
+            ],
+            "negative": [
+              [
+                "B4r",
+                "train_250k"
+              ]
+            ],
+            "aggregation": "sum over the positive sides minus the sum over the negative sides; identical to a mean for the one-element contrasts",
+            "per_seed_differences": [
+              0.00959,
+              -0.01219,
+              -0.00454
+            ],
+            "mean_difference": -0.00238,
+            "sd_difference": 0.01105,
+            "interval_95": [
+              -0.01071,
+              0.00588
+            ],
+            "directional_rule": "uncertain or mixed evidence",
+            "bootstrap": {
+              "draws": 2000,
+              "seed": 0,
+              "alpha": 0.05,
+              "clustering": "development imageId",
+              "implementation": "experiments/e8a_question_encoder/analyse_core.py"
+            },
+            "caveat": "the 95 per cent interval is image-clustered over the development images and CONDITIONS ON THE FIXED TRAINED SEED SET: it propagates sampling variation over questions and images, not training variance. The three per-seed differences are reported beside it, as the canonical rule requires."
+          }
+        }
+      },
+      "scale_effect_B4": {
+        "description": "B4 at train_250k minus B4 at train_40k",
+        "metrics": {
+          "canonical_r1_correct": {
+            "metric": "canonical_r1_correct",
+            "positive": [
+              [
+                "B4",
+                "train_250k"
+              ]
+            ],
+            "negative": [
+              [
+                "B4",
+                "train_40k"
+              ]
+            ],
+            "aggregation": "sum over the positive sides minus the sum over the negative sides; identical to a mean for the one-element contrasts",
+            "per_seed_differences": [
+              0.077,
+              0.05406,
+              0.07208
+            ],
+            "mean_difference": 0.06771,
+            "sd_difference": 0.01208,
+            "interval_95": [
+              0.058,
+              0.07738
+            ],
+            "directional_rule": "positive directional evidence",
+            "bootstrap": {
+              "draws": 2000,
+              "seed": 0,
+              "alpha": 0.05,
+              "clustering": "development imageId",
+              "implementation": "experiments/e8a_question_encoder/analyse_core.py"
+            },
+            "caveat": "the 95 per cent interval is image-clustered over the development images and CONDITIONS ON THE FIXED TRAINED SEED SET: it propagates sampling variation over questions and images, not training variance. The three per-seed differences are reported beside it, as the canonical rule requires."
+          },
+          "g21_normalized_correct": {
+            "metric": "g21_normalized_correct",
+            "positive": [
+              [
+                "B4",
+                "train_250k"
+              ]
+            ],
+            "negative": [
+              [
+                "B4",
+                "train_40k"
+              ]
+            ],
+            "aggregation": "sum over the positive sides minus the sum over the negative sides; identical to a mean for the one-element contrasts",
+            "per_seed_differences": [
+              0.077,
+              0.05406,
+              0.07208
+            ],
+            "mean_difference": 0.06771,
+            "sd_difference": 0.01208,
+            "interval_95": [
+              0.058,
+              0.07738
+            ],
+            "directional_rule": "positive directional evidence",
+            "bootstrap": {
+              "draws": 2000,
+              "seed": 0,
+              "alpha": 0.05,
+              "clustering": "development imageId",
+              "implementation": "experiments/e8a_question_encoder/analyse_core.py"
+            },
+            "caveat": "the 95 per cent interval is image-clustered over the development images and CONDITIONS ON THE FIXED TRAINED SEED SET: it propagates sampling variation over questions and images, not training variance. The three per-seed differences are reported beside it, as the canonical rule requires."
+          }
+        }
+      },
+      "scale_effect_B4r": {
+        "description": "B4r at train_250k minus B4r at train_40k",
+        "metrics": {
+          "canonical_r1_correct": {
+            "metric": "canonical_r1_correct",
+            "positive": [
+              [
+                "B4r",
+                "train_250k"
+              ]
+            ],
+            "negative": [
+              [
+                "B4r",
+                "train_40k"
+              ]
+            ],
+            "aggregation": "sum over the positive sides minus the sum over the negative sides; identical to a mean for the one-element contrasts",
+            "per_seed_differences": [
+              0.05782,
+              0.06987,
+              0.06209
+            ],
+            "mean_difference": 0.06326,
+            "sd_difference": 0.00611,
+            "interval_95": [
+              0.05287,
+              0.07296
+            ],
+            "directional_rule": "positive directional evidence",
+            "bootstrap": {
+              "draws": 2000,
+              "seed": 0,
+              "alpha": 0.05,
+              "clustering": "development imageId",
+              "implementation": "experiments/e8a_question_encoder/analyse_core.py"
+            },
+            "caveat": "the 95 per cent interval is image-clustered over the development images and CONDITIONS ON THE FIXED TRAINED SEED SET: it propagates sampling variation over questions and images, not training variance. The three per-seed differences are reported beside it, as the canonical rule requires."
+          },
+          "g21_normalized_correct": {
+            "metric": "g21_normalized_correct",
+            "positive": [
+              [
+                "B4r",
+                "train_250k"
+              ]
+            ],
+            "negative": [
+              [
+                "B4r",
+                "train_40k"
+              ]
+            ],
+            "aggregation": "sum over the positive sides minus the sum over the negative sides; identical to a mean for the one-element contrasts",
+            "per_seed_differences": [
+              0.05782,
+              0.06987,
+              0.06209
+            ],
+            "mean_difference": 0.06326,
+            "sd_difference": 0.00611,
+            "interval_95": [
+              0.05287,
+              0.07296
+            ],
+            "directional_rule": "positive directional evidence",
+            "bootstrap": {
+              "draws": 2000,
+              "seed": 0,
+              "alpha": 0.05,
+              "clustering": "development imageId",
+              "implementation": "experiments/e8a_question_encoder/analyse_core.py"
+            },
+            "caveat": "the 95 per cent interval is image-clustered over the development images and CONDITIONS ON THE FIXED TRAINED SEED SET: it propagates sampling variation over questions and images, not training variance. The three per-seed differences are reported beside it, as the canonical rule requires."
+          }
+        }
+      },
+      "pretraining_by_scale_difference_in_differences": {
+        "description": "(B4 minus B4r) at train_250k minus (B4 minus B4r) at train_40k",
+        "metrics": {
+          "canonical_r1_correct": {
+            "metric": "canonical_r1_correct",
+            "positive": [
+              [
+                "B4",
+                "train_250k"
+              ],
+              [
+                "B4r",
+                "train_40k"
+              ]
+            ],
+            "negative": [
+              [
+                "B4r",
+                "train_250k"
+              ],
+              [
+                "B4",
+                "train_40k"
+              ]
+            ],
+            "aggregation": "sum over the positive sides minus the sum over the negative sides; identical to a mean for the one-element contrasts",
+            "per_seed_differences": [
+              0.01919,
+              -0.01582,
+              0.00998
+            ],
+            "mean_difference": 0.00445,
+            "sd_difference": 0.01815,
+            "interval_95": [
+              -0.00709,
+              0.01641
+            ],
+            "directional_rule": "uncertain or mixed evidence",
+            "bootstrap": {
+              "draws": 2000,
+              "seed": 0,
+              "alpha": 0.05,
+              "clustering": "development imageId",
+              "implementation": "experiments/e8a_question_encoder/analyse_core.py"
+            },
+            "caveat": "the 95 per cent interval is image-clustered over the development images and CONDITIONS ON THE FIXED TRAINED SEED SET: it propagates sampling variation over questions and images, not training variance. The three per-seed differences are reported beside it, as the canonical rule requires."
+          },
+          "g21_normalized_correct": {
+            "metric": "g21_normalized_correct",
+            "positive": [
+              [
+                "B4",
+                "train_250k"
+              ],
+              [
+                "B4r",
+                "train_40k"
+              ]
+            ],
+            "negative": [
+              [
+                "B4r",
+                "train_250k"
+              ],
+              [
+                "B4",
+                "train_40k"
+              ]
+            ],
+            "aggregation": "sum over the positive sides minus the sum over the negative sides; identical to a mean for the one-element contrasts",
+            "per_seed_differences": [
+              0.01919,
+              -0.01582,
+              0.00998
+            ],
+            "mean_difference": 0.00445,
+            "sd_difference": 0.01815,
+            "interval_95": [
+              -0.00709,
+              0.01641
+            ],
+            "directional_rule": "uncertain or mixed evidence",
+            "bootstrap": {
+              "draws": 2000,
+              "seed": 0,
+              "alpha": 0.05,
+              "clustering": "development imageId",
+              "implementation": "experiments/e8a_question_encoder/analyse_core.py"
+            },
+            "caveat": "the 95 per cent interval is image-clustered over the development images and CONDITIONS ON THE FIXED TRAINED SEED SET: it propagates sampling variation over questions and images, not training variance. The three per-seed differences are reported beside it, as the canonical rule requires."
+          }
+        }
+      }
+    },
+    "visual_reliance": {
+      "status": "NO_INTERVENTION_EVIDENCE_IN_THE_FROZEN_E10_CONTRACT",
+      "conditions_present": [
+        "normal"
+      ],
+      "cells_per_condition": {
+        "normal": 12
+      },
+      "contrasts": {},
+      "note": "the frozen E10 per-cell budget funds one final full-development R1 pass under the normal condition; no intervention condition is registered for E10, so no reliance contrast is computed and none is estimated"
+    },
+    "resources": {
+      "policy": {
+        "per_cell_wall_clock_hours": 12.0,
+        "e10_per_identity_ceiling_hours": 40.0,
+        "programme_wide_identity_ceiling_hours": 40.0,
+        "effective_identity_ceiling_hours": 40.0,
+        "headroom_floor_hours": 1.0,
+        "automatic_retries_per_identity": 0,
+        "max_authorized_retries_per_identity": 1,
+        "wall_source": "config.E10_PER_CELL_WALL_CLOCK_HOURS",
+        "ceiling_rule": "min(E10_PER_IDENTITY_CEILING_HOURS, PER_MODEL_IDENTITY_CEILING_HOURS)"
+      },
+      "per_identity": {
+        "pretrained_smollm2_360m": {
+          "charged_hours": 25.563267730120277,
+          "effective_identity_ceiling_hours": 40.0,
+          "headroom_hours": 14.436732269879723
+        },
+        "random_smollm2_360m": {
+          "charged_hours": 25.54782766730639,
+          "effective_identity_ceiling_hours": 40.0,
+          "headroom_hours": 14.45217233269361
+        }
+      },
+      "per_cell": {
+        "B4_train_40k_0": {
+          "gpu_hours": 2.0341773759355557,
+          "peak_reserved_fraction": 0.676310341920638,
+          "elapsed_seconds_at_publication": 7322.736564105,
+          "per_cell_wall_clock_hours": 12.0
+        },
+        "B4r_train_40k_0": {
+          "gpu_hours": 2.0227302072416666,
+          "peak_reserved_fraction": 0.6761105161437372,
+          "elapsed_seconds_at_publication": 7281.533573017,
+          "per_cell_wall_clock_hours": 12.0
+        },
+        "B4_train_40k_1": {
+          "gpu_hours": 2.027126866991389,
+          "peak_reserved_fraction": 0.6760106032552868,
+          "elapsed_seconds_at_publication": 7297.354343947,
+          "per_cell_wall_clock_hours": 12.0
+        },
+        "B4r_train_40k_1": {
+          "gpu_hours": 2.0234260612777777,
+          "peak_reserved_fraction": 0.6761105161437372,
+          "elapsed_seconds_at_publication": 7284.0408742,
+          "per_cell_wall_clock_hours": 12.0
+        },
+        "B4_train_40k_2": {
+          "gpu_hours": 2.030544703252222,
+          "peak_reserved_fraction": 0.6773094708051418,
+          "elapsed_seconds_at_publication": 7309.654266473,
+          "per_cell_wall_clock_hours": 12.0
+        },
+        "B4r_train_40k_2": {
+          "gpu_hours": 2.0355328736141667,
+          "peak_reserved_fraction": 0.6764102548090883,
+          "elapsed_seconds_at_publication": 7327.614104147,
+          "per_cell_wall_clock_hours": 12.0
+        },
+        "B4_train_250k_0": {
+          "gpu_hours": 6.519548047543333,
+          "peak_reserved_fraction": 0.6589254993302714,
+          "elapsed_seconds_at_publication": 23470.055509387,
+          "per_cell_wall_clock_hours": 12.0
+        },
+        "B4r_train_250k_0": {
+          "gpu_hours": 6.491150510823333,
+          "peak_reserved_fraction": 0.658825586441821,
+          "elapsed_seconds_at_publication": 23367.844852028,
+          "per_cell_wall_clock_hours": 12.0
+        },
+        "B4_train_250k_1": {
+          "gpu_hours": 6.4717445340925,
+          "peak_reserved_fraction": 0.6748116485938822,
+          "elapsed_seconds_at_publication": 23297.968750579,
+          "per_cell_wall_clock_hours": 12.0
+        },
+        "B4r_train_250k_1": {
+          "gpu_hours": 6.461688880885278,
+          "peak_reserved_fraction": 0.6748116485938822,
+          "elapsed_seconds_at_publication": 23261.771539024,
+          "per_cell_wall_clock_hours": 12.0
+        },
+        "B4_train_250k_2": {
+          "gpu_hours": 6.480126202305278,
+          "peak_reserved_fraction": 0.6748116485938822,
+          "elapsed_seconds_at_publication": 23328.113059111,
+          "per_cell_wall_clock_hours": 12.0
+        },
+        "B4r_train_250k_2": {
+          "gpu_hours": 6.480584950190833,
+          "peak_reserved_fraction": 0.6748116485938822,
+          "elapsed_seconds_at_publication": 23329.786537415,
+          "per_cell_wall_clock_hours": 12.0
+        }
+      },
+      "automatic_retries_taken": 0
+    },
+    "preregistration": {
+      "contrast_set_fixed_before_results": true,
+      "post_hoc_tests_added": 0,
+      "analyses_conditioned_on_significance": false,
+      "missing_cells_imputed": 0
+    },
+    "development_results_only": true,
+    "clean_test_accessed": false
+  }
+}

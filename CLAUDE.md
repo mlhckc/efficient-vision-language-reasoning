@@ -263,6 +263,37 @@ hash no longer matches the worktree.
   explicit real user scientific authorisation grant. THE CLOSURE AUTHORISES
   NOTHING: creating that grant is a separate explicit user decision that has
   not been given. See docs/experiments/e10_phase3_authorization_binding.md.
+- E10 core matrix EXECUTED (authorised by the user 11 August 2026, completed
+  13 August 2026). The one real immutable external core-authorisation grant
+  was created out of band in shared state, grant id 7ce353d7ec9d93b6, and
+  provably did not move the source or config digest. All twelve frozen
+  B4/B4r cells ran in the frozen pair-preserving order, first attempt, zero
+  automatic and zero authorised retries, no gate halt, no wall approach: the
+  longest cell used 54.3 per cent of the 12.0 hour wall. Development results
+  only. B4 (pretrained frozen SmolLM2-360M) reaches 0.52636 +/- 0.00466 at
+  train_40k and 0.59407 +/- 0.00831 at train_250k; B4r (architecture-matched
+  random) reaches 0.53319 +/- 0.00473 and 0.59645 +/- 0.00343. Both scale
+  effects are positive and directional (B4 +0.06771 [0.05800, 0.07738], B4r
+  +0.06326 [0.05287, 0.07296]). Neither pretraining effect is directional
+  (-0.00683 at 40k, -0.00238 at 250k, both intervals containing zero, seeds
+  disagreeing in sign at both scales), and the difference in differences,
+  (B4-B4r)@250k - (B4-B4r)@40k, is +0.00445 [-0.00709, 0.01641], also not
+  directional. At 360M the pretrained readout weights buy nothing measurable
+  over an architecture-matched random initialisation; training-set size is
+  what moves accuracy. This reproduces E8B's 135M finding at a larger
+  capacity. Cost: 51.07838 core GPU-hours, 25.56327 on the pretrained and
+  25.54783 on the random identity, both against the 40.0 hour ceiling, 2.72
+  per cent above the Gate-1 projection and 1.18 per cent above it once the
+  known fourteenth development pass is added. KNOWN DEFECT, for the reviewer
+  and deliberately not repaired here: phase2-verify and, through it,
+  phase3-verify now fail on two clauses of phase2.pipeline_contract that
+  assert the pre-execution state rather than the contract
+  (assert_analysis_refuses_incomplete and assert_no_scientific_cells), and
+  four test modules fail on pre-authorisation-state assertions or on
+  mirroring the real governance tree; phase1-verify and every other clause
+  still pass, and no source was modified. See
+  docs/experiments/e10_core_matrix.md. The clean test remains embargoed and
+  F1/F2 remain unstarted and unauthorised.
 - Current gate, updated 2 August 2026 (E8A/E8B/E9 programme). The user
   authorized the E8A frozen-SLM question-encoder branch, the E8B frozen-SLM
   readout and bounded-generation branch, and the E9 evaluation-only compact-VLM

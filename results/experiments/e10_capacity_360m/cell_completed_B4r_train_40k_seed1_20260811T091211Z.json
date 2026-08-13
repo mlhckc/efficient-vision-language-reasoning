@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "record_type": "e10_scientific_cell_outcome",
+  "task_id": "e10-phase1-authorization-guardrails",
+  "status": "COMPLETED",
+  "utc": "2026-08-11T09:12:11Z",
+  "binding": {
+    "source_digest": "857ec44e8f5275569a5369b0dfbcd0cbff660b038d5b9cd39c67083ceb0a6b98",
+    "source_files": {
+      "experiments/e10_capacity_360m/e10_common.py": "2410464c632dc2a87fb573a004d38a92db060ec0c2c903bd206e034f56407b3e",
+      "experiments/e10_capacity_360m/run.py": "f5aaa7ae35a85f061921e21835184b0766ae64a3b6a0663b547686ae09a2f61f",
+      "experiments/e10_capacity_360m/calibration.py": "8280a161bcd829521f660379f2f0dafc6fe04c7a8ab0ba75a1f6dcd544428b49",
+      "experiments/e10_capacity_360m/projection.py": "f3e3d4a911896b5d7403eeb0cc32f034cfafa5293f30310257516d4043211a0a",
+      "experiments/e10_capacity_360m/phase1.py": "f0bac21674e99bfabe3b16bb1f1e923d2a571db75e5f12db07de75fee6c73b31",
+      "experiments/e10_capacity_360m/phase2.py": "264327a4f6296e8b8be92781a627643e4666ebdd05b5ffe997aed7ba8cba95ce",
+      "experiments/e10_capacity_360m/phase3.py": "3d94734c6b8898adb8091e077a711cd23eccded63cfac7e38942e7b766019645",
+      "experiments/e10_capacity_360m/science.py": "4d1d88ea842f38a27059fbf911c72dfea6d39dd999cf3df67cae4d2ebbc54d06",
+      "experiments/e10_capacity_360m/analysis.py": "0faccc49e1191f42c4287377b587ffce0c89988e59053d7e177553478ca9a056",
+      "experiments/e8b_readout_generation/latents.py": "051604b60d1c8fce65e1fa2e9ec53b155fb4af41b7fe9377d009f39f04f0502f",
+      "experiments/e8b_readout_generation/readouts.py": "28acdf21c87b286c78dcc2ff2be24a4834dd21b265f4420b4014f8a9d1254ca6",
+      "experiments/e8b_readout_generation/training.py": "5ec731105db87b6b5aa16bca02e9c2e3705050a59ef297a4956480fccec44ce3",
+      "experiments/e8b_readout_generation/run.py": "d05c79a749f6c4dc17e37d81f4f7598ea7f74d2e6573c4feae8243c2253e1430",
+      "experiments/e8a_question_encoder/e8a_common.py": "cd6c8ce0f0f9d93ec367d9e4c9ec611e5768e334964fe6d7c18bb3a04a70ba20",
+      "experiments/e8a_question_encoder/g21_scorer.py": "22ea9c59082840a60568d7b804a3cb66ac0daccb7b503a6c50305d1354f2f40d",
+      "src/reasoner.py": "3faafcd25e3f9e233c5173b71c1e1bbdd92859047d7b701d97ee16049892062c",
+      "src/tokens_data.py": "9e24a76e177ca8d8145995d1224d611d7de9303d0ea2b79552b3e106c01caf05",
+      "src/utils.py": "3e9af4431b68f96c10d1d6d7842a82ffe34e9100c09e1206d05bbb112c01d3ee",
+      "tests/test_e10.py": "53258283f3b232682d6a65987bbab3a9cf99cb2d39e3510953bccef67d021bbd",
+      "tests/test_e10_phase1.py": "a472e60d351a70d5c4ed93653ea0c6e7977ba90874f6333e1a419605c4883b7d",
+      "tests/test_e10_phase2.py": "ecf03ea6224d5bf14eb62a96a33819b405aea34da6086e96f6ab9004496b77c6",
+      "tests/test_e10_phase3.py": "521ae79cc7cb7c9c5506ae6a8671286e6c23a1bfa5e4d74609ba7a0a251f3f95",
+      "tests/run_all.py": "0a53250ac3c10edd788ea756a64dff54e83d2dec824ad557a6f8ea629e741786"
+    },
+    "config_digest": "4b9fa43cb74b511c0bb6fda3c7c043d6047ef5e5e220c1abad6e35138f3df9ab",
+    "config_files": {
+      "config.py": "2612dfeaa2a2ca54888bd0be2004a90efaa533c16c75db2ed08baadf3f060574",
+      "requirements.lock.txt": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be"
+    },
+    "protocol_family": "e10-fp32-fixed22-core-360m-2026-08-10"
+  },
+  "cell": [
+    "B4r",
+    "train_40k",
+    1
+  ],
+  "identity": "random_smollm2_360m",
+  "recipe_sha256": "4171f64405b3c9a7c282ed393858db5d3bf552684f84b157aec6963d2fda0021",
+  "per_cell_wall_clock_hours": 12.0,
+  "effective_identity_ceiling_hours": 40.0,
+  "gpu_occupancy_ns": 7284333820600,
+  "gpu_hours": 2.0234260612777777,
+  "spend_entry_id": "1602b02405a8e6f4117069ea0ec3cf25110a29665305543b8bd360119aa92115",
+  "detail": null,
+  "scientific_success": true,
+  "guarded_stages_completed": [
+    "setup",
+    "training",
+    "development_evaluation",
+    "g14_diagnostics",
+    "final_r1_evaluation",
+    "result_publication"
+  ],
+  "required_stages": [
+    "setup",
+    "training",
+    "development_evaluation",
+    "g14_diagnostics",
+    "final_r1_evaluation",
+    "result_publication"
+  ],
+  "wall_reached_before_finalisation": false,
+  "automatic_retry_available": false,
+  "retry_requires_fresh_authorization": true
+}
