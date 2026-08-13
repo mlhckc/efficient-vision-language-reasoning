@@ -2,15 +2,15 @@
 
 Is there a reliable pretrained-over-random advantage, and does it grow with scale?
 
-| contrast | order | interface side | language model size | reference condition | training scale | effect | 95% CI (image-clustered) | excludes zero | per-seed effects | comparison class | evidence id |
-|---|---|---|---|---|---|---|---|---|---|---|---|
-| A1 minus A1r | FIRST_ORDER | question side | 135M | A1r, architecture-matched random SmolLM2-135M | 40k | 0.03820 | [0.02947, 0.04680] | true | not bound in VE-0 | CLEAN_PAIRED_CONTROL | EV-CON-E8A.A1_minus_A1r.train_40k |
-| A1 minus A1r | FIRST_ORDER | question side | 135M | A1r, architecture-matched random SmolLM2-135M | 250k | 0.04835 | [0.03935, 0.05803] | true | not bound in VE-0 | CLEAN_PAIRED_CONTROL | EV-CON-E8A.A1_minus_A1r.train_250k |
-| B3 - B2 | FIRST_ORDER | answer side | 135M | B2, architecture-matched random SmolLM2-135M | 40k | -0.02463 | [-0.03333, -0.01619] | true | not bound in VE-0 | CLEAN_PAIRED_CONTROL | EV-CON-E8B.B3_-_B2.train_40k |
-| B3 - B2 | FIRST_ORDER | answer side | 135M | B2, architecture-matched random SmolLM2-135M | 250k | -0.00475 | [-0.01208, 0.00297] | false | not bound in VE-0 | CLEAN_PAIRED_CONTROL | EV-CON-E8B.B3_-_B2.train_250k |
-| pretraining effect | FIRST_ORDER | answer side | 360M | B4r, architecture-matched random SmolLM2-360M | 40k | -0.00683 | [-0.01508, 0.00114] | false | not bound in VE-0 | CLEAN_PAIRED_CONTROL | EV-CON-E10.pretraining_effect.train_40k |
-| pretraining effect | FIRST_ORDER | answer side | 360M | B4r, architecture-matched random SmolLM2-360M | 250k | -0.00238 | [-0.01071, 0.00588] | false | not bound in VE-0 | CLEAN_PAIRED_CONTROL | EV-CON-E10.pretraining_effect.train_250k |
-| (pretrained minus random) at 250k minus the same at 40k | SECOND_ORDER interaction | answer side | 360M | the same effect at train_40k (SECOND-ORDER) | 250k against 40k | 0.00445 | [-0.00709, 0.01641] | false | not bound in VE-0 | CLEAN_PAIRED_CONTROL | EV-CON-E10.difference_in_differences |
+| contrast | order | interface side | language model size | reference condition | training scale | effect | 95% CI (image-clustered) | excludes zero | per-seed effects | seeds disagree in sign | comparison class | evidence id |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| A1 minus A1r | FIRST_ORDER | question side | 135M | A1r, architecture-matched random SmolLM2-135M | 40k | 0.03820 | [0.02947, 0.04680] | true | 0: 0.03565; 1: 0.04304; 2: 0.03591 | false | CLEAN_PAIRED_CONTROL | EV-CON-E8A.A1_minus_A1r.train_40k |
+| A1 minus A1r | FIRST_ORDER | question side | 135M | A1r, architecture-matched random SmolLM2-135M | 250k | 0.04835 | [0.03935, 0.05803] | true | 0: 0.04472; 1: 0.04874; 2: 0.05159 | false | CLEAN_PAIRED_CONTROL | EV-CON-E8A.A1_minus_A1r.train_250k |
+| B3 - B2 | FIRST_ORDER | answer side | 135M | B2, architecture-matched random SmolLM2-135M | 40k | -0.02463 | [-0.03333, -0.01619] | true | 0: -0.00091; 1: -0.05872; 2: -0.01426 | false | CLEAN_PAIRED_CONTROL | EV-CON-E8B.B3_-_B2.train_40k |
+| B3 - B2 | FIRST_ORDER | answer side | 135M | B2, architecture-matched random SmolLM2-135M | 250k | -0.00475 | [-0.01208, 0.00297] | false | 0: 0.00233; 1: -0.00324; 2: -0.01335 | true | CLEAN_PAIRED_CONTROL | EV-CON-E8B.B3_-_B2.train_250k |
+| pretraining effect | FIRST_ORDER | answer side | 360M | B4r, architecture-matched random SmolLM2-360M | 40k | -0.00683 | [-0.01508, 0.00114] | false | 0: -0.00959; 1: 0.00363; 2: -0.01452 | true | CLEAN_PAIRED_CONTROL | EV-CON-E10.pretraining_effect.train_40k |
+| pretraining effect | FIRST_ORDER | answer side | 360M | B4r, architecture-matched random SmolLM2-360M | 250k | -0.00238 | [-0.01071, 0.00588] | false | 0: 0.00959; 1: -0.01219; 2: -0.00454 | true | CLEAN_PAIRED_CONTROL | EV-CON-E10.pretraining_effect.train_250k |
+| (pretrained minus random) at 250k minus the same at 40k | SECOND_ORDER interaction | answer side | 360M | the same effect at train_40k (SECOND-ORDER) | 250k against 40k | 0.00445 | [-0.00709, 0.01641] | false | 0: 0.01919; 1: -0.01582; 2: 0.00998 | true | CLEAN_PAIRED_CONTROL | EV-CON-E10.difference_in_differences |
 
 **Uncertainty.** interval as [lower, upper]; per-seed effects printed so a reader can see where seeds disagree in sign
 

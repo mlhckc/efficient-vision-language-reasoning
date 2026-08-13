@@ -38,13 +38,17 @@ def build(out_dir: Path | None = None) -> dict:
         payload = builder(contract, recorder, out_dir=figure_dir)
         figure_payloads.append(payload)
         caption_records.append(captions.figure_caption(contract, payload))
+    for payload in figures.variant_payloads(contract, recorder,
+                                            out_dir=figure_dir):
+        figure_payloads.append(payload)
+        caption_records.append(captions.figure_caption(contract, payload))
 
     for _, builder in tables.BUILDERS:
         payload = builder(contract, recorder, out_dir=table_dir)
         table_payloads.append(payload)
         caption_records.append(captions.table_caption(contract, payload))
 
-    blocked = figures.blocked_specifications(contract)
+    blocked, unblocked = figures.blocked_specifications(contract)
     for entry in blocked:
         if entry["status"] == "DEFERRED_TO_VE2":
             caption_records.append(
@@ -53,13 +57,15 @@ def build(out_dir: Path | None = None) -> dict:
 
     outputs = {}
     outputs["captions"] = _write_captions(root, contract, caption_records)
-    outputs["blocked"] = _write_blocked(root, contract, blocked)
+    outputs["blocked"] = _write_blocked(root, contract, blocked,
+                                        unblocked)
     outputs["visual_qa"] = _write_visual_qa(root, contract)
     outputs["registry"] = _write_registry(root, contract, recorder)
     outputs["manifest"] = _write_manifest(
         root, contract, recorder, figure_payloads, table_payloads, blocked,
-        caption_records, outputs)
+        caption_records, outputs, unblocked)
     return {
+        "unblocked": unblocked,
         "contract": contract,
         "recorder": recorder,
         "figures": figure_payloads,
@@ -99,7 +105,8 @@ def _write_captions(root: Path, contract: Contract, records: list) -> dict:
             "content_sha256": payload["content_sha256"]}
 
 
-def _write_blocked(root: Path, contract: Contract, blocked: list) -> dict:
+def _write_blocked(root: Path, contract: Contract, blocked: list,
+                   unblocked: list) -> dict:
     payload = _finalise({
         "title": "VE-1 specifications not rendered",
         "ve1_output": "blocked_specifications",
@@ -114,6 +121,8 @@ def _write_blocked(root: Path, contract: Contract, blocked: list) -> dict:
         "deferred_count": sum(1 for b in blocked
                               if b["status"] == "DEFERRED_TO_VE2"),
         "entries": sorted(blocked, key=lambda b: b["specification_id"]),
+        "previously_blocked_now_rendered": sorted(
+            unblocked, key=lambda b: b["specification_id"]),
     }, BUILDER, contract)
     path = root / "blocked_specifications.json"
     return {"path": vc.relpath(path), "sha256": vc.write_json(path, payload),
@@ -170,7 +179,7 @@ def _write_registry(root: Path, contract: Contract,
 def _write_manifest(root: Path, contract: Contract, recorder: Recorder,
                     figure_payloads: list, table_payloads: list,
                     blocked: list, caption_records: list,
-                    outputs: dict) -> dict:
+                    outputs: dict, unblocked: list) -> dict:
     consumed = sorted({e for entry in recorder.entries
                        for e in entry["consumed_evidence_ids"]})
     efficiency = next(p for p in figure_payloads
@@ -197,6 +206,7 @@ def _write_manifest(root: Path, contract: Contract, recorder: Recorder,
                 1 for b in blocked if b["status"] == "BLOCKED_NOT_RENDERED"),
             "specifications_deferred_to_ve2": sum(
                 1 for b in blocked if b["status"] == "DEFERRED_TO_VE2"),
+            "specifications_unblocked_by_the_amendment": len(unblocked),
             "caption_records": len(caption_records),
             "evidence_identifiers_consumed": len(consumed),
             "evidence_identifiers_in_ve0": len(contract.rows),

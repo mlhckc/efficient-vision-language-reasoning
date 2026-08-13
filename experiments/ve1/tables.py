@@ -68,9 +68,34 @@ REFERENCE_CONDITION = {
 }
 
 
+CROSS_REFERENCE = re.compile(r"^as (VE0-TAB-\d+)$")
+
+
+def _uncertainty_notation(contract: Contract, spec: dict) -> tuple:
+    """The reader-facing uncertainty definition, resolved if it is a pointer.
+
+    VE0-TAB-03 declares its notation as "as VE0-TAB-02". That is fine as
+    provenance and useless in a dissertation, where a reader meets the table
+    without the specification beside it. The cross-reference is resolved to
+    the text it points at and the pointer is kept as provenance.
+    """
+    declared = spec["uncertainty_notation"]
+    match = CROSS_REFERENCE.match(declared.strip())
+    if not match:
+        return declared, None
+    target = contract.tables[match.group(1)]
+    return target["uncertainty_notation"], {
+        "declared_in_ve0_as": declared,
+        "resolved_from": match.group(1),
+        "reason": "a cross-reference is provenance, not a reader-facing "
+                  "definition; the dissertation table must stand on its own",
+    }
+
+
 def _payload(contract: Contract, evidence: Evidence, rows: list,
              columns: list, caveat: str, notes: dict | None = None) -> dict:
     spec = evidence.spec
+    notation, resolved = _uncertainty_notation(contract, spec)
     payload = {
         "artefact_id": spec["table_id"].replace("VE0-", "VE1-"),
         "ve0_specification_id": spec["table_id"],
@@ -82,7 +107,9 @@ def _payload(contract: Contract, evidence: Evidence, rows: list,
         "rows": rows,
         "row_count": len(rows),
         "precision": spec["precision"],
-        "uncertainty_notation": spec["uncertainty_notation"],
+        "uncertainty_notation": notation,
+        "uncertainty_notation_cross_reference": resolved,
+        "ve0_declared_uncertainty_notation": spec["uncertainty_notation"],
         "bolding_rule": spec["bolding_rule"],
         "highlight_rule": spec["highlight_rule"],
         "footnotes": spec["footnotes"],
@@ -139,10 +166,20 @@ def _limitation_caveat(contract: Contract, evidence: Evidence) -> str:
 # VE0-TAB-01: main experimental progression
 # --------------------------------------------------------------------------
 
-TAB01_COLUMNS = ["system", "trainable parameters", "training scale", "seeds",
-                 "mean accuracy", "sd (training seeds, ddof=1)",
-                 "95% CI (image-clustered)", "interval available",
-                 "evidence id"]
+TAB01_COLUMNS = ["presentation", "system", "trainable parameters",
+                 "training scale", "seeds", "mean accuracy",
+                 "sd (training seeds, ddof=1)", "95% CI (image-clustered)",
+                 "interval available", "evidence id"]
+
+# The two blocks answer different questions and are never read as one series.
+# Before the amendment they were one undivided list, in which the four
+# systems that appear at train_40k in both blocks looked like contradictory
+# duplicate results rather than the same evidence seen twice under different
+# protocols.
+TAB01_BLOCK_CONTROLLED = ("Controlled comparison at train_40k, with "
+                          "image-clustered intervals (v2_02, v2_03)")
+TAB01_BLOCK_SCALING = ("Training-scale series, across-seed means with no "
+                       "clustered interval (v2_07)")
 
 PARAMETER_KEY = {"concat": "trainable_parameters.concat",
                  "fusion": "trainable_parameters.fusion"}
@@ -175,6 +212,7 @@ def build_tab_01(contract: Contract, recorder: Recorder,
         evidence_id = f"EV-ARM-{family}.{system}.train_40k"
         row = evidence.row(evidence_id)
         rows.append({
+            "presentation": TAB01_BLOCK_CONTROLLED,
             "system": vc.system_label(system),
             "trainable parameters": parameters(system),
             "training scale": vc.scale_label(row["training_scale"]),
@@ -192,7 +230,8 @@ def build_tab_01(contract: Contract, recorder: Recorder,
             evidence_id = f"EV-SEED-v2_07.{system}.{scale}"
             row = evidence.row(evidence_id)
             rows.append({
-                "system": vc.system_label(system) + " (v2_07 scaling)",
+                "presentation": TAB01_BLOCK_SCALING,
+                "system": vc.system_label(system),
                 "trainable parameters": parameters(system),
                 "training scale": vc.scale_label(scale),
                 "seeds": vc.fmt_seeds(row["seed_set"]),
@@ -207,24 +246,34 @@ def build_tab_01(contract: Contract, recorder: Recorder,
 
     evidence.assert_complete()
     return _emit(contract, evidence, recorder, rows, TAB01_COLUMNS,
-                 _limitation_caveat(contract, evidence), out_dir=out_dir)
+                 _limitation_caveat(contract, evidence), out_dir=out_dir,
+                 notes={"presentation_column": "presentation",
+                        "presentation_blocks": [TAB01_BLOCK_CONTROLLED,
+                                                TAB01_BLOCK_SCALING]})
 
 
 # --------------------------------------------------------------------------
 # VE0-TAB-02: capacity-matched controls and interaction features
 # --------------------------------------------------------------------------
 
-CONTRAST_COLUMNS = ["contrast", "comparison class", "effect",
+TAB02_BLOCK_MAIN = ("Main text: the six baseline and capacity contrasts that "
+                    "drive the low-data claim (v2_02, v2_03)")
+TAB02_BLOCK_FULL = ("Retained in full: the nine-gap interaction-feature "
+                    "decomposition (v2_04), carried by Figure VE1-FIG-A1")
+
+CONTRAST_COLUMNS = ["presentation", "contrast", "comparison class", "effect",
                     "95% CI (image-clustered)", "excludes zero",
                     "sd (training seeds, ddof=1)", "n questions", "n images",
                     "evidence id"]
 
 
-def _contrast_row(evidence: Evidence, evidence_id: str) -> dict:
+def _contrast_row(evidence: Evidence, evidence_id: str,
+                  block: str | None = None) -> dict:
     row = evidence.row(evidence_id)
     key = str(row["source_key"]).split("/")
     name = key[1] if len(key) > 1 else key[0]
     return {
+        "presentation": block,
         "contrast": name.replace("_minus_", " minus ").replace("_", " "),
         "comparison class": row["comparison_class"],
         "effect": vc.fmt(row["point_estimate"]),
@@ -241,10 +290,23 @@ def _contrast_row(evidence: Evidence, evidence_id: str) -> dict:
 def build_tab_02(contract: Contract, recorder: Recorder,
                  out_dir=None) -> dict:
     evidence = Evidence(contract, "VE0-TAB-02")
-    rows = [_contrast_row(evidence, e) for e in sorted(evidence.bound)]
+    main = [e for e in sorted(evidence.bound)
+            if contract.rows[e]["experiment_family"] in ("v2_02", "v2_03")]
+    rest = [e for e in sorted(evidence.bound) if e not in main]
+    rows = ([_contrast_row(evidence, e, TAB02_BLOCK_MAIN) for e in main]
+            + [_contrast_row(evidence, e, TAB02_BLOCK_FULL) for e in rest])
     evidence.assert_complete()
     return _emit(contract, evidence, recorder, rows, CONTRAST_COLUMNS,
-                 _limitation_caveat(contract, evidence), out_dir=out_dir)
+                 _limitation_caveat(contract, evidence), out_dir=out_dir,
+                 notes={"presentation_column": "presentation",
+                        "presentation_blocks": [TAB02_BLOCK_MAIN,
+                                                TAB02_BLOCK_FULL],
+                        "presentation_note":
+                            "No row was deleted. The main-text block is the "
+                            "six contrasts claim C01 rests on; the nine "
+                            "interaction-feature gaps remain in the same "
+                            "artefact, in the CSV and in the JSON record, "
+                            "under their own heading."})
 
 
 # --------------------------------------------------------------------------
@@ -286,7 +348,8 @@ def build_tab_03(contract: Contract, recorder: Recorder,
 TAB04_COLUMNS = ["arm", "interface side", "language model",
                  "pretrained or random", "training scale", "seeds",
                  "mean accuracy", "sd (training seeds, ddof=1)",
-                 "per-seed values", "high dispersion", "evidence id"]
+                 "per-seed values", "range across seeds", "high dispersion",
+                 "evidence id"]
 
 
 def build_tab_04(contract: Contract, recorder: Recorder,
@@ -308,14 +371,9 @@ def build_tab_04(contract: Contract, recorder: Recorder,
             "mean accuracy": vc.fmt(row["point_estimate"]),
             "sd (training seeds, ddof=1)":
                 vc.fmt(row["across_training_seed_sd_ddof1"]),
-            "per-seed values": evidence.note_unbound(
-                "per-seed values",
-                "the VE0-TAB-04 specification requires a per-seed column and "
-                "calls it mandatory, but no VE-0 inventory row binds per-seed "
-                "accuracies: a SEED row carries the across-seed mean, the "
-                "sample standard deviation and the seed set only. VE-1 does "
-                "not recover them from a historical experiment directory.",
-                [evidence_id]),
+            "per-seed values": vc.fmt_per_seed(row["per_seed_values"],
+                                               row["per_seed_seed_ids"]),
+            "range across seeds": vc.fmt(row["per_seed_range"]),
             "high dispersion": "yes (dagger)" if dispersion else "no",
             "evidence id": evidence_id,
         })
@@ -331,8 +389,21 @@ def build_tab_04(contract: Contract, recorder: Recorder,
 TAB05_COLUMNS = ["contrast", "order", "interface side",
                  "language model size", "reference condition",
                  "training scale", "effect", "95% CI (image-clustered)",
-                 "excludes zero", "per-seed effects", "comparison class",
-                 "evidence id"]
+                 "excludes zero", "per-seed effects",
+                 "seeds disagree in sign", "comparison class", "evidence id"]
+
+
+def _mixed_signs(effects) -> bool:
+    """Whether the per-seed effects disagree in sign.
+
+    The specification's footnote says the per-seed effects are printed so a
+    reader can see where seeds disagree. Deriving the flag from the printed
+    vector rather than asserting it in prose means the statement and the
+    numbers cannot drift apart.
+    """
+    if not effects:
+        return None
+    return any(v > 0 for v in effects) and any(v < 0 for v in effects)
 
 TAB05_ORDER = [
     "EV-CON-E8A.A1_minus_A1r.train_40k",
@@ -368,14 +439,10 @@ def build_tab_05(contract: Contract, recorder: Recorder,
             "effect": vc.fmt(row["point_estimate"]),
             "95% CI (image-clustered)": vc.fmt_ci(row["ci95"]),
             "excludes zero": vc.fmt(row["excludes_zero"]),
-            "per-seed effects": evidence.note_unbound(
-                "per-seed effects",
-                "the VE0-TAB-05 specification asks for per-seed effects so a "
-                "reader can see where seeds disagree in sign. No VE-0 "
-                "inventory row binds per-seed contrast values; the seed "
-                "disagreement is recorded in prose in the row's mandatory "
-                "limitation and is reproduced in this table's caveat.",
-                [evidence_id]),
+            "per-seed effects": vc.fmt_per_seed(row["per_seed_effects"],
+                                                row["per_seed_seed_ids"]),
+            "seeds disagree in sign": vc.fmt(
+                _mixed_signs(row["per_seed_effects"])),
             "comparison class": row["comparison_class"],
             "evidence id": evidence_id,
         })
@@ -388,7 +455,15 @@ def build_tab_05(contract: Contract, recorder: Recorder,
 # VE0-TAB-06: measured efficiency, by node and timing class
 # --------------------------------------------------------------------------
 
-TAB06_COLUMNS = ["system", "experiment family", "timing class", "node",
+TAB06_BLOCK_E7B = ("Main text, node otter155 (E7b): authoritative "
+                   "END_TO_END_SERIAL evidence")
+TAB06_BLOCK_E9 = ("Main text, node otter159 (E9): authoritative "
+                  "END_TO_END_SERIAL evidence. Never merged with otter155")
+TAB06_BLOCK_REST = ("Retained in full: cached, component and superseded rows, "
+                    "which support no end-to-end latency claim")
+
+TAB06_COLUMNS = ["presentation", "system", "experiment family",
+                 "timing class", "node",
                  "precision", "batch size",
                  "warm median serial latency (ms)",
                  "comparable with end-to-end", "evidence status",
@@ -423,7 +498,14 @@ def build_tab_06(contract: Contract, recorder: Recorder,
         else:
             latency = vc.fmt(value, 4)
         pairing = row["accuracy_pairing"]
+        if row["timing_kind"] != "END_TO_END_SERIAL":
+            block = TAB06_BLOCK_REST
+        elif "otter155" in str(row["node"]):
+            block = TAB06_BLOCK_E7B
+        else:
+            block = TAB06_BLOCK_E9
         rows.append({
+            "presentation": block,
             "system": row["model_system"],
             "experiment family": row["experiment_family"],
             "timing class": row["timing_kind"],
@@ -438,11 +520,24 @@ def build_tab_06(contract: Contract, recorder: Recorder,
             "accuracy pairing": pairing.get("status"),
             "evidence id": evidence_id,
         })
+    order = {TAB06_BLOCK_E7B: 0, TAB06_BLOCK_E9: 1, TAB06_BLOCK_REST: 2}
+    rows.sort(key=lambda r: (order[r["presentation"]], r["system"]))
     evidence.assert_complete()
     return _emit(contract, evidence, recorder, rows, TAB06_COLUMNS,
                  _limitation_caveat(contract, evidence), out_dir=out_dir,
                  notes={"nodes_merged": False,
-                        "energy_or_power_measured": False})
+                        "energy_or_power_measured": False,
+                        "presentation_column": "presentation",
+                        "presentation_blocks": [TAB06_BLOCK_E7B,
+                                                TAB06_BLOCK_E9,
+                                                TAB06_BLOCK_REST],
+                        "presentation_note":
+                            "The two main-text blocks are the only rows that "
+                            "support an end-to-end latency claim, and they "
+                            "are separated by node because the nodes are "
+                            "never merged. The complete 36-row timing "
+                            "registry is retained in the same artefact, in "
+                            "the CSV and in the JSON record."})
 
 
 # --------------------------------------------------------------------------
@@ -561,22 +656,12 @@ def build_tab_a2(contract: Contract, recorder: Recorder,
             "scale": vc.scale_label(row["training_scale"]),
             "metric": row["metric_id"],
             "seed set": vc.fmt_seeds(row["seed_set"]),
-            "per-seed accuracies": evidence.note_unbound(
-                "per-seed accuracies",
-                "no VE-0 inventory row binds per-seed accuracies. A SEED row "
-                "carries the across-seed mean, the sample standard deviation "
-                "and the seed set only, so the question this table asks "
-                "cannot be answered from the frozen evidence contract as it "
-                "stands.", [evidence_id]),
+            "per-seed accuracies": vc.fmt_per_seed(row["per_seed_values"],
+                                                   row["per_seed_seed_ids"]),
             "mean": vc.fmt(row["point_estimate"]),
             "sd (training seeds, ddof=1)":
                 vc.fmt(row["across_training_seed_sd_ddof1"]),
-            "range": evidence.note_unbound(
-                "range",
-                "the range is derivable only from per-seed values, which VE-0 "
-                "does not bind. Two rows state their range inside their "
-                "mandatory limitation and those statements are preserved in "
-                "the caveat.", [evidence_id]),
+            "range": vc.fmt(row["per_seed_range"]),
             "high dispersion": "yes" if dispersion else "no",
             "checkpoint selection": row["checkpoint_selection_class"],
             "evidence id": evidence_id,

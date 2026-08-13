@@ -33,6 +33,7 @@ What exactly does this dissertation claim, on what evidence, and with what bound
 **Notes.**
 
 1. This table is generated from the VE-0 claim ledger. The Abstract, Discussion and Conclusion may not state a stronger version of any row here.
+2. Moved to the appendix by the 2026-08-13 amendment. Twenty-one rows of claim text, caveat and forbidden stronger version is a reference apparatus rather than a Results table; the main-text Limitations section states the boundaries in prose and cites this table. No claim, status, caveat or prohibition changed, and no replacement main-text table was invented to fill the slot.
 
 **Bolding.** no bolding
 

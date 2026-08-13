@@ -766,11 +766,25 @@ RESEARCH_QUESTIONS = [
         "question": "Does reasoning over token-level visual features with a "
                     "latent-query reasoner beat the global-embedding heads?",
         "answer_status": "ANSWERED",
-        "supported_answer": "Not materially, at any tested scale, and not on "
-                            "the multi-step deficit.",
+        # Repaired by the 2026-08-13 amendment, blocking finding B1. The
+        # previous wording, "Not materially, at any tested scale, and not on
+        # the multi-step deficit", over-generalised the 40k conclusion to
+        # every scale: the reasoner's mean overall accuracy IS higher at 100k
+        # and 250k. Only the deficit conclusion holds at every tested scale.
+        "supported_answer": "At train_40k, the latent-query reasoner does not "
+                            "materially outperform the much smaller global "
+                            "fusion head. Its mean overall accuracy is higher "
+                            "at the larger training scales, but no tested "
+                            "scale shows a reliable reduction in the "
+                            "four-or-more-step deficit.",
         "claim_ids": ["C07"],
-        "limitation": "System-level comparison; token access is not isolated; "
-                      "the intervals show absence of detection, not "
+        "limitation": "System-level comparison; token access is not "
+                      "causally isolated, because architecture, trainable "
+                      "capacity and input granularity move together; the "
+                      "larger-scale overall-accuracy comparison rests on "
+                      "across-training-seed means with no evaluation "
+                      "interval, and the two series do not share a seed set; "
+                      "the deficit intervals show absence of detection, not "
                       "equivalence.",
         "dissertation_section": "R5_LATENT_REASONING_AND_REPRESENTATION",
     },
@@ -813,13 +827,31 @@ RESEARCH_QUESTIONS = [
         "question": "What is the accuracy against computational-cost "
                     "trade-off for these systems?",
         "answer_status": "ANSWERED",
-        "supported_answer": "Measured warm serial batch-1 latency per node "
-                            "places the small global-embedding heads far "
-                            "cheaper than the reasoner, the SLM readouts and "
-                            "the compact VLMs, at comparable accuracy.",
+        # Repaired by the 2026-08-13 amendment, blocking finding B2. The
+        # previous wording implied that every "SLM readout" has an
+        # accuracy-paired serial cost. It does not: on otter159 every
+        # lightweight and E8B row is latency-only, because VE-0 records its
+        # accuracy pairing as unresolved.
+        "supported_answer": "On otter155, where every timed lightweight "
+                            "system has a resolved accuracy pairing, the "
+                            "small global-embedding heads are far cheaper "
+                            "than the latent-query reasoner and the frozen "
+                            "small-language-model question encoder at "
+                            "comparable accuracy. On otter159, a top-1000 "
+                            "global head was timed at about 6.2 ms against "
+                            "the compact VLMs' roughly 141 to 153 ms on the "
+                            "same node; the lightweight rows on that node are "
+                            "latency-only, so that ratio is not bound to a "
+                            "specific accuracy. E8B's canonical R1 readout "
+                            "and E10 have no serial latency evidence, and R2 "
+                            "and R3 are never presented as R1's cost.",
         "claim_ids": ["C13", "C14"],
-        "limitation": "Latency only; two nodes kept separate; E8B R1 and E10 "
-                      "have no serial latency evidence.",
+        "limitation": "Latency only, on two nodes that are never merged into "
+                      "one frontier; the shared fusion bridge control failed "
+                      "its pre-registered tolerance and no adjustment factor "
+                      "is applied; seven end-to-end rows have no verified "
+                      "accuracy pairing and are reported latency-only; E8B R1 "
+                      "and E10 have no serial latency evidence at all.",
         "dissertation_section": "R8_COMPUTATIONAL_EFFICIENCY",
     },
     {

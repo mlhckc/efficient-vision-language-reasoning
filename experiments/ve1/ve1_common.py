@@ -446,18 +446,128 @@ class Evidence:
         return sorted(self.used)
 
     def source_paths(self) -> list:
-        """Canonical source path and hash behind every consumed row."""
+        """Canonical source path, hash and resolution route for every row.
+
+        Resolution runs here rather than only in the tests, so a build that
+        cannot produce a source byte-for-byte fails at build time.
+        """
         seen = {}
         for evidence_id in sorted(self.used):
             row = self.contract.rows[evidence_id]
             path = row.get("canonical_source_path")
-            if path:
-                seen[path] = row.get("canonical_source_sha256")
-        return [{"path": p, "sha256": h} for p, h in sorted(seen.items())]
+            sha = row.get("canonical_source_sha256")
+            if path and path != "NOT_APPLICABLE" and sha not in (
+                    None, "NOT_APPLICABLE", "NOT_AVAILABLE"):
+                seen[path] = sha
+        return [resolve_source(p, h).as_record()
+                for p, h in sorted(seen.items())]
 
 
 NOT_BOUND = "not bound in VE-0"
 NOT_AVAILABLE = "not available"
+
+
+# --------------------------------------------------------------------------
+# canonical source resolution, added by the 2026-08-13 amendment
+# --------------------------------------------------------------------------
+# Blocking finding B4: VE-1's source-hash validation only ever looked at the
+# canonical path. Twelve of the nineteen canonical sources are git-ignored
+# working-tree artefacts, so in a clean checkout of the published repository
+# those checks could not run at all.
+#
+# The repair does NOT relax the check. Scientific identity remains the
+# canonical path and the canonical expected hash. When the canonical file is
+# absent, resolution falls back to exactly one deterministically derived
+# tracked mirror, and only if that mirror's SHA-256 is EXACTLY the canonical
+# expected hash. A present-but-different file fails; a missing mirror fails;
+# a mirror is never reinterpreted as a new scientific source. Which of the two
+# routes satisfied each source is recorded, so a reader can see it.
+
+CANONICAL_PATH = "CANONICAL_PATH"
+HASH_IDENTICAL_TRACKED_MIRROR = "HASH_IDENTICAL_TRACKED_MIRROR"
+
+# Deterministic prefix rewrites. No globbing, no fuzzy filename matching and
+# no directory search: a canonical path maps to at most one candidate, and the
+# candidate is only ever accepted if its hash is exactly the canonical one.
+# The second rule covers the V1 stage artefacts, which the export tree groups
+# under v1/ rather than mirroring their flat original location.
+MIRROR_PREFIXES = (
+    ("results/experiments/", "artifacts/results_export/"),
+    ("results/stage", "artifacts/results_export/v1/stage"),
+)
+
+
+def mirror_candidate(path: str) -> str | None:
+    """The single deterministic mirror path for a canonical path, or None."""
+    for source_prefix, mirror_prefix in MIRROR_PREFIXES:
+        if path.startswith(source_prefix):
+            return mirror_prefix + path[len(source_prefix):]
+    return None
+
+
+class SourceResolution:
+    """One canonical source, resolved and hash-verified."""
+
+    def __init__(self, path: str, expected_sha256: str, resolved: Path,
+                 mode: str):
+        self.path = path
+        self.expected_sha256 = expected_sha256
+        self.resolved = resolved
+        self.mode = mode
+
+    def as_record(self) -> dict:
+        return {
+            "path": self.path,
+            "sha256": self.expected_sha256,
+            "resolved_from": relpath(self.resolved),
+            "resolution": self.mode,
+        }
+
+
+def resolve_source(path: str, expected_sha256: str,
+                   root: Path | None = None) -> SourceResolution:
+    """Resolve one canonical source path, or refuse.
+
+    Refusal is the point: a source that cannot be produced byte-for-byte is
+    not a source, and silently skipping it is what let the clean-checkout gap
+    exist.
+    """
+    base = Path(root or PROJECT_ROOT)
+    canonical = base / path
+    if not expected_sha256 or expected_sha256 in (NOT_AVAILABLE,
+                                                  "NOT_AVAILABLE"):
+        raise AssertionError(
+            f"canonical source {path} carries no expected hash, so it cannot "
+            f"be verified")
+
+    if canonical.exists():
+        actual = sha256_file(canonical)
+        if actual != expected_sha256:
+            raise AssertionError(
+                f"canonical source {path} is present but hashes to {actual}, "
+                f"not the expected {expected_sha256}. VE-1 refuses to render "
+                f"from a changed source.")
+        return SourceResolution(path, expected_sha256, canonical,
+                                CANONICAL_PATH)
+
+    candidate = mirror_candidate(path)
+    if candidate is None:
+        raise AssertionError(
+            f"canonical source {path} is absent and no deterministic tracked "
+            f"mirror is defined for it")
+    mirror = base / candidate
+    if not mirror.exists():
+        raise AssertionError(
+            f"canonical source {path} is absent and its only deterministic "
+            f"mirror {candidate} does not exist")
+    actual = sha256_file(mirror)
+    if actual != expected_sha256:
+        raise AssertionError(
+            f"canonical source {path} is absent and its mirror {candidate} "
+            f"hashes to {actual}, not the expected {expected_sha256}. A "
+            f"differing mirror is not a substitute and VE-1 refuses it.")
+    return SourceResolution(path, expected_sha256, mirror,
+                            HASH_IDENTICAL_TRACKED_MIRROR)
 
 
 # --------------------------------------------------------------------------
@@ -486,19 +596,29 @@ BOUND_SCALARS = {
         "kind": "int",
         "description": "trainable parameters of the fusion head",
     },
-    "trainable_parameters.e10_B4": {
+    # The two figures VE0-FIG-08's caveat quotes are the endpoints of the
+    # 135M-to-360M step, not the two E10 arms. The earlier key names
+    # trainable_parameters.e10_B4 and .e10_B4r were wrong twice over: they
+    # attached the 135M figure to an E10 arm, and they implied that B4 and
+    # B4r differ in trainable capacity. They do not: both E10 arms have
+    # 21,540,800 trainable parameters, because B4r is architecture-matched to
+    # B4. Renamed by the 2026-08-13 amendment, blocking finding B3. The
+    # numbers are unchanged.
+    "trainable_parameters.answer_side_135m": {
         "spec": "VE0-FIG-08",
         "field": "mandatory_caption_caveat",
         "pattern": r"trainable capacity moves too, ([\d,]+) to [\d,]+",
         "kind": "int",
-        "description": "trainable parameters of the E10 B4 system",
+        "description": "trainable parameters of the answer-side 135M system, "
+                       "E8B B2 and B3",
     },
-    "trainable_parameters.e10_B4r": {
+    "trainable_parameters.answer_side_360m": {
         "spec": "VE0-FIG-08",
         "field": "mandatory_caption_caveat",
         "pattern": r"trainable capacity moves too, [\d,]+ to ([\d,]+)",
         "kind": "int",
-        "description": "trainable parameters of the E10 B4r system",
+        "description": "trainable parameters of the answer-side 360M system, "
+                       "E10 B4 and B4r. Both E10 arms have this same count",
     },
     "parameters_label.reasoner": {
         "spec": "VE0-FIG-06",
@@ -586,6 +706,18 @@ def fmt_seeds(seed_set) -> str:
     if isinstance(seed_set, str):
         return seed_set
     return ", ".join(str(s) for s in seed_set)
+
+
+def fmt_per_seed(values, seed_ids, places: int = 5) -> str:
+    """Per-seed values, each labelled with the seed that produced it.
+
+    Written as "seed=value" pairs rather than a bare list, because the point
+    of printing them is that a reader can see which seed disagreed.
+    """
+    if not values or not seed_ids:
+        return NOT_AVAILABLE
+    return "; ".join(f"{seed}: {value:.{places}f}"
+                     for seed, value in zip(seed_ids, values))
 
 
 def scale_label(scale: str) -> str:

@@ -111,6 +111,17 @@ def _blank_row() -> dict:
         "n_training_seeds": None,
         "point_estimate": None,
         "across_training_seed_sd_ddof1": None,
+        # Per-seed reporting fields, added by the 2026-08-13 amendment. They
+        # bind values that were already computed and already hashed before
+        # VE-0 froze; nothing here is recomputed. A row that has none says so
+        # in per_seed_status rather than carrying a silent null.
+        "per_seed_values": None,
+        "per_seed_seed_ids": None,
+        "per_seed_range": None,
+        "per_seed_effects": None,
+        "per_seed_effect_range": None,
+        "per_seed_status": vc.NOT_APPLICABLE,
+        "per_seed_provenance": vc.NOT_APPLICABLE,
         "ci95": None,
         "ci_type": vc.NOT_APPLICABLE,
         "cluster_unit": vc.NOT_APPLICABLE,
@@ -137,6 +148,150 @@ def _blank_row() -> dict:
         "appendix_destination": vc.NOT_APPLICABLE,
         "qualitative_pairing": vc.NOT_APPLICABLE,
     }
+
+
+# --------------------------------------------------------------------------
+# per-seed binding, added by the 2026-08-13 amendment
+# --------------------------------------------------------------------------
+# The independent VE-1 review found that VE0-FIG-A2, VE0-TAB-04, VE0-TAB-05
+# and VE0-TAB-A2 all ask for per-seed values the inventory did not bind, even
+# though those values already exist, fully computed and hash-pinned, inside
+# two of VE-0's own declared closure inputs. This binds them. It reads; it
+# does not compute. The mean, the standard deviation and the range stored
+# beside each vector are re-derived only to REFUSE a vector that does not
+# reproduce them, which is a consistency guard rather than a new statistic.
+
+ROUNDING = 5
+TOLERANCE = 1.1e-5
+
+
+def _mean(values: list) -> float:
+    return round(sum(values) / len(values), ROUNDING)
+
+
+def _sd_ddof1(values: list) -> float:
+    mean = sum(values) / len(values)
+    variance = sum((v - mean) ** 2 for v in values) / (len(values) - 1)
+    return round(variance ** 0.5, ROUNDING)
+
+
+def _per_seed_vector(payload, seed_set: list) -> tuple:
+    """Normalise the two stored shapes into (seed_ids, values).
+
+    The closure stores per-seed accuracy as a seed-keyed mapping and per-seed
+    effects either as a mapping or as a list ordered by the row's own
+    training_seeds. Both are accepted; nothing else is.
+    """
+    if payload is None:
+        return None, None
+    if isinstance(payload, dict):
+        ids = sorted(payload, key=int)
+        return [int(i) for i in ids], [payload[i] for i in ids]
+    if isinstance(payload, list):
+        if seed_set is None or len(seed_set) != len(payload):
+            raise AssertionError(
+                "a list-shaped per-seed vector must align with the row's own "
+                f"seed set: {payload} against {seed_set}")
+        return list(seed_set), list(payload)
+    raise AssertionError(f"unrecognised per-seed payload shape: {payload!r}")
+
+
+def _per_seed_provenance(ctx, closure_key: str, row_id: str, field: str,
+                         upstream_path: str) -> dict:
+    """Exactly where a bound vector was read from, and what it came from."""
+    closure_path = ctx["input_paths"][closure_key]
+    return {
+        "read_from": closure_path,
+        "read_from_sha256": ctx["hashes"].get(closure_path, vc.NOT_AVAILABLE),
+        "locator": f"rows[row_id={row_id}].{field}"
+        if closure_key == "seed" else
+        f"contrasts[contrast_id={row_id}].{field}",
+        "upstream_canonical_source_path": upstream_path,
+        "upstream_canonical_source_sha256": ctx["hashes"].get(
+            upstream_path, vc.NOT_AVAILABLE),
+        "computation": "READ_ONLY. The vector was read from a frozen closure "
+                       "output that VE-0 already declares as an input and "
+                       "already hashes. No value was recomputed, no model was "
+                       "loaded and no evaluation was run.",
+        "bound_by": "VE-0 amendment 2026-08-13",
+    }
+
+
+def _bind_seed_vector(ctx, row: dict, source: dict) -> None:
+    """Attach the per-seed accuracies to one SEED row, or say why not."""
+    ids, values = _per_seed_vector(source.get("per_seed_accuracy"),
+                                   source.get("seed_set"))
+    if values is None:
+        row["per_seed_status"] = (
+            "NOT_AVAILABLE_IN_FROZEN_SOURCE: the closure seed-variability "
+            "artefact stores no per-seed accuracy for this row")
+        return
+    if ids != list(source["seed_set"]):
+        raise AssertionError(
+            f"{source['row_id']}: per-seed identifiers {ids} do not match the "
+            f"row's seed set {source['seed_set']}")
+    if len(values) != source["n_training_seeds"]:
+        raise AssertionError(
+            f"{source['row_id']}: {len(values)} per-seed values against "
+            f"n_training_seeds {source['n_training_seeds']}")
+    if abs(_mean(values) - source["mean"]) > TOLERANCE:
+        raise AssertionError(
+            f"{source['row_id']}: per-seed values mean to {_mean(values)}, "
+            f"the stored mean is {source['mean']}")
+    if len(values) > 1 and abs(_sd_ddof1(values)
+                               - source["sd_across_training_seeds_ddof1"]
+                               ) > TOLERANCE:
+        raise AssertionError(
+            f"{source['row_id']}: per-seed values give sd "
+            f"{_sd_ddof1(values)}, the stored sd is "
+            f"{source['sd_across_training_seeds_ddof1']}")
+    stored_range = source.get("range")
+    derived_range = round(max(values) - min(values), ROUNDING)
+    if stored_range is not None and abs(derived_range
+                                        - stored_range) > TOLERANCE:
+        raise AssertionError(
+            f"{source['row_id']}: per-seed range {derived_range} against the "
+            f"stored range {stored_range}")
+    row["per_seed_values"] = values
+    row["per_seed_seed_ids"] = ids
+    row["per_seed_range"] = stored_range if stored_range is not None \
+        else derived_range
+    row["per_seed_status"] = "BOUND"
+    row["per_seed_provenance"] = _per_seed_provenance(
+        ctx, "seed", source["row_id"], "per_seed_accuracy",
+        source["source_artefact"])
+
+
+def _bind_contrast_vector(ctx, row: dict, source: dict) -> None:
+    """Attach the per-seed matched effects to one CON row, or say why not."""
+    ids, values = _per_seed_vector(source.get("per_seed_effect"),
+                                   source.get("training_seeds"))
+    if values is None:
+        row["per_seed_status"] = (
+            "NOT_AVAILABLE_IN_FROZEN_SOURCE: the closure contrast artefact "
+            "stores no per-seed effect vector for this contrast")
+        return
+    if ids != list(source["training_seeds"]):
+        raise AssertionError(
+            f"{source['contrast_id']}: per-seed identifiers {ids} do not "
+            f"match the contrast's seed set {source['training_seeds']}")
+    if abs(_mean(values) - source["effect"]) > TOLERANCE:
+        raise AssertionError(
+            f"{source['contrast_id']}: per-seed effects mean to "
+            f"{_mean(values)}, the stored effect is {source['effect']}")
+    sd = source.get("across_training_seed_sd_ddof1")
+    if sd is not None and len(values) > 1 \
+            and abs(_sd_ddof1(values) - sd) > TOLERANCE:
+        raise AssertionError(
+            f"{source['contrast_id']}: per-seed effects give sd "
+            f"{_sd_ddof1(values)}, the stored sd is {sd}")
+    row["per_seed_effects"] = values
+    row["per_seed_seed_ids"] = ids
+    row["per_seed_effect_range"] = round(max(values) - min(values), ROUNDING)
+    row["per_seed_status"] = "BOUND"
+    row["per_seed_provenance"] = _per_seed_provenance(
+        ctx, "contrasts", source["contrast_id"], "per_seed_effect",
+        source["source_artefact"])
 
 
 # --------------------------------------------------------------------------
@@ -195,6 +350,7 @@ def _contrast_rows(ctx) -> list:
             "excludes_zero": c["excludes_zero"],
             "directional": c["excludes_zero"],
         })
+        _bind_contrast_vector(ctx, row, c)
         row["row_level_evidence_paths"], row["row_level_sha256"] = \
             _row_evidence_for(ctx, family, _scale_from_key(key))
         rows.append(row)
@@ -359,6 +515,7 @@ def _seed_rows(ctx) -> list:
             "excludes_zero": None,
             "directional": None,
         })
+        _bind_seed_vector(ctx, row, s)
         if s["high_seed_dispersion"]:
             row["mandatory_limitation"] += (
                 f" HIGH SEED DISPERSION: sd "
@@ -802,6 +959,10 @@ INVENTORY_CSV_COLUMNS = [
     "n_questions", "n_unique_images", "answer_set_size", "metric_id",
     "analysis_role", "comparison_class", "evidence_readiness",
     "checkpoint_selection", "excludes_zero",
+    # per-seed reporting, added by the 2026-08-13 amendment so the flat view
+    # carries the same bindings as the JSON
+    "per_seed_status", "per_seed_seed_ids", "per_seed_values",
+    "per_seed_range", "per_seed_effects", "per_seed_effect_range",
     "proposed_figure_use", "proposed_table_use",
     "proposed_dissertation_section", "proposed_supervisor_slide",
     "appendix_destination", "mandatory_limitation",

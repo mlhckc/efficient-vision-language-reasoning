@@ -109,10 +109,11 @@ def figure_caption(contract: Contract, payload: dict) -> dict:
     caveat = spec["mandatory_caption_caveat"]
     context_sentence = _context_sentence(context)
 
-    dissertation = " ".join([
-        f"{payload['artefact_id']}. {spec['working_title']}.",
-        message, quantity, uncertainty, context_sentence, caveat,
-    ])
+    glossary = payload.get("arm_code_glossary")
+    dissertation = " ".join(
+        [f"{payload['artefact_id']}. {spec['working_title']}.",
+         message, quantity, uncertainty, context_sentence, caveat]
+        + ([glossary] if glossary else []))
     presentation = " ".join([
         f"{spec['working_title']}.", message, uncertainty, caveat,
     ])
@@ -138,6 +139,7 @@ def figure_caption(contract: Contract, payload: dict) -> dict:
         "likely_viva_question": spec["likely_viva_question"],
         "viva_answer": spec["viva_answer"],
         "carries_v2_07_limitation": spec["carries_v2_07_limitation"],
+        "glossary": glossary,
         "consumed_evidence_ids": payload["consumed_evidence_ids"],
         "context": context,
     }
@@ -150,8 +152,10 @@ def table_caption(contract: Contract, payload: dict) -> dict:
     context = _context(contract, payload["consumed_evidence_ids"])
     message = spec["scientific_question"]
     caveat = payload["mandatory_caveat"]
-    uncertainty = f"Uncertainty notation: {spec['uncertainty_notation']}"
-    quantity = (f"Quantity: {', '.join(spec['columns'])}. "
+    # The payload's notation, not the specification's: VE0-TAB-03 declares a
+    # cross-reference, and a dissertation caption must stand on its own.
+    uncertainty = f"Uncertainty notation: {payload['uncertainty_notation']}"
+    quantity = (f"Quantity: {', '.join(payload['columns'])}. "
                 f"Precision: {spec['precision']}.")
     context_sentence = _context_sentence(context)
 

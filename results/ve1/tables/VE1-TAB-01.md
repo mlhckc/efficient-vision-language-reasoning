@@ -2,6 +2,8 @@
 
 What accuracy does each global-embedding head reach at each training scale?
 
+## Controlled comparison at train_40k, with image-clustered intervals (v2_02, v2_03)
+
 | system | trainable parameters | training scale | seeds | mean accuracy | sd (training seeds, ddof=1) | 95% CI (image-clustered) | interval available | evidence id |
 |---|---|---|---|---|---|---|---|---|
 | question only | not bound in VE-0 | 40k | 0, 1, 2, 3, 42 | 0.45797 | 0.00290 | [0.44717, 0.46917] | yes | EV-ARM-v2_02.question_only.train_40k |
@@ -10,18 +12,23 @@ What accuracy does each global-embedding head reach at each training scale?
 | concat_wide (matched budget) | matched budget (see VE1-TAB-02 note 3) | 40k | 0, 1, 2, 3, 42 | 0.53262 | 0.00259 | [0.52154, 0.54394] | yes | EV-ARM-v2_03.concat_wide.train_40k |
 | fusion_narrow (matched budget) | matched budget (see VE1-TAB-02 note 3) | 40k | 0, 1, 2, 3, 42 | 0.53342 | 0.00139 | [0.52130, 0.54546] | yes | EV-ARM-v2_03.fusion_narrow.train_40k |
 | fusion | 1,100,388 | 40k | 0, 1, 2, 3, 42 | 0.53840 | 0.00218 | [0.52679, 0.55028] | yes | EV-ARM-v2_02.fusion.train_40k |
-| question only (v2_07 scaling) | not bound in VE-0 | 40k | 0, 1, 2, 3, 42 | 0.45797 | 0.00290 | not available | no: v2_07 ACCEPTED DOCUMENTED LIMITATION | EV-SEED-v2_07.question_only.train_40k |
-| question only (v2_07 scaling) | not bound in VE-0 | 100k | 0, 1, 2, 3, 42 | 0.48294 | 0.00151 | not available | no: v2_07 ACCEPTED DOCUMENTED LIMITATION | EV-SEED-v2_07.question_only.train_100k |
-| question only (v2_07 scaling) | not bound in VE-0 | 250k | 0, 1, 2, 3, 42 | 0.49769 | 0.00439 | not available | no: v2_07 ACCEPTED DOCUMENTED LIMITATION | EV-SEED-v2_07.question_only.train_250k |
-| concat (v2_07 scaling) | 576,100 | 40k | 0, 1, 2, 3, 42 | 0.52398 | 0.00276 | not available | no: v2_07 ACCEPTED DOCUMENTED LIMITATION | EV-SEED-v2_07.concat.train_40k |
-| concat (v2_07 scaling) | 576,100 | 100k | 0, 1, 2, 3, 42 | 0.55084 | 0.00201 | not available | no: v2_07 ACCEPTED DOCUMENTED LIMITATION | EV-SEED-v2_07.concat.train_100k |
-| concat (v2_07 scaling) | 576,100 | 250k | 0, 1, 2, 3, 42 | 0.57861 | 0.00264 | not available | no: v2_07 ACCEPTED DOCUMENTED LIMITATION | EV-SEED-v2_07.concat.train_250k |
-| product (576k budget) (v2_07 scaling) | matched budget (see VE1-TAB-02 note 3) | 40k | 0, 1, 2, 3, 42 | 0.53355 | 0.00312 | not available | no: v2_07 ACCEPTED DOCUMENTED LIMITATION | EV-SEED-v2_07.product_576k.train_40k |
-| product (576k budget) (v2_07 scaling) | matched budget (see VE1-TAB-02 note 3) | 100k | 0, 1, 2, 3, 42 | 0.56365 | 0.00223 | not available | no: v2_07 ACCEPTED DOCUMENTED LIMITATION | EV-SEED-v2_07.product_576k.train_100k |
-| product (576k budget) (v2_07 scaling) | matched budget (see VE1-TAB-02 note 3) | 250k | 0, 1, 2, 3, 42 | 0.58242 | 0.00318 | not available | no: v2_07 ACCEPTED DOCUMENTED LIMITATION | EV-SEED-v2_07.product_576k.train_250k |
-| fusion (v2_07 scaling) | 1,100,388 | 40k | 0, 1, 2, 3, 42 | 0.53840 | 0.00218 | not available | no: v2_07 ACCEPTED DOCUMENTED LIMITATION | EV-SEED-v2_07.fusion.train_40k |
-| fusion (v2_07 scaling) | 1,100,388 | 100k | 0, 1, 2, 3, 42 | 0.56308 | 0.00268 | not available | no: v2_07 ACCEPTED DOCUMENTED LIMITATION | EV-SEED-v2_07.fusion.train_100k |
-| fusion (v2_07 scaling) | 1,100,388 | 250k | 0, 1, 2, 3, 42 | 0.58226 | 0.00197 | not available | no: v2_07 ACCEPTED DOCUMENTED LIMITATION | EV-SEED-v2_07.fusion.train_250k |
+
+## Training-scale series, across-seed means with no clustered interval (v2_07)
+
+| system | trainable parameters | training scale | seeds | mean accuracy | sd (training seeds, ddof=1) | 95% CI (image-clustered) | interval available | evidence id |
+|---|---|---|---|---|---|---|---|---|
+| question only | not bound in VE-0 | 40k | 0, 1, 2, 3, 42 | 0.45797 | 0.00290 | not available | no: v2_07 ACCEPTED DOCUMENTED LIMITATION | EV-SEED-v2_07.question_only.train_40k |
+| question only | not bound in VE-0 | 100k | 0, 1, 2, 3, 42 | 0.48294 | 0.00151 | not available | no: v2_07 ACCEPTED DOCUMENTED LIMITATION | EV-SEED-v2_07.question_only.train_100k |
+| question only | not bound in VE-0 | 250k | 0, 1, 2, 3, 42 | 0.49769 | 0.00439 | not available | no: v2_07 ACCEPTED DOCUMENTED LIMITATION | EV-SEED-v2_07.question_only.train_250k |
+| concat | 576,100 | 40k | 0, 1, 2, 3, 42 | 0.52398 | 0.00276 | not available | no: v2_07 ACCEPTED DOCUMENTED LIMITATION | EV-SEED-v2_07.concat.train_40k |
+| concat | 576,100 | 100k | 0, 1, 2, 3, 42 | 0.55084 | 0.00201 | not available | no: v2_07 ACCEPTED DOCUMENTED LIMITATION | EV-SEED-v2_07.concat.train_100k |
+| concat | 576,100 | 250k | 0, 1, 2, 3, 42 | 0.57861 | 0.00264 | not available | no: v2_07 ACCEPTED DOCUMENTED LIMITATION | EV-SEED-v2_07.concat.train_250k |
+| product (576k budget) | matched budget (see VE1-TAB-02 note 3) | 40k | 0, 1, 2, 3, 42 | 0.53355 | 0.00312 | not available | no: v2_07 ACCEPTED DOCUMENTED LIMITATION | EV-SEED-v2_07.product_576k.train_40k |
+| product (576k budget) | matched budget (see VE1-TAB-02 note 3) | 100k | 0, 1, 2, 3, 42 | 0.56365 | 0.00223 | not available | no: v2_07 ACCEPTED DOCUMENTED LIMITATION | EV-SEED-v2_07.product_576k.train_100k |
+| product (576k budget) | matched budget (see VE1-TAB-02 note 3) | 250k | 0, 1, 2, 3, 42 | 0.58242 | 0.00318 | not available | no: v2_07 ACCEPTED DOCUMENTED LIMITATION | EV-SEED-v2_07.product_576k.train_250k |
+| fusion | 1,100,388 | 40k | 0, 1, 2, 3, 42 | 0.53840 | 0.00218 | not available | no: v2_07 ACCEPTED DOCUMENTED LIMITATION | EV-SEED-v2_07.fusion.train_40k |
+| fusion | 1,100,388 | 100k | 0, 1, 2, 3, 42 | 0.56308 | 0.00268 | not available | no: v2_07 ACCEPTED DOCUMENTED LIMITATION | EV-SEED-v2_07.fusion.train_100k |
+| fusion | 1,100,388 | 250k | 0, 1, 2, 3, 42 | 0.58226 | 0.00197 | not available | no: v2_07 ACCEPTED DOCUMENTED LIMITATION | EV-SEED-v2_07.fusion.train_250k |
 
 **Uncertainty.** SD in a column headed 'sd (training seeds)', interval in a separate column headed '95% CI (image-clustered)'. Where no interval exists the cell reads 'not available' and never a dash that could be read as zero width.
 

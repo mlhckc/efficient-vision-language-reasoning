@@ -10,7 +10,7 @@ How much does labelled training scale move each SLM-interface system?
 | B2 (answer side) | SmolLM2-135M, random | 0.06693 | [0.05683, 0.07633] | true | not available | EV-CON-E8B.scale_effect_B2 |
 | B3 (answer side) | SmolLM2-135M, pretrained | 0.08681 | [0.07781, 0.09640] | true | not available | EV-CON-E8B.scale_effect_B3 |
 
-**Uncertainty.** as VE0-TAB-02
+**Uncertainty.** interval as [lower, upper] with the cluster unit stated in the caption; SD in its own column and never inside the brackets
 
 **Caveat.** Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. Both pretraining-effect intervals contain zero and the seeds disagree in sign; they establish neither equivalence nor the absence of an effect. The 135M-to-360M step is whole-system capacity sensitivity, not an isolated causal language-model-size effect: trainable capacity moves too, 21,343,808 to 21,540,800 parameters, because the projection width follows the hidden size. An interval containing zero is an absence of a detected effect and establishes neither equivalence nor the absence of an effect. B3 at train_40k has an across-training-seed sd of 0.02795 and must always be shown with its seed spread.
 

@@ -26,7 +26,7 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-from . import build_inventory, build_rest, build_specs
+from . import amendment, build_inventory, build_rest, build_specs
 from . import ve0_common as vc
 
 CLOSURE_INPUTS = {
@@ -57,6 +57,7 @@ OUTPUTS = {
     "K": "provenance_contract.json",
     "L": "efficiency_visualisation_contract.json",
     "M": "results_section_mapping.json",
+    "N": "VE0_AMENDMENT_20260813.json",
 }
 
 MANIFEST_NAME = "VE0_MANIFEST.json"
@@ -64,7 +65,7 @@ MANIFEST_NAME = "VE0_MANIFEST.json"
 
 def load_context() -> dict:
     """Load and hash every frozen input once."""
-    ctx = {"inputs": []}
+    ctx = {"inputs": [], "input_paths": dict(CLOSURE_INPUTS)}
     for key, path in sorted(CLOSURE_INPUTS.items()):
         full = vc.PROJECT_ROOT / path
         ctx[key] = vc.read_json(full)
@@ -131,6 +132,7 @@ def build_all(ctx) -> dict:
 
     return {
         "A": inventory,
+        "N": amendment.build(ctx, rows),
         "C": supersession,
         "D": ledger,
         "E": matrix,

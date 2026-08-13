@@ -1218,9 +1218,15 @@ TABLES = [
             "This table is generated from the VE-0 claim ledger. The "
             "Abstract, Discussion and Conclusion may not state a stronger "
             "version of any row here.",
+            "Moved to the appendix by the 2026-08-13 amendment. Twenty-one "
+            "rows of claim text, caveat and forbidden stronger version is a "
+            "reference apparatus rather than a Results table; the main-text "
+            "Limitations section states the boundaries in prose and cites "
+            "this table. No claim, status, caveat or prohibition changed, and "
+            "no replacement main-text table was invented to fill the slot.",
         ],
-        "placement": "MAIN_TEXT",
-        "dissertation_section": "R_LIMITATIONS",
+        "placement": "APPENDIX",
+        "dissertation_section": "R_APPENDIX_CLAIM_LEDGER",
     },
     # ---------------------------------------------------------------- appendix
     {

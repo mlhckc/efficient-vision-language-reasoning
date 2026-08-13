@@ -2,6 +2,8 @@
 
 How much of the fusion advantage survives at a matched budget, and which term carries it?
 
+## Main text: the six baseline and capacity contrasts that drive the low-data claim (v2_02, v2_03)
+
 | contrast | comparison class | effect | 95% CI (image-clustered) | excludes zero | sd (training seeds, ddof=1) | n questions | n images | evidence id |
 |---|---|---|---|---|---|---|---|---|
 | concat minus question only | CAPACITY_CONFOUNDED | 0.06601 | [0.05395, 0.07747] | true | 0.00318 | 7714 | 768 | EV-CON-v2_02.concat_minus_question_only.train_40k |
@@ -10,6 +12,11 @@ How much of the fusion advantage survives at a matched budget, and which term ca
 | fusion minus concat wide | CLEAN_PAIRED_CONTROL | 0.00578 | [-0.00116, 0.01226] | false | 0.00298 | 7714 | 768 | EV-CON-v2_03.fusion_minus_concat_wide.train_40k |
 | fusion minus fusion narrow | CLEAN_PAIRED_CONTROL | 0.00498 | [0.00025, 0.00967] | true | 0.00170 | 7714 | 768 | EV-CON-v2_03.fusion_minus_fusion_narrow.train_40k |
 | fusion narrow minus concat | CLEAN_PAIRED_CONTROL | 0.00944 | [0.00285, 0.01592] | true | 0.00175 | 7714 | 768 | EV-CON-v2_03.fusion_narrow_minus_concat.train_40k |
+
+## Retained in full: the nine-gap interaction-feature decomposition (v2_04), carried by Figure VE1-FIG-A1
+
+| contrast | comparison class | effect | 95% CI (image-clustered) | excludes zero | sd (training seeds, ddof=1) | n questions | n images | evidence id |
+|---|---|---|---|---|---|---|---|---|
 | difference 576k minus concat | CLEAN_PAIRED_CONTROL | 0.00944 | [0.00338, 0.01569] | true | 0.00355 | 7714 | 768 | EV-CON-v2_04.difference_576k_minus_concat.train_40k |
 | difference natural minus concat | CAPACITY_CONFOUNDED | 0.01001 | [0.00370, 0.01626] | true | 0.00282 | 7714 | 768 | EV-CON-v2_04.difference_natural_minus_concat.train_40k |
 | fusion minus difference natural | CAPACITY_CONFOUNDED | 0.00441 | [0.00077, 0.00784] | true | 0.00217 | 7714 | 768 | EV-CON-v2_04.fusion_minus_difference_natural.train_40k |

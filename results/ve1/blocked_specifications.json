@@ -1,7 +1,7 @@
 {
- "blocked_count": 2,
+ "blocked_count": 1,
  "clean_test_accessed": false,
- "content_sha256": "2943bc54753fafd6837b590c512f0d3b50463c8a895d881ff4f9d64be9d7cc3e",
+ "content_sha256": "4e7a07b714787f11f9140a1aad4ee8efa19a12de776a21a1caf9f9036a56ec47",
  "deferred_count": 1,
  "development_set_only": true,
  "entries": [
@@ -18,84 +18,6 @@
    "status": "DEFERRED_TO_VE2",
    "what_would_unblock_it": "VE-2 authorisation and execution.",
    "working_title": "Qualitative development examples"
-  },
-  {
-   "affected_evidence_count": 66,
-   "affected_evidence_ids": [
-    "EV-SEED-E10.B4.train_250k",
-    "EV-SEED-E10.B4.train_40k",
-    "EV-SEED-E10.B4r.train_250k",
-    "EV-SEED-E10.B4r.train_40k",
-    "EV-SEED-E2.concat.train_250k",
-    "EV-SEED-E2.concat.train_40k",
-    "EV-SEED-E2.fusion.train_250k",
-    "EV-SEED-E2.fusion.train_40k",
-    "EV-SEED-E2.product.train_250k",
-    "EV-SEED-E2.product.train_40k",
-    "EV-SEED-E2.question_only.train_250k",
-    "EV-SEED-E2.question_only.train_40k",
-    "EV-SEED-E3.concat.train_250k",
-    "EV-SEED-E3.concat.train_40k",
-    "EV-SEED-E3.fusion.train_250k",
-    "EV-SEED-E3.fusion.train_40k",
-    "EV-SEED-E3.product.train_250k",
-    "EV-SEED-E3.product.train_40k",
-    "EV-SEED-E3.question_only.train_250k",
-    "EV-SEED-E3.question_only.train_40k",
-    "EV-SEED-E8A.A0p.train_250k",
-    "EV-SEED-E8A.A0p.train_40k",
-    "EV-SEED-E8A.A1.train_250k",
-    "EV-SEED-E8A.A1.train_40k",
-    "EV-SEED-E8A.A1r.train_250k",
-    "EV-SEED-E8A.A1r.train_40k",
-    "EV-SEED-E8B.B1.train_250k",
-    "EV-SEED-E8B.B1.train_40k",
-    "EV-SEED-E8B.B2.train_250k",
-    "EV-SEED-E8B.B2.train_40k",
-    "EV-SEED-E8B.B3.train_250k",
-    "EV-SEED-E8B.B3.train_40k",
-    "EV-SEED-v2_02.concat.train_40k",
-    "EV-SEED-v2_02.fusion.train_40k",
-    "EV-SEED-v2_02.image_only.train_40k",
-    "EV-SEED-v2_02.question_only.train_40k",
-    "EV-SEED-v2_03.concat_wide.train_40k",
-    "EV-SEED-v2_03.fusion_narrow.train_40k",
-    "EV-SEED-v2_04.difference_576k.train_40k",
-    "EV-SEED-v2_04.difference_natural.train_40k",
-    "EV-SEED-v2_04.product_576k.train_40k",
-    "EV-SEED-v2_04.product_natural.train_40k",
-    "EV-SEED-v2_06.concat.shuffled.train_40k",
-    "EV-SEED-v2_06.concat.zeroed.train_40k",
-    "EV-SEED-v2_06.fusion.shuffled.train_40k",
-    "EV-SEED-v2_06.fusion.zeroed.train_40k",
-    "EV-SEED-v2_06.image_only.shuffled.train_40k",
-    "EV-SEED-v2_06.image_only.zeroed.train_40k",
-    "EV-SEED-v2_06.product_576k.shuffled.train_40k",
-    "EV-SEED-v2_06.product_576k.zeroed.train_40k",
-    "EV-SEED-v2_06.question_only.shuffled.train_40k",
-    "EV-SEED-v2_06.question_only.zeroed.train_40k",
-    "EV-SEED-v2_07.concat.train_100k",
-    "EV-SEED-v2_07.concat.train_250k",
-    "EV-SEED-v2_07.concat.train_40k",
-    "EV-SEED-v2_07.fusion.train_100k",
-    "EV-SEED-v2_07.fusion.train_250k",
-    "EV-SEED-v2_07.fusion.train_40k",
-    "EV-SEED-v2_07.product_576k.train_100k",
-    "EV-SEED-v2_07.product_576k.train_250k",
-    "EV-SEED-v2_07.product_576k.train_40k",
-    "EV-SEED-v2_07.question_only.train_100k",
-    "EV-SEED-v2_07.question_only.train_250k",
-    "EV-SEED-v2_07.question_only.train_40k",
-    "EV-SEED-v3_03.reasoner.train_100k",
-    "EV-SEED-v3_03.reasoner.train_250k"
-   ],
-   "not_done_instead": "no mean-and-SD substitute was drawn. Substituting a summary bar is exactly what the declared uncertainty kind forbids, and it would answer a different question from the one the figure asks.",
-   "placement": "APPENDIX",
-   "reason": "the figure is a dot plot with one dot per training seed and declares uncertainty kind SEED_POINTS, which VE-0 defines as every per-seed value plotted individually with no summary bar hiding the spread. No inventory row carries per-seed values: a SEED row binds the across-seed mean, the sample standard deviation and the seed set, and nothing else. The quantity the figure exists to show is not bound in VE-0.",
-   "specification_id": "VE0-FIG-A2",
-   "status": "BLOCKED_NOT_RENDERED",
-   "what_would_unblock_it": "a VE-0 revision binding the per-seed accuracies for the 66 SEED rows, read from the same frozen artefacts the rows already cite.",
-   "working_title": "Per-seed dispersion across every trained family"
   },
   {
    "affected_evidence_count": 16,
@@ -126,10 +48,20 @@
    "working_title": "Where the time goes: cached and component costs against measured end-to-end"
   }
  ],
+ "previously_blocked_now_rendered": [
+  {
+   "previous_status": "BLOCKED_NOT_RENDERED",
+   "rendered_as": "SEED_POINTS: one open marker per training seed, with the across-seed mean drawn as a separate tick. No summary bar was substituted at any point.",
+   "specification_id": "VE0-FIG-A2",
+   "status": "RENDERED",
+   "unblocked_by": "the 2026-08-13 VE-0 amendment, which binds per_seed_values, per_seed_seed_ids and per_seed_range on all 66 SEED rows from results/closure/E_seed_variability.json, a closure output VE-0 already declares as an input and already hashes. No value was recomputed.",
+   "was_blocked_because": "the figure declares uncertainty kind SEED_POINTS, and no VE-0 inventory row bound per-seed values: a SEED row carried the across-seed mean, the sample standard deviation and the seed set, and nothing else."
+  }
+ ],
  "provenance": {
   "build_command": "python -m experiments.ve1.run_ve1",
   "builder": "experiments/ve1/run_ve1.py",
-  "builder_sha256": "2c9aecc4e40d6fb6b00d46ce3fd088a397276ed19579446c907720e3c029287d",
+  "builder_sha256": "5d71cc50d2f67db0f239e0a8d72e7f2778606ccb683ece0b76318fc5bafe5848",
   "clean_test_accessed": false,
   "device": "cpu",
   "evaluated_anything": false,
@@ -139,72 +71,72 @@
    {
     "path": "results/ve0/canonical_evidence_inventory.json",
     "role": "VE-0 output A",
-    "sha256": "18eaa5355cf2252f0f74b1090f03404881d526bc2588391a866f4ed6fdd22462"
+    "sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3"
    },
    {
     "path": "results/ve0/canonical_evidence_inventory.csv",
     "role": "VE-0 output A_csv",
-    "sha256": "30e1b82090573758947026407ff4d05b5dcb4e12cde827d0e02040d6787cd9d9"
+    "sha256": "86921381e6fc22b674559b44272e9ba70aaeffafdf600c4a752d5cb6200eee9b"
    },
    {
     "path": "results/ve0/supersession_map.json",
     "role": "VE-0 output C",
-    "sha256": "5eddcfdec886ae3b246fab02c076e523f62a77611916695bfbf5363076ee2d4a"
+    "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
    },
    {
     "path": "results/ve0/claim_ledger.json",
     "role": "VE-0 output D",
-    "sha256": "15e3ffc4a487068e9a556ada04a96e6967dc6d8e9f1364babbc353decca1c94d"
+    "sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7"
    },
    {
     "path": "results/ve0/rq_evidence_matrix.json",
     "role": "VE-0 output E",
-    "sha256": "c8f6d7d99db9f41fd98821dafc880f9b709f9ba8757a53c40b65b8bf23e27b86"
+    "sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d"
    },
    {
     "path": "results/ve0/figure_specifications.json",
     "role": "VE-0 output F",
-    "sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92"
+    "sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c"
    },
    {
     "path": "results/ve0/table_specifications.json",
     "role": "VE-0 output G",
-    "sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0"
+    "sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8"
    },
    {
     "path": "results/ve0/qualitative_protocol.json",
     "role": "VE-0 output H",
-    "sha256": "d15fc69c7a6a4e6721874bf43ae017a105c1a8b3b694b759a88043ff2664b975"
+    "sha256": "c8c5c35bec84da409e9a36612ad07846e2d218aa35351bc7d09340760cd9e895"
    },
    {
     "path": "results/ve0/qualitative_record_schema.json",
     "role": "VE-0 output I",
-    "sha256": "c2f0742c0c936a2a11fb71f5dc364633bda329c632b52744150f047d95d81984"
+    "sha256": "898e0a6bfeddfb37196e0d1e4bfc469606bcd663c5283b6fac931cd0e3de4297"
    },
    {
     "path": "results/ve0/reporting_style_contract.json",
     "role": "VE-0 output J",
-    "sha256": "e2a8767fe477e9ac8a5bf8544c3ecbff19f63f1f8a59c9b7ddaa350221c7fc4c"
+    "sha256": "536cf07aa6bd5f80eb1b843046435804345e7bd1f558ba047866b223aadd5504"
    },
    {
     "path": "results/ve0/provenance_contract.json",
     "role": "VE-0 output K",
-    "sha256": "65e66b78cae76cf713f11073f4847062c0e252c4319b30b3a9d58e63a0689159"
+    "sha256": "4a0c33512194fcd11493d3e05f0a86fc8f752ea6343f698c8da0c630672213ab"
    },
    {
     "path": "results/ve0/efficiency_visualisation_contract.json",
     "role": "VE-0 output L",
-    "sha256": "b39a6c4ae080eebf1c0ed0cb65d01a98f1993d162ade704287c53c298b56902e"
+    "sha256": "c8d221544dca46f55339fcd708e4dd66b9aa1e1e9b130bdf44a2a39871ee9cc4"
    },
    {
     "path": "results/ve0/results_section_mapping.json",
     "role": "VE-0 output M",
-    "sha256": "f2153f7f45c71fdd69a0e96555184d3b2608a63685afe42f40a5800b6f2d7738"
+    "sha256": "2f80c8d34949f6ea3e5b7546d67b79793463d7f63d4278b0a03153125bc50686"
    },
    {
     "path": "results/ve0/VE0_MANIFEST.json",
     "role": "VE-0 output O",
-    "sha256": "31a572db0b3e9ab85a74fefe88232f1112641d113dc421083d09137d79a0a594"
+    "sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3"
    }
   ],
   "matplotlib_version": "3.11.0",
@@ -213,8 +145,8 @@
   "python": "3.12.3",
   "read_any_checkpoint": false,
   "read_any_embedding_store": false,
-  "repository_head": "d58cd66b0b3e7e64fd49b10b0a0342588df367fd",
-  "repository_head_short": "d58cd66",
+  "repository_head": "f91d0770b6733a0b3eb4f161dd2ca36d60050bbb",
+  "repository_head_short": "f91d077",
   "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
   "schema_version": 1,
   "selected_any_checkpoint": false,
@@ -227,72 +159,72 @@
   {
    "path": "results/ve0/canonical_evidence_inventory.json",
    "role": "VE-0 output A",
-   "sha256": "18eaa5355cf2252f0f74b1090f03404881d526bc2588391a866f4ed6fdd22462"
+   "sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3"
   },
   {
    "path": "results/ve0/canonical_evidence_inventory.csv",
    "role": "VE-0 output A_csv",
-   "sha256": "30e1b82090573758947026407ff4d05b5dcb4e12cde827d0e02040d6787cd9d9"
+   "sha256": "86921381e6fc22b674559b44272e9ba70aaeffafdf600c4a752d5cb6200eee9b"
   },
   {
    "path": "results/ve0/supersession_map.json",
    "role": "VE-0 output C",
-   "sha256": "5eddcfdec886ae3b246fab02c076e523f62a77611916695bfbf5363076ee2d4a"
+   "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
   },
   {
    "path": "results/ve0/claim_ledger.json",
    "role": "VE-0 output D",
-   "sha256": "15e3ffc4a487068e9a556ada04a96e6967dc6d8e9f1364babbc353decca1c94d"
+   "sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7"
   },
   {
    "path": "results/ve0/rq_evidence_matrix.json",
    "role": "VE-0 output E",
-   "sha256": "c8f6d7d99db9f41fd98821dafc880f9b709f9ba8757a53c40b65b8bf23e27b86"
+   "sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d"
   },
   {
    "path": "results/ve0/figure_specifications.json",
    "role": "VE-0 output F",
-   "sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92"
+   "sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c"
   },
   {
    "path": "results/ve0/table_specifications.json",
    "role": "VE-0 output G",
-   "sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0"
+   "sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8"
   },
   {
    "path": "results/ve0/qualitative_protocol.json",
    "role": "VE-0 output H",
-   "sha256": "d15fc69c7a6a4e6721874bf43ae017a105c1a8b3b694b759a88043ff2664b975"
+   "sha256": "c8c5c35bec84da409e9a36612ad07846e2d218aa35351bc7d09340760cd9e895"
   },
   {
    "path": "results/ve0/qualitative_record_schema.json",
    "role": "VE-0 output I",
-   "sha256": "c2f0742c0c936a2a11fb71f5dc364633bda329c632b52744150f047d95d81984"
+   "sha256": "898e0a6bfeddfb37196e0d1e4bfc469606bcd663c5283b6fac931cd0e3de4297"
   },
   {
    "path": "results/ve0/reporting_style_contract.json",
    "role": "VE-0 output J",
-   "sha256": "e2a8767fe477e9ac8a5bf8544c3ecbff19f63f1f8a59c9b7ddaa350221c7fc4c"
+   "sha256": "536cf07aa6bd5f80eb1b843046435804345e7bd1f558ba047866b223aadd5504"
   },
   {
    "path": "results/ve0/provenance_contract.json",
    "role": "VE-0 output K",
-   "sha256": "65e66b78cae76cf713f11073f4847062c0e252c4319b30b3a9d58e63a0689159"
+   "sha256": "4a0c33512194fcd11493d3e05f0a86fc8f752ea6343f698c8da0c630672213ab"
   },
   {
    "path": "results/ve0/efficiency_visualisation_contract.json",
    "role": "VE-0 output L",
-   "sha256": "b39a6c4ae080eebf1c0ed0cb65d01a98f1993d162ade704287c53c298b56902e"
+   "sha256": "c8d221544dca46f55339fcd708e4dd66b9aa1e1e9b130bdf44a2a39871ee9cc4"
   },
   {
    "path": "results/ve0/results_section_mapping.json",
    "role": "VE-0 output M",
-   "sha256": "f2153f7f45c71fdd69a0e96555184d3b2608a63685afe42f40a5800b6f2d7738"
+   "sha256": "2f80c8d34949f6ea3e5b7546d67b79793463d7f63d4278b0a03153125bc50686"
   },
   {
    "path": "results/ve0/VE0_MANIFEST.json",
    "role": "VE-0 output O",
-   "sha256": "31a572db0b3e9ab85a74fefe88232f1112641d113dc421083d09137d79a0a594"
+   "sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3"
   }
  ],
  "ve1_output": "blocked_specifications"

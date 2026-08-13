@@ -26,10 +26,10 @@
  },
  "clean_test_accessed": false,
  "concept_separation": "held-out GQA evaluation (F2, not run), reasoning-depth analysis (the in-distribution step-bucket evidence) and true out-of-distribution compositional generalisation (never tested) are three distinct concepts. No answer here substitutes one for another.",
- "content_sha256": "5d39dc8e2afaf3178eb87ec582e83cf1ec63c45469604ceb4616cf6b4ef0d633",
+ "content_sha256": "5dcbe19e11a47771be54c7845edf3463cd1265eb251ae79b13fa46c355e0c2a0",
  "provenance": {
   "builder": "experiments/ve0/run_ve0.py",
-  "builder_sha256": "3a53114ff7e55ca6d38d92004717da9ccae1320ef411cd6124af5175d790bc42",
+  "builder_sha256": "d7ae716779e98cfbf4d9ed3112cd2015614dff720340a4bae2e788c049a07c49",
   "clean_test_accessed": false,
   "command": "python -m experiments.ve0.run_ve0",
   "deterministic_selection_salt": "P2607-VE0-QUALITATIVE-SALT-20260813-v1",
@@ -103,8 +103,8 @@
   "numpy_version": "2.5.0",
   "pandas_version": "3.0.3",
   "python": "3.12.3",
-  "repository_head": "0f4fecb5e7e5a59d1e47d0953ca3127302694852",
-  "repository_head_short": "0f4fecb",
+  "repository_head": "f91d0770b6733a0b3eb4f161dd2ca36d60050bbb",
+  "repository_head_short": "f91d077",
   "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
   "schema_version": 1,
   "selected_any_checkpoint": false,
@@ -387,10 +387,10 @@
     "EV-DSC-v3_01.reasoner_minus_fusion.train_40k.seed_mean"
    ],
    "kind": "SECONDARY",
-   "limitation": "System-level comparison; token access is not isolated; the intervals show absence of detection, not equivalence.",
+   "limitation": "System-level comparison; token access is not causally isolated, because architecture, trainable capacity and input granularity move together; the larger-scale overall-accuracy comparison rests on across-training-seed means with no evaluation interval, and the two series do not share a seed set; the deficit intervals show absence of detection, not equivalence.",
    "question": "Does reasoning over token-level visual features with a latent-query reasoner beat the global-embedding heads?",
    "rq_id": "RQ6",
-   "supported_answer": "Not materially, at any tested scale, and not on the multi-step deficit."
+   "supported_answer": "At train_40k, the latent-query reasoner does not materially outperform the much smaller global fusion head. Its mean overall accuracy is higher at the larger training scales, but no tested scale shows a reliable reduction in the four-or-more-step deficit."
   },
   {
    "answer_status": "PARTIALLY_ANSWERED",
@@ -478,10 +478,10 @@
     "EV-EFF-E9.vocab1000_product"
    ],
    "kind": "SECONDARY",
-   "limitation": "Latency only; two nodes kept separate; E8B R1 and E10 have no serial latency evidence.",
+   "limitation": "Latency only, on two nodes that are never merged into one frontier; the shared fusion bridge control failed its pre-registered tolerance and no adjustment factor is applied; seven end-to-end rows have no verified accuracy pairing and are reported latency-only; E8B R1 and E10 have no serial latency evidence at all.",
    "question": "What is the accuracy against computational-cost trade-off for these systems?",
    "rq_id": "RQ9",
-   "supported_answer": "Measured warm serial batch-1 latency per node places the small global-embedding heads far cheaper than the reasoner, the SLM readouts and the compact VLMs, at comparable accuracy."
+   "supported_answer": "On otter155, where every timed lightweight system has a resolved accuracy pairing, the small global-embedding heads are far cheaper than the latent-query reasoner and the frozen small-language-model question encoder at comparable accuracy. On otter159, a top-1000 global head was timed at about 6.2 ms against the compact VLMs' roughly 141 to 153 ms on the same node; the lightweight rows on that node are latency-only, so that ratio is not bound to a specific accuracy. E8B's canonical R1 readout and E10 have no serial latency evidence, and R2 and R3 are never presented as R1's cost."
   }
  ],
  "title": "research-question evidence matrix",

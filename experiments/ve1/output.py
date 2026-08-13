@@ -108,6 +108,15 @@ def _write_csv(path, rows: list, columns: list) -> str:
     return vc.sha256_text(text)
 
 
+def _markdown_block(rows: list, columns: list) -> list:
+    lines = ["| " + " | ".join(columns) + " |",
+             "|" + "|".join(["---"] * len(columns)) + "|"]
+    for row in rows:
+        cells = [str(_cell(row.get(c))).replace("|", "\\|") for c in columns]
+        lines.append("| " + " | ".join(cells) + " |")
+    return lines
+
+
 def _cell(value):
     if value is None:
         return ""
@@ -119,16 +128,36 @@ def _cell(value):
 
 
 def _markdown(payload: dict, rows: list, columns: list) -> str:
-    """The rendered form: title, question, table, caption, footnotes."""
+    """The rendered form: title, question, table, caption, footnotes.
+
+    A table that declares a presentation column is rendered as one section per
+    block, with the block named as a subheading and the column itself dropped
+    from the body. That is how the main-text subset and the retained full
+    registry live in one artefact: the reader sees the short table first, the
+    complete evidence follows under its own heading, and the CSV and JSON keep
+    every row with its block label.
+    """
+    block_column = payload.get("presentation_column")
+    body = [c for c in columns if c != block_column]
+
     lines = [f"# {payload['artefact_id']}: {payload['working_title']}", ""]
     lines.append(payload["scientific_question"])
     lines.append("")
-    lines.append("| " + " | ".join(columns) + " |")
-    lines.append("|" + "|".join(["---"] * len(columns)) + "|")
-    for row in rows:
-        cells = [str(_cell(row.get(c))).replace("|", "\\|") for c in columns]
-        lines.append("| " + " | ".join(cells) + " |")
-    lines.append("")
+
+    if block_column:
+        seen = []
+        for row in rows:
+            if row.get(block_column) not in seen:
+                seen.append(row.get(block_column))
+        for block in seen:
+            lines.append(f"## {block}")
+            lines.append("")
+            lines.extend(_markdown_block(
+                [r for r in rows if r.get(block_column) == block], body))
+            lines.append("")
+    else:
+        lines.extend(_markdown_block(rows, body))
+        lines.append("")
     lines.append(f"**Uncertainty.** {payload['uncertainty_notation']}")
     lines.append("")
     lines.append(f"**Caveat.** {payload['mandatory_caveat']}")

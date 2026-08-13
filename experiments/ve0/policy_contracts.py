@@ -113,6 +113,14 @@ RESULTS_SECTIONS = [
      "purpose": "Full SigLIP and CLIP arm accuracies at both scales, "
                 "including the 250k rows that carry no clustered interval.",
      "placement": "APPENDIX"},
+    # Added by the 2026-08-13 amendment, which moved the claim ledger out of
+    # the main text. The Limitations section states the boundaries in prose
+    # and cites this appendix; the ledger itself is reference apparatus.
+    {"section_id": "R_APPENDIX_CLAIM_LEDGER",
+     "title": "Appendix: claim, evidence and limitation ledger",
+     "purpose": "The complete claim ledger, including the four NOT_SUPPORTED "
+                "rows that record prohibitions rather than findings.",
+     "placement": "APPENDIX"},
 ]
 
 SECTION_IDS = [s["section_id"] for s in RESULTS_SECTIONS]

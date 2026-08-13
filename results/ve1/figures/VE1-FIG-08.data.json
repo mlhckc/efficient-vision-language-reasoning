@@ -1,8 +1,8 @@
 {
  "artefact_id": "VE1-FIG-08",
  "bound_scalars_used": {
-  "trainable_parameters.e10_B4": 21343808,
-  "trainable_parameters.e10_B4r": 21540800
+  "trainable_parameters.answer_side_135m": 21343808,
+  "trainable_parameters.answer_side_360m": 21540800
  },
  "caption_claim": "Frozen pretraining helps on the question side at both scales, while no reliable positive pretrained-over-random advantage is detected for either tested answer-side readout.",
  "carries_v2_07_limitation": false,
@@ -17,7 +17,7 @@
   "EV-CON-E8B.B3_-_B2.train_250k",
   "EV-CON-E8B.B3_-_B2.train_40k"
  ],
- "content_sha256": "10672cf770af866d35b3390288cf9725d72c0012205748f90fc14e9d2704bff4",
+ "content_sha256": "4b00801332e688ae97a3ca391f77529864513ee85e4a81443f84ebf9d41aeeb6",
  "cross_experiment_synthesis": "A cross-experiment synthesis of three separately run experiments, not one factorial interface experiment. E8A, E8B and E10 share the pinned G21 metric, the same development rows and the same effect orientation, which is what makes one forest legitimate; they do not share a training history, a checkpoint-selection rule or a trainable-capacity budget.",
  "development_set_only": true,
  "dissertation_section": [
@@ -219,7 +219,7 @@
    "n_unique_images": 768,
    "order": "SECOND_ORDER",
    "quantity": "difference in differences: (B4 minus B4r) at train_250k minus (B4 minus B4r) at train_40k. This is an interaction between the pretraining effect and training scale, NOT a pretraining effect",
-   "role": "G4_second_order_interaction effect",
+   "role": "G4_second_order_interaction interaction",
    "row_group": "G4_second_order_interaction",
    "seed_set": [
     0,
@@ -242,6 +242,8 @@
  ],
  "mixes_checkpoint_selection": true,
  "panels": {
+  "panel_first_order": "three labelled blocks of pretrained-minus-matched-random effects, on the pretrained-minus-random axis",
+  "panel_second_order": "the E10 difference in differences alone, in its own subpanel with its own axis label. It shares the numeric scale so the magnitudes are comparable by eye, and it is never drawn under the first-order axis label",
   "row_groups": [
    {
     "evidence_ids": [
@@ -279,14 +281,13 @@
     "quantity": "difference in differences: (B4 minus B4r) at train_250k minus (B4 minus B4r) at train_40k. This is an interaction between the pretraining effect and training scale, NOT a pretraining effect",
     "separation_requirement": "drawn below a horizontal rule, in its own labelled block, with its own row label naming it a second-order interaction. It must never sit inside or immediately adjacent to the three first-order blocks without that separation"
    }
-  ],
-  "single_panel": "three first-order blocks above a rule and one separated second-order block below it"
+  ]
  },
  "placement": "MAIN_TEXT",
  "provenance": {
   "build_command": "python -m experiments.ve1.run_ve1",
   "builder": "experiments/ve1/figures.py",
-  "builder_sha256": "e568681a005d9e611a002b3e97cd67d34f0f8f9640fafcfe9794a25ea3456469",
+  "builder_sha256": "ec27ea9b5beadb4e6acd1f5f2cc585ffb9019da84af86587086a6dd537f745fd",
   "clean_test_accessed": false,
   "device": "cpu",
   "evaluated_anything": false,
@@ -295,14 +296,20 @@
   "inputs": [
    {
     "path": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
+    "resolution": "CANONICAL_PATH",
+    "resolved_from": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
     "sha256": "37ffdcd09aa2bcd306ca9b54229a1d0d17ff203b6b0900e09e5f876ad1ed0748"
    },
    {
     "path": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
+    "resolution": "CANONICAL_PATH",
+    "resolved_from": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
     "sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562"
    },
    {
     "path": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+    "resolution": "CANONICAL_PATH",
+    "resolved_from": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
     "sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138"
    }
   ],
@@ -312,8 +319,8 @@
   "python": "3.12.3",
   "read_any_checkpoint": false,
   "read_any_embedding_store": false,
-  "repository_head": "d58cd66b0b3e7e64fd49b10b0a0342588df367fd",
-  "repository_head_short": "d58cd66",
+  "repository_head": "f91d0770b6733a0b3eb4f161dd2ca36d60050bbb",
+  "repository_head_short": "f91d077",
   "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
   "schema_version": 1,
   "selected_any_checkpoint": false,
@@ -321,6 +328,7 @@
   "worktree_dirty": true
  },
  "scientific_question": "Does frozen pretraining help, and does the answer depend on which side of the interface the language model sits?",
+ "trainable_capacity_note": "The two counts are the endpoints of the 135M-to-360M step, not the two E10 arms. E10's B4 and B4r are architecture-matched and both have 21,540,800 trainable parameters; 21,343,808 belongs to the answer-side 135M system, E8B B2 and B3.",
  "unbound_cells": [],
  "uncertainty_by_panel": null,
  "uncertainty_shown": "CLUSTERED_CI95",
@@ -328,72 +336,72 @@
   {
    "path": "results/ve0/canonical_evidence_inventory.json",
    "role": "VE-0 output A",
-   "sha256": "18eaa5355cf2252f0f74b1090f03404881d526bc2588391a866f4ed6fdd22462"
+   "sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3"
   },
   {
    "path": "results/ve0/canonical_evidence_inventory.csv",
    "role": "VE-0 output A_csv",
-   "sha256": "30e1b82090573758947026407ff4d05b5dcb4e12cde827d0e02040d6787cd9d9"
+   "sha256": "86921381e6fc22b674559b44272e9ba70aaeffafdf600c4a752d5cb6200eee9b"
   },
   {
    "path": "results/ve0/supersession_map.json",
    "role": "VE-0 output C",
-   "sha256": "5eddcfdec886ae3b246fab02c076e523f62a77611916695bfbf5363076ee2d4a"
+   "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
   },
   {
    "path": "results/ve0/claim_ledger.json",
    "role": "VE-0 output D",
-   "sha256": "15e3ffc4a487068e9a556ada04a96e6967dc6d8e9f1364babbc353decca1c94d"
+   "sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7"
   },
   {
    "path": "results/ve0/rq_evidence_matrix.json",
    "role": "VE-0 output E",
-   "sha256": "c8f6d7d99db9f41fd98821dafc880f9b709f9ba8757a53c40b65b8bf23e27b86"
+   "sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d"
   },
   {
    "path": "results/ve0/figure_specifications.json",
    "role": "VE-0 output F",
-   "sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92"
+   "sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c"
   },
   {
    "path": "results/ve0/table_specifications.json",
    "role": "VE-0 output G",
-   "sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0"
+   "sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8"
   },
   {
    "path": "results/ve0/qualitative_protocol.json",
    "role": "VE-0 output H",
-   "sha256": "d15fc69c7a6a4e6721874bf43ae017a105c1a8b3b694b759a88043ff2664b975"
+   "sha256": "c8c5c35bec84da409e9a36612ad07846e2d218aa35351bc7d09340760cd9e895"
   },
   {
    "path": "results/ve0/qualitative_record_schema.json",
    "role": "VE-0 output I",
-   "sha256": "c2f0742c0c936a2a11fb71f5dc364633bda329c632b52744150f047d95d81984"
+   "sha256": "898e0a6bfeddfb37196e0d1e4bfc469606bcd663c5283b6fac931cd0e3de4297"
   },
   {
    "path": "results/ve0/reporting_style_contract.json",
    "role": "VE-0 output J",
-   "sha256": "e2a8767fe477e9ac8a5bf8544c3ecbff19f63f1f8a59c9b7ddaa350221c7fc4c"
+   "sha256": "536cf07aa6bd5f80eb1b843046435804345e7bd1f558ba047866b223aadd5504"
   },
   {
    "path": "results/ve0/provenance_contract.json",
    "role": "VE-0 output K",
-   "sha256": "65e66b78cae76cf713f11073f4847062c0e252c4319b30b3a9d58e63a0689159"
+   "sha256": "4a0c33512194fcd11493d3e05f0a86fc8f752ea6343f698c8da0c630672213ab"
   },
   {
    "path": "results/ve0/efficiency_visualisation_contract.json",
    "role": "VE-0 output L",
-   "sha256": "b39a6c4ae080eebf1c0ed0cb65d01a98f1993d162ade704287c53c298b56902e"
+   "sha256": "c8d221544dca46f55339fcd708e4dd66b9aa1e1e9b130bdf44a2a39871ee9cc4"
   },
   {
    "path": "results/ve0/results_section_mapping.json",
    "role": "VE-0 output M",
-   "sha256": "f2153f7f45c71fdd69a0e96555184d3b2608a63685afe42f40a5800b6f2d7738"
+   "sha256": "2f80c8d34949f6ea3e5b7546d67b79793463d7f63d4278b0a03153125bc50686"
   },
   {
    "path": "results/ve0/VE0_MANIFEST.json",
    "role": "VE-0 output O",
-   "sha256": "31a572db0b3e9ab85a74fefe88232f1112641d113dc421083d09137d79a0a594"
+   "sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3"
   }
  ],
  "ve0_specification_id": "VE0-FIG-08",

@@ -6,7 +6,7 @@
    "pattern": "the ([\\d.]+M) global fusion head",
    "value": "1.1M",
    "ve0_artefact": "figure_specifications.json",
-   "ve0_artefact_sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92",
+   "ve0_artefact_sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c",
    "ve0_specification_field": "caption_claim",
    "ve0_specification_id": "VE0-FIG-06"
   },
@@ -16,9 +16,29 @@
    "pattern": "The ([\\d.]+M)-parameter latent-query reasoner",
    "value": "21.1M",
    "ve0_artefact": "figure_specifications.json",
-   "ve0_artefact_sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92",
+   "ve0_artefact_sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c",
    "ve0_specification_field": "caption_claim",
    "ve0_specification_id": "VE0-FIG-06"
+  },
+  {
+   "description": "trainable parameters of the answer-side 135M system, E8B B2 and B3",
+   "key": "trainable_parameters.answer_side_135m",
+   "pattern": "trainable capacity moves too, ([\\d,]+) to [\\d,]+",
+   "value": 21343808,
+   "ve0_artefact": "figure_specifications.json",
+   "ve0_artefact_sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c",
+   "ve0_specification_field": "mandatory_caption_caveat",
+   "ve0_specification_id": "VE0-FIG-08"
+  },
+  {
+   "description": "trainable parameters of the answer-side 360M system, E10 B4 and B4r. Both E10 arms have this same count",
+   "key": "trainable_parameters.answer_side_360m",
+   "pattern": "trainable capacity moves too, [\\d,]+ to ([\\d,]+)",
+   "value": 21540800,
+   "ve0_artefact": "figure_specifications.json",
+   "ve0_artefact_sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c",
+   "ve0_specification_field": "mandatory_caption_caveat",
+   "ve0_specification_id": "VE0-FIG-08"
   },
   {
    "description": "trainable parameters of the concat head",
@@ -26,29 +46,9 @@
    "pattern": "Trainable parameter counts: concat ([\\d,]+);",
    "value": 576100,
    "ve0_artefact": "table_specifications.json",
-   "ve0_artefact_sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0",
+   "ve0_artefact_sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8",
    "ve0_specification_field": "footnotes",
    "ve0_specification_id": "VE0-TAB-02"
-  },
-  {
-   "description": "trainable parameters of the E10 B4 system",
-   "key": "trainable_parameters.e10_B4",
-   "pattern": "trainable capacity moves too, ([\\d,]+) to [\\d,]+",
-   "value": 21343808,
-   "ve0_artefact": "figure_specifications.json",
-   "ve0_artefact_sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92",
-   "ve0_specification_field": "mandatory_caption_caveat",
-   "ve0_specification_id": "VE0-FIG-08"
-  },
-  {
-   "description": "trainable parameters of the E10 B4r system",
-   "key": "trainable_parameters.e10_B4r",
-   "pattern": "trainable capacity moves too, [\\d,]+ to ([\\d,]+)",
-   "value": 21540800,
-   "ve0_artefact": "figure_specifications.json",
-   "ve0_artefact_sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92",
-   "ve0_specification_field": "mandatory_caption_caveat",
-   "ve0_specification_id": "VE0-FIG-08"
   },
   {
    "description": "trainable parameters of the fusion head",
@@ -56,13 +56,13 @@
    "pattern": "Trainable parameter counts: concat [\\d,]+; fusion ([\\d,]+);",
    "value": 1100388,
    "ve0_artefact": "table_specifications.json",
-   "ve0_artefact_sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0",
+   "ve0_artefact_sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8",
    "ve0_specification_field": "footnotes",
    "ve0_specification_id": "VE0-TAB-02"
   }
  ],
  "clean_test_accessed": false,
- "content_sha256": "f78321bab5957f1bb912254e518a85814dc586780dd40d22f7e5ceb7b465d376",
+ "content_sha256": "d7bdd13e3a04c304886206fedf23181ae55233e5847aea5695063a668e174fe7",
  "development_set_only": true,
  "entries": [
   {
@@ -70,7 +70,7 @@
    "bound_evidence_count": 0,
    "build_command": "python -m experiments.ve1.run_ve1",
    "builder_script": "experiments/ve1/figures.py",
-   "builder_sha256": "e568681a005d9e611a002b3e97cd67d34f0f8f9640fafcfe9794a25ea3456469",
+   "builder_sha256": "ec27ea9b5beadb4e6acd1f5f2cc585ffb9019da84af86587086a6dd537f745fd",
    "consumed_evidence_count": 0,
    "consumed_evidence_ids": [],
    "consumed_no_evidence_because": "evidence-free schematic: VE-0 binds no inventory row to it and it draws no measured quantity",
@@ -88,85 +88,85 @@
      "sha256": "e47126a3282d01b40fc8087c85cc15502861918cf7095c6ea949064a724e0d38"
     },
     {
-     "content_sha256": "a064d21b4276f479c6b3c7dd6d26198470c7e022b4b5aa09f2ed4f8060207922",
+     "content_sha256": "48a90157115b6b27a5cfc0d42aa40567a728bf885be2b6b3086e6da7a1581f34",
      "path": "results/ve1/figures/VE1-FIG-01.data.json",
      "role": "plotted data, one record per drawn value",
-     "sha256": "d3bac2e77c9f89f7357e739b6fa1f8507780cda84ce311c043be30f3d53b0ddd"
+     "sha256": "4445297f719db599aba5c0d1c5c34a80cabf6974c0c01fa25239d3821bd58021"
     }
    ],
    "placement": "MAIN_TEXT",
-   "repository_head": "d58cd66b0b3e7e64fd49b10b0a0342588df367fd",
+   "repository_head": "f91d0770b6733a0b3eb4f161dd2ca36d60050bbb",
    "source_paths": [],
    "ve0_source_artefacts": [
     {
      "path": "results/ve0/canonical_evidence_inventory.json",
      "role": "VE-0 output A",
-     "sha256": "18eaa5355cf2252f0f74b1090f03404881d526bc2588391a866f4ed6fdd22462"
+     "sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3"
     },
     {
      "path": "results/ve0/canonical_evidence_inventory.csv",
      "role": "VE-0 output A_csv",
-     "sha256": "30e1b82090573758947026407ff4d05b5dcb4e12cde827d0e02040d6787cd9d9"
+     "sha256": "86921381e6fc22b674559b44272e9ba70aaeffafdf600c4a752d5cb6200eee9b"
     },
     {
      "path": "results/ve0/supersession_map.json",
      "role": "VE-0 output C",
-     "sha256": "5eddcfdec886ae3b246fab02c076e523f62a77611916695bfbf5363076ee2d4a"
+     "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
     },
     {
      "path": "results/ve0/claim_ledger.json",
      "role": "VE-0 output D",
-     "sha256": "15e3ffc4a487068e9a556ada04a96e6967dc6d8e9f1364babbc353decca1c94d"
+     "sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7"
     },
     {
      "path": "results/ve0/rq_evidence_matrix.json",
      "role": "VE-0 output E",
-     "sha256": "c8f6d7d99db9f41fd98821dafc880f9b709f9ba8757a53c40b65b8bf23e27b86"
+     "sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d"
     },
     {
      "path": "results/ve0/figure_specifications.json",
      "role": "VE-0 output F",
-     "sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92"
+     "sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c"
     },
     {
      "path": "results/ve0/table_specifications.json",
      "role": "VE-0 output G",
-     "sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0"
+     "sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8"
     },
     {
      "path": "results/ve0/qualitative_protocol.json",
      "role": "VE-0 output H",
-     "sha256": "d15fc69c7a6a4e6721874bf43ae017a105c1a8b3b694b759a88043ff2664b975"
+     "sha256": "c8c5c35bec84da409e9a36612ad07846e2d218aa35351bc7d09340760cd9e895"
     },
     {
      "path": "results/ve0/qualitative_record_schema.json",
      "role": "VE-0 output I",
-     "sha256": "c2f0742c0c936a2a11fb71f5dc364633bda329c632b52744150f047d95d81984"
+     "sha256": "898e0a6bfeddfb37196e0d1e4bfc469606bcd663c5283b6fac931cd0e3de4297"
     },
     {
      "path": "results/ve0/reporting_style_contract.json",
      "role": "VE-0 output J",
-     "sha256": "e2a8767fe477e9ac8a5bf8544c3ecbff19f63f1f8a59c9b7ddaa350221c7fc4c"
+     "sha256": "536cf07aa6bd5f80eb1b843046435804345e7bd1f558ba047866b223aadd5504"
     },
     {
      "path": "results/ve0/provenance_contract.json",
      "role": "VE-0 output K",
-     "sha256": "65e66b78cae76cf713f11073f4847062c0e252c4319b30b3a9d58e63a0689159"
+     "sha256": "4a0c33512194fcd11493d3e05f0a86fc8f752ea6343f698c8da0c630672213ab"
     },
     {
      "path": "results/ve0/efficiency_visualisation_contract.json",
      "role": "VE-0 output L",
-     "sha256": "b39a6c4ae080eebf1c0ed0cb65d01a98f1993d162ade704287c53c298b56902e"
+     "sha256": "c8d221544dca46f55339fcd708e4dd66b9aa1e1e9b130bdf44a2a39871ee9cc4"
     },
     {
      "path": "results/ve0/results_section_mapping.json",
      "role": "VE-0 output M",
-     "sha256": "f2153f7f45c71fdd69a0e96555184d3b2608a63685afe42f40a5800b6f2d7738"
+     "sha256": "2f80c8d34949f6ea3e5b7546d67b79793463d7f63d4278b0a03153125bc50686"
     },
     {
      "path": "results/ve0/VE0_MANIFEST.json",
      "role": "VE-0 output O",
-     "sha256": "31a572db0b3e9ab85a74fefe88232f1112641d113dc421083d09137d79a0a594"
+     "sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3"
     }
    ],
    "ve0_specification_id": "VE0-FIG-01"
@@ -176,7 +176,7 @@
    "bound_evidence_count": 12,
    "build_command": "python -m experiments.ve1.run_ve1",
    "builder_script": "experiments/ve1/figures.py",
-   "builder_sha256": "e568681a005d9e611a002b3e97cd67d34f0f8f9640fafcfe9794a25ea3456469",
+   "builder_sha256": "ec27ea9b5beadb4e6acd1f5f2cc585ffb9019da84af86587086a6dd537f745fd",
    "consumed_evidence_count": 12,
    "consumed_evidence_ids": [
     "EV-ARM-v2_02.concat.train_40k",
@@ -207,17 +207,19 @@
      "sha256": "9af967b199c72600d0caa8c9e205c4b64e6ef769e9e2f4233be383016dd52394"
     },
     {
-     "content_sha256": "dc06f28cd47b7f70539e840c89e477d3c7e36eaa80cf899375a209c13d6465ff",
+     "content_sha256": "ad2c278fec69df11fba71d9341bfe15dce5d812518a1a4ada05f43253b26b944",
      "path": "results/ve1/figures/VE1-FIG-02.data.json",
      "role": "plotted data, one record per drawn value",
-     "sha256": "9dbe27d1fe97e7e7be498028280647835d6f050a35acfa2f594e3df6149ea347"
+     "sha256": "1a1f8f8038da5ed422af29f054f4ba92e19cd0a9c0d5fc5cc911648dcbd90194"
     }
    ],
    "placement": "MAIN_TEXT",
-   "repository_head": "d58cd66b0b3e7e64fd49b10b0a0342588df367fd",
+   "repository_head": "f91d0770b6733a0b3eb4f161dd2ca36d60050bbb",
    "source_paths": [
     {
      "path": "results/closure/reconstructed_statistics.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/closure/reconstructed_statistics.json",
      "sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097"
     }
    ],
@@ -225,72 +227,72 @@
     {
      "path": "results/ve0/canonical_evidence_inventory.json",
      "role": "VE-0 output A",
-     "sha256": "18eaa5355cf2252f0f74b1090f03404881d526bc2588391a866f4ed6fdd22462"
+     "sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3"
     },
     {
      "path": "results/ve0/canonical_evidence_inventory.csv",
      "role": "VE-0 output A_csv",
-     "sha256": "30e1b82090573758947026407ff4d05b5dcb4e12cde827d0e02040d6787cd9d9"
+     "sha256": "86921381e6fc22b674559b44272e9ba70aaeffafdf600c4a752d5cb6200eee9b"
     },
     {
      "path": "results/ve0/supersession_map.json",
      "role": "VE-0 output C",
-     "sha256": "5eddcfdec886ae3b246fab02c076e523f62a77611916695bfbf5363076ee2d4a"
+     "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
     },
     {
      "path": "results/ve0/claim_ledger.json",
      "role": "VE-0 output D",
-     "sha256": "15e3ffc4a487068e9a556ada04a96e6967dc6d8e9f1364babbc353decca1c94d"
+     "sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7"
     },
     {
      "path": "results/ve0/rq_evidence_matrix.json",
      "role": "VE-0 output E",
-     "sha256": "c8f6d7d99db9f41fd98821dafc880f9b709f9ba8757a53c40b65b8bf23e27b86"
+     "sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d"
     },
     {
      "path": "results/ve0/figure_specifications.json",
      "role": "VE-0 output F",
-     "sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92"
+     "sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c"
     },
     {
      "path": "results/ve0/table_specifications.json",
      "role": "VE-0 output G",
-     "sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0"
+     "sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8"
     },
     {
      "path": "results/ve0/qualitative_protocol.json",
      "role": "VE-0 output H",
-     "sha256": "d15fc69c7a6a4e6721874bf43ae017a105c1a8b3b694b759a88043ff2664b975"
+     "sha256": "c8c5c35bec84da409e9a36612ad07846e2d218aa35351bc7d09340760cd9e895"
     },
     {
      "path": "results/ve0/qualitative_record_schema.json",
      "role": "VE-0 output I",
-     "sha256": "c2f0742c0c936a2a11fb71f5dc364633bda329c632b52744150f047d95d81984"
+     "sha256": "898e0a6bfeddfb37196e0d1e4bfc469606bcd663c5283b6fac931cd0e3de4297"
     },
     {
      "path": "results/ve0/reporting_style_contract.json",
      "role": "VE-0 output J",
-     "sha256": "e2a8767fe477e9ac8a5bf8544c3ecbff19f63f1f8a59c9b7ddaa350221c7fc4c"
+     "sha256": "536cf07aa6bd5f80eb1b843046435804345e7bd1f558ba047866b223aadd5504"
     },
     {
      "path": "results/ve0/provenance_contract.json",
      "role": "VE-0 output K",
-     "sha256": "65e66b78cae76cf713f11073f4847062c0e252c4319b30b3a9d58e63a0689159"
+     "sha256": "4a0c33512194fcd11493d3e05f0a86fc8f752ea6343f698c8da0c630672213ab"
     },
     {
      "path": "results/ve0/efficiency_visualisation_contract.json",
      "role": "VE-0 output L",
-     "sha256": "b39a6c4ae080eebf1c0ed0cb65d01a98f1993d162ade704287c53c298b56902e"
+     "sha256": "c8d221544dca46f55339fcd708e4dd66b9aa1e1e9b130bdf44a2a39871ee9cc4"
     },
     {
      "path": "results/ve0/results_section_mapping.json",
      "role": "VE-0 output M",
-     "sha256": "f2153f7f45c71fdd69a0e96555184d3b2608a63685afe42f40a5800b6f2d7738"
+     "sha256": "2f80c8d34949f6ea3e5b7546d67b79793463d7f63d4278b0a03153125bc50686"
     },
     {
      "path": "results/ve0/VE0_MANIFEST.json",
      "role": "VE-0 output O",
-     "sha256": "31a572db0b3e9ab85a74fefe88232f1112641d113dc421083d09137d79a0a594"
+     "sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3"
     }
    ],
    "ve0_specification_id": "VE0-FIG-02"
@@ -300,7 +302,7 @@
    "bound_evidence_count": 15,
    "build_command": "python -m experiments.ve1.run_ve1",
    "builder_script": "experiments/ve1/figures.py",
-   "builder_sha256": "e568681a005d9e611a002b3e97cd67d34f0f8f9640fafcfe9794a25ea3456469",
+   "builder_sha256": "ec27ea9b5beadb4e6acd1f5f2cc585ffb9019da84af86587086a6dd537f745fd",
    "consumed_evidence_count": 15,
    "consumed_evidence_ids": [
     "EV-DSC-train_100k.n_questions",
@@ -334,21 +336,25 @@
      "sha256": "43d1cbae96b3b15b019757f35e010026930034a18ac2427ef553fe4ae8684201"
     },
     {
-     "content_sha256": "f62b25b4f7e8d14d6c37ebf51781c325fbfabfddb0903fd84cb7af26a60fc0ab",
+     "content_sha256": "7a020ae71700757fe239192401a94eb553d062b363fd50cf114b48efdf3febe7",
      "path": "results/ve1/figures/VE1-FIG-03.data.json",
      "role": "plotted data, one record per drawn value",
-     "sha256": "ce4039b35f86500a9a5c74393f0570b5e8395664cc767994964e68a9d0bffa09"
+     "sha256": "b0bdc3db56a1776806a110e273ba38687f581950e09848baf1127f9d69741b73"
     }
    ],
    "placement": "MAIN_TEXT",
-   "repository_head": "d58cd66b0b3e7e64fd49b10b0a0342588df367fd",
+   "repository_head": "f91d0770b6733a0b3eb4f161dd2ca36d60050bbb",
    "source_paths": [
     {
      "path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "artifacts/v2_00_protocol/protocol_build_summary.json",
      "sha256": "cfe82a17f0353a9bb6f107f770e59b6b7321ff69ab8d31eda2f49f16d5976e62"
     },
     {
      "path": "results/experiments/v2_07_scaling/results.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/v2_07_scaling/results.json",
      "sha256": "852206e1b0a404955ed66c5b56a3b9bd7215c15fb35b438dd703cc6c497b79fc"
     }
    ],
@@ -356,72 +362,72 @@
     {
      "path": "results/ve0/canonical_evidence_inventory.json",
      "role": "VE-0 output A",
-     "sha256": "18eaa5355cf2252f0f74b1090f03404881d526bc2588391a866f4ed6fdd22462"
+     "sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3"
     },
     {
      "path": "results/ve0/canonical_evidence_inventory.csv",
      "role": "VE-0 output A_csv",
-     "sha256": "30e1b82090573758947026407ff4d05b5dcb4e12cde827d0e02040d6787cd9d9"
+     "sha256": "86921381e6fc22b674559b44272e9ba70aaeffafdf600c4a752d5cb6200eee9b"
     },
     {
      "path": "results/ve0/supersession_map.json",
      "role": "VE-0 output C",
-     "sha256": "5eddcfdec886ae3b246fab02c076e523f62a77611916695bfbf5363076ee2d4a"
+     "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
     },
     {
      "path": "results/ve0/claim_ledger.json",
      "role": "VE-0 output D",
-     "sha256": "15e3ffc4a487068e9a556ada04a96e6967dc6d8e9f1364babbc353decca1c94d"
+     "sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7"
     },
     {
      "path": "results/ve0/rq_evidence_matrix.json",
      "role": "VE-0 output E",
-     "sha256": "c8f6d7d99db9f41fd98821dafc880f9b709f9ba8757a53c40b65b8bf23e27b86"
+     "sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d"
     },
     {
      "path": "results/ve0/figure_specifications.json",
      "role": "VE-0 output F",
-     "sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92"
+     "sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c"
     },
     {
      "path": "results/ve0/table_specifications.json",
      "role": "VE-0 output G",
-     "sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0"
+     "sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8"
     },
     {
      "path": "results/ve0/qualitative_protocol.json",
      "role": "VE-0 output H",
-     "sha256": "d15fc69c7a6a4e6721874bf43ae017a105c1a8b3b694b759a88043ff2664b975"
+     "sha256": "c8c5c35bec84da409e9a36612ad07846e2d218aa35351bc7d09340760cd9e895"
     },
     {
      "path": "results/ve0/qualitative_record_schema.json",
      "role": "VE-0 output I",
-     "sha256": "c2f0742c0c936a2a11fb71f5dc364633bda329c632b52744150f047d95d81984"
+     "sha256": "898e0a6bfeddfb37196e0d1e4bfc469606bcd663c5283b6fac931cd0e3de4297"
     },
     {
      "path": "results/ve0/reporting_style_contract.json",
      "role": "VE-0 output J",
-     "sha256": "e2a8767fe477e9ac8a5bf8544c3ecbff19f63f1f8a59c9b7ddaa350221c7fc4c"
+     "sha256": "536cf07aa6bd5f80eb1b843046435804345e7bd1f558ba047866b223aadd5504"
     },
     {
      "path": "results/ve0/provenance_contract.json",
      "role": "VE-0 output K",
-     "sha256": "65e66b78cae76cf713f11073f4847062c0e252c4319b30b3a9d58e63a0689159"
+     "sha256": "4a0c33512194fcd11493d3e05f0a86fc8f752ea6343f698c8da0c630672213ab"
     },
     {
      "path": "results/ve0/efficiency_visualisation_contract.json",
      "role": "VE-0 output L",
-     "sha256": "b39a6c4ae080eebf1c0ed0cb65d01a98f1993d162ade704287c53c298b56902e"
+     "sha256": "c8d221544dca46f55339fcd708e4dd66b9aa1e1e9b130bdf44a2a39871ee9cc4"
     },
     {
      "path": "results/ve0/results_section_mapping.json",
      "role": "VE-0 output M",
-     "sha256": "f2153f7f45c71fdd69a0e96555184d3b2608a63685afe42f40a5800b6f2d7738"
+     "sha256": "2f80c8d34949f6ea3e5b7546d67b79793463d7f63d4278b0a03153125bc50686"
     },
     {
      "path": "results/ve0/VE0_MANIFEST.json",
      "role": "VE-0 output O",
-     "sha256": "31a572db0b3e9ab85a74fefe88232f1112641d113dc421083d09137d79a0a594"
+     "sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3"
     }
    ],
    "ve0_specification_id": "VE0-FIG-03"
@@ -431,7 +437,7 @@
    "bound_evidence_count": 47,
    "build_command": "python -m experiments.ve1.run_ve1",
    "builder_script": "experiments/ve1/figures.py",
-   "builder_sha256": "e568681a005d9e611a002b3e97cd67d34f0f8f9640fafcfe9794a25ea3456469",
+   "builder_sha256": "ec27ea9b5beadb4e6acd1f5f2cc585ffb9019da84af86587086a6dd537f745fd",
    "consumed_evidence_count": 47,
    "consumed_evidence_ids": [
     "EV-DEF-e2.pooled_ge4_deficit.concat.train_250k",
@@ -489,29 +495,33 @@
     {
      "path": "results/ve1/figures/VE1-FIG-04.pdf",
      "role": "vector figure",
-     "sha256": "3c0f0c266ca6e052ee6a9125fd986510d7fef7c971e7cc9f675c903300607086"
+     "sha256": "f97ebcb137c91064fff63784521a481ff84058b0428e845a0247fbdfc3ebb07c"
     },
     {
      "path": "results/ve1/figures/VE1-FIG-04.png",
      "role": "preview figure",
-     "sha256": "fc864c86286c53dbd5420f63ea6bf7132abca880bec0f9125789ad3a13c8c3b9"
+     "sha256": "383596f731bd159da666400cb63f63a3e7e8a40f4d8a41d60ad00a2fc44f5aee"
     },
     {
-     "content_sha256": "9ba2689ffbe40a3e7aaa10bd548b41be2c8b799649739e5678bb3201249441e2",
+     "content_sha256": "af4b89ecc51f1e89ab358b8129b9001ab1c13683b4426a0f7ace157aa8ca9fcd",
      "path": "results/ve1/figures/VE1-FIG-04.data.json",
      "role": "plotted data, one record per drawn value",
-     "sha256": "da0116a24972ebd3e18b889fc067c7a4a5b7973638228befc116b841268e4e7c"
+     "sha256": "39eb587cfab39ba721fed55bec0fd6e01a0f19e79499b7af1f55495b76461488"
     }
    ],
    "placement": "MAIN_TEXT",
-   "repository_head": "d58cd66b0b3e7e64fd49b10b0a0342588df367fd",
+   "repository_head": "f91d0770b6733a0b3eb4f161dd2ca36d60050bbb",
    "source_paths": [
     {
      "path": "results/closure/reconstructed_statistics.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/closure/reconstructed_statistics.json",
      "sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097"
     },
     {
      "path": "results/experiments/v3_02a_refs/step_statistics.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/v3_02a_refs/step_statistics.json",
      "sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3"
     }
    ],
@@ -519,72 +529,239 @@
     {
      "path": "results/ve0/canonical_evidence_inventory.json",
      "role": "VE-0 output A",
-     "sha256": "18eaa5355cf2252f0f74b1090f03404881d526bc2588391a866f4ed6fdd22462"
+     "sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3"
     },
     {
      "path": "results/ve0/canonical_evidence_inventory.csv",
      "role": "VE-0 output A_csv",
-     "sha256": "30e1b82090573758947026407ff4d05b5dcb4e12cde827d0e02040d6787cd9d9"
+     "sha256": "86921381e6fc22b674559b44272e9ba70aaeffafdf600c4a752d5cb6200eee9b"
     },
     {
      "path": "results/ve0/supersession_map.json",
      "role": "VE-0 output C",
-     "sha256": "5eddcfdec886ae3b246fab02c076e523f62a77611916695bfbf5363076ee2d4a"
+     "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
     },
     {
      "path": "results/ve0/claim_ledger.json",
      "role": "VE-0 output D",
-     "sha256": "15e3ffc4a487068e9a556ada04a96e6967dc6d8e9f1364babbc353decca1c94d"
+     "sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7"
     },
     {
      "path": "results/ve0/rq_evidence_matrix.json",
      "role": "VE-0 output E",
-     "sha256": "c8f6d7d99db9f41fd98821dafc880f9b709f9ba8757a53c40b65b8bf23e27b86"
+     "sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d"
     },
     {
      "path": "results/ve0/figure_specifications.json",
      "role": "VE-0 output F",
-     "sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92"
+     "sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c"
     },
     {
      "path": "results/ve0/table_specifications.json",
      "role": "VE-0 output G",
-     "sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0"
+     "sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8"
     },
     {
      "path": "results/ve0/qualitative_protocol.json",
      "role": "VE-0 output H",
-     "sha256": "d15fc69c7a6a4e6721874bf43ae017a105c1a8b3b694b759a88043ff2664b975"
+     "sha256": "c8c5c35bec84da409e9a36612ad07846e2d218aa35351bc7d09340760cd9e895"
     },
     {
      "path": "results/ve0/qualitative_record_schema.json",
      "role": "VE-0 output I",
-     "sha256": "c2f0742c0c936a2a11fb71f5dc364633bda329c632b52744150f047d95d81984"
+     "sha256": "898e0a6bfeddfb37196e0d1e4bfc469606bcd663c5283b6fac931cd0e3de4297"
     },
     {
      "path": "results/ve0/reporting_style_contract.json",
      "role": "VE-0 output J",
-     "sha256": "e2a8767fe477e9ac8a5bf8544c3ecbff19f63f1f8a59c9b7ddaa350221c7fc4c"
+     "sha256": "536cf07aa6bd5f80eb1b843046435804345e7bd1f558ba047866b223aadd5504"
     },
     {
      "path": "results/ve0/provenance_contract.json",
      "role": "VE-0 output K",
-     "sha256": "65e66b78cae76cf713f11073f4847062c0e252c4319b30b3a9d58e63a0689159"
+     "sha256": "4a0c33512194fcd11493d3e05f0a86fc8f752ea6343f698c8da0c630672213ab"
     },
     {
      "path": "results/ve0/efficiency_visualisation_contract.json",
      "role": "VE-0 output L",
-     "sha256": "b39a6c4ae080eebf1c0ed0cb65d01a98f1993d162ade704287c53c298b56902e"
+     "sha256": "c8d221544dca46f55339fcd708e4dd66b9aa1e1e9b130bdf44a2a39871ee9cc4"
     },
     {
      "path": "results/ve0/results_section_mapping.json",
      "role": "VE-0 output M",
-     "sha256": "f2153f7f45c71fdd69a0e96555184d3b2608a63685afe42f40a5800b6f2d7738"
+     "sha256": "2f80c8d34949f6ea3e5b7546d67b79793463d7f63d4278b0a03153125bc50686"
     },
     {
      "path": "results/ve0/VE0_MANIFEST.json",
      "role": "VE-0 output O",
-     "sha256": "31a572db0b3e9ab85a74fefe88232f1112641d113dc421083d09137d79a0a594"
+     "sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3"
+    }
+   ],
+   "ve0_specification_id": "VE0-FIG-04"
+  },
+  {
+   "artefact_id": "VE1-FIG-04-FULL",
+   "bound_evidence_count": 47,
+   "build_command": "python -m experiments.ve1.run_ve1",
+   "builder_script": "experiments/ve1/figures.py",
+   "builder_sha256": "ec27ea9b5beadb4e6acd1f5f2cc585ffb9019da84af86587086a6dd537f745fd",
+   "consumed_evidence_count": 47,
+   "consumed_evidence_ids": [
+    "EV-DEF-e2.pooled_ge4_deficit.concat.train_250k",
+    "EV-DEF-e2.pooled_ge4_deficit.concat.train_40k",
+    "EV-DEF-e2.pooled_ge4_deficit.fusion.train_250k",
+    "EV-DEF-e2.pooled_ge4_deficit.fusion.train_40k",
+    "EV-DEF-e2.pooled_ge4_deficit.product.train_250k",
+    "EV-DEF-e2.pooled_ge4_deficit.product.train_40k",
+    "EV-DEF-e2.pooled_ge4_deficit.question_only.train_250k",
+    "EV-DEF-e2.pooled_ge4_deficit.question_only.train_40k",
+    "EV-DEF-v2_02.pooled_ge4_deficit.concat.train_40k",
+    "EV-DEF-v2_02.pooled_ge4_deficit.fusion.train_40k",
+    "EV-DEF-v2_02.pooled_ge4_deficit.question_only.train_40k",
+    "EV-DEF-v2_04.pooled_ge4_deficit.product_natural.train_40k",
+    "EV-SLC-v3_02a.concat.train_40k.steps-3.accuracy",
+    "EV-SLC-v3_02a.concat.train_40k.steps-4.accuracy",
+    "EV-SLC-v3_02a.concat.train_40k.steps-ge4_combined.deficit",
+    "EV-SLC-v3_02a.concat.train_40k.steps-ge5.accuracy",
+    "EV-SLC-v3_02a.concat.train_40k.steps-le2.accuracy",
+    "EV-SLC-v3_02a.direct_linear.train_40k.steps-3.accuracy",
+    "EV-SLC-v3_02a.direct_linear.train_40k.steps-4.accuracy",
+    "EV-SLC-v3_02a.direct_linear.train_40k.steps-ge4_combined.deficit",
+    "EV-SLC-v3_02a.direct_linear.train_40k.steps-ge5.accuracy",
+    "EV-SLC-v3_02a.direct_linear.train_40k.steps-le2.accuracy",
+    "EV-SLC-v3_02a.fusion.train_40k.steps-3.accuracy",
+    "EV-SLC-v3_02a.fusion.train_40k.steps-4.accuracy",
+    "EV-SLC-v3_02a.fusion.train_40k.steps-ge4_combined.deficit",
+    "EV-SLC-v3_02a.fusion.train_40k.steps-ge5.accuracy",
+    "EV-SLC-v3_02a.fusion.train_40k.steps-le2.accuracy",
+    "EV-SLC-v3_02a.meanpatch_concat.train_40k.steps-3.accuracy",
+    "EV-SLC-v3_02a.meanpatch_concat.train_40k.steps-4.accuracy",
+    "EV-SLC-v3_02a.meanpatch_concat.train_40k.steps-ge4_combined.deficit",
+    "EV-SLC-v3_02a.meanpatch_concat.train_40k.steps-ge5.accuracy",
+    "EV-SLC-v3_02a.meanpatch_concat.train_40k.steps-le2.accuracy",
+    "EV-SLC-v3_02a.product_576k.train_40k.steps-3.accuracy",
+    "EV-SLC-v3_02a.product_576k.train_40k.steps-4.accuracy",
+    "EV-SLC-v3_02a.product_576k.train_40k.steps-ge4_combined.deficit",
+    "EV-SLC-v3_02a.product_576k.train_40k.steps-ge5.accuracy",
+    "EV-SLC-v3_02a.product_576k.train_40k.steps-le2.accuracy",
+    "EV-SLC-v3_02a.question_only.train_40k.steps-3.accuracy",
+    "EV-SLC-v3_02a.question_only.train_40k.steps-4.accuracy",
+    "EV-SLC-v3_02a.question_only.train_40k.steps-ge4_combined.deficit",
+    "EV-SLC-v3_02a.question_only.train_40k.steps-ge5.accuracy",
+    "EV-SLC-v3_02a.question_only.train_40k.steps-le2.accuracy",
+    "EV-SLC-v3_02a.reasoner.train_40k.steps-3.accuracy",
+    "EV-SLC-v3_02a.reasoner.train_40k.steps-4.accuracy",
+    "EV-SLC-v3_02a.reasoner.train_40k.steps-ge4_combined.deficit",
+    "EV-SLC-v3_02a.reasoner.train_40k.steps-ge5.accuracy",
+    "EV-SLC-v3_02a.reasoner.train_40k.steps-le2.accuracy"
+   ],
+   "consumed_no_evidence_because": null,
+   "deterministic_seed_or_salt": "NOT_APPLICABLE: VE-1 draws no sample and selects nothing",
+   "kind": "figure",
+   "outputs": [
+    {
+     "path": "results/ve1/figures/VE1-FIG-04-FULL.pdf",
+     "role": "vector figure",
+     "sha256": "95f78b8334fddb466b00fcd24e8718178ec9adb6d21a88f3162e435f4c33e398"
+    },
+    {
+     "path": "results/ve1/figures/VE1-FIG-04-FULL.png",
+     "role": "preview figure",
+     "sha256": "c986744eadc1564b90f095ffd6f682c8c5965a443c664d728332609a9cd792cd"
+    },
+    {
+     "content_sha256": "b2ad05a1aaaf92f84d71e516fd441e551b411405dd876bea1a8e7111e556c7d0",
+     "path": "results/ve1/figures/VE1-FIG-04-FULL.data.json",
+     "role": "plotted data, one record per drawn value",
+     "sha256": "89daf7c5c2149be65a7c50a23955e9fdf960be5d198c6b092af363fe7e174062"
+    }
+   ],
+   "placement": "MAIN_TEXT",
+   "repository_head": "f91d0770b6733a0b3eb4f161dd2ca36d60050bbb",
+   "source_paths": [
+    {
+     "path": "results/closure/reconstructed_statistics.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/closure/reconstructed_statistics.json",
+     "sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097"
+    },
+    {
+     "path": "results/experiments/v3_02a_refs/step_statistics.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/v3_02a_refs/step_statistics.json",
+     "sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3"
+    }
+   ],
+   "ve0_source_artefacts": [
+    {
+     "path": "results/ve0/canonical_evidence_inventory.json",
+     "role": "VE-0 output A",
+     "sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3"
+    },
+    {
+     "path": "results/ve0/canonical_evidence_inventory.csv",
+     "role": "VE-0 output A_csv",
+     "sha256": "86921381e6fc22b674559b44272e9ba70aaeffafdf600c4a752d5cb6200eee9b"
+    },
+    {
+     "path": "results/ve0/supersession_map.json",
+     "role": "VE-0 output C",
+     "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
+    },
+    {
+     "path": "results/ve0/claim_ledger.json",
+     "role": "VE-0 output D",
+     "sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7"
+    },
+    {
+     "path": "results/ve0/rq_evidence_matrix.json",
+     "role": "VE-0 output E",
+     "sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d"
+    },
+    {
+     "path": "results/ve0/figure_specifications.json",
+     "role": "VE-0 output F",
+     "sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c"
+    },
+    {
+     "path": "results/ve0/table_specifications.json",
+     "role": "VE-0 output G",
+     "sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8"
+    },
+    {
+     "path": "results/ve0/qualitative_protocol.json",
+     "role": "VE-0 output H",
+     "sha256": "c8c5c35bec84da409e9a36612ad07846e2d218aa35351bc7d09340760cd9e895"
+    },
+    {
+     "path": "results/ve0/qualitative_record_schema.json",
+     "role": "VE-0 output I",
+     "sha256": "898e0a6bfeddfb37196e0d1e4bfc469606bcd663c5283b6fac931cd0e3de4297"
+    },
+    {
+     "path": "results/ve0/reporting_style_contract.json",
+     "role": "VE-0 output J",
+     "sha256": "536cf07aa6bd5f80eb1b843046435804345e7bd1f558ba047866b223aadd5504"
+    },
+    {
+     "path": "results/ve0/provenance_contract.json",
+     "role": "VE-0 output K",
+     "sha256": "4a0c33512194fcd11493d3e05f0a86fc8f752ea6343f698c8da0c630672213ab"
+    },
+    {
+     "path": "results/ve0/efficiency_visualisation_contract.json",
+     "role": "VE-0 output L",
+     "sha256": "c8d221544dca46f55339fcd708e4dd66b9aa1e1e9b130bdf44a2a39871ee9cc4"
+    },
+    {
+     "path": "results/ve0/results_section_mapping.json",
+     "role": "VE-0 output M",
+     "sha256": "2f80c8d34949f6ea3e5b7546d67b79793463d7f63d4278b0a03153125bc50686"
+    },
+    {
+     "path": "results/ve0/VE0_MANIFEST.json",
+     "role": "VE-0 output O",
+     "sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3"
     }
    ],
    "ve0_specification_id": "VE0-FIG-04"
@@ -594,7 +771,7 @@
    "bound_evidence_count": 10,
    "build_command": "python -m experiments.ve1.run_ve1",
    "builder_script": "experiments/ve1/figures.py",
-   "builder_sha256": "e568681a005d9e611a002b3e97cd67d34f0f8f9640fafcfe9794a25ea3456469",
+   "builder_sha256": "ec27ea9b5beadb4e6acd1f5f2cc585ffb9019da84af86587086a6dd537f745fd",
    "consumed_evidence_count": 10,
    "consumed_evidence_ids": [
     "EV-CON-v2_06.concat.drop_shuffled.train_40k",
@@ -623,17 +800,19 @@
      "sha256": "76cee690eadd355a7f380845b8376b29e5603edbe350bd6317aefc47950989ed"
     },
     {
-     "content_sha256": "ec3ce4efd79d003826ef6eb82dfd24fe49c08a21630a7561d23ffc3e49c874e0",
+     "content_sha256": "69bc83027c8625f125ccfb446cb72016c48f9886448b703d103335c1b011fd26",
      "path": "results/ve1/figures/VE1-FIG-05.data.json",
      "role": "plotted data, one record per drawn value",
-     "sha256": "03f6d5dd016b9f4ae1d6ba97954a4ab3c747077288e2a65841d073e872a3b983"
+     "sha256": "139614e96c16c9ad656a23be1e91ebac08b76d009498bd45724aaa5c9b07c859"
     }
    ],
    "placement": "MAIN_TEXT",
-   "repository_head": "d58cd66b0b3e7e64fd49b10b0a0342588df367fd",
+   "repository_head": "f91d0770b6733a0b3eb4f161dd2ca36d60050bbb",
    "source_paths": [
     {
      "path": "results/closure/reconstructed_statistics.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/closure/reconstructed_statistics.json",
      "sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097"
     }
    ],
@@ -641,72 +820,72 @@
     {
      "path": "results/ve0/canonical_evidence_inventory.json",
      "role": "VE-0 output A",
-     "sha256": "18eaa5355cf2252f0f74b1090f03404881d526bc2588391a866f4ed6fdd22462"
+     "sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3"
     },
     {
      "path": "results/ve0/canonical_evidence_inventory.csv",
      "role": "VE-0 output A_csv",
-     "sha256": "30e1b82090573758947026407ff4d05b5dcb4e12cde827d0e02040d6787cd9d9"
+     "sha256": "86921381e6fc22b674559b44272e9ba70aaeffafdf600c4a752d5cb6200eee9b"
     },
     {
      "path": "results/ve0/supersession_map.json",
      "role": "VE-0 output C",
-     "sha256": "5eddcfdec886ae3b246fab02c076e523f62a77611916695bfbf5363076ee2d4a"
+     "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
     },
     {
      "path": "results/ve0/claim_ledger.json",
      "role": "VE-0 output D",
-     "sha256": "15e3ffc4a487068e9a556ada04a96e6967dc6d8e9f1364babbc353decca1c94d"
+     "sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7"
     },
     {
      "path": "results/ve0/rq_evidence_matrix.json",
      "role": "VE-0 output E",
-     "sha256": "c8f6d7d99db9f41fd98821dafc880f9b709f9ba8757a53c40b65b8bf23e27b86"
+     "sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d"
     },
     {
      "path": "results/ve0/figure_specifications.json",
      "role": "VE-0 output F",
-     "sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92"
+     "sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c"
     },
     {
      "path": "results/ve0/table_specifications.json",
      "role": "VE-0 output G",
-     "sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0"
+     "sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8"
     },
     {
      "path": "results/ve0/qualitative_protocol.json",
      "role": "VE-0 output H",
-     "sha256": "d15fc69c7a6a4e6721874bf43ae017a105c1a8b3b694b759a88043ff2664b975"
+     "sha256": "c8c5c35bec84da409e9a36612ad07846e2d218aa35351bc7d09340760cd9e895"
     },
     {
      "path": "results/ve0/qualitative_record_schema.json",
      "role": "VE-0 output I",
-     "sha256": "c2f0742c0c936a2a11fb71f5dc364633bda329c632b52744150f047d95d81984"
+     "sha256": "898e0a6bfeddfb37196e0d1e4bfc469606bcd663c5283b6fac931cd0e3de4297"
     },
     {
      "path": "results/ve0/reporting_style_contract.json",
      "role": "VE-0 output J",
-     "sha256": "e2a8767fe477e9ac8a5bf8544c3ecbff19f63f1f8a59c9b7ddaa350221c7fc4c"
+     "sha256": "536cf07aa6bd5f80eb1b843046435804345e7bd1f558ba047866b223aadd5504"
     },
     {
      "path": "results/ve0/provenance_contract.json",
      "role": "VE-0 output K",
-     "sha256": "65e66b78cae76cf713f11073f4847062c0e252c4319b30b3a9d58e63a0689159"
+     "sha256": "4a0c33512194fcd11493d3e05f0a86fc8f752ea6343f698c8da0c630672213ab"
     },
     {
      "path": "results/ve0/efficiency_visualisation_contract.json",
      "role": "VE-0 output L",
-     "sha256": "b39a6c4ae080eebf1c0ed0cb65d01a98f1993d162ade704287c53c298b56902e"
+     "sha256": "c8d221544dca46f55339fcd708e4dd66b9aa1e1e9b130bdf44a2a39871ee9cc4"
     },
     {
      "path": "results/ve0/results_section_mapping.json",
      "role": "VE-0 output M",
-     "sha256": "f2153f7f45c71fdd69a0e96555184d3b2608a63685afe42f40a5800b6f2d7738"
+     "sha256": "2f80c8d34949f6ea3e5b7546d67b79793463d7f63d4278b0a03153125bc50686"
     },
     {
      "path": "results/ve0/VE0_MANIFEST.json",
      "role": "VE-0 output O",
-     "sha256": "31a572db0b3e9ab85a74fefe88232f1112641d113dc421083d09137d79a0a594"
+     "sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3"
     }
    ],
    "ve0_specification_id": "VE0-FIG-05"
@@ -716,7 +895,7 @@
    "bound_evidence_count": 11,
    "build_command": "python -m experiments.ve1.run_ve1",
    "builder_script": "experiments/ve1/figures.py",
-   "builder_sha256": "e568681a005d9e611a002b3e97cd67d34f0f8f9640fafcfe9794a25ea3456469",
+   "builder_sha256": "ec27ea9b5beadb4e6acd1f5f2cc585ffb9019da84af86587086a6dd537f745fd",
    "consumed_evidence_count": 11,
    "consumed_evidence_ids": [
     "EV-CON-v3_02a.reasoner_minus_fusion_deficit.train_40k",
@@ -746,29 +925,37 @@
      "sha256": "3819da3ff4a9a1cd8d940562cbe4732df20924ef55d3a73c017c23cfa39e49ef"
     },
     {
-     "content_sha256": "d56af1a4e954437b9e6abbbc85b4cef397257eb9eaf68b3e2b3a4a096f40915b",
+     "content_sha256": "5e6ea05bbcaceafdd14bdb4a248df5a681b7733f8c9e933917d6f14e4e556706",
      "path": "results/ve1/figures/VE1-FIG-06.data.json",
      "role": "plotted data, one record per drawn value",
-     "sha256": "259a09a546a54de9673eb9cd919454fb8a3222581f9497db72e113673f38a49b"
+     "sha256": "f5d18def74e7fdf1affd0cdb5d67f42da5b09f7b0f433fbc2793da045701614f"
     }
    ],
    "placement": "MAIN_TEXT",
-   "repository_head": "d58cd66b0b3e7e64fd49b10b0a0342588df367fd",
+   "repository_head": "f91d0770b6733a0b3eb4f161dd2ca36d60050bbb",
    "source_paths": [
     {
      "path": "results/experiments/v2_07_scaling/results.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/v2_07_scaling/results.json",
      "sha256": "852206e1b0a404955ed66c5b56a3b9bd7215c15fb35b438dd703cc6c497b79fc"
     },
     {
      "path": "results/experiments/v3_01_reasoner/results.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/v3_01_reasoner/results.json",
      "sha256": "472fe626775d755e1a24ae3da814466773b3e067537201cb88351ea27d8abfd9"
     },
     {
      "path": "results/experiments/v3_02a_refs/step_statistics.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/v3_02a_refs/step_statistics.json",
      "sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3"
     },
     {
      "path": "results/experiments/v3_03_scaling/results.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/v3_03_scaling/results.json",
      "sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339"
     }
    ],
@@ -776,72 +963,72 @@
     {
      "path": "results/ve0/canonical_evidence_inventory.json",
      "role": "VE-0 output A",
-     "sha256": "18eaa5355cf2252f0f74b1090f03404881d526bc2588391a866f4ed6fdd22462"
+     "sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3"
     },
     {
      "path": "results/ve0/canonical_evidence_inventory.csv",
      "role": "VE-0 output A_csv",
-     "sha256": "30e1b82090573758947026407ff4d05b5dcb4e12cde827d0e02040d6787cd9d9"
+     "sha256": "86921381e6fc22b674559b44272e9ba70aaeffafdf600c4a752d5cb6200eee9b"
     },
     {
      "path": "results/ve0/supersession_map.json",
      "role": "VE-0 output C",
-     "sha256": "5eddcfdec886ae3b246fab02c076e523f62a77611916695bfbf5363076ee2d4a"
+     "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
     },
     {
      "path": "results/ve0/claim_ledger.json",
      "role": "VE-0 output D",
-     "sha256": "15e3ffc4a487068e9a556ada04a96e6967dc6d8e9f1364babbc353decca1c94d"
+     "sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7"
     },
     {
      "path": "results/ve0/rq_evidence_matrix.json",
      "role": "VE-0 output E",
-     "sha256": "c8f6d7d99db9f41fd98821dafc880f9b709f9ba8757a53c40b65b8bf23e27b86"
+     "sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d"
     },
     {
      "path": "results/ve0/figure_specifications.json",
      "role": "VE-0 output F",
-     "sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92"
+     "sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c"
     },
     {
      "path": "results/ve0/table_specifications.json",
      "role": "VE-0 output G",
-     "sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0"
+     "sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8"
     },
     {
      "path": "results/ve0/qualitative_protocol.json",
      "role": "VE-0 output H",
-     "sha256": "d15fc69c7a6a4e6721874bf43ae017a105c1a8b3b694b759a88043ff2664b975"
+     "sha256": "c8c5c35bec84da409e9a36612ad07846e2d218aa35351bc7d09340760cd9e895"
     },
     {
      "path": "results/ve0/qualitative_record_schema.json",
      "role": "VE-0 output I",
-     "sha256": "c2f0742c0c936a2a11fb71f5dc364633bda329c632b52744150f047d95d81984"
+     "sha256": "898e0a6bfeddfb37196e0d1e4bfc469606bcd663c5283b6fac931cd0e3de4297"
     },
     {
      "path": "results/ve0/reporting_style_contract.json",
      "role": "VE-0 output J",
-     "sha256": "e2a8767fe477e9ac8a5bf8544c3ecbff19f63f1f8a59c9b7ddaa350221c7fc4c"
+     "sha256": "536cf07aa6bd5f80eb1b843046435804345e7bd1f558ba047866b223aadd5504"
     },
     {
      "path": "results/ve0/provenance_contract.json",
      "role": "VE-0 output K",
-     "sha256": "65e66b78cae76cf713f11073f4847062c0e252c4319b30b3a9d58e63a0689159"
+     "sha256": "4a0c33512194fcd11493d3e05f0a86fc8f752ea6343f698c8da0c630672213ab"
     },
     {
      "path": "results/ve0/efficiency_visualisation_contract.json",
      "role": "VE-0 output L",
-     "sha256": "b39a6c4ae080eebf1c0ed0cb65d01a98f1993d162ade704287c53c298b56902e"
+     "sha256": "c8d221544dca46f55339fcd708e4dd66b9aa1e1e9b130bdf44a2a39871ee9cc4"
     },
     {
      "path": "results/ve0/results_section_mapping.json",
      "role": "VE-0 output M",
-     "sha256": "f2153f7f45c71fdd69a0e96555184d3b2608a63685afe42f40a5800b6f2d7738"
+     "sha256": "2f80c8d34949f6ea3e5b7546d67b79793463d7f63d4278b0a03153125bc50686"
     },
     {
      "path": "results/ve0/VE0_MANIFEST.json",
      "role": "VE-0 output O",
-     "sha256": "31a572db0b3e9ab85a74fefe88232f1112641d113dc421083d09137d79a0a594"
+     "sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3"
     }
    ],
    "ve0_specification_id": "VE0-FIG-06"
@@ -851,7 +1038,7 @@
    "bound_evidence_count": 4,
    "build_command": "python -m experiments.ve1.run_ve1",
    "builder_script": "experiments/ve1/figures.py",
-   "builder_sha256": "e568681a005d9e611a002b3e97cd67d34f0f8f9640fafcfe9794a25ea3456469",
+   "builder_sha256": "ec27ea9b5beadb4e6acd1f5f2cc585ffb9019da84af86587086a6dd537f745fd",
    "consumed_evidence_count": 4,
    "consumed_evidence_ids": [
     "EV-CON-e2.siglip_minus_clip_concat.train_40k",
@@ -874,17 +1061,19 @@
      "sha256": "be0a00595e4b31f3c497b47f164970bd690e716bb565552aa4ac855045afa386"
     },
     {
-     "content_sha256": "9cc537bd593ed8d51874916c56f1376c4fc011ff91171866585eab4d60e812de",
+     "content_sha256": "3dd1584b621d010f2f2847dedb30f3aa63275e6770a800533e1203225cf1bdf2",
      "path": "results/ve1/figures/VE1-FIG-07.data.json",
      "role": "plotted data, one record per drawn value",
-     "sha256": "08f5915dce0dbcb8e11bb07c4094682ad22fd29f0aeed3c3b4e5c704ff64e3a8"
+     "sha256": "70611ed2031ceb0e0d1d04d3b83c2dac63a4bb3f245730a161898748965e4271"
     }
    ],
    "placement": "MAIN_TEXT",
-   "repository_head": "d58cd66b0b3e7e64fd49b10b0a0342588df367fd",
+   "repository_head": "f91d0770b6733a0b3eb4f161dd2ca36d60050bbb",
    "source_paths": [
     {
      "path": "results/closure/reconstructed_statistics.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/closure/reconstructed_statistics.json",
      "sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097"
     }
    ],
@@ -892,72 +1081,72 @@
     {
      "path": "results/ve0/canonical_evidence_inventory.json",
      "role": "VE-0 output A",
-     "sha256": "18eaa5355cf2252f0f74b1090f03404881d526bc2588391a866f4ed6fdd22462"
+     "sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3"
     },
     {
      "path": "results/ve0/canonical_evidence_inventory.csv",
      "role": "VE-0 output A_csv",
-     "sha256": "30e1b82090573758947026407ff4d05b5dcb4e12cde827d0e02040d6787cd9d9"
+     "sha256": "86921381e6fc22b674559b44272e9ba70aaeffafdf600c4a752d5cb6200eee9b"
     },
     {
      "path": "results/ve0/supersession_map.json",
      "role": "VE-0 output C",
-     "sha256": "5eddcfdec886ae3b246fab02c076e523f62a77611916695bfbf5363076ee2d4a"
+     "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
     },
     {
      "path": "results/ve0/claim_ledger.json",
      "role": "VE-0 output D",
-     "sha256": "15e3ffc4a487068e9a556ada04a96e6967dc6d8e9f1364babbc353decca1c94d"
+     "sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7"
     },
     {
      "path": "results/ve0/rq_evidence_matrix.json",
      "role": "VE-0 output E",
-     "sha256": "c8f6d7d99db9f41fd98821dafc880f9b709f9ba8757a53c40b65b8bf23e27b86"
+     "sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d"
     },
     {
      "path": "results/ve0/figure_specifications.json",
      "role": "VE-0 output F",
-     "sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92"
+     "sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c"
     },
     {
      "path": "results/ve0/table_specifications.json",
      "role": "VE-0 output G",
-     "sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0"
+     "sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8"
     },
     {
      "path": "results/ve0/qualitative_protocol.json",
      "role": "VE-0 output H",
-     "sha256": "d15fc69c7a6a4e6721874bf43ae017a105c1a8b3b694b759a88043ff2664b975"
+     "sha256": "c8c5c35bec84da409e9a36612ad07846e2d218aa35351bc7d09340760cd9e895"
     },
     {
      "path": "results/ve0/qualitative_record_schema.json",
      "role": "VE-0 output I",
-     "sha256": "c2f0742c0c936a2a11fb71f5dc364633bda329c632b52744150f047d95d81984"
+     "sha256": "898e0a6bfeddfb37196e0d1e4bfc469606bcd663c5283b6fac931cd0e3de4297"
     },
     {
      "path": "results/ve0/reporting_style_contract.json",
      "role": "VE-0 output J",
-     "sha256": "e2a8767fe477e9ac8a5bf8544c3ecbff19f63f1f8a59c9b7ddaa350221c7fc4c"
+     "sha256": "536cf07aa6bd5f80eb1b843046435804345e7bd1f558ba047866b223aadd5504"
     },
     {
      "path": "results/ve0/provenance_contract.json",
      "role": "VE-0 output K",
-     "sha256": "65e66b78cae76cf713f11073f4847062c0e252c4319b30b3a9d58e63a0689159"
+     "sha256": "4a0c33512194fcd11493d3e05f0a86fc8f752ea6343f698c8da0c630672213ab"
     },
     {
      "path": "results/ve0/efficiency_visualisation_contract.json",
      "role": "VE-0 output L",
-     "sha256": "b39a6c4ae080eebf1c0ed0cb65d01a98f1993d162ade704287c53c298b56902e"
+     "sha256": "c8d221544dca46f55339fcd708e4dd66b9aa1e1e9b130bdf44a2a39871ee9cc4"
     },
     {
      "path": "results/ve0/results_section_mapping.json",
      "role": "VE-0 output M",
-     "sha256": "f2153f7f45c71fdd69a0e96555184d3b2608a63685afe42f40a5800b6f2d7738"
+     "sha256": "2f80c8d34949f6ea3e5b7546d67b79793463d7f63d4278b0a03153125bc50686"
     },
     {
      "path": "results/ve0/VE0_MANIFEST.json",
      "role": "VE-0 output O",
-     "sha256": "31a572db0b3e9ab85a74fefe88232f1112641d113dc421083d09137d79a0a594"
+     "sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3"
     }
    ],
    "ve0_specification_id": "VE0-FIG-07"
@@ -967,7 +1156,7 @@
    "bound_evidence_count": 7,
    "build_command": "python -m experiments.ve1.run_ve1",
    "builder_script": "experiments/ve1/figures.py",
-   "builder_sha256": "e568681a005d9e611a002b3e97cd67d34f0f8f9640fafcfe9794a25ea3456469",
+   "builder_sha256": "ec27ea9b5beadb4e6acd1f5f2cc585ffb9019da84af86587086a6dd537f745fd",
    "consumed_evidence_count": 7,
    "consumed_evidence_ids": [
     "EV-CON-E10.difference_in_differences",
@@ -985,33 +1174,39 @@
     {
      "path": "results/ve1/figures/VE1-FIG-08.pdf",
      "role": "vector figure",
-     "sha256": "b4fdbc0e05be124e8987f05c6879f1f957c6ca5f1ccffe3e3d3d1fa7e828b4a5"
+     "sha256": "0f2d00819bf1dafd0983c2f59dd2d3c61b62ed534d58bad8edcb12bd69983cf1"
     },
     {
      "path": "results/ve1/figures/VE1-FIG-08.png",
      "role": "preview figure",
-     "sha256": "5b75f567f6b2a418eb20d2f2b8bbe5b6e42f27e283c29a780c206facc6ed0949"
+     "sha256": "bb5da959df374ad3f83128be7846305df12291970aded80611558ecb5b99e5ee"
     },
     {
-     "content_sha256": "10672cf770af866d35b3390288cf9725d72c0012205748f90fc14e9d2704bff4",
+     "content_sha256": "4b00801332e688ae97a3ca391f77529864513ee85e4a81443f84ebf9d41aeeb6",
      "path": "results/ve1/figures/VE1-FIG-08.data.json",
      "role": "plotted data, one record per drawn value",
-     "sha256": "f12fcc1365a9332666f2a87e915f78d9f8da8e65ed1116cb00598e1e79e073d2"
+     "sha256": "d37278cf55ff0d42ad850d96a8e25d86449b685aff623d582cf26e0a6ef6e4b4"
     }
    ],
    "placement": "MAIN_TEXT",
-   "repository_head": "d58cd66b0b3e7e64fd49b10b0a0342588df367fd",
+   "repository_head": "f91d0770b6733a0b3eb4f161dd2ca36d60050bbb",
    "source_paths": [
     {
      "path": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
      "sha256": "37ffdcd09aa2bcd306ca9b54229a1d0d17ff203b6b0900e09e5f876ad1ed0748"
     },
     {
      "path": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
      "sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562"
     },
     {
      "path": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
      "sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138"
     }
    ],
@@ -1019,72 +1214,72 @@
     {
      "path": "results/ve0/canonical_evidence_inventory.json",
      "role": "VE-0 output A",
-     "sha256": "18eaa5355cf2252f0f74b1090f03404881d526bc2588391a866f4ed6fdd22462"
+     "sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3"
     },
     {
      "path": "results/ve0/canonical_evidence_inventory.csv",
      "role": "VE-0 output A_csv",
-     "sha256": "30e1b82090573758947026407ff4d05b5dcb4e12cde827d0e02040d6787cd9d9"
+     "sha256": "86921381e6fc22b674559b44272e9ba70aaeffafdf600c4a752d5cb6200eee9b"
     },
     {
      "path": "results/ve0/supersession_map.json",
      "role": "VE-0 output C",
-     "sha256": "5eddcfdec886ae3b246fab02c076e523f62a77611916695bfbf5363076ee2d4a"
+     "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
     },
     {
      "path": "results/ve0/claim_ledger.json",
      "role": "VE-0 output D",
-     "sha256": "15e3ffc4a487068e9a556ada04a96e6967dc6d8e9f1364babbc353decca1c94d"
+     "sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7"
     },
     {
      "path": "results/ve0/rq_evidence_matrix.json",
      "role": "VE-0 output E",
-     "sha256": "c8f6d7d99db9f41fd98821dafc880f9b709f9ba8757a53c40b65b8bf23e27b86"
+     "sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d"
     },
     {
      "path": "results/ve0/figure_specifications.json",
      "role": "VE-0 output F",
-     "sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92"
+     "sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c"
     },
     {
      "path": "results/ve0/table_specifications.json",
      "role": "VE-0 output G",
-     "sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0"
+     "sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8"
     },
     {
      "path": "results/ve0/qualitative_protocol.json",
      "role": "VE-0 output H",
-     "sha256": "d15fc69c7a6a4e6721874bf43ae017a105c1a8b3b694b759a88043ff2664b975"
+     "sha256": "c8c5c35bec84da409e9a36612ad07846e2d218aa35351bc7d09340760cd9e895"
     },
     {
      "path": "results/ve0/qualitative_record_schema.json",
      "role": "VE-0 output I",
-     "sha256": "c2f0742c0c936a2a11fb71f5dc364633bda329c632b52744150f047d95d81984"
+     "sha256": "898e0a6bfeddfb37196e0d1e4bfc469606bcd663c5283b6fac931cd0e3de4297"
     },
     {
      "path": "results/ve0/reporting_style_contract.json",
      "role": "VE-0 output J",
-     "sha256": "e2a8767fe477e9ac8a5bf8544c3ecbff19f63f1f8a59c9b7ddaa350221c7fc4c"
+     "sha256": "536cf07aa6bd5f80eb1b843046435804345e7bd1f558ba047866b223aadd5504"
     },
     {
      "path": "results/ve0/provenance_contract.json",
      "role": "VE-0 output K",
-     "sha256": "65e66b78cae76cf713f11073f4847062c0e252c4319b30b3a9d58e63a0689159"
+     "sha256": "4a0c33512194fcd11493d3e05f0a86fc8f752ea6343f698c8da0c630672213ab"
     },
     {
      "path": "results/ve0/efficiency_visualisation_contract.json",
      "role": "VE-0 output L",
-     "sha256": "b39a6c4ae080eebf1c0ed0cb65d01a98f1993d162ade704287c53c298b56902e"
+     "sha256": "c8d221544dca46f55339fcd708e4dd66b9aa1e1e9b130bdf44a2a39871ee9cc4"
     },
     {
      "path": "results/ve0/results_section_mapping.json",
      "role": "VE-0 output M",
-     "sha256": "f2153f7f45c71fdd69a0e96555184d3b2608a63685afe42f40a5800b6f2d7738"
+     "sha256": "2f80c8d34949f6ea3e5b7546d67b79793463d7f63d4278b0a03153125bc50686"
     },
     {
      "path": "results/ve0/VE0_MANIFEST.json",
      "role": "VE-0 output O",
-     "sha256": "31a572db0b3e9ab85a74fefe88232f1112641d113dc421083d09137d79a0a594"
+     "sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3"
     }
    ],
    "ve0_specification_id": "VE0-FIG-08"
@@ -1094,7 +1289,7 @@
    "bound_evidence_count": 19,
    "build_command": "python -m experiments.ve1.run_ve1",
    "builder_script": "experiments/ve1/figures.py",
-   "builder_sha256": "e568681a005d9e611a002b3e97cd67d34f0f8f9640fafcfe9794a25ea3456469",
+   "builder_sha256": "ec27ea9b5beadb4e6acd1f5f2cc585ffb9019da84af86587086a6dd537f745fd",
    "consumed_evidence_count": 19,
    "consumed_evidence_ids": [
     "EV-EFF-E7b.concat",
@@ -1124,29 +1319,33 @@
     {
      "path": "results/ve1/figures/VE1-FIG-09.pdf",
      "role": "vector figure",
-     "sha256": "f3e8c070d3605bc6ec8dd8b77448f6b01ec4daaae01ee0c8d6eccd9d3c1b3b46"
+     "sha256": "6111bf26cb58570cfc03b286076ff2b27cc63f8e76261db849f737dfd4412668"
     },
     {
      "path": "results/ve1/figures/VE1-FIG-09.png",
      "role": "preview figure",
-     "sha256": "2650d6707fcb1a446e3704567d7f8ac469ac4d31758a895b274fa5e2cde2bbc2"
+     "sha256": "19b318f9a986ab1de5e81a8905eb8594b93ff3be1e0f97795d4dc59d3c0a1469"
     },
     {
-     "content_sha256": "c3fe226cc616a75dc3deadcb41cbe3bd0052f0e198c50340a56bbb033e788d29",
+     "content_sha256": "fbffa5e732c253dcf64d281bc3592a4532c9eb891207f44b4123dcbefc2319ae",
      "path": "results/ve1/figures/VE1-FIG-09.data.json",
      "role": "plotted data, one record per drawn value",
-     "sha256": "27da8ef5086f7dcbd9cf7b0e82f18ee2af8d6e0a989f756a1d887f3cb8b297f4"
+     "sha256": "a869ce3108678493712c2f917bda2fc079a34fe699d9e5c8090dd5fd02d477f9"
     }
    ],
    "placement": "MAIN_TEXT",
-   "repository_head": "d58cd66b0b3e7e64fd49b10b0a0342588df367fd",
+   "repository_head": "f91d0770b6733a0b3eb4f161dd2ca36d60050bbb",
    "source_paths": [
     {
      "path": "results/experiments/e7b_serial_efficiency/e7b_results.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/e7b_serial_efficiency/e7b_results.json",
      "sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4"
     },
     {
      "path": "results/experiments/e9_compact_vlm/e9_results.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/e9_compact_vlm/e9_results.json",
      "sha256": "5d42ae9344fa9d7bcd48589645d62b4d0c20db9a3d9d03288bbddd6832ae2caa"
     }
    ],
@@ -1154,72 +1353,72 @@
     {
      "path": "results/ve0/canonical_evidence_inventory.json",
      "role": "VE-0 output A",
-     "sha256": "18eaa5355cf2252f0f74b1090f03404881d526bc2588391a866f4ed6fdd22462"
+     "sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3"
     },
     {
      "path": "results/ve0/canonical_evidence_inventory.csv",
      "role": "VE-0 output A_csv",
-     "sha256": "30e1b82090573758947026407ff4d05b5dcb4e12cde827d0e02040d6787cd9d9"
+     "sha256": "86921381e6fc22b674559b44272e9ba70aaeffafdf600c4a752d5cb6200eee9b"
     },
     {
      "path": "results/ve0/supersession_map.json",
      "role": "VE-0 output C",
-     "sha256": "5eddcfdec886ae3b246fab02c076e523f62a77611916695bfbf5363076ee2d4a"
+     "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
     },
     {
      "path": "results/ve0/claim_ledger.json",
      "role": "VE-0 output D",
-     "sha256": "15e3ffc4a487068e9a556ada04a96e6967dc6d8e9f1364babbc353decca1c94d"
+     "sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7"
     },
     {
      "path": "results/ve0/rq_evidence_matrix.json",
      "role": "VE-0 output E",
-     "sha256": "c8f6d7d99db9f41fd98821dafc880f9b709f9ba8757a53c40b65b8bf23e27b86"
+     "sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d"
     },
     {
      "path": "results/ve0/figure_specifications.json",
      "role": "VE-0 output F",
-     "sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92"
+     "sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c"
     },
     {
      "path": "results/ve0/table_specifications.json",
      "role": "VE-0 output G",
-     "sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0"
+     "sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8"
     },
     {
      "path": "results/ve0/qualitative_protocol.json",
      "role": "VE-0 output H",
-     "sha256": "d15fc69c7a6a4e6721874bf43ae017a105c1a8b3b694b759a88043ff2664b975"
+     "sha256": "c8c5c35bec84da409e9a36612ad07846e2d218aa35351bc7d09340760cd9e895"
     },
     {
      "path": "results/ve0/qualitative_record_schema.json",
      "role": "VE-0 output I",
-     "sha256": "c2f0742c0c936a2a11fb71f5dc364633bda329c632b52744150f047d95d81984"
+     "sha256": "898e0a6bfeddfb37196e0d1e4bfc469606bcd663c5283b6fac931cd0e3de4297"
     },
     {
      "path": "results/ve0/reporting_style_contract.json",
      "role": "VE-0 output J",
-     "sha256": "e2a8767fe477e9ac8a5bf8544c3ecbff19f63f1f8a59c9b7ddaa350221c7fc4c"
+     "sha256": "536cf07aa6bd5f80eb1b843046435804345e7bd1f558ba047866b223aadd5504"
     },
     {
      "path": "results/ve0/provenance_contract.json",
      "role": "VE-0 output K",
-     "sha256": "65e66b78cae76cf713f11073f4847062c0e252c4319b30b3a9d58e63a0689159"
+     "sha256": "4a0c33512194fcd11493d3e05f0a86fc8f752ea6343f698c8da0c630672213ab"
     },
     {
      "path": "results/ve0/efficiency_visualisation_contract.json",
      "role": "VE-0 output L",
-     "sha256": "b39a6c4ae080eebf1c0ed0cb65d01a98f1993d162ade704287c53c298b56902e"
+     "sha256": "c8d221544dca46f55339fcd708e4dd66b9aa1e1e9b130bdf44a2a39871ee9cc4"
     },
     {
      "path": "results/ve0/results_section_mapping.json",
      "role": "VE-0 output M",
-     "sha256": "f2153f7f45c71fdd69a0e96555184d3b2608a63685afe42f40a5800b6f2d7738"
+     "sha256": "2f80c8d34949f6ea3e5b7546d67b79793463d7f63d4278b0a03153125bc50686"
     },
     {
      "path": "results/ve0/VE0_MANIFEST.json",
      "role": "VE-0 output O",
-     "sha256": "31a572db0b3e9ab85a74fefe88232f1112641d113dc421083d09137d79a0a594"
+     "sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3"
     }
    ],
    "ve0_specification_id": "VE0-FIG-09"
@@ -1229,7 +1428,7 @@
    "bound_evidence_count": 9,
    "build_command": "python -m experiments.ve1.run_ve1",
    "builder_script": "experiments/ve1/figures.py",
-   "builder_sha256": "e568681a005d9e611a002b3e97cd67d34f0f8f9640fafcfe9794a25ea3456469",
+   "builder_sha256": "ec27ea9b5beadb4e6acd1f5f2cc585ffb9019da84af86587086a6dd537f745fd",
    "consumed_evidence_count": 9,
    "consumed_evidence_ids": [
     "EV-CON-v2_04.difference_576k_minus_concat.train_40k",
@@ -1257,17 +1456,19 @@
      "sha256": "0fddada999ab56955955c4a0709e0e78330ee2f52f669a0dcdd7d1a97c3237f5"
     },
     {
-     "content_sha256": "a552ee67ce70797cfc3ebbc4d4b80ce7db6f18c83c33fe14a62347f9d1f4136d",
+     "content_sha256": "aa065da619295cff56a966619b8cc125ca9781a9642e946cd31987893941e3a8",
      "path": "results/ve1/figures/VE1-FIG-A1.data.json",
      "role": "plotted data, one record per drawn value",
-     "sha256": "f025e69342fd4907b3835e4e70221f3f64fcf91574756618f3a13f545baeed17"
+     "sha256": "78edd8cdd930005aeaed62fe99b57c0bf81af73b4c57b41c54b726780bfd9cb5"
     }
    ],
    "placement": "APPENDIX",
-   "repository_head": "d58cd66b0b3e7e64fd49b10b0a0342588df367fd",
+   "repository_head": "f91d0770b6733a0b3eb4f161dd2ca36d60050bbb",
    "source_paths": [
     {
      "path": "results/closure/reconstructed_statistics.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/closure/reconstructed_statistics.json",
      "sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097"
     }
    ],
@@ -1275,82 +1476,322 @@
     {
      "path": "results/ve0/canonical_evidence_inventory.json",
      "role": "VE-0 output A",
-     "sha256": "18eaa5355cf2252f0f74b1090f03404881d526bc2588391a866f4ed6fdd22462"
+     "sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3"
     },
     {
      "path": "results/ve0/canonical_evidence_inventory.csv",
      "role": "VE-0 output A_csv",
-     "sha256": "30e1b82090573758947026407ff4d05b5dcb4e12cde827d0e02040d6787cd9d9"
+     "sha256": "86921381e6fc22b674559b44272e9ba70aaeffafdf600c4a752d5cb6200eee9b"
     },
     {
      "path": "results/ve0/supersession_map.json",
      "role": "VE-0 output C",
-     "sha256": "5eddcfdec886ae3b246fab02c076e523f62a77611916695bfbf5363076ee2d4a"
+     "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
     },
     {
      "path": "results/ve0/claim_ledger.json",
      "role": "VE-0 output D",
-     "sha256": "15e3ffc4a487068e9a556ada04a96e6967dc6d8e9f1364babbc353decca1c94d"
+     "sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7"
     },
     {
      "path": "results/ve0/rq_evidence_matrix.json",
      "role": "VE-0 output E",
-     "sha256": "c8f6d7d99db9f41fd98821dafc880f9b709f9ba8757a53c40b65b8bf23e27b86"
+     "sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d"
     },
     {
      "path": "results/ve0/figure_specifications.json",
      "role": "VE-0 output F",
-     "sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92"
+     "sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c"
     },
     {
      "path": "results/ve0/table_specifications.json",
      "role": "VE-0 output G",
-     "sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0"
+     "sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8"
     },
     {
      "path": "results/ve0/qualitative_protocol.json",
      "role": "VE-0 output H",
-     "sha256": "d15fc69c7a6a4e6721874bf43ae017a105c1a8b3b694b759a88043ff2664b975"
+     "sha256": "c8c5c35bec84da409e9a36612ad07846e2d218aa35351bc7d09340760cd9e895"
     },
     {
      "path": "results/ve0/qualitative_record_schema.json",
      "role": "VE-0 output I",
-     "sha256": "c2f0742c0c936a2a11fb71f5dc364633bda329c632b52744150f047d95d81984"
+     "sha256": "898e0a6bfeddfb37196e0d1e4bfc469606bcd663c5283b6fac931cd0e3de4297"
     },
     {
      "path": "results/ve0/reporting_style_contract.json",
      "role": "VE-0 output J",
-     "sha256": "e2a8767fe477e9ac8a5bf8544c3ecbff19f63f1f8a59c9b7ddaa350221c7fc4c"
+     "sha256": "536cf07aa6bd5f80eb1b843046435804345e7bd1f558ba047866b223aadd5504"
     },
     {
      "path": "results/ve0/provenance_contract.json",
      "role": "VE-0 output K",
-     "sha256": "65e66b78cae76cf713f11073f4847062c0e252c4319b30b3a9d58e63a0689159"
+     "sha256": "4a0c33512194fcd11493d3e05f0a86fc8f752ea6343f698c8da0c630672213ab"
     },
     {
      "path": "results/ve0/efficiency_visualisation_contract.json",
      "role": "VE-0 output L",
-     "sha256": "b39a6c4ae080eebf1c0ed0cb65d01a98f1993d162ade704287c53c298b56902e"
+     "sha256": "c8d221544dca46f55339fcd708e4dd66b9aa1e1e9b130bdf44a2a39871ee9cc4"
     },
     {
      "path": "results/ve0/results_section_mapping.json",
      "role": "VE-0 output M",
-     "sha256": "f2153f7f45c71fdd69a0e96555184d3b2608a63685afe42f40a5800b6f2d7738"
+     "sha256": "2f80c8d34949f6ea3e5b7546d67b79793463d7f63d4278b0a03153125bc50686"
     },
     {
      "path": "results/ve0/VE0_MANIFEST.json",
      "role": "VE-0 output O",
-     "sha256": "31a572db0b3e9ab85a74fefe88232f1112641d113dc421083d09137d79a0a594"
+     "sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3"
     }
    ],
    "ve0_specification_id": "VE0-FIG-A1"
+  },
+  {
+   "artefact_id": "VE1-FIG-A2",
+   "bound_evidence_count": 66,
+   "build_command": "python -m experiments.ve1.run_ve1",
+   "builder_script": "experiments/ve1/figures.py",
+   "builder_sha256": "ec27ea9b5beadb4e6acd1f5f2cc585ffb9019da84af86587086a6dd537f745fd",
+   "consumed_evidence_count": 66,
+   "consumed_evidence_ids": [
+    "EV-SEED-E10.B4.train_250k",
+    "EV-SEED-E10.B4.train_40k",
+    "EV-SEED-E10.B4r.train_250k",
+    "EV-SEED-E10.B4r.train_40k",
+    "EV-SEED-E2.concat.train_250k",
+    "EV-SEED-E2.concat.train_40k",
+    "EV-SEED-E2.fusion.train_250k",
+    "EV-SEED-E2.fusion.train_40k",
+    "EV-SEED-E2.product.train_250k",
+    "EV-SEED-E2.product.train_40k",
+    "EV-SEED-E2.question_only.train_250k",
+    "EV-SEED-E2.question_only.train_40k",
+    "EV-SEED-E3.concat.train_250k",
+    "EV-SEED-E3.concat.train_40k",
+    "EV-SEED-E3.fusion.train_250k",
+    "EV-SEED-E3.fusion.train_40k",
+    "EV-SEED-E3.product.train_250k",
+    "EV-SEED-E3.product.train_40k",
+    "EV-SEED-E3.question_only.train_250k",
+    "EV-SEED-E3.question_only.train_40k",
+    "EV-SEED-E8A.A0p.train_250k",
+    "EV-SEED-E8A.A0p.train_40k",
+    "EV-SEED-E8A.A1.train_250k",
+    "EV-SEED-E8A.A1.train_40k",
+    "EV-SEED-E8A.A1r.train_250k",
+    "EV-SEED-E8A.A1r.train_40k",
+    "EV-SEED-E8B.B1.train_250k",
+    "EV-SEED-E8B.B1.train_40k",
+    "EV-SEED-E8B.B2.train_250k",
+    "EV-SEED-E8B.B2.train_40k",
+    "EV-SEED-E8B.B3.train_250k",
+    "EV-SEED-E8B.B3.train_40k",
+    "EV-SEED-v2_02.concat.train_40k",
+    "EV-SEED-v2_02.fusion.train_40k",
+    "EV-SEED-v2_02.image_only.train_40k",
+    "EV-SEED-v2_02.question_only.train_40k",
+    "EV-SEED-v2_03.concat_wide.train_40k",
+    "EV-SEED-v2_03.fusion_narrow.train_40k",
+    "EV-SEED-v2_04.difference_576k.train_40k",
+    "EV-SEED-v2_04.difference_natural.train_40k",
+    "EV-SEED-v2_04.product_576k.train_40k",
+    "EV-SEED-v2_04.product_natural.train_40k",
+    "EV-SEED-v2_06.concat.shuffled.train_40k",
+    "EV-SEED-v2_06.concat.zeroed.train_40k",
+    "EV-SEED-v2_06.fusion.shuffled.train_40k",
+    "EV-SEED-v2_06.fusion.zeroed.train_40k",
+    "EV-SEED-v2_06.image_only.shuffled.train_40k",
+    "EV-SEED-v2_06.image_only.zeroed.train_40k",
+    "EV-SEED-v2_06.product_576k.shuffled.train_40k",
+    "EV-SEED-v2_06.product_576k.zeroed.train_40k",
+    "EV-SEED-v2_06.question_only.shuffled.train_40k",
+    "EV-SEED-v2_06.question_only.zeroed.train_40k",
+    "EV-SEED-v2_07.concat.train_100k",
+    "EV-SEED-v2_07.concat.train_250k",
+    "EV-SEED-v2_07.concat.train_40k",
+    "EV-SEED-v2_07.fusion.train_100k",
+    "EV-SEED-v2_07.fusion.train_250k",
+    "EV-SEED-v2_07.fusion.train_40k",
+    "EV-SEED-v2_07.product_576k.train_100k",
+    "EV-SEED-v2_07.product_576k.train_250k",
+    "EV-SEED-v2_07.product_576k.train_40k",
+    "EV-SEED-v2_07.question_only.train_100k",
+    "EV-SEED-v2_07.question_only.train_250k",
+    "EV-SEED-v2_07.question_only.train_40k",
+    "EV-SEED-v3_03.reasoner.train_100k",
+    "EV-SEED-v3_03.reasoner.train_250k"
+   ],
+   "consumed_no_evidence_because": null,
+   "deterministic_seed_or_salt": "NOT_APPLICABLE: VE-1 draws no sample and selects nothing",
+   "kind": "figure",
+   "outputs": [
+    {
+     "path": "results/ve1/figures/VE1-FIG-A2.pdf",
+     "role": "vector figure",
+     "sha256": "7c879da1c622937b7fa51dd1c4562b0693d5e0f71dbc21eb7ee4eaad9a2a2bb8"
+    },
+    {
+     "path": "results/ve1/figures/VE1-FIG-A2.png",
+     "role": "preview figure",
+     "sha256": "3f8c36fe12f1537b15fab40d9ce608650ae8d338bfe2a7b84fd3009d2bc00c87"
+    },
+    {
+     "content_sha256": "8206bb02d595cf41b2c0c8e231aac1e17473686fe2c6096472da543b130322a0",
+     "path": "results/ve1/figures/VE1-FIG-A2.data.json",
+     "role": "plotted data, one record per drawn value",
+     "sha256": "81a236bc63b79341046d849b779631638a58859f12cf911a32e5e8eacf2fe32e"
+    }
+   ],
+   "placement": "APPENDIX",
+   "repository_head": "f91d0770b6733a0b3eb4f161dd2ca36d60050bbb",
+   "source_paths": [
+    {
+     "path": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
+     "sha256": "37ffdcd09aa2bcd306ca9b54229a1d0d17ff203b6b0900e09e5f876ad1ed0748"
+    },
+    {
+     "path": "results/experiments/e2_siglip/results.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/e2_siglip/results.json",
+     "sha256": "4c51f60890bdac967915aa96dbad08b676262f2dfa13b5d10bfebd46c5af0a96"
+    },
+    {
+     "path": "results/experiments/e3_vocab1000/results.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/e3_vocab1000/results.json",
+     "sha256": "bbdf65f724ee89cc6078628cd85684ad64a06585b6d34bdf0638b364c2a52be6"
+    },
+    {
+     "path": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
+     "sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562"
+    },
+    {
+     "path": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+     "sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138"
+    },
+    {
+     "path": "results/experiments/v2_02_multiseed/results.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/v2_02_multiseed/results.json",
+     "sha256": "306c1d1bdf31e081c90ab57ef4474b7fc6aeb7c5b34af4697d52a84fd44a8e6d"
+    },
+    {
+     "path": "results/experiments/v2_03_param_match/results.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/v2_03_param_match/results.json",
+     "sha256": "9494f8a706b26dc82a66bb28280411acbd079991f353da8467248ac0c1947f92"
+    },
+    {
+     "path": "results/experiments/v2_04_ablation/results.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/v2_04_ablation/results.json",
+     "sha256": "3e4a7652dd1e7418b1a19244d85017a4442b6638e86c3d85b1c4888cbceed608"
+    },
+    {
+     "path": "results/experiments/v2_06_reliance/results.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/v2_06_reliance/results.json",
+     "sha256": "45763fe56be11d42421a968922ac3212b5d1a21af77ccd87706ed44549b6a66b"
+    },
+    {
+     "path": "results/experiments/v2_07_scaling/results.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/v2_07_scaling/results.json",
+     "sha256": "852206e1b0a404955ed66c5b56a3b9bd7215c15fb35b438dd703cc6c497b79fc"
+    },
+    {
+     "path": "results/experiments/v3_03_scaling/results.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/v3_03_scaling/results.json",
+     "sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339"
+    }
+   ],
+   "ve0_source_artefacts": [
+    {
+     "path": "results/ve0/canonical_evidence_inventory.json",
+     "role": "VE-0 output A",
+     "sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3"
+    },
+    {
+     "path": "results/ve0/canonical_evidence_inventory.csv",
+     "role": "VE-0 output A_csv",
+     "sha256": "86921381e6fc22b674559b44272e9ba70aaeffafdf600c4a752d5cb6200eee9b"
+    },
+    {
+     "path": "results/ve0/supersession_map.json",
+     "role": "VE-0 output C",
+     "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
+    },
+    {
+     "path": "results/ve0/claim_ledger.json",
+     "role": "VE-0 output D",
+     "sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7"
+    },
+    {
+     "path": "results/ve0/rq_evidence_matrix.json",
+     "role": "VE-0 output E",
+     "sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d"
+    },
+    {
+     "path": "results/ve0/figure_specifications.json",
+     "role": "VE-0 output F",
+     "sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c"
+    },
+    {
+     "path": "results/ve0/table_specifications.json",
+     "role": "VE-0 output G",
+     "sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8"
+    },
+    {
+     "path": "results/ve0/qualitative_protocol.json",
+     "role": "VE-0 output H",
+     "sha256": "c8c5c35bec84da409e9a36612ad07846e2d218aa35351bc7d09340760cd9e895"
+    },
+    {
+     "path": "results/ve0/qualitative_record_schema.json",
+     "role": "VE-0 output I",
+     "sha256": "898e0a6bfeddfb37196e0d1e4bfc469606bcd663c5283b6fac931cd0e3de4297"
+    },
+    {
+     "path": "results/ve0/reporting_style_contract.json",
+     "role": "VE-0 output J",
+     "sha256": "536cf07aa6bd5f80eb1b843046435804345e7bd1f558ba047866b223aadd5504"
+    },
+    {
+     "path": "results/ve0/provenance_contract.json",
+     "role": "VE-0 output K",
+     "sha256": "4a0c33512194fcd11493d3e05f0a86fc8f752ea6343f698c8da0c630672213ab"
+    },
+    {
+     "path": "results/ve0/efficiency_visualisation_contract.json",
+     "role": "VE-0 output L",
+     "sha256": "c8d221544dca46f55339fcd708e4dd66b9aa1e1e9b130bdf44a2a39871ee9cc4"
+    },
+    {
+     "path": "results/ve0/results_section_mapping.json",
+     "role": "VE-0 output M",
+     "sha256": "2f80c8d34949f6ea3e5b7546d67b79793463d7f63d4278b0a03153125bc50686"
+    },
+    {
+     "path": "results/ve0/VE0_MANIFEST.json",
+     "role": "VE-0 output O",
+     "sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3"
+    }
+   ],
+   "ve0_specification_id": "VE0-FIG-A2"
   },
   {
    "artefact_id": "VE1-FIG-A3",
    "bound_evidence_count": 16,
    "build_command": "python -m experiments.ve1.run_ve1",
    "builder_script": "experiments/ve1/figures.py",
-   "builder_sha256": "e568681a005d9e611a002b3e97cd67d34f0f8f9640fafcfe9794a25ea3456469",
+   "builder_sha256": "ec27ea9b5beadb4e6acd1f5f2cc585ffb9019da84af86587086a6dd537f745fd",
    "consumed_evidence_count": 16,
    "consumed_evidence_ids": [
     "EV-ARM-e3.concat.train_250k",
@@ -1385,25 +1826,31 @@
      "sha256": "24fba22d761d5a253f5dbdfdbe02c5fd81c68c90b0805e9bef5419265a129720"
     },
     {
-     "content_sha256": "4f781069b605e86b4687791116a110b7bff3cee6e0d6759f1c610b6434f14306",
+     "content_sha256": "cb21b3b6cf1b6c760756641bc1b6dd6805058924dd3c288f2ff6f93635cd425d",
      "path": "results/ve1/figures/VE1-FIG-A3.data.json",
      "role": "plotted data, one record per drawn value",
-     "sha256": "9b798550b4903561e537eb2dcf0e0ff8683f8101e5aafd1eba508856534a2592"
+     "sha256": "f1476ccaf964b5735ae4551423288548789efcd258c3ace72ccf8785b08e63a0"
     }
    ],
    "placement": "APPENDIX",
-   "repository_head": "d58cd66b0b3e7e64fd49b10b0a0342588df367fd",
+   "repository_head": "f91d0770b6733a0b3eb4f161dd2ca36d60050bbb",
    "source_paths": [
     {
      "path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "artifacts/v2_00_protocol/protocol_build_summary.json",
      "sha256": "cfe82a17f0353a9bb6f107f770e59b6b7321ff69ab8d31eda2f49f16d5976e62"
     },
     {
      "path": "results/closure/reconstructed_statistics.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/closure/reconstructed_statistics.json",
      "sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097"
     },
     {
      "path": "results/experiments/e3_vocab1000/results.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/e3_vocab1000/results.json",
      "sha256": "bbdf65f724ee89cc6078628cd85684ad64a06585b6d34bdf0638b364c2a52be6"
     }
    ],
@@ -1412,72 +1859,72 @@
     {
      "path": "results/ve0/canonical_evidence_inventory.json",
      "role": "VE-0 output A",
-     "sha256": "18eaa5355cf2252f0f74b1090f03404881d526bc2588391a866f4ed6fdd22462"
+     "sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3"
     },
     {
      "path": "results/ve0/canonical_evidence_inventory.csv",
      "role": "VE-0 output A_csv",
-     "sha256": "30e1b82090573758947026407ff4d05b5dcb4e12cde827d0e02040d6787cd9d9"
+     "sha256": "86921381e6fc22b674559b44272e9ba70aaeffafdf600c4a752d5cb6200eee9b"
     },
     {
      "path": "results/ve0/supersession_map.json",
      "role": "VE-0 output C",
-     "sha256": "5eddcfdec886ae3b246fab02c076e523f62a77611916695bfbf5363076ee2d4a"
+     "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
     },
     {
      "path": "results/ve0/claim_ledger.json",
      "role": "VE-0 output D",
-     "sha256": "15e3ffc4a487068e9a556ada04a96e6967dc6d8e9f1364babbc353decca1c94d"
+     "sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7"
     },
     {
      "path": "results/ve0/rq_evidence_matrix.json",
      "role": "VE-0 output E",
-     "sha256": "c8f6d7d99db9f41fd98821dafc880f9b709f9ba8757a53c40b65b8bf23e27b86"
+     "sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d"
     },
     {
      "path": "results/ve0/figure_specifications.json",
      "role": "VE-0 output F",
-     "sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92"
+     "sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c"
     },
     {
      "path": "results/ve0/table_specifications.json",
      "role": "VE-0 output G",
-     "sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0"
+     "sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8"
     },
     {
      "path": "results/ve0/qualitative_protocol.json",
      "role": "VE-0 output H",
-     "sha256": "d15fc69c7a6a4e6721874bf43ae017a105c1a8b3b694b759a88043ff2664b975"
+     "sha256": "c8c5c35bec84da409e9a36612ad07846e2d218aa35351bc7d09340760cd9e895"
     },
     {
      "path": "results/ve0/qualitative_record_schema.json",
      "role": "VE-0 output I",
-     "sha256": "c2f0742c0c936a2a11fb71f5dc364633bda329c632b52744150f047d95d81984"
+     "sha256": "898e0a6bfeddfb37196e0d1e4bfc469606bcd663c5283b6fac931cd0e3de4297"
     },
     {
      "path": "results/ve0/reporting_style_contract.json",
      "role": "VE-0 output J",
-     "sha256": "e2a8767fe477e9ac8a5bf8544c3ecbff19f63f1f8a59c9b7ddaa350221c7fc4c"
+     "sha256": "536cf07aa6bd5f80eb1b843046435804345e7bd1f558ba047866b223aadd5504"
     },
     {
      "path": "results/ve0/provenance_contract.json",
      "role": "VE-0 output K",
-     "sha256": "65e66b78cae76cf713f11073f4847062c0e252c4319b30b3a9d58e63a0689159"
+     "sha256": "4a0c33512194fcd11493d3e05f0a86fc8f752ea6343f698c8da0c630672213ab"
     },
     {
      "path": "results/ve0/efficiency_visualisation_contract.json",
      "role": "VE-0 output L",
-     "sha256": "b39a6c4ae080eebf1c0ed0cb65d01a98f1993d162ade704287c53c298b56902e"
+     "sha256": "c8d221544dca46f55339fcd708e4dd66b9aa1e1e9b130bdf44a2a39871ee9cc4"
     },
     {
      "path": "results/ve0/results_section_mapping.json",
      "role": "VE-0 output M",
-     "sha256": "f2153f7f45c71fdd69a0e96555184d3b2608a63685afe42f40a5800b6f2d7738"
+     "sha256": "2f80c8d34949f6ea3e5b7546d67b79793463d7f63d4278b0a03153125bc50686"
     },
     {
      "path": "results/ve0/VE0_MANIFEST.json",
      "role": "VE-0 output O",
-     "sha256": "31a572db0b3e9ab85a74fefe88232f1112641d113dc421083d09137d79a0a594"
+     "sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3"
     }
    ],
    "ve0_specification_id": "VE0-FIG-A3"
@@ -1487,7 +1934,7 @@
    "bound_evidence_count": 56,
    "build_command": "python -m experiments.ve1.run_ve1",
    "builder_script": "experiments/ve1/figures.py",
-   "builder_sha256": "e568681a005d9e611a002b3e97cd67d34f0f8f9640fafcfe9794a25ea3456469",
+   "builder_sha256": "ec27ea9b5beadb4e6acd1f5f2cc585ffb9019da84af86587086a6dd537f745fd",
    "consumed_evidence_count": 42,
    "consumed_evidence_ids": [
     "EV-SLC-v2_02.concat.train_40k.semantic-attr.accuracy",
@@ -1548,21 +1995,25 @@
      "sha256": "d913069ce4a7105affaf8970f49afd5772a86d344067b471a42e74d833fe10ac"
     },
     {
-     "content_sha256": "683bbd6a077529e5059346a9b64d02049da9ac2191469ffdafdf06396d406989",
+     "content_sha256": "a5a7f48aeca0435a6e307f5a6797ca5f374cff101b1c29ac41632e0fed3a9857",
      "path": "results/ve1/figures/VE1-FIG-A4.data.json",
      "role": "plotted data, one record per drawn value",
-     "sha256": "3d6426792c5e58479cf477d3a946980a1e82ff47e5708df1aad2fe65f3829393"
+     "sha256": "0d675d715c79adedf35f652d1abd1906e603d4b57fde3005f3cc1f67943b937d"
     }
    ],
    "placement": "APPENDIX",
-   "repository_head": "d58cd66b0b3e7e64fd49b10b0a0342588df367fd",
+   "repository_head": "f91d0770b6733a0b3eb4f161dd2ca36d60050bbb",
    "source_paths": [
     {
      "path": "results/closure/reconstructed_statistics.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/closure/reconstructed_statistics.json",
      "sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097"
     },
     {
      "path": "results/experiments/v2_05_types/addendum_clustered.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/v2_05_types/addendum_clustered.json",
      "sha256": "86c7969ec36121ca387cd98da3319e1cd1a6ff9ba021241c85f057bfca11f312"
     }
    ],
@@ -1570,72 +2021,72 @@
     {
      "path": "results/ve0/canonical_evidence_inventory.json",
      "role": "VE-0 output A",
-     "sha256": "18eaa5355cf2252f0f74b1090f03404881d526bc2588391a866f4ed6fdd22462"
+     "sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3"
     },
     {
      "path": "results/ve0/canonical_evidence_inventory.csv",
      "role": "VE-0 output A_csv",
-     "sha256": "30e1b82090573758947026407ff4d05b5dcb4e12cde827d0e02040d6787cd9d9"
+     "sha256": "86921381e6fc22b674559b44272e9ba70aaeffafdf600c4a752d5cb6200eee9b"
     },
     {
      "path": "results/ve0/supersession_map.json",
      "role": "VE-0 output C",
-     "sha256": "5eddcfdec886ae3b246fab02c076e523f62a77611916695bfbf5363076ee2d4a"
+     "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
     },
     {
      "path": "results/ve0/claim_ledger.json",
      "role": "VE-0 output D",
-     "sha256": "15e3ffc4a487068e9a556ada04a96e6967dc6d8e9f1364babbc353decca1c94d"
+     "sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7"
     },
     {
      "path": "results/ve0/rq_evidence_matrix.json",
      "role": "VE-0 output E",
-     "sha256": "c8f6d7d99db9f41fd98821dafc880f9b709f9ba8757a53c40b65b8bf23e27b86"
+     "sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d"
     },
     {
      "path": "results/ve0/figure_specifications.json",
      "role": "VE-0 output F",
-     "sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92"
+     "sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c"
     },
     {
      "path": "results/ve0/table_specifications.json",
      "role": "VE-0 output G",
-     "sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0"
+     "sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8"
     },
     {
      "path": "results/ve0/qualitative_protocol.json",
      "role": "VE-0 output H",
-     "sha256": "d15fc69c7a6a4e6721874bf43ae017a105c1a8b3b694b759a88043ff2664b975"
+     "sha256": "c8c5c35bec84da409e9a36612ad07846e2d218aa35351bc7d09340760cd9e895"
     },
     {
      "path": "results/ve0/qualitative_record_schema.json",
      "role": "VE-0 output I",
-     "sha256": "c2f0742c0c936a2a11fb71f5dc364633bda329c632b52744150f047d95d81984"
+     "sha256": "898e0a6bfeddfb37196e0d1e4bfc469606bcd663c5283b6fac931cd0e3de4297"
     },
     {
      "path": "results/ve0/reporting_style_contract.json",
      "role": "VE-0 output J",
-     "sha256": "e2a8767fe477e9ac8a5bf8544c3ecbff19f63f1f8a59c9b7ddaa350221c7fc4c"
+     "sha256": "536cf07aa6bd5f80eb1b843046435804345e7bd1f558ba047866b223aadd5504"
     },
     {
      "path": "results/ve0/provenance_contract.json",
      "role": "VE-0 output K",
-     "sha256": "65e66b78cae76cf713f11073f4847062c0e252c4319b30b3a9d58e63a0689159"
+     "sha256": "4a0c33512194fcd11493d3e05f0a86fc8f752ea6343f698c8da0c630672213ab"
     },
     {
      "path": "results/ve0/efficiency_visualisation_contract.json",
      "role": "VE-0 output L",
-     "sha256": "b39a6c4ae080eebf1c0ed0cb65d01a98f1993d162ade704287c53c298b56902e"
+     "sha256": "c8d221544dca46f55339fcd708e4dd66b9aa1e1e9b130bdf44a2a39871ee9cc4"
     },
     {
      "path": "results/ve0/results_section_mapping.json",
      "role": "VE-0 output M",
-     "sha256": "f2153f7f45c71fdd69a0e96555184d3b2608a63685afe42f40a5800b6f2d7738"
+     "sha256": "2f80c8d34949f6ea3e5b7546d67b79793463d7f63d4278b0a03153125bc50686"
     },
     {
      "path": "results/ve0/VE0_MANIFEST.json",
      "role": "VE-0 output O",
-     "sha256": "31a572db0b3e9ab85a74fefe88232f1112641d113dc421083d09137d79a0a594"
+     "sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3"
     }
    ],
    "ve0_specification_id": "VE0-FIG-A4"
@@ -1645,7 +2096,7 @@
    "bound_evidence_count": 11,
    "build_command": "python -m experiments.ve1.run_ve1",
    "builder_script": "experiments/ve1/figures.py",
-   "builder_sha256": "e568681a005d9e611a002b3e97cd67d34f0f8f9640fafcfe9794a25ea3456469",
+   "builder_sha256": "ec27ea9b5beadb4e6acd1f5f2cc585ffb9019da84af86587086a6dd537f745fd",
    "consumed_evidence_count": 11,
    "consumed_evidence_ids": [
     "EV-EFF-E9.e8b_B1",
@@ -1667,25 +2118,27 @@
     {
      "path": "results/ve1/figures/VE1-FIG-A5.pdf",
      "role": "vector figure",
-     "sha256": "6f85b4fbb74bba4f94a0af942ba31413597cc4e7df5f5381edb3216e2565601d"
+     "sha256": "78e990ee49b055a9be2e5ad9f3ad4fd770caca60d3c6cf36a41a227c048f844d"
     },
     {
      "path": "results/ve1/figures/VE1-FIG-A5.png",
      "role": "preview figure",
-     "sha256": "d374976642292c76db658aa494080a4f71e3bd8883ac72588f6b8b62c1d1b604"
+     "sha256": "6648eecb639d2c49b8c8f53917b6acb9c9498911622574280341155b6e690adf"
     },
     {
-     "content_sha256": "4b20f2227169dc9b63ab4664d94ff1a159cedbe3c19a93a6c5efd3336a72794e",
+     "content_sha256": "3c58429e18764cd4d6c5d643f9a9513986952b3208dccedf6ff4e0813556ee75",
      "path": "results/ve1/figures/VE1-FIG-A5.data.json",
      "role": "plotted data, one record per drawn value",
-     "sha256": "a714c7ae47d806a1b67b39ef3ff084c55173872d696fc1caf2d97228be8cbf02"
+     "sha256": "e08f67ba5db0538b904b38050922122a8a5ff0ec88f17eb1d23111e8a2452b82"
     }
    ],
    "placement": "APPENDIX",
-   "repository_head": "d58cd66b0b3e7e64fd49b10b0a0342588df367fd",
+   "repository_head": "f91d0770b6733a0b3eb4f161dd2ca36d60050bbb",
    "source_paths": [
     {
      "path": "results/experiments/e9_compact_vlm/e9_results.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/e9_compact_vlm/e9_results.json",
      "sha256": "5d42ae9344fa9d7bcd48589645d62b4d0c20db9a3d9d03288bbddd6832ae2caa"
     }
    ],
@@ -1693,72 +2146,72 @@
     {
      "path": "results/ve0/canonical_evidence_inventory.json",
      "role": "VE-0 output A",
-     "sha256": "18eaa5355cf2252f0f74b1090f03404881d526bc2588391a866f4ed6fdd22462"
+     "sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3"
     },
     {
      "path": "results/ve0/canonical_evidence_inventory.csv",
      "role": "VE-0 output A_csv",
-     "sha256": "30e1b82090573758947026407ff4d05b5dcb4e12cde827d0e02040d6787cd9d9"
+     "sha256": "86921381e6fc22b674559b44272e9ba70aaeffafdf600c4a752d5cb6200eee9b"
     },
     {
      "path": "results/ve0/supersession_map.json",
      "role": "VE-0 output C",
-     "sha256": "5eddcfdec886ae3b246fab02c076e523f62a77611916695bfbf5363076ee2d4a"
+     "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
     },
     {
      "path": "results/ve0/claim_ledger.json",
      "role": "VE-0 output D",
-     "sha256": "15e3ffc4a487068e9a556ada04a96e6967dc6d8e9f1364babbc353decca1c94d"
+     "sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7"
     },
     {
      "path": "results/ve0/rq_evidence_matrix.json",
      "role": "VE-0 output E",
-     "sha256": "c8f6d7d99db9f41fd98821dafc880f9b709f9ba8757a53c40b65b8bf23e27b86"
+     "sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d"
     },
     {
      "path": "results/ve0/figure_specifications.json",
      "role": "VE-0 output F",
-     "sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92"
+     "sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c"
     },
     {
      "path": "results/ve0/table_specifications.json",
      "role": "VE-0 output G",
-     "sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0"
+     "sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8"
     },
     {
      "path": "results/ve0/qualitative_protocol.json",
      "role": "VE-0 output H",
-     "sha256": "d15fc69c7a6a4e6721874bf43ae017a105c1a8b3b694b759a88043ff2664b975"
+     "sha256": "c8c5c35bec84da409e9a36612ad07846e2d218aa35351bc7d09340760cd9e895"
     },
     {
      "path": "results/ve0/qualitative_record_schema.json",
      "role": "VE-0 output I",
-     "sha256": "c2f0742c0c936a2a11fb71f5dc364633bda329c632b52744150f047d95d81984"
+     "sha256": "898e0a6bfeddfb37196e0d1e4bfc469606bcd663c5283b6fac931cd0e3de4297"
     },
     {
      "path": "results/ve0/reporting_style_contract.json",
      "role": "VE-0 output J",
-     "sha256": "e2a8767fe477e9ac8a5bf8544c3ecbff19f63f1f8a59c9b7ddaa350221c7fc4c"
+     "sha256": "536cf07aa6bd5f80eb1b843046435804345e7bd1f558ba047866b223aadd5504"
     },
     {
      "path": "results/ve0/provenance_contract.json",
      "role": "VE-0 output K",
-     "sha256": "65e66b78cae76cf713f11073f4847062c0e252c4319b30b3a9d58e63a0689159"
+     "sha256": "4a0c33512194fcd11493d3e05f0a86fc8f752ea6343f698c8da0c630672213ab"
     },
     {
      "path": "results/ve0/efficiency_visualisation_contract.json",
      "role": "VE-0 output L",
-     "sha256": "b39a6c4ae080eebf1c0ed0cb65d01a98f1993d162ade704287c53c298b56902e"
+     "sha256": "c8d221544dca46f55339fcd708e4dd66b9aa1e1e9b130bdf44a2a39871ee9cc4"
     },
     {
      "path": "results/ve0/results_section_mapping.json",
      "role": "VE-0 output M",
-     "sha256": "f2153f7f45c71fdd69a0e96555184d3b2608a63685afe42f40a5800b6f2d7738"
+     "sha256": "2f80c8d34949f6ea3e5b7546d67b79793463d7f63d4278b0a03153125bc50686"
     },
     {
      "path": "results/ve0/VE0_MANIFEST.json",
      "role": "VE-0 output O",
-     "sha256": "31a572db0b3e9ab85a74fefe88232f1112641d113dc421083d09137d79a0a594"
+     "sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3"
     }
    ],
    "ve0_specification_id": "VE0-FIG-A5"
@@ -1768,7 +2221,7 @@
    "bound_evidence_count": 18,
    "build_command": "python -m experiments.ve1.run_ve1",
    "builder_script": "experiments/ve1/tables.py",
-   "builder_sha256": "8ba42a83bbc46fa056eebbd31715b536f3a9f9b05c066e7059b2cc28052a8733",
+   "builder_sha256": "c8c2a91ec60da21aa633b6f6f3d77499bdbceb8d62c0c15a50007cce898b1675",
    "consumed_evidence_count": 18,
    "consumed_evidence_ids": [
     "EV-ARM-v2_02.concat.train_40k",
@@ -1797,29 +2250,33 @@
     {
      "path": "results/ve1/tables/VE1-TAB-01.csv",
      "role": "machine-readable table",
-     "sha256": "313693653dba1ee0332b544ce2efdbb7907c5e91cc4001c65ad3f8e6f51771b2"
+     "sha256": "7e50b88b635ab246bbb672352c2dfeac148a19c61f07554b787fced46cfd6826"
     },
     {
      "path": "results/ve1/tables/VE1-TAB-01.md",
      "role": "rendered table",
-     "sha256": "12f52741dce82fa16947bd20c65441aa4eff3a2e603fff801942ee9e8880a55f"
+     "sha256": "186e252adf6e6866c93b789b22c1ab6bab60667959731af2ed75ea6a0049f129"
     },
     {
-     "content_sha256": "0fa7150ba24fb03abe17be03f65774fdf735e0d1d69891b92286e554fd381f1c",
+     "content_sha256": "c2967455576f4a3f9d1ca56a4e9aecaefcbccef96eb2cb18b2af680ce63cb87d",
      "path": "results/ve1/tables/VE1-TAB-01.json",
      "role": "table record with per-cell evidence identifiers",
-     "sha256": "58d137dd3659b91f33ab922fa4d9910bf15fac9dc68a529bb998b3c9b953d5de"
+     "sha256": "a3231eeeebad7b53b345dc82a251de2a0dcd844bb52394fc4c0eff7341fa49e8"
     }
    ],
    "placement": "MAIN_TEXT",
-   "repository_head": "d58cd66b0b3e7e64fd49b10b0a0342588df367fd",
+   "repository_head": "f91d0770b6733a0b3eb4f161dd2ca36d60050bbb",
    "source_paths": [
     {
      "path": "results/closure/reconstructed_statistics.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/closure/reconstructed_statistics.json",
      "sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097"
     },
     {
      "path": "results/experiments/v2_07_scaling/results.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/v2_07_scaling/results.json",
      "sha256": "852206e1b0a404955ed66c5b56a3b9bd7215c15fb35b438dd703cc6c497b79fc"
     }
    ],
@@ -1827,72 +2284,72 @@
     {
      "path": "results/ve0/canonical_evidence_inventory.json",
      "role": "VE-0 output A",
-     "sha256": "18eaa5355cf2252f0f74b1090f03404881d526bc2588391a866f4ed6fdd22462"
+     "sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3"
     },
     {
      "path": "results/ve0/canonical_evidence_inventory.csv",
      "role": "VE-0 output A_csv",
-     "sha256": "30e1b82090573758947026407ff4d05b5dcb4e12cde827d0e02040d6787cd9d9"
+     "sha256": "86921381e6fc22b674559b44272e9ba70aaeffafdf600c4a752d5cb6200eee9b"
     },
     {
      "path": "results/ve0/supersession_map.json",
      "role": "VE-0 output C",
-     "sha256": "5eddcfdec886ae3b246fab02c076e523f62a77611916695bfbf5363076ee2d4a"
+     "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
     },
     {
      "path": "results/ve0/claim_ledger.json",
      "role": "VE-0 output D",
-     "sha256": "15e3ffc4a487068e9a556ada04a96e6967dc6d8e9f1364babbc353decca1c94d"
+     "sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7"
     },
     {
      "path": "results/ve0/rq_evidence_matrix.json",
      "role": "VE-0 output E",
-     "sha256": "c8f6d7d99db9f41fd98821dafc880f9b709f9ba8757a53c40b65b8bf23e27b86"
+     "sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d"
     },
     {
      "path": "results/ve0/figure_specifications.json",
      "role": "VE-0 output F",
-     "sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92"
+     "sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c"
     },
     {
      "path": "results/ve0/table_specifications.json",
      "role": "VE-0 output G",
-     "sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0"
+     "sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8"
     },
     {
      "path": "results/ve0/qualitative_protocol.json",
      "role": "VE-0 output H",
-     "sha256": "d15fc69c7a6a4e6721874bf43ae017a105c1a8b3b694b759a88043ff2664b975"
+     "sha256": "c8c5c35bec84da409e9a36612ad07846e2d218aa35351bc7d09340760cd9e895"
     },
     {
      "path": "results/ve0/qualitative_record_schema.json",
      "role": "VE-0 output I",
-     "sha256": "c2f0742c0c936a2a11fb71f5dc364633bda329c632b52744150f047d95d81984"
+     "sha256": "898e0a6bfeddfb37196e0d1e4bfc469606bcd663c5283b6fac931cd0e3de4297"
     },
     {
      "path": "results/ve0/reporting_style_contract.json",
      "role": "VE-0 output J",
-     "sha256": "e2a8767fe477e9ac8a5bf8544c3ecbff19f63f1f8a59c9b7ddaa350221c7fc4c"
+     "sha256": "536cf07aa6bd5f80eb1b843046435804345e7bd1f558ba047866b223aadd5504"
     },
     {
      "path": "results/ve0/provenance_contract.json",
      "role": "VE-0 output K",
-     "sha256": "65e66b78cae76cf713f11073f4847062c0e252c4319b30b3a9d58e63a0689159"
+     "sha256": "4a0c33512194fcd11493d3e05f0a86fc8f752ea6343f698c8da0c630672213ab"
     },
     {
      "path": "results/ve0/efficiency_visualisation_contract.json",
      "role": "VE-0 output L",
-     "sha256": "b39a6c4ae080eebf1c0ed0cb65d01a98f1993d162ade704287c53c298b56902e"
+     "sha256": "c8d221544dca46f55339fcd708e4dd66b9aa1e1e9b130bdf44a2a39871ee9cc4"
     },
     {
      "path": "results/ve0/results_section_mapping.json",
      "role": "VE-0 output M",
-     "sha256": "f2153f7f45c71fdd69a0e96555184d3b2608a63685afe42f40a5800b6f2d7738"
+     "sha256": "2f80c8d34949f6ea3e5b7546d67b79793463d7f63d4278b0a03153125bc50686"
     },
     {
      "path": "results/ve0/VE0_MANIFEST.json",
      "role": "VE-0 output O",
-     "sha256": "31a572db0b3e9ab85a74fefe88232f1112641d113dc421083d09137d79a0a594"
+     "sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3"
     }
    ],
    "ve0_specification_id": "VE0-TAB-01"
@@ -1902,7 +2359,7 @@
    "bound_evidence_count": 15,
    "build_command": "python -m experiments.ve1.run_ve1",
    "builder_script": "experiments/ve1/tables.py",
-   "builder_sha256": "8ba42a83bbc46fa056eebbd31715b536f3a9f9b05c066e7059b2cc28052a8733",
+   "builder_sha256": "c8c2a91ec60da21aa633b6f6f3d77499bdbceb8d62c0c15a50007cce898b1675",
    "consumed_evidence_count": 15,
    "consumed_evidence_ids": [
     "EV-CON-v2_02.concat_minus_question_only.train_40k",
@@ -1928,25 +2385,27 @@
     {
      "path": "results/ve1/tables/VE1-TAB-02.csv",
      "role": "machine-readable table",
-     "sha256": "b9e98df1614715547e8600bdd374ed48eff5c005fd2738ff4bc9c138ff475b48"
+     "sha256": "849d2f5a64e4864aeef0960f4cea9aa774a83d222d15fdec40429c580a51d672"
     },
     {
      "path": "results/ve1/tables/VE1-TAB-02.md",
      "role": "rendered table",
-     "sha256": "88b8cc7bd78b98c1562a05071fe4bb2d01563297bc50136e8858957b343de522"
+     "sha256": "72af32da85a626630f59f4c7623d53b4da4e23a2a8ba4a7420b3fb8356e6c043"
     },
     {
-     "content_sha256": "199b98c7260cc62522afcc0bd3aa4401c9640db404d7864ad77c614c5702abc7",
+     "content_sha256": "65ee4b0b2b26ae35a5ec6864e5e5b3b1ccfe851b54a2763584faf384129edc0d",
      "path": "results/ve1/tables/VE1-TAB-02.json",
      "role": "table record with per-cell evidence identifiers",
-     "sha256": "13dde23d71183507c60197d4515ac02bace82b90fb6e1d51991dc90b1310c7ea"
+     "sha256": "cf3995f40ea7878bd0d951a5bb92f637303fec71ccd8cce986aed4d2ceb6b0eb"
     }
    ],
    "placement": "MAIN_TEXT",
-   "repository_head": "d58cd66b0b3e7e64fd49b10b0a0342588df367fd",
+   "repository_head": "f91d0770b6733a0b3eb4f161dd2ca36d60050bbb",
    "source_paths": [
     {
      "path": "results/closure/reconstructed_statistics.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/closure/reconstructed_statistics.json",
      "sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097"
     }
    ],
@@ -1954,72 +2413,72 @@
     {
      "path": "results/ve0/canonical_evidence_inventory.json",
      "role": "VE-0 output A",
-     "sha256": "18eaa5355cf2252f0f74b1090f03404881d526bc2588391a866f4ed6fdd22462"
+     "sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3"
     },
     {
      "path": "results/ve0/canonical_evidence_inventory.csv",
      "role": "VE-0 output A_csv",
-     "sha256": "30e1b82090573758947026407ff4d05b5dcb4e12cde827d0e02040d6787cd9d9"
+     "sha256": "86921381e6fc22b674559b44272e9ba70aaeffafdf600c4a752d5cb6200eee9b"
     },
     {
      "path": "results/ve0/supersession_map.json",
      "role": "VE-0 output C",
-     "sha256": "5eddcfdec886ae3b246fab02c076e523f62a77611916695bfbf5363076ee2d4a"
+     "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
     },
     {
      "path": "results/ve0/claim_ledger.json",
      "role": "VE-0 output D",
-     "sha256": "15e3ffc4a487068e9a556ada04a96e6967dc6d8e9f1364babbc353decca1c94d"
+     "sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7"
     },
     {
      "path": "results/ve0/rq_evidence_matrix.json",
      "role": "VE-0 output E",
-     "sha256": "c8f6d7d99db9f41fd98821dafc880f9b709f9ba8757a53c40b65b8bf23e27b86"
+     "sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d"
     },
     {
      "path": "results/ve0/figure_specifications.json",
      "role": "VE-0 output F",
-     "sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92"
+     "sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c"
     },
     {
      "path": "results/ve0/table_specifications.json",
      "role": "VE-0 output G",
-     "sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0"
+     "sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8"
     },
     {
      "path": "results/ve0/qualitative_protocol.json",
      "role": "VE-0 output H",
-     "sha256": "d15fc69c7a6a4e6721874bf43ae017a105c1a8b3b694b759a88043ff2664b975"
+     "sha256": "c8c5c35bec84da409e9a36612ad07846e2d218aa35351bc7d09340760cd9e895"
     },
     {
      "path": "results/ve0/qualitative_record_schema.json",
      "role": "VE-0 output I",
-     "sha256": "c2f0742c0c936a2a11fb71f5dc364633bda329c632b52744150f047d95d81984"
+     "sha256": "898e0a6bfeddfb37196e0d1e4bfc469606bcd663c5283b6fac931cd0e3de4297"
     },
     {
      "path": "results/ve0/reporting_style_contract.json",
      "role": "VE-0 output J",
-     "sha256": "e2a8767fe477e9ac8a5bf8544c3ecbff19f63f1f8a59c9b7ddaa350221c7fc4c"
+     "sha256": "536cf07aa6bd5f80eb1b843046435804345e7bd1f558ba047866b223aadd5504"
     },
     {
      "path": "results/ve0/provenance_contract.json",
      "role": "VE-0 output K",
-     "sha256": "65e66b78cae76cf713f11073f4847062c0e252c4319b30b3a9d58e63a0689159"
+     "sha256": "4a0c33512194fcd11493d3e05f0a86fc8f752ea6343f698c8da0c630672213ab"
     },
     {
      "path": "results/ve0/efficiency_visualisation_contract.json",
      "role": "VE-0 output L",
-     "sha256": "b39a6c4ae080eebf1c0ed0cb65d01a98f1993d162ade704287c53c298b56902e"
+     "sha256": "c8d221544dca46f55339fcd708e4dd66b9aa1e1e9b130bdf44a2a39871ee9cc4"
     },
     {
      "path": "results/ve0/results_section_mapping.json",
      "role": "VE-0 output M",
-     "sha256": "f2153f7f45c71fdd69a0e96555184d3b2608a63685afe42f40a5800b6f2d7738"
+     "sha256": "2f80c8d34949f6ea3e5b7546d67b79793463d7f63d4278b0a03153125bc50686"
     },
     {
      "path": "results/ve0/VE0_MANIFEST.json",
      "role": "VE-0 output O",
-     "sha256": "31a572db0b3e9ab85a74fefe88232f1112641d113dc421083d09137d79a0a594"
+     "sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3"
     }
    ],
    "ve0_specification_id": "VE0-TAB-02"
@@ -2029,7 +2488,7 @@
    "bound_evidence_count": 5,
    "build_command": "python -m experiments.ve1.run_ve1",
    "builder_script": "experiments/ve1/tables.py",
-   "builder_sha256": "8ba42a83bbc46fa056eebbd31715b536f3a9f9b05c066e7059b2cc28052a8733",
+   "builder_sha256": "c8c2a91ec60da21aa633b6f6f3d77499bdbceb8d62c0c15a50007cce898b1675",
    "consumed_evidence_count": 5,
    "consumed_evidence_ids": [
     "EV-CON-E10.scale_effect_B4",
@@ -2050,24 +2509,28 @@
     {
      "path": "results/ve1/tables/VE1-TAB-03.md",
      "role": "rendered table",
-     "sha256": "728847d1859bc8aeb0f4ffe0df19bfe92a99d90c7a92879005d2aade85cdd83e"
+     "sha256": "13ebf2d593686ddbe76b3555d415efd1aa2db6c7ddc5738cd2a20506e7c6a3bc"
     },
     {
-     "content_sha256": "a19fb07671392f959956dd11967b55ffe75b0d75d1cd248d33a713d9a662de56",
+     "content_sha256": "deb0f98469bab4f751a1d0728913dc71aad7abdd0e5f0738d70798f8c67de5bd",
      "path": "results/ve1/tables/VE1-TAB-03.json",
      "role": "table record with per-cell evidence identifiers",
-     "sha256": "ef2a96d1623b62812b22a0cde471ecfd503ba5c916d3ef5b12ac8223c307f96b"
+     "sha256": "c079ce503947e40aad1b8181057f1b7766a0f1208bc8957225a3fc1c7b7a87c1"
     }
    ],
    "placement": "MAIN_TEXT",
-   "repository_head": "d58cd66b0b3e7e64fd49b10b0a0342588df367fd",
+   "repository_head": "f91d0770b6733a0b3eb4f161dd2ca36d60050bbb",
    "source_paths": [
     {
      "path": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
      "sha256": "37ffdcd09aa2bcd306ca9b54229a1d0d17ff203b6b0900e09e5f876ad1ed0748"
     },
     {
      "path": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
      "sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138"
     }
    ],
@@ -2075,72 +2538,72 @@
     {
      "path": "results/ve0/canonical_evidence_inventory.json",
      "role": "VE-0 output A",
-     "sha256": "18eaa5355cf2252f0f74b1090f03404881d526bc2588391a866f4ed6fdd22462"
+     "sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3"
     },
     {
      "path": "results/ve0/canonical_evidence_inventory.csv",
      "role": "VE-0 output A_csv",
-     "sha256": "30e1b82090573758947026407ff4d05b5dcb4e12cde827d0e02040d6787cd9d9"
+     "sha256": "86921381e6fc22b674559b44272e9ba70aaeffafdf600c4a752d5cb6200eee9b"
     },
     {
      "path": "results/ve0/supersession_map.json",
      "role": "VE-0 output C",
-     "sha256": "5eddcfdec886ae3b246fab02c076e523f62a77611916695bfbf5363076ee2d4a"
+     "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
     },
     {
      "path": "results/ve0/claim_ledger.json",
      "role": "VE-0 output D",
-     "sha256": "15e3ffc4a487068e9a556ada04a96e6967dc6d8e9f1364babbc353decca1c94d"
+     "sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7"
     },
     {
      "path": "results/ve0/rq_evidence_matrix.json",
      "role": "VE-0 output E",
-     "sha256": "c8f6d7d99db9f41fd98821dafc880f9b709f9ba8757a53c40b65b8bf23e27b86"
+     "sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d"
     },
     {
      "path": "results/ve0/figure_specifications.json",
      "role": "VE-0 output F",
-     "sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92"
+     "sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c"
     },
     {
      "path": "results/ve0/table_specifications.json",
      "role": "VE-0 output G",
-     "sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0"
+     "sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8"
     },
     {
      "path": "results/ve0/qualitative_protocol.json",
      "role": "VE-0 output H",
-     "sha256": "d15fc69c7a6a4e6721874bf43ae017a105c1a8b3b694b759a88043ff2664b975"
+     "sha256": "c8c5c35bec84da409e9a36612ad07846e2d218aa35351bc7d09340760cd9e895"
     },
     {
      "path": "results/ve0/qualitative_record_schema.json",
      "role": "VE-0 output I",
-     "sha256": "c2f0742c0c936a2a11fb71f5dc364633bda329c632b52744150f047d95d81984"
+     "sha256": "898e0a6bfeddfb37196e0d1e4bfc469606bcd663c5283b6fac931cd0e3de4297"
     },
     {
      "path": "results/ve0/reporting_style_contract.json",
      "role": "VE-0 output J",
-     "sha256": "e2a8767fe477e9ac8a5bf8544c3ecbff19f63f1f8a59c9b7ddaa350221c7fc4c"
+     "sha256": "536cf07aa6bd5f80eb1b843046435804345e7bd1f558ba047866b223aadd5504"
     },
     {
      "path": "results/ve0/provenance_contract.json",
      "role": "VE-0 output K",
-     "sha256": "65e66b78cae76cf713f11073f4847062c0e252c4319b30b3a9d58e63a0689159"
+     "sha256": "4a0c33512194fcd11493d3e05f0a86fc8f752ea6343f698c8da0c630672213ab"
     },
     {
      "path": "results/ve0/efficiency_visualisation_contract.json",
      "role": "VE-0 output L",
-     "sha256": "b39a6c4ae080eebf1c0ed0cb65d01a98f1993d162ade704287c53c298b56902e"
+     "sha256": "c8d221544dca46f55339fcd708e4dd66b9aa1e1e9b130bdf44a2a39871ee9cc4"
     },
     {
      "path": "results/ve0/results_section_mapping.json",
      "role": "VE-0 output M",
-     "sha256": "f2153f7f45c71fdd69a0e96555184d3b2608a63685afe42f40a5800b6f2d7738"
+     "sha256": "2f80c8d34949f6ea3e5b7546d67b79793463d7f63d4278b0a03153125bc50686"
     },
     {
      "path": "results/ve0/VE0_MANIFEST.json",
      "role": "VE-0 output O",
-     "sha256": "31a572db0b3e9ab85a74fefe88232f1112641d113dc421083d09137d79a0a594"
+     "sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3"
     }
    ],
    "ve0_specification_id": "VE0-TAB-03"
@@ -2150,7 +2613,7 @@
    "bound_evidence_count": 16,
    "build_command": "python -m experiments.ve1.run_ve1",
    "builder_script": "experiments/ve1/tables.py",
-   "builder_sha256": "8ba42a83bbc46fa056eebbd31715b536f3a9f9b05c066e7059b2cc28052a8733",
+   "builder_sha256": "c8c2a91ec60da21aa633b6f6f3d77499bdbceb8d62c0c15a50007cce898b1675",
    "consumed_evidence_count": 16,
    "consumed_evidence_ids": [
     "EV-SEED-E10.B4.train_250k",
@@ -2177,33 +2640,39 @@
     {
      "path": "results/ve1/tables/VE1-TAB-04.csv",
      "role": "machine-readable table",
-     "sha256": "4576e0876e78cd7e431a97b6b42985b6cccb46153455fcf9cf7cde4346415727"
+     "sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131"
     },
     {
      "path": "results/ve1/tables/VE1-TAB-04.md",
      "role": "rendered table",
-     "sha256": "b67baec31fba7d609e376b1c23e574ebc5309df554e8d66e61e7064abaca7a3e"
+     "sha256": "48907f8eb8da3cbea791f3aa942e08d02e9844ac64d51c31ab0bc15d48cf13d4"
     },
     {
-     "content_sha256": "e98cdf80e73ecb75ee0c6f3e5080e092100b409540728d7790148dd3ce8c6e22",
+     "content_sha256": "fbf65305059912fc1bfd7d1dadab6aa698d5e046b0e30a09fe3e319c86ed45b3",
      "path": "results/ve1/tables/VE1-TAB-04.json",
      "role": "table record with per-cell evidence identifiers",
-     "sha256": "e6fe9be95771a84334ed7816019779cf69c8b591c0b571e1490ed88a16621c32"
+     "sha256": "9e4fd41977f889cf5fd9be0edf1ebd9f8c230948267bdce73815381b4160d309"
     }
    ],
    "placement": "MAIN_TEXT",
-   "repository_head": "d58cd66b0b3e7e64fd49b10b0a0342588df367fd",
+   "repository_head": "f91d0770b6733a0b3eb4f161dd2ca36d60050bbb",
    "source_paths": [
     {
      "path": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
      "sha256": "37ffdcd09aa2bcd306ca9b54229a1d0d17ff203b6b0900e09e5f876ad1ed0748"
     },
     {
      "path": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
      "sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562"
     },
     {
      "path": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
      "sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138"
     }
    ],
@@ -2211,72 +2680,72 @@
     {
      "path": "results/ve0/canonical_evidence_inventory.json",
      "role": "VE-0 output A",
-     "sha256": "18eaa5355cf2252f0f74b1090f03404881d526bc2588391a866f4ed6fdd22462"
+     "sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3"
     },
     {
      "path": "results/ve0/canonical_evidence_inventory.csv",
      "role": "VE-0 output A_csv",
-     "sha256": "30e1b82090573758947026407ff4d05b5dcb4e12cde827d0e02040d6787cd9d9"
+     "sha256": "86921381e6fc22b674559b44272e9ba70aaeffafdf600c4a752d5cb6200eee9b"
     },
     {
      "path": "results/ve0/supersession_map.json",
      "role": "VE-0 output C",
-     "sha256": "5eddcfdec886ae3b246fab02c076e523f62a77611916695bfbf5363076ee2d4a"
+     "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
     },
     {
      "path": "results/ve0/claim_ledger.json",
      "role": "VE-0 output D",
-     "sha256": "15e3ffc4a487068e9a556ada04a96e6967dc6d8e9f1364babbc353decca1c94d"
+     "sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7"
     },
     {
      "path": "results/ve0/rq_evidence_matrix.json",
      "role": "VE-0 output E",
-     "sha256": "c8f6d7d99db9f41fd98821dafc880f9b709f9ba8757a53c40b65b8bf23e27b86"
+     "sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d"
     },
     {
      "path": "results/ve0/figure_specifications.json",
      "role": "VE-0 output F",
-     "sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92"
+     "sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c"
     },
     {
      "path": "results/ve0/table_specifications.json",
      "role": "VE-0 output G",
-     "sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0"
+     "sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8"
     },
     {
      "path": "results/ve0/qualitative_protocol.json",
      "role": "VE-0 output H",
-     "sha256": "d15fc69c7a6a4e6721874bf43ae017a105c1a8b3b694b759a88043ff2664b975"
+     "sha256": "c8c5c35bec84da409e9a36612ad07846e2d218aa35351bc7d09340760cd9e895"
     },
     {
      "path": "results/ve0/qualitative_record_schema.json",
      "role": "VE-0 output I",
-     "sha256": "c2f0742c0c936a2a11fb71f5dc364633bda329c632b52744150f047d95d81984"
+     "sha256": "898e0a6bfeddfb37196e0d1e4bfc469606bcd663c5283b6fac931cd0e3de4297"
     },
     {
      "path": "results/ve0/reporting_style_contract.json",
      "role": "VE-0 output J",
-     "sha256": "e2a8767fe477e9ac8a5bf8544c3ecbff19f63f1f8a59c9b7ddaa350221c7fc4c"
+     "sha256": "536cf07aa6bd5f80eb1b843046435804345e7bd1f558ba047866b223aadd5504"
     },
     {
      "path": "results/ve0/provenance_contract.json",
      "role": "VE-0 output K",
-     "sha256": "65e66b78cae76cf713f11073f4847062c0e252c4319b30b3a9d58e63a0689159"
+     "sha256": "4a0c33512194fcd11493d3e05f0a86fc8f752ea6343f698c8da0c630672213ab"
     },
     {
      "path": "results/ve0/efficiency_visualisation_contract.json",
      "role": "VE-0 output L",
-     "sha256": "b39a6c4ae080eebf1c0ed0cb65d01a98f1993d162ade704287c53c298b56902e"
+     "sha256": "c8d221544dca46f55339fcd708e4dd66b9aa1e1e9b130bdf44a2a39871ee9cc4"
     },
     {
      "path": "results/ve0/results_section_mapping.json",
      "role": "VE-0 output M",
-     "sha256": "f2153f7f45c71fdd69a0e96555184d3b2608a63685afe42f40a5800b6f2d7738"
+     "sha256": "2f80c8d34949f6ea3e5b7546d67b79793463d7f63d4278b0a03153125bc50686"
     },
     {
      "path": "results/ve0/VE0_MANIFEST.json",
      "role": "VE-0 output O",
-     "sha256": "31a572db0b3e9ab85a74fefe88232f1112641d113dc421083d09137d79a0a594"
+     "sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3"
     }
    ],
    "ve0_specification_id": "VE0-TAB-04"
@@ -2286,7 +2755,7 @@
    "bound_evidence_count": 7,
    "build_command": "python -m experiments.ve1.run_ve1",
    "builder_script": "experiments/ve1/tables.py",
-   "builder_sha256": "8ba42a83bbc46fa056eebbd31715b536f3a9f9b05c066e7059b2cc28052a8733",
+   "builder_sha256": "c8c2a91ec60da21aa633b6f6f3d77499bdbceb8d62c0c15a50007cce898b1675",
    "consumed_evidence_count": 7,
    "consumed_evidence_ids": [
     "EV-CON-E10.difference_in_differences",
@@ -2304,33 +2773,39 @@
     {
      "path": "results/ve1/tables/VE1-TAB-05.csv",
      "role": "machine-readable table",
-     "sha256": "d39952b80078cb25d6a3ba89ad98872ff7257acc4f3736a03185d9bbd4ca68f8"
+     "sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137"
     },
     {
      "path": "results/ve1/tables/VE1-TAB-05.md",
      "role": "rendered table",
-     "sha256": "5f833e94afc201c711404ce4e2d4ab0f6adab2c66bf65796e06c989c266ef1eb"
+     "sha256": "590978405f720df9f4e79269921f75aac67f90a0e9f80df4ec9e3945c0df061f"
     },
     {
-     "content_sha256": "4015cc5dd25a65ea4fe209ade9132f9cb6562aef2799628c95dee9c7d95af111",
+     "content_sha256": "82c3d02c8bd7ec13425c8583b198c0de0a5551ffa147e72f7204f432fba30801",
      "path": "results/ve1/tables/VE1-TAB-05.json",
      "role": "table record with per-cell evidence identifiers",
-     "sha256": "052502f092fb2940ef0a9e3f14cf12ae92ebbf6e570fdcaca5a86eac958c5cfb"
+     "sha256": "90ac1e58e9f9cf7618f5d976b8d3c98c7b99f2827cbc5aadb0e6d6d6601cb21e"
     }
    ],
    "placement": "MAIN_TEXT",
-   "repository_head": "d58cd66b0b3e7e64fd49b10b0a0342588df367fd",
+   "repository_head": "f91d0770b6733a0b3eb4f161dd2ca36d60050bbb",
    "source_paths": [
     {
      "path": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
      "sha256": "37ffdcd09aa2bcd306ca9b54229a1d0d17ff203b6b0900e09e5f876ad1ed0748"
     },
     {
      "path": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
      "sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562"
     },
     {
      "path": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
      "sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138"
     }
    ],
@@ -2338,72 +2813,72 @@
     {
      "path": "results/ve0/canonical_evidence_inventory.json",
      "role": "VE-0 output A",
-     "sha256": "18eaa5355cf2252f0f74b1090f03404881d526bc2588391a866f4ed6fdd22462"
+     "sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3"
     },
     {
      "path": "results/ve0/canonical_evidence_inventory.csv",
      "role": "VE-0 output A_csv",
-     "sha256": "30e1b82090573758947026407ff4d05b5dcb4e12cde827d0e02040d6787cd9d9"
+     "sha256": "86921381e6fc22b674559b44272e9ba70aaeffafdf600c4a752d5cb6200eee9b"
     },
     {
      "path": "results/ve0/supersession_map.json",
      "role": "VE-0 output C",
-     "sha256": "5eddcfdec886ae3b246fab02c076e523f62a77611916695bfbf5363076ee2d4a"
+     "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
     },
     {
      "path": "results/ve0/claim_ledger.json",
      "role": "VE-0 output D",
-     "sha256": "15e3ffc4a487068e9a556ada04a96e6967dc6d8e9f1364babbc353decca1c94d"
+     "sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7"
     },
     {
      "path": "results/ve0/rq_evidence_matrix.json",
      "role": "VE-0 output E",
-     "sha256": "c8f6d7d99db9f41fd98821dafc880f9b709f9ba8757a53c40b65b8bf23e27b86"
+     "sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d"
     },
     {
      "path": "results/ve0/figure_specifications.json",
      "role": "VE-0 output F",
-     "sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92"
+     "sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c"
     },
     {
      "path": "results/ve0/table_specifications.json",
      "role": "VE-0 output G",
-     "sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0"
+     "sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8"
     },
     {
      "path": "results/ve0/qualitative_protocol.json",
      "role": "VE-0 output H",
-     "sha256": "d15fc69c7a6a4e6721874bf43ae017a105c1a8b3b694b759a88043ff2664b975"
+     "sha256": "c8c5c35bec84da409e9a36612ad07846e2d218aa35351bc7d09340760cd9e895"
     },
     {
      "path": "results/ve0/qualitative_record_schema.json",
      "role": "VE-0 output I",
-     "sha256": "c2f0742c0c936a2a11fb71f5dc364633bda329c632b52744150f047d95d81984"
+     "sha256": "898e0a6bfeddfb37196e0d1e4bfc469606bcd663c5283b6fac931cd0e3de4297"
     },
     {
      "path": "results/ve0/reporting_style_contract.json",
      "role": "VE-0 output J",
-     "sha256": "e2a8767fe477e9ac8a5bf8544c3ecbff19f63f1f8a59c9b7ddaa350221c7fc4c"
+     "sha256": "536cf07aa6bd5f80eb1b843046435804345e7bd1f558ba047866b223aadd5504"
     },
     {
      "path": "results/ve0/provenance_contract.json",
      "role": "VE-0 output K",
-     "sha256": "65e66b78cae76cf713f11073f4847062c0e252c4319b30b3a9d58e63a0689159"
+     "sha256": "4a0c33512194fcd11493d3e05f0a86fc8f752ea6343f698c8da0c630672213ab"
     },
     {
      "path": "results/ve0/efficiency_visualisation_contract.json",
      "role": "VE-0 output L",
-     "sha256": "b39a6c4ae080eebf1c0ed0cb65d01a98f1993d162ade704287c53c298b56902e"
+     "sha256": "c8d221544dca46f55339fcd708e4dd66b9aa1e1e9b130bdf44a2a39871ee9cc4"
     },
     {
      "path": "results/ve0/results_section_mapping.json",
      "role": "VE-0 output M",
-     "sha256": "f2153f7f45c71fdd69a0e96555184d3b2608a63685afe42f40a5800b6f2d7738"
+     "sha256": "2f80c8d34949f6ea3e5b7546d67b79793463d7f63d4278b0a03153125bc50686"
     },
     {
      "path": "results/ve0/VE0_MANIFEST.json",
      "role": "VE-0 output O",
-     "sha256": "31a572db0b3e9ab85a74fefe88232f1112641d113dc421083d09137d79a0a594"
+     "sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3"
     }
    ],
    "ve0_specification_id": "VE0-TAB-05"
@@ -2413,7 +2888,7 @@
    "bound_evidence_count": 36,
    "build_command": "python -m experiments.ve1.run_ve1",
    "builder_script": "experiments/ve1/tables.py",
-   "builder_sha256": "8ba42a83bbc46fa056eebbd31715b536f3a9f9b05c066e7059b2cc28052a8733",
+   "builder_sha256": "c8c2a91ec60da21aa633b6f6f3d77499bdbceb8d62c0c15a50007cce898b1675",
    "consumed_evidence_count": 36,
    "consumed_evidence_ids": [
     "EV-EFF-E7a.e7a_additive_pipeline_sums",
@@ -2460,33 +2935,39 @@
     {
      "path": "results/ve1/tables/VE1-TAB-06.csv",
      "role": "machine-readable table",
-     "sha256": "5c7a2edf6516635ab4947f338e6ae4d5b51fb1e83f76e4295941c5864854ec72"
+     "sha256": "06b7b61eb82c129b21d57d8a166d79712764d8074c8966cd1044e0e143097781"
     },
     {
      "path": "results/ve1/tables/VE1-TAB-06.md",
      "role": "rendered table",
-     "sha256": "4a68a86210f8c9d84eb36d6e2094c4e9e6d58c96455b73f50f172db3dbf9e4a0"
+     "sha256": "45e90b63eed63a9833c4dca484a00d01ba567eb2a243aa4c424d2634447a0fd4"
     },
     {
-     "content_sha256": "d77622fc60dff86d1afa991a6d111028b23a6068968b38e155dda77d233316f5",
+     "content_sha256": "5d6840acf903aafa26597c30d3aae18056d006ea976afc77c1834d853c4d8d3c",
      "path": "results/ve1/tables/VE1-TAB-06.json",
      "role": "table record with per-cell evidence identifiers",
-     "sha256": "d131ae3872bc0157107242121a00eeed964221461302cb514d84cc33c7b913f0"
+     "sha256": "45ab5949a2250458fd7a8495d9b871ef40958c4f863ee35cbf8d588c828b283d"
     }
    ],
    "placement": "MAIN_TEXT",
-   "repository_head": "d58cd66b0b3e7e64fd49b10b0a0342588df367fd",
+   "repository_head": "f91d0770b6733a0b3eb4f161dd2ca36d60050bbb",
    "source_paths": [
     {
      "path": "results/experiments/e7a_efficiency/results.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/e7a_efficiency/results.json",
      "sha256": "368ba5c2a149953193cf237bdf77023c17b244540ef7b9bfac55cb5a7fdc1a85"
     },
     {
      "path": "results/experiments/e7b_serial_efficiency/e7b_results.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/e7b_serial_efficiency/e7b_results.json",
      "sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4"
     },
     {
      "path": "results/experiments/e9_compact_vlm/e9_results.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/e9_compact_vlm/e9_results.json",
      "sha256": "5d42ae9344fa9d7bcd48589645d62b4d0c20db9a3d9d03288bbddd6832ae2caa"
     }
    ],
@@ -2494,72 +2975,72 @@
     {
      "path": "results/ve0/canonical_evidence_inventory.json",
      "role": "VE-0 output A",
-     "sha256": "18eaa5355cf2252f0f74b1090f03404881d526bc2588391a866f4ed6fdd22462"
+     "sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3"
     },
     {
      "path": "results/ve0/canonical_evidence_inventory.csv",
      "role": "VE-0 output A_csv",
-     "sha256": "30e1b82090573758947026407ff4d05b5dcb4e12cde827d0e02040d6787cd9d9"
+     "sha256": "86921381e6fc22b674559b44272e9ba70aaeffafdf600c4a752d5cb6200eee9b"
     },
     {
      "path": "results/ve0/supersession_map.json",
      "role": "VE-0 output C",
-     "sha256": "5eddcfdec886ae3b246fab02c076e523f62a77611916695bfbf5363076ee2d4a"
+     "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
     },
     {
      "path": "results/ve0/claim_ledger.json",
      "role": "VE-0 output D",
-     "sha256": "15e3ffc4a487068e9a556ada04a96e6967dc6d8e9f1364babbc353decca1c94d"
+     "sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7"
     },
     {
      "path": "results/ve0/rq_evidence_matrix.json",
      "role": "VE-0 output E",
-     "sha256": "c8f6d7d99db9f41fd98821dafc880f9b709f9ba8757a53c40b65b8bf23e27b86"
+     "sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d"
     },
     {
      "path": "results/ve0/figure_specifications.json",
      "role": "VE-0 output F",
-     "sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92"
+     "sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c"
     },
     {
      "path": "results/ve0/table_specifications.json",
      "role": "VE-0 output G",
-     "sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0"
+     "sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8"
     },
     {
      "path": "results/ve0/qualitative_protocol.json",
      "role": "VE-0 output H",
-     "sha256": "d15fc69c7a6a4e6721874bf43ae017a105c1a8b3b694b759a88043ff2664b975"
+     "sha256": "c8c5c35bec84da409e9a36612ad07846e2d218aa35351bc7d09340760cd9e895"
     },
     {
      "path": "results/ve0/qualitative_record_schema.json",
      "role": "VE-0 output I",
-     "sha256": "c2f0742c0c936a2a11fb71f5dc364633bda329c632b52744150f047d95d81984"
+     "sha256": "898e0a6bfeddfb37196e0d1e4bfc469606bcd663c5283b6fac931cd0e3de4297"
     },
     {
      "path": "results/ve0/reporting_style_contract.json",
      "role": "VE-0 output J",
-     "sha256": "e2a8767fe477e9ac8a5bf8544c3ecbff19f63f1f8a59c9b7ddaa350221c7fc4c"
+     "sha256": "536cf07aa6bd5f80eb1b843046435804345e7bd1f558ba047866b223aadd5504"
     },
     {
      "path": "results/ve0/provenance_contract.json",
      "role": "VE-0 output K",
-     "sha256": "65e66b78cae76cf713f11073f4847062c0e252c4319b30b3a9d58e63a0689159"
+     "sha256": "4a0c33512194fcd11493d3e05f0a86fc8f752ea6343f698c8da0c630672213ab"
     },
     {
      "path": "results/ve0/efficiency_visualisation_contract.json",
      "role": "VE-0 output L",
-     "sha256": "b39a6c4ae080eebf1c0ed0cb65d01a98f1993d162ade704287c53c298b56902e"
+     "sha256": "c8d221544dca46f55339fcd708e4dd66b9aa1e1e9b130bdf44a2a39871ee9cc4"
     },
     {
      "path": "results/ve0/results_section_mapping.json",
      "role": "VE-0 output M",
-     "sha256": "f2153f7f45c71fdd69a0e96555184d3b2608a63685afe42f40a5800b6f2d7738"
+     "sha256": "2f80c8d34949f6ea3e5b7546d67b79793463d7f63d4278b0a03153125bc50686"
     },
     {
      "path": "results/ve0/VE0_MANIFEST.json",
      "role": "VE-0 output O",
-     "sha256": "31a572db0b3e9ab85a74fefe88232f1112641d113dc421083d09137d79a0a594"
+     "sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3"
     }
    ],
    "ve0_specification_id": "VE0-TAB-06"
@@ -2569,7 +3050,7 @@
    "bound_evidence_count": 0,
    "build_command": "python -m experiments.ve1.run_ve1",
    "builder_script": "experiments/ve1/tables.py",
-   "builder_sha256": "8ba42a83bbc46fa056eebbd31715b536f3a9f9b05c066e7059b2cc28052a8733",
+   "builder_sha256": "c8c2a91ec60da21aa633b6f6f3d77499bdbceb8d62c0c15a50007cce898b1675",
    "consumed_evidence_count": 0,
    "consumed_evidence_ids": [],
    "consumed_no_evidence_because": "generated from the VE-0 claim ledger rather than from inventory rows; every claim's own evidence identifiers are printed in the table",
@@ -2584,88 +3065,88 @@
     {
      "path": "results/ve1/tables/VE1-TAB-07.md",
      "role": "rendered table",
-     "sha256": "c3127ed76460ff4b695ae483358cf5adf7cd64406595038d90906373af6a463b"
+     "sha256": "401867e8ff3e43c5ba1518d44690b937e1a1d87ad49ec096b87a0c05e7544910"
     },
     {
-     "content_sha256": "cc7f2c216e487ffec30a75d0c1e690a0dc3172a91ba5343a69ef8749303a9577",
+     "content_sha256": "a19959dfef0964701d426ba714b627213b10ebcde70becffd53acdf1963db999",
      "path": "results/ve1/tables/VE1-TAB-07.json",
      "role": "table record with per-cell evidence identifiers",
-     "sha256": "71fd48c9e7fa18a7242dff5375003bdf35fa42d1337ab90e78cbdd736bf0b07b"
+     "sha256": "48c415a8826202de9004cecafd5541dde0304d5e35dc71a3bec0380f791f7814"
     }
    ],
-   "placement": "MAIN_TEXT",
-   "repository_head": "d58cd66b0b3e7e64fd49b10b0a0342588df367fd",
+   "placement": "APPENDIX",
+   "repository_head": "f91d0770b6733a0b3eb4f161dd2ca36d60050bbb",
    "source_paths": [],
    "ve0_source_artefacts": [
     {
      "path": "results/ve0/canonical_evidence_inventory.json",
      "role": "VE-0 output A",
-     "sha256": "18eaa5355cf2252f0f74b1090f03404881d526bc2588391a866f4ed6fdd22462"
+     "sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3"
     },
     {
      "path": "results/ve0/canonical_evidence_inventory.csv",
      "role": "VE-0 output A_csv",
-     "sha256": "30e1b82090573758947026407ff4d05b5dcb4e12cde827d0e02040d6787cd9d9"
+     "sha256": "86921381e6fc22b674559b44272e9ba70aaeffafdf600c4a752d5cb6200eee9b"
     },
     {
      "path": "results/ve0/supersession_map.json",
      "role": "VE-0 output C",
-     "sha256": "5eddcfdec886ae3b246fab02c076e523f62a77611916695bfbf5363076ee2d4a"
+     "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
     },
     {
      "path": "results/ve0/claim_ledger.json",
      "role": "VE-0 output D",
-     "sha256": "15e3ffc4a487068e9a556ada04a96e6967dc6d8e9f1364babbc353decca1c94d"
+     "sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7"
     },
     {
      "path": "results/ve0/rq_evidence_matrix.json",
      "role": "VE-0 output E",
-     "sha256": "c8f6d7d99db9f41fd98821dafc880f9b709f9ba8757a53c40b65b8bf23e27b86"
+     "sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d"
     },
     {
      "path": "results/ve0/figure_specifications.json",
      "role": "VE-0 output F",
-     "sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92"
+     "sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c"
     },
     {
      "path": "results/ve0/table_specifications.json",
      "role": "VE-0 output G",
-     "sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0"
+     "sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8"
     },
     {
      "path": "results/ve0/qualitative_protocol.json",
      "role": "VE-0 output H",
-     "sha256": "d15fc69c7a6a4e6721874bf43ae017a105c1a8b3b694b759a88043ff2664b975"
+     "sha256": "c8c5c35bec84da409e9a36612ad07846e2d218aa35351bc7d09340760cd9e895"
     },
     {
      "path": "results/ve0/qualitative_record_schema.json",
      "role": "VE-0 output I",
-     "sha256": "c2f0742c0c936a2a11fb71f5dc364633bda329c632b52744150f047d95d81984"
+     "sha256": "898e0a6bfeddfb37196e0d1e4bfc469606bcd663c5283b6fac931cd0e3de4297"
     },
     {
      "path": "results/ve0/reporting_style_contract.json",
      "role": "VE-0 output J",
-     "sha256": "e2a8767fe477e9ac8a5bf8544c3ecbff19f63f1f8a59c9b7ddaa350221c7fc4c"
+     "sha256": "536cf07aa6bd5f80eb1b843046435804345e7bd1f558ba047866b223aadd5504"
     },
     {
      "path": "results/ve0/provenance_contract.json",
      "role": "VE-0 output K",
-     "sha256": "65e66b78cae76cf713f11073f4847062c0e252c4319b30b3a9d58e63a0689159"
+     "sha256": "4a0c33512194fcd11493d3e05f0a86fc8f752ea6343f698c8da0c630672213ab"
     },
     {
      "path": "results/ve0/efficiency_visualisation_contract.json",
      "role": "VE-0 output L",
-     "sha256": "b39a6c4ae080eebf1c0ed0cb65d01a98f1993d162ade704287c53c298b56902e"
+     "sha256": "c8d221544dca46f55339fcd708e4dd66b9aa1e1e9b130bdf44a2a39871ee9cc4"
     },
     {
      "path": "results/ve0/results_section_mapping.json",
      "role": "VE-0 output M",
-     "sha256": "f2153f7f45c71fdd69a0e96555184d3b2608a63685afe42f40a5800b6f2d7738"
+     "sha256": "2f80c8d34949f6ea3e5b7546d67b79793463d7f63d4278b0a03153125bc50686"
     },
     {
      "path": "results/ve0/VE0_MANIFEST.json",
      "role": "VE-0 output O",
-     "sha256": "31a572db0b3e9ab85a74fefe88232f1112641d113dc421083d09137d79a0a594"
+     "sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3"
     }
    ],
    "ve0_specification_id": "VE0-TAB-07"
@@ -2675,7 +3156,7 @@
    "bound_evidence_count": 195,
    "build_command": "python -m experiments.ve1.run_ve1",
    "builder_script": "experiments/ve1/tables.py",
-   "builder_sha256": "8ba42a83bbc46fa056eebbd31715b536f3a9f9b05c066e7059b2cc28052a8733",
+   "builder_sha256": "c8c2a91ec60da21aa633b6f6f3d77499bdbceb8d62c0c15a50007cce898b1675",
    "consumed_evidence_count": 195,
    "consumed_evidence_ids": [
     "EV-SLC-E8A.A0p.train_250k.semantic-attr.accuracy",
@@ -2889,29 +3370,37 @@
      "sha256": "508f130548af927410c42aecede23a9b8c2d505e4410e913ff4262e012753d41"
     },
     {
-     "content_sha256": "609b5557e0fe4c8863f41f0ccf3ee19d40cf69e6d0af605810f7dc43db440708",
+     "content_sha256": "80c3f67aee80b1f6ad0f4067b67546edece1bb42b0a1dd15559b48bec480519f",
      "path": "results/ve1/tables/VE1-TAB-A1.json",
      "role": "table record with per-cell evidence identifiers",
-     "sha256": "085b4cafaf664f6d10d13734bd6af4e5b745d74de6b50a3936a087818c654b37"
+     "sha256": "3093de8002d3995ac06109342769f00f282ee1893c1e964417a2f2ddb4a030d4"
     }
    ],
    "placement": "APPENDIX",
-   "repository_head": "d58cd66b0b3e7e64fd49b10b0a0342588df367fd",
+   "repository_head": "f91d0770b6733a0b3eb4f161dd2ca36d60050bbb",
    "source_paths": [
     {
      "path": "results/closure/reconstructed_statistics.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/closure/reconstructed_statistics.json",
      "sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097"
     },
     {
      "path": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
      "sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562"
     },
     {
      "path": "results/experiments/v2_05_types/addendum_clustered.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/v2_05_types/addendum_clustered.json",
      "sha256": "86c7969ec36121ca387cd98da3319e1cd1a6ff9ba021241c85f057bfca11f312"
     },
     {
      "path": "results/experiments/v3_02a_refs/step_statistics.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/v3_02a_refs/step_statistics.json",
      "sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3"
     }
    ],
@@ -2919,72 +3408,72 @@
     {
      "path": "results/ve0/canonical_evidence_inventory.json",
      "role": "VE-0 output A",
-     "sha256": "18eaa5355cf2252f0f74b1090f03404881d526bc2588391a866f4ed6fdd22462"
+     "sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3"
     },
     {
      "path": "results/ve0/canonical_evidence_inventory.csv",
      "role": "VE-0 output A_csv",
-     "sha256": "30e1b82090573758947026407ff4d05b5dcb4e12cde827d0e02040d6787cd9d9"
+     "sha256": "86921381e6fc22b674559b44272e9ba70aaeffafdf600c4a752d5cb6200eee9b"
     },
     {
      "path": "results/ve0/supersession_map.json",
      "role": "VE-0 output C",
-     "sha256": "5eddcfdec886ae3b246fab02c076e523f62a77611916695bfbf5363076ee2d4a"
+     "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
     },
     {
      "path": "results/ve0/claim_ledger.json",
      "role": "VE-0 output D",
-     "sha256": "15e3ffc4a487068e9a556ada04a96e6967dc6d8e9f1364babbc353decca1c94d"
+     "sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7"
     },
     {
      "path": "results/ve0/rq_evidence_matrix.json",
      "role": "VE-0 output E",
-     "sha256": "c8f6d7d99db9f41fd98821dafc880f9b709f9ba8757a53c40b65b8bf23e27b86"
+     "sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d"
     },
     {
      "path": "results/ve0/figure_specifications.json",
      "role": "VE-0 output F",
-     "sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92"
+     "sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c"
     },
     {
      "path": "results/ve0/table_specifications.json",
      "role": "VE-0 output G",
-     "sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0"
+     "sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8"
     },
     {
      "path": "results/ve0/qualitative_protocol.json",
      "role": "VE-0 output H",
-     "sha256": "d15fc69c7a6a4e6721874bf43ae017a105c1a8b3b694b759a88043ff2664b975"
+     "sha256": "c8c5c35bec84da409e9a36612ad07846e2d218aa35351bc7d09340760cd9e895"
     },
     {
      "path": "results/ve0/qualitative_record_schema.json",
      "role": "VE-0 output I",
-     "sha256": "c2f0742c0c936a2a11fb71f5dc364633bda329c632b52744150f047d95d81984"
+     "sha256": "898e0a6bfeddfb37196e0d1e4bfc469606bcd663c5283b6fac931cd0e3de4297"
     },
     {
      "path": "results/ve0/reporting_style_contract.json",
      "role": "VE-0 output J",
-     "sha256": "e2a8767fe477e9ac8a5bf8544c3ecbff19f63f1f8a59c9b7ddaa350221c7fc4c"
+     "sha256": "536cf07aa6bd5f80eb1b843046435804345e7bd1f558ba047866b223aadd5504"
     },
     {
      "path": "results/ve0/provenance_contract.json",
      "role": "VE-0 output K",
-     "sha256": "65e66b78cae76cf713f11073f4847062c0e252c4319b30b3a9d58e63a0689159"
+     "sha256": "4a0c33512194fcd11493d3e05f0a86fc8f752ea6343f698c8da0c630672213ab"
     },
     {
      "path": "results/ve0/efficiency_visualisation_contract.json",
      "role": "VE-0 output L",
-     "sha256": "b39a6c4ae080eebf1c0ed0cb65d01a98f1993d162ade704287c53c298b56902e"
+     "sha256": "c8d221544dca46f55339fcd708e4dd66b9aa1e1e9b130bdf44a2a39871ee9cc4"
     },
     {
      "path": "results/ve0/results_section_mapping.json",
      "role": "VE-0 output M",
-     "sha256": "f2153f7f45c71fdd69a0e96555184d3b2608a63685afe42f40a5800b6f2d7738"
+     "sha256": "2f80c8d34949f6ea3e5b7546d67b79793463d7f63d4278b0a03153125bc50686"
     },
     {
      "path": "results/ve0/VE0_MANIFEST.json",
      "role": "VE-0 output O",
-     "sha256": "31a572db0b3e9ab85a74fefe88232f1112641d113dc421083d09137d79a0a594"
+     "sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3"
     }
    ],
    "ve0_specification_id": "VE0-TAB-A1"
@@ -2994,7 +3483,7 @@
    "bound_evidence_count": 66,
    "build_command": "python -m experiments.ve1.run_ve1",
    "builder_script": "experiments/ve1/tables.py",
-   "builder_sha256": "8ba42a83bbc46fa056eebbd31715b536f3a9f9b05c066e7059b2cc28052a8733",
+   "builder_sha256": "c8c2a91ec60da21aa633b6f6f3d77499bdbceb8d62c0c15a50007cce898b1675",
    "consumed_evidence_count": 66,
    "consumed_evidence_ids": [
     "EV-SEED-E10.B4.train_250k",
@@ -3071,65 +3560,87 @@
     {
      "path": "results/ve1/tables/VE1-TAB-A2.csv",
      "role": "machine-readable table",
-     "sha256": "39a6434493219b4d7556ddab1a4aa6ebdaae8acb8074fbaf85e1e9e245987721"
+     "sha256": "082ab86bb925c471311e269f878ab9c7ca25851aa5ca62bc4d7846f5361315ff"
     },
     {
      "path": "results/ve1/tables/VE1-TAB-A2.md",
      "role": "rendered table",
-     "sha256": "35368a3675b829402d80993a075edcb2da3ade1b034d7b923e89be11ffd2e5b9"
+     "sha256": "cc8f9f729676190193f5259dae363af24775a2815d6ee72a74e4030f38b95e44"
     },
     {
-     "content_sha256": "f27e28da03acb991710acaa6c28dce6b89aafe2875c91a43e27e8171e65a41f6",
+     "content_sha256": "0b2ae5326f8ee3fbca16d5daa7e8360eb2a4327c8b2183761fe223f32b762cc5",
      "path": "results/ve1/tables/VE1-TAB-A2.json",
      "role": "table record with per-cell evidence identifiers",
-     "sha256": "f244c6792118a9382d1766451a08560e9b9ff06fbb23f78c84d8c4bf93272eaf"
+     "sha256": "b8ad5566214b389900019a23d725cc89001d2159aa03ea616a2b59137ed0f90f"
     }
    ],
    "placement": "APPENDIX",
-   "repository_head": "d58cd66b0b3e7e64fd49b10b0a0342588df367fd",
+   "repository_head": "f91d0770b6733a0b3eb4f161dd2ca36d60050bbb",
    "source_paths": [
     {
      "path": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
      "sha256": "37ffdcd09aa2bcd306ca9b54229a1d0d17ff203b6b0900e09e5f876ad1ed0748"
     },
     {
      "path": "results/experiments/e2_siglip/results.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/e2_siglip/results.json",
      "sha256": "4c51f60890bdac967915aa96dbad08b676262f2dfa13b5d10bfebd46c5af0a96"
     },
     {
      "path": "results/experiments/e3_vocab1000/results.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/e3_vocab1000/results.json",
      "sha256": "bbdf65f724ee89cc6078628cd85684ad64a06585b6d34bdf0638b364c2a52be6"
     },
     {
      "path": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
      "sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562"
     },
     {
      "path": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
      "sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138"
     },
     {
      "path": "results/experiments/v2_02_multiseed/results.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/v2_02_multiseed/results.json",
      "sha256": "306c1d1bdf31e081c90ab57ef4474b7fc6aeb7c5b34af4697d52a84fd44a8e6d"
     },
     {
      "path": "results/experiments/v2_03_param_match/results.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/v2_03_param_match/results.json",
      "sha256": "9494f8a706b26dc82a66bb28280411acbd079991f353da8467248ac0c1947f92"
     },
     {
      "path": "results/experiments/v2_04_ablation/results.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/v2_04_ablation/results.json",
      "sha256": "3e4a7652dd1e7418b1a19244d85017a4442b6638e86c3d85b1c4888cbceed608"
     },
     {
      "path": "results/experiments/v2_06_reliance/results.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/v2_06_reliance/results.json",
      "sha256": "45763fe56be11d42421a968922ac3212b5d1a21af77ccd87706ed44549b6a66b"
     },
     {
      "path": "results/experiments/v2_07_scaling/results.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/v2_07_scaling/results.json",
      "sha256": "852206e1b0a404955ed66c5b56a3b9bd7215c15fb35b438dd703cc6c497b79fc"
     },
     {
      "path": "results/experiments/v3_03_scaling/results.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/v3_03_scaling/results.json",
      "sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339"
     }
    ],
@@ -3137,72 +3648,72 @@
     {
      "path": "results/ve0/canonical_evidence_inventory.json",
      "role": "VE-0 output A",
-     "sha256": "18eaa5355cf2252f0f74b1090f03404881d526bc2588391a866f4ed6fdd22462"
+     "sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3"
     },
     {
      "path": "results/ve0/canonical_evidence_inventory.csv",
      "role": "VE-0 output A_csv",
-     "sha256": "30e1b82090573758947026407ff4d05b5dcb4e12cde827d0e02040d6787cd9d9"
+     "sha256": "86921381e6fc22b674559b44272e9ba70aaeffafdf600c4a752d5cb6200eee9b"
     },
     {
      "path": "results/ve0/supersession_map.json",
      "role": "VE-0 output C",
-     "sha256": "5eddcfdec886ae3b246fab02c076e523f62a77611916695bfbf5363076ee2d4a"
+     "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
     },
     {
      "path": "results/ve0/claim_ledger.json",
      "role": "VE-0 output D",
-     "sha256": "15e3ffc4a487068e9a556ada04a96e6967dc6d8e9f1364babbc353decca1c94d"
+     "sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7"
     },
     {
      "path": "results/ve0/rq_evidence_matrix.json",
      "role": "VE-0 output E",
-     "sha256": "c8f6d7d99db9f41fd98821dafc880f9b709f9ba8757a53c40b65b8bf23e27b86"
+     "sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d"
     },
     {
      "path": "results/ve0/figure_specifications.json",
      "role": "VE-0 output F",
-     "sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92"
+     "sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c"
     },
     {
      "path": "results/ve0/table_specifications.json",
      "role": "VE-0 output G",
-     "sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0"
+     "sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8"
     },
     {
      "path": "results/ve0/qualitative_protocol.json",
      "role": "VE-0 output H",
-     "sha256": "d15fc69c7a6a4e6721874bf43ae017a105c1a8b3b694b759a88043ff2664b975"
+     "sha256": "c8c5c35bec84da409e9a36612ad07846e2d218aa35351bc7d09340760cd9e895"
     },
     {
      "path": "results/ve0/qualitative_record_schema.json",
      "role": "VE-0 output I",
-     "sha256": "c2f0742c0c936a2a11fb71f5dc364633bda329c632b52744150f047d95d81984"
+     "sha256": "898e0a6bfeddfb37196e0d1e4bfc469606bcd663c5283b6fac931cd0e3de4297"
     },
     {
      "path": "results/ve0/reporting_style_contract.json",
      "role": "VE-0 output J",
-     "sha256": "e2a8767fe477e9ac8a5bf8544c3ecbff19f63f1f8a59c9b7ddaa350221c7fc4c"
+     "sha256": "536cf07aa6bd5f80eb1b843046435804345e7bd1f558ba047866b223aadd5504"
     },
     {
      "path": "results/ve0/provenance_contract.json",
      "role": "VE-0 output K",
-     "sha256": "65e66b78cae76cf713f11073f4847062c0e252c4319b30b3a9d58e63a0689159"
+     "sha256": "4a0c33512194fcd11493d3e05f0a86fc8f752ea6343f698c8da0c630672213ab"
     },
     {
      "path": "results/ve0/efficiency_visualisation_contract.json",
      "role": "VE-0 output L",
-     "sha256": "b39a6c4ae080eebf1c0ed0cb65d01a98f1993d162ade704287c53c298b56902e"
+     "sha256": "c8d221544dca46f55339fcd708e4dd66b9aa1e1e9b130bdf44a2a39871ee9cc4"
     },
     {
      "path": "results/ve0/results_section_mapping.json",
      "role": "VE-0 output M",
-     "sha256": "f2153f7f45c71fdd69a0e96555184d3b2608a63685afe42f40a5800b6f2d7738"
+     "sha256": "2f80c8d34949f6ea3e5b7546d67b79793463d7f63d4278b0a03153125bc50686"
     },
     {
      "path": "results/ve0/VE0_MANIFEST.json",
      "role": "VE-0 output O",
-     "sha256": "31a572db0b3e9ab85a74fefe88232f1112641d113dc421083d09137d79a0a594"
+     "sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3"
     }
    ],
    "ve0_specification_id": "VE0-TAB-A2"
@@ -3212,7 +3723,7 @@
    "bound_evidence_count": 28,
    "build_command": "python -m experiments.ve1.run_ve1",
    "builder_script": "experiments/ve1/tables.py",
-   "builder_sha256": "8ba42a83bbc46fa056eebbd31715b536f3a9f9b05c066e7059b2cc28052a8733",
+   "builder_sha256": "c8c2a91ec60da21aa633b6f6f3d77499bdbceb8d62c0c15a50007cce898b1675",
    "consumed_evidence_count": 28,
    "consumed_evidence_ids": [
     "EV-ARM-e2.concat.train_250k",
@@ -3259,25 +3770,31 @@
      "sha256": "baca421ceada87e2a10268cb3401e568292ff57a2a3ae3110a8ca84afd5e2ab0"
     },
     {
-     "content_sha256": "eccd6b06063af2c13869bdf7b0d74a3a20a95b7bb2c15dcb24797f267f149ad5",
+     "content_sha256": "e89717257cce75f09d119f464ac35982ae4c2baaeb69fcda7a6de49f213ef414",
      "path": "results/ve1/tables/VE1-TAB-A3.json",
      "role": "table record with per-cell evidence identifiers",
-     "sha256": "b70f1251e78cc80a118e6da06c4437ecd25c3d6aac1c8dbdb8bdd4f855f0d361"
+     "sha256": "bcb9d82d42df80f0dde67075605dd0a7c4de4fdcbb55d79f9287398faa9414c6"
     }
    ],
    "placement": "APPENDIX",
-   "repository_head": "d58cd66b0b3e7e64fd49b10b0a0342588df367fd",
+   "repository_head": "f91d0770b6733a0b3eb4f161dd2ca36d60050bbb",
    "source_paths": [
     {
      "path": "results/closure/reconstructed_statistics.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/closure/reconstructed_statistics.json",
      "sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097"
     },
     {
      "path": "results/experiments/e2_siglip/results.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/e2_siglip/results.json",
      "sha256": "4c51f60890bdac967915aa96dbad08b676262f2dfa13b5d10bfebd46c5af0a96"
     },
     {
      "path": "results/experiments/v2_07_scaling/results.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/v2_07_scaling/results.json",
      "sha256": "852206e1b0a404955ed66c5b56a3b9bd7215c15fb35b438dd703cc6c497b79fc"
     }
    ],
@@ -3285,72 +3802,72 @@
     {
      "path": "results/ve0/canonical_evidence_inventory.json",
      "role": "VE-0 output A",
-     "sha256": "18eaa5355cf2252f0f74b1090f03404881d526bc2588391a866f4ed6fdd22462"
+     "sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3"
     },
     {
      "path": "results/ve0/canonical_evidence_inventory.csv",
      "role": "VE-0 output A_csv",
-     "sha256": "30e1b82090573758947026407ff4d05b5dcb4e12cde827d0e02040d6787cd9d9"
+     "sha256": "86921381e6fc22b674559b44272e9ba70aaeffafdf600c4a752d5cb6200eee9b"
     },
     {
      "path": "results/ve0/supersession_map.json",
      "role": "VE-0 output C",
-     "sha256": "5eddcfdec886ae3b246fab02c076e523f62a77611916695bfbf5363076ee2d4a"
+     "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
     },
     {
      "path": "results/ve0/claim_ledger.json",
      "role": "VE-0 output D",
-     "sha256": "15e3ffc4a487068e9a556ada04a96e6967dc6d8e9f1364babbc353decca1c94d"
+     "sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7"
     },
     {
      "path": "results/ve0/rq_evidence_matrix.json",
      "role": "VE-0 output E",
-     "sha256": "c8f6d7d99db9f41fd98821dafc880f9b709f9ba8757a53c40b65b8bf23e27b86"
+     "sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d"
     },
     {
      "path": "results/ve0/figure_specifications.json",
      "role": "VE-0 output F",
-     "sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92"
+     "sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c"
     },
     {
      "path": "results/ve0/table_specifications.json",
      "role": "VE-0 output G",
-     "sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0"
+     "sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8"
     },
     {
      "path": "results/ve0/qualitative_protocol.json",
      "role": "VE-0 output H",
-     "sha256": "d15fc69c7a6a4e6721874bf43ae017a105c1a8b3b694b759a88043ff2664b975"
+     "sha256": "c8c5c35bec84da409e9a36612ad07846e2d218aa35351bc7d09340760cd9e895"
     },
     {
      "path": "results/ve0/qualitative_record_schema.json",
      "role": "VE-0 output I",
-     "sha256": "c2f0742c0c936a2a11fb71f5dc364633bda329c632b52744150f047d95d81984"
+     "sha256": "898e0a6bfeddfb37196e0d1e4bfc469606bcd663c5283b6fac931cd0e3de4297"
     },
     {
      "path": "results/ve0/reporting_style_contract.json",
      "role": "VE-0 output J",
-     "sha256": "e2a8767fe477e9ac8a5bf8544c3ecbff19f63f1f8a59c9b7ddaa350221c7fc4c"
+     "sha256": "536cf07aa6bd5f80eb1b843046435804345e7bd1f558ba047866b223aadd5504"
     },
     {
      "path": "results/ve0/provenance_contract.json",
      "role": "VE-0 output K",
-     "sha256": "65e66b78cae76cf713f11073f4847062c0e252c4319b30b3a9d58e63a0689159"
+     "sha256": "4a0c33512194fcd11493d3e05f0a86fc8f752ea6343f698c8da0c630672213ab"
     },
     {
      "path": "results/ve0/efficiency_visualisation_contract.json",
      "role": "VE-0 output L",
-     "sha256": "b39a6c4ae080eebf1c0ed0cb65d01a98f1993d162ade704287c53c298b56902e"
+     "sha256": "c8d221544dca46f55339fcd708e4dd66b9aa1e1e9b130bdf44a2a39871ee9cc4"
     },
     {
      "path": "results/ve0/results_section_mapping.json",
      "role": "VE-0 output M",
-     "sha256": "f2153f7f45c71fdd69a0e96555184d3b2608a63685afe42f40a5800b6f2d7738"
+     "sha256": "2f80c8d34949f6ea3e5b7546d67b79793463d7f63d4278b0a03153125bc50686"
     },
     {
      "path": "results/ve0/VE0_MANIFEST.json",
      "role": "VE-0 output O",
-     "sha256": "31a572db0b3e9ab85a74fefe88232f1112641d113dc421083d09137d79a0a594"
+     "sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3"
     }
    ],
    "ve0_specification_id": "VE0-TAB-A3"
@@ -3360,7 +3877,7 @@
    "bound_evidence_count": 70,
    "build_command": "python -m experiments.ve1.run_ve1",
    "builder_script": "experiments/ve1/tables.py",
-   "builder_sha256": "8ba42a83bbc46fa056eebbd31715b536f3a9f9b05c066e7059b2cc28052a8733",
+   "builder_sha256": "c8c2a91ec60da21aa633b6f6f3d77499bdbceb8d62c0c15a50007cce898b1675",
    "consumed_evidence_count": 70,
    "consumed_evidence_ids": [
     "EV-CON-E10.difference_in_differences",
@@ -3449,37 +3966,49 @@
      "sha256": "a19a7611a477dbfc1b6cfedee6ae2f190fe6d62d925e483d85f98ea0f8ee4a2a"
     },
     {
-     "content_sha256": "ad4725fe8f07b307a6d7f9e5b9efd9126aa7717cf23673195a72a71dcc310cad",
+     "content_sha256": "eff8b972a5beda3e9c11a4acce3d687e4f01c08a3bc30db294337b43abcbcc51",
      "path": "results/ve1/tables/VE1-TAB-A4.json",
      "role": "table record with per-cell evidence identifiers",
-     "sha256": "87b74d92cc2f3705e985ac331fa195e1b7506955bfaf1767b114db3da568cffa"
+     "sha256": "3530fd34bc1d48d6db8e809e8641e1301e0d4829ba91ab4a36c71c074b2c0b83"
     }
    ],
    "placement": "APPENDIX",
-   "repository_head": "d58cd66b0b3e7e64fd49b10b0a0342588df367fd",
+   "repository_head": "f91d0770b6733a0b3eb4f161dd2ca36d60050bbb",
    "source_paths": [
     {
      "path": "results/closure/reconstructed_statistics.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/closure/reconstructed_statistics.json",
      "sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097"
     },
     {
      "path": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
      "sha256": "37ffdcd09aa2bcd306ca9b54229a1d0d17ff203b6b0900e09e5f876ad1ed0748"
     },
     {
      "path": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
      "sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562"
     },
     {
      "path": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
      "sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138"
     },
     {
      "path": "results/experiments/v3_02a_refs/step_statistics.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/v3_02a_refs/step_statistics.json",
      "sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3"
     },
     {
      "path": "results/experiments/v3_03_scaling/results.json",
+     "resolution": "CANONICAL_PATH",
+     "resolved_from": "results/experiments/v3_03_scaling/results.json",
      "sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339"
     }
    ],
@@ -3487,82 +4016,82 @@
     {
      "path": "results/ve0/canonical_evidence_inventory.json",
      "role": "VE-0 output A",
-     "sha256": "18eaa5355cf2252f0f74b1090f03404881d526bc2588391a866f4ed6fdd22462"
+     "sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3"
     },
     {
      "path": "results/ve0/canonical_evidence_inventory.csv",
      "role": "VE-0 output A_csv",
-     "sha256": "30e1b82090573758947026407ff4d05b5dcb4e12cde827d0e02040d6787cd9d9"
+     "sha256": "86921381e6fc22b674559b44272e9ba70aaeffafdf600c4a752d5cb6200eee9b"
     },
     {
      "path": "results/ve0/supersession_map.json",
      "role": "VE-0 output C",
-     "sha256": "5eddcfdec886ae3b246fab02c076e523f62a77611916695bfbf5363076ee2d4a"
+     "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
     },
     {
      "path": "results/ve0/claim_ledger.json",
      "role": "VE-0 output D",
-     "sha256": "15e3ffc4a487068e9a556ada04a96e6967dc6d8e9f1364babbc353decca1c94d"
+     "sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7"
     },
     {
      "path": "results/ve0/rq_evidence_matrix.json",
      "role": "VE-0 output E",
-     "sha256": "c8f6d7d99db9f41fd98821dafc880f9b709f9ba8757a53c40b65b8bf23e27b86"
+     "sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d"
     },
     {
      "path": "results/ve0/figure_specifications.json",
      "role": "VE-0 output F",
-     "sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92"
+     "sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c"
     },
     {
      "path": "results/ve0/table_specifications.json",
      "role": "VE-0 output G",
-     "sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0"
+     "sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8"
     },
     {
      "path": "results/ve0/qualitative_protocol.json",
      "role": "VE-0 output H",
-     "sha256": "d15fc69c7a6a4e6721874bf43ae017a105c1a8b3b694b759a88043ff2664b975"
+     "sha256": "c8c5c35bec84da409e9a36612ad07846e2d218aa35351bc7d09340760cd9e895"
     },
     {
      "path": "results/ve0/qualitative_record_schema.json",
      "role": "VE-0 output I",
-     "sha256": "c2f0742c0c936a2a11fb71f5dc364633bda329c632b52744150f047d95d81984"
+     "sha256": "898e0a6bfeddfb37196e0d1e4bfc469606bcd663c5283b6fac931cd0e3de4297"
     },
     {
      "path": "results/ve0/reporting_style_contract.json",
      "role": "VE-0 output J",
-     "sha256": "e2a8767fe477e9ac8a5bf8544c3ecbff19f63f1f8a59c9b7ddaa350221c7fc4c"
+     "sha256": "536cf07aa6bd5f80eb1b843046435804345e7bd1f558ba047866b223aadd5504"
     },
     {
      "path": "results/ve0/provenance_contract.json",
      "role": "VE-0 output K",
-     "sha256": "65e66b78cae76cf713f11073f4847062c0e252c4319b30b3a9d58e63a0689159"
+     "sha256": "4a0c33512194fcd11493d3e05f0a86fc8f752ea6343f698c8da0c630672213ab"
     },
     {
      "path": "results/ve0/efficiency_visualisation_contract.json",
      "role": "VE-0 output L",
-     "sha256": "b39a6c4ae080eebf1c0ed0cb65d01a98f1993d162ade704287c53c298b56902e"
+     "sha256": "c8d221544dca46f55339fcd708e4dd66b9aa1e1e9b130bdf44a2a39871ee9cc4"
     },
     {
      "path": "results/ve0/results_section_mapping.json",
      "role": "VE-0 output M",
-     "sha256": "f2153f7f45c71fdd69a0e96555184d3b2608a63685afe42f40a5800b6f2d7738"
+     "sha256": "2f80c8d34949f6ea3e5b7546d67b79793463d7f63d4278b0a03153125bc50686"
     },
     {
      "path": "results/ve0/VE0_MANIFEST.json",
      "role": "VE-0 output O",
-     "sha256": "31a572db0b3e9ab85a74fefe88232f1112641d113dc421083d09137d79a0a594"
+     "sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3"
     }
    ],
    "ve0_specification_id": "VE0-TAB-A4"
   }
  ],
- "entry_count": 24,
+ "entry_count": 26,
  "provenance": {
   "build_command": "python -m experiments.ve1.run_ve1",
   "builder": "experiments/ve1/run_ve1.py",
-  "builder_sha256": "2c9aecc4e40d6fb6b00d46ce3fd088a397276ed19579446c907720e3c029287d",
+  "builder_sha256": "5d71cc50d2f67db0f239e0a8d72e7f2778606ccb683ece0b76318fc5bafe5848",
   "clean_test_accessed": false,
   "device": "cpu",
   "evaluated_anything": false,
@@ -3572,72 +4101,72 @@
    {
     "path": "results/ve0/canonical_evidence_inventory.json",
     "role": "VE-0 output A",
-    "sha256": "18eaa5355cf2252f0f74b1090f03404881d526bc2588391a866f4ed6fdd22462"
+    "sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3"
    },
    {
     "path": "results/ve0/canonical_evidence_inventory.csv",
     "role": "VE-0 output A_csv",
-    "sha256": "30e1b82090573758947026407ff4d05b5dcb4e12cde827d0e02040d6787cd9d9"
+    "sha256": "86921381e6fc22b674559b44272e9ba70aaeffafdf600c4a752d5cb6200eee9b"
    },
    {
     "path": "results/ve0/supersession_map.json",
     "role": "VE-0 output C",
-    "sha256": "5eddcfdec886ae3b246fab02c076e523f62a77611916695bfbf5363076ee2d4a"
+    "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
    },
    {
     "path": "results/ve0/claim_ledger.json",
     "role": "VE-0 output D",
-    "sha256": "15e3ffc4a487068e9a556ada04a96e6967dc6d8e9f1364babbc353decca1c94d"
+    "sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7"
    },
    {
     "path": "results/ve0/rq_evidence_matrix.json",
     "role": "VE-0 output E",
-    "sha256": "c8f6d7d99db9f41fd98821dafc880f9b709f9ba8757a53c40b65b8bf23e27b86"
+    "sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d"
    },
    {
     "path": "results/ve0/figure_specifications.json",
     "role": "VE-0 output F",
-    "sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92"
+    "sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c"
    },
    {
     "path": "results/ve0/table_specifications.json",
     "role": "VE-0 output G",
-    "sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0"
+    "sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8"
    },
    {
     "path": "results/ve0/qualitative_protocol.json",
     "role": "VE-0 output H",
-    "sha256": "d15fc69c7a6a4e6721874bf43ae017a105c1a8b3b694b759a88043ff2664b975"
+    "sha256": "c8c5c35bec84da409e9a36612ad07846e2d218aa35351bc7d09340760cd9e895"
    },
    {
     "path": "results/ve0/qualitative_record_schema.json",
     "role": "VE-0 output I",
-    "sha256": "c2f0742c0c936a2a11fb71f5dc364633bda329c632b52744150f047d95d81984"
+    "sha256": "898e0a6bfeddfb37196e0d1e4bfc469606bcd663c5283b6fac931cd0e3de4297"
    },
    {
     "path": "results/ve0/reporting_style_contract.json",
     "role": "VE-0 output J",
-    "sha256": "e2a8767fe477e9ac8a5bf8544c3ecbff19f63f1f8a59c9b7ddaa350221c7fc4c"
+    "sha256": "536cf07aa6bd5f80eb1b843046435804345e7bd1f558ba047866b223aadd5504"
    },
    {
     "path": "results/ve0/provenance_contract.json",
     "role": "VE-0 output K",
-    "sha256": "65e66b78cae76cf713f11073f4847062c0e252c4319b30b3a9d58e63a0689159"
+    "sha256": "4a0c33512194fcd11493d3e05f0a86fc8f752ea6343f698c8da0c630672213ab"
    },
    {
     "path": "results/ve0/efficiency_visualisation_contract.json",
     "role": "VE-0 output L",
-    "sha256": "b39a6c4ae080eebf1c0ed0cb65d01a98f1993d162ade704287c53c298b56902e"
+    "sha256": "c8d221544dca46f55339fcd708e4dd66b9aa1e1e9b130bdf44a2a39871ee9cc4"
    },
    {
     "path": "results/ve0/results_section_mapping.json",
     "role": "VE-0 output M",
-    "sha256": "f2153f7f45c71fdd69a0e96555184d3b2608a63685afe42f40a5800b6f2d7738"
+    "sha256": "2f80c8d34949f6ea3e5b7546d67b79793463d7f63d4278b0a03153125bc50686"
    },
    {
     "path": "results/ve0/VE0_MANIFEST.json",
     "role": "VE-0 output O",
-    "sha256": "31a572db0b3e9ab85a74fefe88232f1112641d113dc421083d09137d79a0a594"
+    "sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3"
    }
   ],
   "matplotlib_version": "3.11.0",
@@ -3646,8 +4175,8 @@
   "python": "3.12.3",
   "read_any_checkpoint": false,
   "read_any_embedding_store": false,
-  "repository_head": "d58cd66b0b3e7e64fd49b10b0a0342588df367fd",
-  "repository_head_short": "d58cd66",
+  "repository_head": "f91d0770b6733a0b3eb4f161dd2ca36d60050bbb",
+  "repository_head_short": "f91d077",
   "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
   "schema_version": 1,
   "selected_any_checkpoint": false,
@@ -3656,7 +4185,7 @@
  },
  "rule": "every artefact resolves to its VE-0 specification, the evidence identifiers it consumed, the canonical source paths and hashes behind them, the builder and its hash, the repository HEAD, the build command and its own output hashes.",
  "title": "VE-1 figure and table provenance registry",
- "unbound_cell_count": 8,
+ "unbound_cell_count": 4,
  "unbound_cells": [
   {
    "affected_cells": 4,
@@ -3671,45 +4200,6 @@
    "detail": "VE-0 binds trainable parameter counts for concat and fusion only, in the VE0-TAB-02 footnote and the VE0-FIG-02 caveat. It binds no count for image_only, and VE-1 does not read one from a historical experiment directory.",
    "evidence_ids": [],
    "specification": "VE0-TAB-01"
-  },
-  {
-   "affected_cells": 16,
-   "column_or_series": "per-seed values",
-   "detail": "the VE0-TAB-04 specification requires a per-seed column and calls it mandatory, but no VE-0 inventory row binds per-seed accuracies: a SEED row carries the across-seed mean, the sample standard deviation and the seed set only. VE-1 does not recover them from a historical experiment directory.",
-   "evidence_ids": [
-    "EV-SEED-E10.B4.train_250k",
-    "EV-SEED-E10.B4.train_40k",
-    "EV-SEED-E10.B4r.train_250k",
-    "EV-SEED-E10.B4r.train_40k",
-    "EV-SEED-E8A.A0p.train_250k",
-    "EV-SEED-E8A.A0p.train_40k",
-    "EV-SEED-E8A.A1.train_250k",
-    "EV-SEED-E8A.A1.train_40k",
-    "EV-SEED-E8A.A1r.train_250k",
-    "EV-SEED-E8A.A1r.train_40k",
-    "EV-SEED-E8B.B1.train_250k",
-    "EV-SEED-E8B.B1.train_40k",
-    "EV-SEED-E8B.B2.train_250k",
-    "EV-SEED-E8B.B2.train_40k",
-    "EV-SEED-E8B.B3.train_250k",
-    "EV-SEED-E8B.B3.train_40k"
-   ],
-   "specification": "VE0-TAB-04"
-  },
-  {
-   "affected_cells": 7,
-   "column_or_series": "per-seed effects",
-   "detail": "the VE0-TAB-05 specification asks for per-seed effects so a reader can see where seeds disagree in sign. No VE-0 inventory row binds per-seed contrast values; the seed disagreement is recorded in prose in the row's mandatory limitation and is reproduced in this table's caveat.",
-   "evidence_ids": [
-    "EV-CON-E10.difference_in_differences",
-    "EV-CON-E10.pretraining_effect.train_250k",
-    "EV-CON-E10.pretraining_effect.train_40k",
-    "EV-CON-E8A.A1_minus_A1r.train_250k",
-    "EV-CON-E8A.A1_minus_A1r.train_40k",
-    "EV-CON-E8B.B3_-_B2.train_250k",
-    "EV-CON-E8B.B3_-_B2.train_40k"
-   ],
-   "specification": "VE0-TAB-05"
   },
   {
    "affected_cells": 1,
@@ -3743,226 +4233,78 @@
     "EV-EFF-E7b.vocab1000_product.cached_image_question_side"
    ],
    "specification": "VE0-TAB-06"
-  },
-  {
-   "affected_cells": 66,
-   "column_or_series": "per-seed accuracies",
-   "detail": "no VE-0 inventory row binds per-seed accuracies. A SEED row carries the across-seed mean, the sample standard deviation and the seed set only, so the question this table asks cannot be answered from the frozen evidence contract as it stands.",
-   "evidence_ids": [
-    "EV-SEED-E10.B4.train_250k",
-    "EV-SEED-E10.B4.train_40k",
-    "EV-SEED-E10.B4r.train_250k",
-    "EV-SEED-E10.B4r.train_40k",
-    "EV-SEED-E2.concat.train_250k",
-    "EV-SEED-E2.concat.train_40k",
-    "EV-SEED-E2.fusion.train_250k",
-    "EV-SEED-E2.fusion.train_40k",
-    "EV-SEED-E2.product.train_250k",
-    "EV-SEED-E2.product.train_40k",
-    "EV-SEED-E2.question_only.train_250k",
-    "EV-SEED-E2.question_only.train_40k",
-    "EV-SEED-E3.concat.train_250k",
-    "EV-SEED-E3.concat.train_40k",
-    "EV-SEED-E3.fusion.train_250k",
-    "EV-SEED-E3.fusion.train_40k",
-    "EV-SEED-E3.product.train_250k",
-    "EV-SEED-E3.product.train_40k",
-    "EV-SEED-E3.question_only.train_250k",
-    "EV-SEED-E3.question_only.train_40k",
-    "EV-SEED-E8A.A0p.train_250k",
-    "EV-SEED-E8A.A0p.train_40k",
-    "EV-SEED-E8A.A1.train_250k",
-    "EV-SEED-E8A.A1.train_40k",
-    "EV-SEED-E8A.A1r.train_250k",
-    "EV-SEED-E8A.A1r.train_40k",
-    "EV-SEED-E8B.B1.train_250k",
-    "EV-SEED-E8B.B1.train_40k",
-    "EV-SEED-E8B.B2.train_250k",
-    "EV-SEED-E8B.B2.train_40k",
-    "EV-SEED-E8B.B3.train_250k",
-    "EV-SEED-E8B.B3.train_40k",
-    "EV-SEED-v2_02.concat.train_40k",
-    "EV-SEED-v2_02.fusion.train_40k",
-    "EV-SEED-v2_02.image_only.train_40k",
-    "EV-SEED-v2_02.question_only.train_40k",
-    "EV-SEED-v2_03.concat_wide.train_40k",
-    "EV-SEED-v2_03.fusion_narrow.train_40k",
-    "EV-SEED-v2_04.difference_576k.train_40k",
-    "EV-SEED-v2_04.difference_natural.train_40k",
-    "EV-SEED-v2_04.product_576k.train_40k",
-    "EV-SEED-v2_04.product_natural.train_40k",
-    "EV-SEED-v2_06.concat.shuffled.train_40k",
-    "EV-SEED-v2_06.concat.zeroed.train_40k",
-    "EV-SEED-v2_06.fusion.shuffled.train_40k",
-    "EV-SEED-v2_06.fusion.zeroed.train_40k",
-    "EV-SEED-v2_06.image_only.shuffled.train_40k",
-    "EV-SEED-v2_06.image_only.zeroed.train_40k",
-    "EV-SEED-v2_06.product_576k.shuffled.train_40k",
-    "EV-SEED-v2_06.product_576k.zeroed.train_40k",
-    "EV-SEED-v2_06.question_only.shuffled.train_40k",
-    "EV-SEED-v2_06.question_only.zeroed.train_40k",
-    "EV-SEED-v2_07.concat.train_100k",
-    "EV-SEED-v2_07.concat.train_250k",
-    "EV-SEED-v2_07.concat.train_40k",
-    "EV-SEED-v2_07.fusion.train_100k",
-    "EV-SEED-v2_07.fusion.train_250k",
-    "EV-SEED-v2_07.fusion.train_40k",
-    "EV-SEED-v2_07.product_576k.train_100k",
-    "EV-SEED-v2_07.product_576k.train_250k",
-    "EV-SEED-v2_07.product_576k.train_40k",
-    "EV-SEED-v2_07.question_only.train_100k",
-    "EV-SEED-v2_07.question_only.train_250k",
-    "EV-SEED-v2_07.question_only.train_40k",
-    "EV-SEED-v3_03.reasoner.train_100k",
-    "EV-SEED-v3_03.reasoner.train_250k"
-   ],
-   "specification": "VE0-TAB-A2"
-  },
-  {
-   "affected_cells": 66,
-   "column_or_series": "range",
-   "detail": "the range is derivable only from per-seed values, which VE-0 does not bind. Two rows state their range inside their mandatory limitation and those statements are preserved in the caveat.",
-   "evidence_ids": [
-    "EV-SEED-E10.B4.train_250k",
-    "EV-SEED-E10.B4.train_40k",
-    "EV-SEED-E10.B4r.train_250k",
-    "EV-SEED-E10.B4r.train_40k",
-    "EV-SEED-E2.concat.train_250k",
-    "EV-SEED-E2.concat.train_40k",
-    "EV-SEED-E2.fusion.train_250k",
-    "EV-SEED-E2.fusion.train_40k",
-    "EV-SEED-E2.product.train_250k",
-    "EV-SEED-E2.product.train_40k",
-    "EV-SEED-E2.question_only.train_250k",
-    "EV-SEED-E2.question_only.train_40k",
-    "EV-SEED-E3.concat.train_250k",
-    "EV-SEED-E3.concat.train_40k",
-    "EV-SEED-E3.fusion.train_250k",
-    "EV-SEED-E3.fusion.train_40k",
-    "EV-SEED-E3.product.train_250k",
-    "EV-SEED-E3.product.train_40k",
-    "EV-SEED-E3.question_only.train_250k",
-    "EV-SEED-E3.question_only.train_40k",
-    "EV-SEED-E8A.A0p.train_250k",
-    "EV-SEED-E8A.A0p.train_40k",
-    "EV-SEED-E8A.A1.train_250k",
-    "EV-SEED-E8A.A1.train_40k",
-    "EV-SEED-E8A.A1r.train_250k",
-    "EV-SEED-E8A.A1r.train_40k",
-    "EV-SEED-E8B.B1.train_250k",
-    "EV-SEED-E8B.B1.train_40k",
-    "EV-SEED-E8B.B2.train_250k",
-    "EV-SEED-E8B.B2.train_40k",
-    "EV-SEED-E8B.B3.train_250k",
-    "EV-SEED-E8B.B3.train_40k",
-    "EV-SEED-v2_02.concat.train_40k",
-    "EV-SEED-v2_02.fusion.train_40k",
-    "EV-SEED-v2_02.image_only.train_40k",
-    "EV-SEED-v2_02.question_only.train_40k",
-    "EV-SEED-v2_03.concat_wide.train_40k",
-    "EV-SEED-v2_03.fusion_narrow.train_40k",
-    "EV-SEED-v2_04.difference_576k.train_40k",
-    "EV-SEED-v2_04.difference_natural.train_40k",
-    "EV-SEED-v2_04.product_576k.train_40k",
-    "EV-SEED-v2_04.product_natural.train_40k",
-    "EV-SEED-v2_06.concat.shuffled.train_40k",
-    "EV-SEED-v2_06.concat.zeroed.train_40k",
-    "EV-SEED-v2_06.fusion.shuffled.train_40k",
-    "EV-SEED-v2_06.fusion.zeroed.train_40k",
-    "EV-SEED-v2_06.image_only.shuffled.train_40k",
-    "EV-SEED-v2_06.image_only.zeroed.train_40k",
-    "EV-SEED-v2_06.product_576k.shuffled.train_40k",
-    "EV-SEED-v2_06.product_576k.zeroed.train_40k",
-    "EV-SEED-v2_06.question_only.shuffled.train_40k",
-    "EV-SEED-v2_06.question_only.zeroed.train_40k",
-    "EV-SEED-v2_07.concat.train_100k",
-    "EV-SEED-v2_07.concat.train_250k",
-    "EV-SEED-v2_07.concat.train_40k",
-    "EV-SEED-v2_07.fusion.train_100k",
-    "EV-SEED-v2_07.fusion.train_250k",
-    "EV-SEED-v2_07.fusion.train_40k",
-    "EV-SEED-v2_07.product_576k.train_100k",
-    "EV-SEED-v2_07.product_576k.train_250k",
-    "EV-SEED-v2_07.product_576k.train_40k",
-    "EV-SEED-v2_07.question_only.train_100k",
-    "EV-SEED-v2_07.question_only.train_250k",
-    "EV-SEED-v2_07.question_only.train_40k",
-    "EV-SEED-v3_03.reasoner.train_100k",
-    "EV-SEED-v3_03.reasoner.train_250k"
-   ],
-   "specification": "VE0-TAB-A2"
   }
  ],
  "ve0_source_artefacts": [
   {
    "path": "results/ve0/canonical_evidence_inventory.json",
    "role": "VE-0 output A",
-   "sha256": "18eaa5355cf2252f0f74b1090f03404881d526bc2588391a866f4ed6fdd22462"
+   "sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3"
   },
   {
    "path": "results/ve0/canonical_evidence_inventory.csv",
    "role": "VE-0 output A_csv",
-   "sha256": "30e1b82090573758947026407ff4d05b5dcb4e12cde827d0e02040d6787cd9d9"
+   "sha256": "86921381e6fc22b674559b44272e9ba70aaeffafdf600c4a752d5cb6200eee9b"
   },
   {
    "path": "results/ve0/supersession_map.json",
    "role": "VE-0 output C",
-   "sha256": "5eddcfdec886ae3b246fab02c076e523f62a77611916695bfbf5363076ee2d4a"
+   "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
   },
   {
    "path": "results/ve0/claim_ledger.json",
    "role": "VE-0 output D",
-   "sha256": "15e3ffc4a487068e9a556ada04a96e6967dc6d8e9f1364babbc353decca1c94d"
+   "sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7"
   },
   {
    "path": "results/ve0/rq_evidence_matrix.json",
    "role": "VE-0 output E",
-   "sha256": "c8f6d7d99db9f41fd98821dafc880f9b709f9ba8757a53c40b65b8bf23e27b86"
+   "sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d"
   },
   {
    "path": "results/ve0/figure_specifications.json",
    "role": "VE-0 output F",
-   "sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92"
+   "sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c"
   },
   {
    "path": "results/ve0/table_specifications.json",
    "role": "VE-0 output G",
-   "sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0"
+   "sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8"
   },
   {
    "path": "results/ve0/qualitative_protocol.json",
    "role": "VE-0 output H",
-   "sha256": "d15fc69c7a6a4e6721874bf43ae017a105c1a8b3b694b759a88043ff2664b975"
+   "sha256": "c8c5c35bec84da409e9a36612ad07846e2d218aa35351bc7d09340760cd9e895"
   },
   {
    "path": "results/ve0/qualitative_record_schema.json",
    "role": "VE-0 output I",
-   "sha256": "c2f0742c0c936a2a11fb71f5dc364633bda329c632b52744150f047d95d81984"
+   "sha256": "898e0a6bfeddfb37196e0d1e4bfc469606bcd663c5283b6fac931cd0e3de4297"
   },
   {
    "path": "results/ve0/reporting_style_contract.json",
    "role": "VE-0 output J",
-   "sha256": "e2a8767fe477e9ac8a5bf8544c3ecbff19f63f1f8a59c9b7ddaa350221c7fc4c"
+   "sha256": "536cf07aa6bd5f80eb1b843046435804345e7bd1f558ba047866b223aadd5504"
   },
   {
    "path": "results/ve0/provenance_contract.json",
    "role": "VE-0 output K",
-   "sha256": "65e66b78cae76cf713f11073f4847062c0e252c4319b30b3a9d58e63a0689159"
+   "sha256": "4a0c33512194fcd11493d3e05f0a86fc8f752ea6343f698c8da0c630672213ab"
   },
   {
    "path": "results/ve0/efficiency_visualisation_contract.json",
    "role": "VE-0 output L",
-   "sha256": "b39a6c4ae080eebf1c0ed0cb65d01a98f1993d162ade704287c53c298b56902e"
+   "sha256": "c8d221544dca46f55339fcd708e4dd66b9aa1e1e9b130bdf44a2a39871ee9cc4"
   },
   {
    "path": "results/ve0/results_section_mapping.json",
    "role": "VE-0 output M",
-   "sha256": "f2153f7f45c71fdd69a0e96555184d3b2608a63685afe42f40a5800b6f2d7738"
+   "sha256": "2f80c8d34949f6ea3e5b7546d67b79793463d7f63d4278b0a03153125bc50686"
   },
   {
    "path": "results/ve0/VE0_MANIFEST.json",
    "role": "VE-0 output O",
-   "sha256": "31a572db0b3e9ab85a74fefe88232f1112641d113dc421083d09137d79a0a594"
+   "sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3"
   }
  ],
  "ve1_output": "provenance_registry"

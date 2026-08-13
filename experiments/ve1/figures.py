@@ -101,6 +101,15 @@ def _payload(contract: Contract, evidence: Evidence, drawn: list,
         "development_set_only": True,
         "clean_test_accessed": False,
     }
+    # A figure that consumes v2_07 evidence carries that family's accepted
+    # documented limitation in its own record, not only in its caption, so
+    # the boundary travels with the machine-readable artefact too.
+    v2_07 = sorted(e for e in evidence.consumed()
+                   if contract.rows[e]["experiment_family"] == "v2_07")
+    if v2_07:
+        payload["v2_07_limitation"] = contract.rows[v2_07[0]][
+            "mandatory_limitation"]
+        payload["v2_07_evidence_ids"] = v2_07
     if notes:
         payload.update(notes)
     payload["provenance"] = vc.provenance(BUILDER,
@@ -478,12 +487,40 @@ BUCKET_LABEL = {"steps-le2": "≤ 2", "steps-3": "3", "steps-4": "4",
 FIG04_SYSTEMS = ["question_only", "direct_linear", "meanpatch_concat",
                  "concat", "product_576k", "fusion", "reasoner"]
 
+# The main-text variant of panel (a) carries the four claim-driving systems:
+# the language-bias floor, the plain multimodal head, the interaction head and
+# the token-level reasoner. Seven overlapping series were independently judged
+# overloaded. The other three remain in the full variant, which is rendered
+# from the same evidence in the same build and lives in the appendix, so no
+# evidence is lost and the depth claim is unchanged.
+FIG04_MAIN_SYSTEMS = ["question_only", "concat", "fusion", "reasoner"]
+
 
 def build_fig_04(contract: Contract, recorder: Recorder,
                  out_dir=None) -> dict:
+    """The main-text variant: panel (a) carries the claim-driving systems."""
+    return _fig_04(contract, recorder, FIG04_MAIN_SYSTEMS, "VE1-FIG-04",
+                   out_dir)
+
+
+def variant_payloads(contract: Contract, recorder: Recorder,
+                     out_dir=None) -> list:
+    """Appendix variants rendered from the same evidence as a main figure.
+
+    VE1-FIG-04-FULL exists because the main-text panel (a) shows four of the
+    seven bound systems. The other three are not dropped: they are drawn here,
+    from the same evidence, in the same build.
+    """
+    return [_fig_04(contract, recorder, FIG04_SYSTEMS, "VE1-FIG-04-FULL",
+                    out_dir)]
+
+
+def _fig_04(contract: Contract, recorder: Recorder, systems: list,
+            artefact_id: str, out_dir=None) -> dict:
     evidence = Evidence(contract, "VE0-FIG-04")
     spec = evidence.spec
     drawn = []
+    full = len(systems) == len(FIG04_SYSTEMS)
 
     fig, (ax_a, ax_b) = plt.subplots(
         1, 2, figsize=(11.4, 5.6), gridspec_kw={"width_ratios": [1.0, 1.16]})
@@ -491,7 +528,7 @@ def build_fig_04(contract: Contract, recorder: Recorder,
     # panel (a): accuracy by program-length bucket
     x = np.arange(len(BUCKET_ORDER), dtype=float)
     bucket_counts = {}
-    for index, system in enumerate(FIG04_SYSTEMS):
+    for index, system in enumerate(systems):
         colour = style.SERIES[index]
         marker = style.MARKERS[index]
         values, lows, highs = [], [], []
@@ -506,7 +543,7 @@ def build_fig_04(contract: Contract, recorder: Recorder,
                                      row["n_unique_images"])
             drawn.append(_record(evidence, evidence_id, "panel_a bucket "
                                  "accuracy"))
-        ax_a.errorbar(x + (index - 3) * 0.055, values,
+        ax_a.errorbar(x + (index - (len(systems) - 1) / 2) * 0.055, values,
                       yerr=[lows, highs], color=colour, marker=marker,
                       markersize=4.6, capsize=2.4, elinewidth=1.0,
                       linewidth=1.3, markeredgecolor=style.SURFACE,
@@ -519,8 +556,10 @@ def build_fig_04(contract: Contract, recorder: Recorder,
          f"{bucket_counts[b][1]} images" for b in BUCKET_ORDER])
     ax_a.set_xlabel("GQA semantic program length")
     ax_a.set_ylabel("development accuracy")
-    ax_a.set_title("(a) accuracy by program length, train_40k", loc="left",
-                   fontsize=9.5)
+    ax_a.set_title("(a) accuracy by program length, train_40k"
+                   + ("  — all seven systems" if full
+                      else "  — claim-driving systems"),
+                   loc="left", fontsize=9.5)
     style.tidy(ax_a, xgrid=False)
     ax_a.set_ylim(top=ax_a.get_ylim()[1] + 0.055)
     ax_a.legend(loc="upper left", fontsize=6.9, ncol=2, columnspacing=1.0,
@@ -529,6 +568,16 @@ def build_fig_04(contract: Contract, recorder: Recorder,
               "image-clustered on\nthat bucket's own represented development "
               "images. Program length is a\nproxy for reasoning depth, not a "
               "measure of reasoning performed.")
+
+    not_plotted = []
+    for system in FIG04_SYSTEMS:
+        if system in systems:
+            continue
+        for bucket in BUCKET_ORDER:
+            evidence_id = (f"EV-SLC-v3_02a.{system}.train_40k.{bucket}"
+                           f".accuracy")
+            evidence.row(evidence_id)
+            not_plotted.append(evidence_id)
 
     # panel (b): the pooled >=4-step deficits
     rows_b = []
@@ -575,13 +624,28 @@ def build_fig_04(contract: Contract, recorder: Recorder,
     style.finish(fig, [(0.006, note_a), (0.475, note_b)])
     evidence.assert_complete()
     payload = _payload(contract, evidence, drawn, {
-        "panel_a": "accuracy per program-length bucket per system, with "
-                   "image-clustered 95% intervals and printed bucket counts",
+        "panel_a": f"accuracy per program-length bucket for "
+                   f"{len(systems)} systems, with image-clustered 95% "
+                   f"intervals and printed bucket counts",
         "panel_b": "the pooled four-or-more-step deficit per system and "
                    "scale, grouped by family and encoder",
+    }, notes={
+        "variant": "FULL" if full else "MAIN_TEXT",
+        "panel_a_systems": list(systems),
+        "panel_a_systems_not_plotted_in_this_variant": sorted(
+            set(FIG04_SYSTEMS) - set(systems)),
+        "variant_note":
+            "Panel (a) of the main-text variant carries the four "
+            "claim-driving systems, because seven overlapping series was "
+            "independently judged overloaded. The full seven-series variant "
+            "VE1-FIG-04-FULL is rendered from the same evidence in the same "
+            "build. Panel (b), which carries the depth claim, is identical in "
+            "both, and every bound row is consumed by both.",
     })
-    outputs = output.save_figure(fig, payload["artefact_id"], payload, out_dir)
-    recorder.record(payload["artefact_id"], spec["figure_id"], "figure",
+    payload["artefact_id"] = artefact_id
+    payload["content_sha256"] = vc.content_digest(payload)
+    outputs = output.save_figure(fig, artefact_id, payload, out_dir)
+    recorder.record(artefact_id, spec["figure_id"], "figure",
                     evidence, outputs, BUILDER)
     return payload
 
@@ -890,26 +954,32 @@ def build_fig_08(contract: Contract, recorder: Recorder,
     spec = evidence.spec
     drawn = []
 
-    b4_params = recorder.use_scalar("trainable_parameters.e10_B4")
-    b4r_params = recorder.use_scalar("trainable_parameters.e10_B4r")
+    params_135m = recorder.use_scalar("trainable_parameters.answer_side_135m")
+    params_360m = recorder.use_scalar("trainable_parameters.answer_side_360m")
 
-    fig, ax = plt.subplots(figsize=(9.8, 5.6))
+    # Two axes, not one. The difference in differences is a second-order
+    # interaction, and putting it under an axis labelled "pretrained minus
+    # architecture-matched random" and then repairing the semantics with a
+    # warning is the wrong way round. It gets its own subpanel and its own
+    # axis label.
+    fig, (ax, ax_did) = plt.subplots(
+        2, 1, figsize=(10.6, 6.6), gridspec_kw={"height_ratios": [6.0, 1.5]})
+    fig.subplots_adjust(left=0.155, right=0.99, top=0.885, bottom=0.335,
+                        hspace=0.80)
+
+    first_order = [g for g in spec["row_groups"] if g["order"] == "FIRST_ORDER"]
+    second_order = [g for g in spec["row_groups"]
+                    if g["order"] == "SECOND_ORDER"]
 
     rows, blocks = [], []
-    for group in spec["row_groups"]:
+    for group in first_order:
         blocks.append((group, len(rows)))
         for evidence_id in group["evidence_ids"]:
             row = evidence.row(evidence_id)
-            second_order = group["order"] == "SECOND_ORDER"
-            scale = row["training_scale"]
-            label = ("250k minus 40k" if second_order
-                     else vc.scale_label(scale))
             rows.append({
-                "label": label,
+                "label": vc.scale_label(row["training_scale"]),
                 "point": row["point_estimate"], "ci": row["ci95"],
-                "colour": (style.SERIES[6] if second_order
-                           else style.SERIES[0]),
-                "marker": "D" if second_order else "o",
+                "colour": style.SERIES[0], "marker": "o",
             })
             drawn.append(_record(evidence, evidence_id,
                                  f"{group['group_id']} effect",
@@ -919,19 +989,11 @@ def build_fig_08(contract: Contract, recorder: Recorder,
 
     style.forest(ax, rows)
     style.zero_line(ax)
-
     total = len(rows)
-    # Headroom below the last row so the legend sits clear of every
-    # interval, in particular the second-order row a reader must see.
-    ax.set_ylim(-1.75, total + 0.15)
+    ax.set_ylim(-0.6, total + 0.15)
     for group, start in blocks:
-        second_order = group["order"] == "SECOND_ORDER"
-        style.group_rule(
-            ax, total - start - 0.5, GROUP_TITLE[group["group_id"]],
-            x=0.5, colour=style.SERIES[6] if second_order else None,
-            linewidth=2.0 if second_order else 1.0, fontsize=7.4,
-            weight="bold" if second_order else "normal")
-
+        style.group_rule(ax, total - start - 0.5,
+                         GROUP_TITLE[group["group_id"]], x=0.5, fontsize=7.4)
     ax.set_xlabel("pretrained minus architecture-matched random, in accuracy "
                   "points")
     ax.set_ylabel("labelled training questions")
@@ -940,12 +1002,32 @@ def build_fig_08(contract: Contract, recorder: Recorder,
                  "separately run experiments, not one factorial interface "
                  "experiment", loc="left", fontsize=10)
     style.tidy(ax, ygrid=False)
-    ax.legend(handles=style.legend_handles([
-        {"label": "first-order effect (pretrained minus matched random)",
-         "colour": style.SERIES[0], "marker": "o"},
-        {"label": "second-order interaction (effect × training scale)",
-         "colour": style.SERIES[6], "marker": "D"},
-    ]), loc="lower left", fontsize=7.4)
+
+    rows_did = []
+    for group in second_order:
+        for evidence_id in group["evidence_ids"]:
+            row = evidence.row(evidence_id)
+            rows_did.append({
+                "label": "E10, answer side 360M",
+                "point": row["point_estimate"], "ci": row["ci95"],
+                "colour": style.SERIES[6], "marker": "D",
+            })
+            drawn.append(_record(evidence, evidence_id,
+                                 f"{group['group_id']} interaction",
+                                 extra={"row_group": group["group_id"],
+                                        "order": group["order"],
+                                        "quantity": group["quantity"]}))
+    style.forest(ax_did, rows_did)
+    style.zero_line(ax_did)
+    ax_did.set_xlim(ax.get_xlim())
+    ax_did.set_ylim(-0.75, 0.75)
+    ax_did.set_xlabel("SECOND-ORDER interaction: (pretrained minus random) at "
+                      "250k minus the same at 40k, in accuracy points")
+    ax_did.set_title("A different quantity from the panel above, on its own "
+                     "axis. It is not a pretrained-minus-random effect.",
+                     loc="left", fontsize=7.6, color=style.SERIES[6])
+    style.tidy(ax_did, ygrid=False)
+
     row = contract.rows["EV-CON-E10.pretraining_effect.train_40k"]
     note = (f"All rows use the pinned G21 normalised scorer on "
             f"{row['n_questions']:,} development questions over "
@@ -957,23 +1039,38 @@ def build_fig_08(contract: Contract, recorder: Recorder,
             f"factorial interface experiment: checkpoint selection differs, "
             f"E8A taking the best development epoch while E8B and E10 use the "
             f"frozen fixed-22 rule, and the\n135M-to-360M step moves "
-            f"trainable capacity too, {b4_params:,} against {b4r_params:,} "
-            f"parameters. An interval containing zero is an absence of a "
-            f"detected effect and establishes\nNEITHER equivalence NOR the "
-            f"absence of an effect. E10 does not reproduce E8B's directional "
-            f"negative 40k result. E8B B3 at 40k has a seed sd of 0.02795; "
-            f"see VE1-TAB-04.")
+            f"trainable capacity too, {params_135m:,} parameters on the "
+            f"answer-side 135M system against {params_360m:,} on the 360M "
+            f"one. Within E10 both arms are\narchitecture-matched, so B4 and "
+            f"B4r each have {params_360m:,}. An interval containing zero is "
+            f"an absence of a detected effect and establishes NEITHER "
+            f"equivalence\nNOR the absence of an effect. E10 does not "
+            f"reproduce E8B's directional negative 40k result. E8B B3 at 40k "
+            f"has a seed sd of 0.02795; its per-seed values are in "
+            f"VE1-TAB-04.")
 
-    style.finish(fig, [(0.006, note)])
+    style.footer(fig, [(0.006, note)], 0.215)
     evidence.assert_complete()
     payload = _payload(contract, evidence, drawn, {
-        "single_panel": "three first-order blocks above a rule and one "
-                        "separated second-order block below it",
+        "panel_first_order": "three labelled blocks of pretrained-minus-"
+                             "matched-random effects, on the "
+                             "pretrained-minus-random axis",
+        "panel_second_order": "the E10 difference in differences alone, in "
+                              "its own subpanel with its own axis label. It "
+                              "shares the numeric scale so the magnitudes "
+                              "are comparable by eye, and it is never drawn "
+                              "under the first-order axis label",
         "row_groups": spec["row_groups"],
     }, notes={
         "bound_scalars_used": {
-            "trainable_parameters.e10_B4": b4_params,
-            "trainable_parameters.e10_B4r": b4r_params},
+            "trainable_parameters.answer_side_135m": params_135m,
+            "trainable_parameters.answer_side_360m": params_360m},
+        "trainable_capacity_note":
+            f"The two counts are the endpoints of the 135M-to-360M step, not "
+            f"the two E10 arms. E10's B4 and B4r are architecture-matched and "
+            f"both have {params_360m:,} trainable parameters; "
+            f"{params_135m:,} belongs to the answer-side 135M system, E8B B2 "
+            f"and B3.",
         "cross_experiment_synthesis":
             "A cross-experiment synthesis of three separately run "
             "experiments, not one factorial interface experiment. E8A, E8B "
@@ -1147,15 +1244,15 @@ def _efficiency_panel(ax, ax_strip, evidence, drawn, evidence_ids, contract,
             fontsize=6.9, color=style.SERIES[7], pad=4)
         style.tidy(ax_strip, ygrid=False)
     else:
-        ax_strip.set_yticks([])
-        ax_strip.set_ylim(0, 1)
-        ax_strip.text(0.5, 0.55, "every timed row on this node has a "
-                      "VE-0-resolved accuracy pairing;\nno latency-only rows",
-                      transform=ax_strip.transAxes, ha="center", va="center",
-                      fontsize=6.9, color=style.INK_MUTED)
-        for side in ("top", "right", "left"):
-            ax_strip.spines[side].set_visible(False)
-        ax_strip.grid(False)
+        # No empty panel: an axis drawn with nothing in it reads as missing
+        # data. One line states the fact and the space goes back to the plot.
+        ax_strip.axis("off")
+        ax_strip.text(0.0, 0.85, "Every timed row on this node has a "
+                      "VE-0-resolved accuracy pairing, so there are no "
+                      "latency-only rows.", transform=ax_strip.transAxes,
+                      ha="left", va="top", fontsize=7.0,
+                      color=style.INK_SECONDARY)
+        return paired, unpaired
     ax_strip.set_xlabel("warm median end-to-end serial latency, milliseconds "
                         "(log scale)")
     return paired, unpaired
@@ -1174,11 +1271,11 @@ def build_fig_09(contract: Contract, recorder: Recorder,
     compact = {e for e in e9 if contract.rows[e]["model_system"]
                .startswith("e9_")}
 
-    fig, axes = plt.subplots(2, 2, figsize=(12.0, 7.4),
-                             gridspec_kw={"height_ratios": [1.0, 0.72]})
+    fig, axes = plt.subplots(2, 2, figsize=(12.0, 6.9),
+                             gridspec_kw={"height_ratios": [1.0, 0.60]})
     (ax_a, ax_b), (strip_a, strip_b) = axes
-    fig.subplots_adjust(left=0.085, right=0.995, top=0.905, bottom=0.265,
-                        hspace=0.62, wspace=0.30)
+    fig.subplots_adjust(left=0.085, right=0.995, top=0.905, bottom=0.245,
+                        hspace=0.52, wspace=0.30)
 
     paired_a, _ = _efficiency_panel(ax_a, strip_a, evidence, drawn, e7b,
                                     contract, panel_role="panel_a")
@@ -1211,8 +1308,7 @@ def build_fig_09(contract: Contract, recorder: Recorder,
               "positioning only, never a leaderboard: the compact VLMs\n"
               "differ in training history, answer support and output format.")
 
-    style.footer(fig, [(0.006, note_a), (0.505, note_b)], 0.185)
-    style.footer(fig, [(0.006, EFF_EXPANSION)], 0.070)
+    style.footer(fig, [(0.006, note_a), (0.505, note_b)], 0.165)
     evidence.assert_complete()
 
     unresolved = [d["evidence_id"] for d in drawn
@@ -1224,6 +1320,7 @@ def build_fig_09(contract: Contract, recorder: Recorder,
         "panel_b": "node otter159, E9: four rows with a resolved accuracy "
                    "pairing and seven latency-only rows",
     }, notes={
+        "arm_code_glossary": EFF_EXPANSION.replace("\n", " "),
         "accuracy_pairing_unresolved": sorted(unresolved),
         "accuracy_pairing_unresolved_count": len(unresolved),
         "accuracy_pairing_policy":
@@ -1274,8 +1371,7 @@ def build_fig_a5(contract: Contract, recorder: Recorder,
             "is made against published official GQA scores in either "
             "direction.")
 
-    style.footer(fig, [(0.008, note)], 0.205)
-    style.footer(fig, [(0.008, EFF_EXPANSION)], 0.088)
+    style.footer(fig, [(0.008, note)], 0.195)
     evidence.assert_complete()
     unresolved = [d["evidence_id"] for d in drawn
                   if d.get("accuracy_pairing", {}).get("status")
@@ -1283,7 +1379,8 @@ def build_fig_a5(contract: Contract, recorder: Recorder,
     payload = _payload(contract, evidence, drawn, {
         "single_panel": "node otter159 only, compact VLMs marked distinctly "
                         "from the lightweight systems",
-    }, notes={"accuracy_pairing_unresolved": sorted(unresolved),
+    }, notes={"arm_code_glossary": EFF_EXPANSION.replace("\n", " "),
+              "accuracy_pairing_unresolved": sorted(unresolved),
               "nodes_merged": False})
     outputs = output.save_figure(fig, payload["artefact_id"], payload, out_dir)
     recorder.record(payload["artefact_id"], spec["figure_id"], "figure",
@@ -1503,6 +1600,125 @@ SLICE_LABEL = {
 }
 
 
+# --------------------------------------------------------------------------
+# VE0-FIG-A2: per-seed dispersion across every trained family
+# --------------------------------------------------------------------------
+# Unblocked by the 2026-08-13 amendment. The per-seed values it declares are
+# now bound on every one of its 66 SEED rows, so the figure can draw the
+# SEED_POINTS its specification asks for instead of a summary bar.
+
+METRIC_BLOCK = {
+    "v2_closed_vocab_top1_index_match": "V2-era closed-vocabulary scorer",
+    "g21_pinned_normalised_exact_match": "pinned G21 normalised scorer",
+}
+
+
+def build_fig_a2(contract: Contract, recorder: Recorder,
+                 out_dir=None) -> dict:
+    evidence = Evidence(contract, "VE0-FIG-A2")
+    spec = evidence.spec
+    drawn = []
+
+    # Two metrics, drawn as two blocks that never share a scale.
+    blocks = {}
+    for evidence_id in sorted(evidence.bound):
+        row = contract.rows[evidence_id]
+        blocks.setdefault(row["metric_id"], []).append(evidence_id)
+    order = [m for m in ("v2_closed_vocab_top1_index_match",
+                         "g21_pinned_normalised_exact_match") if m in blocks]
+
+    heights = [len(blocks[m]) for m in order]
+    # Stacked, not side by side: the two blocks hold 50 and 16 rows, and
+    # side-by-side panels would give the smaller block a different row pitch
+    # and invite a reader to compare across the two scorers.
+    fig, axes = plt.subplots(
+        len(order), 1, figsize=(9.6, 0.152 * sum(heights) + 2.9),
+        gridspec_kw={"height_ratios": heights})
+    axes = list(axes) if len(order) > 1 else [axes]
+
+    for axis, metric in zip(axes, order):
+        ids = sorted(blocks[metric],
+                     key=lambda e: (contract.rows[e]["experiment_family"],
+                                    contract.rows[e]["model_system"],
+                                    contract.rows[e]["training_scale"]))
+        positions = list(range(len(ids)))[::-1]
+        labels = []
+        for pos, evidence_id in zip(positions, ids):
+            row = evidence.row(evidence_id)
+            values = row["per_seed_values"]
+            seeds = row["per_seed_seed_ids"]
+            if not values:
+                raise AssertionError(
+                    f"VE0-FIG-A2 declares SEED_POINTS but {evidence_id} binds "
+                    f"no per-seed values")
+            dispersion = "HIGH SEED DISPERSION" in str(
+                row["mandatory_limitation"])
+            colour = style.SERIES[7] if dispersion else style.SERIES[0]
+            axis.plot(values, [pos] * len(values), marker="o",
+                      linestyle="none", markersize=3.8, color=colour,
+                      markerfacecolor="none", markeredgewidth=1.0, zorder=3)
+            axis.plot([row["point_estimate"]], [pos], marker="|",
+                      color=style.INK, markersize=8, markeredgewidth=1.3,
+                      linestyle="none", zorder=4)
+            labels.append(
+                f"{row['experiment_family']} · "
+                f"{vc.system_label(row['model_system'])} · "
+                f"{vc.scale_label(row['training_scale'])}"
+                + ("  †" if dispersion else ""))
+            drawn.append(_record(evidence, evidence_id, "per-seed points",
+                                 extra={"per_seed_values": values,
+                                        "per_seed_seed_ids": seeds,
+                                        "per_seed_range":
+                                            row["per_seed_range"],
+                                        "high_seed_dispersion": dispersion}))
+        axis.set_yticks(positions)
+        axis.set_yticklabels(labels, fontsize=6.0)
+        axis.set_ylim(-0.8, len(ids) - 0.2)
+        axis.set_xlabel("development accuracy")
+        axis.set_title(f"{METRIC_BLOCK[metric]}  ({len(ids)} rows)",
+                       loc="left", fontsize=9.0)
+        style.tidy(axis, ygrid=False)
+
+    fig.legend(handles=style.legend_handles([
+        {"label": "one point per training seed", "colour": style.SERIES[0],
+         "marker": "o"},
+        {"label": "across-seed mean", "colour": style.INK, "marker": "|"},
+        {"label": "high seed dispersion (†)", "colour": style.SERIES[7],
+         "marker": "o"},
+    ]), loc="upper right", fontsize=7.0, ncol=3,
+        bbox_to_anchor=(0.995, 1.0))
+
+    fig.suptitle("Per-seed dispersion across every trained family",
+                 fontsize=10, x=0.006, ha="left", y=0.996)
+    note = ("Each open marker is one independent training seed and the tick "
+            "is the across-seed mean; no summary bar hides the spread. "
+            "The spread here is across independent TRAINING seeds. It is a "
+            "different quantity from the image-clustered evaluation-sampling "
+            "intervals used elsewhere and the two are never interchanged. "
+            "Seed sets differ by family,\nfive for V2, E2 and E3 and three "
+            "for V3, E8A, E8B and E10, and are never pooled across families. "
+            "The two metrics are drawn as separate blocks and never share a "
+            "scale. Checkpoint selection also differs:\nV2, V3, E2, E3 and "
+            "E8A select the best development epoch while E8B and E10 use the "
+            "frozen fixed-22 rule, so the dispersions are not measured under "
+            "one selection protocol.")
+    style.finish(fig, [(0.006, note)], top=0.955)
+    evidence.assert_complete()
+    payload = _payload(contract, evidence, drawn, {
+        "blocks": {METRIC_BLOCK[m]: len(blocks[m]) for m in order},
+    }, notes={
+        "unblocked_by": "the 2026-08-13 VE-0 per-seed binding amendment",
+        "high_dispersion_rows": sorted(
+            e for e in evidence.consumed()
+            if "HIGH SEED DISPERSION" in str(
+                contract.rows[e]["mandatory_limitation"])),
+    })
+    outputs = output.save_figure(fig, payload["artefact_id"], payload, out_dir)
+    recorder.record(payload["artefact_id"], spec["figure_id"], "figure",
+                    evidence, outputs, BUILDER)
+    return payload
+
+
 def build_fig_a4(contract: Contract, recorder: Recorder,
                  out_dir=None) -> dict:
     evidence = Evidence(contract, "VE0-FIG-A4")
@@ -1609,39 +1825,36 @@ def build_fig_a4(contract: Contract, recorder: Recorder,
 def blocked_specifications(contract: Contract) -> list:
     """The specifications VE-1 stops on, with the exact missing binding.
 
-    Neither is degraded into a different figure. VE0-FIG-A2's whole subject is
-    the per-seed spread, and VE0-FIG-A6's whole subject is the cached and
-    component costs; drawing either from the fields that do exist would
-    produce a figure whose caption claim its own data cannot support.
+    VE0-FIG-A6's whole subject is the cached and component costs, and drawing
+    it from the fields that do exist would produce a figure whose caption
+    claim its own data cannot support. It is not degraded into a different
+    figure.
+
+    VE0-FIG-A2 was on this list until the 2026-08-13 amendment bound the
+    per-seed values it needs; it is now rendered. Its former entry is kept in
+    `unblocked` rather than deleted, so the record of what was missing and
+    what closed it survives.
     """
     blocked = []
-
-    spec = contract.figures["VE0-FIG-A2"]
-    per_seed_absent = sorted(spec["consumes_evidence"])
-    blocked.append({
+    unblocked = [{
         "specification_id": "VE0-FIG-A2",
-        "working_title": spec["working_title"],
-        "placement": spec["placement"],
-        "status": "BLOCKED_NOT_RENDERED",
-        "reason": "the figure is a dot plot with one dot per training seed "
-                  "and declares uncertainty kind SEED_POINTS, which VE-0 "
-                  "defines as every per-seed value plotted individually with "
-                  "no summary bar hiding the spread. No inventory row carries "
-                  "per-seed values: a SEED row binds the across-seed mean, "
-                  "the sample standard deviation and the seed set, and "
-                  "nothing else. The quantity the figure exists to show is "
-                  "not bound in VE-0.",
-        "what_would_unblock_it": "a VE-0 revision binding the per-seed "
-                                 "accuracies for the 66 SEED rows, read from "
-                                 "the same frozen artefacts the rows already "
-                                 "cite.",
-        "not_done_instead": "no mean-and-SD substitute was drawn. Substituting "
-                            "a summary bar is exactly what the declared "
-                            "uncertainty kind forbids, and it would answer a "
-                            "different question from the one the figure asks.",
-        "affected_evidence_ids": per_seed_absent,
-        "affected_evidence_count": len(per_seed_absent),
-    })
+        "previous_status": "BLOCKED_NOT_RENDERED",
+        "status": "RENDERED",
+        "was_blocked_because": "the figure declares uncertainty kind "
+                               "SEED_POINTS, and no VE-0 inventory row bound "
+                               "per-seed values: a SEED row carried the "
+                               "across-seed mean, the sample standard "
+                               "deviation and the seed set, and nothing else.",
+        "unblocked_by": "the 2026-08-13 VE-0 amendment, which binds "
+                        "per_seed_values, per_seed_seed_ids and "
+                        "per_seed_range on all 66 SEED rows from "
+                        "results/closure/E_seed_variability.json, a closure "
+                        "output VE-0 already declares as an input and already "
+                        "hashes. No value was recomputed.",
+        "rendered_as": "SEED_POINTS: one open marker per training seed, with "
+                       "the across-seed mean drawn as a separate tick. No "
+                       "summary bar was substituted at any point.",
+    }]
 
     spec = contract.figures["VE0-FIG-A6"]
     unvalued = sorted(e for e in spec["consumes_evidence"]
@@ -1697,7 +1910,7 @@ def blocked_specifications(contract: Contract) -> list:
         "affected_evidence_ids": sorted(spec["consumes_evidence"]),
         "affected_evidence_count": len(spec["consumes_evidence"]),
     })
-    return blocked
+    return blocked, unblocked
 
 
 BUILDERS = [
@@ -1711,6 +1924,7 @@ BUILDERS = [
     ("VE0-FIG-08", build_fig_08),
     ("VE0-FIG-09", build_fig_09),
     ("VE0-FIG-A1", build_fig_a1),
+    ("VE0-FIG-A2", build_fig_a2),
     ("VE0-FIG-A3", build_fig_a3),
     ("VE0-FIG-A4", build_fig_a4),
     ("VE0-FIG-A5", build_fig_a5),

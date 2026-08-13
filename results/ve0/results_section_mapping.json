@@ -1,12 +1,12 @@
 {
  "clean_test_accessed": false,
- "content_sha256": "caf570fef79008757c9c7cd783a491e922b2caef6607d7b9a58f343c0fcb3203",
+ "content_sha256": "c6a4ffb92d2aee7610ce7af0ab83d61993ba5a4c52f746f730ffa6dd8e8d703c",
  "placeholder_sections": [
   "R10_HELD_OUT_EVALUATION_PLACEHOLDER"
  ],
  "provenance": {
   "builder": "experiments/ve0/run_ve0.py",
-  "builder_sha256": "3a53114ff7e55ca6d38d92004717da9ccae1320ef411cd6124af5175d790bc42",
+  "builder_sha256": "d7ae716779e98cfbf4d9ed3112cd2015614dff720340a4bae2e788c049a07c49",
   "clean_test_accessed": false,
   "command": "python -m experiments.ve0.run_ve0",
   "deterministic_selection_salt": "P2607-VE0-QUALITATIVE-SALT-20260813-v1",
@@ -80,8 +80,8 @@
   "numpy_version": "2.5.0",
   "pandas_version": "3.0.3",
   "python": "3.12.3",
-  "repository_head": "0f4fecb5e7e5a59d1e47d0953ca3127302694852",
-  "repository_head_short": "0f4fecb",
+  "repository_head": "f91d0770b6733a0b3eb4f161dd2ca36d60050bbb",
+  "repository_head_short": "f91d077",
   "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
   "schema_version": 1,
   "selected_any_checkpoint": false,
@@ -89,7 +89,7 @@
   "worktree_dirty": true
  },
  "rule": "every figure, table and claim belongs to a named section, and R10 stays empty until F2.",
- "section_count": 17,
+ "section_count": 18,
  "sections": [
   {
    "claims": [],
@@ -317,9 +317,7 @@
     "RQ11"
    ],
    "section_id": "R_LIMITATIONS",
-   "tables": [
-    "VE0-TAB-07"
-   ],
+   "tables": [],
    "title": "Limitations and evidence boundaries"
   },
   {
@@ -376,6 +374,18 @@
     "VE0-TAB-A3"
    ],
    "title": "Appendix: encoder-swap detail"
+  },
+  {
+   "claims": [],
+   "figures": [],
+   "placement": "APPENDIX",
+   "purpose": "The complete claim ledger, including the four NOT_SUPPORTED rows that record prohibitions rather than findings.",
+   "research_questions": [],
+   "section_id": "R_APPENDIX_CLAIM_LEDGER",
+   "tables": [
+    "VE0-TAB-07"
+   ],
+   "title": "Appendix: claim, evidence and limitation ledger"
   }
  ],
  "title": "results-section mapping",

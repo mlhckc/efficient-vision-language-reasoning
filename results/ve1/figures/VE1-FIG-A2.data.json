@@ -1,0 +1,2882 @@
+{
+ "artefact_id": "VE1-FIG-A2",
+ "caption_claim": "Most systems are seed-stable; two rows are not, and are named.",
+ "carries_v2_07_limitation": true,
+ "clean_test_accessed": false,
+ "consumed_evidence_ids": [
+  "EV-SEED-E10.B4.train_250k",
+  "EV-SEED-E10.B4.train_40k",
+  "EV-SEED-E10.B4r.train_250k",
+  "EV-SEED-E10.B4r.train_40k",
+  "EV-SEED-E2.concat.train_250k",
+  "EV-SEED-E2.concat.train_40k",
+  "EV-SEED-E2.fusion.train_250k",
+  "EV-SEED-E2.fusion.train_40k",
+  "EV-SEED-E2.product.train_250k",
+  "EV-SEED-E2.product.train_40k",
+  "EV-SEED-E2.question_only.train_250k",
+  "EV-SEED-E2.question_only.train_40k",
+  "EV-SEED-E3.concat.train_250k",
+  "EV-SEED-E3.concat.train_40k",
+  "EV-SEED-E3.fusion.train_250k",
+  "EV-SEED-E3.fusion.train_40k",
+  "EV-SEED-E3.product.train_250k",
+  "EV-SEED-E3.product.train_40k",
+  "EV-SEED-E3.question_only.train_250k",
+  "EV-SEED-E3.question_only.train_40k",
+  "EV-SEED-E8A.A0p.train_250k",
+  "EV-SEED-E8A.A0p.train_40k",
+  "EV-SEED-E8A.A1.train_250k",
+  "EV-SEED-E8A.A1.train_40k",
+  "EV-SEED-E8A.A1r.train_250k",
+  "EV-SEED-E8A.A1r.train_40k",
+  "EV-SEED-E8B.B1.train_250k",
+  "EV-SEED-E8B.B1.train_40k",
+  "EV-SEED-E8B.B2.train_250k",
+  "EV-SEED-E8B.B2.train_40k",
+  "EV-SEED-E8B.B3.train_250k",
+  "EV-SEED-E8B.B3.train_40k",
+  "EV-SEED-v2_02.concat.train_40k",
+  "EV-SEED-v2_02.fusion.train_40k",
+  "EV-SEED-v2_02.image_only.train_40k",
+  "EV-SEED-v2_02.question_only.train_40k",
+  "EV-SEED-v2_03.concat_wide.train_40k",
+  "EV-SEED-v2_03.fusion_narrow.train_40k",
+  "EV-SEED-v2_04.difference_576k.train_40k",
+  "EV-SEED-v2_04.difference_natural.train_40k",
+  "EV-SEED-v2_04.product_576k.train_40k",
+  "EV-SEED-v2_04.product_natural.train_40k",
+  "EV-SEED-v2_06.concat.shuffled.train_40k",
+  "EV-SEED-v2_06.concat.zeroed.train_40k",
+  "EV-SEED-v2_06.fusion.shuffled.train_40k",
+  "EV-SEED-v2_06.fusion.zeroed.train_40k",
+  "EV-SEED-v2_06.image_only.shuffled.train_40k",
+  "EV-SEED-v2_06.image_only.zeroed.train_40k",
+  "EV-SEED-v2_06.product_576k.shuffled.train_40k",
+  "EV-SEED-v2_06.product_576k.zeroed.train_40k",
+  "EV-SEED-v2_06.question_only.shuffled.train_40k",
+  "EV-SEED-v2_06.question_only.zeroed.train_40k",
+  "EV-SEED-v2_07.concat.train_100k",
+  "EV-SEED-v2_07.concat.train_250k",
+  "EV-SEED-v2_07.concat.train_40k",
+  "EV-SEED-v2_07.fusion.train_100k",
+  "EV-SEED-v2_07.fusion.train_250k",
+  "EV-SEED-v2_07.fusion.train_40k",
+  "EV-SEED-v2_07.product_576k.train_100k",
+  "EV-SEED-v2_07.product_576k.train_250k",
+  "EV-SEED-v2_07.product_576k.train_40k",
+  "EV-SEED-v2_07.question_only.train_100k",
+  "EV-SEED-v2_07.question_only.train_250k",
+  "EV-SEED-v2_07.question_only.train_40k",
+  "EV-SEED-v3_03.reasoner.train_100k",
+  "EV-SEED-v3_03.reasoner.train_250k"
+ ],
+ "content_sha256": "8206bb02d595cf41b2c0c8e231aac1e17473686fe2c6096472da543b130322a0",
+ "development_set_only": true,
+ "dissertation_section": [
+  "R_APPENDIX_STATISTICS"
+ ],
+ "drawn_value_count": 66,
+ "drawn_values": [
+  {
+   "across_training_seed_sd_ddof1": 0.00261,
+   "canonical_source_path": "results/experiments/e2_siglip/results.json",
+   "canonical_source_sha256": "4c51f60890bdac967915aa96dbad08b676262f2dfa13b5d10bfebd46c5af0a96",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-E2.concat.train_250k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "concat",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.0057,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.59411,
+    0.59502,
+    0.59023,
+    0.58932,
+    0.5901
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_250k",
+   "value": 0.59176
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00376,
+   "canonical_source_path": "results/experiments/e2_siglip/results.json",
+   "canonical_source_sha256": "4c51f60890bdac967915aa96dbad08b676262f2dfa13b5d10bfebd46c5af0a96",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-E2.concat.train_40k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "concat",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00933,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.53785,
+    0.54071,
+    0.54187,
+    0.53358,
+    0.54291
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.53938
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00317,
+   "canonical_source_path": "results/experiments/e2_siglip/results.json",
+   "canonical_source_sha256": "4c51f60890bdac967915aa96dbad08b676262f2dfa13b5d10bfebd46c5af0a96",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-E2.fusion.train_250k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "fusion",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00764,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.59386,
+    0.59774,
+    0.59619,
+    0.5901,
+    0.59152
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_250k",
+   "value": 0.59388
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00249,
+   "canonical_source_path": "results/experiments/e2_siglip/results.json",
+   "canonical_source_sha256": "4c51f60890bdac967915aa96dbad08b676262f2dfa13b5d10bfebd46c5af0a96",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-E2.fusion.train_40k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "fusion",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00609,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.54991,
+    0.55522,
+    0.55185,
+    0.55276,
+    0.556
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.55315
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00355,
+   "canonical_source_path": "results/experiments/e2_siglip/results.json",
+   "canonical_source_sha256": "4c51f60890bdac967915aa96dbad08b676262f2dfa13b5d10bfebd46c5af0a96",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-E2.product.train_250k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "product",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00933,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.59904,
+    0.59204,
+    0.60137,
+    0.59956,
+    0.59813
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_250k",
+   "value": 0.59803
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00245,
+   "canonical_source_path": "results/experiments/e2_siglip/results.json",
+   "canonical_source_sha256": "4c51f60890bdac967915aa96dbad08b676262f2dfa13b5d10bfebd46c5af0a96",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-E2.product.train_40k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "product",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00661,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.55341,
+    0.54926,
+    0.55121,
+    0.55069,
+    0.5468
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.55027
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00449,
+   "canonical_source_path": "results/experiments/e2_siglip/results.json",
+   "canonical_source_sha256": "4c51f60890bdac967915aa96dbad08b676262f2dfa13b5d10bfebd46c5af0a96",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-E2.question_only.train_250k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "question_only",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.01154,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.50104,
+    0.4952,
+    0.50428,
+    0.50674,
+    0.50454
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_250k",
+   "value": 0.50236
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00215,
+   "canonical_source_path": "results/experiments/e2_siglip/results.json",
+   "canonical_source_sha256": "4c51f60890bdac967915aa96dbad08b676262f2dfa13b5d10bfebd46c5af0a96",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-E2.question_only.train_40k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "question_only",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00493,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.46318,
+    0.46746,
+    0.46733,
+    0.46811,
+    0.46448
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.46611
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00176,
+   "canonical_source_path": "results/experiments/e3_vocab1000/results.json",
+   "canonical_source_sha256": "bbdf65f724ee89cc6078628cd85684ad64a06585b6d34bdf0638b364c2a52be6",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-E3.concat.train_250k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "concat",
+   "n_questions": 9823,
+   "n_unique_images": 776,
+   "per_seed_range": 0.00387,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.49231,
+    0.48936,
+    0.49303,
+    0.48916,
+    0.4917
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_250k",
+   "value": 0.49111
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00236,
+   "canonical_source_path": "results/experiments/e3_vocab1000/results.json",
+   "canonical_source_sha256": "bbdf65f724ee89cc6078628cd85684ad64a06585b6d34bdf0638b364c2a52be6",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-E3.concat.train_40k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "concat",
+   "n_questions": 9823,
+   "n_unique_images": 776,
+   "per_seed_range": 0.00591,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.43184,
+    0.43062,
+    0.43653,
+    0.43296,
+    0.43113
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.43262
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00232,
+   "canonical_source_path": "results/experiments/e3_vocab1000/results.json",
+   "canonical_source_sha256": "bbdf65f724ee89cc6078628cd85684ad64a06585b6d34bdf0638b364c2a52be6",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-E3.fusion.train_250k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "fusion",
+   "n_questions": 9823,
+   "n_unique_images": 776,
+   "per_seed_range": 0.00632,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.49516,
+    0.49812,
+    0.4918,
+    0.49618,
+    0.49608
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_250k",
+   "value": 0.49547
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00254,
+   "canonical_source_path": "results/experiments/e3_vocab1000/results.json",
+   "canonical_source_sha256": "bbdf65f724ee89cc6078628cd85684ad64a06585b6d34bdf0638b364c2a52be6",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-E3.fusion.train_40k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "fusion",
+   "n_questions": 9823,
+   "n_unique_images": 776,
+   "per_seed_range": 0.00652,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.44365,
+    0.44752,
+    0.44803,
+    0.45017,
+    0.44518
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.44691
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00248,
+   "canonical_source_path": "results/experiments/e3_vocab1000/results.json",
+   "canonical_source_sha256": "bbdf65f724ee89cc6078628cd85684ad64a06585b6d34bdf0638b364c2a52be6",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-E3.product.train_250k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "product",
+   "n_questions": 9823,
+   "n_unique_images": 776,
+   "per_seed_range": 0.0057,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.49954,
+    0.49669,
+    0.4973,
+    0.50137,
+    0.50239
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_250k",
+   "value": 0.49946
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00218,
+   "canonical_source_path": "results/experiments/e3_vocab1000/results.json",
+   "canonical_source_sha256": "bbdf65f724ee89cc6078628cd85684ad64a06585b6d34bdf0638b364c2a52be6",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-E3.product.train_40k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "product",
+   "n_questions": 9823,
+   "n_unique_images": 776,
+   "per_seed_range": 0.0056,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.44701,
+    0.44141,
+    0.44447,
+    0.44223,
+    0.44396
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.44382
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00359,
+   "canonical_source_path": "results/experiments/e3_vocab1000/results.json",
+   "canonical_source_sha256": "bbdf65f724ee89cc6078628cd85684ad64a06585b6d34bdf0638b364c2a52be6",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-E3.question_only.train_250k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "question_only",
+   "n_questions": 9823,
+   "n_unique_images": 776,
+   "per_seed_range": 0.00967,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.40476,
+    0.40741,
+    0.41077,
+    0.4011,
+    0.40721
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_250k",
+   "value": 0.40625
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00084,
+   "canonical_source_path": "results/experiments/e3_vocab1000/results.json",
+   "canonical_source_sha256": "bbdf65f724ee89cc6078628cd85684ad64a06585b6d34bdf0638b364c2a52be6",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-E3.question_only.train_40k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "question_only",
+   "n_questions": 9823,
+   "n_unique_images": 776,
+   "per_seed_range": 0.00234,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.36608,
+    0.36761,
+    0.3674,
+    0.36842,
+    0.3674
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.36738
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00276,
+   "canonical_source_path": "results/experiments/v2_02_multiseed/results.json",
+   "canonical_source_sha256": "306c1d1bdf31e081c90ab57ef4474b7fc6aeb7c5b34af4697d52a84fd44a8e6d",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-v2_02.concat.train_40k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "concat",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00596,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.5223,
+    0.5267,
+    0.52722,
+    0.52126,
+    0.52243
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.52398
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00218,
+   "canonical_source_path": "results/experiments/v2_02_multiseed/results.json",
+   "canonical_source_sha256": "306c1d1bdf31e081c90ab57ef4474b7fc6aeb7c5b34af4697d52a84fd44a8e6d",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-v2_02.fusion.train_40k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "fusion",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00466,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.53617,
+    0.54083,
+    0.54045,
+    0.53811,
+    0.53643
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.5384
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00033,
+   "canonical_source_path": "results/experiments/v2_02_multiseed/results.json",
+   "canonical_source_sha256": "306c1d1bdf31e081c90ab57ef4474b7fc6aeb7c5b34af4697d52a84fd44a8e6d",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-v2_02.image_only.train_40k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "image_only",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00091,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.23425,
+    0.2349,
+    0.23438,
+    0.23399,
+    0.23438
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.23438
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.0029,
+   "canonical_source_path": "results/experiments/v2_02_multiseed/results.json",
+   "canonical_source_sha256": "306c1d1bdf31e081c90ab57ef4474b7fc6aeb7c5b34af4697d52a84fd44a8e6d",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-v2_02.question_only.train_40k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "question_only",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00765,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.45307,
+    0.46072,
+    0.45813,
+    0.45904,
+    0.45891
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.45797
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00259,
+   "canonical_source_path": "results/experiments/v2_03_param_match/results.json",
+   "canonical_source_sha256": "9494f8a706b26dc82a66bb28280411acbd079991f353da8467248ac0c1947f92",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-v2_03.concat_wide.train_40k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "concat_wide",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00635,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.53565,
+    0.53448,
+    0.5328,
+    0.53085,
+    0.5293
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.53262
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00139,
+   "canonical_source_path": "results/experiments/v2_03_param_match/results.json",
+   "canonical_source_sha256": "9494f8a706b26dc82a66bb28280411acbd079991f353da8467248ac0c1947f92",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-v2_03.fusion_narrow.train_40k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "fusion_narrow",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.0035,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.53228,
+    0.5337,
+    0.53552,
+    0.53202,
+    0.53358
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.53342
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00107,
+   "canonical_source_path": "results/experiments/v2_04_ablation/results.json",
+   "canonical_source_sha256": "3e4a7652dd1e7418b1a19244d85017a4442b6638e86c3d85b1c4888cbceed608",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-v2_04.difference_576k.train_40k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "difference_576k",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00298,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.53306,
+    0.53202,
+    0.53345,
+    0.535,
+    0.53358
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.53342
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00026,
+   "canonical_source_path": "results/experiments/v2_04_ablation/results.json",
+   "canonical_source_sha256": "3e4a7652dd1e7418b1a19244d85017a4442b6638e86c3d85b1c4888cbceed608",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-v2_04.difference_natural.train_40k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "difference_natural",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00064,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.53358,
+    0.53396,
+    0.53396,
+    0.53422,
+    0.53422
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.53399
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00312,
+   "canonical_source_path": "results/experiments/v2_04_ablation/results.json",
+   "canonical_source_sha256": "3e4a7652dd1e7418b1a19244d85017a4442b6638e86c3d85b1c4888cbceed608",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-v2_04.product_576k.train_40k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "product_576k",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00662,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.53072,
+    0.5328,
+    0.53721,
+    0.53643,
+    0.53059
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.53355
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00101,
+   "canonical_source_path": "results/experiments/v2_04_ablation/results.json",
+   "canonical_source_sha256": "3e4a7652dd1e7418b1a19244d85017a4442b6638e86c3d85b1c4888cbceed608",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-v2_04.product_natural.train_40k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "product_natural",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00272,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.53539,
+    0.53721,
+    0.53643,
+    0.53643,
+    0.53811
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.53671
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00329,
+   "canonical_source_path": "results/experiments/v2_06_reliance/results.json",
+   "canonical_source_sha256": "45763fe56be11d42421a968922ac3212b5d1a21af77ccd87706ed44549b6a66b",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-v2_06.concat.shuffled.train_40k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "concat/shuffled",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00778,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.40511,
+    0.40887,
+    0.40394,
+    0.41172,
+    0.40485
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.4069
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.0028,
+   "canonical_source_path": "results/experiments/v2_06_reliance/results.json",
+   "canonical_source_sha256": "45763fe56be11d42421a968922ac3212b5d1a21af77ccd87706ed44549b6a66b",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-v2_06.concat.zeroed.train_40k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "concat/zeroed",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00739,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.42339,
+    0.42274,
+    0.42442,
+    0.42131,
+    0.4287
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.42411
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00258,
+   "canonical_source_path": "results/experiments/v2_06_reliance/results.json",
+   "canonical_source_sha256": "45763fe56be11d42421a968922ac3212b5d1a21af77ccd87706ed44549b6a66b",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-v2_06.fusion.shuffled.train_40k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "fusion/shuffled",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00635,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.39124,
+    0.39759,
+    0.39577,
+    0.39668,
+    0.3972
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.3957
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00487,
+   "canonical_source_path": "results/experiments/v2_06_reliance/results.json",
+   "canonical_source_sha256": "45763fe56be11d42421a968922ac3212b5d1a21af77ccd87706ed44549b6a66b",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-v2_06.fusion.zeroed.train_40k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "fusion/zeroed",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.01206,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.41613,
+    0.42222,
+    0.41457,
+    0.42663,
+    0.41846
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.4196
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.01012,
+   "canonical_source_path": "results/experiments/v2_06_reliance/results.json",
+   "canonical_source_sha256": "45763fe56be11d42421a968922ac3212b5d1a21af77ccd87706ed44549b6a66b",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-v2_06.image_only.shuffled.train_40k",
+   "high_seed_dispersion": true,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "image_only/shuffled",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.02593,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.20158,
+    0.21234,
+    0.20599,
+    0.22751,
+    0.20638
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.21076
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00272,
+   "canonical_source_path": "results/experiments/v2_06_reliance/results.json",
+   "canonical_source_sha256": "45763fe56be11d42421a968922ac3212b5d1a21af77ccd87706ed44549b6a66b",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-v2_06.image_only.zeroed.train_40k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "image_only/zeroed",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00609,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.22466,
+    0.22466,
+    0.22466,
+    0.22466,
+    0.23075
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.22588
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.002,
+   "canonical_source_path": "results/experiments/v2_06_reliance/results.json",
+   "canonical_source_sha256": "45763fe56be11d42421a968922ac3212b5d1a21af77ccd87706ed44549b6a66b",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-v2_06.product_576k.shuffled.train_40k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "product_576k/shuffled",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00506,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.40563,
+    0.40433,
+    0.40368,
+    0.40874,
+    0.40459
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.40539
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00302,
+   "canonical_source_path": "results/experiments/v2_06_reliance/results.json",
+   "canonical_source_sha256": "45763fe56be11d42421a968922ac3212b5d1a21af77ccd87706ed44549b6a66b",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-v2_06.product_576k.zeroed.train_40k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "product_576k/zeroed",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.0083,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.4252,
+    0.42235,
+    0.42066,
+    0.42053,
+    0.4169
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.42113
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.0029,
+   "canonical_source_path": "results/experiments/v2_06_reliance/results.json",
+   "canonical_source_sha256": "45763fe56be11d42421a968922ac3212b5d1a21af77ccd87706ed44549b6a66b",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-v2_06.question_only.shuffled.train_40k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "question_only/shuffled",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00765,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.45307,
+    0.46072,
+    0.45813,
+    0.45904,
+    0.45891
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.45797
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.0029,
+   "canonical_source_path": "results/experiments/v2_06_reliance/results.json",
+   "canonical_source_sha256": "45763fe56be11d42421a968922ac3212b5d1a21af77ccd87706ed44549b6a66b",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-v2_06.question_only.zeroed.train_40k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "question_only/zeroed",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00765,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.45307,
+    0.46072,
+    0.45813,
+    0.45904,
+    0.45891
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.45797
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00201,
+   "canonical_source_path": "results/experiments/v2_07_scaling/results.json",
+   "canonical_source_sha256": "852206e1b0a404955ed66c5b56a3b9bd7215c15fb35b438dd703cc6c497b79fc",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-v2_07.concat.train_100k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "concat",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00467,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.55069,
+    0.54965,
+    0.54822,
+    0.55289,
+    0.55276
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_100k",
+   "value": 0.55084
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00264,
+   "canonical_source_path": "results/experiments/v2_07_scaling/results.json",
+   "canonical_source_sha256": "852206e1b0a404955ed66c5b56a3b9bd7215c15fb35b438dd703cc6c497b79fc",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-v2_07.concat.train_250k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "concat",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00545,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.57661,
+    0.577,
+    0.58193,
+    0.57648,
+    0.58102
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_250k",
+   "value": 0.57861
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00276,
+   "canonical_source_path": "results/experiments/v2_07_scaling/results.json",
+   "canonical_source_sha256": "852206e1b0a404955ed66c5b56a3b9bd7215c15fb35b438dd703cc6c497b79fc",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-v2_07.concat.train_40k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "concat",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00596,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.5223,
+    0.5267,
+    0.52722,
+    0.52126,
+    0.52243
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.52398
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00268,
+   "canonical_source_path": "results/experiments/v2_07_scaling/results.json",
+   "canonical_source_sha256": "852206e1b0a404955ed66c5b56a3b9bd7215c15fb35b438dd703cc6c497b79fc",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-v2_07.fusion.train_100k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "fusion",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00674,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.56365,
+    0.56521,
+    0.56339,
+    0.55847,
+    0.56469
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_100k",
+   "value": 0.56308
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00197,
+   "canonical_source_path": "results/experiments/v2_07_scaling/results.json",
+   "canonical_source_sha256": "852206e1b0a404955ed66c5b56a3b9bd7215c15fb35b438dd703cc6c497b79fc",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-v2_07.fusion.train_250k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "fusion",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00402,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.58439,
+    0.58128,
+    0.58089,
+    0.58439,
+    0.58037
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_250k",
+   "value": 0.58226
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00218,
+   "canonical_source_path": "results/experiments/v2_07_scaling/results.json",
+   "canonical_source_sha256": "852206e1b0a404955ed66c5b56a3b9bd7215c15fb35b438dd703cc6c497b79fc",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-v2_07.fusion.train_40k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "fusion",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00466,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.53617,
+    0.54083,
+    0.54045,
+    0.53811,
+    0.53643
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.5384
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00223,
+   "canonical_source_path": "results/experiments/v2_07_scaling/results.json",
+   "canonical_source_sha256": "852206e1b0a404955ed66c5b56a3b9bd7215c15fb35b438dd703cc6c497b79fc",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-v2_07.product_576k.train_100k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "product_576k",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00583,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.56274,
+    0.56352,
+    0.56054,
+    0.56637,
+    0.56508
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_100k",
+   "value": 0.56365
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00318,
+   "canonical_source_path": "results/experiments/v2_07_scaling/results.json",
+   "canonical_source_sha256": "852206e1b0a404955ed66c5b56a3b9bd7215c15fb35b438dd703cc6c497b79fc",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-v2_07.product_576k.train_250k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "product_576k",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00842,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.58271,
+    0.57921,
+    0.58763,
+    0.58167,
+    0.58089
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_250k",
+   "value": 0.58242
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00312,
+   "canonical_source_path": "results/experiments/v2_07_scaling/results.json",
+   "canonical_source_sha256": "852206e1b0a404955ed66c5b56a3b9bd7215c15fb35b438dd703cc6c497b79fc",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-v2_07.product_576k.train_40k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "product_576k",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00662,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.53072,
+    0.5328,
+    0.53721,
+    0.53643,
+    0.53059
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.53355
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00151,
+   "canonical_source_path": "results/experiments/v2_07_scaling/results.json",
+   "canonical_source_sha256": "852206e1b0a404955ed66c5b56a3b9bd7215c15fb35b438dd703cc6c497b79fc",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-v2_07.question_only.train_100k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "question_only",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00363,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.48146,
+    0.48172,
+    0.4838,
+    0.48263,
+    0.48509
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_100k",
+   "value": 0.48294
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00439,
+   "canonical_source_path": "results/experiments/v2_07_scaling/results.json",
+   "canonical_source_sha256": "852206e1b0a404955ed66c5b56a3b9bd7215c15fb35b438dd703cc6c497b79fc",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-v2_07.question_only.train_250k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "question_only",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.01115,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.50402,
+    0.49287,
+    0.49767,
+    0.49948,
+    0.49443
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_250k",
+   "value": 0.49769
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.0029,
+   "canonical_source_path": "results/experiments/v2_07_scaling/results.json",
+   "canonical_source_sha256": "852206e1b0a404955ed66c5b56a3b9bd7215c15fb35b438dd703cc6c497b79fc",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-v2_07.question_only.train_40k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "question_only",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00765,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "per_seed_values": [
+    0.45307,
+    0.46072,
+    0.45813,
+    0.45904,
+    0.45891
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2,
+    3,
+    42
+   ],
+   "training_scale": "train_40k",
+   "value": 0.45797
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.0002,
+   "canonical_source_path": "results/experiments/v3_03_scaling/results.json",
+   "canonical_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-v3_03.reasoner.train_100k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "reasoner",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00039,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2
+   ],
+   "per_seed_values": [
+    0.57078,
+    0.57065,
+    0.57039
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_100k",
+   "value": 0.57061
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00741,
+   "canonical_source_path": "results/experiments/v3_03_scaling/results.json",
+   "canonical_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-v3_03.reasoner.train_250k",
+   "high_seed_dispersion": false,
+   "metric_id": "v2_closed_vocab_top1_index_match",
+   "model_system": "reasoner",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.01297,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2
+   ],
+   "per_seed_values": [
+    0.59139,
+    0.59165,
+    0.60436
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_250k",
+   "value": 0.5958
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.0083,
+   "canonical_source_path": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
+   "canonical_source_sha256": "37ffdcd09aa2bcd306ca9b54229a1d0d17ff203b6b0900e09e5f876ad1ed0748",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-E10.B4.train_250k",
+   "high_seed_dispersion": false,
+   "metric_id": "g21_pinned_normalised_exact_match",
+   "model_system": "B4",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.01659,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2
+   ],
+   "per_seed_values": [
+    0.60215,
+    0.58556,
+    0.5945
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_250k",
+   "value": 0.59407
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00465,
+   "canonical_source_path": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
+   "canonical_source_sha256": "37ffdcd09aa2bcd306ca9b54229a1d0d17ff203b6b0900e09e5f876ad1ed0748",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-E10.B4.train_40k",
+   "high_seed_dispersion": false,
+   "metric_id": "g21_pinned_normalised_exact_match",
+   "model_system": "B4",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00907,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2
+   ],
+   "per_seed_values": [
+    0.52515,
+    0.5315,
+    0.52243
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.52636
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00343,
+   "canonical_source_path": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
+   "canonical_source_sha256": "37ffdcd09aa2bcd306ca9b54229a1d0d17ff203b6b0900e09e5f876ad1ed0748",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-E10.B4r.train_250k",
+   "high_seed_dispersion": false,
+   "metric_id": "g21_pinned_normalised_exact_match",
+   "model_system": "B4r",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00648,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2
+   ],
+   "per_seed_values": [
+    0.59256,
+    0.59774,
+    0.59904
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_250k",
+   "value": 0.59645
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00474,
+   "canonical_source_path": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
+   "canonical_source_sha256": "37ffdcd09aa2bcd306ca9b54229a1d0d17ff203b6b0900e09e5f876ad1ed0748",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-E10.B4r.train_40k",
+   "high_seed_dispersion": false,
+   "metric_id": "g21_pinned_normalised_exact_match",
+   "model_system": "B4r",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00908,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2
+   ],
+   "per_seed_values": [
+    0.53474,
+    0.52787,
+    0.53695
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.53319
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.0003,
+   "canonical_source_path": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
+   "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-E8A.A0p.train_250k",
+   "high_seed_dispersion": false,
+   "metric_id": "g21_pinned_normalised_exact_match",
+   "model_system": "A0p",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00052,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2
+   ],
+   "per_seed_values": [
+    0.59463,
+    0.59411,
+    0.59463
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_250k",
+   "value": 0.59446
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00438,
+   "canonical_source_path": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
+   "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-E8A.A0p.train_40k",
+   "high_seed_dispersion": false,
+   "metric_id": "g21_pinned_normalised_exact_match",
+   "model_system": "A0p",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00868,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2
+   ],
+   "per_seed_values": [
+    0.53578,
+    0.54446,
+    0.54109
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.54044
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00153,
+   "canonical_source_path": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
+   "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-E8A.A1.train_250k",
+   "high_seed_dispersion": false,
+   "metric_id": "g21_pinned_normalised_exact_match",
+   "model_system": "A1",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00272,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2
+   ],
+   "per_seed_values": [
+    0.57493,
+    0.57221,
+    0.57234
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_250k",
+   "value": 0.57316
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00296,
+   "canonical_source_path": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
+   "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-E8A.A1.train_40k",
+   "high_seed_dispersion": false,
+   "metric_id": "g21_pinned_normalised_exact_match",
+   "model_system": "A1",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00583,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2
+   ],
+   "per_seed_values": [
+    0.52541,
+    0.53124,
+    0.52917
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.52861
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00487,
+   "canonical_source_path": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
+   "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-E8A.A1r.train_250k",
+   "high_seed_dispersion": false,
+   "metric_id": "g21_pinned_normalised_exact_match",
+   "model_system": "A1r",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00946,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2
+   ],
+   "per_seed_values": [
+    0.5302,
+    0.52346,
+    0.52074
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_250k",
+   "value": 0.5248
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00259,
+   "canonical_source_path": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
+   "canonical_source_sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
+   "checkpoint_selection_class": "BEST_ON_DEVELOPMENT",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-E8A.A1r.train_40k",
+   "high_seed_dispersion": false,
+   "metric_id": "g21_pinned_normalised_exact_match",
+   "model_system": "A1r",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00506,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2
+   ],
+   "per_seed_values": [
+    0.48976,
+    0.4882,
+    0.49326
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.49041
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00486,
+   "canonical_source_path": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+   "canonical_source_sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-E8B.B1.train_250k",
+   "high_seed_dispersion": false,
+   "metric_id": "g21_pinned_normalised_exact_match",
+   "model_system": "B1",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00908,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2
+   ],
+   "per_seed_values": [
+    0.58841,
+    0.59749,
+    0.59593
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_250k",
+   "value": 0.59394
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.0039,
+   "canonical_source_path": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+   "canonical_source_sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-E8B.B1.train_40k",
+   "high_seed_dispersion": false,
+   "metric_id": "g21_pinned_normalised_exact_match",
+   "model_system": "B1",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00726,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2
+   ],
+   "per_seed_values": [
+    0.54952,
+    0.54226,
+    0.54343
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.54507
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00528,
+   "canonical_source_path": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+   "canonical_source_sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-E8B.B2.train_250k",
+   "high_seed_dispersion": false,
+   "metric_id": "g21_pinned_normalised_exact_match",
+   "model_system": "B2",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.0105,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2
+   ],
+   "per_seed_values": [
+    0.59593,
+    0.60021,
+    0.60643
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_250k",
+   "value": 0.60086
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.00233,
+   "canonical_source_path": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+   "canonical_source_sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-E8B.B2.train_40k",
+   "high_seed_dispersion": false,
+   "metric_id": "g21_pinned_normalised_exact_match",
+   "model_system": "B2",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00441,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2
+   ],
+   "per_seed_values": [
+    0.53215,
+    0.53656,
+    0.53306
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.53392
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.0027,
+   "canonical_source_path": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+   "canonical_source_sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-E8B.B3.train_250k",
+   "high_seed_dispersion": false,
+   "metric_id": "g21_pinned_normalised_exact_match",
+   "model_system": "B3",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.00518,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2
+   ],
+   "per_seed_values": [
+    0.59826,
+    0.59697,
+    0.59308
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_250k",
+   "value": 0.5961
+  },
+  {
+   "across_training_seed_sd_ddof1": 0.02795,
+   "canonical_source_path": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+   "canonical_source_sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138",
+   "checkpoint_selection_class": "FIXED_EPOCH_22",
+   "ci95": null,
+   "ci_type": "NO_INTERVAL: this row carries training-seed dispersion only",
+   "cluster_unit": "NOT_APPLICABLE",
+   "comparison_class": "DESCRIPTIVE_ONLY",
+   "evidence_id": "EV-SEED-E8B.B3.train_40k",
+   "high_seed_dispersion": true,
+   "metric_id": "g21_pinned_normalised_exact_match",
+   "model_system": "B3",
+   "n_questions": 7714,
+   "n_unique_images": 768,
+   "per_seed_range": 0.05341,
+   "per_seed_seed_ids": [
+    0,
+    1,
+    2
+   ],
+   "per_seed_values": [
+    0.53124,
+    0.47783,
+    0.5188
+   ],
+   "role": "per-seed points",
+   "seed_set": [
+    0,
+    1,
+    2
+   ],
+   "training_scale": "train_40k",
+   "value": 0.50929
+  }
+ ],
+ "high_dispersion_rows": [
+  "EV-SEED-E8B.B3.train_40k",
+  "EV-SEED-v2_06.image_only.shuffled.train_40k"
+ ],
+ "mandatory_caption_caveat": "The spread here is across independent TRAINING seeds. It is a different quantity from the image-clustered evaluation-sampling intervals used elsewhere and the two are never interchanged. Seed sets differ by family (five seeds for V2, E2 and E3; three for V3, E8A, E8B and E10) and are never pooled across families. Two metrics appear in this figure and are shown as separate blocks, never on one shared scale. Checkpoint selection also differs across the blocks: V2, V3, E2, E3 and E8A select the best development epoch, while E8B and E10 use the frozen fixed-22 rule with no early stopping, so the dispersions are not measured under one selection protocol.",
+ "metric_ids": [
+  "g21_pinned_normalised_exact_match",
+  "v2_closed_vocab_top1_index_match"
+ ],
+ "mixes_checkpoint_selection": true,
+ "panels": {
+  "blocks": {
+   "V2-era closed-vocabulary scorer": 50,
+   "pinned G21 normalised scorer": 16
+  }
+ },
+ "placement": "APPENDIX",
+ "provenance": {
+  "build_command": "python -m experiments.ve1.run_ve1",
+  "builder": "experiments/ve1/figures.py",
+  "builder_sha256": "ec27ea9b5beadb4e6acd1f5f2cc585ffb9019da84af86587086a6dd537f745fd",
+  "clean_test_accessed": false,
+  "device": "cpu",
+  "evaluated_anything": false,
+  "gpu_hours_charged": 0.0,
+  "gpu_used": false,
+  "inputs": [
+   {
+    "path": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
+    "resolution": "CANONICAL_PATH",
+    "resolved_from": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
+    "sha256": "37ffdcd09aa2bcd306ca9b54229a1d0d17ff203b6b0900e09e5f876ad1ed0748"
+   },
+   {
+    "path": "results/experiments/e2_siglip/results.json",
+    "resolution": "CANONICAL_PATH",
+    "resolved_from": "results/experiments/e2_siglip/results.json",
+    "sha256": "4c51f60890bdac967915aa96dbad08b676262f2dfa13b5d10bfebd46c5af0a96"
+   },
+   {
+    "path": "results/experiments/e3_vocab1000/results.json",
+    "resolution": "CANONICAL_PATH",
+    "resolved_from": "results/experiments/e3_vocab1000/results.json",
+    "sha256": "bbdf65f724ee89cc6078628cd85684ad64a06585b6d34bdf0638b364c2a52be6"
+   },
+   {
+    "path": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
+    "resolution": "CANONICAL_PATH",
+    "resolved_from": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
+    "sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562"
+   },
+   {
+    "path": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+    "resolution": "CANONICAL_PATH",
+    "resolved_from": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+    "sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138"
+   },
+   {
+    "path": "results/experiments/v2_02_multiseed/results.json",
+    "resolution": "CANONICAL_PATH",
+    "resolved_from": "results/experiments/v2_02_multiseed/results.json",
+    "sha256": "306c1d1bdf31e081c90ab57ef4474b7fc6aeb7c5b34af4697d52a84fd44a8e6d"
+   },
+   {
+    "path": "results/experiments/v2_03_param_match/results.json",
+    "resolution": "CANONICAL_PATH",
+    "resolved_from": "results/experiments/v2_03_param_match/results.json",
+    "sha256": "9494f8a706b26dc82a66bb28280411acbd079991f353da8467248ac0c1947f92"
+   },
+   {
+    "path": "results/experiments/v2_04_ablation/results.json",
+    "resolution": "CANONICAL_PATH",
+    "resolved_from": "results/experiments/v2_04_ablation/results.json",
+    "sha256": "3e4a7652dd1e7418b1a19244d85017a4442b6638e86c3d85b1c4888cbceed608"
+   },
+   {
+    "path": "results/experiments/v2_06_reliance/results.json",
+    "resolution": "CANONICAL_PATH",
+    "resolved_from": "results/experiments/v2_06_reliance/results.json",
+    "sha256": "45763fe56be11d42421a968922ac3212b5d1a21af77ccd87706ed44549b6a66b"
+   },
+   {
+    "path": "results/experiments/v2_07_scaling/results.json",
+    "resolution": "CANONICAL_PATH",
+    "resolved_from": "results/experiments/v2_07_scaling/results.json",
+    "sha256": "852206e1b0a404955ed66c5b56a3b9bd7215c15fb35b438dd703cc6c497b79fc"
+   },
+   {
+    "path": "results/experiments/v3_03_scaling/results.json",
+    "resolution": "CANONICAL_PATH",
+    "resolved_from": "results/experiments/v3_03_scaling/results.json",
+    "sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339"
+   }
+  ],
+  "matplotlib_version": "3.11.0",
+  "measured_anything": false,
+  "numpy_version": "2.5.0",
+  "python": "3.12.3",
+  "read_any_checkpoint": false,
+  "read_any_embedding_store": false,
+  "repository_head": "f91d0770b6733a0b3eb4f161dd2ca36d60050bbb",
+  "repository_head_short": "f91d077",
+  "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+  "schema_version": 1,
+  "selected_any_checkpoint": false,
+  "trained_anything": false,
+  "worktree_dirty": true
+ },
+ "scientific_question": "How much does a result move when only the training seed changes?",
+ "unblocked_by": "the 2026-08-13 VE-0 per-seed binding amendment",
+ "unbound_cells": [],
+ "uncertainty_by_panel": null,
+ "uncertainty_shown": "SEED_POINTS",
+ "v2_07_evidence_ids": [
+  "EV-SEED-v2_07.concat.train_100k",
+  "EV-SEED-v2_07.concat.train_250k",
+  "EV-SEED-v2_07.concat.train_40k",
+  "EV-SEED-v2_07.fusion.train_100k",
+  "EV-SEED-v2_07.fusion.train_250k",
+  "EV-SEED-v2_07.fusion.train_40k",
+  "EV-SEED-v2_07.product_576k.train_100k",
+  "EV-SEED-v2_07.product_576k.train_250k",
+  "EV-SEED-v2_07.product_576k.train_40k",
+  "EV-SEED-v2_07.question_only.train_100k",
+  "EV-SEED-v2_07.question_only.train_250k",
+  "EV-SEED-v2_07.question_only.train_40k"
+ ],
+ "v2_07_limitation": "Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. v2_07 ACCEPTED DOCUMENTED LIMITATION. No image-clustered evaluation interval is available for this family: row-level reconstruction was attempted and stopped by a point-estimate reproduction mismatch, and one of forty cells differs from reconstruction by one numerically tied row (v2_07::question_only::train_250k::seed2::normal, stored 0.49767 against recomputed 0.49754, a single float32 argmax tie on row index 6213 of 7,714). Report per-seed means and the across-training-seed sample sd only. No post-hoc partial-family reconstruction is authorised.",
+ "ve0_source_artefacts": [
+  {
+   "path": "results/ve0/canonical_evidence_inventory.json",
+   "role": "VE-0 output A",
+   "sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3"
+  },
+  {
+   "path": "results/ve0/canonical_evidence_inventory.csv",
+   "role": "VE-0 output A_csv",
+   "sha256": "86921381e6fc22b674559b44272e9ba70aaeffafdf600c4a752d5cb6200eee9b"
+  },
+  {
+   "path": "results/ve0/supersession_map.json",
+   "role": "VE-0 output C",
+   "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
+  },
+  {
+   "path": "results/ve0/claim_ledger.json",
+   "role": "VE-0 output D",
+   "sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7"
+  },
+  {
+   "path": "results/ve0/rq_evidence_matrix.json",
+   "role": "VE-0 output E",
+   "sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d"
+  },
+  {
+   "path": "results/ve0/figure_specifications.json",
+   "role": "VE-0 output F",
+   "sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c"
+  },
+  {
+   "path": "results/ve0/table_specifications.json",
+   "role": "VE-0 output G",
+   "sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8"
+  },
+  {
+   "path": "results/ve0/qualitative_protocol.json",
+   "role": "VE-0 output H",
+   "sha256": "c8c5c35bec84da409e9a36612ad07846e2d218aa35351bc7d09340760cd9e895"
+  },
+  {
+   "path": "results/ve0/qualitative_record_schema.json",
+   "role": "VE-0 output I",
+   "sha256": "898e0a6bfeddfb37196e0d1e4bfc469606bcd663c5283b6fac931cd0e3de4297"
+  },
+  {
+   "path": "results/ve0/reporting_style_contract.json",
+   "role": "VE-0 output J",
+   "sha256": "536cf07aa6bd5f80eb1b843046435804345e7bd1f558ba047866b223aadd5504"
+  },
+  {
+   "path": "results/ve0/provenance_contract.json",
+   "role": "VE-0 output K",
+   "sha256": "4a0c33512194fcd11493d3e05f0a86fc8f752ea6343f698c8da0c630672213ab"
+  },
+  {
+   "path": "results/ve0/efficiency_visualisation_contract.json",
+   "role": "VE-0 output L",
+   "sha256": "c8d221544dca46f55339fcd708e4dd66b9aa1e1e9b130bdf44a2a39871ee9cc4"
+  },
+  {
+   "path": "results/ve0/results_section_mapping.json",
+   "role": "VE-0 output M",
+   "sha256": "2f80c8d34949f6ea3e5b7546d67b79793463d7f63d4278b0a03153125bc50686"
+  },
+  {
+   "path": "results/ve0/VE0_MANIFEST.json",
+   "role": "VE-0 output O",
+   "sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3"
+  }
+ ],
+ "ve0_specification_id": "VE0-FIG-A2",
+ "working_title": "Per-seed dispersion across every trained family"
+}

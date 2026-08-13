@@ -827,6 +827,116 @@ def test_v3_01_scalar_identity(art: dict) -> None:
               f"statistics are superseded")
 
 
+
+def test_per_seed_amendment(art: dict) -> None:
+    """The 2026-08-13 amendment: bound per-seed vectors, nothing recomputed."""
+    rows = art["inventory"]["rows"]
+    seed_rows = [r for r in rows if r["evidence_class"] == "SEED"]
+    contrast_rows = [r for r in rows if r["evidence_class"] == "CON"]
+
+    bound_seed = [r for r in seed_rows if r["per_seed_status"] == "BOUND"]
+    check(len(bound_seed) == len(seed_rows) == 66,
+          f"{len(bound_seed)} of {len(seed_rows)} SEED rows carry per-seed "
+          f"values; all 66 are available in the frozen closure artefact")
+
+    bound_contrast = [r for r in contrast_rows
+                      if r["per_seed_status"] == "BOUND"]
+    check(len(bound_contrast) == 67,
+          f"{len(bound_contrast)} contrast rows carry per-seed effects, "
+          f"expected 67")
+    unavailable = [r for r in contrast_rows
+                   if str(r["per_seed_status"]).startswith("NOT_AVAILABLE")]
+    check(len(unavailable) == 3,
+          f"{len(unavailable)} contrast rows record no per-seed effect, "
+          f"expected the 3 V3 deficit differences")
+    for row in unavailable:
+        check("reasoner_minus_fusion_deficit" in row["source_key"],
+              f"{row['evidence_id']} unexpectedly has no per-seed effect")
+        check("NOT_AVAILABLE_IN_FROZEN_SOURCE" in row["per_seed_status"],
+              f"{row['evidence_id']} does not say why it has none")
+
+    for row in bound_seed + bound_contrast:
+        values = row["per_seed_values"] or row["per_seed_effects"]
+        ids = row["per_seed_seed_ids"]
+        check(ids == list(row["seed_set"]),
+              f"{row['evidence_id']} per-seed identifiers do not match its "
+              f"seed set")
+        check(len(values) == row["n_training_seeds"],
+              f"{row['evidence_id']} per-seed count does not match "
+              f"n_training_seeds")
+        mean = round(sum(values) / len(values), 5)
+        check(abs(mean - row["point_estimate"]) <= 1.1e-5,
+              f"{row['evidence_id']} per-seed values mean to {mean}, stored "
+              f"{row['point_estimate']}")
+        provenance = row["per_seed_provenance"]
+        check(provenance["read_from"].startswith("results/closure/"),
+              f"{row['evidence_id']} per-seed provenance does not name a "
+              f"frozen closure output")
+        check("READ_ONLY" in provenance["computation"],
+              f"{row['evidence_id']} does not record that nothing was "
+              f"recomputed")
+        source = vc.PROJECT_ROOT / provenance["read_from"]
+        check(vc.sha256_file(source) == provenance["read_from_sha256"],
+              f"{row['evidence_id']} per-seed source hash is stale")
+
+    b3 = next(r for r in rows
+              if r["evidence_id"] == "EV-SEED-E8B.B3.train_40k")
+    check(b3["per_seed_values"] == [0.53124, 0.47783, 0.5188],
+          f"E8B B3 train_40k per-seed values are {b3['per_seed_values']}")
+    check(b3["per_seed_range"] == 0.05341,
+          f"E8B B3 train_40k range is {b3['per_seed_range']}")
+    did = next(r for r in rows
+               if r["evidence_id"] == "EV-CON-E10.difference_in_differences")
+    check(did["per_seed_effects"] == [0.01919, -0.01582, 0.00998],
+          f"E10 difference-in-differences per-seed effects are "
+          f"{did['per_seed_effects']}")
+
+
+def test_repaired_research_question_wording(art: dict) -> None:
+    """B1 and B2: RQ6 and RQ9 stay inside what the evidence supports."""
+    questions = {q["rq_id"]: q for q in art["matrix"]["questions"]}
+    rq6 = questions["RQ6"]["supported_answer"]
+    check("at any tested scale" not in rq6,
+          "RQ6 still over-generalises the 40k conclusion to every scale")
+    check("higher at the larger training scales" in rq6,
+          "RQ6 does not record the larger-scale overall-accuracy direction")
+    check("no tested scale shows a reliable reduction" in rq6,
+          "RQ6 does not keep the deficit conclusion, which does hold at every "
+          "tested scale")
+    check(questions["RQ6"]["claim_ids"] == ["C07"],
+          "RQ6 no longer rests on C07 alone")
+
+    rq9 = questions["RQ9"]["supported_answer"]
+    check("SLM readouts" not in rq9,
+          "RQ9 still generalises accuracy-paired serial cost to the SLM "
+          "readouts as a class")
+    check("otter155" in rq9 and "otter159" in rq9,
+          "RQ9 no longer separates the two nodes")
+    check("latency-only" in rq9 and "not bound to a specific accuracy" in rq9,
+          "RQ9 does not state that the otter159 rows carry no accuracy")
+    check(questions["RQ9"]["claim_ids"] == ["C13", "C14"],
+          "RQ9 no longer rests on C13 and C14")
+
+
+def test_claim_ledger_moved_to_the_appendix(art: dict) -> None:
+    tables = {t["table_id"]: t for t in art["tables"]["tables"]}
+    check(tables["VE0-TAB-07"]["placement"] == "APPENDIX",
+          "the claim ledger is still a main-text table")
+    check("VE0-TAB-07" in art["tables"]["appendix_tables"],
+          "the claim ledger is not listed among the appendix tables")
+    check("VE0-TAB-07" not in art["tables"]["main_text_tables"],
+          "the claim ledger is still listed among the main-text tables")
+    sections = {s["section_id"]: s for s in art["mapping"]["sections"]}
+    check("R_APPENDIX_CLAIM_LEDGER" in sections,
+          "the appendix claim-ledger section does not exist")
+    check(sections["R_APPENDIX_CLAIM_LEDGER"]["tables"] == ["VE0-TAB-07"],
+          "the appendix claim-ledger section does not carry the table")
+    check("VE0-TAB-07" not in sections["R_LIMITATIONS"]["tables"],
+          "the Limitations section still carries the ledger as a table")
+    claims = {c["claim_id"] for c in art["ledger"]["claims"]}
+    check(len(claims) == 21, f"the ledger has {len(claims)} claims, not 21")
+
+
 def run() -> None:
     CHECKS[0] = 0
     FAILURES.clear()
@@ -852,6 +962,9 @@ def run() -> None:
     test_checkpoint_selection_is_enforced(art)
     test_isolated_rebuild_is_content_identical(art)
     test_provenance_divergence_is_content_neutral(art)
+    test_per_seed_amendment(art)
+    test_repaired_research_question_wording(art)
+    test_claim_ledger_moved_to_the_appendix(art)
 
     if FAILURES:
         for failure in FAILURES:

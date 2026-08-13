@@ -32,6 +32,37 @@ CHECKLIST = [
 # still stands.
 RECORDS = [
     {
+        "artefact_id": "VE1-FIG-A2",
+        "outcome": "PASS after repair",
+        "findings": [
+            "first rendered as two side-by-side panels holding 50 and 16 "
+            "rows, which gave the smaller block a different row pitch and "
+            "invited a reader to compare across the two scorers",
+            "the legend overlapped the figure title",
+        ],
+        "disposition": "the blocks were stacked with height ratios matching "
+                       "their row counts, so both have the same row pitch and "
+                       "neither shares an axis with the other; the title was "
+                       "shortened and the legend anchored clear of it.",
+        "residual": "the figure is tall by necessity: 66 rows, each with its "
+                    "own seed points. It is an appendix figure and is read "
+                    "row by row.",
+        "added_by": "the 2026-08-13 amendment, which unblocked this figure by "
+                    "binding the per-seed values it declares",
+    },
+    {
+        "artefact_id": "VE1-FIG-04-FULL",
+        "outcome": "PASS",
+        "findings": [],
+        "disposition": "no change needed. It is the seven-series variant of "
+                       "panel (a), rendered from the same evidence as the "
+                       "main-text figure so that reducing the main panel to "
+                       "four claim-driving systems drops no evidence.",
+        "residual": "seven overlapping series remain dense. That is why it is "
+                    "the appendix variant and not the main-text one.",
+        "added_by": "the 2026-08-13 amendment",
+    },
+    {
         "artefact_id": "VE1-FIG-01",
         "outcome": "PASS after repair",
         "findings": [
@@ -91,11 +122,12 @@ RECORDS = [
                        "with added headroom; group titles moved onto their "
                        "separating rules with an opaque background, in the "
                        "empty left band of the panel.",
-        "residual": "panel (a) carries seven series, above the three-series "
-                    "cap for an all-pairs colour comparison. Identity is "
-                    "carried by marker shape and by the legend as well as by "
-                    "colour, and no pairwise colour discrimination is asked "
-                    "of the reader.",
+        "residual": "none. The 2026-08-13 amendment reduced main-text panel "
+                    "(a) from seven series to the four claim-driving systems, "
+                    "which the independent review judged necessary; the full "
+                    "seven-series evidence is rendered as VE1-FIG-04-FULL "
+                    "from the same evidence in the same build, and panel (b), "
+                    "which carries the depth claim, is unchanged.",
     },
     {
         "artefact_id": "VE1-FIG-05",
@@ -153,11 +185,13 @@ RECORDS = [
                        "vertical headroom added below the last row so the "
                        "legend sits under the data rather than on any of "
                        "them.",
-        "residual": "the second-order block is separated by a thicker rule in "
-                    "its own colour, is labelled a second-order interaction, "
-                    "and its row label reads '250k minus 40k' rather than a "
-                    "training scale. The axis label disclaimer is in the "
-                    "footer and in the caption.",
+        "residual": "none. The 2026-08-13 amendment moved the difference in "
+                    "differences out of the first-order forest entirely and "
+                    "into its own subpanel with its own axis label, so the "
+                    "quantity no longer sits under a label that does not "
+                    "describe it and no warning is relied on to repair the "
+                    "semantics. The two axes share a numeric scale so "
+                    "magnitudes stay comparable by eye.",
     },
     {
         "artefact_id": "VE1-FIG-09",
@@ -182,10 +216,14 @@ RECORDS = [
                        "reserves room for them, ticks are plain "
                        "milliseconds, and each panel's legend is built from "
                        "what that panel actually drew.",
-        "residual": "panel (a)'s strip is empty by construction and carries a "
-                    "note saying so. The whitespace is deliberate: it makes "
-                    "visible that the unresolved pairings are all on the "
-                    "other node.",
+        "residual": "none. The 2026-08-13 amendment removed the empty strip "
+                    "axis under panel (a), which read as missing data, and "
+                    "replaced it with one line of text; the arm-code glossary "
+                    "moved out of the plot body into the canonical caption. "
+                    "Every scientific safeguard is unchanged: the nodes are "
+                    "still separate, the seven unresolved rows are still "
+                    "latency-only with no frontier membership, and the failed "
+                    "bridge control is still stated.",
     },
     {
         "artefact_id": "VE1-FIG-A1",

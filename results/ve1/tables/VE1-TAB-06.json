@@ -5,6 +5,7 @@
  "carries_v2_07_limitation": false,
  "clean_test_accessed": false,
  "columns": [
+  "presentation",
   "system",
   "experiment family",
   "timing class",
@@ -55,7 +56,7 @@
   "EV-EFF-E9.fusion",
   "EV-EFF-E9.vocab1000_product"
  ],
- "content_sha256": "d77622fc60dff86d1afa991a6d111028b23a6068968b38e155dda77d233316f5",
+ "content_sha256": "5d6840acf903aafa26597c30d3aae18056d006ea976afc77c1834d853c4d8d3c",
  "development_set_only": true,
  "dissertation_section": [
   "R8_COMPUTATIONAL_EFFICIENCY"
@@ -78,10 +79,17 @@
  "nodes_merged": false,
  "placement": "MAIN_TEXT",
  "precision": "latency to 4 decimal places as stored",
+ "presentation_blocks": [
+  "Main text, node otter155 (E7b): authoritative END_TO_END_SERIAL evidence",
+  "Main text, node otter159 (E9): authoritative END_TO_END_SERIAL evidence. Never merged with otter155",
+  "Retained in full: cached, component and superseded rows, which support no end-to-end latency claim"
+ ],
+ "presentation_column": "presentation",
+ "presentation_note": "The two main-text blocks are the only rows that support an end-to-end latency claim, and they are separated by node because the nodes are never merged. The complete 36-row timing registry is retained in the same artefact, in the CSV and in the JSON record.",
  "provenance": {
   "build_command": "python -m experiments.ve1.run_ve1",
   "builder": "experiments/ve1/tables.py",
-  "builder_sha256": "8ba42a83bbc46fa056eebbd31715b536f3a9f9b05c066e7059b2cc28052a8733",
+  "builder_sha256": "c8c2a91ec60da21aa633b6f6f3d77499bdbceb8d62c0c15a50007cce898b1675",
   "clean_test_accessed": false,
   "device": "cpu",
   "evaluated_anything": false,
@@ -90,14 +98,20 @@
   "inputs": [
    {
     "path": "results/experiments/e7a_efficiency/results.json",
+    "resolution": "CANONICAL_PATH",
+    "resolved_from": "results/experiments/e7a_efficiency/results.json",
     "sha256": "368ba5c2a149953193cf237bdf77023c17b244540ef7b9bfac55cb5a7fdc1a85"
    },
    {
     "path": "results/experiments/e7b_serial_efficiency/e7b_results.json",
+    "resolution": "CANONICAL_PATH",
+    "resolved_from": "results/experiments/e7b_serial_efficiency/e7b_results.json",
     "sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4"
    },
    {
     "path": "results/experiments/e9_compact_vlm/e9_results.json",
+    "resolution": "CANONICAL_PATH",
+    "resolved_from": "results/experiments/e9_compact_vlm/e9_results.json",
     "sha256": "5d42ae9344fa9d7bcd48589645d62b4d0c20db9a3d9d03288bbddd6832ae2caa"
    }
   ],
@@ -107,8 +121,8 @@
   "python": "3.12.3",
   "read_any_checkpoint": false,
   "read_any_embedding_store": false,
-  "repository_head": "d58cd66b0b3e7e64fd49b10b0a0342588df367fd",
-  "repository_head_short": "d58cd66",
+  "repository_head": "f91d0770b6733a0b3eb4f161dd2ca36d60050bbb",
+  "repository_head_short": "f91d077",
   "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
   "schema_version": 1,
   "selected_any_checkpoint": false,
@@ -118,227 +132,6 @@
  "row_count": 36,
  "rows": [
   {
-   "accuracy pairing": "NOT_APPLICABLE",
-   "batch size": 1,
-   "comparable with end-to-end": "false",
-   "evidence id": "EV-EFF-E7a.e7a_additive_pipeline_sums",
-   "evidence status": "SUPERSEDED_FOR_END_TO_END_CLAIMS",
-   "experiment family": "E7a",
-   "node": "otter (E7a session)",
-   "precision": "fp32 inference",
-   "system": "e7a_additive_pipeline_sums",
-   "timing class": "ADDITIVE_COMPONENT_SUM_SUPERSEDED",
-   "warm median serial latency (ms)": "not bound in VE-0"
-  },
-  {
-   "accuracy pairing": "NOT_APPLICABLE",
-   "batch size": 1,
-   "comparable with end-to-end": "false",
-   "evidence id": "EV-EFF-E7a.e7a_component_measurements",
-   "evidence status": "VERIFIED_AS_COMPONENTS",
-   "experiment family": "E7a",
-   "node": "otter (E7a session)",
-   "precision": "fp32 inference",
-   "system": "e7a_component_measurements",
-   "timing class": "COMPONENT",
-   "warm median serial latency (ms)": "not bound in VE-0"
-  },
-  {
-   "accuracy pairing": "NOT_APPLICABLE",
-   "batch size": 1,
-   "comparable with end-to-end": "false",
-   "evidence id": "EV-EFF-E7b.concat.cached_feature_head_only",
-   "evidence status": "VERIFIED",
-   "experiment family": "E7b",
-   "node": "otter155.eps.surrey.ac.uk",
-   "precision": "fp32 inference",
-   "system": "concat::cached_feature_head_only",
-   "timing class": "CACHED_FEATURE_HEAD_ONLY",
-   "warm median serial latency (ms)": "not bound in VE-0"
-  },
-  {
-   "accuracy pairing": "NOT_APPLICABLE",
-   "batch size": 1,
-   "comparable with end-to-end": "false",
-   "evidence id": "EV-EFF-E7b.e8a_a0p.cached_feature_head_only",
-   "evidence status": "VERIFIED",
-   "experiment family": "E7b",
-   "node": "otter155.eps.surrey.ac.uk",
-   "precision": "fp32 inference",
-   "system": "e8a_a0p::cached_feature_head_only",
-   "timing class": "CACHED_FEATURE_HEAD_ONLY",
-   "warm median serial latency (ms)": "not bound in VE-0"
-  },
-  {
-   "accuracy pairing": "NOT_APPLICABLE",
-   "batch size": 1,
-   "comparable with end-to-end": "false",
-   "evidence id": "EV-EFF-E7b.e8a_a1.cached_feature_head_only",
-   "evidence status": "VERIFIED",
-   "experiment family": "E7b",
-   "node": "otter155.eps.surrey.ac.uk",
-   "precision": "fp32 inference",
-   "system": "e8a_a1::cached_feature_head_only",
-   "timing class": "CACHED_FEATURE_HEAD_ONLY",
-   "warm median serial latency (ms)": "not bound in VE-0"
-  },
-  {
-   "accuracy pairing": "NOT_APPLICABLE",
-   "batch size": 1,
-   "comparable with end-to-end": "false",
-   "evidence id": "EV-EFF-E7b.fusion.cached_feature_head_only",
-   "evidence status": "VERIFIED",
-   "experiment family": "E7b",
-   "node": "otter155.eps.surrey.ac.uk",
-   "precision": "fp32 inference",
-   "system": "fusion::cached_feature_head_only",
-   "timing class": "CACHED_FEATURE_HEAD_ONLY",
-   "warm median serial latency (ms)": "not bound in VE-0"
-  },
-  {
-   "accuracy pairing": "NOT_APPLICABLE",
-   "batch size": 1,
-   "comparable with end-to-end": "false",
-   "evidence id": "EV-EFF-E7b.question_only.cached_feature_head_only",
-   "evidence status": "VERIFIED",
-   "experiment family": "E7b",
-   "node": "otter155.eps.surrey.ac.uk",
-   "precision": "fp32 inference",
-   "system": "question_only::cached_feature_head_only",
-   "timing class": "CACHED_FEATURE_HEAD_ONLY",
-   "warm median serial latency (ms)": "not bound in VE-0"
-  },
-  {
-   "accuracy pairing": "NOT_APPLICABLE",
-   "batch size": 1,
-   "comparable with end-to-end": "false",
-   "evidence id": "EV-EFF-E7b.reasoner.cached_feature_head_only",
-   "evidence status": "VERIFIED",
-   "experiment family": "E7b",
-   "node": "otter155.eps.surrey.ac.uk",
-   "precision": "fp32 inference",
-   "system": "reasoner::cached_feature_head_only",
-   "timing class": "CACHED_FEATURE_HEAD_ONLY",
-   "warm median serial latency (ms)": "not bound in VE-0"
-  },
-  {
-   "accuracy pairing": "NOT_APPLICABLE",
-   "batch size": 1,
-   "comparable with end-to-end": "false",
-   "evidence id": "EV-EFF-E7b.siglip_fusion.cached_feature_head_only",
-   "evidence status": "VERIFIED",
-   "experiment family": "E7b",
-   "node": "otter155.eps.surrey.ac.uk",
-   "precision": "fp32 inference",
-   "system": "siglip_fusion::cached_feature_head_only",
-   "timing class": "CACHED_FEATURE_HEAD_ONLY",
-   "warm median serial latency (ms)": "not bound in VE-0"
-  },
-  {
-   "accuracy pairing": "NOT_APPLICABLE",
-   "batch size": 1,
-   "comparable with end-to-end": "false",
-   "evidence id": "EV-EFF-E7b.vocab1000_product.cached_feature_head_only",
-   "evidence status": "VERIFIED",
-   "experiment family": "E7b",
-   "node": "otter155.eps.surrey.ac.uk",
-   "precision": "fp32 inference",
-   "system": "vocab1000_product::cached_feature_head_only",
-   "timing class": "CACHED_FEATURE_HEAD_ONLY",
-   "warm median serial latency (ms)": "not bound in VE-0"
-  },
-  {
-   "accuracy pairing": "NOT_APPLICABLE",
-   "batch size": 1,
-   "comparable with end-to-end": "false",
-   "evidence id": "EV-EFF-E7b.concat.cached_image_question_side",
-   "evidence status": "VERIFIED",
-   "experiment family": "E7b",
-   "node": "otter155.eps.surrey.ac.uk",
-   "precision": "fp32 inference",
-   "system": "concat::cached_image_question_side",
-   "timing class": "CACHED_IMAGE_QUESTION_SIDE",
-   "warm median serial latency (ms)": "not bound in VE-0"
-  },
-  {
-   "accuracy pairing": "NOT_APPLICABLE",
-   "batch size": 1,
-   "comparable with end-to-end": "false",
-   "evidence id": "EV-EFF-E7b.e8a_a0p.cached_image_question_side",
-   "evidence status": "VERIFIED",
-   "experiment family": "E7b",
-   "node": "otter155.eps.surrey.ac.uk",
-   "precision": "fp32 inference",
-   "system": "e8a_a0p::cached_image_question_side",
-   "timing class": "CACHED_IMAGE_QUESTION_SIDE",
-   "warm median serial latency (ms)": "not bound in VE-0"
-  },
-  {
-   "accuracy pairing": "NOT_APPLICABLE",
-   "batch size": 1,
-   "comparable with end-to-end": "false",
-   "evidence id": "EV-EFF-E7b.e8a_a1.cached_image_question_side",
-   "evidence status": "VERIFIED",
-   "experiment family": "E7b",
-   "node": "otter155.eps.surrey.ac.uk",
-   "precision": "fp32 inference",
-   "system": "e8a_a1::cached_image_question_side",
-   "timing class": "CACHED_IMAGE_QUESTION_SIDE",
-   "warm median serial latency (ms)": "not bound in VE-0"
-  },
-  {
-   "accuracy pairing": "NOT_APPLICABLE",
-   "batch size": 1,
-   "comparable with end-to-end": "false",
-   "evidence id": "EV-EFF-E7b.fusion.cached_image_question_side",
-   "evidence status": "VERIFIED",
-   "experiment family": "E7b",
-   "node": "otter155.eps.surrey.ac.uk",
-   "precision": "fp32 inference",
-   "system": "fusion::cached_image_question_side",
-   "timing class": "CACHED_IMAGE_QUESTION_SIDE",
-   "warm median serial latency (ms)": "not bound in VE-0"
-  },
-  {
-   "accuracy pairing": "NOT_APPLICABLE",
-   "batch size": 1,
-   "comparable with end-to-end": "false",
-   "evidence id": "EV-EFF-E7b.reasoner.cached_image_question_side",
-   "evidence status": "VERIFIED",
-   "experiment family": "E7b",
-   "node": "otter155.eps.surrey.ac.uk",
-   "precision": "fp32 inference",
-   "system": "reasoner::cached_image_question_side",
-   "timing class": "CACHED_IMAGE_QUESTION_SIDE",
-   "warm median serial latency (ms)": "not bound in VE-0"
-  },
-  {
-   "accuracy pairing": "NOT_APPLICABLE",
-   "batch size": 1,
-   "comparable with end-to-end": "false",
-   "evidence id": "EV-EFF-E7b.siglip_fusion.cached_image_question_side",
-   "evidence status": "VERIFIED",
-   "experiment family": "E7b",
-   "node": "otter155.eps.surrey.ac.uk",
-   "precision": "fp32 inference",
-   "system": "siglip_fusion::cached_image_question_side",
-   "timing class": "CACHED_IMAGE_QUESTION_SIDE",
-   "warm median serial latency (ms)": "not bound in VE-0"
-  },
-  {
-   "accuracy pairing": "NOT_APPLICABLE",
-   "batch size": 1,
-   "comparable with end-to-end": "false",
-   "evidence id": "EV-EFF-E7b.vocab1000_product.cached_image_question_side",
-   "evidence status": "VERIFIED",
-   "experiment family": "E7b",
-   "node": "otter155.eps.surrey.ac.uk",
-   "precision": "fp32 inference",
-   "system": "vocab1000_product::cached_image_question_side",
-   "timing class": "CACHED_IMAGE_QUESTION_SIDE",
-   "warm median serial latency (ms)": "not bound in VE-0"
-  },
-  {
    "accuracy pairing": "RESOLVED",
    "batch size": 1,
    "comparable with end-to-end": "true",
@@ -347,6 +140,7 @@
    "experiment family": "E7b",
    "node": "otter155.eps.surrey.ac.uk",
    "precision": "fp32 inference",
+   "presentation": "Main text, node otter155 (E7b): authoritative END_TO_END_SERIAL evidence",
    "system": "concat",
    "timing class": "END_TO_END_SERIAL",
    "warm median serial latency (ms)": "7.6104"
@@ -360,6 +154,7 @@
    "experiment family": "E7b",
    "node": "otter155.eps.surrey.ac.uk",
    "precision": "fp32 inference",
+   "presentation": "Main text, node otter155 (E7b): authoritative END_TO_END_SERIAL evidence",
    "system": "e8a_a0p",
    "timing class": "END_TO_END_SERIAL",
    "warm median serial latency (ms)": "9.2117"
@@ -373,6 +168,7 @@
    "experiment family": "E7b",
    "node": "otter155.eps.surrey.ac.uk",
    "precision": "fp32 inference",
+   "presentation": "Main text, node otter155 (E7b): authoritative END_TO_END_SERIAL evidence",
    "system": "e8a_a1",
    "timing class": "END_TO_END_SERIAL",
    "warm median serial latency (ms)": "20.1460"
@@ -386,6 +182,7 @@
    "experiment family": "E7b",
    "node": "otter155.eps.surrey.ac.uk",
    "precision": "fp32 inference",
+   "presentation": "Main text, node otter155 (E7b): authoritative END_TO_END_SERIAL evidence",
    "system": "fusion",
    "timing class": "END_TO_END_SERIAL",
    "warm median serial latency (ms)": "7.6351"
@@ -399,6 +196,7 @@
    "experiment family": "E7b",
    "node": "otter155.eps.surrey.ac.uk",
    "precision": "fp32 inference",
+   "presentation": "Main text, node otter155 (E7b): authoritative END_TO_END_SERIAL evidence",
    "system": "question_only",
    "timing class": "END_TO_END_SERIAL",
    "warm median serial latency (ms)": "1.9603"
@@ -412,6 +210,7 @@
    "experiment family": "E7b",
    "node": "otter155.eps.surrey.ac.uk",
    "precision": "fp32 inference",
+   "presentation": "Main text, node otter155 (E7b): authoritative END_TO_END_SERIAL evidence",
    "system": "reasoner",
    "timing class": "END_TO_END_SERIAL",
    "warm median serial latency (ms)": "9.1719"
@@ -425,6 +224,7 @@
    "experiment family": "E7b",
    "node": "otter155.eps.surrey.ac.uk",
    "precision": "fp32 inference",
+   "presentation": "Main text, node otter155 (E7b): authoritative END_TO_END_SERIAL evidence",
    "system": "siglip_fusion",
    "timing class": "END_TO_END_SERIAL",
    "warm median serial latency (ms)": "9.8433"
@@ -438,6 +238,7 @@
    "experiment family": "E7b",
    "node": "otter155.eps.surrey.ac.uk",
    "precision": "fp32 inference",
+   "presentation": "Main text, node otter155 (E7b): authoritative END_TO_END_SERIAL evidence",
    "system": "vocab1000_product",
    "timing class": "END_TO_END_SERIAL",
    "warm median serial latency (ms)": "7.6708"
@@ -451,6 +252,7 @@
    "experiment family": "E9",
    "node": "otter159.eps.surrey.ac.uk",
    "precision": "fp32 inference",
+   "presentation": "Main text, node otter159 (E9): authoritative END_TO_END_SERIAL evidence. Never merged with otter155",
    "system": "e8b_B1",
    "timing class": "END_TO_END_SERIAL",
    "warm median serial latency (ms)": "10.2420"
@@ -464,6 +266,7 @@
    "experiment family": "E9",
    "node": "otter159.eps.surrey.ac.uk",
    "precision": "fp32 inference",
+   "presentation": "Main text, node otter159 (E9): authoritative END_TO_END_SERIAL evidence. Never merged with otter155",
    "system": "e8b_B2_R2",
    "timing class": "END_TO_END_SERIAL",
    "warm median serial latency (ms)": "39.7326"
@@ -477,6 +280,7 @@
    "experiment family": "E9",
    "node": "otter159.eps.surrey.ac.uk",
    "precision": "fp32 inference",
+   "presentation": "Main text, node otter159 (E9): authoritative END_TO_END_SERIAL evidence. Never merged with otter155",
    "system": "e8b_B2_R3",
    "timing class": "END_TO_END_SERIAL",
    "warm median serial latency (ms)": "39.2394"
@@ -490,6 +294,7 @@
    "experiment family": "E9",
    "node": "otter159.eps.surrey.ac.uk",
    "precision": "fp32 inference",
+   "presentation": "Main text, node otter159 (E9): authoritative END_TO_END_SERIAL evidence. Never merged with otter155",
    "system": "e8b_B3_R2",
    "timing class": "END_TO_END_SERIAL",
    "warm median serial latency (ms)": "39.6561"
@@ -503,6 +308,7 @@
    "experiment family": "E9",
    "node": "otter159.eps.surrey.ac.uk",
    "precision": "fp32 inference",
+   "presentation": "Main text, node otter159 (E9): authoritative END_TO_END_SERIAL evidence. Never merged with otter155",
    "system": "e8b_B3_R3",
    "timing class": "END_TO_END_SERIAL",
    "warm median serial latency (ms)": "38.7963"
@@ -516,6 +322,7 @@
    "experiment family": "E9",
    "node": "otter159.eps.surrey.ac.uk",
    "precision": "fp32 inference",
+   "presentation": "Main text, node otter159 (E9): authoritative END_TO_END_SERIAL evidence. Never merged with otter155",
    "system": "e9_256m_constrained",
    "timing class": "END_TO_END_SERIAL",
    "warm median serial latency (ms)": "142.6747"
@@ -529,6 +336,7 @@
    "experiment family": "E9",
    "node": "otter159.eps.surrey.ac.uk",
    "precision": "fp32 inference",
+   "presentation": "Main text, node otter159 (E9): authoritative END_TO_END_SERIAL evidence. Never merged with otter155",
    "system": "e9_256m_open",
    "timing class": "END_TO_END_SERIAL",
    "warm median serial latency (ms)": "140.9070"
@@ -542,6 +350,7 @@
    "experiment family": "E9",
    "node": "otter159.eps.surrey.ac.uk",
    "precision": "fp32 inference",
+   "presentation": "Main text, node otter159 (E9): authoritative END_TO_END_SERIAL evidence. Never merged with otter155",
    "system": "e9_500m_constrained",
    "timing class": "END_TO_END_SERIAL",
    "warm median serial latency (ms)": "152.8540"
@@ -555,6 +364,7 @@
    "experiment family": "E9",
    "node": "otter159.eps.surrey.ac.uk",
    "precision": "fp32 inference",
+   "presentation": "Main text, node otter159 (E9): authoritative END_TO_END_SERIAL evidence. Never merged with otter155",
    "system": "e9_500m_open",
    "timing class": "END_TO_END_SERIAL",
    "warm median serial latency (ms)": "151.3801"
@@ -568,6 +378,7 @@
    "experiment family": "E9",
    "node": "otter159.eps.surrey.ac.uk",
    "precision": "fp32 inference",
+   "presentation": "Main text, node otter159 (E9): authoritative END_TO_END_SERIAL evidence. Never merged with otter155",
    "system": "fusion",
    "timing class": "END_TO_END_SERIAL",
    "warm median serial latency (ms)": "6.2081"
@@ -581,9 +392,248 @@
    "experiment family": "E9",
    "node": "otter159.eps.surrey.ac.uk",
    "precision": "fp32 inference",
+   "presentation": "Main text, node otter159 (E9): authoritative END_TO_END_SERIAL evidence. Never merged with otter155",
    "system": "vocab1000_product",
    "timing class": "END_TO_END_SERIAL",
    "warm median serial latency (ms)": "6.1990"
+  },
+  {
+   "accuracy pairing": "NOT_APPLICABLE",
+   "batch size": 1,
+   "comparable with end-to-end": "false",
+   "evidence id": "EV-EFF-E7b.concat.cached_feature_head_only",
+   "evidence status": "VERIFIED",
+   "experiment family": "E7b",
+   "node": "otter155.eps.surrey.ac.uk",
+   "precision": "fp32 inference",
+   "presentation": "Retained in full: cached, component and superseded rows, which support no end-to-end latency claim",
+   "system": "concat::cached_feature_head_only",
+   "timing class": "CACHED_FEATURE_HEAD_ONLY",
+   "warm median serial latency (ms)": "not bound in VE-0"
+  },
+  {
+   "accuracy pairing": "NOT_APPLICABLE",
+   "batch size": 1,
+   "comparable with end-to-end": "false",
+   "evidence id": "EV-EFF-E7b.concat.cached_image_question_side",
+   "evidence status": "VERIFIED",
+   "experiment family": "E7b",
+   "node": "otter155.eps.surrey.ac.uk",
+   "precision": "fp32 inference",
+   "presentation": "Retained in full: cached, component and superseded rows, which support no end-to-end latency claim",
+   "system": "concat::cached_image_question_side",
+   "timing class": "CACHED_IMAGE_QUESTION_SIDE",
+   "warm median serial latency (ms)": "not bound in VE-0"
+  },
+  {
+   "accuracy pairing": "NOT_APPLICABLE",
+   "batch size": 1,
+   "comparable with end-to-end": "false",
+   "evidence id": "EV-EFF-E7a.e7a_additive_pipeline_sums",
+   "evidence status": "SUPERSEDED_FOR_END_TO_END_CLAIMS",
+   "experiment family": "E7a",
+   "node": "otter (E7a session)",
+   "precision": "fp32 inference",
+   "presentation": "Retained in full: cached, component and superseded rows, which support no end-to-end latency claim",
+   "system": "e7a_additive_pipeline_sums",
+   "timing class": "ADDITIVE_COMPONENT_SUM_SUPERSEDED",
+   "warm median serial latency (ms)": "not bound in VE-0"
+  },
+  {
+   "accuracy pairing": "NOT_APPLICABLE",
+   "batch size": 1,
+   "comparable with end-to-end": "false",
+   "evidence id": "EV-EFF-E7a.e7a_component_measurements",
+   "evidence status": "VERIFIED_AS_COMPONENTS",
+   "experiment family": "E7a",
+   "node": "otter (E7a session)",
+   "precision": "fp32 inference",
+   "presentation": "Retained in full: cached, component and superseded rows, which support no end-to-end latency claim",
+   "system": "e7a_component_measurements",
+   "timing class": "COMPONENT",
+   "warm median serial latency (ms)": "not bound in VE-0"
+  },
+  {
+   "accuracy pairing": "NOT_APPLICABLE",
+   "batch size": 1,
+   "comparable with end-to-end": "false",
+   "evidence id": "EV-EFF-E7b.e8a_a0p.cached_feature_head_only",
+   "evidence status": "VERIFIED",
+   "experiment family": "E7b",
+   "node": "otter155.eps.surrey.ac.uk",
+   "precision": "fp32 inference",
+   "presentation": "Retained in full: cached, component and superseded rows, which support no end-to-end latency claim",
+   "system": "e8a_a0p::cached_feature_head_only",
+   "timing class": "CACHED_FEATURE_HEAD_ONLY",
+   "warm median serial latency (ms)": "not bound in VE-0"
+  },
+  {
+   "accuracy pairing": "NOT_APPLICABLE",
+   "batch size": 1,
+   "comparable with end-to-end": "false",
+   "evidence id": "EV-EFF-E7b.e8a_a0p.cached_image_question_side",
+   "evidence status": "VERIFIED",
+   "experiment family": "E7b",
+   "node": "otter155.eps.surrey.ac.uk",
+   "precision": "fp32 inference",
+   "presentation": "Retained in full: cached, component and superseded rows, which support no end-to-end latency claim",
+   "system": "e8a_a0p::cached_image_question_side",
+   "timing class": "CACHED_IMAGE_QUESTION_SIDE",
+   "warm median serial latency (ms)": "not bound in VE-0"
+  },
+  {
+   "accuracy pairing": "NOT_APPLICABLE",
+   "batch size": 1,
+   "comparable with end-to-end": "false",
+   "evidence id": "EV-EFF-E7b.e8a_a1.cached_feature_head_only",
+   "evidence status": "VERIFIED",
+   "experiment family": "E7b",
+   "node": "otter155.eps.surrey.ac.uk",
+   "precision": "fp32 inference",
+   "presentation": "Retained in full: cached, component and superseded rows, which support no end-to-end latency claim",
+   "system": "e8a_a1::cached_feature_head_only",
+   "timing class": "CACHED_FEATURE_HEAD_ONLY",
+   "warm median serial latency (ms)": "not bound in VE-0"
+  },
+  {
+   "accuracy pairing": "NOT_APPLICABLE",
+   "batch size": 1,
+   "comparable with end-to-end": "false",
+   "evidence id": "EV-EFF-E7b.e8a_a1.cached_image_question_side",
+   "evidence status": "VERIFIED",
+   "experiment family": "E7b",
+   "node": "otter155.eps.surrey.ac.uk",
+   "precision": "fp32 inference",
+   "presentation": "Retained in full: cached, component and superseded rows, which support no end-to-end latency claim",
+   "system": "e8a_a1::cached_image_question_side",
+   "timing class": "CACHED_IMAGE_QUESTION_SIDE",
+   "warm median serial latency (ms)": "not bound in VE-0"
+  },
+  {
+   "accuracy pairing": "NOT_APPLICABLE",
+   "batch size": 1,
+   "comparable with end-to-end": "false",
+   "evidence id": "EV-EFF-E7b.fusion.cached_feature_head_only",
+   "evidence status": "VERIFIED",
+   "experiment family": "E7b",
+   "node": "otter155.eps.surrey.ac.uk",
+   "precision": "fp32 inference",
+   "presentation": "Retained in full: cached, component and superseded rows, which support no end-to-end latency claim",
+   "system": "fusion::cached_feature_head_only",
+   "timing class": "CACHED_FEATURE_HEAD_ONLY",
+   "warm median serial latency (ms)": "not bound in VE-0"
+  },
+  {
+   "accuracy pairing": "NOT_APPLICABLE",
+   "batch size": 1,
+   "comparable with end-to-end": "false",
+   "evidence id": "EV-EFF-E7b.fusion.cached_image_question_side",
+   "evidence status": "VERIFIED",
+   "experiment family": "E7b",
+   "node": "otter155.eps.surrey.ac.uk",
+   "precision": "fp32 inference",
+   "presentation": "Retained in full: cached, component and superseded rows, which support no end-to-end latency claim",
+   "system": "fusion::cached_image_question_side",
+   "timing class": "CACHED_IMAGE_QUESTION_SIDE",
+   "warm median serial latency (ms)": "not bound in VE-0"
+  },
+  {
+   "accuracy pairing": "NOT_APPLICABLE",
+   "batch size": 1,
+   "comparable with end-to-end": "false",
+   "evidence id": "EV-EFF-E7b.question_only.cached_feature_head_only",
+   "evidence status": "VERIFIED",
+   "experiment family": "E7b",
+   "node": "otter155.eps.surrey.ac.uk",
+   "precision": "fp32 inference",
+   "presentation": "Retained in full: cached, component and superseded rows, which support no end-to-end latency claim",
+   "system": "question_only::cached_feature_head_only",
+   "timing class": "CACHED_FEATURE_HEAD_ONLY",
+   "warm median serial latency (ms)": "not bound in VE-0"
+  },
+  {
+   "accuracy pairing": "NOT_APPLICABLE",
+   "batch size": 1,
+   "comparable with end-to-end": "false",
+   "evidence id": "EV-EFF-E7b.reasoner.cached_feature_head_only",
+   "evidence status": "VERIFIED",
+   "experiment family": "E7b",
+   "node": "otter155.eps.surrey.ac.uk",
+   "precision": "fp32 inference",
+   "presentation": "Retained in full: cached, component and superseded rows, which support no end-to-end latency claim",
+   "system": "reasoner::cached_feature_head_only",
+   "timing class": "CACHED_FEATURE_HEAD_ONLY",
+   "warm median serial latency (ms)": "not bound in VE-0"
+  },
+  {
+   "accuracy pairing": "NOT_APPLICABLE",
+   "batch size": 1,
+   "comparable with end-to-end": "false",
+   "evidence id": "EV-EFF-E7b.reasoner.cached_image_question_side",
+   "evidence status": "VERIFIED",
+   "experiment family": "E7b",
+   "node": "otter155.eps.surrey.ac.uk",
+   "precision": "fp32 inference",
+   "presentation": "Retained in full: cached, component and superseded rows, which support no end-to-end latency claim",
+   "system": "reasoner::cached_image_question_side",
+   "timing class": "CACHED_IMAGE_QUESTION_SIDE",
+   "warm median serial latency (ms)": "not bound in VE-0"
+  },
+  {
+   "accuracy pairing": "NOT_APPLICABLE",
+   "batch size": 1,
+   "comparable with end-to-end": "false",
+   "evidence id": "EV-EFF-E7b.siglip_fusion.cached_feature_head_only",
+   "evidence status": "VERIFIED",
+   "experiment family": "E7b",
+   "node": "otter155.eps.surrey.ac.uk",
+   "precision": "fp32 inference",
+   "presentation": "Retained in full: cached, component and superseded rows, which support no end-to-end latency claim",
+   "system": "siglip_fusion::cached_feature_head_only",
+   "timing class": "CACHED_FEATURE_HEAD_ONLY",
+   "warm median serial latency (ms)": "not bound in VE-0"
+  },
+  {
+   "accuracy pairing": "NOT_APPLICABLE",
+   "batch size": 1,
+   "comparable with end-to-end": "false",
+   "evidence id": "EV-EFF-E7b.siglip_fusion.cached_image_question_side",
+   "evidence status": "VERIFIED",
+   "experiment family": "E7b",
+   "node": "otter155.eps.surrey.ac.uk",
+   "precision": "fp32 inference",
+   "presentation": "Retained in full: cached, component and superseded rows, which support no end-to-end latency claim",
+   "system": "siglip_fusion::cached_image_question_side",
+   "timing class": "CACHED_IMAGE_QUESTION_SIDE",
+   "warm median serial latency (ms)": "not bound in VE-0"
+  },
+  {
+   "accuracy pairing": "NOT_APPLICABLE",
+   "batch size": 1,
+   "comparable with end-to-end": "false",
+   "evidence id": "EV-EFF-E7b.vocab1000_product.cached_feature_head_only",
+   "evidence status": "VERIFIED",
+   "experiment family": "E7b",
+   "node": "otter155.eps.surrey.ac.uk",
+   "precision": "fp32 inference",
+   "presentation": "Retained in full: cached, component and superseded rows, which support no end-to-end latency claim",
+   "system": "vocab1000_product::cached_feature_head_only",
+   "timing class": "CACHED_FEATURE_HEAD_ONLY",
+   "warm median serial latency (ms)": "not bound in VE-0"
+  },
+  {
+   "accuracy pairing": "NOT_APPLICABLE",
+   "batch size": 1,
+   "comparable with end-to-end": "false",
+   "evidence id": "EV-EFF-E7b.vocab1000_product.cached_image_question_side",
+   "evidence status": "VERIFIED",
+   "experiment family": "E7b",
+   "node": "otter155.eps.surrey.ac.uk",
+   "precision": "fp32 inference",
+   "presentation": "Retained in full: cached, component and superseded rows, which support no end-to-end latency claim",
+   "system": "vocab1000_product::cached_image_question_side",
+   "timing class": "CACHED_IMAGE_QUESTION_SIDE",
+   "warm median serial latency (ms)": "not bound in VE-0"
   }
  ],
  "scientific_question": "What does each system cost per query, and under exactly which measurement conditions?",
@@ -623,76 +673,78 @@
   }
  ],
  "uncertainty_notation": "no interval; a warm median. The across-pass spread is stated in the caption",
+ "uncertainty_notation_cross_reference": null,
+ "ve0_declared_uncertainty_notation": "no interval; a warm median. The across-pass spread is stated in the caption",
  "ve0_source_artefacts": [
   {
    "path": "results/ve0/canonical_evidence_inventory.json",
    "role": "VE-0 output A",
-   "sha256": "18eaa5355cf2252f0f74b1090f03404881d526bc2588391a866f4ed6fdd22462"
+   "sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3"
   },
   {
    "path": "results/ve0/canonical_evidence_inventory.csv",
    "role": "VE-0 output A_csv",
-   "sha256": "30e1b82090573758947026407ff4d05b5dcb4e12cde827d0e02040d6787cd9d9"
+   "sha256": "86921381e6fc22b674559b44272e9ba70aaeffafdf600c4a752d5cb6200eee9b"
   },
   {
    "path": "results/ve0/supersession_map.json",
    "role": "VE-0 output C",
-   "sha256": "5eddcfdec886ae3b246fab02c076e523f62a77611916695bfbf5363076ee2d4a"
+   "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
   },
   {
    "path": "results/ve0/claim_ledger.json",
    "role": "VE-0 output D",
-   "sha256": "15e3ffc4a487068e9a556ada04a96e6967dc6d8e9f1364babbc353decca1c94d"
+   "sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7"
   },
   {
    "path": "results/ve0/rq_evidence_matrix.json",
    "role": "VE-0 output E",
-   "sha256": "c8f6d7d99db9f41fd98821dafc880f9b709f9ba8757a53c40b65b8bf23e27b86"
+   "sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d"
   },
   {
    "path": "results/ve0/figure_specifications.json",
    "role": "VE-0 output F",
-   "sha256": "b068dc08c9794291f4538cb3b65e077c54096fd6f991cea8fa609ed599792d92"
+   "sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c"
   },
   {
    "path": "results/ve0/table_specifications.json",
    "role": "VE-0 output G",
-   "sha256": "56d3d4185ff52821080b6dbcfc72d5d68211d098bceabf4cae0fc3ec3c2d20f0"
+   "sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8"
   },
   {
    "path": "results/ve0/qualitative_protocol.json",
    "role": "VE-0 output H",
-   "sha256": "d15fc69c7a6a4e6721874bf43ae017a105c1a8b3b694b759a88043ff2664b975"
+   "sha256": "c8c5c35bec84da409e9a36612ad07846e2d218aa35351bc7d09340760cd9e895"
   },
   {
    "path": "results/ve0/qualitative_record_schema.json",
    "role": "VE-0 output I",
-   "sha256": "c2f0742c0c936a2a11fb71f5dc364633bda329c632b52744150f047d95d81984"
+   "sha256": "898e0a6bfeddfb37196e0d1e4bfc469606bcd663c5283b6fac931cd0e3de4297"
   },
   {
    "path": "results/ve0/reporting_style_contract.json",
    "role": "VE-0 output J",
-   "sha256": "e2a8767fe477e9ac8a5bf8544c3ecbff19f63f1f8a59c9b7ddaa350221c7fc4c"
+   "sha256": "536cf07aa6bd5f80eb1b843046435804345e7bd1f558ba047866b223aadd5504"
   },
   {
    "path": "results/ve0/provenance_contract.json",
    "role": "VE-0 output K",
-   "sha256": "65e66b78cae76cf713f11073f4847062c0e252c4319b30b3a9d58e63a0689159"
+   "sha256": "4a0c33512194fcd11493d3e05f0a86fc8f752ea6343f698c8da0c630672213ab"
   },
   {
    "path": "results/ve0/efficiency_visualisation_contract.json",
    "role": "VE-0 output L",
-   "sha256": "b39a6c4ae080eebf1c0ed0cb65d01a98f1993d162ade704287c53c298b56902e"
+   "sha256": "c8d221544dca46f55339fcd708e4dd66b9aa1e1e9b130bdf44a2a39871ee9cc4"
   },
   {
    "path": "results/ve0/results_section_mapping.json",
    "role": "VE-0 output M",
-   "sha256": "f2153f7f45c71fdd69a0e96555184d3b2608a63685afe42f40a5800b6f2d7738"
+   "sha256": "2f80c8d34949f6ea3e5b7546d67b79793463d7f63d4278b0a03153125bc50686"
   },
   {
    "path": "results/ve0/VE0_MANIFEST.json",
    "role": "VE-0 output O",
-   "sha256": "31a572db0b3e9ab85a74fefe88232f1112641d113dc421083d09137d79a0a594"
+   "sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3"
   }
  ],
  "ve0_specification_id": "VE0-TAB-06",

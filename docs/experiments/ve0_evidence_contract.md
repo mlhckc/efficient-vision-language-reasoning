@@ -498,6 +498,75 @@ labelled VE-0 working formulations, the seven unresolved efficiency pairings
 remain unresolved and unguessed, and the seventeen unconsumed inventory rows
 remain unconsumed.
 
+## Amendment, 13 August 2026
+
+VE-0 was closed at VE0_PASS. The independent review of VE-1, which renders
+from this contract, then returned VE1_CHANGES_REQUIRED with seven blocking
+findings, four of which are defects in VE-0 rather than in the rendering. The
+user authorised one narrow amendment to close them. It is recorded in
+`results/ve0/VE0_AMENDMENT_20260813.json`, which is a registered output and is
+rebuilt with everything else. This section exists so the amendment is never
+mistaken for part of the original freeze.
+
+**Per-seed values are now bound (findings B5, B6, B7).** VE0-TAB-04 calls its
+per-seed column mandatory, VE0-TAB-05's footnote says the per-seed effects are
+printed so a reader can see where seeds disagree in sign, and VE0-TAB-A2 exists
+to answer what the per-seed value behind every reported mean is. None of them
+could be satisfied, because the inventory bound no per-seed vector. Those
+vectors already existed, fully computed and hash-pinned, inside two of VE-0's
+own declared closure inputs: `per_seed_accuracy` with its range in
+`E_seed_variability.json`, and `per_seed_effect` in `B_primary_contrasts.json`.
+Seven fields now carry them: `per_seed_values`, `per_seed_seed_ids`,
+`per_seed_range`, `per_seed_effects`, `per_seed_effect_range`,
+`per_seed_status` and `per_seed_provenance`.
+
+All 66 SEED rows and 67 of the 70 contrast rows are bound. The three that are
+not are the V3 reasoner-minus-fusion deficit differences, for which the closure
+artefact stores no per-seed effect; no rendered specification needs one, and
+the absence is recorded on the rows rather than filled. Every bound vector must
+reproduce the mean, the sample standard deviation and, for accuracies, the
+range stored beside it in the same frozen row, and its seed identifiers must
+equal the row's own seed set. A vector that does not is a build failure. This
+is a read, not a computation: no model was loaded, no evaluation ran and no
+value was recomputed.
+
+**RQ6 no longer over-generalises (finding B1).** The previous supported answer,
+"Not materially, at any tested scale, and not on the multi-step deficit",
+extended the train_40k conclusion to every scale. The reasoner's mean overall
+accuracy is higher at 100k and 250k; only the four-or-more-step conclusion
+holds everywhere. The repaired answer separates the two, and the limitation now
+also records that the larger-scale comparison rests on across-training-seed
+means with no evaluation interval and no shared seed set. C07 is unchanged and
+no number moved.
+
+**RQ9 no longer generalises the efficiency evidence (finding B2).** The
+previous answer placed the global heads below "the SLM readouts" as a class, as
+though each had accuracy-paired serial cost evidence. On otter159 every
+lightweight and E8B row is latency-only. The repaired answer separates the two
+nodes, states that the otter159 ratio is not bound to a specific accuracy, and
+keeps that E8B's canonical R1 readout and E10 have no serial latency evidence
+at all.
+
+**The claim ledger moved to the appendix.** Twenty-one rows of claim text,
+mandatory caveat and forbidden stronger version is reference apparatus rather
+than a Results table. VE0-TAB-07 is now an appendix table in the new
+`R_APPENDIX_CLAIM_LEDGER` section. No claim, status, caveat or prohibition
+changed, and no replacement main-text table was invented to fill the slot.
+
+**What did not change.** 428 rows, identical identifiers. Across 6,848 core
+scientific fields compared row by row against the VE0_PASS state, zero changed:
+no point estimate, no interval, no across-training-seed standard deviation, no
+sample count, no seed set, no metric identity, no comparison class, no
+checkpoint-selection class and no mandatory limitation. All 21 claims keep
+their text, status and caveat; C02 remains TENTATIVE and C19 remains SUPPORTED.
+Every research question keeps its answer status. The qualitative salt is
+untouched, v2_07 was not repaired, E10 and the statistical and efficiency
+closure were not reopened, and no historical review artefact was rewritten.
+
+`python -B tests/run_ve0.py` now runs 3,864 checks and exits 0, including the
+per-seed consistency, RQ-wording and ledger-placement checks added with the
+amendment.
+
 ## Status
 
 VE-0 is complete and submitted for independent re-review at packet state

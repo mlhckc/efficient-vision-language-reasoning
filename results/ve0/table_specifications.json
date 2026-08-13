@@ -1,26 +1,26 @@
 {
  "appendix_tables": [
+  "VE0-TAB-07",
   "VE0-TAB-A1",
   "VE0-TAB-A2",
   "VE0-TAB-A3",
   "VE0-TAB-A4"
  ],
  "clean_test_accessed": false,
- "content_sha256": "33396472f81a73db3d7a2dd1fcf32562dc0d426e258a4a2574140d8948bbaba7",
+ "content_sha256": "0a93c1cf7c409170fbf485ac1bf1f62d1e9690f082b37c11860c3e767954ddc2",
  "main_text_tables": [
   "VE0-TAB-01",
   "VE0-TAB-02",
   "VE0-TAB-03",
   "VE0-TAB-04",
   "VE0-TAB-05",
-  "VE0-TAB-06",
-  "VE0-TAB-07"
+  "VE0-TAB-06"
  ],
  "no_outcome_bolding_rule": "no value is bolded because it is the largest or because it is positive. Several tables span measurement nodes, metrics or families where a bold maximum would assert a comparison the evidence does not support.",
  "not_rendered_by_ve0": true,
  "provenance": {
   "builder": "experiments/ve0/run_ve0.py",
-  "builder_sha256": "3a53114ff7e55ca6d38d92004717da9ccae1320ef411cd6124af5175d790bc42",
+  "builder_sha256": "d7ae716779e98cfbf4d9ed3112cd2015614dff720340a4bae2e788c049a07c49",
   "clean_test_accessed": false,
   "command": "python -m experiments.ve0.run_ve0",
   "deterministic_selection_salt": "P2607-VE0-QUALITATIVE-SALT-20260813-v1",
@@ -94,8 +94,8 @@
   "numpy_version": "2.5.0",
   "pandas_version": "3.0.3",
   "python": "3.12.3",
-  "repository_head": "0f4fecb5e7e5a59d1e47d0953ca3127302694852",
-  "repository_head_short": "0f4fecb",
+  "repository_head": "f91d0770b6733a0b3eb4f161dd2ca36d60050bbb",
+  "repository_head_short": "f91d077",
   "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
   "schema_version": 1,
   "selected_any_checkpoint": false,
@@ -614,16 +614,17 @@
    "consumes_evidence": [],
    "consumes_evidence_count": 0,
    "dissertation_section": [
-    "R_LIMITATIONS"
+    "R_APPENDIX_CLAIM_LEDGER"
    ],
    "evidence_ids": [],
    "footnotes": [
-    "This table is generated from the VE-0 claim ledger. The Abstract, Discussion and Conclusion may not state a stronger version of any row here."
+    "This table is generated from the VE-0 claim ledger. The Abstract, Discussion and Conclusion may not state a stronger version of any row here.",
+    "Moved to the appendix by the 2026-08-13 amendment. Twenty-one rows of claim text, caveat and forbidden stronger version is a reference apparatus rather than a Results table; the main-text Limitations section states the boundaries in prose and cites this table. No claim, status, caveat or prohibition changed, and no replacement main-text table was invented to fill the slot."
    ],
    "highlight_rule": "NOT_SUPPORTED rows are kept in the table, not deleted; they record prohibitions",
    "metric_ids": [],
    "mixes_checkpoint_selection": false,
-   "placement": "MAIN_TEXT",
+   "placement": "APPENDIX",
    "precision": "NOT_APPLICABLE",
    "scientific_question": "What exactly does this dissertation claim, on what evidence, and with what boundary?",
    "selectors": [],

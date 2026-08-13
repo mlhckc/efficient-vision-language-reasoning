@@ -1,16 +1,16 @@
-contrast,comparison class,effect,95% CI (image-clustered),excludes zero,"sd (training seeds, ddof=1)",n questions,n images,evidence id
-concat minus question only,CAPACITY_CONFOUNDED,0.06601,"[0.05395, 0.07747]",true,0.00318,7714,768,EV-CON-v2_02.concat_minus_question_only.train_40k
-fusion minus concat,CAPACITY_CONFOUNDED,0.01442,"[0.00794, 0.02095]",true,0.00141,7714,768,EV-CON-v2_02.fusion_minus_concat.train_40k
-concat wide minus concat,CLEAN_PAIRED_CONTROL,0.00863,"[0.00376, 0.01378]",true,0.00302,7714,768,EV-CON-v2_03.concat_wide_minus_concat.train_40k
-fusion minus concat wide,CLEAN_PAIRED_CONTROL,0.00578,"[-0.00116, 0.01226]",false,0.00298,7714,768,EV-CON-v2_03.fusion_minus_concat_wide.train_40k
-fusion minus fusion narrow,CLEAN_PAIRED_CONTROL,0.00498,"[0.00025, 0.00967]",true,0.00170,7714,768,EV-CON-v2_03.fusion_minus_fusion_narrow.train_40k
-fusion narrow minus concat,CLEAN_PAIRED_CONTROL,0.00944,"[0.00285, 0.01592]",true,0.00175,7714,768,EV-CON-v2_03.fusion_narrow_minus_concat.train_40k
-difference 576k minus concat,CLEAN_PAIRED_CONTROL,0.00944,"[0.00338, 0.01569]",true,0.00355,7714,768,EV-CON-v2_04.difference_576k_minus_concat.train_40k
-difference natural minus concat,CAPACITY_CONFOUNDED,0.01001,"[0.00370, 0.01626]",true,0.00282,7714,768,EV-CON-v2_04.difference_natural_minus_concat.train_40k
-fusion minus difference natural,CAPACITY_CONFOUNDED,0.00441,"[0.00077, 0.00784]",true,0.00217,7714,768,EV-CON-v2_04.fusion_minus_difference_natural.train_40k
-fusion minus product natural,CAPACITY_CONFOUNDED,0.00169,"[-0.00383, 0.00734]",false,0.00232,7714,768,EV-CON-v2_04.fusion_minus_product_natural.train_40k
-fusion narrow minus difference 576k,CLEAN_PAIRED_CONTROL,-0.00000,"[-0.00402, 0.00398]",false,0.00204,7714,768,EV-CON-v2_04.fusion_narrow_minus_difference_576k.train_40k
-fusion narrow minus product 576k,CLEAN_PAIRED_CONTROL,-0.00013,"[-0.00654, 0.00551]",false,0.00293,7714,768,EV-CON-v2_04.fusion_narrow_minus_product_576k.train_40k
-product 576k minus concat,CLEAN_PAIRED_CONTROL,0.00957,"[0.00495, 0.01415]",true,0.00342,7714,768,EV-CON-v2_04.product_576k_minus_concat.train_40k
-product 576k minus difference 576k,CLEAN_PAIRED_CONTROL,0.00013,"[-0.00552, 0.00569]",false,0.00278,7714,768,EV-CON-v2_04.product_576k_minus_difference_576k.train_40k
-product natural minus concat,CAPACITY_CONFOUNDED,0.01273,"[0.00811, 0.01741]",true,0.00284,7714,768,EV-CON-v2_04.product_natural_minus_concat.train_40k
+presentation,contrast,comparison class,effect,95% CI (image-clustered),excludes zero,"sd (training seeds, ddof=1)",n questions,n images,evidence id
+"Main text: the six baseline and capacity contrasts that drive the low-data claim (v2_02, v2_03)",concat minus question only,CAPACITY_CONFOUNDED,0.06601,"[0.05395, 0.07747]",true,0.00318,7714,768,EV-CON-v2_02.concat_minus_question_only.train_40k
+"Main text: the six baseline and capacity contrasts that drive the low-data claim (v2_02, v2_03)",fusion minus concat,CAPACITY_CONFOUNDED,0.01442,"[0.00794, 0.02095]",true,0.00141,7714,768,EV-CON-v2_02.fusion_minus_concat.train_40k
+"Main text: the six baseline and capacity contrasts that drive the low-data claim (v2_02, v2_03)",concat wide minus concat,CLEAN_PAIRED_CONTROL,0.00863,"[0.00376, 0.01378]",true,0.00302,7714,768,EV-CON-v2_03.concat_wide_minus_concat.train_40k
+"Main text: the six baseline and capacity contrasts that drive the low-data claim (v2_02, v2_03)",fusion minus concat wide,CLEAN_PAIRED_CONTROL,0.00578,"[-0.00116, 0.01226]",false,0.00298,7714,768,EV-CON-v2_03.fusion_minus_concat_wide.train_40k
+"Main text: the six baseline and capacity contrasts that drive the low-data claim (v2_02, v2_03)",fusion minus fusion narrow,CLEAN_PAIRED_CONTROL,0.00498,"[0.00025, 0.00967]",true,0.00170,7714,768,EV-CON-v2_03.fusion_minus_fusion_narrow.train_40k
+"Main text: the six baseline and capacity contrasts that drive the low-data claim (v2_02, v2_03)",fusion narrow minus concat,CLEAN_PAIRED_CONTROL,0.00944,"[0.00285, 0.01592]",true,0.00175,7714,768,EV-CON-v2_03.fusion_narrow_minus_concat.train_40k
+"Retained in full: the nine-gap interaction-feature decomposition (v2_04), carried by Figure VE1-FIG-A1",difference 576k minus concat,CLEAN_PAIRED_CONTROL,0.00944,"[0.00338, 0.01569]",true,0.00355,7714,768,EV-CON-v2_04.difference_576k_minus_concat.train_40k
+"Retained in full: the nine-gap interaction-feature decomposition (v2_04), carried by Figure VE1-FIG-A1",difference natural minus concat,CAPACITY_CONFOUNDED,0.01001,"[0.00370, 0.01626]",true,0.00282,7714,768,EV-CON-v2_04.difference_natural_minus_concat.train_40k
+"Retained in full: the nine-gap interaction-feature decomposition (v2_04), carried by Figure VE1-FIG-A1",fusion minus difference natural,CAPACITY_CONFOUNDED,0.00441,"[0.00077, 0.00784]",true,0.00217,7714,768,EV-CON-v2_04.fusion_minus_difference_natural.train_40k
+"Retained in full: the nine-gap interaction-feature decomposition (v2_04), carried by Figure VE1-FIG-A1",fusion minus product natural,CAPACITY_CONFOUNDED,0.00169,"[-0.00383, 0.00734]",false,0.00232,7714,768,EV-CON-v2_04.fusion_minus_product_natural.train_40k
+"Retained in full: the nine-gap interaction-feature decomposition (v2_04), carried by Figure VE1-FIG-A1",fusion narrow minus difference 576k,CLEAN_PAIRED_CONTROL,-0.00000,"[-0.00402, 0.00398]",false,0.00204,7714,768,EV-CON-v2_04.fusion_narrow_minus_difference_576k.train_40k
+"Retained in full: the nine-gap interaction-feature decomposition (v2_04), carried by Figure VE1-FIG-A1",fusion narrow minus product 576k,CLEAN_PAIRED_CONTROL,-0.00013,"[-0.00654, 0.00551]",false,0.00293,7714,768,EV-CON-v2_04.fusion_narrow_minus_product_576k.train_40k
+"Retained in full: the nine-gap interaction-feature decomposition (v2_04), carried by Figure VE1-FIG-A1",product 576k minus concat,CLEAN_PAIRED_CONTROL,0.00957,"[0.00495, 0.01415]",true,0.00342,7714,768,EV-CON-v2_04.product_576k_minus_concat.train_40k
+"Retained in full: the nine-gap interaction-feature decomposition (v2_04), carried by Figure VE1-FIG-A1",product 576k minus difference 576k,CLEAN_PAIRED_CONTROL,0.00013,"[-0.00552, 0.00569]",false,0.00278,7714,768,EV-CON-v2_04.product_576k_minus_difference_576k.train_40k
+"Retained in full: the nine-gap interaction-feature decomposition (v2_04), carried by Figure VE1-FIG-A1",product natural minus concat,CAPACITY_CONFOUNDED,0.01273,"[0.00811, 0.01741]",true,0.00284,7714,768,EV-CON-v2_04.product_natural_minus_concat.train_40k

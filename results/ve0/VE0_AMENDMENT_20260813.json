@@ -1,0 +1,256 @@
+{
+ "authorisation": {
+  "authorised_by": "the user",
+  "date_utc": "2026-08-13",
+  "explicitly_not_authorised": [
+   "training",
+   "evaluation",
+   "new bootstrap or statistics",
+   "timing",
+   "checkpoint selection",
+   "any change to a historical scientific value, confidence interval, training-seed standard deviation or sample count",
+   "any v2_07 repair",
+   "clean-test access",
+   "VE-2",
+   "F1",
+   "F2",
+   "A5 or A8c",
+   "reopening E10",
+   "reopening the statistical and efficiency closure"
+  ],
+  "permitted_reading": "the frozen source artefacts may be READ only to bind values that were already computed before VE-0 and whose hashes are already part of the accepted evidence provenance.",
+  "scope": "one narrow governed amendment and repair, existing only to close the seven blockers the independent VE-1 review raised and to apply the directly associated dissertation-readability improvements that review already accepted."
+ },
+ "content_sha256": "e5bdd2dd716971511195732654bf105fdb0013b6df4653f2aa5b554c3499b15b",
+ "dependency_into_ve1": {
+  "note": "VE-1 must be rebuilt against this amended contract. Its validation suite refuses to render from a contract whose content digests it cannot verify.",
+  "populates": [
+   "VE0-TAB-04 per-seed values",
+   "VE0-TAB-05 per-seed effects",
+   "VE0-TAB-A2 per-seed accuracies and range"
+  ],
+  "unblocks": [
+   "VE0-FIG-A2"
+  ]
+ },
+ "discovery": {
+  "blocking_findings_repaired_in_ve1_rather_than_here": {
+   "B3": "mislabelled trainable-parameter scalar keys in the VE-1 provenance registry",
+   "B4": "VE-1 source validation did not resolve canonical sources in a clean checkout"
+  },
+  "blocking_findings_that_are_ve0_defects": {
+   "B1": "RQ6's supported answer over-generalised the train_40k conclusion to every tested scale. The reasoner's mean overall accuracy is higher at 100k and 250k; only the four-or-more-step deficit conclusion holds at every scale.",
+   "B2": "RQ9's supported answer implied that every frozen-SLM readout has accuracy-paired serial cost evidence. On otter159 every lightweight and E8B row is latency-only, because VE-0 records its accuracy pairing as unresolved.",
+   "B5": "VE0-TAB-04 requires a per-seed column and calls it mandatory, but no inventory row bound per-seed values.",
+   "B6": "VE0-TAB-05's footnote states that the per-seed effects are printed so a reader can see where seeds disagree in sign, while no inventory row bound them.",
+   "B7": "VE0-TAB-A2 exists to answer what the per-seed value behind every reported mean is, and could not."
+  },
+  "found_by": "the independent VE-1 review, which rendered the dissertation figures and tables from this contract and reported verdict VE1_CHANGES_REQUIRED",
+  "numerical_verification_reported_by_that_review": {
+   "figure_drawn_rows_re_derived": 203,
+   "figure_field_comparisons": 2436,
+   "scientific_numerical_mismatches": 0,
+   "strictly_numeric_table_cells": 898
+  },
+  "reviewed_ve1_head": "f91d0770b6733a0b3eb4f161dd2ca36d60050bbb"
+ },
+ "fields_changed": {
+  "canonical_evidence_inventory": {
+   "existing_fields_changed": "none. Every point estimate, interval, across-training-seed standard deviation, sample count, seed set, metric identity, comparison class, scorer, checkpoint-selection class, claim boundary and limitation is byte-identical to the VE0_PASS state.",
+   "new_fields": [
+    "per_seed_values",
+    "per_seed_seed_ids",
+    "per_seed_range",
+    "per_seed_effects",
+    "per_seed_effect_range",
+    "per_seed_status",
+    "per_seed_provenance"
+   ],
+   "row_count_before_and_after": 428,
+   "rows_added": 0,
+   "rows_removed": 0
+  },
+  "claim_ledger": {
+   "changed": "nothing. 21 claims, identical texts, statuses, caveats and forbidden stronger versions. C02 remains TENTATIVE and C19 remains SUPPORTED."
+  },
+  "figure_specifications": {
+   "changed": "nothing"
+  },
+  "qualitative_protocol": {
+   "changed": "nothing; the frozen selection salt is untouched"
+  },
+  "results_section_mapping": {
+   "reason": "the claim ledger needed an appendix home once it left the main text. The Limitations section keeps its claims and states the boundaries in prose.",
+   "sections_added": [
+    "R_APPENDIX_CLAIM_LEDGER"
+   ]
+  },
+  "rq_evidence_matrix": {
+   "answer_status_changed": "none. Both remain ANSWERED.",
+   "claim_bindings_changed": "none. RQ6 still rests on C07 and RQ9 on C13 and C14.",
+   "fields_changed": [
+    "supported_answer",
+    "limitation"
+   ],
+   "questions_changed": [
+    "RQ6",
+    "RQ9"
+   ]
+  },
+  "supersession_map": {
+   "changed": "nothing"
+  },
+  "table_specifications": {
+   "fields_changed": [
+    "placement",
+    "dissertation_section",
+    "footnotes"
+   ],
+   "reason": "twenty-one rows of claim text, mandatory caveat and forbidden stronger version is reference apparatus rather than a Results table. No claim, status, caveat or prohibition changed, and no replacement main-text table was invented to fill the slot.",
+   "specifications_changed": [
+    "VE0-TAB-07"
+   ]
+  }
+ },
+ "original_freeze": {
+  "approved_head": "d58cd66b0b3e7e64fd49b10b0a0342588df367fd",
+  "approved_patch_sha256": "fbab37b5162147dc3468985dfa415583d7ffecaa13fa3f03fc05c0041e63fe01",
+  "closed_at_utc": "2026-08-13",
+  "closure_record": ".agent-bridge/tasks/ve0-canonical-evidence-inventory/60-final.json",
+  "note": "the original freeze stands as the historical record. It is not rewritten, reinterpreted or backdated by this amendment, and no historical review artefact was modified.",
+  "review_rounds": [
+   "VE0_CHANGES_REQUIRED",
+   "VE0_PASS"
+  ],
+  "verdict": "VE0_PASS"
+ },
+ "per_seed_binding": {
+  "computation": "READ_ONLY. No value was recomputed, no model was loaded, no checkpoint or embedding store was opened, no evaluation or timing was run and no GPU hour was charged.",
+  "consistency_guard": "every bound vector must reproduce the mean, the sample standard deviation (ddof=1) and, for accuracies, the range stored beside it in the same frozen row, and its seed identifiers must equal the row's own seed set. A vector that does not is a build failure, not a warning.",
+  "contrast_rows_bound": 67,
+  "contrast_rows_total": 70,
+  "rows_without_a_per_seed_vector": [
+   "EV-CON-v3_02a.reasoner_minus_fusion_deficit.train_40k",
+   "EV-CON-v3_03.reasoner_minus_fusion_deficit.train_100k",
+   "EV-CON-v3_03.reasoner_minus_fusion_deficit.train_250k"
+  ],
+  "seed_rows_bound": 66,
+  "seed_rows_total": 66,
+  "sources": [
+   {
+    "path": "results/closure/B_primary_contrasts.json",
+    "role": "a frozen closure output that VE-0 already declares as an input and already hashes",
+    "rows_bound_from_it": 67,
+    "sha256": "cca3c32fb9797123dd644d4ee4e1189e1ca03dcb6c497594774cbe90abd5e18b"
+   },
+   {
+    "path": "results/closure/E_seed_variability.json",
+    "role": "a frozen closure output that VE-0 already declares as an input and already hashes",
+    "rows_bound_from_it": 66,
+    "sha256": "6da253c493edaba1a3ecc33b4d3c4d085b7520e51fe87975003c5353dcb65e14"
+   }
+  ],
+  "why_those_rows_have_none": "the closure's contrast artefact stores no per-seed effect for the three V3 reasoner-minus-fusion deficit differences. No rendered specification requires a per-seed effect for them, so nothing is blocked; the absence is recorded on the rows rather than filled."
+ },
+ "provenance": {
+  "builder": "experiments/ve0/run_ve0.py",
+  "builder_sha256": "d7ae716779e98cfbf4d9ed3112cd2015614dff720340a4bae2e788c049a07c49",
+  "clean_test_accessed": false,
+  "command": "python -m experiments.ve0.run_ve0",
+  "deterministic_selection_salt": "P2607-VE0-QUALITATIVE-SALT-20260813-v1",
+  "device": "cpu",
+  "evaluated_anything": false,
+  "gpu_hours_charged": 0.0,
+  "gpu_used": false,
+  "inputs": [
+   {
+    "bytes": 42006,
+    "path": "results/closure/G_claim_evidence.json",
+    "role": "closure output claims",
+    "sha256": "9efc2d34ac91c47120e936e5eb9d609fa04f96ae64c65af79a37832756fe952c"
+   },
+   {
+    "bytes": 127530,
+    "path": "results/closure/B_primary_contrasts.json",
+    "role": "closure output contrasts",
+    "sha256": "cca3c32fb9797123dd644d4ee4e1189e1ca03dcb6c497594774cbe90abd5e18b"
+   },
+   {
+    "bytes": 64983,
+    "path": "results/closure/efficiency_closure_table.json",
+    "role": "closure output efficiency",
+    "sha256": "be1781efeece841cc75df126fab43c9e9946437957c1ea6401ee1f86c8b47d5e"
+   },
+   {
+    "bytes": 4191,
+    "path": "results/closure/F_multiplicity_status.json",
+    "role": "closure output multiplicity",
+    "sha256": "7ab15242d892e02d6c397e96a4b002fe839b311100c61093cc214c2152d2cc41"
+   },
+   {
+    "bytes": 12970,
+    "path": "results/closure/H_evidence_readiness.json",
+    "role": "closure output readiness",
+    "sha256": "b54113dafb37e55c59d5ae0b8c550a33033a02bb54030b43a9416a859b0a3a9f"
+   },
+   {
+    "bytes": 239578,
+    "path": "results/closure/reconstructed_statistics.json",
+    "role": "closure output reconstructed",
+    "sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097"
+   },
+   {
+    "bytes": 441421,
+    "path": "results/closure/C_reconstructed_evidence_manifest.json",
+    "role": "closure output reconstructed_manifest",
+    "sha256": "a7c72050f4032d6f0c1c24e9cf5e334db4e1698c31c83c4907513a290e21dff5"
+   },
+   {
+    "bytes": 20546,
+    "path": "results/closure/A_evidence_registry.json",
+    "role": "closure output registry",
+    "sha256": "b8b47e024c49a599a425894f34c24b4375958998401a311605694027257de122"
+   },
+   {
+    "bytes": 66484,
+    "path": "results/closure/E_seed_variability.json",
+    "role": "closure output seed",
+    "sha256": "6da253c493edaba1a3ecc33b4d3c4d085b7520e51fe87975003c5353dcb65e14"
+   },
+   {
+    "bytes": 198706,
+    "path": "results/closure/D_slice_statistics.json",
+    "role": "closure output slices",
+    "sha256": "0a21059492c9e37b67223757535b379e15d3146cff51d0d378885e9dc39c2088"
+   }
+  ],
+  "measured_anything": false,
+  "numpy_version": "2.5.0",
+  "pandas_version": "3.0.3",
+  "python": "3.12.3",
+  "repository_head": "f91d0770b6733a0b3eb4f161dd2ca36d60050bbb",
+  "repository_head_short": "f91d077",
+  "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+  "schema_version": 1,
+  "selected_any_checkpoint": false,
+  "trained_anything": false,
+  "worktree_dirty": true
+ },
+ "rule": "this amendment is NOT part of the original freeze. It binds values that already existed in VE-0's own frozen inputs and repairs two over-general research-question answers. It computes no scientific value, changes no historical result and reopens nothing.",
+ "scope_confirmations": {
+  "clean_test_accessed": false,
+  "closure_reopened": false,
+  "e10_reopened": false,
+  "evaluated_anything": false,
+  "gpu_hours_charged": 0.0,
+  "gpu_used": false,
+  "historical_review_artefact_rewritten": false,
+  "measured_anything": false,
+  "recomputed_any_scientific_value": false,
+  "selected_any_checkpoint": false,
+  "trained_anything": false,
+  "v2_07_repaired": false
+ },
+ "title": "VE-0 reporting and evidence-binding amendment, 2026-08-13",
+ "ve0_output": "N"
+}
