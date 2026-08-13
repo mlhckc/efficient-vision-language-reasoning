@@ -28,6 +28,7 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 import config
+from experiments.e10_capacity_360m import analysis
 from experiments.e10_capacity_360m import e10_common as e10
 from experiments.e10_capacity_360m import phase1
 from experiments.e10_capacity_360m import phase2
@@ -35,6 +36,7 @@ from experiments.e10_capacity_360m import phase3
 from experiments.e10_capacity_360m import run as e10_run
 from experiments.e10_capacity_360m import science
 from tests.test_e10 import (
+    _completed_core_entry,
     _must_raise,
     pre_authorization_state,
     write_pre_execution_ledgers,
@@ -550,8 +552,9 @@ def test_phase3_amendment_is_carried_by_the_newest_chain_link() -> None:
     # amendment is no longer the newest and is now admitted exactly like every
     # other superseded record: through the link that carries it, by bytes.
     chain = e10._amendment_chain()
-    assert chain[0][0] == e10.POSTEXECUTION_AMENDMENT_PATH
+    assert chain[0][0] == e10.R31_AMENDMENT_PATH
     assert [path.name for path, _ in chain] == [
+        "post_execution_binding_amendment_r31_20260813.json",
         "post_execution_binding_amendment_20260813.json",
         "phase3_binding_amendment_20260811.json",
         "phase2_binding_amendment_20260810.json",
@@ -564,7 +567,7 @@ def test_phase3_amendment_is_carried_by_the_newest_chain_link() -> None:
     assert amendment["status"] == "PHASE2_EVIDENCE_CARRIED_FORWARD"
     assert amendment["NON_SCIENTIFIC"] is True
     assert amendment["binding"]["source_digest"] == e10.EXECUTION_SOURCE_DIGEST
-    assert e10.POSTEXECUTION_AMENDMENT_PATH.name in [
+    assert e10.R31_AMENDMENT_PATH.name in [
         path.name for path, _ in chain]
     assert amendment["phase2_r2_source_digest"] == e10.PHASE2_R2_SOURCE_DIGEST
     assert set(amendment["preserved_records"]) == set(
@@ -915,7 +918,11 @@ def test_post_execution_amendment_carries_the_completed_evidence() -> None:
     amendment = e10.validate_post_execution_amendment()
     assert amendment["record_type"] == "e10_post_execution_binding_amendment"
     assert amendment["NON_SCIENTIFIC"] is True
-    assert amendment["binding"]["source_digest"] == e10.source_digest()[0]
+    # R3.1 supersedes the R3 binding, so this record now carries the R3 pair
+    # and is admitted through the R3.1 link rather than by the live binding.
+    assert amendment["binding"]["source_digest"] == \
+        e10.POSTEXECUTION_R3_SOURCE_DIGEST
+    assert amendment["binding"]["source_digest"] != e10.source_digest()[0]
     assert amendment["execution_source_digest"] == e10.EXECUTION_SOURCE_DIGEST
     assert amendment["change_scope"]["scientific_results_changed"] is False
     assert amendment["change_scope"]["cell_records_rewritten"] is False
@@ -969,6 +976,190 @@ def test_spent_grant_cannot_fund_new_execution() -> None:
     # And no retry became available.
     assert e10.read_retry_ledger()["retries"] == []
     assert config.E10_AUTOMATIC_RETRIES_PER_IDENTITY == 0
+
+
+@contextmanager
+def _declared_matrix(root: Path, *, completed, degrade_cell=None):
+    """Declare an authorised matrix with an exact set of completed cells.
+
+    R3.1. Everything is built, nothing inherited. ``completed`` names the cells
+    that have a published result and a completed ledger charge; every other
+    cell has neither. ``degrade_cell`` corrupts the recorded per-row digest of
+    one published cell so the WHOLE-MATRIX terminal proof degrades while that
+    cell's own completion traces survive, which is exactly the reviewer's
+    G-R3-1 state.
+    """
+    root = Path(root)
+    core = root / "core"
+    core.mkdir(parents=True, exist_ok=True)
+    for arm, scale, seed in completed:
+        name = e10.core_run_name(arm, scale, seed)
+        shutil.copy2(e10.REAL_CORE_OUT_DIR / f"{name}.json", core / f"{name}.json")
+    if degrade_cell is not None:
+        victim = core / f"{e10.core_run_name(*degrade_cell)}.json"
+        payload = json.loads(victim.read_text())
+        payload["e10_core_cell"]["per_row"]["sha256"] = "0" * 64
+        victim.write_text(json.dumps(payload, indent=2) + "\n")
+    ledgers = root / "ledgers"
+    ledgers.mkdir(parents=True, exist_ok=True)
+    spend, retry = ledgers / "spend.json", ledgers / "retry.json"
+    write_pre_execution_ledgers(spend, retry)
+    ledger = json.loads(spend.read_text())
+    for arm, scale, seed in completed:
+        ledger["entries"].append(_completed_core_entry(arm, scale, seed))
+    spend.unlink()
+    e10.atomic_write_json(spend, ledger)
+    with ExitStack() as stack:
+        stack.enter_context(mock.patch.object(e10, "CORE_OUT_DIR", core))
+        stack.enter_context(mock.patch.object(
+            e10, "CORE_CHECKPOINT_DIR", core / "checkpoints"))
+        stack.enter_context(mock.patch.object(e10, "SPEND_LEDGER", spend))
+        stack.enter_context(mock.patch.object(e10, "RETRY_LEDGER", retry))
+        yield {"core": core, "spend": spend, "retry": retry}
+
+
+def _all_three_entry_points_refuse(cell, fragment) -> None:
+    """The three authoritative entry points, all refusing for one reason."""
+    _must_raise(SystemExit,
+                lambda: e10.assert_core_entry_authorized(*cell), fragment)
+    _must_raise(SystemExit,
+                lambda: e10.authorize_cell_execution(*cell), fragment)
+    _must_raise(SystemExit, lambda: e10_run.core_cell(*cell), fragment)
+
+
+def test_completed_cell_refuses_when_terminal_proof_is_degraded() -> None:
+    """G-R3-1, reproduced directly and then required to refuse.
+
+    There is deliberately NO early return on a non-terminal lifecycle state:
+    the whole point of this test is the state in which the whole-matrix proof
+    has degraded. Before the repair, this state authorised an already-completed
+    cell and minted a signed optimizer permit for it.
+    """
+    target = ("B4", "train_40k", 0)
+    with tempfile.TemporaryDirectory() as directory:
+        with _declared_matrix(Path(directory), completed=list(FROZEN_ORDER),
+                              degrade_cell=("B4r", "train_250k", 2)):
+            # The precondition the reviewer described, asserted rather than
+            # assumed: authorised, all twelve published and charged, grant
+            # valid, and the terminal proof degraded by one local binary.
+            assert e10.core_execution_state()["state"] == \
+                e10.AUTHORIZED_INCOMPLETE
+            assert e10.core_authorization_state()["grant_valid"] is True
+            completion = e10.cell_previously_completed(*target)
+            assert completion["published_result"] is True
+            assert completion["completed_charge"] is True
+            assert completion["previously_completed"] is True
+            # All three authoritative entry points refuse, for immutability.
+            _all_three_entry_points_refuse(target, "already been completed")
+            _all_three_entry_points_refuse(target, "immutable")
+            # And no signed permit exists for it.
+            _must_raise(SystemExit,
+                        lambda: e10.authorize_cell_execution(*target),
+                        "authorises no re-execution")
+
+
+def test_unrun_cell_in_an_incomplete_matrix_is_still_authorised() -> None:
+    """The repair must not become a blanket incomplete-state refusal.
+
+    A blanket refusal would retrospectively invalidate the original execution
+    lifecycle, in which an authorised but incomplete matrix must still admit
+    the exact cells that have not yet run.
+    """
+    order = list(FROZEN_ORDER)
+    done, target = order[:6], order[6]
+    with tempfile.TemporaryDirectory() as directory:
+        with _declared_matrix(Path(directory), completed=done):
+            assert e10.core_execution_state()["state"] == \
+                e10.AUTHORIZED_INCOMPLETE
+            completion = e10.cell_previously_completed(*target)
+            assert completion["published_result"] is False
+            assert completion["completed_charge"] is False
+            assert completion["previously_completed"] is False
+            # Case C: no completion trace, so immutability must NOT be invoked.
+            grant = e10.assert_core_entry_authorized(*target)
+            assert grant["grant_id"] == e10.EXECUTION_GRANT_ID
+            permit = e10.authorize_cell_execution(*target)
+            assert (permit.arm, permit.scale, permit.seed) == target
+            assert permit.per_cell_wall_hours == 12.0
+            # A cell that HAS run in that same incomplete matrix still refuses.
+            _all_three_entry_points_refuse(done[0], "already been completed")
+
+
+def test_either_completion_trace_alone_refuses() -> None:
+    """Fail-closed cases A and B: one surviving indicator is enough."""
+    order = list(FROZEN_ORDER)
+    target = order[0]
+    # A. A published result with no completed charge.
+    with tempfile.TemporaryDirectory() as directory:
+        with _declared_matrix(Path(directory), completed=[]) as paths:
+            name = e10.core_run_name(*target)
+            shutil.copy2(e10.REAL_CORE_OUT_DIR / f"{name}.json",
+                         paths["core"] / f"{name}.json")
+            completion = e10.cell_previously_completed(*target)
+            assert completion == {"cell": list(target), "published_result": True,
+                                  "completed_charge": False,
+                                  "previously_completed": True}
+            _all_three_entry_points_refuse(target, "a published result record")
+    # B. A completed charge with no published result.
+    with tempfile.TemporaryDirectory() as directory:
+        with _declared_matrix(Path(directory), completed=[]) as paths:
+            ledger = json.loads(Path(paths["spend"]).read_text())
+            ledger["entries"].append(_completed_core_entry(*target))
+            Path(paths["spend"]).unlink()
+            e10.atomic_write_json(Path(paths["spend"]), ledger)
+            completion = e10.cell_previously_completed(*target)
+            assert completion == {"cell": list(target), "published_result": False,
+                                  "completed_charge": True,
+                                  "previously_completed": True}
+            _all_three_entry_points_refuse(
+                target, "a completed charge in the shared ledger")
+
+
+def test_r31_amendment_carries_r3_and_fails_closed() -> None:
+    """R3.1 chain: original -> R3 post-execution -> R3.1 live binding."""
+    chain = [path.name for path, _ in e10._amendment_chain()]
+    assert chain[:3] == [
+        "post_execution_binding_amendment_r31_20260813.json",
+        "post_execution_binding_amendment_20260813.json",
+        "phase3_binding_amendment_20260811.json",
+    ]
+    amendment = e10.validate_r31_amendment()
+    assert amendment["defect_repaired"] == "G-R3-1"
+    assert amendment["binding"]["source_digest"] == e10.source_digest()[0]
+    assert amendment["r3_source_digest"] == e10.POSTEXECUTION_R3_SOURCE_DIGEST
+    assert amendment["execution_source_digest"] == e10.EXECUTION_SOURCE_DIGEST
+    assert amendment["change_scope"][
+        "blanket_incomplete_refusal_introduced"] is False
+    assert amendment["change_scope"]["previous_amendment_rewritten"] is False
+    assert amendment["grant_terminal_policy"][
+        "immutability_survives_degraded_terminal_proof"] is True
+    # The R3 amendment is carried by exact bytes, and both pairs are accepted.
+    carried = amendment["preserved_records"][
+        e10.POSTEXECUTION_AMENDMENT_PATH.name]
+    assert carried["sha256"] == e10.sha256_file(e10.POSTEXECUTION_AMENDMENT_PATH)
+    accepted = e10.accepted_historical_bindings()
+    assert (e10.POSTEXECUTION_R3_SOURCE_DIGEST,
+            e10.POSTEXECUTION_R3_CONFIG_DIGEST) in accepted
+    assert (e10.EXECUTION_SOURCE_DIGEST, e10.EXECUTION_CONFIG_DIGEST) in accepted
+    # Substituted historical evidence fails closed: if the carried record's
+    # bytes change, the link refuses instead of admitting the stale binding.
+    with tempfile.TemporaryDirectory() as directory:
+        substituted = (Path(directory)
+                       / e10.POSTEXECUTION_AMENDMENT_PATH.name)
+        payload = json.loads(e10.POSTEXECUTION_AMENDMENT_PATH.read_text())
+        payload["reason"] = "substituted"
+        substituted.write_text(json.dumps(payload, indent=2) + "\n")
+        with mock.patch.object(e10, "POSTEXECUTION_AMENDMENT_PATH", substituted):
+            _must_raise(AssertionError, e10.validate_r31_amendment,
+                        "changed under R3.1")
+    # The twelve historical cells still validate through the chain, and the
+    # frozen analysis still reproduces from them.
+    for arm, scale, seed in FROZEN_ORDER:
+        result = e10.core_cell_paths(arm, scale, seed)["result"]
+        record = e10.read_json_mapping(result)
+        e10.assert_recorded_binding(
+            record["metadata"], f"cell {arm}/{scale}/{seed}", result)
+    assert len(analysis.load_matrix()["cells"]) == len(e10.CORE_CELLS)
 
 
 def test_phase3_verify_reports_the_real_state() -> None:
@@ -1033,6 +1224,10 @@ TESTS = (
     test_frozen_scientific_protocol_is_unchanged,
     test_no_e10_source_assigns_the_authorization_constant,
     test_post_execution_amendment_carries_the_completed_evidence,
+    test_completed_cell_refuses_when_terminal_proof_is_degraded,
+    test_unrun_cell_in_an_incomplete_matrix_is_still_authorised,
+    test_either_completion_trace_alone_refuses,
+    test_r31_amendment_carries_r3_and_fails_closed,
     test_spent_grant_cannot_fund_new_execution,
     test_phase3_verify_reports_the_real_state,
 )

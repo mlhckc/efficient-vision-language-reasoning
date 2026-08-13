@@ -431,6 +431,24 @@ EXECUTION_CONFIG_DIGEST = (
     "4b9fa43cb74b511c0bb6fda3c7c043d6047ef5e5e220c1abad6e35138f3df9ab"
 )
 POSTEXECUTION_TASK_ID = "e10-r3-terminal-state-repair"
+# --- the R3.1 live-binding link -----------------------------------------------
+# R3.1 repairs G-R3-1, the spent-grant refusal surviving a degraded terminal
+# proof. It edits digest-bound source and tests again, so the live source digest
+# moves a second time and the R3 amendment stops carrying the live binding. This
+# link anchors the new live binding and preserves the R3 amendment by exact
+# bytes, so the chain reads: original execution binding -> R3 post-execution
+# amendment -> R3.1 live-binding amendment. Like its predecessor it is
+# provenance, never permission.
+POSTEXECUTION_R3_SOURCE_DIGEST = (
+    "cdc57315c416c5ada8543ed7163612ccaeb1e14a724df220dbdaa607e7b3ea64"
+)
+POSTEXECUTION_R3_CONFIG_DIGEST = (
+    "4b9fa43cb74b511c0bb6fda3c7c043d6047ef5e5e220c1abad6e35138f3df9ab"
+)
+R31_TASK_ID = "e10-r31-spent-grant-degraded-state-repair"
+R31_AMENDMENT_PATH = (
+    OUT_DIR / "post_execution_binding_amendment_r31_20260813.json"
+)
 # The real trees, captured once at import. The post-execution amendment pins
 # immutable historical evidence, so its resolution must not follow a test
 # redirect of OUT_DIR, CORE_OUT_DIR or CORE_AUTHORIZATION_DIR.
@@ -814,6 +832,10 @@ def assert_current_binding(record: dict, context: str) -> dict:
 def accepted_historical_bindings() -> tuple[tuple[str, str], ...]:
     """The (source, config) digest pairs a superseded record may still carry."""
     return (
+        # The R3 pair. R3.1 moved the live source digest a second time, so the
+        # R3 amendment now carries a superseded binding of its own. It is
+        # admitted only for records the R3.1 amendment names by exact bytes.
+        (POSTEXECUTION_R3_SOURCE_DIGEST, POSTEXECUTION_R3_CONFIG_DIGEST),
         # The execution-time pair. R3 moved the live source digest by repairing
         # the terminal-state verifiers, so the twelve completed cell records,
         # their governance outcomes, the frozen analysis and the grant all carry
@@ -831,6 +853,7 @@ def accepted_historical_bindings() -> tuple[tuple[str, str], ...]:
 def _amendment_chain() -> tuple[tuple[Path, Any], ...]:
     """Newest first. Each link carries the records the next one bound."""
     return (
+        (R31_AMENDMENT_PATH, validate_r31_amendment),
         (POSTEXECUTION_AMENDMENT_PATH, validate_post_execution_amendment),
         (PHASE3_AMENDMENT_PATH, validate_phase3_amendment),
         (PHASE2_AMENDMENT_PATH, validate_phase2_amendment),
@@ -857,6 +880,98 @@ def postexecution_record_path(filename: str, location: str) -> Path:
     if location == "shared_state":
         return REAL_CORE_AUTHORIZATION_GRANT_PATH
     raise AssertionError(f"unknown post-execution record location {location!r}")
+
+
+def validate_r31_amendment() -> dict:
+    """The immutable R3.1 link that carries the R3 amendment across its move.
+
+    R3.1 repairs the spent-grant refusal so that it survives a degraded
+    whole-matrix proof. That repair touches SOURCE_PATHS, so the live source
+    digest moves and the R3 post-execution amendment, which anchored the
+    previous live binding, would stop validating. This link anchors the new
+    live binding and preserves the R3 amendment by exact bytes; through it the
+    twelve historical cells, their binaries, the frozen analysis and the grant
+    all remain reproducible under the binding they were produced under.
+
+    It authorises nothing. It restates the operationally-SPENT grant policy and
+    fails closed if the record it carries is substituted.
+    """
+    amendment = read_json_mapping(R31_AMENDMENT_PATH)
+    required = {
+        "schema_version", "record_type", "task_id", "status", "NON_SCIENTIFIC",
+        "utc", "binding", "reason", "change_scope", "r3_source_digest",
+        "r3_config_digest", "execution_source_digest", "execution_config_digest",
+        "preserved_records", "completed_execution", "grant_terminal_policy",
+        "defect_repaired",
+    }
+    _require_exact_keys(amendment, required, "E10 R3.1 amendment")
+    if amendment["schema_version"] != 1 \
+            or amendment["record_type"] != "e10_r31_binding_amendment" \
+            or amendment["task_id"] != R31_TASK_ID \
+            or amendment["status"] != "R3_EVIDENCE_CARRIED_FORWARD" \
+            or amendment["NON_SCIENTIFIC"] is not True \
+            or amendment["r3_source_digest"] != POSTEXECUTION_R3_SOURCE_DIGEST \
+            or amendment["r3_config_digest"] != POSTEXECUTION_R3_CONFIG_DIGEST \
+            or amendment["execution_source_digest"] != EXECUTION_SOURCE_DIGEST \
+            or amendment["execution_config_digest"] != EXECUTION_CONFIG_DIGEST \
+            or amendment["defect_repaired"] != "G-R3-1" \
+            or amendment["completed_execution"] != {
+                "scientific_cells_completed": len(CORE_CELLS),
+                "cells": [list(cell) for cell in pair_preserving_order()],
+                "grant_id": EXECUTION_GRANT_ID,
+                "automatic_retries": 0,
+                "authorized_retries_consumed": 0,
+                "e10_training_authorized": None,
+            }:
+        raise AssertionError("E10 R3.1 amendment semantics mismatch")
+    _require_utc(amendment["utc"], "E10 R3.1 amendment utc")
+    assert_current_binding(amendment, "E10 R3.1 amendment")
+    if amendment["change_scope"] != {
+        "spent_grant_refusal_made_state_independent": True,
+        "per_cell_immutability_guard_added": True,
+        "blanket_incomplete_refusal_introduced": False,
+        "scientific_results_changed": False,
+        "cell_records_rewritten": False,
+        "checkpoints_changed": False,
+        "per_row_evidence_changed": False,
+        "frozen_analysis_changed": False,
+        "grant_rewritten": False,
+        "previous_amendment_rewritten": False,
+        "resource_constants_changed": False,
+        "scientific_recipe_changed": False,
+        "core_matrix_changed": False,
+        "model_pin_changed": False,
+        "dev_evaluation_cadence_changed": False,
+        "new_scientific_authorization_granted": False,
+    }:
+        raise AssertionError("E10 R3.1 amendment scope mismatch")
+    if amendment["grant_terminal_policy"] != {
+        "historically_valid_for_the_completed_execution": True,
+        "operationally_spent": True,
+        "authorizes_new_scientific_execution": False,
+        "authorizes_retry": False,
+        "completed_cells_remain_immutable": True,
+        "immutability_survives_degraded_terminal_proof": True,
+        "new_work_requires": (
+            "a fresh explicit user authorization and a new valid grant"
+        ),
+    }:
+        raise AssertionError("E10 R3.1 amendment grant policy mismatch")
+    preserved = amendment["preserved_records"]
+    expected = {POSTEXECUTION_AMENDMENT_PATH.name}
+    if not isinstance(preserved, dict) or set(preserved) != expected:
+        raise AssertionError("E10 R3.1 amendment record set mismatch")
+    reference = preserved[POSTEXECUTION_AMENDMENT_PATH.name]
+    _require_exact_keys(reference, {"location", "sha256"},
+                        "R3.1 amendment preserved record")
+    if reference["location"] != "governance":
+        raise AssertionError("E10 R3.1 amendment preserved location mismatch")
+    _require_sha256(reference["sha256"], "R3.1 preserved record sha256")
+    if not POSTEXECUTION_AMENDMENT_PATH.is_file() \
+            or sha256_file(POSTEXECUTION_AMENDMENT_PATH) != reference["sha256"]:
+        raise AssertionError(
+            "E10 R3 post-execution amendment changed under R3.1")
+    return amendment
 
 
 def validate_post_execution_amendment() -> dict:
@@ -900,7 +1015,13 @@ def validate_post_execution_amendment() -> dict:
             }:
         raise AssertionError("E10 post-execution amendment semantics mismatch")
     _require_utc(amendment["utc"], "E10 post-execution amendment utc")
-    assert_current_binding(amendment, "E10 post-execution amendment")
+    # Was assert_current_binding while this record was the newest link. R3.1
+    # adds a newer one, so it is now admitted like every other superseded
+    # record: the live binding, or the one historical pair an immutable
+    # amendment names together with these exact bytes.
+    assert_recorded_binding(
+        amendment, "E10 post-execution amendment", POSTEXECUTION_AMENDMENT_PATH
+    )
     if amendment["change_scope"] != {
         "terminal_state_verifiers_repaired": True,
         "lifecycle_tests_repaired": True,
@@ -2324,7 +2445,47 @@ def assert_no_core_authorization_grant() -> dict:
     }
 
 
-def assert_core_entry_authorized(arm: str, scale: str, seed: int) -> dict:
+def cell_previously_completed(arm: str, scale: str, seed: int) -> dict:
+    """Whether this exact cell has already run, on either surviving indicator.
+
+    R3.1, the G-R3-1 repair. Two independent historical traces of a completed
+    cell, checked separately so the loss of one cannot hide the other: the
+    published result record, and a completed charge for that exact cell in the
+    authoritative shared ledger. Either alone is proof that the cell ran.
+
+    Deliberately per-cell and deliberately cheap. It does not consult, and does
+    not depend on, the whole-matrix terminal proof, which is what makes it
+    survive a degraded proof caused by a missing or altered local binary.
+    """
+    published = core_cell_paths(arm, scale, seed)["result"].is_file()
+    charged = any(
+        tuple(entry["cell"]) == (arm, scale, seed)
+        and entry["outcome"] == "completed"
+        for entry in charged_core_cells()
+    )
+    return {
+        "cell": [arm, scale, seed],
+        "published_result": published,
+        "completed_charge": charged,
+        "previously_completed": bool(published or charged),
+    }
+
+
+def assert_core_entry_authorized(arm: str, scale: str, seed: int, *,
+                                 purpose: str = "execution") -> dict:
+    """Admit one exact cell to scientific execution, or refuse.
+
+    ``purpose`` is narrow and exists for exactly one caller. Accounting runs
+    AFTER a cell has published its result, so the per-cell immutability guard
+    below would refuse the charge of the very cell that legitimately just
+    finished. ``charge_core_cell_hours`` therefore passes
+    ``purpose="accounting"``, which skips that one guard and keeps every other
+    refusal. This opens no bypass: accounting additionally requires a signed,
+    process-bound permit, and a permit can only be minted through the
+    execution path, which the guard closes.
+    """
+    if purpose not in ("execution", "accounting"):
+        raise SystemExit(f"E10 CORE REFUSED: unknown entry purpose {purpose!r}")
     if (arm, scale, seed) not in CORE_CELLS:
         raise SystemExit(f"E10 CORE REFUSED: unknown cell {arm}/{scale}/seed{seed}")
     if config.E10_PER_IDENTITY_CEILING_HOURS is None:
@@ -2366,6 +2527,33 @@ def assert_core_entry_authorized(arm: str, scale: str, seed: int) -> dict:
             f"further scientific execution. New work requires a fresh explicit "
             f"user authorization and a new valid grant."
         )
+    # R3.1, G-R3-1. The fail-closed backstop for the refusal above. The
+    # whole-matrix proof is deliberately strict, so it degrades to
+    # AUTHORIZED_INCOMPLETE the moment one local per-row array or checkpoint
+    # goes missing or stops matching its digest. Before this guard the spent
+    # refusal was keyed only on that whole-matrix state, so losing a single
+    # untracked binary re-opened every already-completed cell at the entry gate
+    # and let authorize_cell_execution mint a signed optimizer permit for it.
+    #
+    # This is per-cell and independent of the matrix state. It is NOT a blanket
+    # "incomplete refuses everything": a cell that has genuinely never run still
+    # passes, which is what the original execution lifecycle requires.
+    if purpose == "execution":
+        completion = cell_previously_completed(arm, scale, seed)
+        if completion["previously_completed"]:
+            traces = []
+            if completion["published_result"]:
+                traces.append("a published result record")
+            if completion["completed_charge"]:
+                traces.append("a completed charge in the shared ledger")
+            raise SystemExit(
+                f"E10 CORE REFUSED: {arm}/{scale}/seed{seed} has already been "
+                f"completed and is immutable ({' and '.join(traces)}); grant "
+                f"{grant['grant_id']} is spent for this cell and authorises no "
+                f"re-execution of it. This refusal does not depend on the "
+                f"whole-matrix terminal proof. Re-running it requires a fresh "
+                f"explicit user authorization and a new valid grant."
+            )
     # Only reached after the side-effect-free budget, sentinel and grant
     # refusals; no model, dataset, CUDA context or output directory is touched.
     assert_shared_state_healthy(require_calibration_complete=True)
@@ -2980,7 +3168,10 @@ def charge_core_cell_hours(permit: CellExecutionPermit, *,
             f"hour per-cell wall (charged {occupancy_ns} ns, permit elapsed "
             f"{permit_elapsed_ns} ns, wall {wall_ns} ns)"
         )
-    assert_core_entry_authorized(arm, scale, seed)
+    # R3.1: accounting runs after publication, so the per-cell immutability
+    # guard must not refuse the charge of the cell that just finished. Every
+    # other refusal still applies, and a signed permit is required to get here.
+    assert_core_entry_authorized(arm, scale, seed, purpose="accounting")
     identity = model_identity(arm)
     recipe = build_recipe(arm, scale, seed)
     with exclusive_file_lock(GOVERNANCE_LOCK):

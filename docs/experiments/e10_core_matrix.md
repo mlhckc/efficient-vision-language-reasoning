@@ -94,6 +94,11 @@ After the twelfth cell the frozen analysis ran unchanged and refused nothing.
   the R3 source-digest move and records the grant's spent status.
 - `results/experiments/e10_capacity_360m_core/e10_core_r3_terminal_state_20260813.json`,
   the R3 terminal-state repair record.
+- `results/experiments/e10_capacity_360m/post_execution_binding_amendment_r31_20260813.json`,
+  the immutable R3.1 link that carries the R3 amendment across the second
+  source-digest move.
+- `results/experiments/e10_capacity_360m_core/e10_core_r31_spent_grant_20260813.json`,
+  the R3.1 G-R3-1 repair record.
 - Local, not version controlled: twelve per-row `.npz` arrays and
   thirty-six checkpoints under `checkpoints/`, each pinned by a SHA-256
   recorded inside its cell record and in the artefact manifest.
@@ -309,7 +314,7 @@ new digest was not backdated into any of them.
 
 R3 also settled the grant's terminal status as policy rather than observation.
 The grant remains historically valid as the provenance of the twelve completed
-cells and is operationally **spent**: `assert_core_entry_authorized` now refuses
+cells and is operationally **spent**: `assert_core_entry_authorized` refuses
 every authorised cell with `the authorised twelve-cell matrix is complete and
 grant … is operationally SPENT`, unauthorised arms, scales and seeds still
 refuse at the entry gate, retries remain at zero, and any further work needs a
@@ -318,6 +323,47 @@ fresh explicit user authorisation and a new valid grant. The details are in
 R3 changed no accuracy, contrast, interval, checkpoint, per-row array or
 result record, and the frozen analysis still reproduces all twelve cells from
 their own per-row evidence.
+
+**R3.1, 13 August 2026: the spent refusal now survives a degraded proof.** The
+independent R3 review returned `E10_CHANGES_REQUIRED` on one governance
+blocker, G-R3-1, with no scientific and no execution blocker. As written above,
+the spent refusal was keyed only on the whole-matrix state resolving to
+`AUTHORIZED_COMPLETE`. That proof is deliberately strict, so losing or altering
+a single untracked local binary — one per-row array or one checkpoint —
+degraded it to `AUTHORIZED_INCOMPLETE` and re-opened every already-completed
+cell at the entry gate. The defect was reproduced before it was repaired: in
+that state `assert_core_entry_authorized` authorised a finished cell and
+`authorize_cell_execution` minted a signed optimizer permit for it. Only the
+`run.core_cell` preflight still refused, on the unrelated grounds that the
+result file already existed, so no computation could actually start, but the
+registered fail-closed semantics were violated.
+
+The repair adds a per-cell immutability guard that does not consult the
+whole-matrix proof at all. A cell is refused if it has **either** a published
+result record **or** a completed charge for that exact cell in the shared
+ledger, so the loss of one indicator cannot hide the other. It is deliberately
+not a blanket "incomplete refuses everything": a cell that has genuinely never
+run is still admitted, which is what the original execution lifecycle requires
+and what a regression test now pins. One narrow exception is documented and
+tested: accounting runs after a cell publishes, so `charge_core_cell_hours`
+passes `purpose="accounting"` to skip that single guard, which is not a bypass
+because accounting also requires a signed process-bound permit and permits can
+only be minted through the path the guard closes.
+
+R3.1 moved the live source digest again, from `cdc57315…` to `e666f101…`, with
+the config digest unchanged. A second immutable link,
+`post_execution_binding_amendment_r31_20260813.json`, anchors the new binding
+and preserves the R3 amendment by exact bytes, so the chain is now: original
+execution binding → R3 post-execution amendment → R3.1 live-binding amendment.
+Nothing historical was rewritten. All 104 E10 tests and all twelve non-E10
+modules pass, and every accuracy, contrast, interval, checkpoint and per-row
+hash is unchanged. The details are in
+`results/experiments/e10_capacity_360m_core/e10_core_r31_spent_grant_20260813.json`,
+which also records two metadata corrections the reviewer asked for against the
+R3 record: its `changed_paths` listed 11 of the 13 actual paths, because it was
+written before its own commit and `git diff` does not list untracked files, and
+its test change is more accurately described as five tests added and two
+superseded, net +3, than as three new tests.
 
 The second observation is the memory figure above. Peak reserved memory was
 consistently about 0.15 higher than the Gate-1 projection predicted. The gate

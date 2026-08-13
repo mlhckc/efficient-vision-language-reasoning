@@ -337,7 +337,31 @@ hash no longer matches the worktree.
   results/experiments/e10_capacity_360m_core/e10_core_execution_correction_20260813.json
   and the R3 record
   results/experiments/e10_capacity_360m_core/e10_core_r3_terminal_state_20260813.json.
-  R3 is review_requested and no final E10 PASS is declared. The clean test
+  R3.1 (13 August 2026, explicit user authorisation) then repaired the one
+  governance blocker the independent R3 review returned, G-R3-1, with zero
+  scientific and zero execution blockers: the operationally-SPENT refusal was
+  keyed only on the whole-matrix proof, so losing or altering ONE untracked
+  local binary degraded that proof and re-opened every already-completed cell
+  at the entry gate, letting authorize_cell_execution mint a signed permit for
+  a finished cell. Reproduced before repair. The fix adds
+  e10_common.cell_previously_completed and a per-cell immutability guard in
+  assert_core_entry_authorized that refuses on EITHER a published result
+  record OR a completed ledger charge for that exact cell, independent of the
+  whole-matrix state, while keeping the full-matrix SPENT refusal. It is NOT a
+  blanket incomplete-state refusal: a cell that has never run is still
+  admitted, which the original execution lifecycle requires and a regression
+  test pins. One documented exception: charge_core_cell_hours passes
+  purpose="accounting" because accounting runs after publication; it is not a
+  bypass, because accounting also requires a signed process-bound permit.
+  R3.1 moved the live source digest again, cdc57315 to e666f101, config
+  4b9fa43c unchanged, and added a second immutable link
+  post_execution_binding_amendment_r31_20260813.json that preserves the R3
+  amendment by exact bytes, giving the chain original execution binding ->
+  R3 post-execution amendment -> R3.1 live-binding amendment. 104 E10 tests
+  and 12 non-E10 modules pass, run_all exits 0, and no accuracy, contrast,
+  interval, checkpoint or per-row hash changed. See
+  results/experiments/e10_capacity_360m_core/e10_core_r31_spent_grant_20260813.json.
+  R3.1 is review_requested and no final E10 PASS is declared. The clean test
   remains embargoed and F1/F2 remain unstarted and unauthorised.
 - Current gate, updated 2 August 2026 (E8A/E8B/E9 programme). The user
   authorized the E8A frozen-SLM question-encoder branch, the E8B frozen-SLM

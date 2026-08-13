@@ -39,6 +39,7 @@ from experiments.e10_capacity_360m import phase2
 from experiments.e10_capacity_360m import run as e10_run
 from experiments.e10_capacity_360m import science
 from tests.test_e10 import (
+    _completed_core_entry,
     _must_raise,
     pre_authorization_state,
     write_pre_execution_ledgers,
@@ -80,31 +81,6 @@ def _patched_core_tree(stack: ExitStack, root: Path) -> dict:
     stack.enter_context(mock.patch.object(science, "CELL_LOCK_DIR",
                                           root / "cell-locks"))
     return paths
-
-
-def _completed_core_entry(arm: str, scale: str, seed: int) -> dict:
-    """A minimal ledger charge for one completed cell, for lifecycle fixtures."""
-    body = {
-        "identity": e10.model_identity(arm),
-        "arm": arm,
-        "context": "e10_core_cell",
-        "cell": [arm, scale, seed],
-        "gpu_occupancy_ns": 7_200_000_000_000,
-        "measurement": "process_monotonic_ns",
-        "outcome": "completed",
-        "host": "lifecycle-fixture",
-        "pid": 1,
-        "started_utc": "2026-08-11T00:00:00Z",
-        "ended_utc": "2026-08-11T02:00:00Z",
-        "source_digest": e10.EXECUTION_SOURCE_DIGEST,
-        "config_digest": e10.EXECUTION_CONFIG_DIGEST,
-        "protocol_family": e10.PROTOCOL_FAMILY,
-        "claim_sha256": None,
-        "recipe_digests": {
-            f"{arm}_{scale}_seed{seed}":
-                e10.recipe_sha256(e10.build_recipe(arm, scale, seed))},
-    }
-    return {"entry_id": e10.sha256_bytes(e10.canonical_json_bytes(body)), **body}
 
 
 def _synthetic_dev_frame():
@@ -1376,7 +1352,10 @@ def test_production_synthetic_cell_reaches_complete() -> None:
         # a completed cell is immutable and is never overwritten
         _must_raise(SystemExit,
                     lambda: science.run_core_cell("B4", "train_40k", 0),
-                    "already exists")
+                    # R3.1: a completed cell is now refused at the ENTRY GATE, before the
+            # preflight that used to catch it, and the refusal names
+            # immutability rather than a stray file.
+            "has already been completed and is immutable")
 
 
 # --- B2: the difference in differences is on the full scale -------------------

@@ -1,0 +1,308 @@
+{
+  "metadata": {
+    "timestamp": "2026-08-13T13:39:47",
+    "git_commit": "5cb4cc8",
+    "git_dirty": true,
+    "open_clip_version": "3.3.0",
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "h5py_version": "3.16.0",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "seed": 0,
+    "deterministic": true,
+    "device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation",
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "cuda": "13.0",
+    "dataset": "gqa",
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "embed_dim": 512,
+    "top_k_answers": 100,
+    "n_train": 40000,
+    "n_val": 8000,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "n_epochs": 30,
+    "hidden_dim": 512,
+    "dropout": 0.3,
+    "weight_decay": 0.0001,
+    "task_id": "e10-r31-spent-grant-degraded-state-repair",
+    "protocol_family": "e10-fp32-fixed22-core-360m-2026-08-10",
+    "binding": {
+      "source_digest": "e666f10100ad7de5f9c2f988c85a33155b00ed84020e4a5b51e34b87ed5d2ebc",
+      "source_files": {
+        "experiments/e10_capacity_360m/e10_common.py": "2f4b490d80112aba71c4acc4f4cdd57c9465a9c2ceb2add39f64e02682546065",
+        "experiments/e10_capacity_360m/run.py": "f5aaa7ae35a85f061921e21835184b0766ae64a3b6a0663b547686ae09a2f61f",
+        "experiments/e10_capacity_360m/calibration.py": "8280a161bcd829521f660379f2f0dafc6fe04c7a8ab0ba75a1f6dcd544428b49",
+        "experiments/e10_capacity_360m/projection.py": "f3e3d4a911896b5d7403eeb0cc32f034cfafa5293f30310257516d4043211a0a",
+        "experiments/e10_capacity_360m/phase1.py": "f0bac21674e99bfabe3b16bb1f1e923d2a571db75e5f12db07de75fee6c73b31",
+        "experiments/e10_capacity_360m/phase2.py": "29422726d213207ccbd54fc7b381af72671f82cd6c38db88df92ce3233755355",
+        "experiments/e10_capacity_360m/phase3.py": "d38f0d745f6888dd8b0c05c5c412e150d87b586080982a0aff8ce8090d8bbf7d",
+        "experiments/e10_capacity_360m/science.py": "4d1d88ea842f38a27059fbf911c72dfea6d39dd999cf3df67cae4d2ebbc54d06",
+        "experiments/e10_capacity_360m/analysis.py": "a8df3b50f44c0681e1f28674268b0ff32e5927de076cd5a96e893ae9575dbb2d",
+        "experiments/e8b_readout_generation/latents.py": "051604b60d1c8fce65e1fa2e9ec53b155fb4af41b7fe9377d009f39f04f0502f",
+        "experiments/e8b_readout_generation/readouts.py": "28acdf21c87b286c78dcc2ff2be24a4834dd21b265f4420b4014f8a9d1254ca6",
+        "experiments/e8b_readout_generation/training.py": "5ec731105db87b6b5aa16bca02e9c2e3705050a59ef297a4956480fccec44ce3",
+        "experiments/e8b_readout_generation/run.py": "d05c79a749f6c4dc17e37d81f4f7598ea7f74d2e6573c4feae8243c2253e1430",
+        "experiments/e8a_question_encoder/e8a_common.py": "cd6c8ce0f0f9d93ec367d9e4c9ec611e5768e334964fe6d7c18bb3a04a70ba20",
+        "experiments/e8a_question_encoder/g21_scorer.py": "22ea9c59082840a60568d7b804a3cb66ac0daccb7b503a6c50305d1354f2f40d",
+        "src/reasoner.py": "3faafcd25e3f9e233c5173b71c1e1bbdd92859047d7b701d97ee16049892062c",
+        "src/tokens_data.py": "9e24a76e177ca8d8145995d1224d611d7de9303d0ea2b79552b3e106c01caf05",
+        "src/utils.py": "3e9af4431b68f96c10d1d6d7842a82ffe34e9100c09e1206d05bbb112c01d3ee",
+        "tests/test_e10.py": "efffd3314f0735c92fd16e25dec29843932771633aa3ccf7f6fbd2e7acd5534c",
+        "tests/test_e10_phase1.py": "76ff26c58bd57d847ac0b39aa011072248b9e4fc7fa35d30b0549177b53a8396",
+        "tests/test_e10_phase2.py": "37f6066c439a4a85749e5101922cb0d69bc8957e931c32358ae889bfe8b4ac96",
+        "tests/test_e10_phase3.py": "181497dd5d9b8c9c2f4d366a5b17801df7d5306703d31e1248a2655da38a41f1",
+        "tests/run_all.py": "0a53250ac3c10edd788ea756a64dff54e83d2dec824ad557a6f8ea629e741786"
+      },
+      "config_digest": "4b9fa43cb74b511c0bb6fda3c7c043d6047ef5e5e220c1abad6e35138f3df9ab",
+      "config_files": {
+        "config.py": "2612dfeaa2a2ca54888bd0be2004a90efaa533c16c75db2ed08baadf3f060574",
+        "requirements.lock.txt": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be"
+      },
+      "protocol_family": "e10-fp32-fixed22-core-360m-2026-08-10"
+    }
+  },
+  "e10_r31_spent_grant_repair": {
+    "schema_version": 1,
+    "record_type": "e10_r31_spent_grant_degraded_state_repair",
+    "status": "G_R3_1_REPAIRED",
+    "review_state": "review_requested",
+    "NON_SCIENTIFIC": true,
+    "utc": "2026-08-13T12:39:47Z",
+    "binding": {
+      "source_digest": "e666f10100ad7de5f9c2f988c85a33155b00ed84020e4a5b51e34b87ed5d2ebc",
+      "source_files": {
+        "experiments/e10_capacity_360m/e10_common.py": "2f4b490d80112aba71c4acc4f4cdd57c9465a9c2ceb2add39f64e02682546065",
+        "experiments/e10_capacity_360m/run.py": "f5aaa7ae35a85f061921e21835184b0766ae64a3b6a0663b547686ae09a2f61f",
+        "experiments/e10_capacity_360m/calibration.py": "8280a161bcd829521f660379f2f0dafc6fe04c7a8ab0ba75a1f6dcd544428b49",
+        "experiments/e10_capacity_360m/projection.py": "f3e3d4a911896b5d7403eeb0cc32f034cfafa5293f30310257516d4043211a0a",
+        "experiments/e10_capacity_360m/phase1.py": "f0bac21674e99bfabe3b16bb1f1e923d2a571db75e5f12db07de75fee6c73b31",
+        "experiments/e10_capacity_360m/phase2.py": "29422726d213207ccbd54fc7b381af72671f82cd6c38db88df92ce3233755355",
+        "experiments/e10_capacity_360m/phase3.py": "d38f0d745f6888dd8b0c05c5c412e150d87b586080982a0aff8ce8090d8bbf7d",
+        "experiments/e10_capacity_360m/science.py": "4d1d88ea842f38a27059fbf911c72dfea6d39dd999cf3df67cae4d2ebbc54d06",
+        "experiments/e10_capacity_360m/analysis.py": "a8df3b50f44c0681e1f28674268b0ff32e5927de076cd5a96e893ae9575dbb2d",
+        "experiments/e8b_readout_generation/latents.py": "051604b60d1c8fce65e1fa2e9ec53b155fb4af41b7fe9377d009f39f04f0502f",
+        "experiments/e8b_readout_generation/readouts.py": "28acdf21c87b286c78dcc2ff2be24a4834dd21b265f4420b4014f8a9d1254ca6",
+        "experiments/e8b_readout_generation/training.py": "5ec731105db87b6b5aa16bca02e9c2e3705050a59ef297a4956480fccec44ce3",
+        "experiments/e8b_readout_generation/run.py": "d05c79a749f6c4dc17e37d81f4f7598ea7f74d2e6573c4feae8243c2253e1430",
+        "experiments/e8a_question_encoder/e8a_common.py": "cd6c8ce0f0f9d93ec367d9e4c9ec611e5768e334964fe6d7c18bb3a04a70ba20",
+        "experiments/e8a_question_encoder/g21_scorer.py": "22ea9c59082840a60568d7b804a3cb66ac0daccb7b503a6c50305d1354f2f40d",
+        "src/reasoner.py": "3faafcd25e3f9e233c5173b71c1e1bbdd92859047d7b701d97ee16049892062c",
+        "src/tokens_data.py": "9e24a76e177ca8d8145995d1224d611d7de9303d0ea2b79552b3e106c01caf05",
+        "src/utils.py": "3e9af4431b68f96c10d1d6d7842a82ffe34e9100c09e1206d05bbb112c01d3ee",
+        "tests/test_e10.py": "efffd3314f0735c92fd16e25dec29843932771633aa3ccf7f6fbd2e7acd5534c",
+        "tests/test_e10_phase1.py": "76ff26c58bd57d847ac0b39aa011072248b9e4fc7fa35d30b0549177b53a8396",
+        "tests/test_e10_phase2.py": "37f6066c439a4a85749e5101922cb0d69bc8957e931c32358ae889bfe8b4ac96",
+        "tests/test_e10_phase3.py": "181497dd5d9b8c9c2f4d366a5b17801df7d5306703d31e1248a2655da38a41f1",
+        "tests/run_all.py": "0a53250ac3c10edd788ea756a64dff54e83d2dec824ad557a6f8ea629e741786"
+      },
+      "config_digest": "4b9fa43cb74b511c0bb6fda3c7c043d6047ef5e5e220c1abad6e35138f3df9ab",
+      "config_files": {
+        "config.py": "2612dfeaa2a2ca54888bd0be2004a90efaa533c16c75db2ed08baadf3f060574",
+        "requirements.lock.txt": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be"
+      },
+      "protocol_family": "e10-fp32-fixed22-core-360m-2026-08-10"
+    },
+    "report": "docs/experiments/e10_core_matrix.md",
+    "base_head": "5cb4cc87253412936b4c1043c68e509a4cae8760",
+    "authorisation": {
+      "granted_by": "the User, explicitly, on 2026-08-13",
+      "scope": "governance only: the G-R3-1 spent-grant degraded-state repair",
+      "r3_review_verdict": "E10_CHANGES_REQUIRED",
+      "scientific_blockers": 0,
+      "execution_integrity_blockers": 0,
+      "governance_blockers": 1
+    },
+    "defect": {
+      "id": "G-R3-1",
+      "statement": "the spent-grant refusal did not survive loss of terminal proof: it was keyed only on the whole-matrix state being AUTHORIZED_COMPLETE",
+      "trigger": "one untracked local scientific binary, a per-row NPZ or a checkpoint, goes missing or fails its hash, so the strict whole-matrix proof correctly degrades to AUTHORIZED_INCOMPLETE",
+      "consequence_before_repair": "an already-completed cell became AUTHORISED at the entry gate and authorize_cell_execution minted a signed optimizer permit for it; run.core_cell still refused later on the already-exists preflight, so no scientific computation could start, but the registered fail-closed grant semantics were violated",
+      "independently_reproduced_before_repair": true,
+      "reproduction": {
+        "lifecycle_state": "AUTHORIZED_INCOMPLETE",
+        "published_cell_records": 12,
+        "charged_core_cells": 12,
+        "grant_valid": true,
+        "assert_core_entry_authorized": "AUTHORISED (returned a grant)",
+        "authorize_cell_execution": "AUTHORISED (minted a CellExecutionPermit)",
+        "run_core_cell": "refused only on the unrelated already-exists preflight"
+      }
+    },
+    "repair": {
+      "new_helper": "e10_common.cell_previously_completed",
+      "indicators": [
+        "a published result record for that exact cell",
+        "a completed charge for that exact cell in the shared ledger"
+      ],
+      "either_indicator_alone_refuses": true,
+      "independent_of_whole_matrix_state": true,
+      "full_matrix_spent_refusal_retained": true,
+      "blanket_incomplete_refusal_introduced": false,
+      "semantics": {
+        "authorised + incomplete + cell never run": "may execute if all other guards pass",
+        "authorised + incomplete + requested cell previously completed": "REFUSE, immutable",
+        "authorised + complete": "REFUSE all further execution, grant operationally SPENT",
+        "unauthorised cell": "REFUSE"
+      },
+      "accounting_exception": {
+        "caller": "e10_common.charge_core_cell_hours",
+        "parameter": "purpose=\"accounting\"",
+        "why": "accounting runs AFTER a cell publishes its result, so the per-cell guard would otherwise refuse the charge of the cell that legitimately just finished and break the original execution lifecycle",
+        "why_it_is_not_a_bypass": "accounting additionally requires a signed, process-bound permit, and a permit can only be minted through the execution path, which the guard closes",
+        "guards_still_applied": "cell membership, resource bounds, the legacy sentinel, grant validation, the whole-matrix spent refusal and shared-state health"
+      }
+    },
+    "entry_points": {
+      "registered_authoritative_paths": 7,
+      "all_funnel_through": "e10_common.assert_core_entry_authorized",
+      "three_caller_facing": [
+        "e10_common.assert_core_entry_authorized",
+        "e10_common.authorize_cell_execution",
+        "experiments.e10_capacity_360m.run.core_cell"
+      ],
+      "degraded_state_result_after_repair": {
+        "assert_core_entry_authorized": "REFUSED (immutable)",
+        "authorize_cell_execution": "REFUSED, no permit minted",
+        "run.core_cell": "REFUSED before any scientific work"
+      },
+      "permit_minted_for_a_completed_cell": false
+    },
+    "digests": {
+      "old_source_digest": "cdc57315c416c5ada8543ed7163612ccaeb1e14a724df220dbdaa607e7b3ea64",
+      "new_source_digest": "e666f10100ad7de5f9c2f988c85a33155b00ed84020e4a5b51e34b87ed5d2ebc",
+      "source_digest_moved": true,
+      "source_move_is_the_authorised_intent": true,
+      "config_digest": "4b9fa43cb74b511c0bb6fda3c7c043d6047ef5e5e220c1abad6e35138f3df9ab",
+      "config_digest_unchanged": true,
+      "execution_source_digest_still_historical": "857ec44e8f5275569a5369b0dfbcd0cbff660b038d5b9cd39c67083ceb0a6b98",
+      "historical_records_rewritten": 0
+    },
+    "amendment_chain": {
+      "order": [
+        "results/experiments/e10_capacity_360m/post_execution_binding_amendment_r31_20260813.json",
+        "results/experiments/e10_capacity_360m/post_execution_binding_amendment_20260813.json",
+        "results/experiments/e10_capacity_360m/phase3_binding_amendment_20260811.json",
+        "results/experiments/e10_capacity_360m/phase2_binding_amendment_20260810.json",
+        "results/experiments/e10_capacity_360m/phase1_whole_cell_wall_repair_20260810.json",
+        "results/experiments/e10_capacity_360m/phase1_binding_amendment_20260810.json",
+        "results/experiments/e10_capacity_360m/source_correction_20260810.json"
+      ],
+      "new_link": {
+        "path": "results/experiments/e10_capacity_360m/post_execution_binding_amendment_r31_20260813.json",
+        "sha256": "a2fbc61a3edf422bbd9f8715777dc8466abde6859252d9910327961dec8c707b",
+        "task_id": "e10-r31-spent-grant-degraded-state-repair",
+        "record_type": "e10_r31_binding_amendment"
+      },
+      "preserves_previous_amendment": {
+        "path": "results/experiments/e10_capacity_360m/post_execution_binding_amendment_20260813.json",
+        "sha256": "fa1b2c230204df72d904891d10086019cff7059091df8971f69c610f754f8a17",
+        "rewritten": false,
+        "fails_closed_on_substitution": true
+      },
+      "logical_chain": "original scientific execution binding -> R3 post-execution amendment -> R3.1 live-binding amendment",
+      "acts_as_new_execution_authorisation": false
+    },
+    "r3_record_metadata_corrections": {
+      "corrects": "results/experiments/e10_capacity_360m_core/e10_core_r3_terminal_state_20260813.json",
+      "mutated": false,
+      "note": "the R3 record is not rewritten; these are the corrections the independent review asked for, recorded here",
+      "changed_paths": {
+        "as_recorded_in_r3": 11,
+        "actual": 13,
+        "cause": "the R3 record was written before its own commit, and git diff --name-status lists modified tracked files only, so the two then-untracked new records were omitted",
+        "omitted": [
+          "results/experiments/e10_capacity_360m/post_execution_binding_amendment_20260813.json",
+          "results/experiments/e10_capacity_360m_core/e10_core_r3_terminal_state_20260813.json"
+        ]
+      },
+      "test_change_description": {
+        "as_recorded_in_r3": "three new tests",
+        "accurate": "five tests added and two superseded, net +3: three genuinely new tests, plus two rewritten tests that replaced two superseded ones (test_no_real_scientific_grant_exists and test_phase3_amendment_is_the_newest_chain_link), taking the suite from 97 to 100"
+      }
+    },
+    "tests": {
+      "before_r31": {
+        "total": 100,
+        "failing": 0
+      },
+      "after_r31": {
+        "total": 104,
+        "failing": 0,
+        "per_module": {
+          "test_e10": 21,
+          "test_e10_phase1": 15,
+          "test_e10_phase2": 39,
+          "test_e10_phase3": 29
+        }
+      },
+      "added": 4,
+      "new_tests": [
+        "test_completed_cell_refuses_when_terminal_proof_is_degraded",
+        "test_unrun_cell_in_an_incomplete_matrix_is_still_authorised",
+        "test_either_completion_trace_alone_refuses",
+        "test_r31_amendment_carries_r3_and_fails_closed"
+      ],
+      "degraded_state_test_has_no_early_return_on_non_terminal_state": true,
+      "fail_closed_cases_covered": {
+        "A_result_without_charge": "refuses as already published",
+        "B_charge_without_result": "refuses as already completed",
+        "C_neither_indicator_and_never_run": "immutability is not invoked; the cell is authorised",
+        "D_wrong_arm_scale_or_seed": "still refuses as unknown cell",
+        "E_retries": "still zero and still refused"
+      },
+      "safety_assertions_weakened_or_inverted": 0
+    },
+    "scientific_preservation": {
+      "accuracies_changed": 0,
+      "seed_means_or_sds_changed": 0,
+      "contrasts_changed": 0,
+      "intervals_changed": 0,
+      "did_changed": false,
+      "checkpoint_hashes_changed": 0,
+      "per_row_hashes_changed": 0,
+      "cell_records_mutated": 0,
+      "execution_record_mutated": false,
+      "r1_correction_mutated": false,
+      "r3_record_mutated": false,
+      "previous_amendment_mutated": false,
+      "grant_mutated": false,
+      "e8a_e8b_e9_trees_changed": false,
+      "frozen_analysis_reproduces": true,
+      "clean_test_accessed": false
+    },
+    "resources": {
+      "new_scientific_gpu_work": false,
+      "spend_ledger_entries": 13,
+      "spend_ledger_changed": false,
+      "retry_ledger_entries": 0,
+      "retry_ledger_changed": false,
+      "new_retry_authorization": false
+    },
+    "scope_closed": {
+      "f1": false,
+      "f2": false,
+      "clean_test": false,
+      "a5": false,
+      "a8c": false,
+      "visual_evidence": false,
+      "dissertation": false,
+      "new_experiment": false
+    },
+    "working_tree_at_write_time": [
+      "M CLAUDE.md",
+      " M docs/experiments/e10_core_matrix.md",
+      " M experiments/e10_capacity_360m/e10_common.py",
+      " M results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+      " M tests/test_e10.py",
+      " M tests/test_e10_phase2.py",
+      " M tests/test_e10_phase3.py",
+      "?? results/experiments/e10_capacity_360m/post_execution_binding_amendment_r31_20260813.json"
+    ],
+    "final_e10_pass_declared_by_executor": false,
+    "next_gate": "independent review of R3.1"
+  }
+}

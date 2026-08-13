@@ -91,6 +91,31 @@ def _write_ledgers(spend_path: Path, retry_path: Path) -> None:
     e10.atomic_write_json(retry_path, e10._initial_retry_ledger())
 
 
+def _completed_core_entry(arm: str, scale: str, seed: int) -> dict:
+    """A minimal ledger charge for one completed cell, for lifecycle fixtures."""
+    body = {
+        "identity": e10.model_identity(arm),
+        "arm": arm,
+        "context": "e10_core_cell",
+        "cell": [arm, scale, seed],
+        "gpu_occupancy_ns": 7_200_000_000_000,
+        "measurement": "process_monotonic_ns",
+        "outcome": "completed",
+        "host": "lifecycle-fixture",
+        "pid": 1,
+        "started_utc": "2026-08-11T00:00:00Z",
+        "ended_utc": "2026-08-11T02:00:00Z",
+        "source_digest": e10.EXECUTION_SOURCE_DIGEST,
+        "config_digest": e10.EXECUTION_CONFIG_DIGEST,
+        "protocol_family": e10.PROTOCOL_FAMILY,
+        "claim_sha256": None,
+        "recipe_digests": {
+            f"{arm}_{scale}_seed{seed}":
+                e10.recipe_sha256(e10.build_recipe(arm, scale, seed))},
+    }
+    return {"entry_id": e10.sha256_bytes(e10.canonical_json_bytes(body)), **body}
+
+
 def write_pre_execution_ledgers(spend_path: Path, retry_path: Path) -> None:
     """Empty of scientific cells, but still consistent with shared state.
 
