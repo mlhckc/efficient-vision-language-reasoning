@@ -1,0 +1,331 @@
+{
+ "artefact_id": "ve2_gallery_appendix",
+ "clean_test_accessed": false,
+ "development_set_only": true,
+ "example_count": 8,
+ "grouping": "one row per selected example, grouped by selection category",
+ "grouping_note": "the specification's row-per-example grouping is rendered as one page per category, because ten examples on a single page would not be legible at printed size",
+ "mandatory_caption_caveat": "Development examples only; the clean test is embargoed and unread. Every example is drawn by the deterministic rank defined in the VE-0 qualitative protocol, whose salt was frozen before any example was inspected. Illustrative only: n examples cannot support a quantitative claim, and no scene graph or reasoning chain is shown that is not present in the canonical evidence.",
+ "page_count": 4,
+ "pages": [
+  {
+   "arm_code_expansions": [
+    "question-only head: a classifier over the frozen CLIP question embedding alone, with no image input",
+    "concatenation head: a classifier over the frozen CLIP image and question embeddings concatenated",
+    "fusion head: the concatenation plus the elementwise product and absolute difference of the two embeddings"
+   ],
+   "category_id": "QC01_all_correct",
+   "examples": [
+    {
+     "gold_answer": "no",
+     "image_ids_drawn": [
+      "2384466"
+     ],
+     "image_sha256_drawn": [
+      "0db6afa4e3f2e7a5f2b7b247369dc66f9a2fbadb29a70f985f050ce788d1d0c3"
+     ],
+     "interpretation": "Illustrative only. An easy row for every system; illustrative of the task, not of any system's advantage.",
+     "n_program_steps_drawn": "NOT_DRAWN",
+     "predictions": [
+      {
+       "correct": true,
+       "display_label": "Question-only",
+       "mark_drawn": "✓",
+       "predicted_answer": "no",
+       "system_id": "v2_02/question_only",
+       "word_drawn": "correct"
+      },
+      {
+       "correct": true,
+       "display_label": "Concatenation",
+       "mark_drawn": "✓",
+       "predicted_answer": "no",
+       "system_id": "v2_02/concat",
+       "word_drawn": "correct"
+      },
+      {
+       "correct": true,
+       "display_label": "Fusion",
+       "mark_drawn": "✓",
+       "predicted_answer": "no",
+       "system_id": "v2_02/fusion",
+       "word_drawn": "correct"
+      }
+     ],
+     "qualitative_id": "VE2-QUAL-QC01_all_correct-01",
+     "question_id": "02541262",
+     "question_text": "Is the man to the right of a boy?",
+     "selection_rank": 1
+    },
+    {
+     "gold_answer": "yes",
+     "image_ids_drawn": [
+      "2340934"
+     ],
+     "image_sha256_drawn": [
+      "8144659fa766b59c29d15db345f96f17ad6548e8f8032edad05bfed3f888be07"
+     ],
+     "interpretation": "Illustrative only. An easy row for every system; illustrative of the task, not of any system's advantage.",
+     "n_program_steps_drawn": "NOT_DRAWN",
+     "predictions": [
+      {
+       "correct": true,
+       "display_label": "Question-only",
+       "mark_drawn": "✓",
+       "predicted_answer": "yes",
+       "system_id": "v2_02/question_only",
+       "word_drawn": "correct"
+      },
+      {
+       "correct": true,
+       "display_label": "Concatenation",
+       "mark_drawn": "✓",
+       "predicted_answer": "yes",
+       "system_id": "v2_02/concat",
+       "word_drawn": "correct"
+      },
+      {
+       "correct": true,
+       "display_label": "Fusion",
+       "mark_drawn": "✓",
+       "predicted_answer": "yes",
+       "system_id": "v2_02/fusion",
+       "word_drawn": "correct"
+      }
+     ],
+     "qualitative_id": "VE2-QUAL-QC01_all_correct-02",
+     "question_id": "03842019",
+     "question_text": "Are there either any shelves or computers?",
+     "selection_rank": 2
+    }
+   ],
+   "page_subtitle": "every compared global-embedding system answers correctly",
+   "page_title": "QC01_all_correct",
+   "placement": "APPENDIX",
+   "png": "results/ve2/galleries/ve2_gallery_appendix_QC01_all_correct.png"
+  },
+  {
+   "arm_code_expansions": [
+    "fusion head: the concatenation plus the elementwise product and absolute difference of the two embeddings",
+    "SigLIP fusion head: the same fusion head over frozen SigLIP ViT-B/16 embeddings instead of frozen CLIP ViT-B/32"
+   ],
+   "category_id": "QC04_representation_improvement",
+   "examples": [
+    {
+     "gold_answer": "yes",
+     "image_ids_drawn": [
+      "2318195"
+     ],
+     "image_sha256_drawn": [
+      "5da9cd4d2ecbcdb108efcc474dcaf61ad1de55ccde6165fd0e6e7f7ca73400cd"
+     ],
+     "interpretation": "Illustrative only. Representation quality is not isolated; the encoder and two widths changed together, so the example illustrates a system difference.",
+     "n_program_steps_drawn": "NOT_DRAWN",
+     "predictions": [
+      {
+       "correct": false,
+       "display_label": "Fusion",
+       "mark_drawn": "✗",
+       "predicted_answer": "left",
+       "system_id": "v2_02/fusion",
+       "word_drawn": "incorrect"
+      },
+      {
+       "correct": true,
+       "display_label": "Fusion (SigLIP)",
+       "mark_drawn": "✓",
+       "predicted_answer": "yes",
+       "system_id": "e2/fusion",
+       "word_drawn": "correct"
+      }
+     ],
+     "qualitative_id": "VE2-QUAL-QC04_representation_improvement-01",
+     "question_id": "00445083",
+     "question_text": "Is the yellow food to the left of the ginger on the right?",
+     "selection_rank": 1
+    },
+    {
+     "gold_answer": "blue",
+     "image_ids_drawn": [
+      "2401578"
+     ],
+     "image_sha256_drawn": [
+      "995efba534b4d8ed5c36111eaccc10b3203862c41e68c2d8de80895ad3f34e71"
+     ],
+     "interpretation": "Illustrative only. Representation quality is not isolated; the encoder and two widths changed together, so the example illustrates a system difference.",
+     "n_program_steps_drawn": "NOT_DRAWN",
+     "predictions": [
+      {
+       "correct": false,
+       "display_label": "Fusion",
+       "mark_drawn": "✗",
+       "predicted_answer": "yellow",
+       "system_id": "v2_02/fusion",
+       "word_drawn": "incorrect"
+      },
+      {
+       "correct": true,
+       "display_label": "Fusion (SigLIP)",
+       "mark_drawn": "✓",
+       "predicted_answer": "blue",
+       "system_id": "e2/fusion",
+       "word_drawn": "correct"
+      }
+     ],
+     "qualitative_id": "VE2-QUAL-QC04_representation_improvement-02",
+     "question_id": "11743124",
+     "question_text": "What is the color of the letters?",
+     "selection_rank": 2
+    }
+   ],
+   "page_subtitle": "the SigLIP fusion head correct where the CLIP fusion head is wrong",
+   "page_title": "QC04_representation_improvement",
+   "placement": "APPENDIX",
+   "png": "results/ve2/galleries/ve2_gallery_appendix_QC04_representation_improvement.png"
+  },
+  {
+   "arm_code_expansions": [
+    "B4: the pretrained frozen SmolLM2-360M answer readout",
+    "B4r: the architecture-matched randomly initialised SmolLM2-360M answer readout, the within-size control for B4"
+   ],
+   "category_id": "QC06_answer_side_disagreement",
+   "examples": [
+    {
+     "gold_answer": "street",
+     "image_ids_drawn": [
+      "1159442"
+     ],
+     "image_sha256_drawn": [
+      "71ce4d5ec13c8db65c37405534d20dad684d5ab18531c6d9d430c86ebf581b28"
+     ],
+     "interpretation": "Illustrative only. The aggregate contrast is not directional and its interval contains zero. Both directions of disagreement must be shown, and the caption must not imply the pretrained side is better.",
+     "n_program_steps_drawn": "NOT_DRAWN",
+     "predictions": [
+      {
+       "correct": true,
+       "display_label": "B4 (pretrained)",
+       "mark_drawn": "✓",
+       "predicted_answer": "street",
+       "system_id": "E10/B4",
+       "word_drawn": "correct"
+      },
+      {
+       "correct": false,
+       "display_label": "B4r (random)",
+       "mark_drawn": "✗",
+       "predicted_answer": "road",
+       "system_id": "E10/B4r",
+       "word_drawn": "incorrect"
+      }
+     ],
+     "qualitative_id": "VE2-QUAL-QC06_answer_side_disagreement-01",
+     "question_id": "04652163",
+     "question_text": "Where is it?",
+     "selection_rank": 1
+    },
+    {
+     "gold_answer": "yes",
+     "image_ids_drawn": [
+      "2368959"
+     ],
+     "image_sha256_drawn": [
+      "666df920c73fcfb31d2e6b2ca570896c26d48be000dd463887cb99540350d952"
+     ],
+     "interpretation": "Illustrative only. The aggregate contrast is not directional and its interval contains zero. Both directions of disagreement must be shown, and the caption must not imply the pretrained side is better.",
+     "n_program_steps_drawn": "NOT_DRAWN",
+     "predictions": [
+      {
+       "correct": false,
+       "display_label": "B4 (pretrained)",
+       "mark_drawn": "✗",
+       "predicted_answer": "no",
+       "system_id": "E10/B4",
+       "word_drawn": "incorrect"
+      },
+      {
+       "correct": true,
+       "display_label": "B4r (random)",
+       "mark_drawn": "✓",
+       "predicted_answer": "yes",
+       "system_id": "E10/B4r",
+       "word_drawn": "correct"
+      }
+     ],
+     "qualitative_id": "VE2-QUAL-QC06_answer_side_disagreement-03",
+     "question_id": "15948686",
+     "question_text": "Are there any people to the left of the man that is holding the camera?",
+     "selection_rank": 3
+    }
+   ],
+   "page_subtitle": "the pretrained 360M readout B4 and its random control B4r disagree",
+   "page_title": "QC06_answer_side_disagreement",
+   "placement": "APPENDIX",
+   "png": "results/ve2/galleries/ve2_gallery_appendix_QC06_answer_side_disagreement.png"
+  },
+  {
+   "arm_code_expansions": [
+    "fusion head: the concatenation plus the elementwise product and absolute difference of the two embeddings"
+   ],
+   "category_id": "QC08_short_reasoning",
+   "examples": [
+    {
+     "gold_answer": "yes",
+     "image_ids_drawn": [
+      "2396197"
+     ],
+     "image_sha256_drawn": [
+      "ff3b82080fd058460ba44ae3d09568fda64aa8c652360cab7a8a5970122cb713"
+     ],
+     "interpretation": "Illustrative only. Step count is the GQA semantic program length, a proxy for reasoning depth.",
+     "n_program_steps_drawn": 2,
+     "predictions": [
+      {
+       "correct": false,
+       "display_label": "Fusion",
+       "mark_drawn": "✗",
+       "predicted_answer": "no",
+       "system_id": "v2_02/fusion",
+       "word_drawn": "incorrect"
+      }
+     ],
+     "qualitative_id": "VE2-QUAL-QC08_short_reasoning-01",
+     "question_id": "04945041",
+     "question_text": "Is the ground wet?",
+     "selection_rank": 1
+    },
+    {
+     "gold_answer": "yes",
+     "image_ids_drawn": [
+      "2347720"
+     ],
+     "image_sha256_drawn": [
+      "78cb5ff4dcd7e70eed411503b4b32e7cb5402fbd13213d0649d83b307edae71b"
+     ],
+     "interpretation": "Illustrative only. Step count is the GQA semantic program length, a proxy for reasoning depth.",
+     "n_program_steps_drawn": 2,
+     "predictions": [
+      {
+       "correct": true,
+       "display_label": "Fusion",
+       "mark_drawn": "✓",
+       "predicted_answer": "yes",
+       "system_id": "v2_02/fusion",
+       "word_drawn": "correct"
+      }
+     ],
+     "qualitative_id": "VE2-QUAL-QC08_short_reasoning-02",
+     "question_id": "15535737",
+     "question_text": "Is the snowboard on the left of the picture?",
+     "selection_rank": 2
+    }
+   ],
+   "page_subtitle": "a two-step-or-fewer question",
+   "page_title": "QC08_short_reasoning",
+   "placement": "APPENDIX",
+   "png": "results/ve2/galleries/ve2_gallery_appendix_QC08_short_reasoning.png"
+  }
+ ],
+ "placement": "APPENDIX",
+ "title": "Qualitative development examples, appendix",
+ "ve0_specification_id": "VE0-FIG-10"
+}

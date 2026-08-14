@@ -1,0 +1,777 @@
+{
+ "allowed_skip_reasons": [
+  "image_unreadable",
+  "predicate_failed_on_recheck"
+ ],
+ "appearance_played_no_part": "the rank key is SHA-256 over the salt, the category identifier and the question identifier. It cannot see the image, the model, the prediction or the outcome, and the candidate pool is built before the order is computed and the order before any image file is opened.",
+ "categories": [
+  {
+   "balance_requirement": "NOT_APPLICABLE",
+   "candidate_pool_share_of_development_split": 0.289863,
+   "candidate_pool_size": 2236,
+   "category_id": "QC01_all_correct",
+   "condition": "normal",
+   "direction_pool_sizes": [
+    {
+     "direction_id": "ALL",
+     "pool_size": 2236
+    }
+   ],
+   "evidence_source": "closure_row_evidence",
+   "examples_requested": 2,
+   "examples_selected": 2,
+   "placement": "APPENDIX",
+   "predicate": "correct == 1 for question_only, concat and fusion",
+   "rank_key_collisions": [],
+   "scale": "train_40k",
+   "seed": 0,
+   "selected": [
+    {
+     "direction_id": "ALL",
+     "direction_label": "no balance requirement is declared for this category",
+     "image_id": "2384466",
+     "qualitative_id": "VE2-QUAL-QC01_all_correct-01",
+     "question_id": "02541262",
+     "selection_rank": 1,
+     "selection_rank_key": "00098b82a4e929d4585b1a63cdd835e6e9721dd4040ce728cf2587e89316f3ea",
+     "skipped_ranks": []
+    },
+    {
+     "direction_id": "ALL",
+     "direction_label": "no balance requirement is declared for this category",
+     "image_id": "2340934",
+     "qualitative_id": "VE2-QUAL-QC01_all_correct-02",
+     "question_id": "03842019",
+     "selection_rank": 2,
+     "selection_rank_key": "004377ef57f3e97c2e233ce763960f4e3472677f736a9896543f2d8d6d001130",
+     "skipped_ranks": []
+    }
+   ],
+   "skip_count": 0,
+   "skips": [],
+   "status": "POPULATED",
+   "systems": [
+    "v2_02/question_only",
+    "v2_02/concat",
+    "v2_02/fusion"
+   ]
+  },
+  {
+   "balance_requirement": "NOT_APPLICABLE",
+   "candidate_pool_share_of_development_split": 0.301141,
+   "candidate_pool_size": 2323,
+   "category_id": "QC02_all_wrong",
+   "condition": "normal",
+   "direction_pool_sizes": [
+    {
+     "direction_id": "ALL",
+     "pool_size": 2323
+    }
+   ],
+   "evidence_source": "closure_row_evidence",
+   "examples_requested": 2,
+   "examples_selected": 2,
+   "placement": "MAIN_TEXT",
+   "predicate": "correct == 0 for question_only, concat and fusion",
+   "rank_key_collisions": [],
+   "scale": "train_40k",
+   "seed": 0,
+   "selected": [
+    {
+     "direction_id": "ALL",
+     "direction_label": "no balance requirement is declared for this category",
+     "image_id": "2385131",
+     "qualitative_id": "VE2-QUAL-QC02_all_wrong-01",
+     "question_id": "10600430",
+     "selection_rank": 1,
+     "selection_rank_key": "000253df116240ded76c5db9036393b826d346e9448d3d949d157b371436f911",
+     "skipped_ranks": []
+    },
+    {
+     "direction_id": "ALL",
+     "direction_label": "no balance requirement is declared for this category",
+     "image_id": "2384279",
+     "qualitative_id": "VE2-QUAL-QC02_all_wrong-02",
+     "question_id": "071060289",
+     "selection_rank": 2,
+     "selection_rank_key": "001143963b88c9cef428717286deca4b3ceaf35bcda8beef760924878909eb2a",
+     "skipped_ranks": []
+    }
+   ],
+   "skip_count": 0,
+   "skips": [],
+   "status": "POPULATED",
+   "systems": [
+    "v2_02/question_only",
+    "v2_02/concat",
+    "v2_02/fusion"
+   ]
+  },
+  {
+   "balance_requirement": "NOT_APPLICABLE",
+   "candidate_pool_share_of_development_split": 0.100337,
+   "candidate_pool_size": 774,
+   "category_id": "QC03_fusion_right_concat_wrong",
+   "condition": "normal",
+   "direction_pool_sizes": [
+    {
+     "direction_id": "ALL",
+     "pool_size": 774
+    }
+   ],
+   "evidence_source": "closure_row_evidence",
+   "examples_requested": 2,
+   "examples_selected": 2,
+   "placement": "MAIN_TEXT",
+   "predicate": "fusion correct == 1 and concat correct == 0",
+   "rank_key_collisions": [],
+   "scale": "train_40k",
+   "seed": 0,
+   "selected": [
+    {
+     "direction_id": "ALL",
+     "direction_label": "no balance requirement is declared for this category",
+     "image_id": "2320225",
+     "qualitative_id": "VE2-QUAL-QC03_fusion_right_concat_wrong-01",
+     "question_id": "10869363",
+     "selection_rank": 1,
+     "selection_rank_key": "002f92b4c3894b41e49eb6e8c70fd082479aafdc269e5ed7b6231bf2e48aabe4",
+     "skipped_ranks": []
+    },
+    {
+     "direction_id": "ALL",
+     "direction_label": "no balance requirement is declared for this category",
+     "image_id": "2364920",
+     "qualitative_id": "VE2-QUAL-QC03_fusion_right_concat_wrong-02",
+     "question_id": "101012371",
+     "selection_rank": 2,
+     "selection_rank_key": "00b65d9a442802d3aee2be8fe7ddec19864a064ea0b47c7255b52299bb3afa67",
+     "skipped_ranks": []
+    }
+   ],
+   "skip_count": 0,
+   "skips": [],
+   "status": "POPULATED",
+   "systems": [
+    "v2_02/concat",
+    "v2_02/fusion"
+   ]
+  },
+  {
+   "balance_requirement": "NOT_APPLICABLE",
+   "candidate_pool_share_of_development_split": 0.146487,
+   "candidate_pool_size": 1130,
+   "category_id": "QC04_representation_improvement",
+   "condition": "normal",
+   "direction_pool_sizes": [
+    {
+     "direction_id": "ALL",
+     "pool_size": 1130
+    }
+   ],
+   "evidence_source": "closure_row_evidence",
+   "examples_requested": 2,
+   "examples_selected": 2,
+   "placement": "APPENDIX",
+   "predicate": "e2 fusion correct == 1 and v2_02 fusion correct == 0",
+   "rank_key_collisions": [],
+   "scale": "train_40k",
+   "seed": 0,
+   "selected": [
+    {
+     "direction_id": "ALL",
+     "direction_label": "no balance requirement is declared for this category",
+     "image_id": "2318195",
+     "qualitative_id": "VE2-QUAL-QC04_representation_improvement-01",
+     "question_id": "00445083",
+     "selection_rank": 1,
+     "selection_rank_key": "007935e1ba32fab78262a62e617edf4e129d49c63a49ad2b4486213f7877d6da",
+     "skipped_ranks": []
+    },
+    {
+     "direction_id": "ALL",
+     "direction_label": "no balance requirement is declared for this category",
+     "image_id": "2401578",
+     "qualitative_id": "VE2-QUAL-QC04_representation_improvement-02",
+     "question_id": "11743124",
+     "selection_rank": 2,
+     "selection_rank_key": "008b184f41d31f3e7370231791ccaf8681fbeb8a1f0f1d10237f5645bec00e97",
+     "skipped_ranks": []
+    }
+   ],
+   "skip_count": 0,
+   "skips": [],
+   "status": "POPULATED",
+   "systems": [
+    "v2_02/fusion",
+    "e2/fusion"
+   ]
+  },
+  {
+   "balance_requirement": "NOT_APPLICABLE",
+   "candidate_pool_share_of_development_split": 0.190174,
+   "candidate_pool_size": 1467,
+   "category_id": "QC05_question_side_pretraining",
+   "condition": "normal",
+   "direction_pool_sizes": [
+    {
+     "direction_id": "ALL",
+     "pool_size": 1467
+    }
+   ],
+   "evidence_source": "e8a_prediction_tables",
+   "examples_requested": 2,
+   "examples_selected": 2,
+   "placement": "MAIN_TEXT",
+   "predicate": "A1 normalized_correct == 1 and A1r normalized_correct == 0",
+   "rank_key_collisions": [],
+   "scale": "train_40k",
+   "seed": 0,
+   "selected": [
+    {
+     "direction_id": "ALL",
+     "direction_label": "no balance requirement is declared for this category",
+     "image_id": "2393299",
+     "qualitative_id": "VE2-QUAL-QC05_question_side_pretraining-01",
+     "question_id": "081024770",
+     "selection_rank": 1,
+     "selection_rank_key": "0005552ef6e7e53106e2e4c24b1e845777c757f50e038c0f3f8ae372f59272b3",
+     "skipped_ranks": []
+    },
+    {
+     "direction_id": "ALL",
+     "direction_label": "no balance requirement is declared for this category",
+     "image_id": "2387771",
+     "qualitative_id": "VE2-QUAL-QC05_question_side_pretraining-02",
+     "question_id": "1971431",
+     "selection_rank": 2,
+     "selection_rank_key": "003443a87e1489f83079f370d634be0df24ffbe49693eb8dececd849324b6caf",
+     "skipped_ranks": []
+    }
+   ],
+   "skip_count": 0,
+   "skips": [],
+   "status": "POPULATED",
+   "systems": [
+    "E8A/A1",
+    "E8A/A1r"
+   ]
+  },
+  {
+   "balance_requirement": "equal numbers of B4-correct and B4r-correct rows, taken by rank within each direction, so the gallery cannot suggest a direction the statistics do not support",
+   "candidate_pool_share_of_development_split": 0.357272,
+   "candidate_pool_size": 2756,
+   "category_id": "QC06_answer_side_disagreement",
+   "condition": "normal",
+   "direction_pool_sizes": [
+    {
+     "direction_id": "B4_correct",
+     "pool_size": 1341
+    },
+    {
+     "direction_id": "B4r_correct",
+     "pool_size": 1415
+    }
+   ],
+   "evidence_source": "e10_per_row",
+   "examples_requested": 2,
+   "examples_selected": 2,
+   "placement": "APPENDIX",
+   "predicate": "B4 normalized_correct != B4r normalized_correct",
+   "rank_key_collisions": [],
+   "scale": "train_40k",
+   "seed": 0,
+   "selected": [
+    {
+     "direction_id": "B4_correct",
+     "direction_label": "pretrained readout correct, random control wrong",
+     "image_id": "1159442",
+     "qualitative_id": "VE2-QUAL-QC06_answer_side_disagreement-01",
+     "question_id": "04652163",
+     "selection_rank": 1,
+     "selection_rank_key": "00097c536cec6d2c342b31a1fb4d9f609d1c9de1984926013d377d6b89747015",
+     "skipped_ranks": []
+    },
+    {
+     "direction_id": "B4r_correct",
+     "direction_label": "random control correct, pretrained readout wrong",
+     "image_id": "2368959",
+     "qualitative_id": "VE2-QUAL-QC06_answer_side_disagreement-03",
+     "question_id": "15948686",
+     "selection_rank": 3,
+     "selection_rank_key": "002b9cc9599df4909383c015dc77d61bf36927893b85307639eba72a0135116e",
+     "skipped_ranks": []
+    }
+   ],
+   "skip_count": 0,
+   "skips": [],
+   "status": "POPULATED",
+   "systems": [
+    "E10/B4",
+    "E10/B4r"
+   ]
+  },
+  {
+   "balance_requirement": "NOT_APPLICABLE",
+   "candidate_pool_share_of_development_split": 0.277677,
+   "candidate_pool_size": 2142,
+   "category_id": "QC07_visual_reliance",
+   "condition": "normal and shuffled, paired on the same question",
+   "direction_pool_sizes": [
+    {
+     "direction_id": "ALL",
+     "pool_size": 2142
+    }
+   ],
+   "evidence_source": "closure_row_evidence",
+   "examples_requested": 2,
+   "examples_selected": 2,
+   "placement": "MAIN_TEXT",
+   "predicate": "v2_06 fusion normal correct == 1 and v2_06 fusion shuffled correct == 0",
+   "rank_key_collisions": [],
+   "scale": "train_40k",
+   "seed": 0,
+   "selected": [
+    {
+     "direction_id": "ALL",
+     "direction_label": "no balance requirement is declared for this category",
+     "image_id": "2402937",
+     "qualitative_id": "VE2-QUAL-QC07_visual_reliance-01",
+     "question_id": "10181047",
+     "selection_rank": 1,
+     "selection_rank_key": "003d71dec24058628000062c0f9e41081c02d05ee84dfaa7b9fcbc1c59af0f67",
+     "skipped_ranks": []
+    },
+    {
+     "direction_id": "ALL",
+     "direction_label": "no balance requirement is declared for this category",
+     "image_id": "2410905",
+     "qualitative_id": "VE2-QUAL-QC07_visual_reliance-02",
+     "question_id": "05206184",
+     "selection_rank": 2,
+     "selection_rank_key": "0049cd3505a07950168eed24b2d3425efa2dfd256ac5a1fa806fc47f314bf08b",
+     "skipped_ranks": []
+    }
+   ],
+   "skip_count": 0,
+   "skips": [],
+   "status": "POPULATED",
+   "systems": [
+    "v2_06/fusion@normal",
+    "v2_06/fusion@shuffled"
+   ]
+  },
+  {
+   "balance_requirement": "NOT_APPLICABLE",
+   "candidate_pool_share_of_development_split": 0.311123,
+   "candidate_pool_size": 2400,
+   "category_id": "QC08_short_reasoning",
+   "condition": "normal",
+   "direction_pool_sizes": [
+    {
+     "direction_id": "ALL",
+     "pool_size": 2400
+    }
+   ],
+   "evidence_source": "closure_row_evidence",
+   "examples_requested": 2,
+   "examples_selected": 2,
+   "placement": "APPENDIX",
+   "predicate": "n_steps <= 2 in data/v2/metadata/dev_types.csv",
+   "rank_key_collisions": [],
+   "scale": "train_40k",
+   "seed": 0,
+   "selected": [
+    {
+     "direction_id": "ALL",
+     "direction_label": "no balance requirement is declared for this category",
+     "image_id": "2396197",
+     "qualitative_id": "VE2-QUAL-QC08_short_reasoning-01",
+     "question_id": "04945041",
+     "selection_rank": 1,
+     "selection_rank_key": "00098f90d3079f4eaa972482663c9e2967b6879c2010e2e4e0f43cbaf65d9838",
+     "skipped_ranks": []
+    },
+    {
+     "direction_id": "ALL",
+     "direction_label": "no balance requirement is declared for this category",
+     "image_id": "2347720",
+     "qualitative_id": "VE2-QUAL-QC08_short_reasoning-02",
+     "question_id": "15535737",
+     "selection_rank": 2,
+     "selection_rank_key": "0057ebfcb65f698e2afe24ee4de0dc63dfd1e74367a799dbc510590a6c7aff4b",
+     "skipped_ranks": []
+    }
+   ],
+   "skip_count": 0,
+   "skips": [],
+   "status": "POPULATED",
+   "systems": [
+    "v2_02/fusion"
+   ]
+  },
+  {
+   "balance_requirement": "NOT_APPLICABLE",
+   "candidate_pool_share_of_development_split": 0.108634,
+   "candidate_pool_size": 838,
+   "category_id": "QC09_deep_reasoning_failure",
+   "condition": "normal",
+   "direction_pool_sizes": [
+    {
+     "direction_id": "ALL",
+     "pool_size": 838
+    }
+   ],
+   "evidence_source": "closure_row_evidence",
+   "examples_requested": 2,
+   "examples_selected": 2,
+   "placement": "MAIN_TEXT",
+   "predicate": "n_steps >= 4 and v2_02 fusion correct == 0",
+   "rank_key_collisions": [],
+   "scale": "train_40k",
+   "seed": 0,
+   "selected": [
+    {
+     "direction_id": "ALL",
+     "direction_label": "no balance requirement is declared for this category",
+     "image_id": "2358266",
+     "qualitative_id": "VE2-QUAL-QC09_deep_reasoning_failure-01",
+     "question_id": "05237394",
+     "selection_rank": 1,
+     "selection_rank_key": "0018d240a4c0aa7a5004baf3c6ee8db804efea4b588c8044c24e844a9eaf51e7",
+     "skipped_ranks": []
+    },
+    {
+     "direction_id": "ALL",
+     "direction_label": "no balance requirement is declared for this category",
+     "image_id": "2361055",
+     "qualitative_id": "VE2-QUAL-QC09_deep_reasoning_failure-02",
+     "question_id": "05590137",
+     "selection_rank": 2,
+     "selection_rank_key": "00f451432466846044bc3ed0b930fd2e73133ebacb4f8c6336a255b3f096d36b",
+     "skipped_ranks": []
+    }
+   ],
+   "skip_count": 0,
+   "skips": [],
+   "status": "POPULATED",
+   "systems": [
+    "v2_02/fusion"
+   ]
+  }
+ ],
+ "categories_dropped": 1,
+ "categories_populated": 9,
+ "clean_test_accessed": false,
+ "content_sha256": "f94d3aebb5727045416059bd3492a35c07ae8a28df29416486b615c06e3dc067",
+ "development_set_only": true,
+ "dropped_categories": [
+  {
+   "artefact_manifest": {
+    "path": "results/experiments/e9_compact_vlm/ARTEFACT_MANIFEST.json",
+    "sha256": "6610909b774b9fa48815d01cc7683db37ca7abaec07ffaeeb37b3da06eec2817"
+   },
+   "artefacts_scanned_for_a_correctness_array": [
+    {
+     "holds_a_per_row_correctness_array": false,
+     "note": "aggregate scores and metadata only",
+     "path": "results/experiments/e9_compact_vlm/ARTEFACT_MANIFEST.json",
+     "sha256": "6610909b774b9fa48815d01cc7683db37ca7abaec07ffaeeb37b3da06eec2817"
+    },
+    {
+     "holds_a_per_row_correctness_array": false,
+     "note": "aggregate scores and metadata only",
+     "path": "results/experiments/e9_compact_vlm/delta_ledger.json",
+     "sha256": "bf1fc309ee8fd0ee6882fd5eba030a7b1e3100c9a529498164d744ba28cd6af4"
+    },
+    {
+     "holds_a_per_row_correctness_array": false,
+     "note": "aggregate scores and metadata only",
+     "path": "results/experiments/e9_compact_vlm/e9_determinism_replica.json",
+     "sha256": "70d44f5838c1ae5c608702157d5f50c4a86a8b5b7fa8bb9ec74c79d4e561787e"
+    },
+    {
+     "holds_a_per_row_correctness_array": false,
+     "note": "aggregate scores and metadata only",
+     "path": "results/experiments/e9_compact_vlm/e9_determinism_replication.json",
+     "sha256": "e6b5fd960033cf0aaee55386fb75948810bec2501b0fbeae57c35e1c87df8c53"
+    },
+    {
+     "holds_a_per_row_correctness_array": false,
+     "note": "aggregate scores and metadata only",
+     "path": "results/experiments/e9_compact_vlm/e9_efficiency.json",
+     "sha256": "929c45ae2544a7a70416c5ebb1fea0c2871c943e5d59e24b67aae60676922d0b"
+    },
+    {
+     "holds_a_per_row_correctness_array": false,
+     "note": "aggregate scores and metadata only",
+     "path": "results/experiments/e9_compact_vlm/e9_execution.json",
+     "sha256": "006430df76ce215afac263089724592dd936371fcb1ce2145e59d4c9db4fbadd"
+    },
+    {
+     "holds_a_per_row_correctness_array": false,
+     "note": "aggregate scores and metadata only",
+     "path": "results/experiments/e9_compact_vlm/e9_results.json",
+     "sha256": "5d42ae9344fa9d7bcd48589645d62b4d0c20db9a3d9d03288bbddd6832ae2caa"
+    },
+    {
+     "holds_a_per_row_correctness_array": false,
+     "note": "aggregate scores and metadata only",
+     "path": "results/experiments/e9_compact_vlm/e9_smolvlm_256m_constrained_deranged.json",
+     "sha256": "a330e476ba6f6fe969a8d0f66bde75361b4c6f2f263ad4fa2ba5ccb095280b00"
+    },
+    {
+     "holds_a_per_row_correctness_array": false,
+     "note": "aggregate scores and metadata only",
+     "path": "results/experiments/e9_compact_vlm/e9_smolvlm_256m_constrained_normal.json",
+     "sha256": "5c3ea579f3527e0a92ebdb68e799a0b6c4662bcba936e667471bf4052cc62440"
+    },
+    {
+     "holds_a_per_row_correctness_array": false,
+     "note": "aggregate scores and metadata only",
+     "path": "results/experiments/e9_compact_vlm/e9_smolvlm_256m_open_blank.json",
+     "sha256": "35a39083246f03294f07af0b9b965ec482e2cc7ce1b442cb42168619e3ef73e4"
+    },
+    {
+     "holds_a_per_row_correctness_array": false,
+     "note": "aggregate scores and metadata only",
+     "path": "results/experiments/e9_compact_vlm/e9_smolvlm_256m_open_deranged.json",
+     "sha256": "6dec0484239e3da1e54a1100e3969ac738364d99789ce24fc4832bdd254552b9"
+    },
+    {
+     "holds_a_per_row_correctness_array": false,
+     "note": "aggregate scores and metadata only",
+     "path": "results/experiments/e9_compact_vlm/e9_smolvlm_256m_open_normal.json",
+     "sha256": "ae6049dddcc9df4381f569cf69e9b7553786f235077335826dc882a56bf5d58b"
+    },
+    {
+     "holds_a_per_row_correctness_array": false,
+     "note": "aggregate scores and metadata only",
+     "path": "results/experiments/e9_compact_vlm/e9_smolvlm_500m_constrained_normal.json",
+     "sha256": "65e54cfdb24b1edfb2ccdd32ce8e91f00b874ab00556340e8dab7a6a7c9f767c"
+    },
+    {
+     "holds_a_per_row_correctness_array": false,
+     "note": "aggregate scores and metadata only",
+     "path": "results/experiments/e9_compact_vlm/e9_smolvlm_500m_open_normal.json",
+     "sha256": "65fa61f3e2b1e855391415968a51f89ac44b00557464086b000ff93bae9a85f6"
+    },
+    {
+     "holds_a_per_row_correctness_array": false,
+     "note": "aggregate scores and metadata only",
+     "path": "results/experiments/e9_compact_vlm/frozen_protocol.json",
+     "sha256": "e38c0b9e6702cebd97f08487d70177ac49064df5db3e2e1c0d38601415769b02"
+    },
+    {
+     "holds_a_per_row_correctness_array": false,
+     "note": "aggregate scores and metadata only",
+     "path": "results/experiments/e9_compact_vlm/g17_remediation.json",
+     "sha256": "44f7b304198522631b0fa6303e07fb1eeb0e73848696d659ae93b63fbcf9f92d"
+    },
+    {
+     "holds_a_per_row_correctness_array": false,
+     "note": "aggregate scores and metadata only",
+     "path": "results/experiments/e9_compact_vlm/g17_wording_correction.json",
+     "sha256": "d1e132e297ce08c00398b14d4d6e6617d417315d3bcc1151ec32d2eb1fe19310"
+    },
+    {
+     "holds_a_per_row_correctness_array": false,
+     "note": "aggregate scores and metadata only",
+     "path": "results/experiments/e9_compact_vlm/preflight.json",
+     "sha256": "a0d35407e274bdbd4fbeb37e8a82ce77c329ec395aa9efaac516bf0d025325e9"
+    },
+    {
+     "holds_a_per_row_correctness_array": false,
+     "note": "aggregate scores and metadata only",
+     "path": "results/experiments/e9_compact_vlm/resource_ledger.json",
+     "sha256": "28d15e5240fba76a9d81705b8ebb4c3562132a866be6083c3b697b97ed062f49"
+    }
+   ],
+   "authority": "qualitative_protocol.json categories[QC10].drop_if_unverified is true and its status is CONDITIONAL_REQUIRES_VE2_VERIFICATION",
+   "category_id": "QC10_compact_vlm_disagreement",
+   "decoded_answer_strings_are_already_stored": true,
+   "decoding_would_have_been_a_lookup": true,
+   "development_view": "the 10,004-row raw development partition",
+   "fields_present_in_generation_record": [
+    "e9_generation",
+    "finished_with_eos",
+    "generated_token_counts",
+    "metadata",
+    "questionIds",
+    "texts"
+   ],
+   "fields_present_in_tokens_artefact": [
+    "lengths",
+    "questionIds",
+    "tokens"
+   ],
+   "finding": "no artefact in the frozen E9 tree stores a per-row correctness vector. The generations themselves are stored as text, so decoding is unnecessary, but the category predicate needs normalised correctness and the only route to it is to apply the pinned G21 scorer to those generations against the gold answers. That is re-scoring: it computes a per-row scientific quantity that no frozen artefact holds.",
+   "generation_rows": 10004,
+   "outcome": "DROPPED_BY_PROTOCOL",
+   "per_row_correctness_fields_found": [],
+   "recoverable_without_a_new_evaluation": false,
+   "second_obstacle": "the compact VLM was evaluated over the 10,004-row raw development view and the global-embedding head over the 7,714-row in-vocabulary view, so the two correctness vectors do not share a denominator and could not be compared row-for-row without a further decision the frozen protocol does not make.",
+   "verification_required_by_ve0": "VE-2 must first establish, from the frozen E9 artefacts alone, whether a per-row correctness vector can be recovered by DECODING stored tokens and comparing them with stored gold answers. Decoding stored bytes is a lookup. RE-SCORING, re-running generation, or loading SmolVLM weights is a NEW EVALUATION and is OUT OF SCOPE without fresh explicit user authorisation. If the verification fails, the category is recorded UNAVAILABLE and dropped, not worked around.",
+   "what_was_deliberately_not_done": [
+    "no SmolVLM weight was loaded",
+    "no generation was re-run",
+    "no scorer was applied to any stored generation",
+    "no substitute compact-VLM category was invented"
+   ]
+  }
+ ],
+ "provenance": {
+  "build_command": "python -m experiments.ve2.run_ve2",
+  "builder": "experiments/ve2/run_ve2.py",
+  "builder_sha256": "7fab3289488e05d89bd258aa04394df6bbdc88b8c82abe7071196b79dccd4e89",
+  "clean_test_accessed": false,
+  "device": "cpu",
+  "evaluated_anything": false,
+  "gpu_hours_charged": 0.0,
+  "gpu_used": false,
+  "inputs": [
+   {
+    "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__normal.npz",
+    "role": "v2_06/image_only per-row predictions",
+    "sha256": "21e17394f9011373bcc30174dbf828c023498bb4bf8e7d4c344496d8e4c769ba"
+   },
+   {
+    "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__shuffled.npz",
+    "role": "v2_06/image_only per-row predictions",
+    "sha256": "eab132ba346b720a1a8a0a58454a393562792abdf092a41fe9eb899a31a403e5"
+   }
+  ],
+  "matplotlib_version": "3.11.0",
+  "measured_anything": false,
+  "numpy_version": "2.5.0",
+  "pandas_version": "3.0.3",
+  "pillow_version": "12.2.0",
+  "python": "3.12.3",
+  "read_any_checkpoint": false,
+  "read_any_embedding_store": false,
+  "repository_head": "73af31953a99a9c1c196f609abf2be0912c321a2",
+  "repository_head_short": "73af319",
+  "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+  "rescored_anything": false,
+  "schema_version": 1,
+  "selected_any_checkpoint": false,
+  "trained_anything": false,
+  "worktree_dirty": true
+ },
+ "rule": "the complete audit of the selection: every category's candidate pool size, the frozen rank of every example taken, every rank skipped with its mechanical reason, and every category not populated with the finding that dropped it.",
+ "salt": "P2607-VE0-QUALITATIVE-SALT-20260813-v1",
+ "salt_frozen_before_inspection": true,
+ "salt_source": "results/ve0/qualitative_protocol.json, read at build time and never copied into VE-2 source",
+ "selection_rule": {
+  "candidate_pool": "the in-vocabulary development rows only (data/v2/dev.csv, 7,714 rows over 768 represented images), except where a category explicitly declares the raw development view. The clean test is never a candidate pool.",
+  "clean_test": "NEVER. No qualitative example may come from the clean test, and no VE-2 script may resolve the embargoed path.",
+  "examples_per_category": 2,
+  "formula": "rank_key = SHA256(salt + '|' + category_id + '|' + question_id).hexdigest(); candidates sorted ascending by rank_key; the lowest ranks are taken in order",
+  "method": "deterministic hash rank",
+  "predicate_evaluation": "each category names the exact systems, scale, seed and condition its predicate is evaluated at, fixed here and not chosen after seeing the candidates. Where a category needs a single seed, seed 0 is used, declared in advance.",
+  "salt": "P2607-VE0-QUALITATIVE-SALT-20260813-v1",
+  "salt_freeze_statement": "The salt was fixed in experiments/ve0/ve0_common.py at VE-0 time, before any candidate example was listed, inspected or rendered. Changing it changes every rank, so it is recorded here, in the VE-0 manifest and in the VE-0 report, and a later change would be visible as a manifest difference.",
+  "salt_frozen_before_inspection": true,
+  "substitution_policy": "NO SUBSTITUTION FOR APPEARANCE. An example may be skipped ONLY for a recorded mechanical reason: the image file is unreadable, or the row fails the category predicate on re-check. Every skip is recorded in the VE-2 record with its rank, its question_id and its reason, and the next rank is taken. A skip for any aesthetic, rhetorical or outcome-related reason is forbidden.",
+  "tie_breaking": "rank_key collisions are broken by ascending question_id; a collision has never been observed and would be recorded if it occurred"
+ },
+ "shuffled_partner_recovery": {
+  "method": "the image-only head consumes only the image embedding, so its shuffled prediction at row i must equal its normal prediction at row perm[i]",
+  "negative_control_permutation_seed": 20260814,
+  "negative_control_rows_explained": 3143,
+  "permutation_seed": 42,
+  "permutation_source": "numpy.random.default_rng(config.RANDOM_SEED).permutation(7714), the intervention recorded in experiments/v2_06_reliance/run.py",
+  "rows_checked": 7714,
+  "rows_explained": 7714,
+  "rows_whose_partner_is_the_same_image": 11,
+  "verified": true
+ },
+ "title": "VE-2 selection and skip registry",
+ "total_examples_selected": 18,
+ "total_skips": 0,
+ "unused_prediction_sources": [
+  {
+   "categories_declaring_it": [],
+   "outcome": "NOT_USED",
+   "reason": "no frozen category names this source, so no E8B row was read, no positional alignment was assumed and no E8B prediction appears in any VE-2 artefact",
+   "source": "e8b_per_row",
+   "used_by_any_category": false,
+   "ve0_prediction_text_note": "correctness only. No predicted answer string or index is stored, so an E8B row can be shown as correct or incorrect but its predicted answer cannot be displayed",
+   "ve0_row_alignment_note": "these arrays carry no questionId and are positionally aligned to the 10,004-row raw development order in data/v2/dev_raw.csv. VE-2 MUST verify that alignment explicitly before using an E8B row, and must refuse the category if it cannot"
+  }
+ ],
+ "ve0_source_artefacts": [
+  {
+   "path": "results/ve0/canonical_evidence_inventory.json",
+   "role": "VE-0 output A",
+   "sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3"
+  },
+  {
+   "path": "results/ve0/canonical_evidence_inventory.csv",
+   "role": "VE-0 output A_csv",
+   "sha256": "86921381e6fc22b674559b44272e9ba70aaeffafdf600c4a752d5cb6200eee9b"
+  },
+  {
+   "path": "results/ve0/supersession_map.json",
+   "role": "VE-0 output C",
+   "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
+  },
+  {
+   "path": "results/ve0/claim_ledger.json",
+   "role": "VE-0 output D",
+   "sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7"
+  },
+  {
+   "path": "results/ve0/rq_evidence_matrix.json",
+   "role": "VE-0 output E",
+   "sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d"
+  },
+  {
+   "path": "results/ve0/figure_specifications.json",
+   "role": "VE-0 output F",
+   "sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c"
+  },
+  {
+   "path": "results/ve0/table_specifications.json",
+   "role": "VE-0 output G",
+   "sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8"
+  },
+  {
+   "path": "results/ve0/qualitative_protocol.json",
+   "role": "VE-0 output H",
+   "sha256": "c8c5c35bec84da409e9a36612ad07846e2d218aa35351bc7d09340760cd9e895"
+  },
+  {
+   "path": "results/ve0/qualitative_record_schema.json",
+   "role": "VE-0 output I",
+   "sha256": "898e0a6bfeddfb37196e0d1e4bfc469606bcd663c5283b6fac931cd0e3de4297"
+  },
+  {
+   "path": "results/ve0/reporting_style_contract.json",
+   "role": "VE-0 output J",
+   "sha256": "536cf07aa6bd5f80eb1b843046435804345e7bd1f558ba047866b223aadd5504"
+  },
+  {
+   "path": "results/ve0/provenance_contract.json",
+   "role": "VE-0 output K",
+   "sha256": "4a0c33512194fcd11493d3e05f0a86fc8f752ea6343f698c8da0c630672213ab"
+  },
+  {
+   "path": "results/ve0/efficiency_visualisation_contract.json",
+   "role": "VE-0 output L",
+   "sha256": "c8d221544dca46f55339fcd708e4dd66b9aa1e1e9b130bdf44a2a39871ee9cc4"
+  },
+  {
+   "path": "results/ve0/results_section_mapping.json",
+   "role": "VE-0 output M",
+   "sha256": "2f80c8d34949f6ea3e5b7546d67b79793463d7f63d4278b0a03153125bc50686"
+  },
+  {
+   "path": "results/ve0/VE0_MANIFEST.json",
+   "role": "VE-0 output O",
+   "sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3"
+  }
+ ],
+ "ve0_specification_id": "VE0-FIG-10",
+ "ve2_output": "selection_registry"
+}

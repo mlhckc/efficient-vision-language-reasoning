@@ -1,0 +1,414 @@
+{
+ "artefact_id": "ve2_gallery_main",
+ "clean_test_accessed": false,
+ "development_set_only": true,
+ "example_count": 10,
+ "grouping": "one row per selected example, grouped by selection category",
+ "grouping_note": "the specification's row-per-example grouping is rendered as one page per category, because ten examples on a single page would not be legible at printed size",
+ "mandatory_caption_caveat": "Development examples only; the clean test is embargoed and unread. Every example is drawn by the deterministic rank defined in the VE-0 qualitative protocol, whose salt was frozen before any example was inspected. Illustrative only: n examples cannot support a quantitative claim, and no scene graph or reasoning chain is shown that is not present in the canonical evidence.",
+ "page_count": 5,
+ "pages": [
+  {
+   "arm_code_expansions": [
+    "question-only head: a classifier over the frozen CLIP question embedding alone, with no image input",
+    "concatenation head: a classifier over the frozen CLIP image and question embeddings concatenated",
+    "fusion head: the concatenation plus the elementwise product and absolute difference of the two embeddings"
+   ],
+   "category_id": "QC02_all_wrong",
+   "examples": [
+    {
+     "gold_answer": "jeans",
+     "image_ids_drawn": [
+      "2385131"
+     ],
+     "image_sha256_drawn": [
+      "dbaedcf950a14b2795e1dea131b9c935bbc6ff25b1a86aaf54afd5ff8c31d8d8"
+     ],
+     "interpretation": "Illustrative only. A shared failure. It does not identify a cause and must not be captioned as a reasoning failure without independent evidence.",
+     "n_program_steps_drawn": "NOT_DRAWN",
+     "predictions": [
+      {
+       "correct": false,
+       "display_label": "Question-only",
+       "mark_drawn": "✗",
+       "predicted_answer": "shirt",
+       "system_id": "v2_02/question_only",
+       "word_drawn": "incorrect"
+      },
+      {
+       "correct": false,
+       "display_label": "Concatenation",
+       "mark_drawn": "✗",
+       "predicted_answer": "truck",
+       "system_id": "v2_02/concat",
+       "word_drawn": "incorrect"
+      },
+      {
+       "correct": false,
+       "display_label": "Fusion",
+       "mark_drawn": "✗",
+       "predicted_answer": "truck",
+       "system_id": "v2_02/fusion",
+       "word_drawn": "incorrect"
+      }
+     ],
+     "qualitative_id": "VE2-QUAL-QC02_all_wrong-01",
+     "question_id": "10600430",
+     "question_text": "What is the person to the left of the taxi cab wearing?",
+     "selection_rank": 1
+    },
+    {
+     "gold_answer": "gray",
+     "image_ids_drawn": [
+      "2384279"
+     ],
+     "image_sha256_drawn": [
+      "4b2ebd567bbe5eff30eec7bff9a5fb106d107c0c9c14c258d15bdf01f31b76b1"
+     ],
+     "interpretation": "Illustrative only. A shared failure. It does not identify a cause and must not be captioned as a reasoning failure without independent evidence.",
+     "n_program_steps_drawn": "NOT_DRAWN",
+     "predictions": [
+      {
+       "correct": false,
+       "display_label": "Question-only",
+       "mark_drawn": "✗",
+       "predicted_answer": "blue",
+       "system_id": "v2_02/question_only",
+       "word_drawn": "incorrect"
+      },
+      {
+       "correct": false,
+       "display_label": "Concatenation",
+       "mark_drawn": "✗",
+       "predicted_answer": "brown",
+       "system_id": "v2_02/concat",
+       "word_drawn": "incorrect"
+      },
+      {
+       "correct": false,
+       "display_label": "Fusion",
+       "mark_drawn": "✗",
+       "predicted_answer": "brown",
+       "system_id": "v2_02/fusion",
+       "word_drawn": "incorrect"
+      }
+     ],
+     "qualitative_id": "VE2-QUAL-QC02_all_wrong-02",
+     "question_id": "071060289",
+     "question_text": "What color do you think the water has?",
+     "selection_rank": 2
+    }
+   ],
+   "page_subtitle": "every compared global-embedding system answers incorrectly",
+   "page_title": "QC02_all_wrong",
+   "placement": "MAIN_TEXT",
+   "png": "results/ve2/galleries/ve2_gallery_main_QC02_all_wrong.png"
+  },
+  {
+   "arm_code_expansions": [
+    "concatenation head: a classifier over the frozen CLIP image and question embeddings concatenated",
+    "fusion head: the concatenation plus the elementwise product and absolute difference of the two embeddings"
+   ],
+   "category_id": "QC03_fusion_right_concat_wrong",
+   "examples": [
+    {
+     "gold_answer": "right",
+     "image_ids_drawn": [
+      "2320225"
+     ],
+     "image_sha256_drawn": [
+      "a93673b5f44629c9636a56d258b31b5eac17a23f9433dca4fb091678f53cdea7"
+     ],
+     "interpretation": "Illustrative only. One row where the two systems disagree. It illustrates the aggregate contrast; it is not evidence for it, and the aggregate contrast is capacity-confounded.",
+     "n_program_steps_drawn": "NOT_DRAWN",
+     "predictions": [
+      {
+       "correct": false,
+       "display_label": "Concatenation",
+       "mark_drawn": "✗",
+       "predicted_answer": "left",
+       "system_id": "v2_02/concat",
+       "word_drawn": "incorrect"
+      },
+      {
+       "correct": true,
+       "display_label": "Fusion",
+       "mark_drawn": "✓",
+       "predicted_answer": "right",
+       "system_id": "v2_02/fusion",
+       "word_drawn": "correct"
+      }
+     ],
+     "qualitative_id": "VE2-QUAL-QC03_fusion_right_concat_wrong-01",
+     "question_id": "10869363",
+     "question_text": "On which side is the red vehicle?",
+     "selection_rank": 1
+    },
+    {
+     "gold_answer": "brown",
+     "image_ids_drawn": [
+      "2364920"
+     ],
+     "image_sha256_drawn": [
+      "528374681dff7de19bb9c5cffd1f748f36d39bd3417a4b75f0218a918e9e3923"
+     ],
+     "interpretation": "Illustrative only. One row where the two systems disagree. It illustrates the aggregate contrast; it is not evidence for it, and the aggregate contrast is capacity-confounded.",
+     "n_program_steps_drawn": "NOT_DRAWN",
+     "predictions": [
+      {
+       "correct": false,
+       "display_label": "Concatenation",
+       "mark_drawn": "✗",
+       "predicted_answer": "white",
+       "system_id": "v2_02/concat",
+       "word_drawn": "incorrect"
+      },
+      {
+       "correct": true,
+       "display_label": "Fusion",
+       "mark_drawn": "✓",
+       "predicted_answer": "brown",
+       "system_id": "v2_02/fusion",
+       "word_drawn": "correct"
+      }
+     ],
+     "qualitative_id": "VE2-QUAL-QC03_fusion_right_concat_wrong-02",
+     "question_id": "101012371",
+     "question_text": "What color does the animal that the lamb is below have?",
+     "selection_rank": 2
+    }
+   ],
+   "page_subtitle": "fusion correct where concatenation is wrong",
+   "page_title": "QC03_fusion_right_concat_wrong",
+   "placement": "MAIN_TEXT",
+   "png": "results/ve2/galleries/ve2_gallery_main_QC03_fusion_right_concat_wrong.png"
+  },
+  {
+   "arm_code_expansions": [
+    "A1: the pretrained frozen SmolLM2-135M question encoder feeding the latent-query reasoner",
+    "A1r: the architecture-matched randomly initialised SmolLM2-135M question encoder, the within-size control for A1"
+   ],
+   "category_id": "QC05_question_side_pretraining",
+   "examples": [
+    {
+     "gold_answer": "no",
+     "image_ids_drawn": [
+      "2393299"
+     ],
+     "image_sha256_drawn": [
+      "5575af705db67c608121b03bd86bf33f24ca08cb333a0abf0faafcde72c4d2d3"
+     ],
+     "interpretation": "Illustrative only. Illustrates the only clean within-size question-side pretraining contrast; a single row is not evidence of the effect.",
+     "n_program_steps_drawn": "NOT_DRAWN",
+     "predictions": [
+      {
+       "correct": true,
+       "display_label": "A1 (pretrained)",
+       "mark_drawn": "✓",
+       "predicted_answer": "no",
+       "system_id": "E8A/A1",
+       "word_drawn": "correct"
+      },
+      {
+       "correct": false,
+       "display_label": "A1r (random)",
+       "mark_drawn": "✗",
+       "predicted_answer": "yes",
+       "system_id": "E8A/A1r",
+       "word_drawn": "incorrect"
+      }
+     ],
+     "qualitative_id": "VE2-QUAL-QC05_question_side_pretraining-01",
+     "question_id": "081024770",
+     "question_text": "Do you see either cookbooks or rugs?",
+     "selection_rank": 1
+    },
+    {
+     "gold_answer": "yes",
+     "image_ids_drawn": [
+      "2387771"
+     ],
+     "image_sha256_drawn": [
+      "2b37542973f1535f1ad7bb39da641e102f6cdf1cbf6640c53859189e656e9919"
+     ],
+     "interpretation": "Illustrative only. Illustrates the only clean within-size question-side pretraining contrast; a single row is not evidence of the effect.",
+     "n_program_steps_drawn": "NOT_DRAWN",
+     "predictions": [
+      {
+       "correct": true,
+       "display_label": "A1 (pretrained)",
+       "mark_drawn": "✓",
+       "predicted_answer": "yes",
+       "system_id": "E8A/A1",
+       "word_drawn": "correct"
+      },
+      {
+       "correct": false,
+       "display_label": "A1r (random)",
+       "mark_drawn": "✗",
+       "predicted_answer": "no",
+       "system_id": "E8A/A1r",
+       "word_drawn": "incorrect"
+      }
+     ],
+     "qualitative_id": "VE2-QUAL-QC05_question_side_pretraining-02",
+     "question_id": "1971431",
+     "question_text": "Is the drawer to the right of the stove?",
+     "selection_rank": 2
+    }
+   ],
+   "page_subtitle": "the pretrained question encoder A1 correct where its random control A1r is wrong",
+   "page_title": "QC05_question_side_pretraining",
+   "placement": "MAIN_TEXT",
+   "png": "results/ve2/galleries/ve2_gallery_main_QC05_question_side_pretraining.png"
+  },
+  {
+   "arm_code_expansions": [
+    "fusion head reading the question's own image",
+    "the same fusion head, with the image embedding replaced by another development image's under the recorded permutation"
+   ],
+   "category_id": "QC07_visual_reliance",
+   "examples": [
+    {
+     "gold_answer": "shelf",
+     "image_ids_drawn": [
+      "2402937",
+      "2407981"
+     ],
+     "image_sha256_drawn": [
+      "18032f572f63a986e1ce55d0c1c44e604c4ff5c5dcf1d7cd971f9ffa2c3fe20c",
+      "3eade9e8dea8ce5afbec5b8acc27bd28eee197dab347be63dc226818d011610a"
+     ],
+     "interpretation": "Illustrative only. Demonstrates reliance on the image for this row. It is not proof of grounding, and the wrong-image partner must be shown so a reader can see what replaced it.",
+     "n_program_steps_drawn": "NOT_DRAWN",
+     "predictions": [
+      {
+       "correct": true,
+       "display_label": "Fusion, real image",
+       "mark_drawn": "✓",
+       "predicted_answer": "shelf",
+       "system_id": "v2_06/fusion@normal",
+       "word_drawn": "correct"
+      },
+      {
+       "correct": false,
+       "display_label": "Fusion, wrong image",
+       "mark_drawn": "✗",
+       "predicted_answer": "bed",
+       "system_id": "v2_06/fusion@shuffled",
+       "word_drawn": "incorrect"
+      }
+     ],
+     "qualitative_id": "VE2-QUAL-QC07_visual_reliance-01",
+     "question_id": "10181047",
+     "question_text": "What's the plant on?",
+     "selection_rank": 1
+    },
+    {
+     "gold_answer": "right",
+     "image_ids_drawn": [
+      "2410905",
+      "2385812"
+     ],
+     "image_sha256_drawn": [
+      "7ca5c4ba720ffc6d857273946f5a15dd86c8da6bedb5f8bfae582f24566cc64c",
+      "f70f11b9a874b0d8e7404c1f8307ebda21b4d18f4dc332ecd914f8466a431e6d"
+     ],
+     "interpretation": "Illustrative only. Demonstrates reliance on the image for this row. It is not proof of grounding, and the wrong-image partner must be shown so a reader can see what replaced it.",
+     "n_program_steps_drawn": "NOT_DRAWN",
+     "predictions": [
+      {
+       "correct": true,
+       "display_label": "Fusion, real image",
+       "mark_drawn": "✓",
+       "predicted_answer": "right",
+       "system_id": "v2_06/fusion@normal",
+       "word_drawn": "correct"
+      },
+      {
+       "correct": false,
+       "display_label": "Fusion, wrong image",
+       "mark_drawn": "✗",
+       "predicted_answer": "left",
+       "system_id": "v2_06/fusion@shuffled",
+       "word_drawn": "incorrect"
+      }
+     ],
+     "qualitative_id": "VE2-QUAL-QC07_visual_reliance-02",
+     "question_id": "05206184",
+     "question_text": "Is the truck to the right or to the left of the motorcycle that is on the street?",
+     "selection_rank": 2
+    }
+   ],
+   "page_subtitle": "fusion correct under the normal image and wrong under the shuffled image",
+   "page_title": "QC07_visual_reliance",
+   "placement": "MAIN_TEXT",
+   "png": "results/ve2/galleries/ve2_gallery_main_QC07_visual_reliance.png"
+  },
+  {
+   "arm_code_expansions": [
+    "fusion head: the concatenation plus the elementwise product and absolute difference of the two embeddings"
+   ],
+   "category_id": "QC09_deep_reasoning_failure",
+   "examples": [
+    {
+     "gold_answer": "yes",
+     "image_ids_drawn": [
+      "2358266"
+     ],
+     "image_sha256_drawn": [
+      "98c161658f9ede6cccec8e26f0a5d914e966db4410ffd08aa617f6eebcba2c67"
+     ],
+     "interpretation": "Illustrative only. Illustrates where the pooled four-or-more-step deficit lives. It does not show the model failed BECAUSE the question was deep; no causal attribution may be made from an example.",
+     "n_program_steps_drawn": 5,
+     "predictions": [
+      {
+       "correct": false,
+       "display_label": "Fusion",
+       "mark_drawn": "✗",
+       "predicted_answer": "no",
+       "system_id": "v2_02/fusion",
+       "word_drawn": "incorrect"
+      }
+     ],
+     "qualitative_id": "VE2-QUAL-QC09_deep_reasoning_failure-01",
+     "question_id": "05237394",
+     "question_text": "Are there any helmets or hearts in this scene?",
+     "selection_rank": 1
+    },
+    {
+     "gold_answer": "man",
+     "image_ids_drawn": [
+      "2361055"
+     ],
+     "image_sha256_drawn": [
+      "1e3c637e17e27752d47ad466b9063e3c21b413e1e9516b0734a66e67d240aad9"
+     ],
+     "interpretation": "Illustrative only. Illustrates where the pooled four-or-more-step deficit lives. It does not show the model failed BECAUSE the question was deep; no causal attribution may be made from an example.",
+     "n_program_steps_drawn": 4,
+     "predictions": [
+      {
+       "correct": false,
+       "display_label": "Fusion",
+       "mark_drawn": "✗",
+       "predicted_answer": "left",
+       "system_id": "v2_02/fusion",
+       "word_drawn": "incorrect"
+      }
+     ],
+     "qualitative_id": "VE2-QUAL-QC09_deep_reasoning_failure-02",
+     "question_id": "05590137",
+     "question_text": "Who is reflected in the mirror on the left side of the picture?",
+     "selection_rank": 2
+    }
+   ],
+   "page_subtitle": "a question with four or more program steps that fusion answers incorrectly",
+   "page_title": "QC09_deep_reasoning_failure",
+   "placement": "MAIN_TEXT",
+   "png": "results/ve2/galleries/ve2_gallery_main_QC09_deep_reasoning_failure.png"
+  }
+ ],
+ "placement": "MAIN_TEXT",
+ "title": "Qualitative development examples",
+ "ve0_specification_id": "VE0-FIG-10"
+}

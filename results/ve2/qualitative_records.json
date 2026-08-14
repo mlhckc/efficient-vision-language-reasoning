@@ -1,0 +1,3517 @@
+{
+ "clean_test_accessed": false,
+ "content_sha256": "97c309a9b5b6c7c06ccb2b6d7e57736f1d337319520fd3736f1a615438d40d78",
+ "development_set_only": true,
+ "provenance": {
+  "build_command": "python -m experiments.ve2.run_ve2",
+  "builder": "experiments/ve2/run_ve2.py",
+  "builder_sha256": "7fab3289488e05d89bd258aa04394df6bbdc88b8c82abe7071196b79dccd4e89",
+  "clean_test_accessed": false,
+  "device": "cpu",
+  "evaluated_anything": false,
+  "gpu_hours_charged": 0.0,
+  "gpu_used": false,
+  "inputs": [
+   {
+    "path": "data/v2/dev.csv",
+    "role": "development split manifest",
+    "sha256": "95d1b504dcc4deb7d69ba0c9e293d1c00bae93df4b6907174a1dd615cb93cdc9"
+   },
+   {
+    "path": "data/v2/metadata/dev_types.csv",
+    "role": "question type and program length metadata",
+    "sha256": "2f2308728e3ed499104a5df5b206bc96e26b88f08e84ca72aa6a50c02a46a25f"
+   },
+   {
+    "path": "data/v2/answer_vocab_v2.json",
+    "role": "answer vocabulary",
+    "sha256": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680"
+   },
+   {
+    "path": "data/v2/dev_image_ids.json",
+    "role": "development image identifiers",
+    "sha256": "730d400da7a99aad3c1155e391ca94c280f7710c4ca7a778ae127c671582694d"
+   },
+   {
+    "path": "results/closure/C_reconstructed_evidence_manifest.json",
+    "role": "closure reconstruction manifest, binds the row evidence",
+    "sha256": "a7c72050f4032d6f0c1c24e9cf5e334db4e1698c31c83c4907513a290e21dff5"
+   },
+   {
+    "path": "results/closure/D_slice_statistics.json",
+    "role": "closure slice statistics, binds the type metadata",
+    "sha256": "0a21059492c9e37b67223757535b379e15d3146cff51d0d378885e9dc39c2088"
+   },
+   {
+    "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+    "path": "results/closure/row_evidence/e2/e2__fusion__train_40k__seed0__normal.npz",
+    "sha256": "e58294cb65c7e0036f53299603e41f28349db75919d47fa2f5b061eefe62921c"
+   },
+   {
+    "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+    "path": "results/closure/row_evidence/v2_02/v2_02__concat__train_40k__seed0__normal.npz",
+    "sha256": "2689f53e9dccd9ae5dd42f0ec3bd43a9a8507481bfe4dfd905f480598c4586ad"
+   },
+   {
+    "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+    "path": "results/closure/row_evidence/v2_02/v2_02__fusion__train_40k__seed0__normal.npz",
+    "sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9"
+   },
+   {
+    "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+    "path": "results/closure/row_evidence/v2_02/v2_02__question_only__train_40k__seed0__normal.npz",
+    "sha256": "68b88653e6f3abd8ca0b1f44a1ca0b2bf0c3f36354f31214166f5d633fe83fc8"
+   },
+   {
+    "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+    "path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__normal.npz",
+    "sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9"
+   },
+   {
+    "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+    "path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__shuffled.npz",
+    "sha256": "d2b1df68571695bdc65cd05f59a8e1e5d040c626b1d44083258e1c9fbe3a6751"
+   },
+   {
+    "hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+    "path": "results/experiments/e10_capacity_360m_core/e10_core_B4_train_40k_seed0_per_row.npz",
+    "sha256": "e89149ab457d86e755d24f7528abc4c0a5feaf4a42bbec76fa1c1e67ddea3a9a"
+   },
+   {
+    "hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+    "path": "results/experiments/e10_capacity_360m_core/e10_core_B4r_train_40k_seed0_per_row.npz",
+    "sha256": "5433835167c26eef8fe7aef9c96afffe59f0e0e12214af58d5b1bc6530944797"
+   },
+   {
+    "hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+    "path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1_train_40k_seed0.csv.gz",
+    "sha256": "b6d55f48db56531284fec187699f706e8d806d151407c462c0cc99b2b69ef86f"
+   },
+   {
+    "hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+    "path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1r_train_40k_seed0.csv.gz",
+    "sha256": "2b72b4915b649b4d756504ae16e11c1a932b5d4df2d7d601dcda3c41e3f4b067"
+   },
+   {
+    "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__normal.npz",
+    "role": "v2_06/image_only per-row predictions",
+    "sha256": "21e17394f9011373bcc30174dbf828c023498bb4bf8e7d4c344496d8e4c769ba"
+   },
+   {
+    "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__shuffled.npz",
+    "role": "v2_06/image_only per-row predictions",
+    "sha256": "eab132ba346b720a1a8a0a58454a393562792abdf092a41fe9eb899a31a403e5"
+   }
+  ],
+  "matplotlib_version": "3.11.0",
+  "measured_anything": false,
+  "numpy_version": "2.5.0",
+  "pandas_version": "3.0.3",
+  "pillow_version": "12.2.0",
+  "python": "3.12.3",
+  "read_any_checkpoint": false,
+  "read_any_embedding_store": false,
+  "repository_head": "73af31953a99a9c1c196f609abf2be0912c321a2",
+  "repository_head_short": "73af319",
+  "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+  "rescored_anything": false,
+  "schema_version": 1,
+  "selected_any_checkpoint": false,
+  "trained_anything": false,
+  "worktree_dirty": true
+ },
+ "record_count": 18,
+ "record_schema_sha256": "898e0a6bfeddfb37196e0d1e4bfc469606bcd663c5283b6fac931cd0e3de4297",
+ "records": [
+  {
+   "category_id": "QC01_all_correct",
+   "gold_answer": "no",
+   "image_id": "2384466",
+   "image_path": "data/gqa/images/2384466.jpg",
+   "image_sha256": "0db6afa4e3f2e7a5f2b7b247369dc66f9a2fbadb29a70f985f050ce788d1d0c3",
+   "limitation": "One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "n_program_steps": 2,
+   "placement": "APPENDIX",
+   "qualitative_id": "VE2-QUAL-QC01_all_correct-01",
+   "question_id": "02541262",
+   "question_text": "Is the man to the right of a boy?",
+   "selection_category_interpretation": "an easy row for every system; illustrative of the task, not of any system's advantage",
+   "selection_rank": 1,
+   "selection_rank_key": "00098b82a4e929d4585b1a63cdd835e6e9721dd4040ce728cf2587e89316f3ea",
+   "semantic_type": "rel",
+   "skipped_ranks": [],
+   "source_hashes": {
+    "development_split": [
+     {
+      "path": "data/v2/dev.csv",
+      "role": "development split manifest",
+      "sha256": "95d1b504dcc4deb7d69ba0c9e293d1c00bae93df4b6907174a1dd615cb93cdc9"
+     },
+     {
+      "path": "data/v2/metadata/dev_types.csv",
+      "role": "question type and program length metadata",
+      "sha256": "2f2308728e3ed499104a5df5b206bc96e26b88f08e84ca72aa6a50c02a46a25f"
+     },
+     {
+      "path": "data/v2/answer_vocab_v2.json",
+      "role": "answer vocabulary",
+      "sha256": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680"
+     },
+     {
+      "path": "data/v2/dev_image_ids.json",
+      "role": "development image identifiers",
+      "sha256": "730d400da7a99aad3c1155e391ca94c280f7710c4ca7a778ae127c671582694d"
+     },
+     {
+      "path": "results/closure/C_reconstructed_evidence_manifest.json",
+      "role": "closure reconstruction manifest, binds the row evidence",
+      "sha256": "a7c72050f4032d6f0c1c24e9cf5e334db4e1698c31c83c4907513a290e21dff5"
+     },
+     {
+      "path": "results/closure/D_slice_statistics.json",
+      "role": "closure slice statistics, binds the type metadata",
+      "sha256": "0a21059492c9e37b67223757535b379e15d3146cff51d0d378885e9dc39c2088"
+     }
+    ],
+    "prediction_sources": [
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/e2/e2__fusion__train_40k__seed0__normal.npz",
+      "sha256": "e58294cb65c7e0036f53299603e41f28349db75919d47fa2f5b061eefe62921c"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__concat__train_40k__seed0__normal.npz",
+      "sha256": "2689f53e9dccd9ae5dd42f0ec3bd43a9a8507481bfe4dfd905f480598c4586ad"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__fusion__train_40k__seed0__normal.npz",
+      "sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__question_only__train_40k__seed0__normal.npz",
+      "sha256": "68b88653e6f3abd8ca0b1f44a1ca0b2bf0c3f36354f31214166f5d633fe83fc8"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__normal.npz",
+      "sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__shuffled.npz",
+      "sha256": "d2b1df68571695bdc65cd05f59a8e1e5d040c626b1d44083258e1c9fbe3a6751"
+     },
+     {
+      "hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4_train_40k_seed0_per_row.npz",
+      "sha256": "e89149ab457d86e755d24f7528abc4c0a5feaf4a42bbec76fa1c1e67ddea3a9a"
+     },
+     {
+      "hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4r_train_40k_seed0_per_row.npz",
+      "sha256": "5433835167c26eef8fe7aef9c96afffe59f0e0e12214af58d5b1bc6530944797"
+     },
+     {
+      "hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1_train_40k_seed0.csv.gz",
+      "sha256": "b6d55f48db56531284fec187699f706e8d806d151407c462c0cc99b2b69ef86f"
+     },
+     {
+      "hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1r_train_40k_seed0.csv.gz",
+      "sha256": "2b72b4915b649b4d756504ae16e11c1a932b5d4df2d7d601dcda3c41e3f4b067"
+     }
+    ],
+    "shuffled_partner_recovery": [
+     {
+      "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__normal.npz",
+      "role": "v2_06/image_only per-row predictions",
+      "sha256": "21e17394f9011373bcc30174dbf828c023498bb4bf8e7d4c344496d8e4c769ba"
+     },
+     {
+      "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__shuffled.npz",
+      "role": "v2_06/image_only per-row predictions",
+      "sha256": "eab132ba346b720a1a8a0a58454a393562792abdf092a41fe9eb899a31a403e5"
+     }
+    ]
+   },
+   "structural_type": "verify",
+   "systems": [
+    {
+     "alignment_proof": {
+      "alignment_method": "question_id, image_id and gold answer compared element-by-element against data/v2/dev.csv",
+      "closure_point_estimate_reproduced": true,
+      "closure_split_identity": "v2 development partition, in-vocabulary view",
+      "expected_row_count": 7714,
+      "gold_answer_matches_split_row_for_row": true,
+      "gold_label_matches_split_row_for_row": true,
+      "image_id_matches_split_row_for_row": true,
+      "question_id_matches_split_row_for_row": true,
+      "row_count": 7714,
+      "verified": true
+     },
+     "arm": "question_only",
+     "condition": "normal",
+     "correct": true,
+     "display_label": "Question-only",
+     "displayed_image": {
+      "image_id": "2384466",
+      "image_path": "data/gqa/images/2384466.jpg",
+      "image_sha256": "0db6afa4e3f2e7a5f2b7b247369dc66f9a2fbadb29a70f985f050ce788d1d0c3",
+      "is_the_questions_own_image": true
+     },
+     "evidence_hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+     "evidence_path": "results/closure/row_evidence/v2_02/v2_02__question_only__train_40k__seed0__normal.npz",
+     "evidence_sha256": "68b88653e6f3abd8ca0b1f44a1ca0b2bf0c3f36354f31214166f5d633fe83fc8",
+     "expansion": "question-only head: a classifier over the frozen CLIP question embedding alone, with no image input",
+     "predicted_answer": "no",
+     "scale": "train_40k",
+     "seed": 0,
+     "system_id": "v2_02/question_only"
+    },
+    {
+     "alignment_proof": {
+      "alignment_method": "question_id, image_id and gold answer compared element-by-element against data/v2/dev.csv",
+      "closure_point_estimate_reproduced": true,
+      "closure_split_identity": "v2 development partition, in-vocabulary view",
+      "expected_row_count": 7714,
+      "gold_answer_matches_split_row_for_row": true,
+      "gold_label_matches_split_row_for_row": true,
+      "image_id_matches_split_row_for_row": true,
+      "question_id_matches_split_row_for_row": true,
+      "row_count": 7714,
+      "verified": true
+     },
+     "arm": "concat",
+     "condition": "normal",
+     "correct": true,
+     "display_label": "Concatenation",
+     "displayed_image": {
+      "image_id": "2384466",
+      "image_path": "data/gqa/images/2384466.jpg",
+      "image_sha256": "0db6afa4e3f2e7a5f2b7b247369dc66f9a2fbadb29a70f985f050ce788d1d0c3",
+      "is_the_questions_own_image": true
+     },
+     "evidence_hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+     "evidence_path": "results/closure/row_evidence/v2_02/v2_02__concat__train_40k__seed0__normal.npz",
+     "evidence_sha256": "2689f53e9dccd9ae5dd42f0ec3bd43a9a8507481bfe4dfd905f480598c4586ad",
+     "expansion": "concatenation head: a classifier over the frozen CLIP image and question embeddings concatenated",
+     "predicted_answer": "no",
+     "scale": "train_40k",
+     "seed": 0,
+     "system_id": "v2_02/concat"
+    },
+    {
+     "alignment_proof": {
+      "alignment_method": "question_id, image_id and gold answer compared element-by-element against data/v2/dev.csv",
+      "closure_point_estimate_reproduced": true,
+      "closure_split_identity": "v2 development partition, in-vocabulary view",
+      "expected_row_count": 7714,
+      "gold_answer_matches_split_row_for_row": true,
+      "gold_label_matches_split_row_for_row": true,
+      "image_id_matches_split_row_for_row": true,
+      "question_id_matches_split_row_for_row": true,
+      "row_count": 7714,
+      "verified": true
+     },
+     "arm": "fusion",
+     "condition": "normal",
+     "correct": true,
+     "display_label": "Fusion",
+     "displayed_image": {
+      "image_id": "2384466",
+      "image_path": "data/gqa/images/2384466.jpg",
+      "image_sha256": "0db6afa4e3f2e7a5f2b7b247369dc66f9a2fbadb29a70f985f050ce788d1d0c3",
+      "is_the_questions_own_image": true
+     },
+     "evidence_hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+     "evidence_path": "results/closure/row_evidence/v2_02/v2_02__fusion__train_40k__seed0__normal.npz",
+     "evidence_sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9",
+     "expansion": "fusion head: the concatenation plus the elementwise product and absolute difference of the two embeddings",
+     "predicted_answer": "no",
+     "scale": "train_40k",
+     "seed": 0,
+     "system_id": "v2_02/fusion"
+    }
+   ]
+  },
+  {
+   "category_id": "QC01_all_correct",
+   "gold_answer": "yes",
+   "image_id": "2340934",
+   "image_path": "data/gqa/images/2340934.jpg",
+   "image_sha256": "8144659fa766b59c29d15db345f96f17ad6548e8f8032edad05bfed3f888be07",
+   "limitation": "One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "n_program_steps": 5,
+   "placement": "APPENDIX",
+   "qualitative_id": "VE2-QUAL-QC01_all_correct-02",
+   "question_id": "03842019",
+   "question_text": "Are there either any shelves or computers?",
+   "selection_category_interpretation": "an easy row for every system; illustrative of the task, not of any system's advantage",
+   "selection_rank": 2,
+   "selection_rank_key": "004377ef57f3e97c2e233ce763960f4e3472677f736a9896543f2d8d6d001130",
+   "semantic_type": "obj",
+   "skipped_ranks": [],
+   "source_hashes": {
+    "development_split": [
+     {
+      "path": "data/v2/dev.csv",
+      "role": "development split manifest",
+      "sha256": "95d1b504dcc4deb7d69ba0c9e293d1c00bae93df4b6907174a1dd615cb93cdc9"
+     },
+     {
+      "path": "data/v2/metadata/dev_types.csv",
+      "role": "question type and program length metadata",
+      "sha256": "2f2308728e3ed499104a5df5b206bc96e26b88f08e84ca72aa6a50c02a46a25f"
+     },
+     {
+      "path": "data/v2/answer_vocab_v2.json",
+      "role": "answer vocabulary",
+      "sha256": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680"
+     },
+     {
+      "path": "data/v2/dev_image_ids.json",
+      "role": "development image identifiers",
+      "sha256": "730d400da7a99aad3c1155e391ca94c280f7710c4ca7a778ae127c671582694d"
+     },
+     {
+      "path": "results/closure/C_reconstructed_evidence_manifest.json",
+      "role": "closure reconstruction manifest, binds the row evidence",
+      "sha256": "a7c72050f4032d6f0c1c24e9cf5e334db4e1698c31c83c4907513a290e21dff5"
+     },
+     {
+      "path": "results/closure/D_slice_statistics.json",
+      "role": "closure slice statistics, binds the type metadata",
+      "sha256": "0a21059492c9e37b67223757535b379e15d3146cff51d0d378885e9dc39c2088"
+     }
+    ],
+    "prediction_sources": [
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/e2/e2__fusion__train_40k__seed0__normal.npz",
+      "sha256": "e58294cb65c7e0036f53299603e41f28349db75919d47fa2f5b061eefe62921c"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__concat__train_40k__seed0__normal.npz",
+      "sha256": "2689f53e9dccd9ae5dd42f0ec3bd43a9a8507481bfe4dfd905f480598c4586ad"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__fusion__train_40k__seed0__normal.npz",
+      "sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__question_only__train_40k__seed0__normal.npz",
+      "sha256": "68b88653e6f3abd8ca0b1f44a1ca0b2bf0c3f36354f31214166f5d633fe83fc8"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__normal.npz",
+      "sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__shuffled.npz",
+      "sha256": "d2b1df68571695bdc65cd05f59a8e1e5d040c626b1d44083258e1c9fbe3a6751"
+     },
+     {
+      "hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4_train_40k_seed0_per_row.npz",
+      "sha256": "e89149ab457d86e755d24f7528abc4c0a5feaf4a42bbec76fa1c1e67ddea3a9a"
+     },
+     {
+      "hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4r_train_40k_seed0_per_row.npz",
+      "sha256": "5433835167c26eef8fe7aef9c96afffe59f0e0e12214af58d5b1bc6530944797"
+     },
+     {
+      "hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1_train_40k_seed0.csv.gz",
+      "sha256": "b6d55f48db56531284fec187699f706e8d806d151407c462c0cc99b2b69ef86f"
+     },
+     {
+      "hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1r_train_40k_seed0.csv.gz",
+      "sha256": "2b72b4915b649b4d756504ae16e11c1a932b5d4df2d7d601dcda3c41e3f4b067"
+     }
+    ],
+    "shuffled_partner_recovery": [
+     {
+      "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__normal.npz",
+      "role": "v2_06/image_only per-row predictions",
+      "sha256": "21e17394f9011373bcc30174dbf828c023498bb4bf8e7d4c344496d8e4c769ba"
+     },
+     {
+      "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__shuffled.npz",
+      "role": "v2_06/image_only per-row predictions",
+      "sha256": "eab132ba346b720a1a8a0a58454a393562792abdf092a41fe9eb899a31a403e5"
+     }
+    ]
+   },
+   "structural_type": "logical",
+   "systems": [
+    {
+     "alignment_proof": {
+      "alignment_method": "question_id, image_id and gold answer compared element-by-element against data/v2/dev.csv",
+      "closure_point_estimate_reproduced": true,
+      "closure_split_identity": "v2 development partition, in-vocabulary view",
+      "expected_row_count": 7714,
+      "gold_answer_matches_split_row_for_row": true,
+      "gold_label_matches_split_row_for_row": true,
+      "image_id_matches_split_row_for_row": true,
+      "question_id_matches_split_row_for_row": true,
+      "row_count": 7714,
+      "verified": true
+     },
+     "arm": "question_only",
+     "condition": "normal",
+     "correct": true,
+     "display_label": "Question-only",
+     "displayed_image": {
+      "image_id": "2340934",
+      "image_path": "data/gqa/images/2340934.jpg",
+      "image_sha256": "8144659fa766b59c29d15db345f96f17ad6548e8f8032edad05bfed3f888be07",
+      "is_the_questions_own_image": true
+     },
+     "evidence_hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+     "evidence_path": "results/closure/row_evidence/v2_02/v2_02__question_only__train_40k__seed0__normal.npz",
+     "evidence_sha256": "68b88653e6f3abd8ca0b1f44a1ca0b2bf0c3f36354f31214166f5d633fe83fc8",
+     "expansion": "question-only head: a classifier over the frozen CLIP question embedding alone, with no image input",
+     "predicted_answer": "yes",
+     "scale": "train_40k",
+     "seed": 0,
+     "system_id": "v2_02/question_only"
+    },
+    {
+     "alignment_proof": {
+      "alignment_method": "question_id, image_id and gold answer compared element-by-element against data/v2/dev.csv",
+      "closure_point_estimate_reproduced": true,
+      "closure_split_identity": "v2 development partition, in-vocabulary view",
+      "expected_row_count": 7714,
+      "gold_answer_matches_split_row_for_row": true,
+      "gold_label_matches_split_row_for_row": true,
+      "image_id_matches_split_row_for_row": true,
+      "question_id_matches_split_row_for_row": true,
+      "row_count": 7714,
+      "verified": true
+     },
+     "arm": "concat",
+     "condition": "normal",
+     "correct": true,
+     "display_label": "Concatenation",
+     "displayed_image": {
+      "image_id": "2340934",
+      "image_path": "data/gqa/images/2340934.jpg",
+      "image_sha256": "8144659fa766b59c29d15db345f96f17ad6548e8f8032edad05bfed3f888be07",
+      "is_the_questions_own_image": true
+     },
+     "evidence_hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+     "evidence_path": "results/closure/row_evidence/v2_02/v2_02__concat__train_40k__seed0__normal.npz",
+     "evidence_sha256": "2689f53e9dccd9ae5dd42f0ec3bd43a9a8507481bfe4dfd905f480598c4586ad",
+     "expansion": "concatenation head: a classifier over the frozen CLIP image and question embeddings concatenated",
+     "predicted_answer": "yes",
+     "scale": "train_40k",
+     "seed": 0,
+     "system_id": "v2_02/concat"
+    },
+    {
+     "alignment_proof": {
+      "alignment_method": "question_id, image_id and gold answer compared element-by-element against data/v2/dev.csv",
+      "closure_point_estimate_reproduced": true,
+      "closure_split_identity": "v2 development partition, in-vocabulary view",
+      "expected_row_count": 7714,
+      "gold_answer_matches_split_row_for_row": true,
+      "gold_label_matches_split_row_for_row": true,
+      "image_id_matches_split_row_for_row": true,
+      "question_id_matches_split_row_for_row": true,
+      "row_count": 7714,
+      "verified": true
+     },
+     "arm": "fusion",
+     "condition": "normal",
+     "correct": true,
+     "display_label": "Fusion",
+     "displayed_image": {
+      "image_id": "2340934",
+      "image_path": "data/gqa/images/2340934.jpg",
+      "image_sha256": "8144659fa766b59c29d15db345f96f17ad6548e8f8032edad05bfed3f888be07",
+      "is_the_questions_own_image": true
+     },
+     "evidence_hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+     "evidence_path": "results/closure/row_evidence/v2_02/v2_02__fusion__train_40k__seed0__normal.npz",
+     "evidence_sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9",
+     "expansion": "fusion head: the concatenation plus the elementwise product and absolute difference of the two embeddings",
+     "predicted_answer": "yes",
+     "scale": "train_40k",
+     "seed": 0,
+     "system_id": "v2_02/fusion"
+    }
+   ]
+  },
+  {
+   "category_id": "QC02_all_wrong",
+   "gold_answer": "jeans",
+   "image_id": "2385131",
+   "image_path": "data/gqa/images/2385131.jpg",
+   "image_sha256": "dbaedcf950a14b2795e1dea131b9c935bbc6ff25b1a86aaf54afd5ff8c31d8d8",
+   "limitation": "One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "n_program_steps": 4,
+   "placement": "MAIN_TEXT",
+   "qualitative_id": "VE2-QUAL-QC02_all_wrong-01",
+   "question_id": "10600430",
+   "question_text": "What is the person to the left of the taxi cab wearing?",
+   "selection_category_interpretation": "a shared failure. It does not identify a cause and must not be captioned as a reasoning failure without independent evidence",
+   "selection_rank": 1,
+   "selection_rank_key": "000253df116240ded76c5db9036393b826d346e9448d3d949d157b371436f911",
+   "semantic_type": "rel",
+   "skipped_ranks": [],
+   "source_hashes": {
+    "development_split": [
+     {
+      "path": "data/v2/dev.csv",
+      "role": "development split manifest",
+      "sha256": "95d1b504dcc4deb7d69ba0c9e293d1c00bae93df4b6907174a1dd615cb93cdc9"
+     },
+     {
+      "path": "data/v2/metadata/dev_types.csv",
+      "role": "question type and program length metadata",
+      "sha256": "2f2308728e3ed499104a5df5b206bc96e26b88f08e84ca72aa6a50c02a46a25f"
+     },
+     {
+      "path": "data/v2/answer_vocab_v2.json",
+      "role": "answer vocabulary",
+      "sha256": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680"
+     },
+     {
+      "path": "data/v2/dev_image_ids.json",
+      "role": "development image identifiers",
+      "sha256": "730d400da7a99aad3c1155e391ca94c280f7710c4ca7a778ae127c671582694d"
+     },
+     {
+      "path": "results/closure/C_reconstructed_evidence_manifest.json",
+      "role": "closure reconstruction manifest, binds the row evidence",
+      "sha256": "a7c72050f4032d6f0c1c24e9cf5e334db4e1698c31c83c4907513a290e21dff5"
+     },
+     {
+      "path": "results/closure/D_slice_statistics.json",
+      "role": "closure slice statistics, binds the type metadata",
+      "sha256": "0a21059492c9e37b67223757535b379e15d3146cff51d0d378885e9dc39c2088"
+     }
+    ],
+    "prediction_sources": [
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/e2/e2__fusion__train_40k__seed0__normal.npz",
+      "sha256": "e58294cb65c7e0036f53299603e41f28349db75919d47fa2f5b061eefe62921c"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__concat__train_40k__seed0__normal.npz",
+      "sha256": "2689f53e9dccd9ae5dd42f0ec3bd43a9a8507481bfe4dfd905f480598c4586ad"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__fusion__train_40k__seed0__normal.npz",
+      "sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__question_only__train_40k__seed0__normal.npz",
+      "sha256": "68b88653e6f3abd8ca0b1f44a1ca0b2bf0c3f36354f31214166f5d633fe83fc8"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__normal.npz",
+      "sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__shuffled.npz",
+      "sha256": "d2b1df68571695bdc65cd05f59a8e1e5d040c626b1d44083258e1c9fbe3a6751"
+     },
+     {
+      "hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4_train_40k_seed0_per_row.npz",
+      "sha256": "e89149ab457d86e755d24f7528abc4c0a5feaf4a42bbec76fa1c1e67ddea3a9a"
+     },
+     {
+      "hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4r_train_40k_seed0_per_row.npz",
+      "sha256": "5433835167c26eef8fe7aef9c96afffe59f0e0e12214af58d5b1bc6530944797"
+     },
+     {
+      "hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1_train_40k_seed0.csv.gz",
+      "sha256": "b6d55f48db56531284fec187699f706e8d806d151407c462c0cc99b2b69ef86f"
+     },
+     {
+      "hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1r_train_40k_seed0.csv.gz",
+      "sha256": "2b72b4915b649b4d756504ae16e11c1a932b5d4df2d7d601dcda3c41e3f4b067"
+     }
+    ],
+    "shuffled_partner_recovery": [
+     {
+      "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__normal.npz",
+      "role": "v2_06/image_only per-row predictions",
+      "sha256": "21e17394f9011373bcc30174dbf828c023498bb4bf8e7d4c344496d8e4c769ba"
+     },
+     {
+      "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__shuffled.npz",
+      "role": "v2_06/image_only per-row predictions",
+      "sha256": "eab132ba346b720a1a8a0a58454a393562792abdf092a41fe9eb899a31a403e5"
+     }
+    ]
+   },
+   "structural_type": "query",
+   "systems": [
+    {
+     "alignment_proof": {
+      "alignment_method": "question_id, image_id and gold answer compared element-by-element against data/v2/dev.csv",
+      "closure_point_estimate_reproduced": true,
+      "closure_split_identity": "v2 development partition, in-vocabulary view",
+      "expected_row_count": 7714,
+      "gold_answer_matches_split_row_for_row": true,
+      "gold_label_matches_split_row_for_row": true,
+      "image_id_matches_split_row_for_row": true,
+      "question_id_matches_split_row_for_row": true,
+      "row_count": 7714,
+      "verified": true
+     },
+     "arm": "question_only",
+     "condition": "normal",
+     "correct": false,
+     "display_label": "Question-only",
+     "displayed_image": {
+      "image_id": "2385131",
+      "image_path": "data/gqa/images/2385131.jpg",
+      "image_sha256": "dbaedcf950a14b2795e1dea131b9c935bbc6ff25b1a86aaf54afd5ff8c31d8d8",
+      "is_the_questions_own_image": true
+     },
+     "evidence_hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+     "evidence_path": "results/closure/row_evidence/v2_02/v2_02__question_only__train_40k__seed0__normal.npz",
+     "evidence_sha256": "68b88653e6f3abd8ca0b1f44a1ca0b2bf0c3f36354f31214166f5d633fe83fc8",
+     "expansion": "question-only head: a classifier over the frozen CLIP question embedding alone, with no image input",
+     "predicted_answer": "shirt",
+     "scale": "train_40k",
+     "seed": 0,
+     "system_id": "v2_02/question_only"
+    },
+    {
+     "alignment_proof": {
+      "alignment_method": "question_id, image_id and gold answer compared element-by-element against data/v2/dev.csv",
+      "closure_point_estimate_reproduced": true,
+      "closure_split_identity": "v2 development partition, in-vocabulary view",
+      "expected_row_count": 7714,
+      "gold_answer_matches_split_row_for_row": true,
+      "gold_label_matches_split_row_for_row": true,
+      "image_id_matches_split_row_for_row": true,
+      "question_id_matches_split_row_for_row": true,
+      "row_count": 7714,
+      "verified": true
+     },
+     "arm": "concat",
+     "condition": "normal",
+     "correct": false,
+     "display_label": "Concatenation",
+     "displayed_image": {
+      "image_id": "2385131",
+      "image_path": "data/gqa/images/2385131.jpg",
+      "image_sha256": "dbaedcf950a14b2795e1dea131b9c935bbc6ff25b1a86aaf54afd5ff8c31d8d8",
+      "is_the_questions_own_image": true
+     },
+     "evidence_hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+     "evidence_path": "results/closure/row_evidence/v2_02/v2_02__concat__train_40k__seed0__normal.npz",
+     "evidence_sha256": "2689f53e9dccd9ae5dd42f0ec3bd43a9a8507481bfe4dfd905f480598c4586ad",
+     "expansion": "concatenation head: a classifier over the frozen CLIP image and question embeddings concatenated",
+     "predicted_answer": "truck",
+     "scale": "train_40k",
+     "seed": 0,
+     "system_id": "v2_02/concat"
+    },
+    {
+     "alignment_proof": {
+      "alignment_method": "question_id, image_id and gold answer compared element-by-element against data/v2/dev.csv",
+      "closure_point_estimate_reproduced": true,
+      "closure_split_identity": "v2 development partition, in-vocabulary view",
+      "expected_row_count": 7714,
+      "gold_answer_matches_split_row_for_row": true,
+      "gold_label_matches_split_row_for_row": true,
+      "image_id_matches_split_row_for_row": true,
+      "question_id_matches_split_row_for_row": true,
+      "row_count": 7714,
+      "verified": true
+     },
+     "arm": "fusion",
+     "condition": "normal",
+     "correct": false,
+     "display_label": "Fusion",
+     "displayed_image": {
+      "image_id": "2385131",
+      "image_path": "data/gqa/images/2385131.jpg",
+      "image_sha256": "dbaedcf950a14b2795e1dea131b9c935bbc6ff25b1a86aaf54afd5ff8c31d8d8",
+      "is_the_questions_own_image": true
+     },
+     "evidence_hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+     "evidence_path": "results/closure/row_evidence/v2_02/v2_02__fusion__train_40k__seed0__normal.npz",
+     "evidence_sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9",
+     "expansion": "fusion head: the concatenation plus the elementwise product and absolute difference of the two embeddings",
+     "predicted_answer": "truck",
+     "scale": "train_40k",
+     "seed": 0,
+     "system_id": "v2_02/fusion"
+    }
+   ]
+  },
+  {
+   "category_id": "QC02_all_wrong",
+   "gold_answer": "gray",
+   "image_id": "2384279",
+   "image_path": "data/gqa/images/2384279.jpg",
+   "image_sha256": "4b2ebd567bbe5eff30eec7bff9a5fb106d107c0c9c14c258d15bdf01f31b76b1",
+   "limitation": "One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "n_program_steps": 2,
+   "placement": "MAIN_TEXT",
+   "qualitative_id": "VE2-QUAL-QC02_all_wrong-02",
+   "question_id": "071060289",
+   "question_text": "What color do you think the water has?",
+   "selection_category_interpretation": "a shared failure. It does not identify a cause and must not be captioned as a reasoning failure without independent evidence",
+   "selection_rank": 2,
+   "selection_rank_key": "001143963b88c9cef428717286deca4b3ceaf35bcda8beef760924878909eb2a",
+   "semantic_type": "attr",
+   "skipped_ranks": [],
+   "source_hashes": {
+    "development_split": [
+     {
+      "path": "data/v2/dev.csv",
+      "role": "development split manifest",
+      "sha256": "95d1b504dcc4deb7d69ba0c9e293d1c00bae93df4b6907174a1dd615cb93cdc9"
+     },
+     {
+      "path": "data/v2/metadata/dev_types.csv",
+      "role": "question type and program length metadata",
+      "sha256": "2f2308728e3ed499104a5df5b206bc96e26b88f08e84ca72aa6a50c02a46a25f"
+     },
+     {
+      "path": "data/v2/answer_vocab_v2.json",
+      "role": "answer vocabulary",
+      "sha256": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680"
+     },
+     {
+      "path": "data/v2/dev_image_ids.json",
+      "role": "development image identifiers",
+      "sha256": "730d400da7a99aad3c1155e391ca94c280f7710c4ca7a778ae127c671582694d"
+     },
+     {
+      "path": "results/closure/C_reconstructed_evidence_manifest.json",
+      "role": "closure reconstruction manifest, binds the row evidence",
+      "sha256": "a7c72050f4032d6f0c1c24e9cf5e334db4e1698c31c83c4907513a290e21dff5"
+     },
+     {
+      "path": "results/closure/D_slice_statistics.json",
+      "role": "closure slice statistics, binds the type metadata",
+      "sha256": "0a21059492c9e37b67223757535b379e15d3146cff51d0d378885e9dc39c2088"
+     }
+    ],
+    "prediction_sources": [
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/e2/e2__fusion__train_40k__seed0__normal.npz",
+      "sha256": "e58294cb65c7e0036f53299603e41f28349db75919d47fa2f5b061eefe62921c"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__concat__train_40k__seed0__normal.npz",
+      "sha256": "2689f53e9dccd9ae5dd42f0ec3bd43a9a8507481bfe4dfd905f480598c4586ad"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__fusion__train_40k__seed0__normal.npz",
+      "sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__question_only__train_40k__seed0__normal.npz",
+      "sha256": "68b88653e6f3abd8ca0b1f44a1ca0b2bf0c3f36354f31214166f5d633fe83fc8"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__normal.npz",
+      "sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__shuffled.npz",
+      "sha256": "d2b1df68571695bdc65cd05f59a8e1e5d040c626b1d44083258e1c9fbe3a6751"
+     },
+     {
+      "hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4_train_40k_seed0_per_row.npz",
+      "sha256": "e89149ab457d86e755d24f7528abc4c0a5feaf4a42bbec76fa1c1e67ddea3a9a"
+     },
+     {
+      "hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4r_train_40k_seed0_per_row.npz",
+      "sha256": "5433835167c26eef8fe7aef9c96afffe59f0e0e12214af58d5b1bc6530944797"
+     },
+     {
+      "hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1_train_40k_seed0.csv.gz",
+      "sha256": "b6d55f48db56531284fec187699f706e8d806d151407c462c0cc99b2b69ef86f"
+     },
+     {
+      "hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1r_train_40k_seed0.csv.gz",
+      "sha256": "2b72b4915b649b4d756504ae16e11c1a932b5d4df2d7d601dcda3c41e3f4b067"
+     }
+    ],
+    "shuffled_partner_recovery": [
+     {
+      "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__normal.npz",
+      "role": "v2_06/image_only per-row predictions",
+      "sha256": "21e17394f9011373bcc30174dbf828c023498bb4bf8e7d4c344496d8e4c769ba"
+     },
+     {
+      "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__shuffled.npz",
+      "role": "v2_06/image_only per-row predictions",
+      "sha256": "eab132ba346b720a1a8a0a58454a393562792abdf092a41fe9eb899a31a403e5"
+     }
+    ]
+   },
+   "structural_type": "query",
+   "systems": [
+    {
+     "alignment_proof": {
+      "alignment_method": "question_id, image_id and gold answer compared element-by-element against data/v2/dev.csv",
+      "closure_point_estimate_reproduced": true,
+      "closure_split_identity": "v2 development partition, in-vocabulary view",
+      "expected_row_count": 7714,
+      "gold_answer_matches_split_row_for_row": true,
+      "gold_label_matches_split_row_for_row": true,
+      "image_id_matches_split_row_for_row": true,
+      "question_id_matches_split_row_for_row": true,
+      "row_count": 7714,
+      "verified": true
+     },
+     "arm": "question_only",
+     "condition": "normal",
+     "correct": false,
+     "display_label": "Question-only",
+     "displayed_image": {
+      "image_id": "2384279",
+      "image_path": "data/gqa/images/2384279.jpg",
+      "image_sha256": "4b2ebd567bbe5eff30eec7bff9a5fb106d107c0c9c14c258d15bdf01f31b76b1",
+      "is_the_questions_own_image": true
+     },
+     "evidence_hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+     "evidence_path": "results/closure/row_evidence/v2_02/v2_02__question_only__train_40k__seed0__normal.npz",
+     "evidence_sha256": "68b88653e6f3abd8ca0b1f44a1ca0b2bf0c3f36354f31214166f5d633fe83fc8",
+     "expansion": "question-only head: a classifier over the frozen CLIP question embedding alone, with no image input",
+     "predicted_answer": "blue",
+     "scale": "train_40k",
+     "seed": 0,
+     "system_id": "v2_02/question_only"
+    },
+    {
+     "alignment_proof": {
+      "alignment_method": "question_id, image_id and gold answer compared element-by-element against data/v2/dev.csv",
+      "closure_point_estimate_reproduced": true,
+      "closure_split_identity": "v2 development partition, in-vocabulary view",
+      "expected_row_count": 7714,
+      "gold_answer_matches_split_row_for_row": true,
+      "gold_label_matches_split_row_for_row": true,
+      "image_id_matches_split_row_for_row": true,
+      "question_id_matches_split_row_for_row": true,
+      "row_count": 7714,
+      "verified": true
+     },
+     "arm": "concat",
+     "condition": "normal",
+     "correct": false,
+     "display_label": "Concatenation",
+     "displayed_image": {
+      "image_id": "2384279",
+      "image_path": "data/gqa/images/2384279.jpg",
+      "image_sha256": "4b2ebd567bbe5eff30eec7bff9a5fb106d107c0c9c14c258d15bdf01f31b76b1",
+      "is_the_questions_own_image": true
+     },
+     "evidence_hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+     "evidence_path": "results/closure/row_evidence/v2_02/v2_02__concat__train_40k__seed0__normal.npz",
+     "evidence_sha256": "2689f53e9dccd9ae5dd42f0ec3bd43a9a8507481bfe4dfd905f480598c4586ad",
+     "expansion": "concatenation head: a classifier over the frozen CLIP image and question embeddings concatenated",
+     "predicted_answer": "brown",
+     "scale": "train_40k",
+     "seed": 0,
+     "system_id": "v2_02/concat"
+    },
+    {
+     "alignment_proof": {
+      "alignment_method": "question_id, image_id and gold answer compared element-by-element against data/v2/dev.csv",
+      "closure_point_estimate_reproduced": true,
+      "closure_split_identity": "v2 development partition, in-vocabulary view",
+      "expected_row_count": 7714,
+      "gold_answer_matches_split_row_for_row": true,
+      "gold_label_matches_split_row_for_row": true,
+      "image_id_matches_split_row_for_row": true,
+      "question_id_matches_split_row_for_row": true,
+      "row_count": 7714,
+      "verified": true
+     },
+     "arm": "fusion",
+     "condition": "normal",
+     "correct": false,
+     "display_label": "Fusion",
+     "displayed_image": {
+      "image_id": "2384279",
+      "image_path": "data/gqa/images/2384279.jpg",
+      "image_sha256": "4b2ebd567bbe5eff30eec7bff9a5fb106d107c0c9c14c258d15bdf01f31b76b1",
+      "is_the_questions_own_image": true
+     },
+     "evidence_hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+     "evidence_path": "results/closure/row_evidence/v2_02/v2_02__fusion__train_40k__seed0__normal.npz",
+     "evidence_sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9",
+     "expansion": "fusion head: the concatenation plus the elementwise product and absolute difference of the two embeddings",
+     "predicted_answer": "brown",
+     "scale": "train_40k",
+     "seed": 0,
+     "system_id": "v2_02/fusion"
+    }
+   ]
+  },
+  {
+   "category_id": "QC03_fusion_right_concat_wrong",
+   "gold_answer": "right",
+   "image_id": "2320225",
+   "image_path": "data/gqa/images/2320225.jpg",
+   "image_sha256": "a93673b5f44629c9636a56d258b31b5eac17a23f9433dca4fb091678f53cdea7",
+   "limitation": "One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "n_program_steps": 3,
+   "placement": "MAIN_TEXT",
+   "qualitative_id": "VE2-QUAL-QC03_fusion_right_concat_wrong-01",
+   "question_id": "10869363",
+   "question_text": "On which side is the red vehicle?",
+   "selection_category_interpretation": "one row where the two systems disagree. It illustrates the aggregate contrast; it is not evidence for it, and the aggregate contrast is capacity-confounded",
+   "selection_rank": 1,
+   "selection_rank_key": "002f92b4c3894b41e49eb6e8c70fd082479aafdc269e5ed7b6231bf2e48aabe4",
+   "semantic_type": "attr",
+   "skipped_ranks": [],
+   "source_hashes": {
+    "development_split": [
+     {
+      "path": "data/v2/dev.csv",
+      "role": "development split manifest",
+      "sha256": "95d1b504dcc4deb7d69ba0c9e293d1c00bae93df4b6907174a1dd615cb93cdc9"
+     },
+     {
+      "path": "data/v2/metadata/dev_types.csv",
+      "role": "question type and program length metadata",
+      "sha256": "2f2308728e3ed499104a5df5b206bc96e26b88f08e84ca72aa6a50c02a46a25f"
+     },
+     {
+      "path": "data/v2/answer_vocab_v2.json",
+      "role": "answer vocabulary",
+      "sha256": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680"
+     },
+     {
+      "path": "data/v2/dev_image_ids.json",
+      "role": "development image identifiers",
+      "sha256": "730d400da7a99aad3c1155e391ca94c280f7710c4ca7a778ae127c671582694d"
+     },
+     {
+      "path": "results/closure/C_reconstructed_evidence_manifest.json",
+      "role": "closure reconstruction manifest, binds the row evidence",
+      "sha256": "a7c72050f4032d6f0c1c24e9cf5e334db4e1698c31c83c4907513a290e21dff5"
+     },
+     {
+      "path": "results/closure/D_slice_statistics.json",
+      "role": "closure slice statistics, binds the type metadata",
+      "sha256": "0a21059492c9e37b67223757535b379e15d3146cff51d0d378885e9dc39c2088"
+     }
+    ],
+    "prediction_sources": [
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/e2/e2__fusion__train_40k__seed0__normal.npz",
+      "sha256": "e58294cb65c7e0036f53299603e41f28349db75919d47fa2f5b061eefe62921c"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__concat__train_40k__seed0__normal.npz",
+      "sha256": "2689f53e9dccd9ae5dd42f0ec3bd43a9a8507481bfe4dfd905f480598c4586ad"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__fusion__train_40k__seed0__normal.npz",
+      "sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__question_only__train_40k__seed0__normal.npz",
+      "sha256": "68b88653e6f3abd8ca0b1f44a1ca0b2bf0c3f36354f31214166f5d633fe83fc8"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__normal.npz",
+      "sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__shuffled.npz",
+      "sha256": "d2b1df68571695bdc65cd05f59a8e1e5d040c626b1d44083258e1c9fbe3a6751"
+     },
+     {
+      "hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4_train_40k_seed0_per_row.npz",
+      "sha256": "e89149ab457d86e755d24f7528abc4c0a5feaf4a42bbec76fa1c1e67ddea3a9a"
+     },
+     {
+      "hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4r_train_40k_seed0_per_row.npz",
+      "sha256": "5433835167c26eef8fe7aef9c96afffe59f0e0e12214af58d5b1bc6530944797"
+     },
+     {
+      "hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1_train_40k_seed0.csv.gz",
+      "sha256": "b6d55f48db56531284fec187699f706e8d806d151407c462c0cc99b2b69ef86f"
+     },
+     {
+      "hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1r_train_40k_seed0.csv.gz",
+      "sha256": "2b72b4915b649b4d756504ae16e11c1a932b5d4df2d7d601dcda3c41e3f4b067"
+     }
+    ],
+    "shuffled_partner_recovery": [
+     {
+      "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__normal.npz",
+      "role": "v2_06/image_only per-row predictions",
+      "sha256": "21e17394f9011373bcc30174dbf828c023498bb4bf8e7d4c344496d8e4c769ba"
+     },
+     {
+      "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__shuffled.npz",
+      "role": "v2_06/image_only per-row predictions",
+      "sha256": "eab132ba346b720a1a8a0a58454a393562792abdf092a41fe9eb899a31a403e5"
+     }
+    ]
+   },
+   "structural_type": "query",
+   "systems": [
+    {
+     "alignment_proof": {
+      "alignment_method": "question_id, image_id and gold answer compared element-by-element against data/v2/dev.csv",
+      "closure_point_estimate_reproduced": true,
+      "closure_split_identity": "v2 development partition, in-vocabulary view",
+      "expected_row_count": 7714,
+      "gold_answer_matches_split_row_for_row": true,
+      "gold_label_matches_split_row_for_row": true,
+      "image_id_matches_split_row_for_row": true,
+      "question_id_matches_split_row_for_row": true,
+      "row_count": 7714,
+      "verified": true
+     },
+     "arm": "concat",
+     "condition": "normal",
+     "correct": false,
+     "display_label": "Concatenation",
+     "displayed_image": {
+      "image_id": "2320225",
+      "image_path": "data/gqa/images/2320225.jpg",
+      "image_sha256": "a93673b5f44629c9636a56d258b31b5eac17a23f9433dca4fb091678f53cdea7",
+      "is_the_questions_own_image": true
+     },
+     "evidence_hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+     "evidence_path": "results/closure/row_evidence/v2_02/v2_02__concat__train_40k__seed0__normal.npz",
+     "evidence_sha256": "2689f53e9dccd9ae5dd42f0ec3bd43a9a8507481bfe4dfd905f480598c4586ad",
+     "expansion": "concatenation head: a classifier over the frozen CLIP image and question embeddings concatenated",
+     "predicted_answer": "left",
+     "scale": "train_40k",
+     "seed": 0,
+     "system_id": "v2_02/concat"
+    },
+    {
+     "alignment_proof": {
+      "alignment_method": "question_id, image_id and gold answer compared element-by-element against data/v2/dev.csv",
+      "closure_point_estimate_reproduced": true,
+      "closure_split_identity": "v2 development partition, in-vocabulary view",
+      "expected_row_count": 7714,
+      "gold_answer_matches_split_row_for_row": true,
+      "gold_label_matches_split_row_for_row": true,
+      "image_id_matches_split_row_for_row": true,
+      "question_id_matches_split_row_for_row": true,
+      "row_count": 7714,
+      "verified": true
+     },
+     "arm": "fusion",
+     "condition": "normal",
+     "correct": true,
+     "display_label": "Fusion",
+     "displayed_image": {
+      "image_id": "2320225",
+      "image_path": "data/gqa/images/2320225.jpg",
+      "image_sha256": "a93673b5f44629c9636a56d258b31b5eac17a23f9433dca4fb091678f53cdea7",
+      "is_the_questions_own_image": true
+     },
+     "evidence_hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+     "evidence_path": "results/closure/row_evidence/v2_02/v2_02__fusion__train_40k__seed0__normal.npz",
+     "evidence_sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9",
+     "expansion": "fusion head: the concatenation plus the elementwise product and absolute difference of the two embeddings",
+     "predicted_answer": "right",
+     "scale": "train_40k",
+     "seed": 0,
+     "system_id": "v2_02/fusion"
+    }
+   ]
+  },
+  {
+   "category_id": "QC03_fusion_right_concat_wrong",
+   "gold_answer": "brown",
+   "image_id": "2364920",
+   "image_path": "data/gqa/images/2364920.jpg",
+   "image_sha256": "528374681dff7de19bb9c5cffd1f748f36d39bd3417a4b75f0218a918e9e3923",
+   "limitation": "One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "n_program_steps": 3,
+   "placement": "MAIN_TEXT",
+   "qualitative_id": "VE2-QUAL-QC03_fusion_right_concat_wrong-02",
+   "question_id": "101012371",
+   "question_text": "What color does the animal that the lamb is below have?",
+   "selection_category_interpretation": "one row where the two systems disagree. It illustrates the aggregate contrast; it is not evidence for it, and the aggregate contrast is capacity-confounded",
+   "selection_rank": 2,
+   "selection_rank_key": "00b65d9a442802d3aee2be8fe7ddec19864a064ea0b47c7255b52299bb3afa67",
+   "semantic_type": "attr",
+   "skipped_ranks": [],
+   "source_hashes": {
+    "development_split": [
+     {
+      "path": "data/v2/dev.csv",
+      "role": "development split manifest",
+      "sha256": "95d1b504dcc4deb7d69ba0c9e293d1c00bae93df4b6907174a1dd615cb93cdc9"
+     },
+     {
+      "path": "data/v2/metadata/dev_types.csv",
+      "role": "question type and program length metadata",
+      "sha256": "2f2308728e3ed499104a5df5b206bc96e26b88f08e84ca72aa6a50c02a46a25f"
+     },
+     {
+      "path": "data/v2/answer_vocab_v2.json",
+      "role": "answer vocabulary",
+      "sha256": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680"
+     },
+     {
+      "path": "data/v2/dev_image_ids.json",
+      "role": "development image identifiers",
+      "sha256": "730d400da7a99aad3c1155e391ca94c280f7710c4ca7a778ae127c671582694d"
+     },
+     {
+      "path": "results/closure/C_reconstructed_evidence_manifest.json",
+      "role": "closure reconstruction manifest, binds the row evidence",
+      "sha256": "a7c72050f4032d6f0c1c24e9cf5e334db4e1698c31c83c4907513a290e21dff5"
+     },
+     {
+      "path": "results/closure/D_slice_statistics.json",
+      "role": "closure slice statistics, binds the type metadata",
+      "sha256": "0a21059492c9e37b67223757535b379e15d3146cff51d0d378885e9dc39c2088"
+     }
+    ],
+    "prediction_sources": [
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/e2/e2__fusion__train_40k__seed0__normal.npz",
+      "sha256": "e58294cb65c7e0036f53299603e41f28349db75919d47fa2f5b061eefe62921c"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__concat__train_40k__seed0__normal.npz",
+      "sha256": "2689f53e9dccd9ae5dd42f0ec3bd43a9a8507481bfe4dfd905f480598c4586ad"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__fusion__train_40k__seed0__normal.npz",
+      "sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__question_only__train_40k__seed0__normal.npz",
+      "sha256": "68b88653e6f3abd8ca0b1f44a1ca0b2bf0c3f36354f31214166f5d633fe83fc8"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__normal.npz",
+      "sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__shuffled.npz",
+      "sha256": "d2b1df68571695bdc65cd05f59a8e1e5d040c626b1d44083258e1c9fbe3a6751"
+     },
+     {
+      "hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4_train_40k_seed0_per_row.npz",
+      "sha256": "e89149ab457d86e755d24f7528abc4c0a5feaf4a42bbec76fa1c1e67ddea3a9a"
+     },
+     {
+      "hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4r_train_40k_seed0_per_row.npz",
+      "sha256": "5433835167c26eef8fe7aef9c96afffe59f0e0e12214af58d5b1bc6530944797"
+     },
+     {
+      "hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1_train_40k_seed0.csv.gz",
+      "sha256": "b6d55f48db56531284fec187699f706e8d806d151407c462c0cc99b2b69ef86f"
+     },
+     {
+      "hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1r_train_40k_seed0.csv.gz",
+      "sha256": "2b72b4915b649b4d756504ae16e11c1a932b5d4df2d7d601dcda3c41e3f4b067"
+     }
+    ],
+    "shuffled_partner_recovery": [
+     {
+      "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__normal.npz",
+      "role": "v2_06/image_only per-row predictions",
+      "sha256": "21e17394f9011373bcc30174dbf828c023498bb4bf8e7d4c344496d8e4c769ba"
+     },
+     {
+      "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__shuffled.npz",
+      "role": "v2_06/image_only per-row predictions",
+      "sha256": "eab132ba346b720a1a8a0a58454a393562792abdf092a41fe9eb899a31a403e5"
+     }
+    ]
+   },
+   "structural_type": "query",
+   "systems": [
+    {
+     "alignment_proof": {
+      "alignment_method": "question_id, image_id and gold answer compared element-by-element against data/v2/dev.csv",
+      "closure_point_estimate_reproduced": true,
+      "closure_split_identity": "v2 development partition, in-vocabulary view",
+      "expected_row_count": 7714,
+      "gold_answer_matches_split_row_for_row": true,
+      "gold_label_matches_split_row_for_row": true,
+      "image_id_matches_split_row_for_row": true,
+      "question_id_matches_split_row_for_row": true,
+      "row_count": 7714,
+      "verified": true
+     },
+     "arm": "concat",
+     "condition": "normal",
+     "correct": false,
+     "display_label": "Concatenation",
+     "displayed_image": {
+      "image_id": "2364920",
+      "image_path": "data/gqa/images/2364920.jpg",
+      "image_sha256": "528374681dff7de19bb9c5cffd1f748f36d39bd3417a4b75f0218a918e9e3923",
+      "is_the_questions_own_image": true
+     },
+     "evidence_hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+     "evidence_path": "results/closure/row_evidence/v2_02/v2_02__concat__train_40k__seed0__normal.npz",
+     "evidence_sha256": "2689f53e9dccd9ae5dd42f0ec3bd43a9a8507481bfe4dfd905f480598c4586ad",
+     "expansion": "concatenation head: a classifier over the frozen CLIP image and question embeddings concatenated",
+     "predicted_answer": "white",
+     "scale": "train_40k",
+     "seed": 0,
+     "system_id": "v2_02/concat"
+    },
+    {
+     "alignment_proof": {
+      "alignment_method": "question_id, image_id and gold answer compared element-by-element against data/v2/dev.csv",
+      "closure_point_estimate_reproduced": true,
+      "closure_split_identity": "v2 development partition, in-vocabulary view",
+      "expected_row_count": 7714,
+      "gold_answer_matches_split_row_for_row": true,
+      "gold_label_matches_split_row_for_row": true,
+      "image_id_matches_split_row_for_row": true,
+      "question_id_matches_split_row_for_row": true,
+      "row_count": 7714,
+      "verified": true
+     },
+     "arm": "fusion",
+     "condition": "normal",
+     "correct": true,
+     "display_label": "Fusion",
+     "displayed_image": {
+      "image_id": "2364920",
+      "image_path": "data/gqa/images/2364920.jpg",
+      "image_sha256": "528374681dff7de19bb9c5cffd1f748f36d39bd3417a4b75f0218a918e9e3923",
+      "is_the_questions_own_image": true
+     },
+     "evidence_hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+     "evidence_path": "results/closure/row_evidence/v2_02/v2_02__fusion__train_40k__seed0__normal.npz",
+     "evidence_sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9",
+     "expansion": "fusion head: the concatenation plus the elementwise product and absolute difference of the two embeddings",
+     "predicted_answer": "brown",
+     "scale": "train_40k",
+     "seed": 0,
+     "system_id": "v2_02/fusion"
+    }
+   ]
+  },
+  {
+   "category_id": "QC04_representation_improvement",
+   "gold_answer": "yes",
+   "image_id": "2318195",
+   "image_path": "data/gqa/images/2318195.jpg",
+   "image_sha256": "5da9cd4d2ecbcdb108efcc474dcaf61ad1de55ccde6165fd0e6e7f7ca73400cd",
+   "limitation": "One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "n_program_steps": 3,
+   "placement": "APPENDIX",
+   "qualitative_id": "VE2-QUAL-QC04_representation_improvement-01",
+   "question_id": "00445083",
+   "question_text": "Is the yellow food to the left of the ginger on the right?",
+   "selection_category_interpretation": "representation quality is not isolated; the encoder and two widths changed together, so the example illustrates a system difference",
+   "selection_rank": 1,
+   "selection_rank_key": "007935e1ba32fab78262a62e617edf4e129d49c63a49ad2b4486213f7877d6da",
+   "semantic_type": "rel",
+   "skipped_ranks": [],
+   "source_hashes": {
+    "development_split": [
+     {
+      "path": "data/v2/dev.csv",
+      "role": "development split manifest",
+      "sha256": "95d1b504dcc4deb7d69ba0c9e293d1c00bae93df4b6907174a1dd615cb93cdc9"
+     },
+     {
+      "path": "data/v2/metadata/dev_types.csv",
+      "role": "question type and program length metadata",
+      "sha256": "2f2308728e3ed499104a5df5b206bc96e26b88f08e84ca72aa6a50c02a46a25f"
+     },
+     {
+      "path": "data/v2/answer_vocab_v2.json",
+      "role": "answer vocabulary",
+      "sha256": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680"
+     },
+     {
+      "path": "data/v2/dev_image_ids.json",
+      "role": "development image identifiers",
+      "sha256": "730d400da7a99aad3c1155e391ca94c280f7710c4ca7a778ae127c671582694d"
+     },
+     {
+      "path": "results/closure/C_reconstructed_evidence_manifest.json",
+      "role": "closure reconstruction manifest, binds the row evidence",
+      "sha256": "a7c72050f4032d6f0c1c24e9cf5e334db4e1698c31c83c4907513a290e21dff5"
+     },
+     {
+      "path": "results/closure/D_slice_statistics.json",
+      "role": "closure slice statistics, binds the type metadata",
+      "sha256": "0a21059492c9e37b67223757535b379e15d3146cff51d0d378885e9dc39c2088"
+     }
+    ],
+    "prediction_sources": [
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/e2/e2__fusion__train_40k__seed0__normal.npz",
+      "sha256": "e58294cb65c7e0036f53299603e41f28349db75919d47fa2f5b061eefe62921c"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__concat__train_40k__seed0__normal.npz",
+      "sha256": "2689f53e9dccd9ae5dd42f0ec3bd43a9a8507481bfe4dfd905f480598c4586ad"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__fusion__train_40k__seed0__normal.npz",
+      "sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__question_only__train_40k__seed0__normal.npz",
+      "sha256": "68b88653e6f3abd8ca0b1f44a1ca0b2bf0c3f36354f31214166f5d633fe83fc8"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__normal.npz",
+      "sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__shuffled.npz",
+      "sha256": "d2b1df68571695bdc65cd05f59a8e1e5d040c626b1d44083258e1c9fbe3a6751"
+     },
+     {
+      "hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4_train_40k_seed0_per_row.npz",
+      "sha256": "e89149ab457d86e755d24f7528abc4c0a5feaf4a42bbec76fa1c1e67ddea3a9a"
+     },
+     {
+      "hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4r_train_40k_seed0_per_row.npz",
+      "sha256": "5433835167c26eef8fe7aef9c96afffe59f0e0e12214af58d5b1bc6530944797"
+     },
+     {
+      "hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1_train_40k_seed0.csv.gz",
+      "sha256": "b6d55f48db56531284fec187699f706e8d806d151407c462c0cc99b2b69ef86f"
+     },
+     {
+      "hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1r_train_40k_seed0.csv.gz",
+      "sha256": "2b72b4915b649b4d756504ae16e11c1a932b5d4df2d7d601dcda3c41e3f4b067"
+     }
+    ],
+    "shuffled_partner_recovery": [
+     {
+      "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__normal.npz",
+      "role": "v2_06/image_only per-row predictions",
+      "sha256": "21e17394f9011373bcc30174dbf828c023498bb4bf8e7d4c344496d8e4c769ba"
+     },
+     {
+      "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__shuffled.npz",
+      "role": "v2_06/image_only per-row predictions",
+      "sha256": "eab132ba346b720a1a8a0a58454a393562792abdf092a41fe9eb899a31a403e5"
+     }
+    ]
+   },
+   "structural_type": "verify",
+   "systems": [
+    {
+     "alignment_proof": {
+      "alignment_method": "question_id, image_id and gold answer compared element-by-element against data/v2/dev.csv",
+      "closure_point_estimate_reproduced": true,
+      "closure_split_identity": "v2 development partition, in-vocabulary view",
+      "expected_row_count": 7714,
+      "gold_answer_matches_split_row_for_row": true,
+      "gold_label_matches_split_row_for_row": true,
+      "image_id_matches_split_row_for_row": true,
+      "question_id_matches_split_row_for_row": true,
+      "row_count": 7714,
+      "verified": true
+     },
+     "arm": "fusion",
+     "condition": "normal",
+     "correct": false,
+     "display_label": "Fusion",
+     "displayed_image": {
+      "image_id": "2318195",
+      "image_path": "data/gqa/images/2318195.jpg",
+      "image_sha256": "5da9cd4d2ecbcdb108efcc474dcaf61ad1de55ccde6165fd0e6e7f7ca73400cd",
+      "is_the_questions_own_image": true
+     },
+     "evidence_hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+     "evidence_path": "results/closure/row_evidence/v2_02/v2_02__fusion__train_40k__seed0__normal.npz",
+     "evidence_sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9",
+     "expansion": "fusion head: the concatenation plus the elementwise product and absolute difference of the two embeddings",
+     "predicted_answer": "left",
+     "scale": "train_40k",
+     "seed": 0,
+     "system_id": "v2_02/fusion"
+    },
+    {
+     "alignment_proof": {
+      "alignment_method": "question_id, image_id and gold answer compared element-by-element against data/v2/dev.csv",
+      "closure_point_estimate_reproduced": true,
+      "closure_split_identity": "v2 development partition, in-vocabulary view, SigLIP embedding store",
+      "expected_row_count": 7714,
+      "gold_answer_matches_split_row_for_row": true,
+      "gold_label_matches_split_row_for_row": true,
+      "image_id_matches_split_row_for_row": true,
+      "question_id_matches_split_row_for_row": true,
+      "row_count": 7714,
+      "verified": true
+     },
+     "arm": "fusion",
+     "condition": "normal",
+     "correct": true,
+     "display_label": "Fusion (SigLIP)",
+     "displayed_image": {
+      "image_id": "2318195",
+      "image_path": "data/gqa/images/2318195.jpg",
+      "image_sha256": "5da9cd4d2ecbcdb108efcc474dcaf61ad1de55ccde6165fd0e6e7f7ca73400cd",
+      "is_the_questions_own_image": true
+     },
+     "evidence_hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+     "evidence_path": "results/closure/row_evidence/e2/e2__fusion__train_40k__seed0__normal.npz",
+     "evidence_sha256": "e58294cb65c7e0036f53299603e41f28349db75919d47fa2f5b061eefe62921c",
+     "expansion": "SigLIP fusion head: the same fusion head over frozen SigLIP ViT-B/16 embeddings instead of frozen CLIP ViT-B/32",
+     "predicted_answer": "yes",
+     "scale": "train_40k",
+     "seed": 0,
+     "system_id": "e2/fusion"
+    }
+   ]
+  },
+  {
+   "category_id": "QC04_representation_improvement",
+   "gold_answer": "blue",
+   "image_id": "2401578",
+   "image_path": "data/gqa/images/2401578.jpg",
+   "image_sha256": "995efba534b4d8ed5c36111eaccc10b3203862c41e68c2d8de80895ad3f34e71",
+   "limitation": "One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "n_program_steps": 2,
+   "placement": "APPENDIX",
+   "qualitative_id": "VE2-QUAL-QC04_representation_improvement-02",
+   "question_id": "11743124",
+   "question_text": "What is the color of the letters?",
+   "selection_category_interpretation": "representation quality is not isolated; the encoder and two widths changed together, so the example illustrates a system difference",
+   "selection_rank": 2,
+   "selection_rank_key": "008b184f41d31f3e7370231791ccaf8681fbeb8a1f0f1d10237f5645bec00e97",
+   "semantic_type": "attr",
+   "skipped_ranks": [],
+   "source_hashes": {
+    "development_split": [
+     {
+      "path": "data/v2/dev.csv",
+      "role": "development split manifest",
+      "sha256": "95d1b504dcc4deb7d69ba0c9e293d1c00bae93df4b6907174a1dd615cb93cdc9"
+     },
+     {
+      "path": "data/v2/metadata/dev_types.csv",
+      "role": "question type and program length metadata",
+      "sha256": "2f2308728e3ed499104a5df5b206bc96e26b88f08e84ca72aa6a50c02a46a25f"
+     },
+     {
+      "path": "data/v2/answer_vocab_v2.json",
+      "role": "answer vocabulary",
+      "sha256": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680"
+     },
+     {
+      "path": "data/v2/dev_image_ids.json",
+      "role": "development image identifiers",
+      "sha256": "730d400da7a99aad3c1155e391ca94c280f7710c4ca7a778ae127c671582694d"
+     },
+     {
+      "path": "results/closure/C_reconstructed_evidence_manifest.json",
+      "role": "closure reconstruction manifest, binds the row evidence",
+      "sha256": "a7c72050f4032d6f0c1c24e9cf5e334db4e1698c31c83c4907513a290e21dff5"
+     },
+     {
+      "path": "results/closure/D_slice_statistics.json",
+      "role": "closure slice statistics, binds the type metadata",
+      "sha256": "0a21059492c9e37b67223757535b379e15d3146cff51d0d378885e9dc39c2088"
+     }
+    ],
+    "prediction_sources": [
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/e2/e2__fusion__train_40k__seed0__normal.npz",
+      "sha256": "e58294cb65c7e0036f53299603e41f28349db75919d47fa2f5b061eefe62921c"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__concat__train_40k__seed0__normal.npz",
+      "sha256": "2689f53e9dccd9ae5dd42f0ec3bd43a9a8507481bfe4dfd905f480598c4586ad"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__fusion__train_40k__seed0__normal.npz",
+      "sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__question_only__train_40k__seed0__normal.npz",
+      "sha256": "68b88653e6f3abd8ca0b1f44a1ca0b2bf0c3f36354f31214166f5d633fe83fc8"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__normal.npz",
+      "sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__shuffled.npz",
+      "sha256": "d2b1df68571695bdc65cd05f59a8e1e5d040c626b1d44083258e1c9fbe3a6751"
+     },
+     {
+      "hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4_train_40k_seed0_per_row.npz",
+      "sha256": "e89149ab457d86e755d24f7528abc4c0a5feaf4a42bbec76fa1c1e67ddea3a9a"
+     },
+     {
+      "hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4r_train_40k_seed0_per_row.npz",
+      "sha256": "5433835167c26eef8fe7aef9c96afffe59f0e0e12214af58d5b1bc6530944797"
+     },
+     {
+      "hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1_train_40k_seed0.csv.gz",
+      "sha256": "b6d55f48db56531284fec187699f706e8d806d151407c462c0cc99b2b69ef86f"
+     },
+     {
+      "hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1r_train_40k_seed0.csv.gz",
+      "sha256": "2b72b4915b649b4d756504ae16e11c1a932b5d4df2d7d601dcda3c41e3f4b067"
+     }
+    ],
+    "shuffled_partner_recovery": [
+     {
+      "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__normal.npz",
+      "role": "v2_06/image_only per-row predictions",
+      "sha256": "21e17394f9011373bcc30174dbf828c023498bb4bf8e7d4c344496d8e4c769ba"
+     },
+     {
+      "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__shuffled.npz",
+      "role": "v2_06/image_only per-row predictions",
+      "sha256": "eab132ba346b720a1a8a0a58454a393562792abdf092a41fe9eb899a31a403e5"
+     }
+    ]
+   },
+   "structural_type": "query",
+   "systems": [
+    {
+     "alignment_proof": {
+      "alignment_method": "question_id, image_id and gold answer compared element-by-element against data/v2/dev.csv",
+      "closure_point_estimate_reproduced": true,
+      "closure_split_identity": "v2 development partition, in-vocabulary view",
+      "expected_row_count": 7714,
+      "gold_answer_matches_split_row_for_row": true,
+      "gold_label_matches_split_row_for_row": true,
+      "image_id_matches_split_row_for_row": true,
+      "question_id_matches_split_row_for_row": true,
+      "row_count": 7714,
+      "verified": true
+     },
+     "arm": "fusion",
+     "condition": "normal",
+     "correct": false,
+     "display_label": "Fusion",
+     "displayed_image": {
+      "image_id": "2401578",
+      "image_path": "data/gqa/images/2401578.jpg",
+      "image_sha256": "995efba534b4d8ed5c36111eaccc10b3203862c41e68c2d8de80895ad3f34e71",
+      "is_the_questions_own_image": true
+     },
+     "evidence_hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+     "evidence_path": "results/closure/row_evidence/v2_02/v2_02__fusion__train_40k__seed0__normal.npz",
+     "evidence_sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9",
+     "expansion": "fusion head: the concatenation plus the elementwise product and absolute difference of the two embeddings",
+     "predicted_answer": "yellow",
+     "scale": "train_40k",
+     "seed": 0,
+     "system_id": "v2_02/fusion"
+    },
+    {
+     "alignment_proof": {
+      "alignment_method": "question_id, image_id and gold answer compared element-by-element against data/v2/dev.csv",
+      "closure_point_estimate_reproduced": true,
+      "closure_split_identity": "v2 development partition, in-vocabulary view, SigLIP embedding store",
+      "expected_row_count": 7714,
+      "gold_answer_matches_split_row_for_row": true,
+      "gold_label_matches_split_row_for_row": true,
+      "image_id_matches_split_row_for_row": true,
+      "question_id_matches_split_row_for_row": true,
+      "row_count": 7714,
+      "verified": true
+     },
+     "arm": "fusion",
+     "condition": "normal",
+     "correct": true,
+     "display_label": "Fusion (SigLIP)",
+     "displayed_image": {
+      "image_id": "2401578",
+      "image_path": "data/gqa/images/2401578.jpg",
+      "image_sha256": "995efba534b4d8ed5c36111eaccc10b3203862c41e68c2d8de80895ad3f34e71",
+      "is_the_questions_own_image": true
+     },
+     "evidence_hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+     "evidence_path": "results/closure/row_evidence/e2/e2__fusion__train_40k__seed0__normal.npz",
+     "evidence_sha256": "e58294cb65c7e0036f53299603e41f28349db75919d47fa2f5b061eefe62921c",
+     "expansion": "SigLIP fusion head: the same fusion head over frozen SigLIP ViT-B/16 embeddings instead of frozen CLIP ViT-B/32",
+     "predicted_answer": "blue",
+     "scale": "train_40k",
+     "seed": 0,
+     "system_id": "e2/fusion"
+    }
+   ]
+  },
+  {
+   "category_id": "QC05_question_side_pretraining",
+   "gold_answer": "no",
+   "image_id": "2393299",
+   "image_path": "data/gqa/images/2393299.jpg",
+   "image_sha256": "5575af705db67c608121b03bd86bf33f24ca08cb333a0abf0faafcde72c4d2d3",
+   "limitation": "One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "n_program_steps": 5,
+   "placement": "MAIN_TEXT",
+   "qualitative_id": "VE2-QUAL-QC05_question_side_pretraining-01",
+   "question_id": "081024770",
+   "question_text": "Do you see either cookbooks or rugs?",
+   "selection_category_interpretation": "illustrates the only clean within-size question-side pretraining contrast; a single row is not evidence of the effect",
+   "selection_rank": 1,
+   "selection_rank_key": "0005552ef6e7e53106e2e4c24b1e845777c757f50e038c0f3f8ae372f59272b3",
+   "semantic_type": "obj",
+   "skipped_ranks": [],
+   "source_hashes": {
+    "development_split": [
+     {
+      "path": "data/v2/dev.csv",
+      "role": "development split manifest",
+      "sha256": "95d1b504dcc4deb7d69ba0c9e293d1c00bae93df4b6907174a1dd615cb93cdc9"
+     },
+     {
+      "path": "data/v2/metadata/dev_types.csv",
+      "role": "question type and program length metadata",
+      "sha256": "2f2308728e3ed499104a5df5b206bc96e26b88f08e84ca72aa6a50c02a46a25f"
+     },
+     {
+      "path": "data/v2/answer_vocab_v2.json",
+      "role": "answer vocabulary",
+      "sha256": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680"
+     },
+     {
+      "path": "data/v2/dev_image_ids.json",
+      "role": "development image identifiers",
+      "sha256": "730d400da7a99aad3c1155e391ca94c280f7710c4ca7a778ae127c671582694d"
+     },
+     {
+      "path": "results/closure/C_reconstructed_evidence_manifest.json",
+      "role": "closure reconstruction manifest, binds the row evidence",
+      "sha256": "a7c72050f4032d6f0c1c24e9cf5e334db4e1698c31c83c4907513a290e21dff5"
+     },
+     {
+      "path": "results/closure/D_slice_statistics.json",
+      "role": "closure slice statistics, binds the type metadata",
+      "sha256": "0a21059492c9e37b67223757535b379e15d3146cff51d0d378885e9dc39c2088"
+     }
+    ],
+    "prediction_sources": [
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/e2/e2__fusion__train_40k__seed0__normal.npz",
+      "sha256": "e58294cb65c7e0036f53299603e41f28349db75919d47fa2f5b061eefe62921c"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__concat__train_40k__seed0__normal.npz",
+      "sha256": "2689f53e9dccd9ae5dd42f0ec3bd43a9a8507481bfe4dfd905f480598c4586ad"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__fusion__train_40k__seed0__normal.npz",
+      "sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__question_only__train_40k__seed0__normal.npz",
+      "sha256": "68b88653e6f3abd8ca0b1f44a1ca0b2bf0c3f36354f31214166f5d633fe83fc8"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__normal.npz",
+      "sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__shuffled.npz",
+      "sha256": "d2b1df68571695bdc65cd05f59a8e1e5d040c626b1d44083258e1c9fbe3a6751"
+     },
+     {
+      "hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4_train_40k_seed0_per_row.npz",
+      "sha256": "e89149ab457d86e755d24f7528abc4c0a5feaf4a42bbec76fa1c1e67ddea3a9a"
+     },
+     {
+      "hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4r_train_40k_seed0_per_row.npz",
+      "sha256": "5433835167c26eef8fe7aef9c96afffe59f0e0e12214af58d5b1bc6530944797"
+     },
+     {
+      "hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1_train_40k_seed0.csv.gz",
+      "sha256": "b6d55f48db56531284fec187699f706e8d806d151407c462c0cc99b2b69ef86f"
+     },
+     {
+      "hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1r_train_40k_seed0.csv.gz",
+      "sha256": "2b72b4915b649b4d756504ae16e11c1a932b5d4df2d7d601dcda3c41e3f4b067"
+     }
+    ],
+    "shuffled_partner_recovery": [
+     {
+      "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__normal.npz",
+      "role": "v2_06/image_only per-row predictions",
+      "sha256": "21e17394f9011373bcc30174dbf828c023498bb4bf8e7d4c344496d8e4c769ba"
+     },
+     {
+      "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__shuffled.npz",
+      "role": "v2_06/image_only per-row predictions",
+      "sha256": "eab132ba346b720a1a8a0a58454a393562792abdf092a41fe9eb899a31a403e5"
+     }
+    ]
+   },
+   "structural_type": "logical",
+   "systems": [
+    {
+     "alignment_proof": {
+      "alignment_method": "questionId, imageId and gold_answer compared element-by-element against data/v2/dev.csv, after filtering the table to the declared condition",
+      "checkpoint_sha256": "640a2e5b3281921c9f088b17220b3b2972d785e1a394eb4fd1ea52aa5acc15f4",
+      "expected_row_count": 7714,
+      "gold_answer_matches_split_row_for_row": true,
+      "identity_read_from_file_columns": true,
+      "image_id_matches_split_row_for_row": true,
+      "question_id_matches_split_row_for_row": true,
+      "row_count": 7714,
+      "scorer_source_sha256": "f08edfcad5be0112500993e245c706b6cb928eadebe203f89f838e5e0d04bec8",
+      "verified": true
+     },
+     "arm": "A1",
+     "condition": "normal",
+     "correct": true,
+     "display_label": "A1 (pretrained)",
+     "displayed_image": {
+      "image_id": "2393299",
+      "image_path": "data/gqa/images/2393299.jpg",
+      "image_sha256": "5575af705db67c608121b03bd86bf33f24ca08cb333a0abf0faafcde72c4d2d3",
+      "is_the_questions_own_image": true
+     },
+     "evidence_hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+     "evidence_path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1_train_40k_seed0.csv.gz",
+     "evidence_sha256": "b6d55f48db56531284fec187699f706e8d806d151407c462c0cc99b2b69ef86f",
+     "expansion": "A1: the pretrained frozen SmolLM2-135M question encoder feeding the latent-query reasoner",
+     "predicted_answer": "no",
+     "scale": "train_40k",
+     "seed": 0,
+     "system_id": "E8A/A1"
+    },
+    {
+     "alignment_proof": {
+      "alignment_method": "questionId, imageId and gold_answer compared element-by-element against data/v2/dev.csv, after filtering the table to the declared condition",
+      "checkpoint_sha256": "a3e8441c00d42bc9b1b03aabe9e9f0ca6049d39fbe57532c5814ead2ca788e38",
+      "expected_row_count": 7714,
+      "gold_answer_matches_split_row_for_row": true,
+      "identity_read_from_file_columns": true,
+      "image_id_matches_split_row_for_row": true,
+      "question_id_matches_split_row_for_row": true,
+      "row_count": 7714,
+      "scorer_source_sha256": "f08edfcad5be0112500993e245c706b6cb928eadebe203f89f838e5e0d04bec8",
+      "verified": true
+     },
+     "arm": "A1r",
+     "condition": "normal",
+     "correct": false,
+     "display_label": "A1r (random)",
+     "displayed_image": {
+      "image_id": "2393299",
+      "image_path": "data/gqa/images/2393299.jpg",
+      "image_sha256": "5575af705db67c608121b03bd86bf33f24ca08cb333a0abf0faafcde72c4d2d3",
+      "is_the_questions_own_image": true
+     },
+     "evidence_hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+     "evidence_path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1r_train_40k_seed0.csv.gz",
+     "evidence_sha256": "2b72b4915b649b4d756504ae16e11c1a932b5d4df2d7d601dcda3c41e3f4b067",
+     "expansion": "A1r: the architecture-matched randomly initialised SmolLM2-135M question encoder, the within-size control for A1",
+     "predicted_answer": "yes",
+     "scale": "train_40k",
+     "seed": 0,
+     "system_id": "E8A/A1r"
+    }
+   ]
+  },
+  {
+   "category_id": "QC05_question_side_pretraining",
+   "gold_answer": "yes",
+   "image_id": "2387771",
+   "image_path": "data/gqa/images/2387771.jpg",
+   "image_sha256": "2b37542973f1535f1ad7bb39da641e102f6cdf1cbf6640c53859189e656e9919",
+   "limitation": "One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "n_program_steps": 2,
+   "placement": "MAIN_TEXT",
+   "qualitative_id": "VE2-QUAL-QC05_question_side_pretraining-02",
+   "question_id": "1971431",
+   "question_text": "Is the drawer to the right of the stove?",
+   "selection_category_interpretation": "illustrates the only clean within-size question-side pretraining contrast; a single row is not evidence of the effect",
+   "selection_rank": 2,
+   "selection_rank_key": "003443a87e1489f83079f370d634be0df24ffbe49693eb8dececd849324b6caf",
+   "semantic_type": "rel",
+   "skipped_ranks": [],
+   "source_hashes": {
+    "development_split": [
+     {
+      "path": "data/v2/dev.csv",
+      "role": "development split manifest",
+      "sha256": "95d1b504dcc4deb7d69ba0c9e293d1c00bae93df4b6907174a1dd615cb93cdc9"
+     },
+     {
+      "path": "data/v2/metadata/dev_types.csv",
+      "role": "question type and program length metadata",
+      "sha256": "2f2308728e3ed499104a5df5b206bc96e26b88f08e84ca72aa6a50c02a46a25f"
+     },
+     {
+      "path": "data/v2/answer_vocab_v2.json",
+      "role": "answer vocabulary",
+      "sha256": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680"
+     },
+     {
+      "path": "data/v2/dev_image_ids.json",
+      "role": "development image identifiers",
+      "sha256": "730d400da7a99aad3c1155e391ca94c280f7710c4ca7a778ae127c671582694d"
+     },
+     {
+      "path": "results/closure/C_reconstructed_evidence_manifest.json",
+      "role": "closure reconstruction manifest, binds the row evidence",
+      "sha256": "a7c72050f4032d6f0c1c24e9cf5e334db4e1698c31c83c4907513a290e21dff5"
+     },
+     {
+      "path": "results/closure/D_slice_statistics.json",
+      "role": "closure slice statistics, binds the type metadata",
+      "sha256": "0a21059492c9e37b67223757535b379e15d3146cff51d0d378885e9dc39c2088"
+     }
+    ],
+    "prediction_sources": [
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/e2/e2__fusion__train_40k__seed0__normal.npz",
+      "sha256": "e58294cb65c7e0036f53299603e41f28349db75919d47fa2f5b061eefe62921c"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__concat__train_40k__seed0__normal.npz",
+      "sha256": "2689f53e9dccd9ae5dd42f0ec3bd43a9a8507481bfe4dfd905f480598c4586ad"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__fusion__train_40k__seed0__normal.npz",
+      "sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__question_only__train_40k__seed0__normal.npz",
+      "sha256": "68b88653e6f3abd8ca0b1f44a1ca0b2bf0c3f36354f31214166f5d633fe83fc8"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__normal.npz",
+      "sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__shuffled.npz",
+      "sha256": "d2b1df68571695bdc65cd05f59a8e1e5d040c626b1d44083258e1c9fbe3a6751"
+     },
+     {
+      "hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4_train_40k_seed0_per_row.npz",
+      "sha256": "e89149ab457d86e755d24f7528abc4c0a5feaf4a42bbec76fa1c1e67ddea3a9a"
+     },
+     {
+      "hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4r_train_40k_seed0_per_row.npz",
+      "sha256": "5433835167c26eef8fe7aef9c96afffe59f0e0e12214af58d5b1bc6530944797"
+     },
+     {
+      "hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1_train_40k_seed0.csv.gz",
+      "sha256": "b6d55f48db56531284fec187699f706e8d806d151407c462c0cc99b2b69ef86f"
+     },
+     {
+      "hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1r_train_40k_seed0.csv.gz",
+      "sha256": "2b72b4915b649b4d756504ae16e11c1a932b5d4df2d7d601dcda3c41e3f4b067"
+     }
+    ],
+    "shuffled_partner_recovery": [
+     {
+      "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__normal.npz",
+      "role": "v2_06/image_only per-row predictions",
+      "sha256": "21e17394f9011373bcc30174dbf828c023498bb4bf8e7d4c344496d8e4c769ba"
+     },
+     {
+      "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__shuffled.npz",
+      "role": "v2_06/image_only per-row predictions",
+      "sha256": "eab132ba346b720a1a8a0a58454a393562792abdf092a41fe9eb899a31a403e5"
+     }
+    ]
+   },
+   "structural_type": "verify",
+   "systems": [
+    {
+     "alignment_proof": {
+      "alignment_method": "questionId, imageId and gold_answer compared element-by-element against data/v2/dev.csv, after filtering the table to the declared condition",
+      "checkpoint_sha256": "640a2e5b3281921c9f088b17220b3b2972d785e1a394eb4fd1ea52aa5acc15f4",
+      "expected_row_count": 7714,
+      "gold_answer_matches_split_row_for_row": true,
+      "identity_read_from_file_columns": true,
+      "image_id_matches_split_row_for_row": true,
+      "question_id_matches_split_row_for_row": true,
+      "row_count": 7714,
+      "scorer_source_sha256": "f08edfcad5be0112500993e245c706b6cb928eadebe203f89f838e5e0d04bec8",
+      "verified": true
+     },
+     "arm": "A1",
+     "condition": "normal",
+     "correct": true,
+     "display_label": "A1 (pretrained)",
+     "displayed_image": {
+      "image_id": "2387771",
+      "image_path": "data/gqa/images/2387771.jpg",
+      "image_sha256": "2b37542973f1535f1ad7bb39da641e102f6cdf1cbf6640c53859189e656e9919",
+      "is_the_questions_own_image": true
+     },
+     "evidence_hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+     "evidence_path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1_train_40k_seed0.csv.gz",
+     "evidence_sha256": "b6d55f48db56531284fec187699f706e8d806d151407c462c0cc99b2b69ef86f",
+     "expansion": "A1: the pretrained frozen SmolLM2-135M question encoder feeding the latent-query reasoner",
+     "predicted_answer": "yes",
+     "scale": "train_40k",
+     "seed": 0,
+     "system_id": "E8A/A1"
+    },
+    {
+     "alignment_proof": {
+      "alignment_method": "questionId, imageId and gold_answer compared element-by-element against data/v2/dev.csv, after filtering the table to the declared condition",
+      "checkpoint_sha256": "a3e8441c00d42bc9b1b03aabe9e9f0ca6049d39fbe57532c5814ead2ca788e38",
+      "expected_row_count": 7714,
+      "gold_answer_matches_split_row_for_row": true,
+      "identity_read_from_file_columns": true,
+      "image_id_matches_split_row_for_row": true,
+      "question_id_matches_split_row_for_row": true,
+      "row_count": 7714,
+      "scorer_source_sha256": "f08edfcad5be0112500993e245c706b6cb928eadebe203f89f838e5e0d04bec8",
+      "verified": true
+     },
+     "arm": "A1r",
+     "condition": "normal",
+     "correct": false,
+     "display_label": "A1r (random)",
+     "displayed_image": {
+      "image_id": "2387771",
+      "image_path": "data/gqa/images/2387771.jpg",
+      "image_sha256": "2b37542973f1535f1ad7bb39da641e102f6cdf1cbf6640c53859189e656e9919",
+      "is_the_questions_own_image": true
+     },
+     "evidence_hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+     "evidence_path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1r_train_40k_seed0.csv.gz",
+     "evidence_sha256": "2b72b4915b649b4d756504ae16e11c1a932b5d4df2d7d601dcda3c41e3f4b067",
+     "expansion": "A1r: the architecture-matched randomly initialised SmolLM2-135M question encoder, the within-size control for A1",
+     "predicted_answer": "no",
+     "scale": "train_40k",
+     "seed": 0,
+     "system_id": "E8A/A1r"
+    }
+   ]
+  },
+  {
+   "category_id": "QC06_answer_side_disagreement",
+   "gold_answer": "street",
+   "image_id": "1159442",
+   "image_path": "data/gqa/images/1159442.jpg",
+   "image_sha256": "71ce4d5ec13c8db65c37405534d20dad684d5ab18531c6d9d430c86ebf581b28",
+   "limitation": "One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "n_program_steps": 2,
+   "placement": "APPENDIX",
+   "qualitative_id": "VE2-QUAL-QC06_answer_side_disagreement-01",
+   "question_id": "04652163",
+   "question_text": "Where is it?",
+   "selection_category_interpretation": "the aggregate contrast is not directional and its interval contains zero. Both directions of disagreement must be shown, and the caption must not imply the pretrained side is better",
+   "selection_rank": 1,
+   "selection_rank_key": "00097c536cec6d2c342b31a1fb4d9f609d1c9de1984926013d377d6b89747015",
+   "semantic_type": "global",
+   "skipped_ranks": [],
+   "source_hashes": {
+    "development_split": [
+     {
+      "path": "data/v2/dev.csv",
+      "role": "development split manifest",
+      "sha256": "95d1b504dcc4deb7d69ba0c9e293d1c00bae93df4b6907174a1dd615cb93cdc9"
+     },
+     {
+      "path": "data/v2/metadata/dev_types.csv",
+      "role": "question type and program length metadata",
+      "sha256": "2f2308728e3ed499104a5df5b206bc96e26b88f08e84ca72aa6a50c02a46a25f"
+     },
+     {
+      "path": "data/v2/answer_vocab_v2.json",
+      "role": "answer vocabulary",
+      "sha256": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680"
+     },
+     {
+      "path": "data/v2/dev_image_ids.json",
+      "role": "development image identifiers",
+      "sha256": "730d400da7a99aad3c1155e391ca94c280f7710c4ca7a778ae127c671582694d"
+     },
+     {
+      "path": "results/closure/C_reconstructed_evidence_manifest.json",
+      "role": "closure reconstruction manifest, binds the row evidence",
+      "sha256": "a7c72050f4032d6f0c1c24e9cf5e334db4e1698c31c83c4907513a290e21dff5"
+     },
+     {
+      "path": "results/closure/D_slice_statistics.json",
+      "role": "closure slice statistics, binds the type metadata",
+      "sha256": "0a21059492c9e37b67223757535b379e15d3146cff51d0d378885e9dc39c2088"
+     }
+    ],
+    "prediction_sources": [
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/e2/e2__fusion__train_40k__seed0__normal.npz",
+      "sha256": "e58294cb65c7e0036f53299603e41f28349db75919d47fa2f5b061eefe62921c"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__concat__train_40k__seed0__normal.npz",
+      "sha256": "2689f53e9dccd9ae5dd42f0ec3bd43a9a8507481bfe4dfd905f480598c4586ad"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__fusion__train_40k__seed0__normal.npz",
+      "sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__question_only__train_40k__seed0__normal.npz",
+      "sha256": "68b88653e6f3abd8ca0b1f44a1ca0b2bf0c3f36354f31214166f5d633fe83fc8"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__normal.npz",
+      "sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__shuffled.npz",
+      "sha256": "d2b1df68571695bdc65cd05f59a8e1e5d040c626b1d44083258e1c9fbe3a6751"
+     },
+     {
+      "hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4_train_40k_seed0_per_row.npz",
+      "sha256": "e89149ab457d86e755d24f7528abc4c0a5feaf4a42bbec76fa1c1e67ddea3a9a"
+     },
+     {
+      "hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4r_train_40k_seed0_per_row.npz",
+      "sha256": "5433835167c26eef8fe7aef9c96afffe59f0e0e12214af58d5b1bc6530944797"
+     },
+     {
+      "hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1_train_40k_seed0.csv.gz",
+      "sha256": "b6d55f48db56531284fec187699f706e8d806d151407c462c0cc99b2b69ef86f"
+     },
+     {
+      "hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1r_train_40k_seed0.csv.gz",
+      "sha256": "2b72b4915b649b4d756504ae16e11c1a932b5d4df2d7d601dcda3c41e3f4b067"
+     }
+    ],
+    "shuffled_partner_recovery": [
+     {
+      "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__normal.npz",
+      "role": "v2_06/image_only per-row predictions",
+      "sha256": "21e17394f9011373bcc30174dbf828c023498bb4bf8e7d4c344496d8e4c769ba"
+     },
+     {
+      "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__shuffled.npz",
+      "role": "v2_06/image_only per-row predictions",
+      "sha256": "eab132ba346b720a1a8a0a58454a393562792abdf092a41fe9eb899a31a403e5"
+     }
+    ]
+   },
+   "structural_type": "query",
+   "systems": [
+    {
+     "alignment_proof": {
+      "alignment_method": "question_id, image_id and the stored label compared element-by-element against data/v2/dev.csv",
+      "e10_tree_written_to": false,
+      "expected_row_count": 7714,
+      "gold_label_matches_split_row_for_row": true,
+      "image_id_matches_split_row_for_row": true,
+      "prediction_text_route": "answer-vocabulary index resolved through data/v2/answer_vocab_v2.json; a lookup, not a re-evaluation",
+      "question_id_matches_split_row_for_row": true,
+      "row_count": 7714,
+      "verified": true
+     },
+     "arm": "B4",
+     "condition": "normal",
+     "correct": true,
+     "display_label": "B4 (pretrained)",
+     "displayed_image": {
+      "image_id": "1159442",
+      "image_path": "data/gqa/images/1159442.jpg",
+      "image_sha256": "71ce4d5ec13c8db65c37405534d20dad684d5ab18531c6d9d430c86ebf581b28",
+      "is_the_questions_own_image": true
+     },
+     "evidence_hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+     "evidence_path": "results/experiments/e10_capacity_360m_core/e10_core_B4_train_40k_seed0_per_row.npz",
+     "evidence_sha256": "e89149ab457d86e755d24f7528abc4c0a5feaf4a42bbec76fa1c1e67ddea3a9a",
+     "expansion": "B4: the pretrained frozen SmolLM2-360M answer readout",
+     "predicted_answer": "street",
+     "scale": "train_40k",
+     "seed": 0,
+     "system_id": "E10/B4"
+    },
+    {
+     "alignment_proof": {
+      "alignment_method": "question_id, image_id and the stored label compared element-by-element against data/v2/dev.csv",
+      "e10_tree_written_to": false,
+      "expected_row_count": 7714,
+      "gold_label_matches_split_row_for_row": true,
+      "image_id_matches_split_row_for_row": true,
+      "prediction_text_route": "answer-vocabulary index resolved through data/v2/answer_vocab_v2.json; a lookup, not a re-evaluation",
+      "question_id_matches_split_row_for_row": true,
+      "row_count": 7714,
+      "verified": true
+     },
+     "arm": "B4r",
+     "condition": "normal",
+     "correct": false,
+     "display_label": "B4r (random)",
+     "displayed_image": {
+      "image_id": "1159442",
+      "image_path": "data/gqa/images/1159442.jpg",
+      "image_sha256": "71ce4d5ec13c8db65c37405534d20dad684d5ab18531c6d9d430c86ebf581b28",
+      "is_the_questions_own_image": true
+     },
+     "evidence_hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+     "evidence_path": "results/experiments/e10_capacity_360m_core/e10_core_B4r_train_40k_seed0_per_row.npz",
+     "evidence_sha256": "5433835167c26eef8fe7aef9c96afffe59f0e0e12214af58d5b1bc6530944797",
+     "expansion": "B4r: the architecture-matched randomly initialised SmolLM2-360M answer readout, the within-size control for B4",
+     "predicted_answer": "road",
+     "scale": "train_40k",
+     "seed": 0,
+     "system_id": "E10/B4r"
+    }
+   ]
+  },
+  {
+   "category_id": "QC06_answer_side_disagreement",
+   "gold_answer": "yes",
+   "image_id": "2368959",
+   "image_path": "data/gqa/images/2368959.jpg",
+   "image_sha256": "666df920c73fcfb31d2e6b2ca570896c26d48be000dd463887cb99540350d952",
+   "limitation": "One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "n_program_steps": 4,
+   "placement": "APPENDIX",
+   "qualitative_id": "VE2-QUAL-QC06_answer_side_disagreement-03",
+   "question_id": "15948686",
+   "question_text": "Are there any people to the left of the man that is holding the camera?",
+   "selection_category_interpretation": "the aggregate contrast is not directional and its interval contains zero. Both directions of disagreement must be shown, and the caption must not imply the pretrained side is better",
+   "selection_rank": 3,
+   "selection_rank_key": "002b9cc9599df4909383c015dc77d61bf36927893b85307639eba72a0135116e",
+   "semantic_type": "rel",
+   "skipped_ranks": [],
+   "source_hashes": {
+    "development_split": [
+     {
+      "path": "data/v2/dev.csv",
+      "role": "development split manifest",
+      "sha256": "95d1b504dcc4deb7d69ba0c9e293d1c00bae93df4b6907174a1dd615cb93cdc9"
+     },
+     {
+      "path": "data/v2/metadata/dev_types.csv",
+      "role": "question type and program length metadata",
+      "sha256": "2f2308728e3ed499104a5df5b206bc96e26b88f08e84ca72aa6a50c02a46a25f"
+     },
+     {
+      "path": "data/v2/answer_vocab_v2.json",
+      "role": "answer vocabulary",
+      "sha256": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680"
+     },
+     {
+      "path": "data/v2/dev_image_ids.json",
+      "role": "development image identifiers",
+      "sha256": "730d400da7a99aad3c1155e391ca94c280f7710c4ca7a778ae127c671582694d"
+     },
+     {
+      "path": "results/closure/C_reconstructed_evidence_manifest.json",
+      "role": "closure reconstruction manifest, binds the row evidence",
+      "sha256": "a7c72050f4032d6f0c1c24e9cf5e334db4e1698c31c83c4907513a290e21dff5"
+     },
+     {
+      "path": "results/closure/D_slice_statistics.json",
+      "role": "closure slice statistics, binds the type metadata",
+      "sha256": "0a21059492c9e37b67223757535b379e15d3146cff51d0d378885e9dc39c2088"
+     }
+    ],
+    "prediction_sources": [
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/e2/e2__fusion__train_40k__seed0__normal.npz",
+      "sha256": "e58294cb65c7e0036f53299603e41f28349db75919d47fa2f5b061eefe62921c"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__concat__train_40k__seed0__normal.npz",
+      "sha256": "2689f53e9dccd9ae5dd42f0ec3bd43a9a8507481bfe4dfd905f480598c4586ad"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__fusion__train_40k__seed0__normal.npz",
+      "sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__question_only__train_40k__seed0__normal.npz",
+      "sha256": "68b88653e6f3abd8ca0b1f44a1ca0b2bf0c3f36354f31214166f5d633fe83fc8"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__normal.npz",
+      "sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__shuffled.npz",
+      "sha256": "d2b1df68571695bdc65cd05f59a8e1e5d040c626b1d44083258e1c9fbe3a6751"
+     },
+     {
+      "hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4_train_40k_seed0_per_row.npz",
+      "sha256": "e89149ab457d86e755d24f7528abc4c0a5feaf4a42bbec76fa1c1e67ddea3a9a"
+     },
+     {
+      "hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4r_train_40k_seed0_per_row.npz",
+      "sha256": "5433835167c26eef8fe7aef9c96afffe59f0e0e12214af58d5b1bc6530944797"
+     },
+     {
+      "hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1_train_40k_seed0.csv.gz",
+      "sha256": "b6d55f48db56531284fec187699f706e8d806d151407c462c0cc99b2b69ef86f"
+     },
+     {
+      "hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1r_train_40k_seed0.csv.gz",
+      "sha256": "2b72b4915b649b4d756504ae16e11c1a932b5d4df2d7d601dcda3c41e3f4b067"
+     }
+    ],
+    "shuffled_partner_recovery": [
+     {
+      "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__normal.npz",
+      "role": "v2_06/image_only per-row predictions",
+      "sha256": "21e17394f9011373bcc30174dbf828c023498bb4bf8e7d4c344496d8e4c769ba"
+     },
+     {
+      "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__shuffled.npz",
+      "role": "v2_06/image_only per-row predictions",
+      "sha256": "eab132ba346b720a1a8a0a58454a393562792abdf092a41fe9eb899a31a403e5"
+     }
+    ]
+   },
+   "structural_type": "verify",
+   "systems": [
+    {
+     "alignment_proof": {
+      "alignment_method": "question_id, image_id and the stored label compared element-by-element against data/v2/dev.csv",
+      "e10_tree_written_to": false,
+      "expected_row_count": 7714,
+      "gold_label_matches_split_row_for_row": true,
+      "image_id_matches_split_row_for_row": true,
+      "prediction_text_route": "answer-vocabulary index resolved through data/v2/answer_vocab_v2.json; a lookup, not a re-evaluation",
+      "question_id_matches_split_row_for_row": true,
+      "row_count": 7714,
+      "verified": true
+     },
+     "arm": "B4",
+     "condition": "normal",
+     "correct": false,
+     "display_label": "B4 (pretrained)",
+     "displayed_image": {
+      "image_id": "2368959",
+      "image_path": "data/gqa/images/2368959.jpg",
+      "image_sha256": "666df920c73fcfb31d2e6b2ca570896c26d48be000dd463887cb99540350d952",
+      "is_the_questions_own_image": true
+     },
+     "evidence_hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+     "evidence_path": "results/experiments/e10_capacity_360m_core/e10_core_B4_train_40k_seed0_per_row.npz",
+     "evidence_sha256": "e89149ab457d86e755d24f7528abc4c0a5feaf4a42bbec76fa1c1e67ddea3a9a",
+     "expansion": "B4: the pretrained frozen SmolLM2-360M answer readout",
+     "predicted_answer": "no",
+     "scale": "train_40k",
+     "seed": 0,
+     "system_id": "E10/B4"
+    },
+    {
+     "alignment_proof": {
+      "alignment_method": "question_id, image_id and the stored label compared element-by-element against data/v2/dev.csv",
+      "e10_tree_written_to": false,
+      "expected_row_count": 7714,
+      "gold_label_matches_split_row_for_row": true,
+      "image_id_matches_split_row_for_row": true,
+      "prediction_text_route": "answer-vocabulary index resolved through data/v2/answer_vocab_v2.json; a lookup, not a re-evaluation",
+      "question_id_matches_split_row_for_row": true,
+      "row_count": 7714,
+      "verified": true
+     },
+     "arm": "B4r",
+     "condition": "normal",
+     "correct": true,
+     "display_label": "B4r (random)",
+     "displayed_image": {
+      "image_id": "2368959",
+      "image_path": "data/gqa/images/2368959.jpg",
+      "image_sha256": "666df920c73fcfb31d2e6b2ca570896c26d48be000dd463887cb99540350d952",
+      "is_the_questions_own_image": true
+     },
+     "evidence_hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+     "evidence_path": "results/experiments/e10_capacity_360m_core/e10_core_B4r_train_40k_seed0_per_row.npz",
+     "evidence_sha256": "5433835167c26eef8fe7aef9c96afffe59f0e0e12214af58d5b1bc6530944797",
+     "expansion": "B4r: the architecture-matched randomly initialised SmolLM2-360M answer readout, the within-size control for B4",
+     "predicted_answer": "yes",
+     "scale": "train_40k",
+     "seed": 0,
+     "system_id": "E10/B4r"
+    }
+   ]
+  },
+  {
+   "category_id": "QC07_visual_reliance",
+   "gold_answer": "shelf",
+   "image_id": "2402937",
+   "image_path": "data/gqa/images/2402937.jpg",
+   "image_sha256": "18032f572f63a986e1ce55d0c1c44e604c4ff5c5dcf1d7cd971f9ffa2c3fe20c",
+   "limitation": "One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "n_program_steps": 3,
+   "placement": "MAIN_TEXT",
+   "qualitative_id": "VE2-QUAL-QC07_visual_reliance-01",
+   "question_id": "10181047",
+   "question_text": "What's the plant on?",
+   "selection_category_interpretation": "demonstrates reliance on the image for this row. It is not proof of grounding, and the wrong-image partner must be shown so a reader can see what replaced it",
+   "selection_rank": 1,
+   "selection_rank_key": "003d71dec24058628000062c0f9e41081c02d05ee84dfaa7b9fcbc1c59af0f67",
+   "semantic_type": "rel",
+   "skipped_ranks": [],
+   "source_hashes": {
+    "development_split": [
+     {
+      "path": "data/v2/dev.csv",
+      "role": "development split manifest",
+      "sha256": "95d1b504dcc4deb7d69ba0c9e293d1c00bae93df4b6907174a1dd615cb93cdc9"
+     },
+     {
+      "path": "data/v2/metadata/dev_types.csv",
+      "role": "question type and program length metadata",
+      "sha256": "2f2308728e3ed499104a5df5b206bc96e26b88f08e84ca72aa6a50c02a46a25f"
+     },
+     {
+      "path": "data/v2/answer_vocab_v2.json",
+      "role": "answer vocabulary",
+      "sha256": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680"
+     },
+     {
+      "path": "data/v2/dev_image_ids.json",
+      "role": "development image identifiers",
+      "sha256": "730d400da7a99aad3c1155e391ca94c280f7710c4ca7a778ae127c671582694d"
+     },
+     {
+      "path": "results/closure/C_reconstructed_evidence_manifest.json",
+      "role": "closure reconstruction manifest, binds the row evidence",
+      "sha256": "a7c72050f4032d6f0c1c24e9cf5e334db4e1698c31c83c4907513a290e21dff5"
+     },
+     {
+      "path": "results/closure/D_slice_statistics.json",
+      "role": "closure slice statistics, binds the type metadata",
+      "sha256": "0a21059492c9e37b67223757535b379e15d3146cff51d0d378885e9dc39c2088"
+     }
+    ],
+    "prediction_sources": [
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/e2/e2__fusion__train_40k__seed0__normal.npz",
+      "sha256": "e58294cb65c7e0036f53299603e41f28349db75919d47fa2f5b061eefe62921c"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__concat__train_40k__seed0__normal.npz",
+      "sha256": "2689f53e9dccd9ae5dd42f0ec3bd43a9a8507481bfe4dfd905f480598c4586ad"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__fusion__train_40k__seed0__normal.npz",
+      "sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__question_only__train_40k__seed0__normal.npz",
+      "sha256": "68b88653e6f3abd8ca0b1f44a1ca0b2bf0c3f36354f31214166f5d633fe83fc8"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__normal.npz",
+      "sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__shuffled.npz",
+      "sha256": "d2b1df68571695bdc65cd05f59a8e1e5d040c626b1d44083258e1c9fbe3a6751"
+     },
+     {
+      "hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4_train_40k_seed0_per_row.npz",
+      "sha256": "e89149ab457d86e755d24f7528abc4c0a5feaf4a42bbec76fa1c1e67ddea3a9a"
+     },
+     {
+      "hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4r_train_40k_seed0_per_row.npz",
+      "sha256": "5433835167c26eef8fe7aef9c96afffe59f0e0e12214af58d5b1bc6530944797"
+     },
+     {
+      "hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1_train_40k_seed0.csv.gz",
+      "sha256": "b6d55f48db56531284fec187699f706e8d806d151407c462c0cc99b2b69ef86f"
+     },
+     {
+      "hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1r_train_40k_seed0.csv.gz",
+      "sha256": "2b72b4915b649b4d756504ae16e11c1a932b5d4df2d7d601dcda3c41e3f4b067"
+     }
+    ],
+    "shuffled_partner_recovery": [
+     {
+      "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__normal.npz",
+      "role": "v2_06/image_only per-row predictions",
+      "sha256": "21e17394f9011373bcc30174dbf828c023498bb4bf8e7d4c344496d8e4c769ba"
+     },
+     {
+      "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__shuffled.npz",
+      "role": "v2_06/image_only per-row predictions",
+      "sha256": "eab132ba346b720a1a8a0a58454a393562792abdf092a41fe9eb899a31a403e5"
+     }
+    ]
+   },
+   "structural_type": "query",
+   "systems": [
+    {
+     "alignment_proof": {
+      "alignment_method": "question_id, image_id and gold answer compared element-by-element against data/v2/dev.csv",
+      "closure_point_estimate_reproduced": true,
+      "closure_split_identity": "v2 development partition, in-vocabulary view",
+      "expected_row_count": 7714,
+      "gold_answer_matches_split_row_for_row": true,
+      "gold_label_matches_split_row_for_row": true,
+      "image_id_matches_split_row_for_row": true,
+      "question_id_matches_split_row_for_row": true,
+      "row_count": 7714,
+      "verified": true
+     },
+     "arm": "fusion",
+     "condition": "normal",
+     "correct": true,
+     "display_label": "Fusion, real image",
+     "displayed_image": {
+      "image_id": "2402937",
+      "image_path": "data/gqa/images/2402937.jpg",
+      "image_sha256": "18032f572f63a986e1ce55d0c1c44e604c4ff5c5dcf1d7cd971f9ffa2c3fe20c",
+      "is_the_questions_own_image": true
+     },
+     "evidence_hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+     "evidence_path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__normal.npz",
+     "evidence_sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9",
+     "expansion": "fusion head reading the question's own image",
+     "predicted_answer": "shelf",
+     "scale": "train_40k",
+     "seed": 0,
+     "system_id": "v2_06/fusion@normal"
+    },
+    {
+     "alignment_proof": {
+      "alignment_method": "question_id, image_id and gold answer compared element-by-element against data/v2/dev.csv",
+      "closure_point_estimate_reproduced": true,
+      "closure_split_identity": "v2 development partition, in-vocabulary view",
+      "expected_row_count": 7714,
+      "gold_answer_matches_split_row_for_row": true,
+      "gold_label_matches_split_row_for_row": true,
+      "image_id_matches_split_row_for_row": true,
+      "question_id_matches_split_row_for_row": true,
+      "row_count": 7714,
+      "verified": true
+     },
+     "arm": "fusion",
+     "condition": "shuffled",
+     "correct": false,
+     "display_label": "Fusion, wrong image",
+     "displayed_image": {
+      "image_id": "2407981",
+      "image_path": "data/gqa/images/2407981.jpg",
+      "image_sha256": "3eade9e8dea8ce5afbec5b8acc27bd28eee197dab347be63dc226818d011610a",
+      "is_the_questions_own_image": false,
+      "recovered_by": "the image-only head consumes only the image embedding, so its shuffled prediction at row i must equal its normal prediction at row perm[i]",
+      "recovery_proof": {
+       "method": "the image-only head consumes only the image embedding, so its shuffled prediction at row i must equal its normal prediction at row perm[i]",
+       "negative_control_permutation_seed": 20260814,
+       "negative_control_rows_explained": 3143,
+       "permutation_seed": 42,
+       "permutation_source": "numpy.random.default_rng(config.RANDOM_SEED).permutation(7714), the intervention recorded in experiments/v2_06_reliance/run.py",
+       "rows_checked": 7714,
+       "rows_explained": 7714,
+       "rows_whose_partner_is_the_same_image": 11,
+       "verified": true
+      }
+     },
+     "evidence_hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+     "evidence_path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__shuffled.npz",
+     "evidence_sha256": "d2b1df68571695bdc65cd05f59a8e1e5d040c626b1d44083258e1c9fbe3a6751",
+     "expansion": "the same fusion head, with the image embedding replaced by another development image's under the recorded permutation",
+     "predicted_answer": "bed",
+     "scale": "train_40k",
+     "seed": 0,
+     "system_id": "v2_06/fusion@shuffled"
+    }
+   ]
+  },
+  {
+   "category_id": "QC07_visual_reliance",
+   "gold_answer": "right",
+   "image_id": "2410905",
+   "image_path": "data/gqa/images/2410905.jpg",
+   "image_sha256": "7ca5c4ba720ffc6d857273946f5a15dd86c8da6bedb5f8bfae582f24566cc64c",
+   "limitation": "One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "n_program_steps": 3,
+   "placement": "MAIN_TEXT",
+   "qualitative_id": "VE2-QUAL-QC07_visual_reliance-02",
+   "question_id": "05206184",
+   "question_text": "Is the truck to the right or to the left of the motorcycle that is on the street?",
+   "selection_category_interpretation": "demonstrates reliance on the image for this row. It is not proof of grounding, and the wrong-image partner must be shown so a reader can see what replaced it",
+   "selection_rank": 2,
+   "selection_rank_key": "0049cd3505a07950168eed24b2d3425efa2dfd256ac5a1fa806fc47f314bf08b",
+   "semantic_type": "rel",
+   "skipped_ranks": [],
+   "source_hashes": {
+    "development_split": [
+     {
+      "path": "data/v2/dev.csv",
+      "role": "development split manifest",
+      "sha256": "95d1b504dcc4deb7d69ba0c9e293d1c00bae93df4b6907174a1dd615cb93cdc9"
+     },
+     {
+      "path": "data/v2/metadata/dev_types.csv",
+      "role": "question type and program length metadata",
+      "sha256": "2f2308728e3ed499104a5df5b206bc96e26b88f08e84ca72aa6a50c02a46a25f"
+     },
+     {
+      "path": "data/v2/answer_vocab_v2.json",
+      "role": "answer vocabulary",
+      "sha256": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680"
+     },
+     {
+      "path": "data/v2/dev_image_ids.json",
+      "role": "development image identifiers",
+      "sha256": "730d400da7a99aad3c1155e391ca94c280f7710c4ca7a778ae127c671582694d"
+     },
+     {
+      "path": "results/closure/C_reconstructed_evidence_manifest.json",
+      "role": "closure reconstruction manifest, binds the row evidence",
+      "sha256": "a7c72050f4032d6f0c1c24e9cf5e334db4e1698c31c83c4907513a290e21dff5"
+     },
+     {
+      "path": "results/closure/D_slice_statistics.json",
+      "role": "closure slice statistics, binds the type metadata",
+      "sha256": "0a21059492c9e37b67223757535b379e15d3146cff51d0d378885e9dc39c2088"
+     }
+    ],
+    "prediction_sources": [
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/e2/e2__fusion__train_40k__seed0__normal.npz",
+      "sha256": "e58294cb65c7e0036f53299603e41f28349db75919d47fa2f5b061eefe62921c"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__concat__train_40k__seed0__normal.npz",
+      "sha256": "2689f53e9dccd9ae5dd42f0ec3bd43a9a8507481bfe4dfd905f480598c4586ad"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__fusion__train_40k__seed0__normal.npz",
+      "sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__question_only__train_40k__seed0__normal.npz",
+      "sha256": "68b88653e6f3abd8ca0b1f44a1ca0b2bf0c3f36354f31214166f5d633fe83fc8"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__normal.npz",
+      "sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__shuffled.npz",
+      "sha256": "d2b1df68571695bdc65cd05f59a8e1e5d040c626b1d44083258e1c9fbe3a6751"
+     },
+     {
+      "hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4_train_40k_seed0_per_row.npz",
+      "sha256": "e89149ab457d86e755d24f7528abc4c0a5feaf4a42bbec76fa1c1e67ddea3a9a"
+     },
+     {
+      "hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4r_train_40k_seed0_per_row.npz",
+      "sha256": "5433835167c26eef8fe7aef9c96afffe59f0e0e12214af58d5b1bc6530944797"
+     },
+     {
+      "hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1_train_40k_seed0.csv.gz",
+      "sha256": "b6d55f48db56531284fec187699f706e8d806d151407c462c0cc99b2b69ef86f"
+     },
+     {
+      "hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1r_train_40k_seed0.csv.gz",
+      "sha256": "2b72b4915b649b4d756504ae16e11c1a932b5d4df2d7d601dcda3c41e3f4b067"
+     }
+    ],
+    "shuffled_partner_recovery": [
+     {
+      "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__normal.npz",
+      "role": "v2_06/image_only per-row predictions",
+      "sha256": "21e17394f9011373bcc30174dbf828c023498bb4bf8e7d4c344496d8e4c769ba"
+     },
+     {
+      "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__shuffled.npz",
+      "role": "v2_06/image_only per-row predictions",
+      "sha256": "eab132ba346b720a1a8a0a58454a393562792abdf092a41fe9eb899a31a403e5"
+     }
+    ]
+   },
+   "structural_type": "choose",
+   "systems": [
+    {
+     "alignment_proof": {
+      "alignment_method": "question_id, image_id and gold answer compared element-by-element against data/v2/dev.csv",
+      "closure_point_estimate_reproduced": true,
+      "closure_split_identity": "v2 development partition, in-vocabulary view",
+      "expected_row_count": 7714,
+      "gold_answer_matches_split_row_for_row": true,
+      "gold_label_matches_split_row_for_row": true,
+      "image_id_matches_split_row_for_row": true,
+      "question_id_matches_split_row_for_row": true,
+      "row_count": 7714,
+      "verified": true
+     },
+     "arm": "fusion",
+     "condition": "normal",
+     "correct": true,
+     "display_label": "Fusion, real image",
+     "displayed_image": {
+      "image_id": "2410905",
+      "image_path": "data/gqa/images/2410905.jpg",
+      "image_sha256": "7ca5c4ba720ffc6d857273946f5a15dd86c8da6bedb5f8bfae582f24566cc64c",
+      "is_the_questions_own_image": true
+     },
+     "evidence_hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+     "evidence_path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__normal.npz",
+     "evidence_sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9",
+     "expansion": "fusion head reading the question's own image",
+     "predicted_answer": "right",
+     "scale": "train_40k",
+     "seed": 0,
+     "system_id": "v2_06/fusion@normal"
+    },
+    {
+     "alignment_proof": {
+      "alignment_method": "question_id, image_id and gold answer compared element-by-element against data/v2/dev.csv",
+      "closure_point_estimate_reproduced": true,
+      "closure_split_identity": "v2 development partition, in-vocabulary view",
+      "expected_row_count": 7714,
+      "gold_answer_matches_split_row_for_row": true,
+      "gold_label_matches_split_row_for_row": true,
+      "image_id_matches_split_row_for_row": true,
+      "question_id_matches_split_row_for_row": true,
+      "row_count": 7714,
+      "verified": true
+     },
+     "arm": "fusion",
+     "condition": "shuffled",
+     "correct": false,
+     "display_label": "Fusion, wrong image",
+     "displayed_image": {
+      "image_id": "2385812",
+      "image_path": "data/gqa/images/2385812.jpg",
+      "image_sha256": "f70f11b9a874b0d8e7404c1f8307ebda21b4d18f4dc332ecd914f8466a431e6d",
+      "is_the_questions_own_image": false,
+      "recovered_by": "the image-only head consumes only the image embedding, so its shuffled prediction at row i must equal its normal prediction at row perm[i]",
+      "recovery_proof": {
+       "method": "the image-only head consumes only the image embedding, so its shuffled prediction at row i must equal its normal prediction at row perm[i]",
+       "negative_control_permutation_seed": 20260814,
+       "negative_control_rows_explained": 3143,
+       "permutation_seed": 42,
+       "permutation_source": "numpy.random.default_rng(config.RANDOM_SEED).permutation(7714), the intervention recorded in experiments/v2_06_reliance/run.py",
+       "rows_checked": 7714,
+       "rows_explained": 7714,
+       "rows_whose_partner_is_the_same_image": 11,
+       "verified": true
+      }
+     },
+     "evidence_hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+     "evidence_path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__shuffled.npz",
+     "evidence_sha256": "d2b1df68571695bdc65cd05f59a8e1e5d040c626b1d44083258e1c9fbe3a6751",
+     "expansion": "the same fusion head, with the image embedding replaced by another development image's under the recorded permutation",
+     "predicted_answer": "left",
+     "scale": "train_40k",
+     "seed": 0,
+     "system_id": "v2_06/fusion@shuffled"
+    }
+   ]
+  },
+  {
+   "category_id": "QC08_short_reasoning",
+   "gold_answer": "yes",
+   "image_id": "2396197",
+   "image_path": "data/gqa/images/2396197.jpg",
+   "image_sha256": "ff3b82080fd058460ba44ae3d09568fda64aa8c652360cab7a8a5970122cb713",
+   "limitation": "One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "n_program_steps": 2,
+   "placement": "APPENDIX",
+   "qualitative_id": "VE2-QUAL-QC08_short_reasoning-01",
+   "question_id": "04945041",
+   "question_text": "Is the ground wet?",
+   "selection_category_interpretation": "step count is the GQA semantic program length, a proxy for reasoning depth",
+   "selection_rank": 1,
+   "selection_rank_key": "00098f90d3079f4eaa972482663c9e2967b6879c2010e2e4e0f43cbaf65d9838",
+   "semantic_type": "attr",
+   "skipped_ranks": [],
+   "source_hashes": {
+    "development_split": [
+     {
+      "path": "data/v2/dev.csv",
+      "role": "development split manifest",
+      "sha256": "95d1b504dcc4deb7d69ba0c9e293d1c00bae93df4b6907174a1dd615cb93cdc9"
+     },
+     {
+      "path": "data/v2/metadata/dev_types.csv",
+      "role": "question type and program length metadata",
+      "sha256": "2f2308728e3ed499104a5df5b206bc96e26b88f08e84ca72aa6a50c02a46a25f"
+     },
+     {
+      "path": "data/v2/answer_vocab_v2.json",
+      "role": "answer vocabulary",
+      "sha256": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680"
+     },
+     {
+      "path": "data/v2/dev_image_ids.json",
+      "role": "development image identifiers",
+      "sha256": "730d400da7a99aad3c1155e391ca94c280f7710c4ca7a778ae127c671582694d"
+     },
+     {
+      "path": "results/closure/C_reconstructed_evidence_manifest.json",
+      "role": "closure reconstruction manifest, binds the row evidence",
+      "sha256": "a7c72050f4032d6f0c1c24e9cf5e334db4e1698c31c83c4907513a290e21dff5"
+     },
+     {
+      "path": "results/closure/D_slice_statistics.json",
+      "role": "closure slice statistics, binds the type metadata",
+      "sha256": "0a21059492c9e37b67223757535b379e15d3146cff51d0d378885e9dc39c2088"
+     }
+    ],
+    "prediction_sources": [
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/e2/e2__fusion__train_40k__seed0__normal.npz",
+      "sha256": "e58294cb65c7e0036f53299603e41f28349db75919d47fa2f5b061eefe62921c"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__concat__train_40k__seed0__normal.npz",
+      "sha256": "2689f53e9dccd9ae5dd42f0ec3bd43a9a8507481bfe4dfd905f480598c4586ad"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__fusion__train_40k__seed0__normal.npz",
+      "sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__question_only__train_40k__seed0__normal.npz",
+      "sha256": "68b88653e6f3abd8ca0b1f44a1ca0b2bf0c3f36354f31214166f5d633fe83fc8"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__normal.npz",
+      "sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__shuffled.npz",
+      "sha256": "d2b1df68571695bdc65cd05f59a8e1e5d040c626b1d44083258e1c9fbe3a6751"
+     },
+     {
+      "hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4_train_40k_seed0_per_row.npz",
+      "sha256": "e89149ab457d86e755d24f7528abc4c0a5feaf4a42bbec76fa1c1e67ddea3a9a"
+     },
+     {
+      "hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4r_train_40k_seed0_per_row.npz",
+      "sha256": "5433835167c26eef8fe7aef9c96afffe59f0e0e12214af58d5b1bc6530944797"
+     },
+     {
+      "hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1_train_40k_seed0.csv.gz",
+      "sha256": "b6d55f48db56531284fec187699f706e8d806d151407c462c0cc99b2b69ef86f"
+     },
+     {
+      "hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1r_train_40k_seed0.csv.gz",
+      "sha256": "2b72b4915b649b4d756504ae16e11c1a932b5d4df2d7d601dcda3c41e3f4b067"
+     }
+    ],
+    "shuffled_partner_recovery": [
+     {
+      "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__normal.npz",
+      "role": "v2_06/image_only per-row predictions",
+      "sha256": "21e17394f9011373bcc30174dbf828c023498bb4bf8e7d4c344496d8e4c769ba"
+     },
+     {
+      "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__shuffled.npz",
+      "role": "v2_06/image_only per-row predictions",
+      "sha256": "eab132ba346b720a1a8a0a58454a393562792abdf092a41fe9eb899a31a403e5"
+     }
+    ]
+   },
+   "structural_type": "verify",
+   "systems": [
+    {
+     "alignment_proof": {
+      "alignment_method": "question_id, image_id and gold answer compared element-by-element against data/v2/dev.csv",
+      "closure_point_estimate_reproduced": true,
+      "closure_split_identity": "v2 development partition, in-vocabulary view",
+      "expected_row_count": 7714,
+      "gold_answer_matches_split_row_for_row": true,
+      "gold_label_matches_split_row_for_row": true,
+      "image_id_matches_split_row_for_row": true,
+      "question_id_matches_split_row_for_row": true,
+      "row_count": 7714,
+      "verified": true
+     },
+     "arm": "fusion",
+     "condition": "normal",
+     "correct": false,
+     "display_label": "Fusion",
+     "displayed_image": {
+      "image_id": "2396197",
+      "image_path": "data/gqa/images/2396197.jpg",
+      "image_sha256": "ff3b82080fd058460ba44ae3d09568fda64aa8c652360cab7a8a5970122cb713",
+      "is_the_questions_own_image": true
+     },
+     "evidence_hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+     "evidence_path": "results/closure/row_evidence/v2_02/v2_02__fusion__train_40k__seed0__normal.npz",
+     "evidence_sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9",
+     "expansion": "fusion head: the concatenation plus the elementwise product and absolute difference of the two embeddings",
+     "predicted_answer": "no",
+     "scale": "train_40k",
+     "seed": 0,
+     "system_id": "v2_02/fusion"
+    }
+   ]
+  },
+  {
+   "category_id": "QC08_short_reasoning",
+   "gold_answer": "yes",
+   "image_id": "2347720",
+   "image_path": "data/gqa/images/2347720.jpg",
+   "image_sha256": "78cb5ff4dcd7e70eed411503b4b32e7cb5402fbd13213d0649d83b307edae71b",
+   "limitation": "One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "n_program_steps": 2,
+   "placement": "APPENDIX",
+   "qualitative_id": "VE2-QUAL-QC08_short_reasoning-02",
+   "question_id": "15535737",
+   "question_text": "Is the snowboard on the left of the picture?",
+   "selection_category_interpretation": "step count is the GQA semantic program length, a proxy for reasoning depth",
+   "selection_rank": 2,
+   "selection_rank_key": "0057ebfcb65f698e2afe24ee4de0dc63dfd1e74367a799dbc510590a6c7aff4b",
+   "semantic_type": "attr",
+   "skipped_ranks": [],
+   "source_hashes": {
+    "development_split": [
+     {
+      "path": "data/v2/dev.csv",
+      "role": "development split manifest",
+      "sha256": "95d1b504dcc4deb7d69ba0c9e293d1c00bae93df4b6907174a1dd615cb93cdc9"
+     },
+     {
+      "path": "data/v2/metadata/dev_types.csv",
+      "role": "question type and program length metadata",
+      "sha256": "2f2308728e3ed499104a5df5b206bc96e26b88f08e84ca72aa6a50c02a46a25f"
+     },
+     {
+      "path": "data/v2/answer_vocab_v2.json",
+      "role": "answer vocabulary",
+      "sha256": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680"
+     },
+     {
+      "path": "data/v2/dev_image_ids.json",
+      "role": "development image identifiers",
+      "sha256": "730d400da7a99aad3c1155e391ca94c280f7710c4ca7a778ae127c671582694d"
+     },
+     {
+      "path": "results/closure/C_reconstructed_evidence_manifest.json",
+      "role": "closure reconstruction manifest, binds the row evidence",
+      "sha256": "a7c72050f4032d6f0c1c24e9cf5e334db4e1698c31c83c4907513a290e21dff5"
+     },
+     {
+      "path": "results/closure/D_slice_statistics.json",
+      "role": "closure slice statistics, binds the type metadata",
+      "sha256": "0a21059492c9e37b67223757535b379e15d3146cff51d0d378885e9dc39c2088"
+     }
+    ],
+    "prediction_sources": [
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/e2/e2__fusion__train_40k__seed0__normal.npz",
+      "sha256": "e58294cb65c7e0036f53299603e41f28349db75919d47fa2f5b061eefe62921c"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__concat__train_40k__seed0__normal.npz",
+      "sha256": "2689f53e9dccd9ae5dd42f0ec3bd43a9a8507481bfe4dfd905f480598c4586ad"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__fusion__train_40k__seed0__normal.npz",
+      "sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__question_only__train_40k__seed0__normal.npz",
+      "sha256": "68b88653e6f3abd8ca0b1f44a1ca0b2bf0c3f36354f31214166f5d633fe83fc8"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__normal.npz",
+      "sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__shuffled.npz",
+      "sha256": "d2b1df68571695bdc65cd05f59a8e1e5d040c626b1d44083258e1c9fbe3a6751"
+     },
+     {
+      "hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4_train_40k_seed0_per_row.npz",
+      "sha256": "e89149ab457d86e755d24f7528abc4c0a5feaf4a42bbec76fa1c1e67ddea3a9a"
+     },
+     {
+      "hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4r_train_40k_seed0_per_row.npz",
+      "sha256": "5433835167c26eef8fe7aef9c96afffe59f0e0e12214af58d5b1bc6530944797"
+     },
+     {
+      "hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1_train_40k_seed0.csv.gz",
+      "sha256": "b6d55f48db56531284fec187699f706e8d806d151407c462c0cc99b2b69ef86f"
+     },
+     {
+      "hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1r_train_40k_seed0.csv.gz",
+      "sha256": "2b72b4915b649b4d756504ae16e11c1a932b5d4df2d7d601dcda3c41e3f4b067"
+     }
+    ],
+    "shuffled_partner_recovery": [
+     {
+      "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__normal.npz",
+      "role": "v2_06/image_only per-row predictions",
+      "sha256": "21e17394f9011373bcc30174dbf828c023498bb4bf8e7d4c344496d8e4c769ba"
+     },
+     {
+      "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__shuffled.npz",
+      "role": "v2_06/image_only per-row predictions",
+      "sha256": "eab132ba346b720a1a8a0a58454a393562792abdf092a41fe9eb899a31a403e5"
+     }
+    ]
+   },
+   "structural_type": "verify",
+   "systems": [
+    {
+     "alignment_proof": {
+      "alignment_method": "question_id, image_id and gold answer compared element-by-element against data/v2/dev.csv",
+      "closure_point_estimate_reproduced": true,
+      "closure_split_identity": "v2 development partition, in-vocabulary view",
+      "expected_row_count": 7714,
+      "gold_answer_matches_split_row_for_row": true,
+      "gold_label_matches_split_row_for_row": true,
+      "image_id_matches_split_row_for_row": true,
+      "question_id_matches_split_row_for_row": true,
+      "row_count": 7714,
+      "verified": true
+     },
+     "arm": "fusion",
+     "condition": "normal",
+     "correct": true,
+     "display_label": "Fusion",
+     "displayed_image": {
+      "image_id": "2347720",
+      "image_path": "data/gqa/images/2347720.jpg",
+      "image_sha256": "78cb5ff4dcd7e70eed411503b4b32e7cb5402fbd13213d0649d83b307edae71b",
+      "is_the_questions_own_image": true
+     },
+     "evidence_hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+     "evidence_path": "results/closure/row_evidence/v2_02/v2_02__fusion__train_40k__seed0__normal.npz",
+     "evidence_sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9",
+     "expansion": "fusion head: the concatenation plus the elementwise product and absolute difference of the two embeddings",
+     "predicted_answer": "yes",
+     "scale": "train_40k",
+     "seed": 0,
+     "system_id": "v2_02/fusion"
+    }
+   ]
+  },
+  {
+   "category_id": "QC09_deep_reasoning_failure",
+   "gold_answer": "yes",
+   "image_id": "2358266",
+   "image_path": "data/gqa/images/2358266.jpg",
+   "image_sha256": "98c161658f9ede6cccec8e26f0a5d914e966db4410ffd08aa617f6eebcba2c67",
+   "limitation": "One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "n_program_steps": 5,
+   "placement": "MAIN_TEXT",
+   "qualitative_id": "VE2-QUAL-QC09_deep_reasoning_failure-01",
+   "question_id": "05237394",
+   "question_text": "Are there any helmets or hearts in this scene?",
+   "selection_category_interpretation": "illustrates where the pooled four-or-more-step deficit lives. It does not show the model failed BECAUSE the question was deep; no causal attribution may be made from an example",
+   "selection_rank": 1,
+   "selection_rank_key": "0018d240a4c0aa7a5004baf3c6ee8db804efea4b588c8044c24e844a9eaf51e7",
+   "semantic_type": "obj",
+   "skipped_ranks": [],
+   "source_hashes": {
+    "development_split": [
+     {
+      "path": "data/v2/dev.csv",
+      "role": "development split manifest",
+      "sha256": "95d1b504dcc4deb7d69ba0c9e293d1c00bae93df4b6907174a1dd615cb93cdc9"
+     },
+     {
+      "path": "data/v2/metadata/dev_types.csv",
+      "role": "question type and program length metadata",
+      "sha256": "2f2308728e3ed499104a5df5b206bc96e26b88f08e84ca72aa6a50c02a46a25f"
+     },
+     {
+      "path": "data/v2/answer_vocab_v2.json",
+      "role": "answer vocabulary",
+      "sha256": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680"
+     },
+     {
+      "path": "data/v2/dev_image_ids.json",
+      "role": "development image identifiers",
+      "sha256": "730d400da7a99aad3c1155e391ca94c280f7710c4ca7a778ae127c671582694d"
+     },
+     {
+      "path": "results/closure/C_reconstructed_evidence_manifest.json",
+      "role": "closure reconstruction manifest, binds the row evidence",
+      "sha256": "a7c72050f4032d6f0c1c24e9cf5e334db4e1698c31c83c4907513a290e21dff5"
+     },
+     {
+      "path": "results/closure/D_slice_statistics.json",
+      "role": "closure slice statistics, binds the type metadata",
+      "sha256": "0a21059492c9e37b67223757535b379e15d3146cff51d0d378885e9dc39c2088"
+     }
+    ],
+    "prediction_sources": [
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/e2/e2__fusion__train_40k__seed0__normal.npz",
+      "sha256": "e58294cb65c7e0036f53299603e41f28349db75919d47fa2f5b061eefe62921c"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__concat__train_40k__seed0__normal.npz",
+      "sha256": "2689f53e9dccd9ae5dd42f0ec3bd43a9a8507481bfe4dfd905f480598c4586ad"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__fusion__train_40k__seed0__normal.npz",
+      "sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__question_only__train_40k__seed0__normal.npz",
+      "sha256": "68b88653e6f3abd8ca0b1f44a1ca0b2bf0c3f36354f31214166f5d633fe83fc8"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__normal.npz",
+      "sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__shuffled.npz",
+      "sha256": "d2b1df68571695bdc65cd05f59a8e1e5d040c626b1d44083258e1c9fbe3a6751"
+     },
+     {
+      "hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4_train_40k_seed0_per_row.npz",
+      "sha256": "e89149ab457d86e755d24f7528abc4c0a5feaf4a42bbec76fa1c1e67ddea3a9a"
+     },
+     {
+      "hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4r_train_40k_seed0_per_row.npz",
+      "sha256": "5433835167c26eef8fe7aef9c96afffe59f0e0e12214af58d5b1bc6530944797"
+     },
+     {
+      "hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1_train_40k_seed0.csv.gz",
+      "sha256": "b6d55f48db56531284fec187699f706e8d806d151407c462c0cc99b2b69ef86f"
+     },
+     {
+      "hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1r_train_40k_seed0.csv.gz",
+      "sha256": "2b72b4915b649b4d756504ae16e11c1a932b5d4df2d7d601dcda3c41e3f4b067"
+     }
+    ],
+    "shuffled_partner_recovery": [
+     {
+      "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__normal.npz",
+      "role": "v2_06/image_only per-row predictions",
+      "sha256": "21e17394f9011373bcc30174dbf828c023498bb4bf8e7d4c344496d8e4c769ba"
+     },
+     {
+      "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__shuffled.npz",
+      "role": "v2_06/image_only per-row predictions",
+      "sha256": "eab132ba346b720a1a8a0a58454a393562792abdf092a41fe9eb899a31a403e5"
+     }
+    ]
+   },
+   "structural_type": "logical",
+   "systems": [
+    {
+     "alignment_proof": {
+      "alignment_method": "question_id, image_id and gold answer compared element-by-element against data/v2/dev.csv",
+      "closure_point_estimate_reproduced": true,
+      "closure_split_identity": "v2 development partition, in-vocabulary view",
+      "expected_row_count": 7714,
+      "gold_answer_matches_split_row_for_row": true,
+      "gold_label_matches_split_row_for_row": true,
+      "image_id_matches_split_row_for_row": true,
+      "question_id_matches_split_row_for_row": true,
+      "row_count": 7714,
+      "verified": true
+     },
+     "arm": "fusion",
+     "condition": "normal",
+     "correct": false,
+     "display_label": "Fusion",
+     "displayed_image": {
+      "image_id": "2358266",
+      "image_path": "data/gqa/images/2358266.jpg",
+      "image_sha256": "98c161658f9ede6cccec8e26f0a5d914e966db4410ffd08aa617f6eebcba2c67",
+      "is_the_questions_own_image": true
+     },
+     "evidence_hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+     "evidence_path": "results/closure/row_evidence/v2_02/v2_02__fusion__train_40k__seed0__normal.npz",
+     "evidence_sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9",
+     "expansion": "fusion head: the concatenation plus the elementwise product and absolute difference of the two embeddings",
+     "predicted_answer": "no",
+     "scale": "train_40k",
+     "seed": 0,
+     "system_id": "v2_02/fusion"
+    }
+   ]
+  },
+  {
+   "category_id": "QC09_deep_reasoning_failure",
+   "gold_answer": "man",
+   "image_id": "2361055",
+   "image_path": "data/gqa/images/2361055.jpg",
+   "image_sha256": "1e3c637e17e27752d47ad466b9063e3c21b413e1e9516b0734a66e67d240aad9",
+   "limitation": "One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "n_program_steps": 4,
+   "placement": "MAIN_TEXT",
+   "qualitative_id": "VE2-QUAL-QC09_deep_reasoning_failure-02",
+   "question_id": "05590137",
+   "question_text": "Who is reflected in the mirror on the left side of the picture?",
+   "selection_category_interpretation": "illustrates where the pooled four-or-more-step deficit lives. It does not show the model failed BECAUSE the question was deep; no causal attribution may be made from an example",
+   "selection_rank": 2,
+   "selection_rank_key": "00f451432466846044bc3ed0b930fd2e73133ebacb4f8c6336a255b3f096d36b",
+   "semantic_type": "rel",
+   "skipped_ranks": [],
+   "source_hashes": {
+    "development_split": [
+     {
+      "path": "data/v2/dev.csv",
+      "role": "development split manifest",
+      "sha256": "95d1b504dcc4deb7d69ba0c9e293d1c00bae93df4b6907174a1dd615cb93cdc9"
+     },
+     {
+      "path": "data/v2/metadata/dev_types.csv",
+      "role": "question type and program length metadata",
+      "sha256": "2f2308728e3ed499104a5df5b206bc96e26b88f08e84ca72aa6a50c02a46a25f"
+     },
+     {
+      "path": "data/v2/answer_vocab_v2.json",
+      "role": "answer vocabulary",
+      "sha256": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680"
+     },
+     {
+      "path": "data/v2/dev_image_ids.json",
+      "role": "development image identifiers",
+      "sha256": "730d400da7a99aad3c1155e391ca94c280f7710c4ca7a778ae127c671582694d"
+     },
+     {
+      "path": "results/closure/C_reconstructed_evidence_manifest.json",
+      "role": "closure reconstruction manifest, binds the row evidence",
+      "sha256": "a7c72050f4032d6f0c1c24e9cf5e334db4e1698c31c83c4907513a290e21dff5"
+     },
+     {
+      "path": "results/closure/D_slice_statistics.json",
+      "role": "closure slice statistics, binds the type metadata",
+      "sha256": "0a21059492c9e37b67223757535b379e15d3146cff51d0d378885e9dc39c2088"
+     }
+    ],
+    "prediction_sources": [
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/e2/e2__fusion__train_40k__seed0__normal.npz",
+      "sha256": "e58294cb65c7e0036f53299603e41f28349db75919d47fa2f5b061eefe62921c"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__concat__train_40k__seed0__normal.npz",
+      "sha256": "2689f53e9dccd9ae5dd42f0ec3bd43a9a8507481bfe4dfd905f480598c4586ad"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__fusion__train_40k__seed0__normal.npz",
+      "sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_02/v2_02__question_only__train_40k__seed0__normal.npz",
+      "sha256": "68b88653e6f3abd8ca0b1f44a1ca0b2bf0c3f36354f31214166f5d633fe83fc8"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__normal.npz",
+      "sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9"
+     },
+     {
+      "hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+      "path": "results/closure/row_evidence/v2_06/v2_06__fusion__train_40k__seed0__shuffled.npz",
+      "sha256": "d2b1df68571695bdc65cd05f59a8e1e5d040c626b1d44083258e1c9fbe3a6751"
+     },
+     {
+      "hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4_train_40k_seed0_per_row.npz",
+      "sha256": "e89149ab457d86e755d24f7528abc4c0a5feaf4a42bbec76fa1c1e67ddea3a9a"
+     },
+     {
+      "hash_bound_in": "results/experiments/e10_capacity_360m_core/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4r_train_40k_seed0_per_row.npz",
+      "sha256": "5433835167c26eef8fe7aef9c96afffe59f0e0e12214af58d5b1bc6530944797"
+     },
+     {
+      "hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1_train_40k_seed0.csv.gz",
+      "sha256": "b6d55f48db56531284fec187699f706e8d806d151407c462c0cc99b2b69ef86f"
+     },
+     {
+      "hash_bound_in": "results/experiments/e8a_question_encoder/ARTEFACT_MANIFEST.json",
+      "path": "results/experiments/e8a_question_encoder/predictions_g21_v1/predictions_A1r_train_40k_seed0.csv.gz",
+      "sha256": "2b72b4915b649b4d756504ae16e11c1a932b5d4df2d7d601dcda3c41e3f4b067"
+     }
+    ],
+    "shuffled_partner_recovery": [
+     {
+      "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__normal.npz",
+      "role": "v2_06/image_only per-row predictions",
+      "sha256": "21e17394f9011373bcc30174dbf828c023498bb4bf8e7d4c344496d8e4c769ba"
+     },
+     {
+      "path": "results/closure/row_evidence/v2_06/v2_06__image_only__train_40k__seed0__shuffled.npz",
+      "role": "v2_06/image_only per-row predictions",
+      "sha256": "eab132ba346b720a1a8a0a58454a393562792abdf092a41fe9eb899a31a403e5"
+     }
+    ]
+   },
+   "structural_type": "query",
+   "systems": [
+    {
+     "alignment_proof": {
+      "alignment_method": "question_id, image_id and gold answer compared element-by-element against data/v2/dev.csv",
+      "closure_point_estimate_reproduced": true,
+      "closure_split_identity": "v2 development partition, in-vocabulary view",
+      "expected_row_count": 7714,
+      "gold_answer_matches_split_row_for_row": true,
+      "gold_label_matches_split_row_for_row": true,
+      "image_id_matches_split_row_for_row": true,
+      "question_id_matches_split_row_for_row": true,
+      "row_count": 7714,
+      "verified": true
+     },
+     "arm": "fusion",
+     "condition": "normal",
+     "correct": false,
+     "display_label": "Fusion",
+     "displayed_image": {
+      "image_id": "2361055",
+      "image_path": "data/gqa/images/2361055.jpg",
+      "image_sha256": "1e3c637e17e27752d47ad466b9063e3c21b413e1e9516b0734a66e67d240aad9",
+      "is_the_questions_own_image": true
+     },
+     "evidence_hash_bound_in": "results/closure/C_reconstructed_evidence_manifest.json",
+     "evidence_path": "results/closure/row_evidence/v2_02/v2_02__fusion__train_40k__seed0__normal.npz",
+     "evidence_sha256": "929c083365e0d9a7a701a135e5d5dc4074f22a26603afbf7459736d2706d2db9",
+     "expansion": "fusion head: the concatenation plus the elementwise product and absolute difference of the two embeddings",
+     "predicted_answer": "left",
+     "scale": "train_40k",
+     "seed": 0,
+     "system_id": "v2_02/fusion"
+    }
+   ]
+  }
+ ],
+ "rule": "one record per selected example, carrying exactly the nineteen fields the frozen VE-0 record schema declares. Every value is copied from a hash-checked source; no number and no prediction string is written by hand.",
+ "title": "VE-2 qualitative records",
+ "ve0_source_artefacts": [
+  {
+   "path": "results/ve0/canonical_evidence_inventory.json",
+   "role": "VE-0 output A",
+   "sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3"
+  },
+  {
+   "path": "results/ve0/canonical_evidence_inventory.csv",
+   "role": "VE-0 output A_csv",
+   "sha256": "86921381e6fc22b674559b44272e9ba70aaeffafdf600c4a752d5cb6200eee9b"
+  },
+  {
+   "path": "results/ve0/supersession_map.json",
+   "role": "VE-0 output C",
+   "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
+  },
+  {
+   "path": "results/ve0/claim_ledger.json",
+   "role": "VE-0 output D",
+   "sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7"
+  },
+  {
+   "path": "results/ve0/rq_evidence_matrix.json",
+   "role": "VE-0 output E",
+   "sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d"
+  },
+  {
+   "path": "results/ve0/figure_specifications.json",
+   "role": "VE-0 output F",
+   "sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c"
+  },
+  {
+   "path": "results/ve0/table_specifications.json",
+   "role": "VE-0 output G",
+   "sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8"
+  },
+  {
+   "path": "results/ve0/qualitative_protocol.json",
+   "role": "VE-0 output H",
+   "sha256": "c8c5c35bec84da409e9a36612ad07846e2d218aa35351bc7d09340760cd9e895"
+  },
+  {
+   "path": "results/ve0/qualitative_record_schema.json",
+   "role": "VE-0 output I",
+   "sha256": "898e0a6bfeddfb37196e0d1e4bfc469606bcd663c5283b6fac931cd0e3de4297"
+  },
+  {
+   "path": "results/ve0/reporting_style_contract.json",
+   "role": "VE-0 output J",
+   "sha256": "536cf07aa6bd5f80eb1b843046435804345e7bd1f558ba047866b223aadd5504"
+  },
+  {
+   "path": "results/ve0/provenance_contract.json",
+   "role": "VE-0 output K",
+   "sha256": "4a0c33512194fcd11493d3e05f0a86fc8f752ea6343f698c8da0c630672213ab"
+  },
+  {
+   "path": "results/ve0/efficiency_visualisation_contract.json",
+   "role": "VE-0 output L",
+   "sha256": "c8d221544dca46f55339fcd708e4dd66b9aa1e1e9b130bdf44a2a39871ee9cc4"
+  },
+  {
+   "path": "results/ve0/results_section_mapping.json",
+   "role": "VE-0 output M",
+   "sha256": "2f80c8d34949f6ea3e5b7546d67b79793463d7f63d4278b0a03153125bc50686"
+  },
+  {
+   "path": "results/ve0/VE0_MANIFEST.json",
+   "role": "VE-0 output O",
+   "sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3"
+  }
+ ],
+ "ve0_specification_id": "VE0-FIG-10",
+ "ve2_output": "qualitative_records"
+}

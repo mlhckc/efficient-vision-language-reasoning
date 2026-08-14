@@ -1,0 +1,246 @@
+{
+ "checklist": [
+  "the image drawn is the image the record names, checked by opening the file at the recorded path and confirming its hash",
+  "the question text on the page is the question text in the record",
+  "the gold answer on the page is the gold answer in the record",
+  "each prediction sits against the system that produced it, in the order the record lists them, with no label offset by one row",
+  "the correctness mark and the correctness word agree with the stored correctness, and neither is the only channel carrying it",
+  "the wrong-image panel is drawn beside the real image for the visual-reliance category, and the two are labelled so a reader can tell which is which",
+  "no text is clipped at a panel edge or overlaps another element",
+  "fonts are large enough to read at printed size",
+  "images are drawn at their true aspect ratio and at sufficient resolution",
+  "arm codes are expanded on the page that first uses them",
+  "the mandatory caveat is present, legible, and not truncated",
+  "the page communicates its message without reading the provenance"
+ ],
+ "clean_test_accessed": false,
+ "content_sha256": "a98d095d1c44a6d0c2360e5c796d45c53bff190d1577c5de846b6506df405853",
+ "development_set_only": true,
+ "pages_inspected": 9,
+ "programmatic_validation_is_not_sufficient": "the validation suite proves that the drawn strings match the records and that the records match their frozen sources. It cannot see a prediction label sitting against the wrong system, an image squashed out of its aspect ratio, or a line of text running off the page, which is why this pass exists.",
+ "provenance": {
+  "build_command": "python -m experiments.ve2.run_ve2",
+  "builder": "experiments/ve2/run_ve2.py",
+  "builder_sha256": "7fab3289488e05d89bd258aa04394df6bbdc88b8c82abe7071196b79dccd4e89",
+  "clean_test_accessed": false,
+  "device": "cpu",
+  "evaluated_anything": false,
+  "gpu_hours_charged": 0.0,
+  "gpu_used": false,
+  "inputs": [],
+  "matplotlib_version": "3.11.0",
+  "measured_anything": false,
+  "numpy_version": "2.5.0",
+  "pandas_version": "3.0.3",
+  "pillow_version": "12.2.0",
+  "python": "3.12.3",
+  "read_any_checkpoint": false,
+  "read_any_embedding_store": false,
+  "repository_head": "73af31953a99a9c1c196f609abf2be0912c321a2",
+  "repository_head_short": "73af319",
+  "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+  "rescored_anything": false,
+  "schema_version": 1,
+  "selected_any_checkpoint": false,
+  "trained_anything": false,
+  "worktree_dirty": true
+ },
+ "records": [
+  {
+   "artefact_id": "ve2_gallery_appendix_QC01_all_correct",
+   "category_id": "QC01_all_correct",
+   "checklist_items_passed": 12,
+   "findings": [],
+   "inspected": true,
+   "note": "three systems, all correct. Nothing on the page implies that an easy row is an advantage for any of them."
+  },
+  {
+   "artefact_id": "ve2_gallery_appendix_QC04_representation_improvement",
+   "category_id": "QC04_representation_improvement",
+   "checklist_items_passed": 12,
+   "findings": [],
+   "inspected": true,
+   "note": "the SigLIP and CLIP fusion heads are distinguished by label rather than by colour alone, and the caption carries the caveat that the encoder and two widths changed together."
+  },
+  {
+   "artefact_id": "ve2_gallery_appendix_QC06_answer_side_disagreement",
+   "category_id": "QC06_answer_side_disagreement",
+   "checklist_items_passed": 12,
+   "findings": [
+    {
+     "cause": "the balanced directions were ranked separately, so the first example in each direction was rank 1",
+     "finding_id": "VQA-5",
+     "repair": "the category's deterministic ordering is computed once over its whole pool and each direction selects by filtering it, so every example keeps its rank in the single ordering. The two examples are now ranks 1 and 3. A uniqueness guard refuses any build in which two records share an identifier or a category selects one question twice.",
+     "severity": "BLOCKING",
+     "status": "REPAIRED",
+     "verified_after_repair": true,
+     "what_was_seen": "found by cross-checking the rendered pages against the records rather than by eye: both QC06 examples carried the identifier VE2-QUAL-QC06_answer_side_disagreement-01, so a caption or a gallery row could not be matched to the record it belonged to."
+    }
+   ],
+   "inspected": true,
+   "note": "the balance requirement is visibly satisfied: the first row is a question the pretrained readout answers correctly and the random control does not, the second is the reverse. Neither the page nor the caption suggests a direction."
+  },
+  {
+   "artefact_id": "ve2_gallery_appendix_QC08_short_reasoning",
+   "category_id": "QC08_short_reasoning",
+   "checklist_items_passed": 12,
+   "findings": [],
+   "inspected": true,
+   "note": "both rows show the program-step count of 2. The category declares no correctness predicate and the deterministic draw returned one correct and one incorrect row; neither was substituted."
+  },
+  {
+   "artefact_id": "ve2_gallery_main_QC02_all_wrong",
+   "category_id": "QC02_all_wrong",
+   "checklist_items_passed": 12,
+   "findings": [
+    {
+     "cause": "the label was anchored to the bottom of the square image box rather than to the image inside it",
+     "finding_id": "VQA-4",
+     "repair": "the label is placed under the rendered image, whose height follows from the image's own aspect ratio.",
+     "severity": "COSMETIC",
+     "status": "REPAIRED",
+     "verified_after_repair": true,
+     "what_was_seen": "a landscape photograph's identifier label floated about half an inch below the image, with white space between them."
+    }
+   ],
+   "inspected": true,
+   "note": "three systems, all incorrect, each with its own prediction string. The caption does not describe the shared failure as a reasoning failure, which the category's interpretation bound forbids without independent evidence."
+  },
+  {
+   "artefact_id": "ve2_gallery_main_QC03_fusion_right_concat_wrong",
+   "category_id": "QC03_fusion_right_concat_wrong",
+   "checklist_items_passed": 12,
+   "findings": [],
+   "inspected": true,
+   "note": "two systems, one correct and one not in each row. The caption states that the aggregate contrast is capacity-confounded, as the category requires."
+  },
+  {
+   "artefact_id": "ve2_gallery_main_QC05_question_side_pretraining",
+   "category_id": "QC05_question_side_pretraining",
+   "checklist_items_passed": 12,
+   "findings": [],
+   "inspected": true,
+   "note": "A1 and A1r are expanded in the header as the pretrained and the architecture-matched random SmolLM2-135M question encoder, so neither code is unexplained."
+  },
+  {
+   "artefact_id": "ve2_gallery_main_QC07_visual_reliance",
+   "category_id": "QC07_visual_reliance",
+   "checklist_items_passed": 12,
+   "findings": [
+    {
+     "cause": "the title concatenated the category identifier and the full category description, and no width check existed",
+     "finding_id": "VQA-1",
+     "repair": "the title is now the category identifier alone and the description moved to the subtitle, which wraps. Every string is measured against the space available before it is drawn and the build stops if it would not fit.",
+     "severity": "BLOCKING",
+     "status": "REPAIRED",
+     "verified_after_repair": true,
+     "what_was_seen": "the page title ran off the right edge and was cut mid-word: the heading read '... wrong under the shuffled im'."
+    },
+    {
+     "cause": "the value column sat at a fixed fraction of the text axis, which was narrower than the longest system label on this page",
+     "finding_id": "VQA-2",
+     "repair": "the value column is now placed after the widest label actually being drawn, measured through the font, and the build refuses a row whose columns would collide. The system labels were also shortened, with the full expansion kept in the page header where the style contract requires it.",
+     "severity": "BLOCKING",
+     "status": "REPAIRED",
+     "verified_after_repair": true,
+     "what_was_seen": "on this page the prediction values were drawn on top of their own labels: 'Fusion head, real image:' and the value 'shelf' overlapped and neither was fully readable."
+    },
+    {
+     "cause": "each image was drawn into an axes that shrank to its own aspect ratio, so the boxes differed",
+     "finding_id": "VQA-3",
+     "repair": "each image is drawn into a fixed square box anchored at the top, keeping its own aspect ratio inside it, and its label follows the rendered image rather than the box.",
+     "severity": "COSMETIC",
+     "status": "REPAIRED",
+     "verified_after_repair": true,
+     "what_was_seen": "the two images in a row did not share a top edge and their identifier labels sat at different heights, which made the pair read as unrelated rather than as a substitution."
+    }
+   ],
+   "inspected": true,
+   "note": "after repair: both images are drawn at their true aspect ratio, labelled 'the question's own image' and 'the image that replaced it', and the two predictions sit against the correct conditions. The wrong-image partner differs from the question's own image in both rows."
+  },
+  {
+   "artefact_id": "ve2_gallery_main_QC09_deep_reasoning_failure",
+   "category_id": "QC09_deep_reasoning_failure",
+   "checklist_items_passed": 12,
+   "findings": [],
+   "inspected": true,
+   "note": "the program-step count is shown on the panel and labelled 'GQA program steps', not reasoning steps performed by the model. The interpretation carries the category's own refusal to attribute the failure to the question's depth."
+  }
+ ],
+ "rule": "every rendered page was displayed and inspected against the checklist below. Findings are kept after repair, because a defect found and fixed is the evidence that the pass was real.",
+ "title": "VE-2 visual quality-assurance record",
+ "ve0_source_artefacts": [
+  {
+   "path": "results/ve0/canonical_evidence_inventory.json",
+   "role": "VE-0 output A",
+   "sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3"
+  },
+  {
+   "path": "results/ve0/canonical_evidence_inventory.csv",
+   "role": "VE-0 output A_csv",
+   "sha256": "86921381e6fc22b674559b44272e9ba70aaeffafdf600c4a752d5cb6200eee9b"
+  },
+  {
+   "path": "results/ve0/supersession_map.json",
+   "role": "VE-0 output C",
+   "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
+  },
+  {
+   "path": "results/ve0/claim_ledger.json",
+   "role": "VE-0 output D",
+   "sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7"
+  },
+  {
+   "path": "results/ve0/rq_evidence_matrix.json",
+   "role": "VE-0 output E",
+   "sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d"
+  },
+  {
+   "path": "results/ve0/figure_specifications.json",
+   "role": "VE-0 output F",
+   "sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c"
+  },
+  {
+   "path": "results/ve0/table_specifications.json",
+   "role": "VE-0 output G",
+   "sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8"
+  },
+  {
+   "path": "results/ve0/qualitative_protocol.json",
+   "role": "VE-0 output H",
+   "sha256": "c8c5c35bec84da409e9a36612ad07846e2d218aa35351bc7d09340760cd9e895"
+  },
+  {
+   "path": "results/ve0/qualitative_record_schema.json",
+   "role": "VE-0 output I",
+   "sha256": "898e0a6bfeddfb37196e0d1e4bfc469606bcd663c5283b6fac931cd0e3de4297"
+  },
+  {
+   "path": "results/ve0/reporting_style_contract.json",
+   "role": "VE-0 output J",
+   "sha256": "536cf07aa6bd5f80eb1b843046435804345e7bd1f558ba047866b223aadd5504"
+  },
+  {
+   "path": "results/ve0/provenance_contract.json",
+   "role": "VE-0 output K",
+   "sha256": "4a0c33512194fcd11493d3e05f0a86fc8f752ea6343f698c8da0c630672213ab"
+  },
+  {
+   "path": "results/ve0/efficiency_visualisation_contract.json",
+   "role": "VE-0 output L",
+   "sha256": "c8d221544dca46f55339fcd708e4dd66b9aa1e1e9b130bdf44a2a39871ee9cc4"
+  },
+  {
+   "path": "results/ve0/results_section_mapping.json",
+   "role": "VE-0 output M",
+   "sha256": "2f80c8d34949f6ea3e5b7546d67b79793463d7f63d4278b0a03153125bc50686"
+  },
+  {
+   "path": "results/ve0/VE0_MANIFEST.json",
+   "role": "VE-0 output O",
+   "sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3"
+  }
+ ],
+ "ve0_specification_id": "VE0-FIG-10",
+ "ve2_output": "visual_qa"
+}

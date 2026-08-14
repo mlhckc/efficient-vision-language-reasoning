@@ -130,6 +130,23 @@ results/ve1/tables/*
 !results/ve1/tables/*.csv
 !results/ve1/tables/*.md
 
+# VE-2 qualitative evidence: the same policy as VE-1. The gallery PDFs and
+# their per-page preview PNGs are the deliverable, and the qualitative records,
+# selection and skip registry, captions, visual-QA record, provenance registry
+# and manifest are what make every selected example checkable from a clone
+# without re-running the build. The galleries render real GQA photographs, but
+# nothing tracked here is a dataset image: the records name each image by its
+# identifier, path and SHA-256, and the images themselves stay under the
+# ignored data/ tree.
+!results/ve2/
+results/ve2/*
+!results/ve2/*.json
+!results/ve2/galleries/
+results/ve2/galleries/*
+!results/ve2/galleries/*.json
+!results/ve2/galleries/*.pdf
+!results/ve2/galleries/*.png
+
 # Python bytecode
 __pycache__/
 *.pyc

@@ -1,0 +1,618 @@
+{
+ "clean_test_accessed": false,
+ "content_sha256": "4d96180c7b79fe57369d4acdac94d053afa52f5deac8fda8008ad96907a13ed1",
+ "development_set_only": true,
+ "provenance": {
+  "build_command": "python -m experiments.ve2.run_ve2",
+  "builder": "experiments/ve2/run_ve2.py",
+  "builder_sha256": "7fab3289488e05d89bd258aa04394df6bbdc88b8c82abe7071196b79dccd4e89",
+  "clean_test_accessed": false,
+  "device": "cpu",
+  "evaluated_anything": false,
+  "gpu_hours_charged": 0.0,
+  "gpu_used": false,
+  "inputs": [],
+  "matplotlib_version": "3.11.0",
+  "measured_anything": false,
+  "numpy_version": "2.5.0",
+  "pandas_version": "3.0.3",
+  "pillow_version": "12.2.0",
+  "python": "3.12.3",
+  "read_any_checkpoint": false,
+  "read_any_embedding_store": false,
+  "repository_head": "73af31953a99a9c1c196f609abf2be0912c321a2",
+  "repository_head_short": "73af319",
+  "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+  "rescored_anything": false,
+  "schema_version": 1,
+  "selected_any_checkpoint": false,
+  "trained_anything": false,
+  "worktree_dirty": true
+ },
+ "record_count": 28,
+ "records": [
+  {
+   "artefact_id": "VE2-CAP-QC01_all_correct",
+   "caption": "Every compared global-embedding system answers correctly, shown on 2 development questions. Evidence: per-row predictions frozen at closure_row_evidence, train_40k, seed 0, condition normal; systems compared are question-only head: a classifier over the frozen CLIP question embedding alone, with no image input; concatenation head: a classifier over the frozen CLIP image and question embeddings concatenated; fusion head: the concatenation plus the elementwise product and absolute difference of the two embeddings. Question text, gold answer, question type and program length come from the development split manifest and its type metadata. Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it. Limitation: an easy row for every system; illustrative of the task, not of any system's advantage. Development-set evidence only; the clean test is embargoed and its contents are unread. Selection: the example is the lowest-ranked eligible development question in its category under the frozen VE-0 deterministic rank, SHA-256 over a salt fixed before any example was inspected. It was not chosen for appearance, and no example was substituted because another read better.",
+   "category_id": "QC01_all_correct",
+   "evidence": "Evidence: per-row predictions frozen at closure_row_evidence, train_40k, seed 0, condition normal; systems compared are question-only head: a classifier over the frozen CLIP question embedding alone, with no image input; concatenation head: a classifier over the frozen CLIP image and question embeddings concatenated; fusion head: the concatenation plus the elementwise product and absolute difference of the two embeddings. Question text, gold answer, question type and program length come from the development split manifest and its type metadata.",
+   "gallery_id": "ve2_gallery_appendix",
+   "illustrative_status": "Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it.",
+   "kind": "gallery_page",
+   "limitation": "Limitation: an easy row for every system; illustrative of the task, not of any system's advantage. Development-set evidence only; the clean test is embargoed and its contents are unread.",
+   "mandatory_caption_caveat": "Development examples only; the clean test is embargoed and unread. Every example is drawn by the deterministic rank defined in the VE-0 qualitative protocol, whose salt was frozen before any example was inspected. Illustrative only: n examples cannot support a quantitative claim, and no scene graph or reasoning chain is shown that is not present in the canonical evidence.",
+   "message": "Every compared global-embedding system answers correctly, shown on 2 development questions.",
+   "placement": "APPENDIX",
+   "qualitative_ids": [
+    "VE2-QUAL-QC01_all_correct-01",
+    "VE2-QUAL-QC01_all_correct-02"
+   ],
+   "question_ids": [
+    "02541262",
+    "03842019"
+   ],
+   "selection": "Selection: the example is the lowest-ranked eligible development question in its category under the frozen VE-0 deterministic rank, SHA-256 over a salt fixed before any example was inspected. It was not chosen for appearance, and no example was substituted because another read better.",
+   "ve0_specification_id": "VE0-FIG-10"
+  },
+  {
+   "artefact_id": "VE2-CAP-QC02_all_wrong",
+   "caption": "Every compared global-embedding system answers incorrectly, shown on 2 development questions. Evidence: per-row predictions frozen at closure_row_evidence, train_40k, seed 0, condition normal; systems compared are question-only head: a classifier over the frozen CLIP question embedding alone, with no image input; concatenation head: a classifier over the frozen CLIP image and question embeddings concatenated; fusion head: the concatenation plus the elementwise product and absolute difference of the two embeddings. Question text, gold answer, question type and program length come from the development split manifest and its type metadata. Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it. Limitation: a shared failure. It does not identify a cause and must not be captioned as a reasoning failure without independent evidence. Development-set evidence only; the clean test is embargoed and its contents are unread. Selection: the example is the lowest-ranked eligible development question in its category under the frozen VE-0 deterministic rank, SHA-256 over a salt fixed before any example was inspected. It was not chosen for appearance, and no example was substituted because another read better.",
+   "category_id": "QC02_all_wrong",
+   "evidence": "Evidence: per-row predictions frozen at closure_row_evidence, train_40k, seed 0, condition normal; systems compared are question-only head: a classifier over the frozen CLIP question embedding alone, with no image input; concatenation head: a classifier over the frozen CLIP image and question embeddings concatenated; fusion head: the concatenation plus the elementwise product and absolute difference of the two embeddings. Question text, gold answer, question type and program length come from the development split manifest and its type metadata.",
+   "gallery_id": "ve2_gallery_main",
+   "illustrative_status": "Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it.",
+   "kind": "gallery_page",
+   "limitation": "Limitation: a shared failure. It does not identify a cause and must not be captioned as a reasoning failure without independent evidence. Development-set evidence only; the clean test is embargoed and its contents are unread.",
+   "mandatory_caption_caveat": "Development examples only; the clean test is embargoed and unread. Every example is drawn by the deterministic rank defined in the VE-0 qualitative protocol, whose salt was frozen before any example was inspected. Illustrative only: n examples cannot support a quantitative claim, and no scene graph or reasoning chain is shown that is not present in the canonical evidence.",
+   "message": "Every compared global-embedding system answers incorrectly, shown on 2 development questions.",
+   "placement": "MAIN_TEXT",
+   "qualitative_ids": [
+    "VE2-QUAL-QC02_all_wrong-01",
+    "VE2-QUAL-QC02_all_wrong-02"
+   ],
+   "question_ids": [
+    "10600430",
+    "071060289"
+   ],
+   "selection": "Selection: the example is the lowest-ranked eligible development question in its category under the frozen VE-0 deterministic rank, SHA-256 over a salt fixed before any example was inspected. It was not chosen for appearance, and no example was substituted because another read better.",
+   "ve0_specification_id": "VE0-FIG-10"
+  },
+  {
+   "artefact_id": "VE2-CAP-QC03_fusion_right_concat_wrong",
+   "caption": "Fusion correct where concatenation is wrong, shown on 2 development questions. Evidence: per-row predictions frozen at closure_row_evidence, train_40k, seed 0, condition normal; systems compared are concatenation head: a classifier over the frozen CLIP image and question embeddings concatenated; fusion head: the concatenation plus the elementwise product and absolute difference of the two embeddings. Question text, gold answer, question type and program length come from the development split manifest and its type metadata. Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it. Limitation: one row where the two systems disagree. It illustrates the aggregate contrast; it is not evidence for it, and the aggregate contrast is capacity-confounded. Development-set evidence only; the clean test is embargoed and its contents are unread. Selection: the example is the lowest-ranked eligible development question in its category under the frozen VE-0 deterministic rank, SHA-256 over a salt fixed before any example was inspected. It was not chosen for appearance, and no example was substituted because another read better.",
+   "category_id": "QC03_fusion_right_concat_wrong",
+   "evidence": "Evidence: per-row predictions frozen at closure_row_evidence, train_40k, seed 0, condition normal; systems compared are concatenation head: a classifier over the frozen CLIP image and question embeddings concatenated; fusion head: the concatenation plus the elementwise product and absolute difference of the two embeddings. Question text, gold answer, question type and program length come from the development split manifest and its type metadata.",
+   "gallery_id": "ve2_gallery_main",
+   "illustrative_status": "Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it.",
+   "kind": "gallery_page",
+   "limitation": "Limitation: one row where the two systems disagree. It illustrates the aggregate contrast; it is not evidence for it, and the aggregate contrast is capacity-confounded. Development-set evidence only; the clean test is embargoed and its contents are unread.",
+   "mandatory_caption_caveat": "Development examples only; the clean test is embargoed and unread. Every example is drawn by the deterministic rank defined in the VE-0 qualitative protocol, whose salt was frozen before any example was inspected. Illustrative only: n examples cannot support a quantitative claim, and no scene graph or reasoning chain is shown that is not present in the canonical evidence.",
+   "message": "Fusion correct where concatenation is wrong, shown on 2 development questions.",
+   "placement": "MAIN_TEXT",
+   "qualitative_ids": [
+    "VE2-QUAL-QC03_fusion_right_concat_wrong-01",
+    "VE2-QUAL-QC03_fusion_right_concat_wrong-02"
+   ],
+   "question_ids": [
+    "10869363",
+    "101012371"
+   ],
+   "selection": "Selection: the example is the lowest-ranked eligible development question in its category under the frozen VE-0 deterministic rank, SHA-256 over a salt fixed before any example was inspected. It was not chosen for appearance, and no example was substituted because another read better.",
+   "ve0_specification_id": "VE0-FIG-10"
+  },
+  {
+   "artefact_id": "VE2-CAP-QC04_representation_improvement",
+   "caption": "The SigLIP fusion head correct where the CLIP fusion head is wrong, shown on 2 development questions. Evidence: per-row predictions frozen at closure_row_evidence, train_40k, seed 0, condition normal; systems compared are fusion head: the concatenation plus the elementwise product and absolute difference of the two embeddings; SigLIP fusion head: the same fusion head over frozen SigLIP ViT-B/16 embeddings instead of frozen CLIP ViT-B/32. Question text, gold answer, question type and program length come from the development split manifest and its type metadata. Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it. Limitation: representation quality is not isolated; the encoder and two widths changed together, so the example illustrates a system difference. Development-set evidence only; the clean test is embargoed and its contents are unread. Selection: the example is the lowest-ranked eligible development question in its category under the frozen VE-0 deterministic rank, SHA-256 over a salt fixed before any example was inspected. It was not chosen for appearance, and no example was substituted because another read better.",
+   "category_id": "QC04_representation_improvement",
+   "evidence": "Evidence: per-row predictions frozen at closure_row_evidence, train_40k, seed 0, condition normal; systems compared are fusion head: the concatenation plus the elementwise product and absolute difference of the two embeddings; SigLIP fusion head: the same fusion head over frozen SigLIP ViT-B/16 embeddings instead of frozen CLIP ViT-B/32. Question text, gold answer, question type and program length come from the development split manifest and its type metadata.",
+   "gallery_id": "ve2_gallery_appendix",
+   "illustrative_status": "Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it.",
+   "kind": "gallery_page",
+   "limitation": "Limitation: representation quality is not isolated; the encoder and two widths changed together, so the example illustrates a system difference. Development-set evidence only; the clean test is embargoed and its contents are unread.",
+   "mandatory_caption_caveat": "Development examples only; the clean test is embargoed and unread. Every example is drawn by the deterministic rank defined in the VE-0 qualitative protocol, whose salt was frozen before any example was inspected. Illustrative only: n examples cannot support a quantitative claim, and no scene graph or reasoning chain is shown that is not present in the canonical evidence.",
+   "message": "The SigLIP fusion head correct where the CLIP fusion head is wrong, shown on 2 development questions.",
+   "placement": "APPENDIX",
+   "qualitative_ids": [
+    "VE2-QUAL-QC04_representation_improvement-01",
+    "VE2-QUAL-QC04_representation_improvement-02"
+   ],
+   "question_ids": [
+    "00445083",
+    "11743124"
+   ],
+   "selection": "Selection: the example is the lowest-ranked eligible development question in its category under the frozen VE-0 deterministic rank, SHA-256 over a salt fixed before any example was inspected. It was not chosen for appearance, and no example was substituted because another read better.",
+   "ve0_specification_id": "VE0-FIG-10"
+  },
+  {
+   "artefact_id": "VE2-CAP-QC05_question_side_pretraining",
+   "caption": "The pretrained question encoder A1 correct where its random control A1r is wrong, shown on 2 development questions. Evidence: per-row predictions frozen at e8a_prediction_tables, train_40k, seed 0, condition normal; systems compared are A1: the pretrained frozen SmolLM2-135M question encoder feeding the latent-query reasoner; A1r: the architecture-matched randomly initialised SmolLM2-135M question encoder, the within-size control for A1. Question text, gold answer, question type and program length come from the development split manifest and its type metadata. Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it. Limitation: illustrates the only clean within-size question-side pretraining contrast; a single row is not evidence of the effect. Development-set evidence only; the clean test is embargoed and its contents are unread. Selection: the example is the lowest-ranked eligible development question in its category under the frozen VE-0 deterministic rank, SHA-256 over a salt fixed before any example was inspected. It was not chosen for appearance, and no example was substituted because another read better.",
+   "category_id": "QC05_question_side_pretraining",
+   "evidence": "Evidence: per-row predictions frozen at e8a_prediction_tables, train_40k, seed 0, condition normal; systems compared are A1: the pretrained frozen SmolLM2-135M question encoder feeding the latent-query reasoner; A1r: the architecture-matched randomly initialised SmolLM2-135M question encoder, the within-size control for A1. Question text, gold answer, question type and program length come from the development split manifest and its type metadata.",
+   "gallery_id": "ve2_gallery_main",
+   "illustrative_status": "Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it.",
+   "kind": "gallery_page",
+   "limitation": "Limitation: illustrates the only clean within-size question-side pretraining contrast; a single row is not evidence of the effect. Development-set evidence only; the clean test is embargoed and its contents are unread.",
+   "mandatory_caption_caveat": "Development examples only; the clean test is embargoed and unread. Every example is drawn by the deterministic rank defined in the VE-0 qualitative protocol, whose salt was frozen before any example was inspected. Illustrative only: n examples cannot support a quantitative claim, and no scene graph or reasoning chain is shown that is not present in the canonical evidence.",
+   "message": "The pretrained question encoder A1 correct where its random control A1r is wrong, shown on 2 development questions.",
+   "placement": "MAIN_TEXT",
+   "qualitative_ids": [
+    "VE2-QUAL-QC05_question_side_pretraining-01",
+    "VE2-QUAL-QC05_question_side_pretraining-02"
+   ],
+   "question_ids": [
+    "081024770",
+    "1971431"
+   ],
+   "selection": "Selection: the example is the lowest-ranked eligible development question in its category under the frozen VE-0 deterministic rank, SHA-256 over a salt fixed before any example was inspected. It was not chosen for appearance, and no example was substituted because another read better.",
+   "ve0_specification_id": "VE0-FIG-10"
+  },
+  {
+   "artefact_id": "VE2-CAP-QC06_answer_side_disagreement",
+   "caption": "The pretrained 360M readout B4 and its random control B4r disagree, shown on 2 development questions. Evidence: per-row predictions frozen at e10_per_row, train_40k, seed 0, condition normal; systems compared are B4: the pretrained frozen SmolLM2-360M answer readout; B4r: the architecture-matched randomly initialised SmolLM2-360M answer readout, the within-size control for B4. Question text, gold answer, question type and program length come from the development split manifest and its type metadata. Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it. Limitation: the aggregate contrast is not directional and its interval contains zero. Both directions of disagreement must be shown, and the caption must not imply the pretrained side is better. Development-set evidence only; the clean test is embargoed and its contents are unread. Selection: the example is the lowest-ranked eligible development question in its category under the frozen VE-0 deterministic rank, SHA-256 over a salt fixed before any example was inspected. It was not chosen for appearance, and no example was substituted because another read better.",
+   "category_id": "QC06_answer_side_disagreement",
+   "evidence": "Evidence: per-row predictions frozen at e10_per_row, train_40k, seed 0, condition normal; systems compared are B4: the pretrained frozen SmolLM2-360M answer readout; B4r: the architecture-matched randomly initialised SmolLM2-360M answer readout, the within-size control for B4. Question text, gold answer, question type and program length come from the development split manifest and its type metadata.",
+   "gallery_id": "ve2_gallery_appendix",
+   "illustrative_status": "Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it.",
+   "kind": "gallery_page",
+   "limitation": "Limitation: the aggregate contrast is not directional and its interval contains zero. Both directions of disagreement must be shown, and the caption must not imply the pretrained side is better. Development-set evidence only; the clean test is embargoed and its contents are unread.",
+   "mandatory_caption_caveat": "Development examples only; the clean test is embargoed and unread. Every example is drawn by the deterministic rank defined in the VE-0 qualitative protocol, whose salt was frozen before any example was inspected. Illustrative only: n examples cannot support a quantitative claim, and no scene graph or reasoning chain is shown that is not present in the canonical evidence.",
+   "message": "The pretrained 360M readout B4 and its random control B4r disagree, shown on 2 development questions.",
+   "placement": "APPENDIX",
+   "qualitative_ids": [
+    "VE2-QUAL-QC06_answer_side_disagreement-01",
+    "VE2-QUAL-QC06_answer_side_disagreement-03"
+   ],
+   "question_ids": [
+    "04652163",
+    "15948686"
+   ],
+   "selection": "Selection: the example is the lowest-ranked eligible development question in its category under the frozen VE-0 deterministic rank, SHA-256 over a salt fixed before any example was inspected. It was not chosen for appearance, and no example was substituted because another read better.",
+   "ve0_specification_id": "VE0-FIG-10"
+  },
+  {
+   "artefact_id": "VE2-CAP-QC07_visual_reliance",
+   "caption": "Fusion correct under the normal image and wrong under the shuffled image, shown on 2 development questions. Evidence: per-row predictions frozen at closure_row_evidence, train_40k, seed 0, condition normal and shuffled, paired on the same question; systems compared are fusion head reading the question's own image; the same fusion head, with the image embedding replaced by another development image's under the recorded permutation. Question text, gold answer, question type and program length come from the development split manifest and its type metadata. Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it. Limitation: demonstrates reliance on the image for this row. It is not proof of grounding, and the wrong-image partner must be shown so a reader can see what replaced it. Development-set evidence only; the clean test is embargoed and its contents are unread. Selection: the example is the lowest-ranked eligible development question in its category under the frozen VE-0 deterministic rank, SHA-256 over a salt fixed before any example was inspected. It was not chosen for appearance, and no example was substituted because another read better.",
+   "category_id": "QC07_visual_reliance",
+   "evidence": "Evidence: per-row predictions frozen at closure_row_evidence, train_40k, seed 0, condition normal and shuffled, paired on the same question; systems compared are fusion head reading the question's own image; the same fusion head, with the image embedding replaced by another development image's under the recorded permutation. Question text, gold answer, question type and program length come from the development split manifest and its type metadata.",
+   "gallery_id": "ve2_gallery_main",
+   "illustrative_status": "Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it.",
+   "kind": "gallery_page",
+   "limitation": "Limitation: demonstrates reliance on the image for this row. It is not proof of grounding, and the wrong-image partner must be shown so a reader can see what replaced it. Development-set evidence only; the clean test is embargoed and its contents are unread.",
+   "mandatory_caption_caveat": "Development examples only; the clean test is embargoed and unread. Every example is drawn by the deterministic rank defined in the VE-0 qualitative protocol, whose salt was frozen before any example was inspected. Illustrative only: n examples cannot support a quantitative claim, and no scene graph or reasoning chain is shown that is not present in the canonical evidence.",
+   "message": "Fusion correct under the normal image and wrong under the shuffled image, shown on 2 development questions.",
+   "placement": "MAIN_TEXT",
+   "qualitative_ids": [
+    "VE2-QUAL-QC07_visual_reliance-01",
+    "VE2-QUAL-QC07_visual_reliance-02"
+   ],
+   "question_ids": [
+    "10181047",
+    "05206184"
+   ],
+   "selection": "Selection: the example is the lowest-ranked eligible development question in its category under the frozen VE-0 deterministic rank, SHA-256 over a salt fixed before any example was inspected. It was not chosen for appearance, and no example was substituted because another read better.",
+   "ve0_specification_id": "VE0-FIG-10"
+  },
+  {
+   "artefact_id": "VE2-CAP-QC08_short_reasoning",
+   "caption": "A two-step-or-fewer question, shown on 2 development questions. Evidence: per-row predictions frozen at closure_row_evidence, train_40k, seed 0, condition normal; systems compared are fusion head: the concatenation plus the elementwise product and absolute difference of the two embeddings. Question text, gold answer, question type and program length come from the development split manifest and its type metadata. Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it. Limitation: step count is the GQA semantic program length, a proxy for reasoning depth. Development-set evidence only; the clean test is embargoed and its contents are unread. Selection: the example is the lowest-ranked eligible development question in its category under the frozen VE-0 deterministic rank, SHA-256 over a salt fixed before any example was inspected. It was not chosen for appearance, and no example was substituted because another read better.",
+   "category_id": "QC08_short_reasoning",
+   "evidence": "Evidence: per-row predictions frozen at closure_row_evidence, train_40k, seed 0, condition normal; systems compared are fusion head: the concatenation plus the elementwise product and absolute difference of the two embeddings. Question text, gold answer, question type and program length come from the development split manifest and its type metadata.",
+   "gallery_id": "ve2_gallery_appendix",
+   "illustrative_status": "Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it.",
+   "kind": "gallery_page",
+   "limitation": "Limitation: step count is the GQA semantic program length, a proxy for reasoning depth. Development-set evidence only; the clean test is embargoed and its contents are unread.",
+   "mandatory_caption_caveat": "Development examples only; the clean test is embargoed and unread. Every example is drawn by the deterministic rank defined in the VE-0 qualitative protocol, whose salt was frozen before any example was inspected. Illustrative only: n examples cannot support a quantitative claim, and no scene graph or reasoning chain is shown that is not present in the canonical evidence.",
+   "message": "A two-step-or-fewer question, shown on 2 development questions.",
+   "placement": "APPENDIX",
+   "qualitative_ids": [
+    "VE2-QUAL-QC08_short_reasoning-01",
+    "VE2-QUAL-QC08_short_reasoning-02"
+   ],
+   "question_ids": [
+    "04945041",
+    "15535737"
+   ],
+   "selection": "Selection: the example is the lowest-ranked eligible development question in its category under the frozen VE-0 deterministic rank, SHA-256 over a salt fixed before any example was inspected. It was not chosen for appearance, and no example was substituted because another read better.",
+   "ve0_specification_id": "VE0-FIG-10"
+  },
+  {
+   "artefact_id": "VE2-CAP-QC09_deep_reasoning_failure",
+   "caption": "A question with four or more program steps that fusion answers incorrectly, shown on 2 development questions. Evidence: per-row predictions frozen at closure_row_evidence, train_40k, seed 0, condition normal; systems compared are fusion head: the concatenation plus the elementwise product and absolute difference of the two embeddings. Question text, gold answer, question type and program length come from the development split manifest and its type metadata. Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it. Limitation: illustrates where the pooled four-or-more-step deficit lives. It does not show the model failed BECAUSE the question was deep; no causal attribution may be made from an example. Development-set evidence only; the clean test is embargoed and its contents are unread. Selection: the example is the lowest-ranked eligible development question in its category under the frozen VE-0 deterministic rank, SHA-256 over a salt fixed before any example was inspected. It was not chosen for appearance, and no example was substituted because another read better.",
+   "category_id": "QC09_deep_reasoning_failure",
+   "evidence": "Evidence: per-row predictions frozen at closure_row_evidence, train_40k, seed 0, condition normal; systems compared are fusion head: the concatenation plus the elementwise product and absolute difference of the two embeddings. Question text, gold answer, question type and program length come from the development split manifest and its type metadata.",
+   "gallery_id": "ve2_gallery_main",
+   "illustrative_status": "Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it.",
+   "kind": "gallery_page",
+   "limitation": "Limitation: illustrates where the pooled four-or-more-step deficit lives. It does not show the model failed BECAUSE the question was deep; no causal attribution may be made from an example. Development-set evidence only; the clean test is embargoed and its contents are unread.",
+   "mandatory_caption_caveat": "Development examples only; the clean test is embargoed and unread. Every example is drawn by the deterministic rank defined in the VE-0 qualitative protocol, whose salt was frozen before any example was inspected. Illustrative only: n examples cannot support a quantitative claim, and no scene graph or reasoning chain is shown that is not present in the canonical evidence.",
+   "message": "A question with four or more program steps that fusion answers incorrectly, shown on 2 development questions.",
+   "placement": "MAIN_TEXT",
+   "qualitative_ids": [
+    "VE2-QUAL-QC09_deep_reasoning_failure-01",
+    "VE2-QUAL-QC09_deep_reasoning_failure-02"
+   ],
+   "question_ids": [
+    "05237394",
+    "05590137"
+   ],
+   "selection": "Selection: the example is the lowest-ranked eligible development question in its category under the frozen VE-0 deterministic rank, SHA-256 over a salt fixed before any example was inspected. It was not chosen for appearance, and no example was substituted because another read better.",
+   "ve0_specification_id": "VE0-FIG-10"
+  },
+  {
+   "artefact_id": "VE2-CAP-QC10_compact_vlm_disagreement",
+   "caption": "QC10_compact_vlm_disagreement was not populated. The compact VLM and the global-embedding head disagree could not be shown. Evidence: no artefact in the frozen E9 tree stores a per-row correctness vector. The generations themselves are stored as text, so decoding is unnecessary, but the category predicate needs normalised correctness and the only route to it is to apply the pinned G21 scorer to those generations against the gold answers. That is re-scoring: it computes a per-row scientific quantity that no frozen artefact holds. Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it. Limitation: the category is recorded DROPPED_BY_PROTOCOL under the frozen protocol rather than approximated, because producing it would have required a new evaluation that is out of scope.",
+   "category_id": "QC10_compact_vlm_disagreement",
+   "evidence": "Evidence: no artefact in the frozen E9 tree stores a per-row correctness vector. The generations themselves are stored as text, so decoding is unnecessary, but the category predicate needs normalised correctness and the only route to it is to apply the pinned G21 scorer to those generations against the gold answers. That is re-scoring: it computes a per-row scientific quantity that no frozen artefact holds.",
+   "illustrative_status": "Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it.",
+   "kind": "dropped_category",
+   "message": "QC10_compact_vlm_disagreement was not populated. The compact VLM and the global-embedding head disagree could not be shown.",
+   "placement": "APPENDIX",
+   "status": "DROPPED_BY_PROTOCOL",
+   "ve0_specification_id": "VE0-FIG-10"
+  },
+  {
+   "artefact_id": "VE2-CAP-VE2-QUAL-QC01_all_correct-01",
+   "caption": "Development question 02541262 on image 2384466: Question-only answered 'no' (correct); Concatenation answered 'no' (correct); Fusion answered 'no' (correct). Evidence: gold answer 'no'; question type rel/verify; GQA semantic program length 2 steps. Predictions are read from frozen per-row artefacts, each hash-checked against the manifest that binds it, and aligned to the development split row-for-row on question and image identifier. Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it. Limitation: One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "category_id": "QC01_all_correct",
+   "category_interpretation_bound": "an easy row for every system; illustrative of the task, not of any system's advantage",
+   "evidence": "Evidence: gold answer 'no'; question type rel/verify; GQA semantic program length 2 steps. Predictions are read from frozen per-row artefacts, each hash-checked against the manifest that binds it, and aligned to the development split row-for-row on question and image identifier.",
+   "illustrative_status": "Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it.",
+   "image_id": "2384466",
+   "kind": "example",
+   "limitation": "Limitation: One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "message": "Development question 02541262 on image 2384466: Question-only answered 'no' (correct); Concatenation answered 'no' (correct); Fusion answered 'no' (correct).",
+   "placement": "APPENDIX",
+   "qualitative_id": "VE2-QUAL-QC01_all_correct-01",
+   "question_id": "02541262",
+   "ve0_specification_id": "VE0-FIG-10"
+  },
+  {
+   "artefact_id": "VE2-CAP-VE2-QUAL-QC01_all_correct-02",
+   "caption": "Development question 03842019 on image 2340934: Question-only answered 'yes' (correct); Concatenation answered 'yes' (correct); Fusion answered 'yes' (correct). Evidence: gold answer 'yes'; question type obj/logical; GQA semantic program length 5 steps. Predictions are read from frozen per-row artefacts, each hash-checked against the manifest that binds it, and aligned to the development split row-for-row on question and image identifier. Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it. Limitation: One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "category_id": "QC01_all_correct",
+   "category_interpretation_bound": "an easy row for every system; illustrative of the task, not of any system's advantage",
+   "evidence": "Evidence: gold answer 'yes'; question type obj/logical; GQA semantic program length 5 steps. Predictions are read from frozen per-row artefacts, each hash-checked against the manifest that binds it, and aligned to the development split row-for-row on question and image identifier.",
+   "illustrative_status": "Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it.",
+   "image_id": "2340934",
+   "kind": "example",
+   "limitation": "Limitation: One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "message": "Development question 03842019 on image 2340934: Question-only answered 'yes' (correct); Concatenation answered 'yes' (correct); Fusion answered 'yes' (correct).",
+   "placement": "APPENDIX",
+   "qualitative_id": "VE2-QUAL-QC01_all_correct-02",
+   "question_id": "03842019",
+   "ve0_specification_id": "VE0-FIG-10"
+  },
+  {
+   "artefact_id": "VE2-CAP-VE2-QUAL-QC02_all_wrong-01",
+   "caption": "Development question 10600430 on image 2385131: Question-only answered 'shirt' (incorrect); Concatenation answered 'truck' (incorrect); Fusion answered 'truck' (incorrect). Evidence: gold answer 'jeans'; question type rel/query; GQA semantic program length 4 steps. Predictions are read from frozen per-row artefacts, each hash-checked against the manifest that binds it, and aligned to the development split row-for-row on question and image identifier. Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it. Limitation: One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "category_id": "QC02_all_wrong",
+   "category_interpretation_bound": "a shared failure. It does not identify a cause and must not be captioned as a reasoning failure without independent evidence",
+   "evidence": "Evidence: gold answer 'jeans'; question type rel/query; GQA semantic program length 4 steps. Predictions are read from frozen per-row artefacts, each hash-checked against the manifest that binds it, and aligned to the development split row-for-row on question and image identifier.",
+   "illustrative_status": "Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it.",
+   "image_id": "2385131",
+   "kind": "example",
+   "limitation": "Limitation: One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "message": "Development question 10600430 on image 2385131: Question-only answered 'shirt' (incorrect); Concatenation answered 'truck' (incorrect); Fusion answered 'truck' (incorrect).",
+   "placement": "MAIN_TEXT",
+   "qualitative_id": "VE2-QUAL-QC02_all_wrong-01",
+   "question_id": "10600430",
+   "ve0_specification_id": "VE0-FIG-10"
+  },
+  {
+   "artefact_id": "VE2-CAP-VE2-QUAL-QC02_all_wrong-02",
+   "caption": "Development question 071060289 on image 2384279: Question-only answered 'blue' (incorrect); Concatenation answered 'brown' (incorrect); Fusion answered 'brown' (incorrect). Evidence: gold answer 'gray'; question type attr/query; GQA semantic program length 2 steps. Predictions are read from frozen per-row artefacts, each hash-checked against the manifest that binds it, and aligned to the development split row-for-row on question and image identifier. Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it. Limitation: One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "category_id": "QC02_all_wrong",
+   "category_interpretation_bound": "a shared failure. It does not identify a cause and must not be captioned as a reasoning failure without independent evidence",
+   "evidence": "Evidence: gold answer 'gray'; question type attr/query; GQA semantic program length 2 steps. Predictions are read from frozen per-row artefacts, each hash-checked against the manifest that binds it, and aligned to the development split row-for-row on question and image identifier.",
+   "illustrative_status": "Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it.",
+   "image_id": "2384279",
+   "kind": "example",
+   "limitation": "Limitation: One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "message": "Development question 071060289 on image 2384279: Question-only answered 'blue' (incorrect); Concatenation answered 'brown' (incorrect); Fusion answered 'brown' (incorrect).",
+   "placement": "MAIN_TEXT",
+   "qualitative_id": "VE2-QUAL-QC02_all_wrong-02",
+   "question_id": "071060289",
+   "ve0_specification_id": "VE0-FIG-10"
+  },
+  {
+   "artefact_id": "VE2-CAP-VE2-QUAL-QC03_fusion_right_concat_wrong-01",
+   "caption": "Development question 10869363 on image 2320225: Concatenation answered 'left' (incorrect); Fusion answered 'right' (correct). Evidence: gold answer 'right'; question type attr/query; GQA semantic program length 3 steps. Predictions are read from frozen per-row artefacts, each hash-checked against the manifest that binds it, and aligned to the development split row-for-row on question and image identifier. Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it. Limitation: One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "category_id": "QC03_fusion_right_concat_wrong",
+   "category_interpretation_bound": "one row where the two systems disagree. It illustrates the aggregate contrast; it is not evidence for it, and the aggregate contrast is capacity-confounded",
+   "evidence": "Evidence: gold answer 'right'; question type attr/query; GQA semantic program length 3 steps. Predictions are read from frozen per-row artefacts, each hash-checked against the manifest that binds it, and aligned to the development split row-for-row on question and image identifier.",
+   "illustrative_status": "Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it.",
+   "image_id": "2320225",
+   "kind": "example",
+   "limitation": "Limitation: One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "message": "Development question 10869363 on image 2320225: Concatenation answered 'left' (incorrect); Fusion answered 'right' (correct).",
+   "placement": "MAIN_TEXT",
+   "qualitative_id": "VE2-QUAL-QC03_fusion_right_concat_wrong-01",
+   "question_id": "10869363",
+   "ve0_specification_id": "VE0-FIG-10"
+  },
+  {
+   "artefact_id": "VE2-CAP-VE2-QUAL-QC03_fusion_right_concat_wrong-02",
+   "caption": "Development question 101012371 on image 2364920: Concatenation answered 'white' (incorrect); Fusion answered 'brown' (correct). Evidence: gold answer 'brown'; question type attr/query; GQA semantic program length 3 steps. Predictions are read from frozen per-row artefacts, each hash-checked against the manifest that binds it, and aligned to the development split row-for-row on question and image identifier. Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it. Limitation: One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "category_id": "QC03_fusion_right_concat_wrong",
+   "category_interpretation_bound": "one row where the two systems disagree. It illustrates the aggregate contrast; it is not evidence for it, and the aggregate contrast is capacity-confounded",
+   "evidence": "Evidence: gold answer 'brown'; question type attr/query; GQA semantic program length 3 steps. Predictions are read from frozen per-row artefacts, each hash-checked against the manifest that binds it, and aligned to the development split row-for-row on question and image identifier.",
+   "illustrative_status": "Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it.",
+   "image_id": "2364920",
+   "kind": "example",
+   "limitation": "Limitation: One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "message": "Development question 101012371 on image 2364920: Concatenation answered 'white' (incorrect); Fusion answered 'brown' (correct).",
+   "placement": "MAIN_TEXT",
+   "qualitative_id": "VE2-QUAL-QC03_fusion_right_concat_wrong-02",
+   "question_id": "101012371",
+   "ve0_specification_id": "VE0-FIG-10"
+  },
+  {
+   "artefact_id": "VE2-CAP-VE2-QUAL-QC04_representation_improvement-01",
+   "caption": "Development question 00445083 on image 2318195: Fusion answered 'left' (incorrect); Fusion (SigLIP) answered 'yes' (correct). Evidence: gold answer 'yes'; question type rel/verify; GQA semantic program length 3 steps. Predictions are read from frozen per-row artefacts, each hash-checked against the manifest that binds it, and aligned to the development split row-for-row on question and image identifier. Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it. Limitation: One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "category_id": "QC04_representation_improvement",
+   "category_interpretation_bound": "representation quality is not isolated; the encoder and two widths changed together, so the example illustrates a system difference",
+   "evidence": "Evidence: gold answer 'yes'; question type rel/verify; GQA semantic program length 3 steps. Predictions are read from frozen per-row artefacts, each hash-checked against the manifest that binds it, and aligned to the development split row-for-row on question and image identifier.",
+   "illustrative_status": "Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it.",
+   "image_id": "2318195",
+   "kind": "example",
+   "limitation": "Limitation: One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "message": "Development question 00445083 on image 2318195: Fusion answered 'left' (incorrect); Fusion (SigLIP) answered 'yes' (correct).",
+   "placement": "APPENDIX",
+   "qualitative_id": "VE2-QUAL-QC04_representation_improvement-01",
+   "question_id": "00445083",
+   "ve0_specification_id": "VE0-FIG-10"
+  },
+  {
+   "artefact_id": "VE2-CAP-VE2-QUAL-QC04_representation_improvement-02",
+   "caption": "Development question 11743124 on image 2401578: Fusion answered 'yellow' (incorrect); Fusion (SigLIP) answered 'blue' (correct). Evidence: gold answer 'blue'; question type attr/query; GQA semantic program length 2 steps. Predictions are read from frozen per-row artefacts, each hash-checked against the manifest that binds it, and aligned to the development split row-for-row on question and image identifier. Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it. Limitation: One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "category_id": "QC04_representation_improvement",
+   "category_interpretation_bound": "representation quality is not isolated; the encoder and two widths changed together, so the example illustrates a system difference",
+   "evidence": "Evidence: gold answer 'blue'; question type attr/query; GQA semantic program length 2 steps. Predictions are read from frozen per-row artefacts, each hash-checked against the manifest that binds it, and aligned to the development split row-for-row on question and image identifier.",
+   "illustrative_status": "Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it.",
+   "image_id": "2401578",
+   "kind": "example",
+   "limitation": "Limitation: One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "message": "Development question 11743124 on image 2401578: Fusion answered 'yellow' (incorrect); Fusion (SigLIP) answered 'blue' (correct).",
+   "placement": "APPENDIX",
+   "qualitative_id": "VE2-QUAL-QC04_representation_improvement-02",
+   "question_id": "11743124",
+   "ve0_specification_id": "VE0-FIG-10"
+  },
+  {
+   "artefact_id": "VE2-CAP-VE2-QUAL-QC05_question_side_pretraining-01",
+   "caption": "Development question 081024770 on image 2393299: A1 (pretrained) answered 'no' (correct); A1r (random) answered 'yes' (incorrect). Evidence: gold answer 'no'; question type obj/logical; GQA semantic program length 5 steps. Predictions are read from frozen per-row artefacts, each hash-checked against the manifest that binds it, and aligned to the development split row-for-row on question and image identifier. Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it. Limitation: One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "category_id": "QC05_question_side_pretraining",
+   "category_interpretation_bound": "illustrates the only clean within-size question-side pretraining contrast; a single row is not evidence of the effect",
+   "evidence": "Evidence: gold answer 'no'; question type obj/logical; GQA semantic program length 5 steps. Predictions are read from frozen per-row artefacts, each hash-checked against the manifest that binds it, and aligned to the development split row-for-row on question and image identifier.",
+   "illustrative_status": "Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it.",
+   "image_id": "2393299",
+   "kind": "example",
+   "limitation": "Limitation: One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "message": "Development question 081024770 on image 2393299: A1 (pretrained) answered 'no' (correct); A1r (random) answered 'yes' (incorrect).",
+   "placement": "MAIN_TEXT",
+   "qualitative_id": "VE2-QUAL-QC05_question_side_pretraining-01",
+   "question_id": "081024770",
+   "ve0_specification_id": "VE0-FIG-10"
+  },
+  {
+   "artefact_id": "VE2-CAP-VE2-QUAL-QC05_question_side_pretraining-02",
+   "caption": "Development question 1971431 on image 2387771: A1 (pretrained) answered 'yes' (correct); A1r (random) answered 'no' (incorrect). Evidence: gold answer 'yes'; question type rel/verify; GQA semantic program length 2 steps. Predictions are read from frozen per-row artefacts, each hash-checked against the manifest that binds it, and aligned to the development split row-for-row on question and image identifier. Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it. Limitation: One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "category_id": "QC05_question_side_pretraining",
+   "category_interpretation_bound": "illustrates the only clean within-size question-side pretraining contrast; a single row is not evidence of the effect",
+   "evidence": "Evidence: gold answer 'yes'; question type rel/verify; GQA semantic program length 2 steps. Predictions are read from frozen per-row artefacts, each hash-checked against the manifest that binds it, and aligned to the development split row-for-row on question and image identifier.",
+   "illustrative_status": "Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it.",
+   "image_id": "2387771",
+   "kind": "example",
+   "limitation": "Limitation: One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "message": "Development question 1971431 on image 2387771: A1 (pretrained) answered 'yes' (correct); A1r (random) answered 'no' (incorrect).",
+   "placement": "MAIN_TEXT",
+   "qualitative_id": "VE2-QUAL-QC05_question_side_pretraining-02",
+   "question_id": "1971431",
+   "ve0_specification_id": "VE0-FIG-10"
+  },
+  {
+   "artefact_id": "VE2-CAP-VE2-QUAL-QC06_answer_side_disagreement-01",
+   "caption": "Development question 04652163 on image 1159442: B4 (pretrained) answered 'street' (correct); B4r (random) answered 'road' (incorrect). Evidence: gold answer 'street'; question type global/query; GQA semantic program length 2 steps. Predictions are read from frozen per-row artefacts, each hash-checked against the manifest that binds it, and aligned to the development split row-for-row on question and image identifier. Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it. Limitation: One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "category_id": "QC06_answer_side_disagreement",
+   "category_interpretation_bound": "the aggregate contrast is not directional and its interval contains zero. Both directions of disagreement must be shown, and the caption must not imply the pretrained side is better",
+   "evidence": "Evidence: gold answer 'street'; question type global/query; GQA semantic program length 2 steps. Predictions are read from frozen per-row artefacts, each hash-checked against the manifest that binds it, and aligned to the development split row-for-row on question and image identifier.",
+   "illustrative_status": "Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it.",
+   "image_id": "1159442",
+   "kind": "example",
+   "limitation": "Limitation: One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "message": "Development question 04652163 on image 1159442: B4 (pretrained) answered 'street' (correct); B4r (random) answered 'road' (incorrect).",
+   "placement": "APPENDIX",
+   "qualitative_id": "VE2-QUAL-QC06_answer_side_disagreement-01",
+   "question_id": "04652163",
+   "ve0_specification_id": "VE0-FIG-10"
+  },
+  {
+   "artefact_id": "VE2-CAP-VE2-QUAL-QC06_answer_side_disagreement-03",
+   "caption": "Development question 15948686 on image 2368959: B4 (pretrained) answered 'no' (incorrect); B4r (random) answered 'yes' (correct). Evidence: gold answer 'yes'; question type rel/verify; GQA semantic program length 4 steps. Predictions are read from frozen per-row artefacts, each hash-checked against the manifest that binds it, and aligned to the development split row-for-row on question and image identifier. Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it. Limitation: One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "category_id": "QC06_answer_side_disagreement",
+   "category_interpretation_bound": "the aggregate contrast is not directional and its interval contains zero. Both directions of disagreement must be shown, and the caption must not imply the pretrained side is better",
+   "evidence": "Evidence: gold answer 'yes'; question type rel/verify; GQA semantic program length 4 steps. Predictions are read from frozen per-row artefacts, each hash-checked against the manifest that binds it, and aligned to the development split row-for-row on question and image identifier.",
+   "illustrative_status": "Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it.",
+   "image_id": "2368959",
+   "kind": "example",
+   "limitation": "Limitation: One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "message": "Development question 15948686 on image 2368959: B4 (pretrained) answered 'no' (incorrect); B4r (random) answered 'yes' (correct).",
+   "placement": "APPENDIX",
+   "qualitative_id": "VE2-QUAL-QC06_answer_side_disagreement-03",
+   "question_id": "15948686",
+   "ve0_specification_id": "VE0-FIG-10"
+  },
+  {
+   "artefact_id": "VE2-CAP-VE2-QUAL-QC07_visual_reliance-01",
+   "caption": "Development question 10181047 on image 2402937: Fusion, real image answered 'shelf' (correct); Fusion, wrong image answered 'bed' (incorrect). Evidence: gold answer 'shelf'; question type rel/query; GQA semantic program length 3 steps. Predictions are read from frozen per-row artefacts, each hash-checked against the manifest that binds it, and aligned to the development split row-for-row on question and image identifier. Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it. Limitation: One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "category_id": "QC07_visual_reliance",
+   "category_interpretation_bound": "demonstrates reliance on the image for this row. It is not proof of grounding, and the wrong-image partner must be shown so a reader can see what replaced it",
+   "evidence": "Evidence: gold answer 'shelf'; question type rel/query; GQA semantic program length 3 steps. Predictions are read from frozen per-row artefacts, each hash-checked against the manifest that binds it, and aligned to the development split row-for-row on question and image identifier.",
+   "illustrative_status": "Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it.",
+   "image_id": "2402937",
+   "kind": "example",
+   "limitation": "Limitation: One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "message": "Development question 10181047 on image 2402937: Fusion, real image answered 'shelf' (correct); Fusion, wrong image answered 'bed' (incorrect).",
+   "placement": "MAIN_TEXT",
+   "qualitative_id": "VE2-QUAL-QC07_visual_reliance-01",
+   "question_id": "10181047",
+   "ve0_specification_id": "VE0-FIG-10"
+  },
+  {
+   "artefact_id": "VE2-CAP-VE2-QUAL-QC07_visual_reliance-02",
+   "caption": "Development question 05206184 on image 2410905: Fusion, real image answered 'right' (correct); Fusion, wrong image answered 'left' (incorrect). Evidence: gold answer 'right'; question type rel/choose; GQA semantic program length 3 steps. Predictions are read from frozen per-row artefacts, each hash-checked against the manifest that binds it, and aligned to the development split row-for-row on question and image identifier. Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it. Limitation: One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "category_id": "QC07_visual_reliance",
+   "category_interpretation_bound": "demonstrates reliance on the image for this row. It is not proof of grounding, and the wrong-image partner must be shown so a reader can see what replaced it",
+   "evidence": "Evidence: gold answer 'right'; question type rel/choose; GQA semantic program length 3 steps. Predictions are read from frozen per-row artefacts, each hash-checked against the manifest that binds it, and aligned to the development split row-for-row on question and image identifier.",
+   "illustrative_status": "Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it.",
+   "image_id": "2410905",
+   "kind": "example",
+   "limitation": "Limitation: One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "message": "Development question 05206184 on image 2410905: Fusion, real image answered 'right' (correct); Fusion, wrong image answered 'left' (incorrect).",
+   "placement": "MAIN_TEXT",
+   "qualitative_id": "VE2-QUAL-QC07_visual_reliance-02",
+   "question_id": "05206184",
+   "ve0_specification_id": "VE0-FIG-10"
+  },
+  {
+   "artefact_id": "VE2-CAP-VE2-QUAL-QC08_short_reasoning-01",
+   "caption": "Development question 04945041 on image 2396197: Fusion answered 'no' (incorrect). Evidence: gold answer 'yes'; question type attr/verify; GQA semantic program length 2 steps. Predictions are read from frozen per-row artefacts, each hash-checked against the manifest that binds it, and aligned to the development split row-for-row on question and image identifier. Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it. Limitation: One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "category_id": "QC08_short_reasoning",
+   "category_interpretation_bound": "step count is the GQA semantic program length, a proxy for reasoning depth",
+   "evidence": "Evidence: gold answer 'yes'; question type attr/verify; GQA semantic program length 2 steps. Predictions are read from frozen per-row artefacts, each hash-checked against the manifest that binds it, and aligned to the development split row-for-row on question and image identifier.",
+   "illustrative_status": "Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it.",
+   "image_id": "2396197",
+   "kind": "example",
+   "limitation": "Limitation: One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "message": "Development question 04945041 on image 2396197: Fusion answered 'no' (incorrect).",
+   "placement": "APPENDIX",
+   "qualitative_id": "VE2-QUAL-QC08_short_reasoning-01",
+   "question_id": "04945041",
+   "ve0_specification_id": "VE0-FIG-10"
+  },
+  {
+   "artefact_id": "VE2-CAP-VE2-QUAL-QC08_short_reasoning-02",
+   "caption": "Development question 15535737 on image 2347720: Fusion answered 'yes' (correct). Evidence: gold answer 'yes'; question type attr/verify; GQA semantic program length 2 steps. Predictions are read from frozen per-row artefacts, each hash-checked against the manifest that binds it, and aligned to the development split row-for-row on question and image identifier. Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it. Limitation: One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "category_id": "QC08_short_reasoning",
+   "category_interpretation_bound": "step count is the GQA semantic program length, a proxy for reasoning depth",
+   "evidence": "Evidence: gold answer 'yes'; question type attr/verify; GQA semantic program length 2 steps. Predictions are read from frozen per-row artefacts, each hash-checked against the manifest that binds it, and aligned to the development split row-for-row on question and image identifier.",
+   "illustrative_status": "Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it.",
+   "image_id": "2347720",
+   "kind": "example",
+   "limitation": "Limitation: One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "message": "Development question 15535737 on image 2347720: Fusion answered 'yes' (correct).",
+   "placement": "APPENDIX",
+   "qualitative_id": "VE2-QUAL-QC08_short_reasoning-02",
+   "question_id": "15535737",
+   "ve0_specification_id": "VE0-FIG-10"
+  },
+  {
+   "artefact_id": "VE2-CAP-VE2-QUAL-QC09_deep_reasoning_failure-01",
+   "caption": "Development question 05237394 on image 2358266: Fusion answered 'no' (incorrect). Evidence: gold answer 'yes'; question type obj/logical; GQA semantic program length 5 steps. Predictions are read from frozen per-row artefacts, each hash-checked against the manifest that binds it, and aligned to the development split row-for-row on question and image identifier. Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it. Limitation: One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "category_id": "QC09_deep_reasoning_failure",
+   "category_interpretation_bound": "illustrates where the pooled four-or-more-step deficit lives. It does not show the model failed BECAUSE the question was deep; no causal attribution may be made from an example",
+   "evidence": "Evidence: gold answer 'yes'; question type obj/logical; GQA semantic program length 5 steps. Predictions are read from frozen per-row artefacts, each hash-checked against the manifest that binds it, and aligned to the development split row-for-row on question and image identifier.",
+   "illustrative_status": "Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it.",
+   "image_id": "2358266",
+   "kind": "example",
+   "limitation": "Limitation: One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "message": "Development question 05237394 on image 2358266: Fusion answered 'no' (incorrect).",
+   "placement": "MAIN_TEXT",
+   "qualitative_id": "VE2-QUAL-QC09_deep_reasoning_failure-01",
+   "question_id": "05237394",
+   "ve0_specification_id": "VE0-FIG-10"
+  },
+  {
+   "artefact_id": "VE2-CAP-VE2-QUAL-QC09_deep_reasoning_failure-02",
+   "caption": "Development question 05590137 on image 2361055: Fusion answered 'left' (incorrect). Evidence: gold answer 'man'; question type rel/query; GQA semantic program length 4 steps. Predictions are read from frozen per-row artefacts, each hash-checked against the manifest that binds it, and aligned to the development split row-for-row on question and image identifier. Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it. Limitation: One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "category_id": "QC09_deep_reasoning_failure",
+   "category_interpretation_bound": "illustrates where the pooled four-or-more-step deficit lives. It does not show the model failed BECAUSE the question was deep; no causal attribution may be made from an example",
+   "evidence": "Evidence: gold answer 'man'; question type rel/query; GQA semantic program length 4 steps. Predictions are read from frozen per-row artefacts, each hash-checked against the manifest that binds it, and aligned to the development split row-for-row on question and image identifier.",
+   "illustrative_status": "Illustrative status: this panel illustrates an aggregate finding established by the quantitative evidence. It is not itself population-level statistical evidence, and no causal attribution may be drawn from it.",
+   "image_id": "2361055",
+   "kind": "example",
+   "limitation": "Limitation: One development question, selected by a frozen deterministic rank. It illustrates an aggregate finding established elsewhere in the quantitative evidence and supports no quantitative claim of its own: a single example cannot establish a population-level effect, in either direction.",
+   "message": "Development question 05590137 on image 2361055: Fusion answered 'left' (incorrect).",
+   "placement": "MAIN_TEXT",
+   "qualitative_id": "VE2-QUAL-QC09_deep_reasoning_failure-02",
+   "question_id": "05590137",
+   "ve0_specification_id": "VE0-FIG-10"
+  }
+ ],
+ "rule": "every caption carries four parts: the MESSAGE, the EVIDENCE behind it, its ILLUSTRATIVE STATUS, and the LIMITATION. The illustrative-status sentence is mandatory and states that the panel illustrates an aggregate finding and is not itself population-level statistical evidence.",
+ "title": "VE-2 canonical caption records",
+ "ve0_source_artefacts": [
+  {
+   "path": "results/ve0/canonical_evidence_inventory.json",
+   "role": "VE-0 output A",
+   "sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3"
+  },
+  {
+   "path": "results/ve0/canonical_evidence_inventory.csv",
+   "role": "VE-0 output A_csv",
+   "sha256": "86921381e6fc22b674559b44272e9ba70aaeffafdf600c4a752d5cb6200eee9b"
+  },
+  {
+   "path": "results/ve0/supersession_map.json",
+   "role": "VE-0 output C",
+   "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
+  },
+  {
+   "path": "results/ve0/claim_ledger.json",
+   "role": "VE-0 output D",
+   "sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7"
+  },
+  {
+   "path": "results/ve0/rq_evidence_matrix.json",
+   "role": "VE-0 output E",
+   "sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d"
+  },
+  {
+   "path": "results/ve0/figure_specifications.json",
+   "role": "VE-0 output F",
+   "sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c"
+  },
+  {
+   "path": "results/ve0/table_specifications.json",
+   "role": "VE-0 output G",
+   "sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8"
+  },
+  {
+   "path": "results/ve0/qualitative_protocol.json",
+   "role": "VE-0 output H",
+   "sha256": "c8c5c35bec84da409e9a36612ad07846e2d218aa35351bc7d09340760cd9e895"
+  },
+  {
+   "path": "results/ve0/qualitative_record_schema.json",
+   "role": "VE-0 output I",
+   "sha256": "898e0a6bfeddfb37196e0d1e4bfc469606bcd663c5283b6fac931cd0e3de4297"
+  },
+  {
+   "path": "results/ve0/reporting_style_contract.json",
+   "role": "VE-0 output J",
+   "sha256": "536cf07aa6bd5f80eb1b843046435804345e7bd1f558ba047866b223aadd5504"
+  },
+  {
+   "path": "results/ve0/provenance_contract.json",
+   "role": "VE-0 output K",
+   "sha256": "4a0c33512194fcd11493d3e05f0a86fc8f752ea6343f698c8da0c630672213ab"
+  },
+  {
+   "path": "results/ve0/efficiency_visualisation_contract.json",
+   "role": "VE-0 output L",
+   "sha256": "c8d221544dca46f55339fcd708e4dd66b9aa1e1e9b130bdf44a2a39871ee9cc4"
+  },
+  {
+   "path": "results/ve0/results_section_mapping.json",
+   "role": "VE-0 output M",
+   "sha256": "2f80c8d34949f6ea3e5b7546d67b79793463d7f63d4278b0a03153125bc50686"
+  },
+  {
+   "path": "results/ve0/VE0_MANIFEST.json",
+   "role": "VE-0 output O",
+   "sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3"
+  }
+ ],
+ "ve0_specification_id": "VE0-FIG-10",
+ "ve2_output": "captions"
+}
