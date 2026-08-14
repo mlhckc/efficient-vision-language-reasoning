@@ -77,15 +77,27 @@ The present state is:
   E7a (1 August 2026, authorized separately and evaluation-only)
   measured the efficiency axis for the first time: 21 head architectures
   and both frozen encoder towers under one protocol, all 189 comparison
-  checkpoints reproduced within 5e-6. The encoder dominates (CLIP
-  2.2510 ms image plus 1.7309 ms text on GPU and 2.295 ms CPU decode,
-  against 0.0162-0.0469 ms for the heads); caching image features across
-  about ten questions per image cuts a query from 6.35 to 2.25 ms; on
-  both end-to-end latency fronts only top-1000 global heads are
-  Pareto-optimal, and the 21.1M reasoner is dominated on all four
-  latency fronts. E7a supersedes the V1 stage-5 and
-  src/efficiency.py-derived latencies. E4 and E5 were proposed and are
-  not authorized.
+  checkpoints reproduced within 5e-6. It is PARTLY SUPERSEDED. Its
+  additive gpu_encoder_plus_head_ms, full_pipeline_ms and amortised_ms
+  columns, and every Pareto front derived from those sums, are
+  SUPERSEDED: they are sums of stage medians timed in isolation, no
+  serial pass was timed in E7a, and they must not be used as current
+  end-to-end latency evidence, in any comparison, ranking or "cheaper"
+  claim. They are NOT replaced by E7b values, because substituting one
+  experiment's number into another's sentence would manufacture a
+  comparison neither made; for measured end-to-end serial latency see
+  docs/experiments/e7b_serial_efficiency.md. What remains valid is the
+  isolated component measurement (CLIP 2.2510 ms image plus 1.7309 ms
+  text on GPU and 2.295 ms CPU decode, against 0.0162-0.0469 ms for the
+  heads), the peak-memory components, the parameter counts and the
+  accuracy column. Bounded statement on those fields only: the top-1000
+  product head at 250k is more accurate (0.4904 against 0.4594
+  raw-distribution) than the 21.1M-parameter reasoner, using 16 times
+  fewer parameters. E7a supersedes the V1 stage-5 and
+  src/efficiency.py-derived latencies. The artefact-group status is
+  recorded in results/ve0/supersession_map.json and the current packet
+  lifecycle in results/closure/pre_f1_status_supersession_20260814.json.
+  E4 and E5 were proposed and are not authorized.
   Supervisor design feedback
   is still to be obtained and recorded when available, and each
   task-specific scientific and resource gate remains binding. The clean-test

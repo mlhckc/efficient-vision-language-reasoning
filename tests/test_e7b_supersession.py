@@ -83,13 +83,29 @@ E7A_INVALID_COMPARISON = ("6.35 against 7.71", "6.35 ms to 2.25 ms")
 
 # Documents a reader treats as current. The E7a report is included because
 # its banner is the first thing on the page; the forbidden sentences may
-# appear there only as quoted prohibitions.
+# appear there only as quoted prohibitions. collab/PROJECT_CONTEXT.md is here
+# because the independent pre-F1 review found the two forbidden sentences
+# alive in its "Current truth" section, where the previous coverage set could
+# not see them: it is the file the collaboration protocol tells an agent to
+# read first, so a superseded claim there is as current-facing as one in
+# README.
 E7A_CURRENT_FACING = (
     "README.md",
     "CLAUDE.md",
     "docs/REPRODUCIBILITY.md",
+    "collab/PROJECT_CONTEXT.md",
     "docs/experiments/e7a_efficiency.md",
     "docs/experiments/e7b_serial_efficiency.md",
+)
+
+# Surfaces where the forbidden sentences may not appear at all, not even as a
+# quoted prohibition, because none of them is the report that publishes the
+# supersession. Keeping this separate from E7A_CURRENT_FACING is what makes
+# the guard non-vacuous on the E7a report itself.
+E7A_NO_QUOTED_EXEMPTION = (
+    "README.md",
+    "CLAUDE.md",
+    "collab/PROJECT_CONTEXT.md",
 )
 
 EMBARGOED = "test_" + "clean_targets"
@@ -180,6 +196,7 @@ HUMAN_FACING_DOCS = (
     "README.md",
     "CLAUDE.md",
     "docs/REPRODUCIBILITY.md",
+    "collab/PROJECT_CONTEXT.md",
     "docs/experiments/ve2_qualitative_evidence.md",
     "docs/experiments/e7b_serial_efficiency.md",
 )
@@ -1706,6 +1723,49 @@ def _sentences(text: str) -> list:
     return re.split(r"(?<=[.;]) ", re.sub(r"\s+", " ", text))
 
 
+# Words that mark an occurrence as a prohibition rather than a claim.
+_PROHIBITION_MARKERS = ("must not", "superseded", "forbidden", "prohibit")
+
+
+def _superseded_e7a_violations(relative: str, text: str) -> list:
+    """Every place `text` presents a superseded E7a timing conclusion as fact.
+
+    Two rules, both semantic rather than lexical.
+
+    A banned sentence or the additive 6.35/7.71 comparison is exonerated only
+    where the surrounding window marks it as superseded or forbidden, which is
+    how the E7a report is able to quote the two banned sentences in the act of
+    banning them. Surfaces in E7A_NO_QUOTED_EXEMPTION get no such exemption:
+    none of them publishes the supersession, so a quoted occurrence there
+    reads to a reader exactly like a live claim.
+
+    A cheapness word is a violation unless its own sentence marks it as a
+    prohibition. That is what the independent pre-F1 review found alive in
+    collab/PROJECT_CONTEXT.md, where the previous coverage set could not see
+    it.
+    """
+    flat = re.sub(r"\s+", " ", text)
+    violations = []
+    quoting_allowed = relative not in E7A_NO_QUOTED_EXEMPTION
+    for phrase in E7A_FORBIDDEN_STATEMENTS + E7A_INVALID_COMPARISON:
+        for hit in re.finditer(re.escape(phrase), flat):
+            window = flat[max(0, hit.start() - 240): hit.end() + 240]
+            if quoting_allowed and ("must not return" in window
+                                    or "SUPERSEDED" in window):
+                continue
+            violations.append((relative, phrase, window[:200]))
+    for sentence in _sentences(flat):
+        lowered = sentence.lower()
+        if not any(term in lowered
+                   for term in ("cheaper", "more efficient", "lower cost")):
+            continue
+        if any(marker in lowered for marker in _PROHIBITION_MARKERS):
+            continue
+        violations.append((relative, "latency-only cheapness claim",
+                           sentence[:200]))
+    return violations
+
+
 def test_e7a_superseded_claims_are_gone() -> None:
     record = _status_record()
     repair = record["e7a_wording_repair"]
@@ -1742,32 +1802,42 @@ def test_e7a_superseded_claims_are_gone() -> None:
               "more accurate (0.4904 against 0.4594" in flat
               and "16 times fewer parameters" in flat, relative)
 
-    # The forbidden sentences and the additive comparison survive nowhere as
-    # a live claim. In the E7a report they are permitted only inside the
-    # banner that forbids them, so each hit is judged in context.
+    # The forbidden sentences, the additive comparison and any latency-only
+    # cheapness claim survive nowhere current-facing. collab/PROJECT_CONTEXT.md
+    # is in this set because the independent pre-F1 review found both banned
+    # sentences alive in its "Current truth" section.
+    check("the guard covers collab/PROJECT_CONTEXT.md",
+          "collab/PROJECT_CONTEXT.md" in E7A_CURRENT_FACING
+          and "collab/PROJECT_CONTEXT.md" in HUMAN_FACING_DOCS)
     for relative in E7A_CURRENT_FACING:
-        flat = re.sub(r"\s+", " ", (PROJECT_ROOT / relative).read_text())
-        for phrase in E7A_FORBIDDEN_STATEMENTS + E7A_INVALID_COMPARISON:
-            for hit in re.finditer(re.escape(phrase), flat):
-                window = flat[max(0, hit.start() - 240): hit.end() + 240]
-                check(f"{relative}: '{phrase}' appears only as a quoted "
-                      f"prohibition",
-                      "must not return" in window
-                      or "SUPERSEDED" in window,
-                      window[:200])
+        violations = _superseded_e7a_violations(
+            relative, (PROJECT_ROOT / relative).read_text())
+        check(f"{relative} presents no superseded E7a timing conclusion",
+              violations == [], str(violations[:2]))
 
-    # No sentence anywhere current-facing may rest a cheapness claim on the
-    # superseded additive columns.
-    for relative in E7A_CURRENT_FACING:
-        for sentence in _sentences((PROJECT_ROOT / relative).read_text()):
-            lowered = sentence.lower()
-            if not any(term in lowered for term in
-                       ("cheaper", "more efficient", "lower cost")):
-                continue
-            check(f"{relative}: the cheapness word is a prohibition, not a "
-                  f"claim",
-                  "must not" in lowered or "superseded" in lowered
-                  or "forbidden" in lowered, sentence[:200])
+    # PROJECT_CONTEXT's repaired paragraph keeps the valid facts and says
+    # plainly that the additive conclusions are superseded.
+    context = re.sub(r"\s+", " ", (PROJECT_ROOT / "collab"
+                                   / "PROJECT_CONTEXT.md").read_text())
+    check("PROJECT_CONTEXT marks E7a as partly superseded",
+          "PARTLY SUPERSEDED" in context)
+    check("PROJECT_CONTEXT names the three superseded additive fields",
+          all(field in context for field in ("gpu_encoder_plus_head_ms",
+                                             "full_pipeline_ms",
+                                             "amortised_ms")))
+    check("PROJECT_CONTEXT sends the reader to E7b for measured latency",
+          "docs/experiments/e7b_serial_efficiency.md" in context)
+    check("PROJECT_CONTEXT refuses to substitute E7b values",
+          "NOT replaced by E7b values" in context)
+    check("PROJECT_CONTEXT keeps the valid component measurement",
+          "2.2510 ms image plus 1.7309 ms text" in context)
+    check("PROJECT_CONTEXT carries the bounded accuracy-and-parameter "
+          "statement",
+          "more accurate (0.4904 against 0.4594" in context
+          and "16 times fewer parameters" in context)
+    check("PROJECT_CONTEXT points to the status authorities",
+          "results/ve0/supersession_map.json" in context
+          and STATUS_RELATIVE in context)
 
     # The E7a report leads with the supersession, not with the numbers.
     e7a = (PROJECT_ROOT / "docs" / "experiments"
@@ -1790,6 +1860,71 @@ def test_e7a_superseded_claims_are_gone() -> None:
     check("the superseded columns are marked in the results table",
           "full pipeline SUPERSEDED" in e7a
           and "amortised SUPERSEDED" in e7a)
+
+
+# --------------------------------------------------------------------------
+# Y2. the guard is not vacuous: reintroducing the claim is caught
+# --------------------------------------------------------------------------
+
+# The exact paragraph the independent pre-F1 review found alive in
+# PROJECT_CONTEXT's "Current truth" section, reassembled from parts so this
+# source does not itself carry the banned sentences as prose.
+_REGRESSION_CASES = (
+    ("the removed caching claim",
+     "The encoder dominates; caching image features across about ten "
+     "questions per image " + "cuts a query from 6.35 to 2.25 ms" + "."),
+    ("the removed front claim",
+     "Measured under one protocol, " + "on both end-to-end latency Pareto "
+     "fronts" + " only top-1000 global heads are optimal."),
+    ("the additive full-pipeline comparison",
+     "The top-1000 product head is cheaper (" + "6.35 against 7.71"
+     + " ms) than the reasoner."),
+    ("a bare latency-only cheapness claim",
+     "The small global head is therefore cheaper than the reasoner at "
+     "comparable accuracy."),
+)
+
+
+def test_e7a_guard_is_not_vacuous() -> None:
+    """Prove the guard fires, on every surface it now covers.
+
+    A regression guard that has never been shown to fail is not evidence that
+    the claim is gone; it is evidence that nothing looked. Each case is
+    injected into an in-memory copy of a live document. No file is written and
+    no tracked document is modified.
+    """
+    for relative in E7A_CURRENT_FACING:
+        live = (PROJECT_ROOT / relative).read_text()
+        check(f"{relative} is clean before injection",
+              _superseded_e7a_violations(relative, live) == [])
+        for label, injected in _REGRESSION_CASES:
+            mutated = live + "\n\n## Current truth\n\n" + injected + "\n"
+            found = _superseded_e7a_violations(relative, mutated)
+            check(f"{relative}: the guard catches {label}",
+                  len(found) > len(_superseded_e7a_violations(relative, live)),
+                  f"{label} survived in {relative}")
+
+    # The quoted-prohibition exemption is real where it is meant to be, and
+    # absent where it is not: the same banned sentence, presented as a
+    # prohibition, is tolerated in the E7a report and refused in
+    # PROJECT_CONTEXT, which publishes no supersession of its own.
+    quoted = ('The sentence "' + E7A_FORBIDDEN_STATEMENTS[0]
+              + '" was removed and must not return.')
+    check("a quoted prohibition is tolerated in the E7a report",
+          _superseded_e7a_violations(
+              "docs/experiments/e7a_efficiency.md", quoted) == [])
+    check("the same quotation is refused in PROJECT_CONTEXT",
+          _superseded_e7a_violations(
+              "collab/PROJECT_CONTEXT.md", quoted) != [])
+    check("PROJECT_CONTEXT is in the no-quoted-exemption set",
+          "collab/PROJECT_CONTEXT.md" in E7A_NO_QUOTED_EXEMPTION)
+
+    # And the cheapness rule does not fire on a sentence that forbids the
+    # claim, or the repaired documents themselves could never pass.
+    check("a prohibition sentence is not treated as a claim",
+          _superseded_e7a_violations(
+              "CLAUDE.md",
+              'They must not be used in any "cheaper" claim.') == [])
 
 
 # --------------------------------------------------------------------------
@@ -1881,6 +2016,7 @@ def run() -> None:
     test_frozen_surfaces_untouched()
     test_rq_matrix_wording_erratum()
     test_e7a_superseded_claims_are_gone()
+    test_e7a_guard_is_not_vacuous()
     test_status_builder_is_mechanical()
     failed = [name for name, ok in _CHECKS if not ok]
     if failed:
