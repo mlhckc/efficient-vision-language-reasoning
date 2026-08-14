@@ -49,6 +49,17 @@ the compact VLMs is contextual positioning, not a fair-protocol superiority
 claim. No energy or power measurement exists, so no claim of energy
 efficiency is made anywhere.
 
+Three E7b fields are withdrawn. `peak_allocated_mib` and `peak_reserved_mib`
+are INVALID: the historical measurement window did not isolate the intended
+batch-1 serial inference envelope. `cold_first_query_ms` is SUPERSEDED,
+because the accepted source repair standardised the cold query to
+`torch.no_grad()` and the stored values measure the older path. Warm serial
+latency, the accuracy column, the parameter counts and the Pareto frontier
+are unaffected, no replacement value exists and none was estimated. The
+canonical record is `results/closure/e7b_evidence_supersession.json`, and it
+takes precedence over the row-level `evidence_status` stored in the older
+closure and E7b artefacts. E7b remains open pending independent review.
+
 The statistical and efficiency evidence closure (13 August 2026) re-verified
 every hash-manifested artefact, reconstructed the row-level correctness
 evidence the V2/E2/E3 families never stored, and attached image-clustered

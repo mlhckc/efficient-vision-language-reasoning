@@ -1,0 +1,852 @@
+{
+  "applies_to_system_count": 8,
+  "applies_to_systems": [
+    "concat",
+    "e8a_a0p",
+    "e8a_a1",
+    "fusion",
+    "question_only",
+    "reasoner",
+    "siglip_fusion",
+    "vocab1000_product"
+  ],
+  "cause_classes": {
+    "GRAD_MODE_STANDARDISATION": [
+      "cold_first_query_ms"
+    ],
+    "MEASUREMENT_BOUNDARY_DEFECT": [
+      "peak_allocated_mib",
+      "peak_reserved_mib"
+    ]
+  },
+  "cause_separation": "The two causes are distinct and must not be conflated. The peak memory withdrawal is NOT attributed to the grad-mode standardisation, and the cold-query withdrawal is NOT attributed to the measurement-boundary defect.",
+  "clean_test_governance": {
+    "clean_test_accessed_by_this_task": true,
+    "clean_test_read_stat_hashed_opened_searched_or_parsed_by_this_task": true,
+    "clean_test_used_for_development_model_selection_or_reporting": false,
+    "disclosure": "The clean-test contents were never inspected or used for development, model selection, or reporting decisions. Its bytes were mechanically read once by an independent reviewer integrity-hash command on 13 August 2026.",
+    "embargo_intact": true,
+    "executor_mechanical_access_during_this_task": {
+      "avoidable": true,
+      "classification": "B — MECHANICAL ACCESS INCIDENT",
+      "consequence": "No scientific invalidation and no F2 remediation. It is recorded here rather than omitted, because the project record must not overstate the embargo.",
+      "contents_inspected": false,
+      "corrective_rule": "A repository-wide scan must exclude data/ or filter the embargoed name before reading, not after.",
+      "hashed": false,
+      "occurred": true,
+      "reached_any_model_or_number": false,
+      "same_class_as": "the independent reviewer's sha256sum integrity check of 13 August 2026, recorded as classification B",
+      "target_named_in_any_written_file": false,
+      "used_for_development_model_selection_or_reporting": false,
+      "what_happened": "While mapping which artefacts carry the withdrawn fields, the executor ran one ad-hoc repository-wide scan that walked the whole project root and called read_text() on every .json, .py, .md, .csv and .txt file, searching for four documentation digests. The traversal was not scoped away from data/, so the embargoed target was among the files mechanically read."
+    },
+    "field_semantics": "The two access fields above are read LITERALLY, by explicit user decision of 14 August 2026: true because some process acting for this task read the target's bytes, whatever its purpose. They do NOT mean that experiment, builder, test or reporting code opened the target, and none did. The third field is what carries the scientific guarantee: no byte of the target reached any model, checkpoint, selection, figure, table or reported number. Elsewhere in the project a clean_test_accessed flag of false means 'no experiment or reporting code opened the target'; this record is stricter and the two conventions must not be read as one.",
+    "no_project_global_claim": "This record deliberately asserts no project-global clean_test_accessed field. The claim that the clean test was never accessed at all would be false, and the scoped fields above are what this task can truthfully attest.",
+    "scope": "THIS_TASK_ONLY"
+  },
+  "conflicting_historical_artefacts": [
+    {
+      "conflict": "23 E7b rows carry evidence_status VERIFIED alongside peak_allocated_mib, peak_reserved_mib and cold_first_query_ms.",
+      "immutable": true,
+      "path": "results/closure/efficiency_closure_table.json",
+      "resolution": "rank 3, superseded field-by-field by this overlay for the three withdrawn fields only; every other field in those rows stands.",
+      "stored_row_level_status": "VERIFIED",
+      "why_immutable": "byte-pinned by the closed VE-0 packet."
+    },
+    {
+      "conflict": "the flat view of the same 23 rows, carrying the same three withdrawn columns.",
+      "immutable": true,
+      "path": "results/closure/efficiency_closure_table.csv",
+      "resolution": "rank 3, superseded field-by-field by this overlay.",
+      "stored_row_level_status": "VERIFIED",
+      "why_immutable": "a closed closure artefact; the task forbids modifying it."
+    },
+    {
+      "conflict": "the aggregate carries peak_allocated_mib, peak_reserved_mib and cold_first_query_ms for all eight systems with no withdrawal marker.",
+      "immutable": true,
+      "path": "results/experiments/e7b_serial_efficiency/e7b_results.json",
+      "resolution": "rank 3, superseded field-by-field by this overlay; retained as raw provenance.",
+      "stored_row_level_status": "none recorded",
+      "why_immutable": "byte-pinned by the closed VE-0 and VE-1 packets."
+    },
+    {
+      "conflict": "columns peak_alloc_mib, peak_reserved_mib and cold_ms_mean carry withdrawn values.",
+      "immutable": true,
+      "path": "results/experiments/e7b_serial_efficiency/latency_memory.csv",
+      "resolution": "rank 3, superseded field-by-field by this overlay.",
+      "stored_row_level_status": "none recorded",
+      "why_immutable": "a closed E7b artefact; the task forbids modifying it."
+    },
+    {
+      "conflict": "the 24 full-run child records and the 3 pilot child records carry the raw per-pass peak and cold values.",
+      "immutable": true,
+      "path": "results/experiments/e7b_serial_efficiency/e7b_run_<system>_pass<n>.json",
+      "resolution": "rank 3. Raw measurement evidence, preserved byte-for-byte and readable as provenance only.",
+      "stored_row_level_status": "none recorded",
+      "why_immutable": "raw evidence is never rewritten."
+    },
+    {
+      "conflict": "embeds its three pilot child records verbatim, including their peak and cold values.",
+      "immutable": true,
+      "path": "results/experiments/e7b_serial_efficiency/pilot_e8a_a1.json",
+      "resolution": "rank 3, raw provenance only.",
+      "stored_row_level_status": "none recorded",
+      "why_immutable": "raw evidence is never rewritten."
+    }
+  ],
+  "content_sha256": "c630682b95fa2a63d3e0847a6a084e2ed6c2090635a2ef3c402e542c2006cc3b",
+  "determinism": {
+    "content_sha256": "the digest of this record with the provenance block and the digest field itself excluded; it is what a later build must reproduce",
+    "file_bytes": "may differ across commits, because provenance carries the repository HEAD and worktree state"
+  },
+  "e9_wording": {
+    "canonical_statement": "SmolVLM-500M was approximately 24.7x slower in warm serial latency under the same-node contextual protocol.",
+    "comparison_kind": "contextual positioning, not a matched causal comparison",
+    "forbidden_conclusions_from_latency_alone": [
+      "cheaper",
+      "25x cheaper",
+      "~25x cheaper",
+      "more efficient",
+      "lower cost"
+    ],
+    "measured_values_ms": {
+      "smolvlm_500m": 152.854,
+      "top_1000_global_head": 6.199
+    },
+    "not_supported_by_the_timing_result_alone": [
+      "energy",
+      "power",
+      "carbon",
+      "monetary cost",
+      "general computational cost"
+    ],
+    "why": "A latency ratio measured on one node states how long each system takes, and nothing else. Training history, multimodal pretraining, answer support and output format all differ between the two systems, so no efficiency, cost or resource conclusion follows from the timing alone."
+  },
+  "experiment_family": "E7b",
+  "frozen_pins": {
+    "all_unchanged": true,
+    "pin_count": 51,
+    "policy": "fail closed: the builder refuses to write if any pinned artefact has moved",
+    "records": [
+      {
+        "actual_sha256": "326bbc7c259aea808478e38358b3dc0eab12e1b61e03501927b9c2d4fc591188",
+        "path": "docs/experiments/ve0_evidence_contract.md",
+        "pinned_sha256": "326bbc7c259aea808478e38358b3dc0eab12e1b61e03501927b9c2d4fc591188",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "da77d32c2567d85831669d701f6390aaefc9053ac584fef741759a554e82d3ce",
+        "path": "results/closure/A_evidence_registry.csv",
+        "pinned_sha256": "da77d32c2567d85831669d701f6390aaefc9053ac584fef741759a554e82d3ce",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "b8b47e024c49a599a425894f34c24b4375958998401a311605694027257de122",
+        "path": "results/closure/A_evidence_registry.json",
+        "pinned_sha256": "b8b47e024c49a599a425894f34c24b4375958998401a311605694027257de122",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+        "path": "results/closure/efficiency_closure_table.csv",
+        "pinned_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "be1781efeece841cc75df126fab43c9e9946437957c1ea6401ee1f86c8b47d5e",
+        "path": "results/closure/efficiency_closure_table.json",
+        "pinned_sha256": "be1781efeece841cc75df126fab43c9e9946437957c1ea6401ee1f86c8b47d5e",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "a7a1d692bad137418673ad20c2fe6fb2823ba6874bb2441db39b80b5baab28db",
+        "path": "results/closure/manifest_e7b_serial_efficiency.json",
+        "pinned_sha256": "a7a1d692bad137418673ad20c2fe6fb2823ba6874bb2441db39b80b5baab28db",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "d8df78208a4a542d9446c266139062cfee365452d056d6c05ea06c54ec9c2572",
+        "path": "results/experiments/e7b_serial_efficiency/audit_verdicts.json",
+        "pinned_sha256": "d8df78208a4a542d9446c266139062cfee365452d056d6c05ea06c54ec9c2572",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "ca370a7dc0885fa69df2b1fa6076ca2f647d8a7047e4c1d9fbcb30d40e5621a5",
+        "path": "results/experiments/e7b_serial_efficiency/benchmark_rows.json",
+        "pinned_sha256": "ca370a7dc0885fa69df2b1fa6076ca2f647d8a7047e4c1d9fbcb30d40e5621a5",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "da3ce51b6f5cc45e18a0991834d68ec201fea91890e6b580aa7234bcec2e0750",
+        "path": "results/experiments/e7b_serial_efficiency/cache_hashes_after.txt",
+        "pinned_sha256": "da3ce51b6f5cc45e18a0991834d68ec201fea91890e6b580aa7234bcec2e0750",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "da3ce51b6f5cc45e18a0991834d68ec201fea91890e6b580aa7234bcec2e0750",
+        "path": "results/experiments/e7b_serial_efficiency/cache_hashes_before.txt",
+        "pinned_sha256": "da3ce51b6f5cc45e18a0991834d68ec201fea91890e6b580aa7234bcec2e0750",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
+        "path": "results/experiments/e7b_serial_efficiency/e7b_results.json",
+        "pinned_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "d10d7ccf094718e3f9946b74e9340ce28ea66c55683a0d616cfbee99a8a18f69",
+        "path": "results/experiments/e7b_serial_efficiency/e7b_run_concat_pass1.json",
+        "pinned_sha256": "d10d7ccf094718e3f9946b74e9340ce28ea66c55683a0d616cfbee99a8a18f69",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "1def4b8eaf67cff56a411ddd4bff9d910dc1d6e12cb202cffac89fe3feb19d6d",
+        "path": "results/experiments/e7b_serial_efficiency/e7b_run_concat_pass2.json",
+        "pinned_sha256": "1def4b8eaf67cff56a411ddd4bff9d910dc1d6e12cb202cffac89fe3feb19d6d",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "36bf4f211cfe8bb7f46cd7cca8b471bc17bad4565cc52c5210f293844162a1fb",
+        "path": "results/experiments/e7b_serial_efficiency/e7b_run_concat_pass3.json",
+        "pinned_sha256": "36bf4f211cfe8bb7f46cd7cca8b471bc17bad4565cc52c5210f293844162a1fb",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "d1e3ebee30561e00e7e56d2546b960d90266064ee27b4dffca2165a6f249acc5",
+        "path": "results/experiments/e7b_serial_efficiency/e7b_run_e8a_a0p_pass1.json",
+        "pinned_sha256": "d1e3ebee30561e00e7e56d2546b960d90266064ee27b4dffca2165a6f249acc5",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "eaaad976be7f7854480fd06e045e60f6fff34bec019c2001c6b502362357a2d1",
+        "path": "results/experiments/e7b_serial_efficiency/e7b_run_e8a_a0p_pass2.json",
+        "pinned_sha256": "eaaad976be7f7854480fd06e045e60f6fff34bec019c2001c6b502362357a2d1",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "e6256d49b161ffb80db921ccded7f5da3e6e20d4f8796605e2ac3a84b9f5bfd1",
+        "path": "results/experiments/e7b_serial_efficiency/e7b_run_e8a_a0p_pass3.json",
+        "pinned_sha256": "e6256d49b161ffb80db921ccded7f5da3e6e20d4f8796605e2ac3a84b9f5bfd1",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "5d5dd4fe02b313441d16490d43911b6ab082a6fe44669ded238fadf064164b2a",
+        "path": "results/experiments/e7b_serial_efficiency/e7b_run_e8a_a1_pass1.json",
+        "pinned_sha256": "5d5dd4fe02b313441d16490d43911b6ab082a6fe44669ded238fadf064164b2a",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "32cebe7829e5ef7dcb560775f9cbe9dd8bf8162598e9a54e7c663bbafd01a4b5",
+        "path": "results/experiments/e7b_serial_efficiency/e7b_run_e8a_a1_pass2.json",
+        "pinned_sha256": "32cebe7829e5ef7dcb560775f9cbe9dd8bf8162598e9a54e7c663bbafd01a4b5",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "371b10347ac5cbed0ce9cd4090592dcfabdc325d7c33428fc6ddb70bc17d97c6",
+        "path": "results/experiments/e7b_serial_efficiency/e7b_run_e8a_a1_pass3.json",
+        "pinned_sha256": "371b10347ac5cbed0ce9cd4090592dcfabdc325d7c33428fc6ddb70bc17d97c6",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "a26c1f2a2fb07c3109c86b2ec7bd33f048b00d46d438cbac7969ca17415a9f57",
+        "path": "results/experiments/e7b_serial_efficiency/e7b_run_fusion_pass1.json",
+        "pinned_sha256": "a26c1f2a2fb07c3109c86b2ec7bd33f048b00d46d438cbac7969ca17415a9f57",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "1ef3e498045a063962e2f84ae54ee3bebe37d0c30451aeabd357b290d3ad2a09",
+        "path": "results/experiments/e7b_serial_efficiency/e7b_run_fusion_pass2.json",
+        "pinned_sha256": "1ef3e498045a063962e2f84ae54ee3bebe37d0c30451aeabd357b290d3ad2a09",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "63b9801d26c431cf1f9d800a7d9d8572d4950e8c83296473f6fd9f1255efb98e",
+        "path": "results/experiments/e7b_serial_efficiency/e7b_run_fusion_pass3.json",
+        "pinned_sha256": "63b9801d26c431cf1f9d800a7d9d8572d4950e8c83296473f6fd9f1255efb98e",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "6c8e901bb557afa2be8ae8c2f6f36cdee6615ea5f349e9168ad4a05c3316bb30",
+        "path": "results/experiments/e7b_serial_efficiency/e7b_run_question_only_pass1.json",
+        "pinned_sha256": "6c8e901bb557afa2be8ae8c2f6f36cdee6615ea5f349e9168ad4a05c3316bb30",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "3173c45c7af7844ad4b9f88664bb4cdc76347c465b5c441d93fc93a03d40987d",
+        "path": "results/experiments/e7b_serial_efficiency/e7b_run_question_only_pass2.json",
+        "pinned_sha256": "3173c45c7af7844ad4b9f88664bb4cdc76347c465b5c441d93fc93a03d40987d",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "f441af579cbe0ac493f82261956d84f7e0f4870e3f5bc2ecda531b8f7aee4f25",
+        "path": "results/experiments/e7b_serial_efficiency/e7b_run_question_only_pass3.json",
+        "pinned_sha256": "f441af579cbe0ac493f82261956d84f7e0f4870e3f5bc2ecda531b8f7aee4f25",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "0158b21b14bb596fcc23c78454931066b5efe27984b28f9e820fe2d6f114ce36",
+        "path": "results/experiments/e7b_serial_efficiency/e7b_run_reasoner_pass1.json",
+        "pinned_sha256": "0158b21b14bb596fcc23c78454931066b5efe27984b28f9e820fe2d6f114ce36",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "451d11cf59f003b5e6b73ac8afb9ee661d16f22d8d864f7509d9823ea0bd5f7c",
+        "path": "results/experiments/e7b_serial_efficiency/e7b_run_reasoner_pass2.json",
+        "pinned_sha256": "451d11cf59f003b5e6b73ac8afb9ee661d16f22d8d864f7509d9823ea0bd5f7c",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "8443ec097e25763bade3eee7564015795c27a8f84dfa53d83f779e340ef4f79e",
+        "path": "results/experiments/e7b_serial_efficiency/e7b_run_reasoner_pass3.json",
+        "pinned_sha256": "8443ec097e25763bade3eee7564015795c27a8f84dfa53d83f779e340ef4f79e",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "d62703395b4fc7c319fe5cfcb32ce84c3778fab954b6ff63e96327cc65edc1ee",
+        "path": "results/experiments/e7b_serial_efficiency/e7b_run_siglip_fusion_pass1.json",
+        "pinned_sha256": "d62703395b4fc7c319fe5cfcb32ce84c3778fab954b6ff63e96327cc65edc1ee",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "475f35c524fb55ac93a194e1d5d52df5146565a6ff7ce34be994d49096254a66",
+        "path": "results/experiments/e7b_serial_efficiency/e7b_run_siglip_fusion_pass2.json",
+        "pinned_sha256": "475f35c524fb55ac93a194e1d5d52df5146565a6ff7ce34be994d49096254a66",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "1d9d3205dd0c5013054b49b3966c06f52977e2f955f5383c9b3fffd7d80cca4e",
+        "path": "results/experiments/e7b_serial_efficiency/e7b_run_siglip_fusion_pass3.json",
+        "pinned_sha256": "1d9d3205dd0c5013054b49b3966c06f52977e2f955f5383c9b3fffd7d80cca4e",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "0e82d6da90b03189afca3330b775ca617fee60cb2e98205d5b0ca2840ad12c25",
+        "path": "results/experiments/e7b_serial_efficiency/e7b_run_vocab1000_product_pass1.json",
+        "pinned_sha256": "0e82d6da90b03189afca3330b775ca617fee60cb2e98205d5b0ca2840ad12c25",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "8be8e0525f04fa533a7e4c5557ed4dcc76f7d3f6d6823a98334668fc57fa0589",
+        "path": "results/experiments/e7b_serial_efficiency/e7b_run_vocab1000_product_pass2.json",
+        "pinned_sha256": "8be8e0525f04fa533a7e4c5557ed4dcc76f7d3f6d6823a98334668fc57fa0589",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "4bc431d642d69fbe7247c5fce32b8b91bca318c4fb480f07387b44e9684cfff5",
+        "path": "results/experiments/e7b_serial_efficiency/e7b_run_vocab1000_product_pass3.json",
+        "pinned_sha256": "4bc431d642d69fbe7247c5fce32b8b91bca318c4fb480f07387b44e9684cfff5",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "deb4a67e793612c822e645d78d314081b9413bc83579d8694d6a83ff647942cc",
+        "path": "results/experiments/e7b_serial_efficiency/latency_memory.csv",
+        "pinned_sha256": "deb4a67e793612c822e645d78d314081b9413bc83579d8694d6a83ff647942cc",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "c65631ea318ff712ef26380edda7c91de2dfbc562f2d37bef059655e65c9ffb5",
+        "path": "results/experiments/e7b_serial_efficiency/pareto_serial.png",
+        "pinned_sha256": "c65631ea318ff712ef26380edda7c91de2dfbc562f2d37bef059655e65c9ffb5",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "792cef85bb5b0f4ff410b130ffe6631b87ddaa47a2d736f27d41a4fd62c3180c",
+        "path": "results/experiments/e7b_serial_efficiency/pilot_e8a_a1.json",
+        "pinned_sha256": "792cef85bb5b0f4ff410b130ffe6631b87ddaa47a2d736f27d41a4fd62c3180c",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "570990f5e129c60545e9ec505931bbf428af221b738b22833e872fdf70859adc",
+        "path": "results/experiments/e7b_serial_efficiency/pilot_evidence/e7b_run_e8a_a1_pass1.json",
+        "pinned_sha256": "570990f5e129c60545e9ec505931bbf428af221b738b22833e872fdf70859adc",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "494064aeec7ba524d4c04b8f0df32b1517246c7d463def72b477c22aa221b697",
+        "path": "results/experiments/e7b_serial_efficiency/pilot_evidence/e7b_run_e8a_a1_pass2.json",
+        "pinned_sha256": "494064aeec7ba524d4c04b8f0df32b1517246c7d463def72b477c22aa221b697",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "938bef44f39609fe1fe4bb8c73bcbeb0714fbc90b7d08b9f9f754b9c7ec81733",
+        "path": "results/experiments/e7b_serial_efficiency/pilot_evidence/e7b_run_e8a_a1_pass3.json",
+        "pinned_sha256": "938bef44f39609fe1fe4bb8c73bcbeb0714fbc90b7d08b9f9f754b9c7ec81733",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "9c96a04d1602117fe0c7b3f27b0368355c6f2c6b5f487e8455e4ec53e6df00d7",
+        "path": "results/experiments/e7b_serial_efficiency/preflight.json",
+        "pinned_sha256": "9c96a04d1602117fe0c7b3f27b0368355c6f2c6b5f487e8455e4ec53e6df00d7",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "fddf880fc6a023ffe8255e6a8001f225dc4a253d6f87d0d1db2136c81bd672b9",
+        "path": "results/experiments/e7b_serial_efficiency/results.json",
+        "pinned_sha256": "fddf880fc6a023ffe8255e6a8001f225dc4a253d6f87d0d1db2136c81bd672b9",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "aeb9f7ef15230278faa1f1a5e5c24430f87506b0e1f1135b8b61eb5ac11cd266",
+        "path": "results/experiments/e7b_serial_efficiency/stage_timings.csv",
+        "pinned_sha256": "aeb9f7ef15230278faa1f1a5e5c24430f87506b0e1f1135b8b61eb5ac11cd266",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3",
+        "path": "results/ve0/VE0_MANIFEST.json",
+        "pinned_sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3",
+        "path": "results/ve0/canonical_evidence_inventory.json",
+        "pinned_sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c",
+        "path": "results/ve0/figure_specifications.json",
+        "pinned_sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c",
+        "path": "results/ve0/supersession_map.json",
+        "pinned_sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8",
+        "path": "results/ve0/table_specifications.json",
+        "pinned_sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "021592025cbfcdeb145441799d7b5c6ff341a0945289f8927230a89e16eb986a",
+        "path": "results/ve1/VE1_MANIFEST.json",
+        "pinned_sha256": "021592025cbfcdeb145441799d7b5c6ff341a0945289f8927230a89e16eb986a",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "f54218e9666b8d2574ba87ccd7868874d4ef35de7560b401e1dce91f3210c386",
+        "path": "results/ve2/VE2_MANIFEST.json",
+        "pinned_sha256": "f54218e9666b8d2574ba87ccd7868874d4ef35de7560b401e1dce91f3210c386",
+        "unchanged": true
+      }
+    ]
+  },
+  "human_facing_pointers": [
+    {
+      "path": "docs/experiments/e7b_serial_efficiency.md",
+      "role": "status banner on the first screen, withdrawn columns marked in the results table"
+    },
+    {
+      "path": "README.md",
+      "role": "pointer to this record from the project overview"
+    },
+    {
+      "path": "docs/REPRODUCIBILITY.md",
+      "role": "the precedence rule"
+    },
+    {
+      "path": "CLAUDE.md",
+      "role": "current E7b status"
+    }
+  ],
+  "machine_resolution": {
+    "lookup": "withdrawn_fields[].field, with the artefact-local spellings in withdrawn_fields[].also_written_as",
+    "resolves_all_three_withdrawn_fields": true,
+    "retention_is_explicit": true
+  },
+  "no_canonical_evidence_id_for_withdrawn_fields": {
+    "checked_against": "results/ve0/canonical_evidence_inventory.json",
+    "e7b_evidence_id_count": 23,
+    "evidence_ids_covering_a_withdrawn_field": 0,
+    "statement": "The 23 canonical EV-EFF-E7b evidence ids cover warm serial latency, the cached-image question side and the cached-feature head only. None registers peak memory or cold first query, so no VE-1 figure or table can resolve to a withdrawn value."
+  },
+  "no_substitute_value": {
+    "adjustment_factor_permitted": false,
+    "back_calculation_permitted": false,
+    "cross_node_substitution_permitted": false,
+    "estimation_permitted": false,
+    "inference_permitted": false,
+    "replacement_cold_query_value_exists": false,
+    "replacement_peak_memory_value_exists": false,
+    "statement": "No replacement memory or cold-query value exists. None is estimated, inferred, back-calculated or substituted from another node, and this overlay introduces no number that was not already measured."
+  },
+  "out_of_scope": {
+    "paths": [
+      "artifacts/results_export/v3_01_reasoner/results.json",
+      "artifacts/results_export/v3_03_scaling/results.json",
+      "artifacts/results_export/v3_03_scaling/preflight.json",
+      "results/experiments/e7a_efficiency/results.json"
+    ],
+    "statement": "Peak-memory fields recorded by other experiments are NOT withdrawn by this overlay. They were measured by different harnesses under different protocols and this record makes no claim about them."
+  },
+  "overlay_kind": "FIELD_LEVEL",
+  "pareto_axes": [
+    "accuracy_raw_distribution_common_denominator",
+    "warm_serial_median_ms"
+  ],
+  "pareto_membership_unchanged": true,
+  "precedence": {
+    "historical_numbers": "Historical numbers remain readable only as provenance.",
+    "order": [
+      {
+        "authority": "results/closure/e7b_evidence_supersession.json",
+        "controls": "named E7b field validity",
+        "rank": 1
+      },
+      {
+        "authority": "results/ve0/supersession_map.json",
+        "controls": "unnamed artefact-group status",
+        "rank": 2
+      },
+      {
+        "authority": "historical stored evidence_status",
+        "controls": "nothing that ranks 1 or 2 already controls",
+        "rank": 3
+      }
+    ],
+    "rule": "1. results/closure/e7b_evidence_supersession.json controls named E7b field validity; 2. results/ve0/supersession_map.json controls unnamed artefact-group status; 3. historical stored evidence_status is lowest precedence.",
+    "scope_limit": "This overlay is E7b-scoped. It says nothing about any field of any other experiment family, and it does not change the artefact-group status VE-0 assigns to E7b as a whole."
+  },
+  "primary_pareto_frontier_common_denominator": [
+    "concat",
+    "fusion",
+    "vocab1000_product"
+  ],
+  "provenance": {
+    "clean_test_governance_pointer": "see clean_test_governance; this record deliberately makes no project-global clean-test claim",
+    "command": "python -m experiments.closure.build_e7b_supersession",
+    "device": "cpu",
+    "embargoed_token_guard": "assembled from parts and asserted absent from the payload",
+    "evaluated_anything": false,
+    "gpu_hours_charged": 0.0,
+    "gpu_used": false,
+    "h5py_version": "3.16.0",
+    "inputs": [
+      {
+        "bytes": 64983,
+        "path": "results/closure/efficiency_closure_table.json",
+        "role": "input",
+        "sha256": "be1781efeece841cc75df126fab43c9e9946437957c1ea6401ee1f86c8b47d5e"
+      },
+      {
+        "bytes": 26662,
+        "path": "results/experiments/e7b_serial_efficiency/e7b_results.json",
+        "role": "input",
+        "sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4"
+      },
+      {
+        "bytes": 1157,
+        "path": "results/experiments/e7b_serial_efficiency/latency_memory.csv",
+        "role": "input",
+        "sha256": "deb4a67e793612c822e645d78d314081b9413bc83579d8694d6a83ff647942cc"
+      },
+      {
+        "bytes": 33666,
+        "path": "results/ve0/supersession_map.json",
+        "role": "input",
+        "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
+      }
+    ],
+    "loaded_any_model": false,
+    "measured_anything": false,
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "python": "3.12.3",
+    "remeasured_anything": false,
+    "repository_head": "05ffaac9497f35efc09580809dc99b6018433aec",
+    "repository_head_short": "05ffaac",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "schema_version": 1,
+    "script": "experiments/closure/build_e7b_supersession.py",
+    "script_sha256": "8b970645765b093e18adbf2281a3bd1ad10f4e2118d2f8b9ef523bf5abd0e5f7",
+    "selected_any_checkpoint": false,
+    "torch_version": "2.12.1",
+    "trained_anything": false,
+    "worktree_dirty": true
+  },
+  "purpose": "Declare, in one machine-resolvable place, which E7b fields are current canonical dissertation evidence and which are withdrawn. The artefacts carrying the withdrawn fields are closed and byte-pinned by VE-0 and VE-1, so they cannot be amended in place without reopening a closed packet. This overlay supersedes their field-level validity instead.",
+  "remeasurement": {
+    "bridge_control": "fusion, the same system measured on both nodes",
+    "bridge_control_pre_registered_tolerance": 0.1,
+    "bridge_control_relative_difference": -0.1869,
+    "bridge_outcome": "FAILED",
+    "current_project_copy_node": "otter159",
+    "gpu_hours_charged": 0.0,
+    "historical_node": "otter155",
+    "reason": "The historical E7b measurements were taken on otter155 and the current project copy runs on otter159. The fusion bridge control differs by -0.1869 against a pre-registered tolerance of 0.10, so the bridge FAILED. Cross-node substitution is forbidden and no adjustment factor is permitted, so remeasuring on the current node would not produce a value comparable with the historical record.",
+    "remeasured": false,
+    "remeasurement_authorised": false
+  },
+  "residual_discoverability_risk": {
+    "mitigation": "Every human entry point that is not itself frozen names this record: the E7b report banner, README and REPRODUCIBILITY. No dissertation figure or table draws a withdrawn value, because the VE-0 canonical evidence inventory registers no evidence id for peak memory or cold first query at all.",
+    "recorded_for": "the later F1 discoverability review",
+    "residual_surfaces": [
+      "results/closure/efficiency_closure_table.json",
+      "results/closure/efficiency_closure_table.csv",
+      "results/experiments/e7b_serial_efficiency/e7b_results.json",
+      "results/experiments/e7b_serial_efficiency/latency_memory.csv"
+    ],
+    "risk_is_zero": false,
+    "statement": "A reviewer who opens only an immutable historical closure file may still see a row-level evidence_status of VERIFIED next to a withdrawn value, with no marker in that file pointing here. Those files are byte-pinned by closed packets and cannot carry a marker without reopening them."
+  },
+  "retained_but_labelled_not_comparable_with_end_to_end": [
+    "cached_image_question_side_ms",
+    "cached_feature_head_only_ms"
+  ],
+  "retained_field_count": 7,
+  "retained_field_names": [
+    "accuracy_raw_distribution_common_denominator",
+    "across_pass_spread_ms",
+    "primary_pareto_frontier_common_denominator",
+    "resident_frozen_parameters",
+    "total_loaded_parameters",
+    "trainable_parameters",
+    "warm_serial_median_ms"
+  ],
+  "retained_fields": [
+    {
+      "also_written_as": [
+        "warm_median_ms",
+        "warm_median_ms_per_pass"
+      ],
+      "applies_to_systems": [
+        "concat",
+        "e8a_a0p",
+        "e8a_a1",
+        "fusion",
+        "question_only",
+        "reasoner",
+        "siglip_fusion",
+        "vocab1000_product"
+      ],
+      "field": "warm_serial_median_ms",
+      "final_status": "RETAINED_VALID",
+      "why": "the warm serial timing loop was already inside a hoisted no_grad context and the accepted source repair did not change it, so the headline latency measures the same path before and after the repair."
+    },
+    {
+      "also_written_as": [
+        "warm_across_pass_spread_ms"
+      ],
+      "applies_to_systems": [
+        "concat",
+        "e8a_a0p",
+        "e8a_a1",
+        "fusion",
+        "question_only",
+        "reasoner",
+        "siglip_fusion",
+        "vocab1000_product"
+      ],
+      "field": "across_pass_spread_ms",
+      "final_status": "RETAINED_VALID",
+      "why": "derived from the same unchanged warm serial medians."
+    },
+    {
+      "also_written_as": [
+        "common_denominator_acc"
+      ],
+      "applies_to_systems": [
+        "concat",
+        "e8a_a0p",
+        "e8a_a1",
+        "fusion",
+        "question_only",
+        "reasoner",
+        "siglip_fusion",
+        "vocab1000_product"
+      ],
+      "field": "accuracy_raw_distribution_common_denominator",
+      "final_status": "RETAINED_VALID",
+      "why": "a stored development accuracy over the common 10,004-row raw denominator, reproduced by the preflight gate before any timing ran; it is independent of the timing harness."
+    },
+    {
+      "also_written_as": [
+        "trainable"
+      ],
+      "applies_to_systems": [
+        "concat",
+        "e8a_a0p",
+        "e8a_a1",
+        "fusion",
+        "question_only",
+        "reasoner",
+        "siglip_fusion",
+        "vocab1000_product"
+      ],
+      "field": "trainable_parameters",
+      "final_status": "RETAINED_VALID",
+      "why": "a structural count of the loaded modules, independent of the timing and memory instrumentation."
+    },
+    {
+      "also_written_as": [
+        "total_loaded"
+      ],
+      "applies_to_systems": [
+        "concat",
+        "e8a_a0p",
+        "e8a_a1",
+        "fusion",
+        "question_only",
+        "reasoner",
+        "siglip_fusion",
+        "vocab1000_product"
+      ],
+      "field": "total_loaded_parameters",
+      "final_status": "RETAINED_VALID",
+      "why": "a structural count of the loaded modules, independent of the timing and memory instrumentation."
+    },
+    {
+      "also_written_as": [
+        "resident_frozen"
+      ],
+      "applies_to_systems": [
+        "concat",
+        "e8a_a0p",
+        "e8a_a1",
+        "fusion",
+        "question_only",
+        "reasoner",
+        "siglip_fusion",
+        "vocab1000_product"
+      ],
+      "field": "resident_frozen_parameters",
+      "final_status": "RETAINED_VALID",
+      "why": "a structural count of the loaded modules, independent of the timing and memory instrumentation."
+    },
+    {
+      "also_written_as": [],
+      "applies_to_systems": [
+        "concat",
+        "e8a_a0p",
+        "e8a_a1",
+        "fusion",
+        "question_only",
+        "reasoner",
+        "siglip_fusion",
+        "vocab1000_product"
+      ],
+      "field": "primary_pareto_frontier_common_denominator",
+      "final_status": "RETAINED_VALID",
+      "why": "its two axes are raw-distribution accuracy and warm serial latency. Neither withdrawn field is a frontier axis, so frontier membership is untouched: concat, fusion and vocab1000_product, exactly as recorded."
+    }
+  ],
+  "schema_version": 1,
+  "status": {
+    "e7b": "OPEN",
+    "e7b_closed_by_this_record": false,
+    "f1": "BLOCKED",
+    "f2": "unstarted and unauthorised",
+    "note": "This record is a withdrawal declaration. It does not close E7b, which needs an independent review.",
+    "ve0": "CLOSED, unchanged",
+    "ve1": "CLOSED, unchanged",
+    "ve2": "CLOSED, unchanged"
+  },
+  "title": "E7b canonical evidence supersession overlay",
+  "withdrawn_field_count": 3,
+  "withdrawn_field_names": [
+    "cold_first_query_ms",
+    "peak_allocated_mib",
+    "peak_reserved_mib"
+  ],
+  "withdrawn_fields": [
+    {
+      "also_written_as": [
+        "peak_alloc_mib"
+      ],
+      "applies_to_systems": [
+        "concat",
+        "e8a_a0p",
+        "e8a_a1",
+        "fusion",
+        "question_only",
+        "reasoner",
+        "siglip_fusion",
+        "vocab1000_product"
+      ],
+      "cause_class": "MEASUREMENT_BOUNDARY_DEFECT",
+      "field": "peak_allocated_mib",
+      "final_status": "INVALID_WITHDRAWN",
+      "forbidden_use": [
+        "any dissertation number",
+        "any figure",
+        "any table",
+        "any comparison between systems",
+        "any Pareto axis",
+        "any GPU-memory footprint claim"
+      ],
+      "permitted_use": "readable as historical provenance only",
+      "reason": "The historical measurement window did not isolate the intended batch-1 serial inference envelope. The CUDA peak counters were read after the whole benchmark rather than at the close of the primary serial timing, so a single reported peak spans the serial, segmented, answer-sweep, cached-image, cached-feature and batch-64 regimes together. The contamination is also asymmetric across systems, because question_only never enters the batch-64 image branch. The published value therefore does not measure what it is labelled as measuring, at any system, and no arithmetic on the stored artefacts can recover the intended quantity.",
+      "remeasured": false,
+      "replacement_value": null,
+      "substitute_permitted": false
+    },
+    {
+      "also_written_as": [
+        "peak_reserved_mib"
+      ],
+      "applies_to_systems": [
+        "concat",
+        "e8a_a0p",
+        "e8a_a1",
+        "fusion",
+        "question_only",
+        "reasoner",
+        "siglip_fusion",
+        "vocab1000_product"
+      ],
+      "cause_class": "MEASUREMENT_BOUNDARY_DEFECT",
+      "field": "peak_reserved_mib",
+      "final_status": "INVALID_WITHDRAWN",
+      "forbidden_use": [
+        "any dissertation number",
+        "any figure",
+        "any table",
+        "any comparison between systems",
+        "any Pareto axis",
+        "any GPU-memory footprint claim"
+      ],
+      "permitted_use": "readable as historical provenance only",
+      "reason": "The historical measurement window did not isolate the intended batch-1 serial inference envelope. The CUDA peak counters were read after the whole benchmark rather than at the close of the primary serial timing, so a single reported peak spans the serial, segmented, answer-sweep, cached-image, cached-feature and batch-64 regimes together. The contamination is also asymmetric across systems, because question_only never enters the batch-64 image branch. The published value therefore does not measure what it is labelled as measuring, at any system, and no arithmetic on the stored artefacts can recover the intended quantity.",
+      "remeasured": false,
+      "replacement_value": null,
+      "substitute_permitted": false
+    },
+    {
+      "also_written_as": [
+        "cold_ms_mean",
+        "cold_ms"
+      ],
+      "applies_to_systems": [
+        "concat",
+        "e8a_a0p",
+        "e8a_a1",
+        "fusion",
+        "question_only",
+        "reasoner",
+        "siglip_fusion",
+        "vocab1000_product"
+      ],
+      "cause_class": "GRAD_MODE_STANDARDISATION",
+      "field": "cold_first_query_ms",
+      "final_status": "SUPERSEDED_WITHDRAWN",
+      "forbidden_use": [
+        "any dissertation number",
+        "any figure",
+        "any table",
+        "any comparison between systems",
+        "any Pareto axis",
+        "any GPU-memory footprint claim"
+      ],
+      "permitted_use": "readable as historical provenance only",
+      "reason": "Historical cold-query measurements were executed on a grad-enabled path. The accepted source repair standardised the cold query to torch.no_grad(). The historical values therefore do not measure the current cold-query path and are not current cold-start evidence.",
+      "remeasured": false,
+      "replacement_value": null,
+      "substitute_permitted": false
+    }
+  ]
+}

@@ -1,5 +1,27 @@
 # Experiment E7b: measured serial end-to-end efficiency
 
+## Status: three fields withdrawn, warm serial latency retained
+
+- `peak_allocated_mib` and `peak_reserved_mib`: **INVALID / WITHDRAWN**. The
+  historical measurement window did not isolate the intended batch-1 serial
+  inference envelope. No dissertation number, figure, table, comparison,
+  Pareto axis or GPU-memory footprint claim may use them.
+- `cold_first_query_ms`: **SUPERSEDED / WITHDRAWN**. The historical cold
+  queries ran on a grad-enabled path and the accepted source repair
+  standardised the cold query to `torch.no_grad()`, so the stored values do
+  not measure the current path.
+- Warm serial latency, the across-pass spread, the accuracy column and the
+  parameter counts remain **VALID**, and the primary Pareto frontier is
+  unchanged: neither withdrawn field is a frontier axis.
+- No replacement value exists and none was estimated. Remeasurement is not
+  authorised: the historical node was otter155, the current copy is otter159
+  and the cross-node bridge control failed at -18.7 per cent against a 10 per
+  cent tolerance.
+- Canonical record, which takes precedence over every stored row-level
+  `evidence_status` for these fields:
+  `results/closure/e7b_evidence_supersession.json`.
+- E7b remains OPEN pending independent review.
+
 ## Purpose
 
 Replace E7a's additive end-to-end estimates with measured serial values.
@@ -62,7 +84,10 @@ vocabulary-supported accuracy (each system's own support) is the
 separately labelled secondary value. Multi-seed context: five seeds for
 the global heads, three for reasoner/E8A.
 
-| system | common-denom acc | vocab-supported acc | multi-seed mean +/- sd | warm serial (ms) | spread | cold (ms) | load (s) | QPS | peak MiB alloc/res | trainable | total loaded |
+The `cold (ms)` and `peak MiB alloc/res` columns are WITHDRAWN and are printed
+here only as the historical record; see the status section above.
+
+| system | common-denom acc | vocab-supported acc | multi-seed mean +/- sd | warm serial (ms) | spread | cold (ms) WITHDRAWN | load (s) | QPS | peak MiB alloc/res WITHDRAWN | trainable | total loaded |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | question_only (context) | 0.38864 | 0.50402 | 0.49769 +/- 0.00439 | 1.960 | 0.013 | 75 | 2.1 | 510 | 623/690 | 313,956 | 151.6M |
 | concat | 0.44462 | 0.57661 | 0.57861 +/- 0.00264 | 7.610 | 0.904 | 117 | 2.0 | 131 | 764/852 | 576,100 | 151.9M |
@@ -123,6 +148,13 @@ pareto_serial.png, cache_hashes_before/after.txt, and the pilot evidence
 (pilot_e8a_a1.json plus its three qualification per-run records under
 pilot_evidence/, tracked, and superseded for measurement by the
 full-run A1 records). tests/test_e7b.py (55 checks) covers the gates.
+
+The field-level withdrawal above is published separately, because every
+artefact in this directory is byte-pinned by the closed VE-0 and VE-1 packets
+and none of them can be amended in place. The canonical record is
+results/closure/e7b_evidence_supersession.json, built by
+experiments/closure/build_e7b_supersession.py and covered by
+tests/test_e7b_supersession.py.
 
 ## Decisions and problems
 

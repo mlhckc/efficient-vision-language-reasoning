@@ -107,6 +107,37 @@ hash no longer matches the worktree.
   proxy (fusion is 48% slower than concat_wide at equal parameters).
   Supersedes the V1 stage-5 and src/efficiency.py-derived latencies.
   Development results only; see docs/experiments/e7a_efficiency.md.
+- E7b status, updated 14 August 2026 and BINDING. E7b measured the serial
+  end-to-end batch-1 query on otter155 and is the authoritative end-to-end
+  latency evidence. THREE of its stored fields are WITHDRAWN and must not
+  appear in any dissertation number, figure, table, comparison, Pareto axis
+  or GPU-memory footprint claim. `peak_allocated_mib` and `peak_reserved_mib`
+  are INVALID_WITHDRAWN, cause class MEASUREMENT_BOUNDARY_DEFECT: the
+  historical measurement window did not isolate the intended batch-1 serial
+  inference envelope. `cold_first_query_ms` is SUPERSEDED_WITHDRAWN, cause
+  class GRAD_MODE_STANDARDISATION: the historical cold queries ran on a
+  grad-enabled path and the accepted source repair standardised the cold
+  query to torch.no_grad(), so the stored values do not measure the current
+  path. The two causes are distinct and must not be conflated. RETAINED and
+  unchanged: warm serial median latency, the across-pass spread, the
+  raw-distribution accuracy on the common denominator, the trainable,
+  total-loaded and resident-frozen parameter counts, and the primary Pareto
+  frontier (concat, fusion, vocab1000_product), because neither withdrawn
+  field is a frontier axis. NO replacement value exists and none may be
+  estimated, inferred, back-calculated or substituted from another node.
+  Remeasurement is NOT authorised and has not run: the historical node was
+  otter155, the current project copy is otter159, and the fusion bridge
+  control failed its pre-registered 10 per cent tolerance at -18.69 per cent,
+  so cross-node substitution is forbidden and no adjustment factor is
+  permitted. The withdrawal is published as a field-level overlay rather than
+  an edit, because every artefact carrying the withdrawn fields is byte-pinned
+  by the closed VE-0 and VE-1 packets. Precedence, binding: (1)
+  results/closure/e7b_evidence_supersession.json controls named E7b field
+  validity; (2) results/ve0/supersession_map.json controls unnamed
+  artefact-group status; (3) historical stored evidence_status is lowest
+  precedence. Historical numbers remain readable only as provenance. E7b
+  remains OPEN pending independent review; F1 stays blocked and F2 unstarted.
+  See docs/experiments/e7b_serial_efficiency.md.
 - E9 (authorized and completed 10 August 2026) placed one frozen compact
   integrated VLM in context against the lightweight systems, evaluation only
   and with zero trainable parameters. On the 10,004-row raw development
@@ -123,7 +154,10 @@ hash no longer matches the worktree.
   about a third more than any E8B arm's +0.084 to +0.126, so it relies on
   the image more. On one node under the frozen E7b serial protocol the
   top-1000 global head reaches the same raw-distribution accuracy at 6.199 ms
-  against SmolVLM-500M's 152.854 ms, about 25 times cheaper; the E8B bridge
+  against SmolVLM-500M's 152.854 ms: SmolVLM-500M was approximately 24.7x
+  slower in warm serial latency under the same-node contextual protocol.
+  That is a latency statement only; no energy, power, carbon, monetary-cost
+  or general computational-cost claim follows from it. The E8B bridge
   measures B1 at 10.242 ms and B2/B3 R2/R3 at 38.8 to 39.7 ms. The fusion
   bridge control failed its pre-registered 10 per cent tolerance against the
   historical E7b node (-18.7 per cent), so those frontiers are not merged and

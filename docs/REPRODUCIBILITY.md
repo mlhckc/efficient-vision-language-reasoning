@@ -47,6 +47,24 @@ GPU name, and the key config values; utils.save_json() writes it next to each
 result. A saved number therefore carries the exact code and settings that
 produced it.
 
+## Which status wins when records disagree
+
+Some artefacts are frozen by a closed review packet and cannot be amended in
+place, so a field can be withdrawn after the file carrying it was sealed. When
+two records disagree about whether a number is current evidence, resolve them
+in this order:
+
+1. `results/closure/e7b_evidence_supersession.json` controls named E7b field
+   validity;
+2. `results/ve0/supersession_map.json` controls unnamed artefact-group status;
+3. historical stored `evidence_status` is lowest precedence.
+
+Historical numbers remain readable only as provenance. A withdrawal is
+field-level: it removes the named fields from current evidence and leaves
+every other field in the same row standing. Withdrawn values are never
+replaced by an estimate, an inferred figure, a back-calculation or a
+measurement taken on a different node.
+
 ## Caveats
 
 Fixing seeds and deterministic flags makes a run repeatable on the same
