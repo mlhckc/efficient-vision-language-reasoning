@@ -3,268 +3,241 @@
 MSc Artificial Intelligence dissertation, University of Surrey. Supervisor:
 Prof. Miroslaw Bober.
 
-The project tests whether Visual Question Answering can be done efficiently by
-reasoning in embedding space. An image and a question are each encoded into a
-fixed vector by one frozen CLIP ViT-B-32 model, and a small trainable head
-classifies the answer from a fixed set of the most frequent answers, on a
-subset of GQA. No large vision-language model is trained, and the encoders are
-never unfrozen.
+## Project summary
 
-Status, current to 14 August 2026. V1 is a completed legacy prototype. V2 is
-complete through global-head scaling at 40k/100k/250k, and V3 through the
-latent-query reasoner and its 100k/250k scaling (E1): the reasoner overtakes
-every global head at the larger scales but did not materially improve on the
-much smaller fusion head at 40k, and it does not reduce the multi-step
-deficit at any scale. E2 (a frozen SigLIP-B/16 encoder swap on the
-global-embedding path) gains about +1.2 to +1.5 points over the CLIP
-counterparts in every seed while the multi-step deficit stays in the same
-range, so the compositional deficit persists across two frozen encoders. E3
-(the 1000-answer vocabulary) raises coverage of the raw development
-distribution from 77.1% to 98.2% and answers about 3.6 to 4.1 points more
-questions correctly on that full distribution, at a roughly 2-point cost on
-the shared rows.
+This project asks whether Visual Question Answering can be done efficiently
+by reasoning in embedding space. An image and a question are each encoded by
+one frozen CLIP ViT-B-32 model, and a small trainable head classifies the
+answer from a closed set of frequent answers, on a subset of GQA. No large
+vision-language model is trained; the encoders are never unfrozen. Around
+that core, the project measures — under multi-seed controls, clustered
+statistics and a hard test-set embargo — what such lightweight systems can
+and cannot do, and what one query actually costs.
 
-Since then the programme has moved to frozen small language models and one
-compact VLM. E8A puts a frozen SmolLM2-135M on the question side; E8B and
-E10 put frozen SmolLM2-135M and SmolLM2-360M on the answer side; E9 places
-two frozen SmolVLM checkpoints in context, evaluation only. The answer-side
-result is consistent at both sizes: no reliable positive
-pretrained-over-random advantage was detected, and the intervals that
-include zero establish neither equivalence nor the absence of an effect.
-Training-set size is what moves accuracy. E10 completed its frozen twelve-cell
-matrix on 13 August 2026 and is closed.
+## Research question
 
-On efficiency, E7b is the authoritative end-to-end evidence: it measures a
-warm serial batch-1 query from raw image and raw question to answer, and it
-supersedes E7a's additive `full_pipeline_ms` and `amortised_ms` fields and
-their Pareto fronts for any end-to-end claim. E7a's component measurements
-remain valid as components. On E7b's node the small global heads sit at about
-7.6 ms per query against 9.2-20.1 ms for the larger systems, and cached or
-head-only figures (0.02-0.05 ms for the global heads) are partial-pipeline
-measurements that are never end-to-end costs. E7b (otter155) and E9 (otter159) were measured on
-different nodes; E9's bridge control missed its pre-registered 10 per cent
-tolerance by -18.7 per cent, so the two sets are kept as two frontiers, are
-never merged, and no adjustment factor is applied. The E9 comparison against
-the compact VLMs is contextual positioning, not a fair-protocol superiority
-claim. No energy or power measurement exists, so no claim of energy
-efficiency is made anywhere.
+Can frozen small encoders plus a tiny trainable head deliver useful VQA
+accuracy at a small measured cost, instead of running a large
+autoregressive vision-language model — and where exactly are the limits of
+that approach?
 
-Three E7b fields are withdrawn. `peak_allocated_mib` and `peak_reserved_mib`
-are INVALID: the historical measurement window did not isolate the intended
-batch-1 serial inference envelope. `cold_first_query_ms` is SUPERSEDED,
-because the accepted source repair standardised the cold query to
-`torch.no_grad()` and the stored values measure the older path. Warm serial
-latency, the accuracy column, the parameter counts and the Pareto frontier
-are unaffected, no replacement value exists and none was estimated. The
-canonical record for field validity is
-`results/closure/e7b_evidence_supersession.json`, and it takes precedence over
-the row-level `evidence_status` stored in the older closure and E7b artefacts.
+## Why this project matters
 
-E7b is CLOSED: the independent review of that withdrawal returned
-`E7B_CANONICAL_SUPERSESSION_REVIEW_PASS` on 14 August 2026. Five review
-packets are now closed — E7b, VE-0 (`VE0_PASS`, amendment
-`VE0_AMENDMENT_PASS`), VE-1 (`VE1_PASS`), VE-2 (`VE2_PASS`) and E10
-(`E10_PASS`). Their lifecycle is stated in one place,
-`results/closure/pre_f1_status_supersession_20260814.json`, which supersedes
-the status text written before those reviews returned, including the `OPEN`
-status block inside the byte-pinned E7b record. That record controls lifecycle
-and status only; field validity is still resolved by the two records named
-above. The model-list freeze (F1) is unstarted and unauthorised, and the
-blinded clean-test evaluation (F2) is unstarted and unauthorised.
+A closed-set answer from cached frozen embeddings costs single-digit
+milliseconds measured end to end; the compact autoregressive VLMs measured
+in this project took approximately 24 to 25 times higher warm serial
+latency under the same-node contextual protocol. Knowing what the cheap
+path extracts, what it provably does
+not (multi-step composition), and which ingredients matter (features,
+capacity, data, token access, pretrained language models) is useful both as
+engineering guidance and as evidence about frozen multimodal
+representations. The negative results are contributions: each one
+eliminates a candidate explanation under controls.
 
-The 14 August 2026 pre-F1 evidence audit found a reporting-only E8B metadata
-defect: B1 is best-on-development with early stopping, while B2/B3 are fixed
-at epoch 22; nine B1-bearing VE-0 rows had inherited the B2/B3 label. The
-field-level successor
-`results/closure/pre_f1_evidence_metadata_repair_20260814.json` corrects those
-rows and every named VE-1 carrier, plus five source-proven presentation
-rounding fields, the tracked E7a locator and `VE1-FIG-04-FULL` appendix
-placement. Closed VE bytes remain historical and byte-identical. The repair
-is awaiting independent review and declares no F1 readiness; see
-`docs/experiments/pre_f1_evidence_metadata_repair.md`.
+## System overview
 
-E7a's additive `full_pipeline_ms` and `amortised_ms` columns are superseded
-and are not current end-to-end evidence; they are not replaced by E7b values,
-because the two experiments measured different quantities. On the valid
-fields, the top-1000 product head at 250k is more accurate (0.4904 against
-0.4594 raw-distribution) than the 21.1M-parameter reasoner, using 16 times
-fewer parameters; for measured end-to-end latency see E7b.
+Four trainable model families over the same frozen base, plus one external
+reference class (details and diagrams in
+[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)):
 
-The statistical and efficiency evidence closure (13 August 2026) re-verified
-every hash-manifested artefact, reconstructed the row-level correctness
-evidence the V2/E2/E3 families never stored, and attached image-clustered
-intervals to the contrasts that carry a claim; its outputs are under
-`results/closure/` and its report is
-`docs/experiments/closure_statistical_efficiency.md`. The model-list freeze
-and the blinded clean-test evaluation are the remaining steps. Supervisor
-design feedback will be recorded when available. The clean-test embargo
-remains unchanged: the clean test remains blinded and no confirmatory result
-has been reported. Every result above is a development-set result.
+- **Global fusion heads** — small MLPs over pooled CLIP vectors: concat,
+  handcrafted fusion (product and absolute-difference interactions),
+  parameter-matched and ablation controls.
+- **Token-level latent-query reasoner** — 32 learned latents attending over
+  50 image tokens and question word tokens (21.1M parameters); the central
+  architectural contribution.
+- **Question-side SLM interface (E8A)** — frozen SmolLM2-135M question
+  states projected into the reasoner, with a random-initialised causal
+  control.
+- **Answer-side SLM readout (E8B, E10)** — the reasoner's latents read out
+  through a frozen SmolLM2-135M/360M, against random-initialised and
+  language-model-free controls.
+- **Compact VLMs (E9)** — frozen SmolVLM-256M/500M, evaluation only, for
+  contextual positioning.
 
-The clean-test contents were never inspected or used for development, model
-selection, or reporting decisions. Mechanical byte access occurred in two
-documented governance incidents, on 13 and 14 August 2026. The first was a
-reviewer's integrity-hash command over the target file; the second was an
-overly broad dependency-mapping scan that read every `.csv` under the project
-root. Neither
-inspected any row, label, distribution or prediction, and neither informed
-development, model selection or reporting. They are governance incidents, not
-test-informed scientific selection. The disclosure is in
-[docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md) and the canonical record is
+## Dataset and evaluation setting
+
+A verified V2 protocol over the balanced GQA release (v2_00): an
+image-disjoint development partition (777 images, 10,004 raw questions,
+7,714 in the top-100 vocabulary), nested training subsets of 40k/100k/250k
+questions, a vocabulary computed from the training pool only, and a clean
+test set (8,013 questions on 972 images) whose targets file is embargoed.
+An independent verifier re-derives the protocol from the raw GQA files (99
+checks, 0 failures). Primary metrics are strict raw exact match and one
+pinned VQA-style normalised exact match. Every result in this repository
+is a development-set result: the model-list freeze (F1) is unstarted and
+the blinded clean-test evaluation (F2) is unstarted and unauthorised.
+
+## Experimental journey
+
+V1 prototype (legacy, selection-biased — fixed by the V2 protocol) →
+five-seed baselines and the fusion decomposition (v2_02-v2_04) →
+type/step analysis finding the multi-step deficit, and visual-reliance
+interventions (v2_05-v2_06) → data scaling to 250k (v2_07) → token-level
+latent-query reasoner, negative at 40k, ahead at 100k/250k, deficit
+unchanged (v3_00-v3_03) → frozen SigLIP swap (E2) and top-1000 vocabulary
+(E3) → measured component and serial efficiency (E7a/E7b) → frozen small
+language models on the question side (E8A) and answer side (E8B) →
+compact-VLM context (E9) → answer-side capacity at 360M (E10) →
+statistical closure and frozen evidence layers (VE-0/VE-1/VE-2). The full
+story: [docs/PROJECT_OVERVIEW.md](docs/PROJECT_OVERVIEW.md).
+
+## Key results
+
+In-vocabulary development accuracy (7,714 rows; five seeds for V2/E2
+rows, three for V3/E8/E10), 40k / 250k training questions:
+
+| System | 40k | 250k |
+|---|---|---|
+| majority reference | 0.2247 | — |
+| question_only | 0.4580 | 0.4977 |
+| concat | 0.5240 | 0.5786 |
+| fusion | 0.5384 | 0.5823 |
+| reasoner (21.1M) | 0.5422 | 0.5958 |
+| SigLIP fusion (E2) | 0.5532 | 0.5939 |
+| E8A: A0p / A1 / A1r | 0.54045 / 0.52861 / 0.49041 | 0.59446 / 0.57316 / 0.52480 |
+| E8B: B1 / B2 / B3 | 0.54507 / 0.53392 / 0.50929 | 0.59394 / 0.60086 / 0.59610 |
+| E10: B4 / B4r (360M) | 0.52636 / 0.53319 | 0.59407 / 0.59645 |
+
+On the raw distribution (all 10,004 dev questions, 250k): the top-1000
+product head reaches 0.4904 against 0.4490 for the top-100 fusion head;
+SmolVLM-256M scores 0.436525 and SmolVLM-500M 0.489004 under the pinned
+normalised metric. Full precision, contrasts and intervals:
+[docs/EXPERIMENTS_AND_RESULTS.md](docs/EXPERIMENTS_AND_RESULTS.md).
+
+## Main scientific findings
+
+- Language priors are strong, but the visual signal contributes
+  materially and grows with data; wrong images actively mislead.
+- The handcrafted fusion advantage is real, half-capacity/half-features,
+  carried by either interaction term alone, and decays to noise at 250k.
+- The multi-step (>=4-step) deficit of about 0.06-0.11 persists across
+  every head, two frozen encoders and three scales — the project's most
+  robust negative finding.
+- Question-side SLM pretraining helps against a matched random control;
+  answer-side SLM pretraining shows no detected advantage at 135M or
+  360M. Training-set size dominates.
+- Representation quality (SigLIP: +1.2 to +1.5 points) and answer-space
+  design (top-1000: +3.6 to +4.1 raw-distribution points) are the levers
+  that move accuracy.
+
+Discovery-by-discovery detail:
+[docs/SCIENTIFIC_FINDINGS.md](docs/SCIENTIFIC_FINDINGS.md).
+
+## Efficiency summary
+
+E7b is the authoritative end-to-end evidence: measured warm serial
+batch-1 queries (raw image and question to answer, node otter155) cost
+about 7.6 ms for the CLIP global heads, 9.2-20.1 ms for the
+reasoner-class and SLM systems; the primary accuracy-latency frontier is
+concat, fusion and the top-1000 product head. Under the same-node E9
+protocol (otter159), SmolVLM-500M measured 151.380 ms on its open-readout
+row (accuracy 0.489004) and 152.854 ms on its constrained row (accuracy
+0.485706), against 6.199 ms for the top-1000 product head (0.49050):
+approximately 24.4 and 24.7 times the warm serial latency respectively.
+These are
+latency and parameter statements only: no energy, power, carbon or
+monetary measurement exists, so no such claim is made anywhere. E7a's
+additive end-to-end sums and three E7b fields (peak memory, cold-start)
+are withdrawn; field validity resolves through
 `results/closure/e7b_evidence_supersession.json`.
 
-Each closed evidence layer ships its own CPU-only test runner rather than
-joining `tests/run_all.py`, which is inside E10's frozen source set and cannot
-gain an import without invalidating the sealed digest:
+## Current status
 
-    python -B tests/run_closure.py            # statistical and efficiency closure
-    python -B tests/run_ve0.py                # canonical evidence contract
-    python -B tests/run_ve1.py                # figures and tables
-    python -B tests/run_ve2.py                # qualitative evidence
-    python -B tests/run_e7b_supersession.py   # E7b withdrawal and lifecycle records
-    python -B tests/run_pre_f1_evidence_metadata_repair.py  # metadata successor
+Current to 14 August 2026. All experimental packets are complete. Five
+review packets are closed with independently accepted verdicts: E7b,
+VE-0, VE-1, VE-2 and E10 (lifecycle record:
+`results/closure/pre_f1_status_supersession_20260814.json`). The 14
+August pre-F1 evidence metadata repair — correcting nine E8B B1-bearing
+checkpoint-selection rows (B1 is best-on-development; B2/B3 are fixed
+epoch 22), five presentation-precision fields, the E7a locator and one
+figure placement — is approved, pushed and closed
+(`results/closure/pre_f1_evidence_metadata_repair_20260814.json`).
+Detailed state: [docs/PROJECT_STATUS.md](docs/PROJECT_STATUS.md).
 
-The current project map and audit findings are in collab/PROJECT_CONTEXT.md.
-Claude-Codex planning, execution and review follow collab/PROTOCOL.md.
+The clean-test contents were never inspected or used for development,
+model selection, or reporting decisions. Mechanical byte access occurred
+in two documented governance incidents, on 13 and 14 August 2026: an
+independent reviewer's integrity-hash command over the target file, and
+an overly broad dependency-mapping scan that read every .json, .py, .md,
+.csv and .txt file under the project root because the traversal was not
+scoped away from data/. Neither inspected any row, label, distribution
+or prediction, and neither informed development, model selection or
+reporting. The governing disclosure is in
+[docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md).
 
-## V1 prototype (legacy)
+## What remains
 
-V1 formulates VQA as classification over the top 100 answers, using frozen
-CLIP global embeddings and small MLP heads. Four models share one head design
-and one training procedure, differing only in input: image-only,
-question-only, concat, and a handcrafted fusion of image, question, their
-elementwise product and their absolute difference.
+The model-list freeze (F1, unstarted) and only then the blinded
+clean-test evaluation (F2, unstarted and unauthorised), each requiring
+explicit user authorization; supervisor design feedback, still to be
+obtained and recorded; and the dissertation manuscript itself, written
+from the frozen evidence base — the handoff for that is
+[docs/DISSERTATION_HANDOFF.md](docs/DISSERTATION_HANDOFF.md).
 
-V1 prototype results (validation accuracy, single run):
+## Repository structure
 
-| model              | val accuracy | trainable params |
-|--------------------|--------------|------------------|
-| majority reference | 0.234        | 0                |
-| image-only         | 0.243        | 313,956          |
-| question-only      | 0.458        | 313,956          |
-| concat             | 0.525        | 576,100          |
-| fusion             | 0.541        | 1,100,388        |
+    config.py                 central settings, imported everywhere
+    1_..5_*.py                the five V1 stage scripts (legacy, complete)
+    src/                      reusable code: data, models, reasoner, utils
+    experiments/              V2/V3/E-series experiment code, closure/, ve0-ve2
+    docs/                     this documentation set, per-experiment reports,
+                              REPRODUCIBILITY, RELATED_WORK, references.bib
+    docs/experiments/         one tracked report per experiment (canonical prose)
+    artifacts/                small tracked evidence (v2_00 protocol, results_export)
+    results/                  git-ignored except the auditable JSON/CSV records:
+      results/experiments/      per-experiment result records
+      results/closure/          statistical closure + canonical successor records
+      results/ve0|ve1|ve2/      frozen evidence inventory, figures/tables, gallery
+    tests/                    per-layer CPU-only runners and test modules
+    data/, embeddings/        GQA data, manifests, caches (git-ignored;
+                              data/v2/test_clean_targets.csv is embargoed)
 
-These are legacy prototype results, not confirmatory findings. Known
-limitations: a single seed; the validation set was reused for checkpoint
-selection and reporting, so its numbers are optimistically biased; concat and
-fusion differ in head capacity (the fused input is twice as wide), so the
-comparison is not capacity-controlled; and the efficiency measurements cover
-the trainable heads only, excluding the shared frozen encoder.
-
-## V2 evaluation protocol (Day 1, complete)
-
-V2 replaces the V1 evaluation data with a defensible protocol:
-
-- an image-disjoint development set (777 images, 10,004 raw questions, 7,714
-  in-vocabulary) partitioned out of the GQA training images;
-- a vocabulary fixed from the training pool only;
-- strict nested training subsets of 40,000 / 100,000 / 250,000 questions,
-  drawn from 724,074 eligible pool questions by one seeded permutation, each
-  smaller manifest row-for-row a prefix of the larger;
-- a clean test set (8,013 questions on 972 images) built from validation
-  images never touched by the V1 validation set, split into an inputs file
-  and an embargoed targets file;
-- an independent verifier that re-derives the whole protocol from the raw GQA
-  files (99 checks, 0 failures), plus preservation and idempotence proofs
-  (all generated files byte-identical across rebuilds).
-
-The clean-test targets (data/v2/test_clean_targets.csv) must not be read by
-any training or development code before final evaluation, and no clean-test
-label statistics may be computed before then. Development decisions use the
-dev split only.
-
-The tracked evidence for Day 1 is under artifacts/v2_00_protocol/ (build
-summary, verifier report, vocabulary, file hashes, environment summary and a
-completion summary); the full protocol description is in
-docs/experiments/v2_00_protocol.md. The manifests themselves are local and
-git-ignored; their sha256 hashes are recorded, and rebuilding them from the
-raw GQA release reproduces them byte-for-byte.
-
-## Requirements
-
-- One NVIDIA GPU (developed on an RTX 4000 Ada Generation, about 20 GB VRAM).
-- Python 3.12 with the `venv` module.
-
-## Setup
-
-Run once from the project root:
-
-    bash setup.sh
-
-This creates the virtual environment at `.venv`, redirects caches into a
-project-local `.cache` folder, and installs the dependencies in
-`requirements.txt`.
-
-Start each session with:
-
-    source .venv/bin/activate && source env.sh
-
-If the machine uses node-local storage for the project directory, the venv
-exists only on the node where `setup.sh` ran; `bash check_env.sh` confirms the
-environment is intact and reports Python, torch and CUDA.
-
-## Running the V1 stages (legacy)
-
-The numbered scripts are the completed V1 stages and run in order:
-
-    python 1_prepare_gqa.py        # V1 GQA subset and answer vocabulary
-    python 2_extract_embeddings.py # run frozen CLIP once and cache the vectors
-    python 3_train_baselines.py    # question-only, image-only and concat baselines
-    python 4_train_latent_model.py # the V1 fusion model
-    python 5_evaluate.py           # accuracy, efficiency and the trade-off plot
-
-V2 code lives under experiments/; the Day-1 protocol build and verifier are
-
-    python -B experiments/v2_00_protocol/build_manifests.py
-    python -B experiments/v2_00_protocol/verify_protocol.py
-
-## Configuration
-
-All fixed settings live in `config.py` (dataset, answer-set size, subset
-sizes, seed, CLIP model, training hyperparameters and paths). Edit values
-there rather than passing command-line flags. The V2 protocol seeds derive
-from `config.RANDOM_SEED`.
+Where to look: "what code produced this?" → `experiments/` and `src/`;
+"what evidence supports this?" → `results/experiments/`,
+`results/closure/`, `artifacts/results_export/`; "which value is
+canonical?" → the successor records named in
+[docs/PROJECT_STATUS.md](docs/PROJECT_STATUS.md); "what is historical?"
+→ anything a successor record supersedes, plus `docs/STUDY_GUIDE.md` and
+`docs/PROGRESS_REPORT.md` (V1-era, banners included).
 
 ## Reproducibility
 
-Each stage calls `utils.set_seed()` first, which seeds Python, NumPy and
-PyTorch and, with `config.DETERMINISTIC`, turns on deterministic
-cuDNN/cuBLAS; DataLoaders are seeded, the encoders are frozen, and
-`utils.run_metadata()` records the commit, seed, library versions and GPU
-with every result. The V2 protocol is additionally deterministic by
-construction (seeded permutations over canonically sorted string IDs) and its
-outputs are pinned by sha256 hashes in
-`artifacts/v2_00_protocol/manifest_hashes_public.json`.
+Requirements: one NVIDIA GPU (developed on an RTX 4000 Ada Generation,
+about 20 GB VRAM) and Python 3.12 with the venv module. One-time setup,
+then per-session activation:
 
-`requirements.txt` is the portable dependency list; `requirements.lock.txt`
-records the exact resolved versions:
+    bash setup.sh
+    source .venv/bin/activate && source env.sh
+    bash check_env.sh
 
-    python -m pip install -r requirements.lock.txt
+All settings live in `config.py`; every stage seeds via
+`utils.set_seed()`; DataLoaders are seeded; the encoders are frozen;
+`utils.run_metadata()` records commit, seed, versions and GPU with every
+result. `requirements.lock.txt` pins exact versions. The V2 protocol is
+deterministic by construction and hash-pinned
+(`artifacts/v2_00_protocol/manifest_hashes_public.json`). The legacy V1
+stages run as `python 1_prepare_gqa.py` … `python 5_evaluate.py`; V2
+work lives under `experiments/`. Each closed evidence layer ships a
+CPU-only runner:
 
-See `docs/REPRODUCIBILITY.md` for the full account and its caveats.
+    python -B tests/run_closure.py
+    python -B tests/run_ve0.py
+    python -B tests/run_ve1.py
+    python -B tests/run_ve2.py
+    python -B tests/run_e7b_supersession.py
+    python -B tests/run_pre_f1_evidence_metadata_repair.py
 
-## Repository layout
+(`tests/run_all.py` is inside E10's frozen source set and needs a GPU;
+it is not part of the zero-GPU verification path.) Full contract and
+caveats: [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md).
 
-    config.py                 central settings, imported everywhere
-    env.sh                    redirect caches into .cache (source each session)
-    setup.sh                  one-time venv creation and dependency install
-    requirements.txt          dependencies (portable list)
-    requirements.lock.txt     exact resolved versions for reproduction
-    check_env.sh              per-session environment check
-    1_..5_*.py                the five V1 stage scripts (legacy, complete)
-    src/                      reusable code: data, models, train, utils, efficiency
-    experiments/              V2/V3/E-series experiment code, and closure/
-    artifacts/                small tracked evidence files (v2_00_protocol)
-    docs/                     reports, protocol documents, study guide
-    data/                     GQA data and V1/V2 manifests (git-ignored)
-    embeddings/               cached CLIP vectors (git-ignored)
-    results/                  trained heads, metrics, figures (git-ignored,
-                              except the small auditable JSON/CSV records of
-                              E7b, E8A, E8B, E9, E10 and closure/)
+## Dissertation documentation
 
-## Reports
-
-Each V1 stage has a report in `docs/` following `docs/REPORT_TEMPLATE.md`; the
-V2 protocol is documented in `docs/experiments/v2_00_protocol.md` with its
-evidence in `artifacts/v2_00_protocol/`.
+- [docs/PROJECT_OVERVIEW.md](docs/PROJECT_OVERVIEW.md) — the complete story
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — model families and diagrams
+- [docs/EXPERIMENTS_AND_RESULTS.md](docs/EXPERIMENTS_AND_RESULTS.md) — every experiment, every number
+- [docs/SCIENTIFIC_FINDINGS.md](docs/SCIENTIFIC_FINDINGS.md) — findings with confidence and limits
+- [docs/PROJECT_STATUS.md](docs/PROJECT_STATUS.md) — done, closed, remaining
+- [docs/DISSERTATION_HANDOFF.md](docs/DISSERTATION_HANDOFF.md) — for whoever writes the dissertation
+- collab/PROJECT_CONTEXT.md and collab/PROTOCOL.md — agent-collaboration context
