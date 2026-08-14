@@ -89,7 +89,7 @@ The `image_only` head consumes nothing but an image embedding, so under a
 correct permutation its shuffled prediction at row i must equal its normal
 prediction at row perm[i]. That identity holds on 7,714 of 7,714 rows. A
 deliberately different permutation, as a negative control against a head that
-might have predicted one answer everywhere, explains 3,131. The recovered
+might have predicted one answer everywhere, explains 3,143. The recovered
 mapping is therefore a checked fact, and the build refuses to name a partner it
 cannot prove.
 
