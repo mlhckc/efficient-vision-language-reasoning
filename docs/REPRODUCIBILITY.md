@@ -81,10 +81,21 @@ place, so a field can be withdrawn after the file carrying it was sealed. When
 two records disagree about whether a number is current evidence, resolve them
 in this order:
 
-1. `results/closure/e7b_evidence_supersession.json` controls named E7b field
-   validity;
-2. `results/ve0/supersession_map.json` controls unnamed artefact-group status;
-3. historical stored `evidence_status` is lowest precedence.
+1. `results/closure/pre_f1_evidence_metadata_repair_20260814.json` controls
+   only its named E8B checkpoint-selection, presentation-precision, E7a
+   locator and FIG-04-FULL placement fields, plus its exact E8B wording
+   selectors;
+2. `results/closure/e7b_evidence_supersession.json` controls named E7b field
+   validity in its disjoint scope;
+3. `results/ve0/supersession_map.json` controls unnamed artefact-group status;
+4. historical stored fields are lowest precedence.
+
+The pre-F1 metadata record leaves the closed VE0/VE1 bytes readable as
+provenance. In its effective view E8B B1 is best-on-development, B2/B3 are
+fixed epoch 22, and the four B1-versus-B2/B3 contrasts explicitly carry both
+selection rules. It is awaiting independent review and does not declare F1
+ready. The exact field inventory is documented in
+`docs/experiments/pre_f1_evidence_metadata_repair.md`.
 
 Historical numbers remain readable only as provenance. A withdrawal is
 field-level: it removes the named fields from current evidence and leaves
@@ -114,6 +125,7 @@ the new sources are still covered by it.
     python -B tests/run_ve1.py                # figures and tables
     python -B tests/run_ve2.py                # qualitative evidence
     python -B tests/run_e7b_supersession.py   # E7b withdrawal and lifecycle records
+    python -B tests/run_pre_f1_evidence_metadata_repair.py  # metadata successor
 
 `tests/run_all.py` itself imports `tests/test_reproduction.py`, which performs
 a CUDA forward pass, so it is not part of a zero-GPU verification pass.
@@ -122,7 +134,7 @@ a CUDA forward pass, so it is not part of a zero-GPU verification pass.
 
 The clean-test contents were never inspected or used for development, model
 selection, or reporting decisions. Mechanical byte access occurred in two
-documented governance incidents, on 13 and 14 August 2026:
+documented governance incidents, on 13 and 14 August 2026.
 
 1. 13 August 2026 — an independent reviewer ran an integrity-hash command over
    the target file, which read its bytes.

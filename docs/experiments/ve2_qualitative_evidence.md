@@ -11,7 +11,9 @@ rows.
 It is a reporting task, not an experiment. Nothing was trained, evaluated,
 timed, scored or selected as a checkpoint; no checkpoint or embedding store was
 opened; zero GPU hours were charged; no quantitative result was recomputed; and
-the embargoed clean test was neither read nor resolved.
+the clean-test contents were never inspected or used for development, model
+selection, or reporting decisions. Mechanical byte access occurred in two
+documented governance incidents, on 13 and 14 August 2026.
 
 The problem VE-2 exists to solve is narrower than it looks. A qualitative panel
 is easy to produce and easy to produce dishonestly: choose the example that
@@ -303,6 +305,12 @@ is closed, the manifest is immutable, and `tests/test_ve2.py` rebuilds VE-2 from
 that source and compares its scientific content, so editing either would reopen
 a closed packet. Read them as a record of what was known on 13 August 2026, not
 as the complete access history.
+
+Current reader-facing wording and the rule that these closed bytes remain
+historical are recorded in
+`results/closure/pre_f1_evidence_metadata_repair_20260814.json`. That successor
+does not alter any VE-2 byte, selection, image or caption content and claims no
+path-wide replacement inside the frozen VE-2 record.
 
 VE-2 itself did not open, hash, stat or parse the clean-test target, and no
 VE-2 module resolves its path. Neither incident was caused by VE-2 code. Image

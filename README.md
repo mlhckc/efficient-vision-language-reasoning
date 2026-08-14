@@ -72,6 +72,17 @@ and status only; field validity is still resolved by the two records named
 above. The model-list freeze (F1) is unstarted and unauthorised, and the
 blinded clean-test evaluation (F2) is unstarted and unauthorised.
 
+The 14 August 2026 pre-F1 evidence audit found a reporting-only E8B metadata
+defect: B1 is best-on-development with early stopping, while B2/B3 are fixed
+at epoch 22; nine B1-bearing VE-0 rows had inherited the B2/B3 label. The
+field-level successor
+`results/closure/pre_f1_evidence_metadata_repair_20260814.json` corrects those
+rows and every named VE-1 carrier, plus five source-proven presentation
+rounding fields, the tracked E7a locator and `VE1-FIG-04-FULL` appendix
+placement. Closed VE bytes remain historical and byte-identical. The repair
+is awaiting independent review and declares no F1 readiness; see
+`docs/experiments/pre_f1_evidence_metadata_repair.md`.
+
 E7a's additive `full_pipeline_ms` and `amortised_ms` columns are superseded
 and are not current end-to-end evidence; they are not replaced by E7b values,
 because the two experiments measured different quantities. On the valid
@@ -92,9 +103,10 @@ has been reported. Every result above is a development-set result.
 
 The clean-test contents were never inspected or used for development, model
 selection, or reporting decisions. Mechanical byte access occurred in two
-documented governance incidents, on 13 and 14 August 2026: a reviewer's
-integrity-hash command over the target file, and an overly broad
-dependency-mapping scan that read every `.csv` under the project root. Neither
+documented governance incidents, on 13 and 14 August 2026. The first was a
+reviewer's integrity-hash command over the target file; the second was an
+overly broad dependency-mapping scan that read every `.csv` under the project
+root. Neither
 inspected any row, label, distribution or prediction, and neither informed
 development, model selection or reporting. They are governance incidents, not
 test-informed scientific selection. The disclosure is in
@@ -110,6 +122,7 @@ gain an import without invalidating the sealed digest:
     python -B tests/run_ve1.py                # figures and tables
     python -B tests/run_ve2.py                # qualitative evidence
     python -B tests/run_e7b_supersession.py   # E7b withdrawal and lifecycle records
+    python -B tests/run_pre_f1_evidence_metadata_repair.py  # metadata successor
 
 The current project map and audit findings are in collab/PROJECT_CONTEXT.md.
 Claude-Codex planning, execution and review follow collab/PROTOCOL.md.

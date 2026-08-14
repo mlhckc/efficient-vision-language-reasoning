@@ -439,6 +439,19 @@ hash no longer matches the worktree.
   (tests/run_closure.py, run_ve0.py, run_ve1.py, run_ve2.py,
   run_e7b_supersession.py) because tests/run_all.py is inside E10's frozen
   SOURCE_PATHS and must not gain an import.
+- Pre-F1 evidence metadata, updated 14 August 2026 and awaiting independent
+  review. The candidate field-level authority is
+  results/closure/pre_f1_evidence_metadata_repair_20260814.json, built by
+  experiments/closure/build_pre_f1_evidence_metadata_repair.py. It corrects
+  exactly nine E8B B1-bearing checkpoint-selection records: five B1-only rows
+  are BEST_ON_DEVELOPMENT and four B1-versus-B2/B3 contrasts are
+  MIXED_WITHIN_ROW; B2/B3 remain FIXED_EPOCH_22. It also controls five
+  source-proven presentation-precision fields, the E7a tracked locator and
+  VE1-FIG-04-FULL appendix placement. Closed VE0/VE1 bytes and their legacy
+  builders remain historical and must be read through this successor. It
+  changes no other numerical field, reinstates no E7a/E7b withdrawal and
+  declares no F1/F2 readiness or authorisation. See
+  docs/experiments/pre_f1_evidence_metadata_repair.md.
 - Current gate, updated 2 August 2026 (E8A/E8B/E9 programme). The user
   authorized the E8A frozen-SLM question-encoder branch, the E8B frozen-SLM
   readout and bounded-generation branch, and the E9 evaluation-only compact-VLM
@@ -563,6 +576,14 @@ hash no longer matches the worktree.
      comparison, the model freeze or the clean-test checkpoint. B1
      retains its frozen section 7.3 classifier recipe and is NOT forced
      onto the 22-epoch rule.
+     CURRENT METADATA RESOLUTION: five B1-only evidence rows are
+     BEST_ON_DEVELOPMENT; the four B1-versus-B2/B3 rows explicitly carry both
+     primitive selection classes and are not checkpoint-selection matched.
+     Resolve the frozen VE0/VE1 carrier fields through
+     results/closure/pre_f1_evidence_metadata_repair_20260814.json. Frozen
+     FIG-08 PDF/PNG renders must additionally be paired with that record's
+     hash-guarded effective virtual note; the corrected text is not embedded
+     in their unchanged historical bytes.
   6. Strict determinism cannot be established at startup: utils.set_seed
      unconditionally sets warn_only=True, and build_arm re-seeds because
      G13 requires it. Enforcement must be re-imposed after EVERY
@@ -655,8 +676,11 @@ hash no longer matches the worktree.
   bytes have already been read. This is how both incidents happened.
   Canonical records: results/closure/e7b_evidence_supersession.json under
   clean_test_governance, and
-  results/closure/pre_f1_status_supersession_20260814.json; the prose
-  disclosure is in docs/REPRODUCIBILITY.md.
+  results/closure/pre_f1_status_supersession_20260814.json. Closed VE/closure
+  wording remains historical and is not a current disclosure surface; the
+  current prose disclosure is in docs/REPRODUCIBILITY.md and the editable
+  reader-facing documents named by
+  results/closure/pre_f1_evidence_metadata_repair_20260814.json.
 - Status: v2_01 (embedding extraction and zero-shot floor 0.080), v2_02
   (five-seed baselines: fusion 0.5384 beats concat 0.5240 in every seed),
   v2_03 (parameter matching halves the fusion gain), v2_04 (either

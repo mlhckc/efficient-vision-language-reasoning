@@ -687,12 +687,17 @@ docs/experiments/e9_compact_vlm.md and results/experiments/e9_compact_vlm/.
 E9 is a contextual baseline, not a clean causal architecture experiment. No
 E9-versus-E8B difference is attributed to integrated architecture alone.
 
-Clean-test contents were never opened, read, scored or used. A pre-score E9
-implementation briefly resolved and stat()ed the embargoed path, which violated
-the stricter G17 path-level rule; it was detected and repaired before any
-scientific score was produced, and is recorded in
+The clean-test contents were never inspected or used for development, model
+selection, or reporting decisions. Mechanical byte access occurred in two
+documented governance incidents, on 13 and 14 August 2026. The earlier E9
+path-resolution/stat incident remains recorded in
 results/experiments/e9_compact_vlm/g17_remediation.json with the later wording
-correction in g17_wording_correction.json.
+correction in g17_wording_correction.json; the two canonical byte-access
+incidents and current disclosure are recorded in
+results/closure/e7b_evidence_supersession.json. Closed VE/closure wording
+remains historical; current reader-facing disclosure and the E8B B1 selection
+correction are governed by
+results/closure/pre_f1_evidence_metadata_repair_20260814.json.
 
 The E10 scientific core, F1 and F2 remain unauthorised and unstarted. E8B is
 closed and was not reopened: the timing bridge is read-only, verified each

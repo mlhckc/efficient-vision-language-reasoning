@@ -6,8 +6,11 @@ VE-1 renders the dissertation's quantitative figures and tables from the frozen
 VE-0 evidence contract, which the independent review closed at verdict
 VE0_PASS. It is a reporting task, not an experiment. Nothing was trained,
 evaluated, timed or selected, no checkpoint or embedding store was opened, zero
-GPU hours were charged, and the embargoed clean test was neither read nor
-resolved.
+GPU hours were charged, and VE-1 itself neither read nor resolved the embargoed
+target. The clean-test contents were never inspected or used
+for development, model selection, or reporting decisions. Mechanical byte
+access occurred in two documented governance incidents, on 13 and 14 August
+2026.
 
 The problem VE-1 exists to solve is narrow and worth stating. The project holds
 several hundred reportable quantities under two scorers, two answer sets, two
@@ -339,6 +342,28 @@ BLOCKED_NOT_RENDERED and VE0-FIG-10 remains DEFERRED_TO_VE2.
 state: 6,848 VE-0 core scientific fields, 1,330 figure drawn-value fields and
 592 strictly numeric table cells, with zero changes. A rebuild leaves all 97
 VE-0 and VE-1 output files byte-identical.
+
+## Pre-F1 metadata successor, 14 August 2026
+
+A later canonical-evidence audit found that the frozen VE-0 family resolver
+had labelled nine E8B B1-bearing rows as fixed epoch 22. The tracked E8B
+authority says B1 is best-on-development with early stopping, whereas B2/B3
+are fixed epoch 22. The current field-level view is in
+`results/closure/pre_f1_evidence_metadata_repair_20260814.json`: it covers
+VE1-FIG-A2, VE1-TAB-03, VE1-TAB-04, VE1-TAB-A2, VE1-TAB-A4, captions and
+provenance. Four B1-versus-B2/B3 rows are selection-mixed system comparisons;
+their numbers remain unchanged.
+
+The same successor sets VE1-FIG-04-FULL to `APPENDIX`, consistent with this
+report and visual QA, giving effective counts of 9 main-text and 6 appendix
+figures. It also supplies five source-proven presentation-rounding corrections
+and the tracked E7a export locator. The closed VE-1 files remain byte-identical
+historical carriers. The successor awaits independent review and authorises
+nothing.
+
+The clean-test contents were never inspected or used for development, model
+selection, or reporting decisions. Mechanical byte access occurred in two
+documented governance incidents, on 13 and 14 August 2026.
 
 ## Status
 

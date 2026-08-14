@@ -1269,15 +1269,19 @@ def test_builder_is_mechanical() -> None:
 # --------------------------------------------------------------------------
 
 def test_no_regression_in_neighbouring_suites() -> None:
-    # The overlay adds one file under results/closure/, and the pre-F1
-    # lifecycle repair adds exactly one more, so the artefact sets the other
-    # suites walk must be the sets they expect.
+    # The overlay adds one file under results/closure/, the pre-F1
+    # lifecycle repair adds exactly one more, and the pre-F1
+    # evidence-metadata repair, which supersedes the packet that wrote this
+    # guard, adds exactly one more at the location its accepted plan review
+    # specified. The artefact set the other suites walk must be exactly
+    # these plus the closure tables.
     closure_dir = PROJECT_ROOT / "results" / "closure"
     names = sorted(p.name for p in closure_dir.iterdir() if p.is_file())
-    check("the closure directory holds the overlay and the lifecycle record "
-          "and nothing else new",
+    check("the closure directory holds the overlay, the lifecycle record "
+          "and the evidence-metadata successor and nothing else new",
           RECORD.name in names and STATUS_RECORD_NAME in names
-          and len(names) == 21, str(len(names)))
+          and "pre_f1_evidence_metadata_repair_20260814.json" in names
+          and len(names) == 22, str(len(names)))
 
     # run_all.py is inside E10's frozen SOURCE_PATHS, so this task must not
     # have edited it. That is why these tests ship their own runner.
