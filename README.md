@@ -10,7 +10,7 @@ classifies the answer from a fixed set of the most frequent answers, on a
 subset of GQA. No large vision-language model is trained, and the encoders are
 never unfrozen.
 
-Status, current to 13 August 2026. V1 is a completed legacy prototype. V2 is
+Status, current to 14 August 2026. V1 is a completed legacy prototype. V2 is
 complete through global-head scaling at 40k/100k/250k, and V3 through the
 latent-query reasoner and its 100k/250k scaling (E1): the reasoner overtakes
 every global head at the larger scales but did not materially improve on the
@@ -56,9 +56,28 @@ because the accepted source repair standardised the cold query to
 `torch.no_grad()` and the stored values measure the older path. Warm serial
 latency, the accuracy column, the parameter counts and the Pareto frontier
 are unaffected, no replacement value exists and none was estimated. The
-canonical record is `results/closure/e7b_evidence_supersession.json`, and it
-takes precedence over the row-level `evidence_status` stored in the older
-closure and E7b artefacts. E7b remains open pending independent review.
+canonical record for field validity is
+`results/closure/e7b_evidence_supersession.json`, and it takes precedence over
+the row-level `evidence_status` stored in the older closure and E7b artefacts.
+
+E7b is CLOSED: the independent review of that withdrawal returned
+`E7B_CANONICAL_SUPERSESSION_REVIEW_PASS` on 14 August 2026. Five review
+packets are now closed — E7b, VE-0 (`VE0_PASS`, amendment
+`VE0_AMENDMENT_PASS`), VE-1 (`VE1_PASS`), VE-2 (`VE2_PASS`) and E10
+(`E10_PASS`). Their lifecycle is stated in one place,
+`results/closure/pre_f1_status_supersession_20260814.json`, which supersedes
+the status text written before those reviews returned, including the `OPEN`
+status block inside the byte-pinned E7b record. That record controls lifecycle
+and status only; field validity is still resolved by the two records named
+above. The model-list freeze (F1) is unstarted and unauthorised, and the
+blinded clean-test evaluation (F2) is unstarted and unauthorised.
+
+E7a's additive `full_pipeline_ms` and `amortised_ms` columns are superseded
+and are not current end-to-end evidence; they are not replaced by E7b values,
+because the two experiments measured different quantities. On the valid
+fields, the top-1000 product head at 250k is more accurate (0.4904 against
+0.4594 raw-distribution) than the 21.1M-parameter reasoner, using 16 times
+fewer parameters; for measured end-to-end latency see E7b.
 
 The statistical and efficiency evidence closure (13 August 2026) re-verified
 every hash-manifested artefact, reconstructed the row-level correctness
@@ -81,6 +100,16 @@ development, model selection or reporting. They are governance incidents, not
 test-informed scientific selection. The disclosure is in
 [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md) and the canonical record is
 `results/closure/e7b_evidence_supersession.json`.
+
+Each closed evidence layer ships its own CPU-only test runner rather than
+joining `tests/run_all.py`, which is inside E10's frozen source set and cannot
+gain an import without invalidating the sealed digest:
+
+    python -B tests/run_closure.py            # statistical and efficiency closure
+    python -B tests/run_ve0.py                # canonical evidence contract
+    python -B tests/run_ve1.py                # figures and tables
+    python -B tests/run_ve2.py                # qualitative evidence
+    python -B tests/run_e7b_supersession.py   # E7b withdrawal and lifecycle records
 
 The current project map and audit findings are in collab/PROJECT_CONTEXT.md.
 Claude-Codex planning, execution and review follow collab/PROTOCOL.md.

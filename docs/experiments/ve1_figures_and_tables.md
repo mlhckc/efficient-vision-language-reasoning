@@ -342,7 +342,11 @@ VE-0 and VE-1 output files byte-identical.
 
 ## Status
 
-VE-1 is complete and submitted for independent review at packet state
-`review_requested`. It authorises nothing and declares no verdict. VE-2, F1 and
-F2 have not been started, F1 and F2 remain unauthorised, and the clean test
-remains embargoed.
+VE-1 is CLOSED. The independent review returned `VE1_PASS` on the amendment
+and repair described above, after a first round of `VE1_CHANGES_REQUIRED`.
+VE-2 has since run and closed at `VE2_PASS`. The consolidated lifecycle record
+for the closed packets is
+`results/closure/pre_f1_status_supersession_20260814.json`.
+
+VE-1 authorises nothing. F1 and F2 have not been started, both remain
+unauthorised, and the clean test remains embargoed.

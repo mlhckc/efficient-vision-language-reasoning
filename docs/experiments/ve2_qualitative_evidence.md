@@ -324,3 +324,12 @@ that is itself capacity-confounded. The representation panels change an encoder
 and two widths together. The answer-side panels sit under a contrast whose
 interval contains zero, which is an absence of a detected effect and not
 equivalence.
+
+## Status
+
+VE-2 is CLOSED. The independent review returned `VE2_PASS` after two rounds.
+The consolidated lifecycle record for the closed packets is
+`results/closure/pre_f1_status_supersession_20260814.json`.
+
+VE-2 authorises nothing. F1 and F2 have not been started, both remain
+unauthorised, and the clean test remains embargoed.

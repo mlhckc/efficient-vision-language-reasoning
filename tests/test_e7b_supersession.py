@@ -1,4 +1,5 @@
-"""Tests for the canonical E7b evidence supersession overlay.
+"""Tests for the E7b evidence supersession overlay and the pre-F1 lifecycle
+record that supersedes its status block.
 
 CPU-only and read-only. Nothing is trained, no model is loaded, no timing is
 taken and no checkpoint is opened. The embargoed clean-test target is never
@@ -13,6 +14,16 @@ are the ones a future edit could quietly break — the exact three-field
 withdrawal, the two separate causes, the retention of warm serial latency,
 the absence of any substitute value, the task-scoped clean-test wording, and
 the fact that no closed packet moved.
+
+POST-CLOSURE EXTENSION, 14 August 2026. This suite was accepted by the
+independent E7b review at E7B_CANONICAL_SUPERSESSION_REVIEW_PASS. It is
+extended here for LIFECYCLE and DISCOVERABILITY only: the five packets are
+now closed, the overlay's own status block still reads OPEN because it is
+byte-pinned, and a consolidated record supersedes that lifecycle text. The
+extension asserts no scientific quantity, reinstates no withdrawn field and
+reopens no E7b science — but a suite an independent review accepted should
+not grow without one, so this modification REQUIRES INDEPENDENT PRE-F1
+REVIEW.
 
 The checks are semantic and field-level, over parsed JSON and the AST of the
 builder, not over line numbers or rendered text, so ordinary reformatting
@@ -36,6 +47,50 @@ if str(PROJECT_ROOT) not in sys.path:
 RECORD = PROJECT_ROOT / "results" / "closure" / "e7b_evidence_supersession.json"
 BUILDER = (PROJECT_ROOT / "experiments" / "closure"
            / "build_e7b_supersession.py")
+
+# The consolidated pre-F1 lifecycle and wording record. It supersedes the
+# status block above and nothing else.
+STATUS_RECORD_NAME = "pre_f1_status_supersession_20260814.json"
+STATUS_RECORD = PROJECT_ROOT / "results" / "closure" / STATUS_RECORD_NAME
+STATUS_BUILDER = (PROJECT_ROOT / "experiments" / "closure"
+                  / "build_pre_f1_status_supersession.py")
+STATUS_RELATIVE = f"results/closure/{STATUS_RECORD_NAME}"
+
+# The E7b overlay is byte-pinned by this task: the lifecycle supersession is
+# published beside it, never into it.
+E7B_OVERLAY_SHA256 = (
+    "2fb6561b3916b83603631c0feb35d716dc9bbf3e1ed1ef3d4e7286516a0a0c75")
+
+# The five packets the consolidated record covers, with the verdict each was
+# accepted at. Written here rather than read from the record, so the test
+# disagrees with the record if either moves.
+CLOSED_PACKETS_LIFECYCLE = {
+    "e7b": "E7B_CANONICAL_SUPERSESSION_REVIEW_PASS",
+    "ve0": "VE0_PASS",
+    "ve1": "VE1_PASS",
+    "ve2": "VE2_PASS",
+    "e10": "E10_PASS",
+}
+
+# Statements VE-0's supersession map records as removed and forbidden to
+# return, plus the additive comparison this task demoted. None may appear as
+# a live claim on a current-facing surface.
+E7A_FORBIDDEN_STATEMENTS = (
+    "cuts a query from 6.35 to 2.25 ms",
+    "on both end-to-end latency Pareto fronts",
+)
+E7A_INVALID_COMPARISON = ("6.35 against 7.71", "6.35 ms to 2.25 ms")
+
+# Documents a reader treats as current. The E7a report is included because
+# its banner is the first thing on the page; the forbidden sentences may
+# appear there only as quoted prohibitions.
+E7A_CURRENT_FACING = (
+    "README.md",
+    "CLAUDE.md",
+    "docs/REPRODUCIBILITY.md",
+    "docs/experiments/e7a_efficiency.md",
+    "docs/experiments/e7b_serial_efficiency.md",
+)
 
 EMBARGOED = "test_" + "clean_targets"
 
@@ -180,6 +235,10 @@ def _sha256(path: Path) -> str:
 
 def _record() -> dict:
     return json.loads(RECORD.read_text())
+
+
+def _status_record() -> dict:
+    return json.loads(STATUS_RECORD.read_text())
 
 
 def _flat(value) -> str:
@@ -945,14 +1004,32 @@ def test_human_facing_discoverability() -> None:
     check("the report marks the withdrawn table columns",
           re.search(r"\|\s*cold \(ms\) WITHDRAWN\s*\|", report) is not None
           and re.search(r"peak MiB alloc/res WITHDRAWN", report) is not None)
-    check("the report does not declare E7b closed",
-          "E7b remains OPEN" in report)
+    # E7b closed on 14 August 2026. The report must say so, and must send the
+    # reader to the lifecycle record rather than to the overlay's own status
+    # block, which still reads OPEN because it is byte-pinned.
+    check("the report no longer says E7b remains open",
+          "E7b remains OPEN" not in report)
+    check("the report declares E7b CLOSED", "E7b is CLOSED" in report)
+    check("the report names the accepted verdict",
+          "E7B_CANONICAL_SUPERSESSION_REVIEW_PASS" in report)
+    check("the report points to the lifecycle record",
+          STATUS_RELATIVE in report)
 
     readme = (PROJECT_ROOT / "README.md").read_text()
     check("README points to the canonical record", relative in readme)
+    check("README points to the lifecycle record", STATUS_RELATIVE in readme)
     check("README names the withdrawal", "WITHDRAWN" in readme.upper())
     check("README does not alter the valid warm-latency numbers",
           "7.6 ms per query" in readme and "9.2-20.1 ms" in readme)
+    check("README no longer says E7b remains open",
+          "E7b remains open" not in readme)
+    check("README declares E7b CLOSED", "E7b is CLOSED" in readme)
+    check("README is current to 14 August 2026",
+          "current to 14 August 2026" in readme)
+    for command in ("tests/run_closure.py", "tests/run_ve0.py",
+                    "tests/run_ve1.py", "tests/run_ve2.py",
+                    "tests/run_e7b_supersession.py"):
+        check(f"README documents the {command} runner", command in readme)
 
     reproducibility = (PROJECT_ROOT / "docs"
                        / "REPRODUCIBILITY.md").read_text()
@@ -964,6 +1041,20 @@ def test_human_facing_discoverability() -> None:
           reproducibility.index(relative)
           < reproducibility.index("results/ve0/supersession_map.json")
           < reproducibility.index("lowest precedence"))
+    # Lifecycle precedence is stated, and stated BEFORE field validity, so a
+    # reader settles "is the packet open" before "is the number current".
+    check("REPRODUCIBILITY documents the lifecycle record",
+          STATUS_RELATIVE in reproducibility)
+    check("REPRODUCIBILITY puts lifecycle precedence above field validity",
+          reproducibility.index(STATUS_RELATIVE)
+          < reproducibility.index("lowest precedence"))
+    check("REPRODUCIBILITY says the lifecycle record changes no result",
+          "changes no accuracy, latency," in reproducibility)
+    for command in ("tests/run_closure.py", "tests/run_ve0.py",
+                    "tests/run_ve1.py", "tests/run_ve2.py",
+                    "tests/run_e7b_supersession.py"):
+        check(f"REPRODUCIBILITY documents the {command} runner",
+              command in reproducibility)
 
     claude = (PROJECT_ROOT / "CLAUDE.md").read_text()
     check("CLAUDE.md records the current E7b status",
@@ -971,8 +1062,32 @@ def test_human_facing_discoverability() -> None:
     check("CLAUDE.md names both cause classes",
           "MEASUREMENT_BOUNDARY_DEFECT" in claude
           and "GRAD_MODE_STANDARDISATION" in claude)
-    check("CLAUDE.md records E7b as open",
-          "E7b\n  remains OPEN" in claude or "E7b remains OPEN" in claude)
+    check("CLAUDE.md no longer records E7b as open",
+          "E7b\n  remains OPEN" not in claude
+          and "E7b remains OPEN" not in claude)
+    check("CLAUDE.md records E7b as CLOSED", "E7b is\n  CLOSED" in claude
+          or "E7b is CLOSED" in claude)
+    check("CLAUDE.md points to the lifecycle record",
+          STATUS_RELATIVE in claude)
+    flat_claude = re.sub(r"\s+", " ", claude)
+    check("CLAUDE.md records E10 as closed at E10_PASS",
+          "E10 is CLOSED at E10_PASS" in flat_claude)
+    check("CLAUDE.md no longer says no final E10 PASS is declared",
+          "no final E10 PASS is declared. The clean test" not in flat_claude)
+    for packet, verdict in sorted(CLOSED_PACKETS_LIFECYCLE.items()):
+        check(f"CLAUDE.md names the accepted {packet} verdict",
+              verdict in flat_claude, verdict)
+    check("CLAUDE.md carries the required clean-test wording",
+          "Mechanical byte access occurred in two documented governance "
+          "incidents, on 13 and 14 August 2026." in flat_claude)
+    check("CLAUDE.md identifies both incidents separately",
+          "13 August 2026 — an independent reviewer" in flat_claude
+          and "14 August 2026 — during the E7b canonical-supersession"
+          in flat_claude)
+    check("CLAUDE.md records the corrective scan rule",
+          "must exclude data/ before reading or traversing" in flat_claude)
+    check("CLAUDE.md states F1 and F2 remain unstarted",
+          "F1 is UNSTARTED and unauthorised" in flat_claude)
 
     # The record's own pointer list agrees with the files that really point.
     pointed = {row["path"] for row in record["human_facing_pointers"]}
@@ -1137,12 +1252,15 @@ def test_builder_is_mechanical() -> None:
 # --------------------------------------------------------------------------
 
 def test_no_regression_in_neighbouring_suites() -> None:
-    # The overlay adds one file under results/closure/ and nothing else, so
-    # the artefact sets the other suites walk must be the sets they expect.
+    # The overlay adds one file under results/closure/, and the pre-F1
+    # lifecycle repair adds exactly one more, so the artefact sets the other
+    # suites walk must be the sets they expect.
     closure_dir = PROJECT_ROOT / "results" / "closure"
     names = sorted(p.name for p in closure_dir.iterdir() if p.is_file())
-    check("the closure directory gained exactly the overlay",
-          RECORD.name in names and len(names) == 20, str(len(names)))
+    check("the closure directory holds the overlay and the lifecycle record "
+          "and nothing else new",
+          RECORD.name in names and STATUS_RECORD_NAME in names
+          and len(names) == 21, str(len(names)))
 
     # run_all.py is inside E10's frozen SOURCE_PATHS, so this task must not
     # have edited it. That is why these tests ship their own runner.
@@ -1164,6 +1282,581 @@ def test_no_regression_in_neighbouring_suites() -> None:
           _sha256(PROJECT_ROOT / "experiments" / "e7b_serial_efficiency"
                   / "run.py")
           == "fd62ccb2cd7532be154d19cd7c0ab598215940340f7295b29ca8d5ca54495455")
+    check("run_all.py is byte-identical",
+          _sha256(PROJECT_ROOT / "tests" / "run_all.py")
+          == "0a53250ac3c10edd788ea756a64dff54e83d2dec824ad557a6f8ea629e741786")
+    check(".gitignore is byte-identical",
+          _sha256(PROJECT_ROOT / ".gitignore")
+          == "9ec096d242e61dd67650f619680d7a0d34115872eca06475dd701ce0e87ed7d1")
+
+
+# --------------------------------------------------------------------------
+# T. the consolidated pre-F1 lifecycle record: schema and digest
+# --------------------------------------------------------------------------
+
+def test_status_record_schema_and_digest() -> None:
+    check("the lifecycle record exists by its exact name",
+          STATUS_RECORD.exists(), STATUS_RELATIVE)
+    check("its builder exists", STATUS_BUILDER.exists())
+    record = _status_record()
+
+    for key in ("title", "record_type", "scope", "changes_no_scientific_result",
+                "purpose", "what_this_record_does_not_do", "precedence",
+                "lifecycle_status", "e7b_lifecycle_supersession",
+                "ve0_pinned_status_treatment", "ve1_ve2_status_edits",
+                "e10_status_correction", "e7a_wording_repair",
+                "frozen_rq_matrix_wording_erratum", "clean_test_governance",
+                "f1_f2", "task_footprint", "verification_runners",
+                "frozen_pins", "content_sha256", "provenance"):
+        check(f"the lifecycle record carries {key}", key in record)
+
+    check("the record type is PRE_F1_STATUS_SUPERSESSION",
+          record["record_type"] == "PRE_F1_STATUS_SUPERSESSION",
+          record["record_type"])
+    check("the scope is LIFECYCLE_AND_WORDING_ONLY",
+          record["scope"] == "LIFECYCLE_AND_WORDING_ONLY", record["scope"])
+    check("it declares that it changes no scientific result",
+          record["changes_no_scientific_result"] is True)
+
+    # The content digest is self-verifying, on the same two-tier rule the
+    # overlay uses: provenance carries the repository HEAD and is excluded.
+    stripped = {k: v for k, v in record.items()
+                if k not in ("provenance", "content_sha256")}
+    text = json.dumps(stripped, indent=2, sort_keys=True,
+                      ensure_ascii=False) + "\n"
+    recomputed = hashlib.sha256(text.encode("utf-8")).hexdigest()
+    check("its content_sha256 re-derives from its own bytes",
+          recomputed == record["content_sha256"],
+          f"{recomputed} against {record['content_sha256']}")
+
+    def _tamper():
+        bad = dict(stripped)
+        bad["scope"] = "EVERYTHING"
+        moved = hashlib.sha256(
+            (json.dumps(bad, indent=2, sort_keys=True,
+                        ensure_ascii=False) + "\n").encode()).hexdigest()
+        assert moved == record["content_sha256"]
+    must_fail("a changed scope leaves the lifecycle digest alone", _tamper)
+
+    check("the lifecycle record declares zero GPU hours",
+          record["provenance"]["gpu_hours_charged"] == 0.0)
+    check("the lifecycle record measured, trained and selected nothing",
+          record["provenance"]["gpu_used"] is False
+          and record["provenance"]["trained_anything"] is False
+          and record["provenance"]["measured_anything"] is False
+          and record["provenance"]["selected_any_checkpoint"] is False)
+    check("the lifecycle record reopened no closed packet",
+          record["provenance"]["reopened_any_closed_packet"] is False)
+
+    # It must not smuggle in a project-global clean-test claim either.
+    globals_found = _find_key(record, "clean_test_accessed")
+    check("the lifecycle record asserts no project-global "
+          "clean_test_accessed field", globals_found == [],
+          str(globals_found[:5]))
+    check("neither the lifecycle record nor its builder names the embargoed "
+          "target",
+          EMBARGOED not in STATUS_RECORD.read_text()
+          and EMBARGOED not in STATUS_BUILDER.read_text())
+
+
+# --------------------------------------------------------------------------
+# U. lifecycle: five closed packets, F1 and F2 unstarted
+# --------------------------------------------------------------------------
+
+def test_status_record_lifecycle() -> None:
+    record = _status_record()
+    lifecycle = record["lifecycle_status"]
+    check("exactly the five closed packets are covered",
+          sorted(lifecycle) == sorted(CLOSED_PACKETS_LIFECYCLE),
+          str(sorted(lifecycle)))
+    check("the declared count agrees",
+          record["closed_packet_count"] == len(CLOSED_PACKETS_LIFECYCLE))
+    for packet, verdict in sorted(CLOSED_PACKETS_LIFECYCLE.items()):
+        entry = lifecycle[packet]
+        check(f"{packet} is CLOSED", entry["status"] == "CLOSED",
+              entry["status"])
+        check(f"{packet} records its accepted verdict {verdict}",
+              entry["accepted_verdict"] == verdict, entry["accepted_verdict"])
+        check(f"{packet} names the stale statement it supersedes",
+              len(entry["superseded_statements"]) >= 1)
+    check("VE-0's amendment verdict is recorded",
+          lifecycle["ve0"]["amendment_verdict"] == "VE0_AMENDMENT_PASS")
+    check("E10's closure is attributed to the frozen supersession map",
+          lifecycle["e10"]["recorded_in"]
+          == "results/ve0/supersession_map.json")
+
+    # F1 is not declared ready by the record that removes E7b's blocker.
+    f1f2 = record["f1_f2"]
+    check("F1 is unstarted", f1f2["f1"] == "UNSTARTED")
+    check("F2 is unstarted and unauthorised",
+          f1f2["f2"] == "UNSTARTED_AND_UNAUTHORISED")
+    check("F1 is not declared ready by this record",
+          f1f2["f1_declared_ready_by_this_record"] is False)
+    check("F1 is not authorised", f1f2["f1_authorised"] is False)
+    check("the clean-test embargo is unchanged",
+          f1f2["clean_test_embargo"] == "UNCHANGED")
+
+    # The scope limit is asserted field by field, not merely in prose.
+    limits = record["what_this_record_does_not_do"]
+    for key in ("changes_no_accuracy", "changes_no_latency",
+                "changes_no_parameter_count", "changes_no_interval",
+                "changes_no_pareto_membership", "changes_no_figure_or_table",
+                "changes_no_raw_artefact", "reinstates_no_withdrawn_field",
+                "introduces_no_replacement_value", "remeasures_nothing",
+                "reopens_no_closed_packet", "authorises_nothing"):
+        check(f"the record declares {key}", limits[key] is True)
+    check("the record does not declare F1 ready",
+          limits["declares_f1_ready"] is False)
+
+    # Precedence: lifecycle here, field validity elsewhere.
+    precedence = record["precedence"]
+    check("this record controls no field validity",
+          precedence["this_record_controls_no_field_validity"] is True)
+    check("lifecycle rank 1 is this record",
+          precedence["lifecycle_order"][0]["authority"] == STATUS_RELATIVE)
+    field_order = precedence["field_validity_order"]
+    check("field rank 1 is still the E7b overlay",
+          field_order[0]["authority"]
+          == "results/closure/e7b_evidence_supersession.json")
+    check("field rank 2 is still the VE-0 supersession map",
+          field_order[1]["authority"] == "results/ve0/supersession_map.json")
+    check("field rank 3 is still the historical evidence_status",
+          field_order[2]["authority"] == "historical stored evidence_status")
+
+    # The task is recorded as a lifecycle extension needing its own review.
+    footprint = record["task_footprint"]
+    check("the task charges zero GPU hours",
+          footprint["gpu_hours_charged"] == 0.0)
+    check("the task trained, evaluated and measured nothing",
+          footprint["trained_anything"] is False
+          and footprint["evaluated_anything"] is False
+          and footprint["measured_anything"] is False)
+    check("exactly one test file was modified",
+          footprint["only_test_file_modified"]
+          == "tests/test_e7b_supersession.py")
+    check("the test modification is a lifecycle and discoverability "
+          "extension",
+          footprint["test_modification_kind"]
+          == "POST_CLOSURE_LIFECYCLE_DISCOVERABILITY_EXTENSION")
+    check("the test modification reopens no E7b science",
+          footprint["test_modification_reopens_e7b_science"] is False)
+    check("the test modification requires independent pre-F1 review",
+          footprint["test_modification_requires_independent_pre_f1_review"]
+          is True)
+    check("this test source records that it needs that review",
+          "REQUIRES INDEPENDENT PRE-F1" in Path(__file__).read_text().upper())
+
+
+# --------------------------------------------------------------------------
+# V. the E7b lifecycle supersession leaves field validity alone
+# --------------------------------------------------------------------------
+
+def test_e7b_lifecycle_supersession() -> None:
+    record = _status_record()
+    block = record["e7b_lifecycle_supersession"]
+    check("it supersedes the E7b overlay",
+          block["supersedes"]
+          == "results/closure/e7b_evidence_supersession.json")
+    check("it supersedes the status block only",
+          block["supersedes_scope"] == "the status block only")
+    check("status.e7b OPEN is marked historical lifecycle state only",
+          block["status_e7b_open_is_historical_lifecycle_state_only"] is True)
+    check("status.f1 BLOCKED is marked historical lifecycle state only",
+          block["status_f1_blocked_is_historical_lifecycle_state_only"]
+          is True)
+    check("the historical values are recorded verbatim",
+          block["historical_values"]["e7b"] == "OPEN"
+          and block["historical_values"]["f1"] == "BLOCKED")
+    check("it records that E7b was independently accepted and closed",
+          "accepted and formally CLOSED" in block["what_happened_since"])
+
+    for field in ("withdrawn_fields", "retained_fields",
+                  "field-level precedence", "metric validity"):
+        check(f"the older record stays authoritative for {field}",
+              field in block["older_record_remains_authoritative_for"])
+    check("the older record was not edited",
+          block["older_record_edited"] is False)
+    check("the older record was not regenerated",
+          block["older_record_regenerated"] is False)
+    check("the withdrawn fields are unchanged",
+          block["withdrawn_fields_unchanged"] is True)
+    check("the retained fields are unchanged",
+          block["retained_fields_unchanged"] is True)
+    check("Pareto membership is unchanged",
+          block["pareto_membership_unchanged"] is True)
+
+    # The proof, not the claim: the overlay's bytes.
+    actual = _sha256(RECORD)
+    check("the E7b overlay is byte-identical",
+          actual == E7B_OVERLAY_SHA256, actual)
+    check("the record pins the same overlay hash",
+          block["older_record_sha256"] == E7B_OVERLAY_SHA256)
+    overlay = _record()
+    check("the overlay still carries the lifecycle text being superseded",
+          overlay["status"]["e7b"] == "OPEN"
+          and overlay["status"]["f1"] == "BLOCKED")
+    check("the overlay's field-level content is untouched",
+          overlay["withdrawn_field_count"] == 3
+          and overlay["retained_field_count"] == 7
+          and overlay["primary_pareto_frontier_common_denominator"]
+          == ["concat", "fusion", "vocab1000_product"])
+
+    # VE-0's report is pinned and was not edited to carry its own correction.
+    ve0 = record["ve0_pinned_status_treatment"]
+    check("the VE-0 report is recorded as not edited",
+          ve0["report_edited"] is False)
+    check("the VE-0 report is byte-identical",
+          _sha256(PROJECT_ROOT / ve0["report"]) == ve0["report_sha256"])
+    check("the VE-0 report is byte-pinned by its manifest",
+          ve0["report_byte_pinned_by"] == "results/ve0/VE0_MANIFEST.json")
+    check("the still-true parts of the stale section are named",
+          any("F1 and F2" in line
+              for line in ve0["still_true_in_the_stale_section"]))
+
+    # VE-1 and VE-2 reports were corrected; their result trees were not.
+    edits = record["ve1_ve2_status_edits"]
+    check("results/ve1 was not modified",
+          edits["results_ve1_modified"] is False)
+    check("results/ve2 was not modified",
+          edits["results_ve2_modified"] is False)
+    check("no figure or table was modified",
+          edits["figures_or_tables_modified"] is False)
+    for relative, verdict in (("docs/experiments/ve1_figures_and_tables.md",
+                               "VE1_PASS"),
+                              ("docs/experiments/ve2_qualitative_evidence.md",
+                               "VE2_PASS")):
+        text = (PROJECT_ROOT / relative).read_text()
+        flat = re.sub(r"\s+", " ", text)
+        name = "VE-1" if "ve1" in relative else "VE-2"
+        check(f"{relative} declares {name} CLOSED",
+              f"{name} is CLOSED" in flat, relative)
+        check(f"{relative} names {verdict}", verdict in flat)
+        check(f"{relative} points to the lifecycle record",
+              STATUS_RELATIVE in flat)
+    ve1_doc = re.sub(r"\s+", " ", (PROJECT_ROOT / "docs" / "experiments"
+                                   / "ve1_figures_and_tables.md").read_text())
+    check("the VE-1 report no longer says VE-2 has not been started",
+          "VE-2, F1 and F2 have not been started" not in ve1_doc)
+
+    # E10's correction cites the frozen map and touched no E10 surface.
+    e10 = record["e10_status_correction"]
+    check("E10 is recorded as CLOSED", e10["current_status"] == "CLOSED")
+    check("E10's verdict is E10_PASS",
+          e10["accepted_verdict"] == "E10_PASS")
+    check("the E10 status is established by the frozen supersession map",
+          e10["established_by"] == "results/ve0/supersession_map.json"
+          and _sha256(PROJECT_ROOT / e10["established_by"])
+          == e10["established_by_sha256"])
+    for key in ("e10_source_modified", "e10_result_modified",
+                "e10_test_modified", "e10_config_modified"):
+        check(f"E10 {key} is false", e10[key] is False)
+    check("the twelve-cell matrix is unchanged",
+          e10["twelve_cell_matrix_unchanged"] is True)
+
+
+# --------------------------------------------------------------------------
+# W. the frozen surfaces really did not move
+# --------------------------------------------------------------------------
+
+def test_frozen_surfaces_untouched() -> None:
+    record = _status_record()
+    pins = record["frozen_pins"]
+    check("the lifecycle record pins the frozen surfaces",
+          pins["pin_count"] >= 15, str(pins["pin_count"]))
+    check("every pin is recorded as unchanged", pins["all_unchanged"] is True)
+    check("the pin records match the declared count",
+          len(pins["records"]) == pins["pin_count"])
+
+    moved, missing = [], []
+    for row in pins["records"]:
+        path = PROJECT_ROOT / row["path"]
+        if not path.exists():
+            missing.append(row["path"])
+            continue
+        if _sha256(path) != row["pinned_sha256"]:
+            moved.append(row["path"])
+        if row["actual_sha256"] != row["pinned_sha256"]:
+            moved.append(row["path"] + " (recorded mismatch)")
+    check("no pinned surface is missing", missing == [], str(missing[:5]))
+    check(f"every pinned surface still has its frozen hash "
+          f"({len(pins['records'])} pins rehashed)", moved == [],
+          str(moved[:5]))
+
+    # The three frozen VE trees gained and lost nothing, and every manifest
+    # entry still rehashes.
+    for tree, expected_files in (("ve0", 15), ("ve1", 83), ("ve2", 19)):
+        root = PROJECT_ROOT / "results" / tree
+        found = sum(1 for p in root.rglob("*") if p.is_file())
+        check(f"results/{tree}/ still holds {expected_files} files",
+              found == expected_files, str(found))
+    for tree, name in (("ve0", "VE0_MANIFEST.json"),
+                       ("ve1", "VE1_MANIFEST.json"),
+                       ("ve2", "VE2_MANIFEST.json")):
+        manifest = json.loads(
+            (PROJECT_ROOT / "results" / tree / name).read_text())
+        entries = _manifest_entries(manifest)
+        bad = [row["path"] for row in entries
+               if (PROJECT_ROOT / row["path"]).exists()
+               and _sha256(PROJECT_ROOT / row["path"]) != row["sha256"]]
+        check(f"{name} entries still rehash after the repair "
+              f"({len(entries)} entries)", bad == [], str(bad[:5]))
+
+    # Nothing was written into the frozen experiment trees.
+    check("the lifecycle record lives under results/closure/",
+          STATUS_RECORD.parent.name == "closure")
+    for tree in ("ve0", "ve1", "ve2"):
+        check(f"the lifecycle record was not written into results/{tree}/",
+              not (PROJECT_ROOT / "results" / tree
+                   / STATUS_RECORD_NAME).exists())
+    check("the lifecycle record was not written into the E7b results "
+          "directory",
+          not (PROJECT_ROOT / "results" / "experiments"
+               / "e7b_serial_efficiency" / STATUS_RECORD_NAME).exists())
+
+    # Known-negative: the builder's own pin guard must refuse a moved pin.
+    from experiments.closure import build_pre_f1_status_supersession as builder
+    must_fail("the lifecycle builder writes when a pinned surface has moved",
+              lambda: _with_broken_status_pin(builder))
+
+
+def _with_broken_status_pin(builder) -> None:
+    original = dict(builder.PINS)
+    try:
+        builder.PINS[builder.E7B_OVERLAY] = "0" * 64
+        builder.build()
+    finally:
+        builder.PINS.clear()
+        builder.PINS.update(original)
+
+
+# --------------------------------------------------------------------------
+# X. the frozen RQ matrix: wording superseded, nothing else
+# --------------------------------------------------------------------------
+
+def test_rq_matrix_wording_erratum() -> None:
+    record = _status_record()
+    erratum = record["frozen_rq_matrix_wording_erratum"]
+    check("the erratum names the frozen RQ matrix",
+          erratum["artefact"] == "results/ve0/rq_evidence_matrix.json")
+    check("the RQ matrix was not edited",
+          erratum["artefact_edited"] is False)
+    check("the RQ matrix is recorded as immutable",
+          erratum["artefact_immutable"] is True)
+    check("the offending wording is 'far cheaper'",
+          erratum["offending_wording"] == "far cheaper")
+    check("its final status is WORDING_SUPERSEDED",
+          erratum["final_status"] == "WORDING_SUPERSEDED",
+          erratum["final_status"])
+
+    # The supersession is by WORDING AUTHORITY only: no answer status, no
+    # evidence id and no number moves.
+    check("no RQ answer status changed",
+          erratum["rq_answer_status_changed"] is False)
+    check("no evidence id changed", erratum["evidence_ids_changed"] is False)
+    check("no numeric result changed",
+          erratum["numeric_results_changed"] is False)
+    check("the superseding authority is the claim ledger",
+          erratum["superseding_authority"] == "results/ve0/claim_ledger.json")
+    check("the superseding claims are C13 and C18",
+          erratum["superseding_claims"] == ["C13", "C18"])
+    check("the superseding wording is the measured-latency form",
+          erratum["superseding_wording"]
+          == "at a small fraction of the measured end-to-end serial latency")
+    check("the claim ledger was already correct",
+          erratum["already_correct_in_the_claim_ledger"] is True)
+
+    # The frozen artefacts really say what the erratum says they say.
+    matrix = json.loads((PROJECT_ROOT / "results" / "ve0"
+                         / "rq_evidence_matrix.json").read_text())
+    offending = {row["rq_id"] for row in matrix["questions"]
+                 if "far cheaper" in row.get("supported_answer", "")}
+    check("the frozen matrix still carries the superseded wording, unedited",
+          offending == set(erratum["affected_questions"]),
+          str(sorted(offending)))
+    for rq_id in sorted(offending):
+        row = next(r for r in matrix["questions"] if r["rq_id"] == rq_id)
+        check(f"{rq_id} keeps its answer status",
+              row["answer_status"] == "ANSWERED", row["answer_status"])
+
+    ledger = json.loads((PROJECT_ROOT / "results" / "ve0"
+                         / "claim_ledger.json").read_text())
+    texts = {row["claim_id"]: row["claim_text"] for row in ledger["claims"]}
+    # C13 and C18 state the same bound in different words, so the record
+    # carries both phrasings rather than collapsing them into one string.
+    by_claim = erratum["superseding_wording_by_claim"]
+    check("C13's phrasing is the headline superseding wording",
+          by_claim["C13"] == erratum["superseding_wording"])
+    for claim_id in ("C13", "C18"):
+        check(f"{claim_id} already states the measured-latency form",
+              by_claim[claim_id] in texts[claim_id], claim_id)
+        check(f"{claim_id} bounds the claim to measured latency",
+              "measured" in by_claim[claim_id]
+              and "latency" in by_claim[claim_id])
+        check(f"{claim_id} makes no cheapness claim",
+              "cheaper" not in texts[claim_id])
+    check("the record states that neither claim says cheaper",
+          erratum["neither_claim_says_cheaper"] is True)
+
+
+# --------------------------------------------------------------------------
+# Y. no superseded E7a claim survives on a current-facing surface
+# --------------------------------------------------------------------------
+
+def _sentences(text: str) -> list:
+    return re.split(r"(?<=[.;]) ", re.sub(r"\s+", " ", text))
+
+
+def test_e7a_superseded_claims_are_gone() -> None:
+    record = _status_record()
+    repair = record["e7a_wording_repair"]
+    check("the two forbidden statements are named",
+          sorted(repair["forbidden_statements_that_must_not_return"])
+          == sorted(E7A_FORBIDDEN_STATEMENTS))
+    check("the invalid comparison is recorded with both values",
+          repair["invalid_current_comparison"]["values_ms"] == [6.35, 7.71])
+    check("the invalid comparison is removed from current-facing surfaces",
+          repair["invalid_current_comparison"]
+          ["removed_from_current_facing_surfaces"] is True)
+    check("no E7b value was substituted",
+          repair["replacement_policy"]["replaced_with_e7b_values"] is False)
+    check("no new cross-experiment comparison was manufactured",
+          repair["replacement_policy"]
+          ["new_cross_experiment_comparison_manufactured"] is False)
+    check("no underlying number was altered",
+          repair["replacement_policy"]["underlying_numbers_altered"] is False
+          and repair["e7a_numbers_altered"] is False)
+    check("the E7a artefact itself was not edited",
+          repair["e7a_artefact_edited"] is False)
+    check("the bounded wording keeps only accuracy and parameters",
+          "more accurate (0.4904 against 0.4594)" in repair["bounded_wording"]
+          and "16 times fewer parameters" in repair["bounded_wording"]
+          and "superseded" in repair["bounded_wording"])
+
+    # The bounded wording is what the documents actually carry: the accuracy
+    # pair and the parameter ratio, and no latency half.
+    for relative in ("docs/experiments/e7a_efficiency.md", "CLAUDE.md",
+                     "README.md"):
+        flat = re.sub(r"\s+", " ", (PROJECT_ROOT / relative).read_text())
+        check(f"{relative} carries the bounded accuracy-and-parameter "
+              f"statement",
+              "more accurate (0.4904 against 0.4594" in flat
+              and "16 times fewer parameters" in flat, relative)
+
+    # The forbidden sentences and the additive comparison survive nowhere as
+    # a live claim. In the E7a report they are permitted only inside the
+    # banner that forbids them, so each hit is judged in context.
+    for relative in E7A_CURRENT_FACING:
+        flat = re.sub(r"\s+", " ", (PROJECT_ROOT / relative).read_text())
+        for phrase in E7A_FORBIDDEN_STATEMENTS + E7A_INVALID_COMPARISON:
+            for hit in re.finditer(re.escape(phrase), flat):
+                window = flat[max(0, hit.start() - 240): hit.end() + 240]
+                check(f"{relative}: '{phrase}' appears only as a quoted "
+                      f"prohibition",
+                      "must not return" in window
+                      or "SUPERSEDED" in window,
+                      window[:200])
+
+    # No sentence anywhere current-facing may rest a cheapness claim on the
+    # superseded additive columns.
+    for relative in E7A_CURRENT_FACING:
+        for sentence in _sentences((PROJECT_ROOT / relative).read_text()):
+            lowered = sentence.lower()
+            if not any(term in lowered for term in
+                       ("cheaper", "more efficient", "lower cost")):
+                continue
+            check(f"{relative}: the cheapness word is a prohibition, not a "
+                  f"claim",
+                  "must not" in lowered or "superseded" in lowered
+                  or "forbidden" in lowered, sentence[:200])
+
+    # The E7a report leads with the supersession, not with the numbers.
+    e7a = (PROJECT_ROOT / "docs" / "experiments"
+           / "e7a_efficiency.md").read_text()
+    banner = "\n".join(e7a.splitlines()[:30])
+    check("the E7a report shows the supersession within its first 30 lines",
+          "SUPERSEDED" in banner.upper())
+    check("the banner names the three additive fields",
+          all(field in banner for field in ("gpu_encoder_plus_head_ms",
+                                            "full_pipeline_ms",
+                                            "amortised_ms")))
+    check("the banner states what remains valid",
+          "VALID" in banner.upper() and "parameter counts" in banner)
+    check("the banner sends the reader to E7b for measured latency",
+          "e7b_serial_efficiency.md" in banner)
+    check("the banner refuses to substitute E7b values",
+          "not** replaced by" in banner or "not replaced by" in banner)
+    check("the E7a report points to the lifecycle record",
+          STATUS_RELATIVE in e7a)
+    check("the superseded columns are marked in the results table",
+          "full pipeline SUPERSEDED" in e7a
+          and "amortised SUPERSEDED" in e7a)
+
+
+# --------------------------------------------------------------------------
+# Z. the lifecycle builder is mechanical too
+# --------------------------------------------------------------------------
+
+def test_status_builder_is_mechanical() -> None:
+    source = STATUS_BUILDER.read_text()
+    tree = ast.parse(source)
+
+    imported = set()
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            imported.update(alias.name.split(".")[0] for alias in node.names)
+        elif isinstance(node, ast.ImportFrom) and node.module:
+            imported.add(node.module.split(".")[0])
+    for banned in ("torch", "open_clip", "transformers", "timm"):
+        check(f"the lifecycle builder does not import {banned}",
+              banned not in imported, str(sorted(imported)))
+
+    called = {node.func.attr for node in ast.walk(tree)
+              if isinstance(node, ast.Call)
+              and isinstance(node.func, ast.Attribute)}
+    for banned in ("cuda", "to", "eval", "forward", "load_state_dict",
+                   "from_pretrained", "synchronize"):
+        check(f"the lifecycle builder never calls {banned}",
+              banned not in called, str(sorted(called)))
+
+    writes = [node for node in ast.walk(tree)
+              if isinstance(node, ast.Call)
+              and isinstance(node.func, ast.Attribute)
+              and node.func.attr in ("write_json", "write_csv", "write_bytes",
+                                     "write_text", "savefig", "save")]
+    check("the lifecycle builder performs exactly one write",
+          len(writes) == 1, str(len(writes)))
+    check("that write is a deterministic JSON write",
+          writes[0].func.attr == "write_json")
+    check("its output path is the lifecycle record", STATUS_RELATIVE in source)
+
+    build_fn = next(node for node in tree.body
+                    if isinstance(node, ast.FunctionDef)
+                    and node.name == "build")
+    first = ast.dump(build_fn.body[0])
+    check("the pin assertion is the first statement of build()",
+          "_assert_pins" in first, first[:120])
+
+    from experiments.closure import build_pre_f1_status_supersession as builder
+    rebuilt = builder.build()
+    check("a rebuild declares a zero-GPU provenance block",
+          rebuilt["provenance"]["gpu_used"] is False)
+    check("a rebuild reproduces the stored content digest",
+          rebuilt["content_sha256"] == _status_record()["content_sha256"],
+          rebuilt["content_sha256"])
+
+    # Known-negative: the builder refuses to publish a supersession of a
+    # statement that is no longer there.
+    must_fail("the builder publishes when the superseded status has gone",
+              lambda: _with_missing_superseded_status(builder))
+
+
+def _with_missing_superseded_status(builder) -> None:
+    original = builder.E7B_OVERLAY
+    try:
+        builder.E7B_OVERLAY = "results/closure/A_evidence_registry.json"
+        builder._assert_superseded_status_still_present()
+    finally:
+        builder.E7B_OVERLAY = original
 
 
 def run() -> None:
@@ -1182,6 +1875,13 @@ def run() -> None:
     test_e9_wording()
     test_builder_is_mechanical()
     test_no_regression_in_neighbouring_suites()
+    test_status_record_schema_and_digest()
+    test_status_record_lifecycle()
+    test_e7b_lifecycle_supersession()
+    test_frozen_surfaces_untouched()
+    test_rq_matrix_wording_erratum()
+    test_e7a_superseded_claims_are_gone()
+    test_status_builder_is_mechanical()
     failed = [name for name, ok in _CHECKS if not ok]
     if failed:
         raise AssertionError(

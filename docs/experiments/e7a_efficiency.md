@@ -1,5 +1,31 @@
 # Experiment E7a: efficiency Pareto and end-to-end cost accounting
 
+## Status: the additive end-to-end columns are SUPERSEDED
+
+- `gpu_encoder_plus_head_ms`, `full_pipeline_ms`, `amortised_ms` and **every
+  Pareto front derived from those additive sums** are **SUPERSEDED**. They are
+  sums of stage medians each timed in isolation; no serially executed
+  decode-encode-head pass was timed in this experiment. They must not be used
+  as current end-to-end latency evidence, and no comparison, ranking or
+  "cheaper" claim may rest on them.
+- Still **VALID**: the isolated encoder component latencies, the isolated head
+  component latencies, the peak-memory components, the parameter counts and
+  the accuracy column.
+- For measured end-to-end latency see `docs/experiments/e7b_serial_efficiency.md`.
+  E7b timed one serial pass per query on one node and is the authoritative
+  end-to-end evidence. The superseded figures below are **not** replaced by
+  E7b's values: the two experiments measured different things, and
+  substituting one into the other's sentence would manufacture a comparison
+  neither made.
+- Two sentences that once appeared in the project README and in `CLAUDE.md`,
+  "cuts a query from 6.35 to 2.25 ms" and "on both end-to-end latency Pareto
+  fronts", were removed for this reason and **must not return**
+  (`results/ve0/supersession_map.json`, artefact group "E7a component
+  efficiency measurements", status PARTLY_SUPERSEDED).
+- Nothing below is recomputed. The superseded numbers are printed as the
+  historical record and are marked where they appear. Lifecycle record:
+  `results/closure/pre_f1_status_supersession_20260814.json`.
+
 ## Purpose
 
 Measure what every stored head actually costs to run, under one
@@ -140,9 +166,11 @@ Representative heads (cost is scale-independent):
 | reasoner | 21,099,620 | 1.3968 | 5,320 | 80.53 |
 
 Top accuracy-cost points (raw-distribution accuracy over 10,004 dev
-questions; ms per query):
+questions; ms per query). The `GPU+head`, `full pipeline` and `amortised`
+columns are SUPERSEDED additive estimates and are printed here only as the
+historical record; see the status section above.
 
-| model @ scale | raw acc | head-only | GPU+head | full pipeline | amortised | footprint head / full (MiB) |
+| model @ scale | raw acc | head-only | GPU+head SUPERSEDED | full pipeline SUPERSEDED | amortised SUPERSEDED | footprint head / full (MiB) |
 |---|---|---|---|---|---|---|
 | vocab1000_product@250k | 0.4904 | 0.0330 | 4.0150 | 6.3459 | 2.2545 | 4.97 / 591.9 |
 | vocab1000_fusion@250k | 0.4865 | 0.0441 | 4.0260 | 6.3570 | 2.2655 | 5.97 / 592.9 |
@@ -161,11 +189,12 @@ Pareto fronts (raw-distribution accuracy against each cost axis):
   vocab1000_concat@250k, vocab1000_product@250k.
 - head-only latency: direct_linear@40k, vocab1000_question_only@250k,
   vocab1000_concat@250k, vocab1000_product@250k.
-- GPU encoder plus head, and full pipeline (identical membership):
+- GPU encoder plus head, and full pipeline (identical membership)
+  SUPERSEDED, additive: vocab1000_question_only@250k,
+  vocab1000_concat@250k, vocab1000_product@250k.
+- amortised SUPERSEDED, additive: image_only@40k,
   vocab1000_question_only@250k, vocab1000_concat@250k,
   vocab1000_product@250k.
-- amortised: image_only@40k, vocab1000_question_only@250k,
-  vocab1000_concat@250k, vocab1000_product@250k.
 - head-only memory footprint: direct_linear@40k, question_only@250k,
   siglip_question_only@250k, product_576k@250k, siglip_concat@250k,
   vocab1000_concat@250k, vocab1000_product@250k.
@@ -191,11 +220,15 @@ floor is vocab1000_question_only@250k):
 |---|---|---|---|
 | minimum trainable parameters | direct_linear@40k | 0.3711 | yes |
 | lowest head-only latency | direct_linear@40k | 0.3711 | yes |
-| lowest full-pipeline latency | vocab1000_question_only@250k | 0.3989 | no |
+| lowest full-pipeline latency SUPERSEDED | vocab1000_question_only@250k | 0.3989 | no |
 | lowest memory footprint (head) | direct_linear@40k | 0.3711 | yes |
 | highest accuracy | vocab1000_product@250k | 0.4904 | yes |
 | best trade-off above own-family blind floor, per parameter | product_576k@250k | 0.4491 | yes |
-| best trade-off above own-family blind floor, per pipeline ms | vocab1000_product@250k | 0.4904 | yes |
+| best trade-off above own-family blind floor, per pipeline ms SUPERSEDED | vocab1000_product@250k | 0.4904 | yes |
+
+The two rows marked SUPERSEDED rank models by the additive full-pipeline
+estimate and carry no current end-to-end weight; they are retained as the
+historical record of what this experiment computed.
 
 The two unnormalised ratio criteria are reported in results.json but are
 degenerate by construction: accuracy per parameter selects
@@ -207,8 +240,9 @@ defensible ones.
 Two of these rows are ties or near-ties rather than firm separations and
 must be read as such. The lowest-full-pipeline winner beats
 question_only@250k by 0.00009 ms, more than twenty times below the
-0.002 ms resolvability threshold; it is a latency tie resolved on
-accuracy by the recorded tie-break. The best-trade-off-per-parameter
+0.002 ms resolvability threshold; it is a tie between two additive
+estimates, resolved on accuracy by the recorded tie-break, and it is
+superseded as end-to-end evidence. The best-trade-off-per-parameter
 winner, product_576k@250k, leads concat@250k by 0.00294 raw accuracy,
 about 1.2 seed standard deviations (0.00245), so the per-parameter
 winner is marginal rather than firmly separated; because concat@250k
@@ -231,31 +265,34 @@ pipeline omits the image tower and decode entirely). CPU image decode
 across-pass spread 0.0573) are comparable in magnitude and their
 ordering is not resolved by these measurements; that decode costs about
 as much as encoding is itself new to the project record. Caching image
-features across the
-~10 questions per image cuts a CLIP query from 6.35 ms to 2.25 ms, a
-2.8-fold reduction, and is the largest saving among the options measured
-here (quantisation, batching and a smaller image tower were not
-measured). The head-versus-head comparisons that occupied V2 and V3 are
-real but nearly invisible at the system level.
+features across the ~10 questions per image removes the image decode and
+the image tower from the repeated cost, which are the two largest
+components measured here; the size of that saving was quoted from the
+additive full-pipeline estimate and that quantification is SUPERSEDED, so
+no per-query millisecond figure for it is stated here. Quantisation,
+batching and a smaller image tower were not measured. The
+head-versus-head comparisons that occupied V2 and V3 are real but nearly
+invisible at the system level.
 
-(b) Vocabulary growth is free; the encoder swap and token-level
-reasoning are not. Against fusion@250k, the top-1000 product head gains
-+0.0414 raw accuracy at 1.00 times the full-pipeline cost (6.3459 against
-6.3579 ms, marginally cheaper because a 1000-way output layer is
-comparable to a 2048-wide fusion input); SigLIP-B/16 gains +0.0090 at
-1.56 times the pipeline cost, 2.4 times the image-tower latency and 4.3
-times lower batch throughput; the latent-query reasoner gains +0.0104
-at 1.21 times the pipeline cost and 1.60 times the amortised cost. On
-both end-to-end latency fronts (GPU encoder plus head, and full
-pipeline) the only Pareto-optimal models are top-1000 global heads; the
-head-only and amortised fronts additionally admit direct_linear@40k and
-image_only@40k respectively, both far below every blind floor. The
-reasoner and every SigLIP configuration are dominated on all four
-latency fronts.
-Sharpest single statement: vocab1000_product@250k is both more accurate
-(0.4904 against 0.4594) and cheaper (6.35 against 7.71 ms) than the
-21.1M-parameter reasoner it is compared with, using 16 times fewer
-parameters.
+(b) Vocabulary growth costs little in the head; the encoder swap and
+token-level reasoning cost more. Stated only in the fields that remain
+valid — accuracy, parameter counts and isolated component latencies —
+and against fusion@250k: the top-1000 product head gains +0.0414 raw
+accuracy at 1,299,944 against 1,100,388 trainable parameters and
+0.0330 against 0.0450 ms of head-only latency, so a 1000-way output
+layer costs about what a 2048-wide fusion input costs; SigLIP-B/16 gains
++0.0090 while its image tower takes 5.4818 against CLIP's 2.2510 ms,
+2.4 times the image-tower latency, with 4.3 times lower batch-256 image
+throughput; the latent-query reasoner gains +0.0104 at 21,099,620
+parameters and 1.3968 ms of head-only latency, 31.0 times a fusion
+head's. Every end-to-end ranking that once accompanied these figures
+rested on the additive full-pipeline and amortised sums and is
+SUPERSEDED; the measured serial frontier is E7b's.
+Bounded statement, drawn only from valid fields:
+vocab1000_product@250k is more accurate (0.4904 against 0.4594) than the
+21.1M-parameter reasoner, using 16 times fewer parameters. Its additive
+full-pipeline cost figures are superseded; for measured end-to-end
+latency see E7b.
 
 (c) Parameter count is a poor proxy for latency. fusion (1,100,388
 parameters, 0.0450 ms) is 48 per cent slower than concat_wide
@@ -313,7 +350,10 @@ heads over a frozen dual encoder with a large answer vocabulary, which
 supports considering at least one top-1000 global head for the final
 model list. The
 reasoner remains scientifically important as the controlled negative and
-scale-reversal result, but it is not on any efficiency Pareto front. No
+scale-reversal result, but it is not on the head-only latency, parameter
+or memory Pareto fronts computed here; the end-to-end fronts that also
+excluded it are superseded, and the measured serial frontier is E7b's to
+state. No
 freeze decision is taken here.
 
 Correction note (5 August 2026): the "GPU+head", "full pipeline" and

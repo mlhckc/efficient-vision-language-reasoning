@@ -1,0 +1,601 @@
+{
+  "all_named_packets_closed": true,
+  "changes_no_scientific_result": true,
+  "clean_test_governance": {
+    "canonical_record": "results/closure/e7b_evidence_supersession.json",
+    "common_to_both_incidents": {
+      "classification": "B — MECHANICAL ACCESS INCIDENT",
+      "contents_inspected": false,
+      "informed_development": false,
+      "informed_model_selection": false,
+      "informed_reporting_decisions": false,
+      "rows_labels_distributions_or_predictions_examined": false,
+      "statement": "These are governance incidents, not test-informed scientific selection. In both cases a process read the file's bytes and nothing else: no row, label, distribution or prediction was examined, and no information from the target entered development, model selection or any reporting decision."
+    },
+    "corrective_rule": "A repository-wide scan must exclude data/ before reading or traversing candidate files, not filter it afterward. Scoping the traversal is the control; filtering the results is not, because by then the bytes have already been read.",
+    "embargo_intact": true,
+    "incident_count": 2,
+    "incidents": [
+      {
+        "actor": "an independent reviewer",
+        "classification": "B — MECHANICAL ACCESS INCIDENT",
+        "contents_inspected": false,
+        "date": "2026-08-13",
+        "incident_id": "A",
+        "informed_development": false,
+        "informed_model_selection": false,
+        "informed_reporting_decisions": false,
+        "mechanism": "an integrity-hash command over the target file, which read its bytes and moved its atime",
+        "nature": "mechanical byte access",
+        "rows_labels_distributions_or_predictions_examined": false
+      },
+      {
+        "actor": "the executor of the E7b canonical-supersession implementation",
+        "classification": "B — MECHANICAL ACCESS INCIDENT",
+        "contents_inspected": false,
+        "date": "2026-08-14",
+        "incident_id": "B",
+        "informed_development": false,
+        "informed_model_selection": false,
+        "informed_reporting_decisions": false,
+        "mechanism": "an overly broad dependency-mapping scan that walked the whole project root and read every .json, .py, .md, .csv and .txt file, searching for four documentation digests; the traversal was not scoped away from data/",
+        "nature": "mechanical byte access",
+        "rows_labels_distributions_or_predictions_examined": false
+      }
+    ],
+    "never_accessed_claim_permitted": false,
+    "restated_here_because": "CLAUDE.md carried no clean-test governance section, so a reader of the project's own instruction file could not resolve the two incidents at all. The summary added there is the same two-incident record, and this block is what it resolves against.",
+    "this_task_scan_policy": "Repository scans in this task operate on tracked Git surfaces or exclude data/ before traversal. The embargoed target was not read, opened, hashed, stat-ed, globbed, searched, parsed or traversed, and the firewall was not 'verified' by touching it.",
+    "this_task_touched_the_target": false,
+    "why_the_never_accessed_claim_is_refused": "It would be false. The bytes were read twice. The record states what is true — that nothing from the target reached any model, checkpoint, selection, figure, table or reported number — rather than a stronger claim that is not."
+  },
+  "closed_packet_count": 5,
+  "closed_packets": [
+    "e10",
+    "e7b",
+    "ve0",
+    "ve1",
+    "ve2"
+  ],
+  "content_sha256": "7f51dd849a4652213b8477e90cce0c67683965641da8dd0896f6d4743a8eff10",
+  "determinism": {
+    "content_sha256": "the digest of this record with the provenance block and the digest field itself excluded; it is what a later build must reproduce",
+    "file_bytes": "may differ across commits, because provenance carries the repository HEAD and worktree state",
+    "no_hash_of_an_edited_document_is_stored": "The record carries no digest of the documents this task edits, so rebuilding it before or after those edits gives the same content digest."
+  },
+  "e10_status_correction": {
+    "accepted_verdict": "E10_PASS",
+    "current_status": "CLOSED",
+    "e10_config_modified": false,
+    "e10_result_modified": false,
+    "e10_source_modified": false,
+    "e10_test_modified": false,
+    "established_by": "results/ve0/supersession_map.json",
+    "established_by_sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c",
+    "quoted_reason": "E10 is CLOSED at E10_PASS and must not be reopened. Its grant is operationally SPENT, its completed cells are immutable and its live source digest is unchanged.",
+    "stale_text": "CLAUDE.md: 'R3.1 is review_requested and no final E10 PASS is declared'",
+    "twelve_cell_matrix_unchanged": true
+  },
+  "e7a_wording_repair": {
+    "applies_to": [
+      "docs/experiments/e7a_efficiency.md",
+      "CLAUDE.md"
+    ],
+    "artefact_group": "E7a component efficiency measurements",
+    "artefact_group_status": "PARTLY_SUPERSEDED",
+    "bounded_wording": "vocab1000_product@250k is more accurate (0.4904 against 0.4594) than the 21.1M-parameter reasoner, using 16 times fewer parameters. Its additive full-pipeline cost figures are superseded; for measured end-to-end latency see E7b.",
+    "bounded_wording_drops": [
+      "the additive full-pipeline latency comparison",
+      "any latency-only claim of being 'cheaper'"
+    ],
+    "bounded_wording_retains": [
+      "raw-distribution accuracy 0.4904 against 0.4594",
+      "the 16-times parameter ratio"
+    ],
+    "e7a_artefact_edited": false,
+    "e7a_numbers_altered": false,
+    "forbidden_statements_that_must_not_return": [
+      "cuts a query from 6.35 to 2.25 ms",
+      "on both end-to-end latency Pareto fronts"
+    ],
+    "invalid_current_comparison": {
+      "field": "full_pipeline_ms",
+      "removed_from_current_facing_surfaces": true,
+      "values_ms": [
+        6.35,
+        7.71
+      ],
+      "why": "Both are additive component estimates: sums of stage medians each measured in isolation. No serially executed decode-encode-head pass was timed in E7a, so the difference between them is a difference between two estimates, not a measured latency difference. E7b measured the serial pass and found the CLIP-global medians about 1.3 ms above the additive figures, which is exactly the error an additive estimate cannot see."
+    },
+    "invalid_fields": [
+      "gpu_encoder_plus_head_ms",
+      "full_pipeline_ms",
+      "amortised_ms",
+      "every Pareto front derived from those additive sums"
+    ],
+    "replacement_policy": {
+      "new_cross_experiment_comparison_manufactured": false,
+      "replaced_with_e7b_values": false,
+      "statement": "The superseded figures are not replaced by E7b values. E7a and E7b are different measurements and substituting one into the other's sentence would manufacture a comparison neither experiment made. The latency half of the claim is dropped and the reader is sent to E7b for measured end-to-end latency.",
+      "underlying_numbers_altered": false
+    },
+    "status_authority": "results/ve0/supersession_map.json",
+    "valid_fields": [
+      "isolated encoder component latencies",
+      "isolated head component latencies",
+      "peak memory components",
+      "parameter counts"
+    ]
+  },
+  "e7b_lifecycle_supersession": {
+    "historical_values": {
+      "e7b": "OPEN",
+      "e7b_closed_by_this_record": false,
+      "f1": "BLOCKED",
+      "f2": "unstarted and unauthorised",
+      "note": "This record is a withdrawal declaration. It does not close E7b, which needs an independent review.",
+      "ve0": "CLOSED, unchanged",
+      "ve1": "CLOSED, unchanged",
+      "ve2": "CLOSED, unchanged"
+    },
+    "historical_values_are_lifecycle_state_only": true,
+    "older_record_byte_identical": true,
+    "older_record_edited": false,
+    "older_record_regenerated": false,
+    "older_record_remains_authoritative_for": [
+      "withdrawn_fields",
+      "retained_fields",
+      "field-level precedence",
+      "metric validity"
+    ],
+    "older_record_sha256": "2fb6561b3916b83603631c0feb35d716dc9bbf3e1ed1ef3d4e7286516a0a0c75",
+    "pareto_membership_unchanged": true,
+    "retained_fields_unchanged": true,
+    "status_e7b_open_is_historical_lifecycle_state_only": true,
+    "status_f1_blocked_is_historical_lifecycle_state_only": true,
+    "superseded_fields": [
+      "status.e7b",
+      "status.f1",
+      "status.e7b_closed_by_this_record",
+      "status.note"
+    ],
+    "supersedes": "results/closure/e7b_evidence_supersession.json",
+    "supersedes_scope": "the status block only",
+    "what_happened_since": "E7b was subsequently reviewed independently, accepted and formally CLOSED at E7B_CANONICAL_SUPERSESSION_REVIEW_PASS. The overlay's status block was written before that review returned and was accurate when written.",
+    "why_not_edited": "Editing it would move a record the independent review accepted by its bytes, and would reopen a closed packet to correct a sentence that was true when it was written. The supersession is published as a separate record for the same reason the field-level withdrawal was.",
+    "withdrawn_fields_unchanged": true
+  },
+  "f1_f2": {
+    "clean_test_embargo": "UNCHANGED",
+    "f1": "UNSTARTED",
+    "f1_authorised": false,
+    "f1_declared_ready_by_this_record": false,
+    "f2": "UNSTARTED_AND_UNAUTHORISED",
+    "statement": "E7b's closure removes the specific blocker its own status block recorded. It does not start F1, does not authorise F1 and does not assert that F1 is ready. The model-list freeze requires an explicit user decision that has not been given, and this record is itself submitted for independent pre-F1 review."
+  },
+  "frozen_pins": {
+    "all_unchanged": true,
+    "pin_count": 19,
+    "policy": "fail closed: the builder refuses to write if any pinned artefact has moved",
+    "records": [
+      {
+        "actual_sha256": "9ec096d242e61dd67650f619680d7a0d34115872eca06475dd701ce0e87ed7d1",
+        "path": ".gitignore",
+        "pinned_sha256": "9ec096d242e61dd67650f619680d7a0d34115872eca06475dd701ce0e87ed7d1",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "326bbc7c259aea808478e38358b3dc0eab12e1b61e03501927b9c2d4fc591188",
+        "path": "docs/experiments/ve0_evidence_contract.md",
+        "pinned_sha256": "326bbc7c259aea808478e38358b3dc0eab12e1b61e03501927b9c2d4fc591188",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "fd62ccb2cd7532be154d19cd7c0ab598215940340f7295b29ca8d5ca54495455",
+        "path": "experiments/e7b_serial_efficiency/run.py",
+        "pinned_sha256": "fd62ccb2cd7532be154d19cd7c0ab598215940340f7295b29ca8d5ca54495455",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "b8b47e024c49a599a425894f34c24b4375958998401a311605694027257de122",
+        "path": "results/closure/A_evidence_registry.json",
+        "pinned_sha256": "b8b47e024c49a599a425894f34c24b4375958998401a311605694027257de122",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "2fb6561b3916b83603631c0feb35d716dc9bbf3e1ed1ef3d4e7286516a0a0c75",
+        "path": "results/closure/e7b_evidence_supersession.json",
+        "pinned_sha256": "2fb6561b3916b83603631c0feb35d716dc9bbf3e1ed1ef3d4e7286516a0a0c75",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "be1781efeece841cc75df126fab43c9e9946437957c1ea6401ee1f86c8b47d5e",
+        "path": "results/closure/efficiency_closure_table.json",
+        "pinned_sha256": "be1781efeece841cc75df126fab43c9e9946437957c1ea6401ee1f86c8b47d5e",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "37ffdcd09aa2bcd306ca9b54229a1d0d17ff203b6b0900e09e5f876ad1ed0748",
+        "path": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
+        "pinned_sha256": "37ffdcd09aa2bcd306ca9b54229a1d0d17ff203b6b0900e09e5f876ad1ed0748",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
+        "path": "results/experiments/e7b_serial_efficiency/e7b_results.json",
+        "pinned_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3",
+        "path": "results/ve0/VE0_MANIFEST.json",
+        "pinned_sha256": "294e11d48ade7316908f8cc6dc37ab9b8f8cc2cc6d454b3df4524fa8ecf6c7f3",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3",
+        "path": "results/ve0/canonical_evidence_inventory.json",
+        "pinned_sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7",
+        "path": "results/ve0/claim_ledger.json",
+        "pinned_sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c",
+        "path": "results/ve0/figure_specifications.json",
+        "pinned_sha256": "7d1c1d4588e97ded196a208e32021b9f21cbfa18aa9a9d3a031e11572eb2486c",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d",
+        "path": "results/ve0/rq_evidence_matrix.json",
+        "pinned_sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c",
+        "path": "results/ve0/supersession_map.json",
+        "pinned_sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8",
+        "path": "results/ve0/table_specifications.json",
+        "pinned_sha256": "98f0e756d7817ba2a78444e2ecadfd021ffda129752604e6f4a7bed7c3b4a3f8",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "021592025cbfcdeb145441799d7b5c6ff341a0945289f8927230a89e16eb986a",
+        "path": "results/ve1/VE1_MANIFEST.json",
+        "pinned_sha256": "021592025cbfcdeb145441799d7b5c6ff341a0945289f8927230a89e16eb986a",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "f54218e9666b8d2574ba87ccd7868874d4ef35de7560b401e1dce91f3210c386",
+        "path": "results/ve2/VE2_MANIFEST.json",
+        "pinned_sha256": "f54218e9666b8d2574ba87ccd7868874d4ef35de7560b401e1dce91f3210c386",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "0a53250ac3c10edd788ea756a64dff54e83d2dec824ad557a6f8ea629e741786",
+        "path": "tests/run_all.py",
+        "pinned_sha256": "0a53250ac3c10edd788ea756a64dff54e83d2dec824ad557a6f8ea629e741786",
+        "unchanged": true
+      },
+      {
+        "actual_sha256": "ac95a923a13241ef5a6e2d828f89be8ca8b8a41e472722662e08306027231595",
+        "path": "tests/test_e7b.py",
+        "pinned_sha256": "ac95a923a13241ef5a6e2d828f89be8ca8b8a41e472722662e08306027231595",
+        "unchanged": true
+      }
+    ]
+  },
+  "frozen_rq_matrix_wording_erratum": {
+    "affected_questions": [
+      "RQ9"
+    ],
+    "already_correct_in_the_claim_ledger": true,
+    "artefact": "results/ve0/rq_evidence_matrix.json",
+    "artefact_edited": false,
+    "artefact_immutable": true,
+    "evidence_ids_changed": false,
+    "final_status": "WORDING_SUPERSEDED",
+    "neither_claim_says_cheaper": true,
+    "numeric_results_changed": false,
+    "offending_wording": "far cheaper",
+    "rq_answer_status_changed": false,
+    "scope": "wording only. RQ9 keeps its answer status of ANSWERED, its evidence set and every number it rests on.",
+    "superseding_authority": "results/ve0/claim_ledger.json",
+    "superseding_claims": [
+      "C13",
+      "C18"
+    ],
+    "superseding_wording": "at a small fraction of the measured end-to-end serial latency",
+    "superseding_wording_by_claim": {
+      "C13": "at a small fraction of the measured end-to-end serial latency",
+      "C18": "at a small fraction of the measured per-query latency"
+    },
+    "why": "'far cheaper' reads as a cost claim. What was measured is warm serial batch-1 latency on one node. No energy, power, carbon, monetary or general computational-cost quantity was measured anywhere in this project, so the only defensible form of the statement is a latency statement.",
+    "why_immutable": "byte-pinned by the closed VE-0 packet."
+  },
+  "lifecycle_status": {
+    "e10": {
+      "accepted_verdict": "E10_PASS",
+      "cells_immutable": true,
+      "grant_state": "operationally SPENT",
+      "packet": "E10 SmolLM2-360M answer-readout capacity matrix",
+      "recorded_in": "results/ve0/supersession_map.json",
+      "review": "independent; recorded as closed by the frozen VE-0 supersession map, which states that E10 is CLOSED at E10_PASS and must not be reopened",
+      "status": "CLOSED",
+      "superseded_statements": [
+        "CLAUDE.md: 'R3.1 is review_requested and no final E10 PASS is declared'"
+      ]
+    },
+    "e7b": {
+      "accepted_verdict": "E7B_CANONICAL_SUPERSESSION_REVIEW_PASS",
+      "closed_on": "2026-08-14",
+      "field_validity_authority": "results/closure/e7b_evidence_supersession.json",
+      "packet": "E7b canonical evidence supersession",
+      "review": "independent, two rounds, approved",
+      "status": "CLOSED",
+      "superseded_statements": [
+        "docs/experiments/e7b_serial_efficiency.md: 'E7b remains OPEN pending independent review'",
+        "README.md: 'E7b remains open pending independent review'",
+        "CLAUDE.md: 'E7b remains OPEN pending independent review'",
+        "results/closure/e7b_evidence_supersession.json: status.e7b = OPEN and status.f1 = BLOCKED"
+      ]
+    },
+    "ve0": {
+      "accepted_verdict": "VE0_PASS",
+      "amendment_verdict": "VE0_AMENDMENT_PASS",
+      "closed_on": "2026-08-13",
+      "packet": "VE-0 canonical evidence contract",
+      "report_is_byte_pinned": true,
+      "review": "independent; the contract closed at VE0_PASS and the 13 August 2026 amendment closed at VE0_AMENDMENT_PASS in the same packet that closed VE-1",
+      "status": "CLOSED",
+      "superseded_statements": [
+        "docs/experiments/ve0_evidence_contract.md: 'submitted for independent re-review at packet state review_requested. It authorises nothing. VE-1, VE-2, F1 and F2 have not been started'"
+      ]
+    },
+    "ve1": {
+      "accepted_verdict": "VE1_PASS",
+      "closed_on": "2026-08-13",
+      "packet": "VE-1 final quantitative figures and tables",
+      "report_is_byte_pinned": false,
+      "review": "independent; the first round returned VE1_CHANGES_REQUIRED with seven blocking findings, and the authorised amendment and repair closed at VE1_PASS",
+      "status": "CLOSED",
+      "superseded_statements": [
+        "docs/experiments/ve1_figures_and_tables.md: 'submitted for independent review at packet state review_requested ... VE-2, F1 and F2 have not been started'"
+      ]
+    },
+    "ve2": {
+      "accepted_verdict": "VE2_PASS",
+      "closed_on": "2026-08-14",
+      "packet": "VE-2 deterministic qualitative development evidence",
+      "report_is_byte_pinned": false,
+      "review": "independent, two rounds, approved",
+      "status": "CLOSED",
+      "superseded_statements": [
+        "docs/experiments/ve2_qualitative_evidence.md carried no status section at all, so a reader could not tell the packet was closed"
+      ]
+    }
+  },
+  "precedence": {
+    "field_validity_order": [
+      {
+        "authority": "results/closure/e7b_evidence_supersession.json",
+        "controls": "named E7b field validity",
+        "rank": 1
+      },
+      {
+        "authority": "results/ve0/supersession_map.json",
+        "controls": "unnamed artefact-group status",
+        "rank": 2
+      },
+      {
+        "authority": "historical stored evidence_status",
+        "controls": "nothing that ranks 1 or 2 already controls",
+        "rank": 3
+      }
+    ],
+    "historical_numbers": "Historical numbers remain readable only as provenance.",
+    "lifecycle_order": [
+      {
+        "authority": "results/closure/pre_f1_status_supersession_20260814.json",
+        "controls": "packet lifecycle and review status",
+        "rank": 1
+      },
+      {
+        "authority": "the closed packet's stored status block",
+        "controls": "packet lifecycle recorded inside a closed packet's own artefacts",
+        "rank": 2
+      }
+    ],
+    "rule": "Lifecycle status and field validity are separate questions and are resolved by separate records. For LIFECYCLE and STATUS, this record is highest precedence. For FIELD VALIDITY, it defers entirely: rank 1 is results/closure/e7b_evidence_supersession.json for named E7b fields, rank 2 is results/ve0/supersession_map.json for unnamed artefact-group status, and historical stored evidence_status is lowest.",
+    "this_record_controls_no_field_validity": true
+  },
+  "provenance": {
+    "clean_test_governance_pointer": "see clean_test_governance; this record makes no project-global clean-test claim, and this task did not touch the target",
+    "command": "python -m experiments.closure.build_pre_f1_status_supersession",
+    "device": "cpu",
+    "embargoed_token_guard": "assembled from parts and asserted absent from the payload",
+    "evaluated_anything": false,
+    "gpu_hours_charged": 0.0,
+    "gpu_used": false,
+    "h5py_version": "3.16.0",
+    "inputs": [
+      {
+        "bytes": 32705,
+        "path": "docs/experiments/ve0_evidence_contract.md",
+        "role": "input",
+        "sha256": "326bbc7c259aea808478e38358b3dc0eab12e1b61e03501927b9c2d4fc591188"
+      },
+      {
+        "bytes": 49410,
+        "path": "results/closure/e7b_evidence_supersession.json",
+        "role": "input",
+        "sha256": "2fb6561b3916b83603631c0feb35d716dc9bbf3e1ed1ef3d4e7286516a0a0c75"
+      },
+      {
+        "bytes": 40143,
+        "path": "results/ve0/claim_ledger.json",
+        "role": "input",
+        "sha256": "ab1a1a52f246832ef48e266cbac6db82453b8f334035f5a4234fba4ae073a5b7"
+      },
+      {
+        "bytes": 20508,
+        "path": "results/ve0/rq_evidence_matrix.json",
+        "role": "input",
+        "sha256": "edad2d62a3db4b4ebae5fae9108889c7156dd0cb4ab585b64f325b37654d532d"
+      },
+      {
+        "bytes": 33666,
+        "path": "results/ve0/supersession_map.json",
+        "role": "input",
+        "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
+      }
+    ],
+    "loaded_any_model": false,
+    "measured_anything": false,
+    "numpy_version": "2.5.0",
+    "pandas_version": "3.0.3",
+    "python": "3.12.3",
+    "remeasured_anything": false,
+    "reopened_any_closed_packet": false,
+    "repository_head": "d64cd472a5e3d1bde6ff0729f3074b8e815d8f48",
+    "repository_head_short": "d64cd47",
+    "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+    "schema_version": 1,
+    "script": "experiments/closure/build_pre_f1_status_supersession.py",
+    "script_sha256": "5980a34f4dd403f2a0f17b891668442d763c96167c3aa66d58c5fbabbd18ad26",
+    "selected_any_checkpoint": false,
+    "torch_version": "2.12.1",
+    "trained_anything": false,
+    "worktree_dirty": true
+  },
+  "purpose": "State, in one machine-resolvable place, the current lifecycle of the five closed review packets — E7b, VE-0, VE-1, VE-2 and E10 — and supersede the stale status text that survives on documents a reader opens first. It also records two wording errata that no longer state what was measured: E7a's additive full-pipeline comparison, and the phrase 'far cheaper' inside the frozen RQ evidence matrix.",
+  "record_date": "2026-08-14",
+  "record_type": "PRE_F1_STATUS_SUPERSESSION",
+  "schema_version": 1,
+  "scope": "LIFECYCLE_AND_WORDING_ONLY",
+  "superseded_statement_verification": {
+    "e7b_overlay_status_block": {
+      "e7b": "OPEN",
+      "e7b_closed_by_this_record": false,
+      "f1": "BLOCKED",
+      "f2": "unstarted and unauthorised",
+      "note": "This record is a withdrawal declaration. It does not close E7b, which needs an independent review.",
+      "ve0": "CLOSED, unchanged",
+      "ve1": "CLOSED, unchanged",
+      "ve2": "CLOSED, unchanged"
+    },
+    "method": "read from the pinned bytes at build time; the builder refuses to publish if either statement has gone",
+    "ve0_report_states_review_requested": true
+  },
+  "task_footprint": {
+    "changed_tracked_paths": [
+      "CLAUDE.md",
+      "README.md",
+      "docs/REPRODUCIBILITY.md",
+      "docs/experiments/e7a_efficiency.md",
+      "docs/experiments/e7b_serial_efficiency.md",
+      "docs/experiments/ve1_figures_and_tables.md",
+      "docs/experiments/ve2_qualitative_evidence.md",
+      "tests/test_e7b_supersession.py"
+    ],
+    "evaluated_anything": false,
+    "frozen_trees_untouched": [
+      "results/ve0/",
+      "results/ve1/",
+      "results/ve2/",
+      "results/experiments/"
+    ],
+    "gpu_hours_charged": 0.0,
+    "measured_anything": false,
+    "new_tracked_paths": [
+      "results/closure/pre_f1_status_supersession_20260814.json",
+      "experiments/closure/build_pre_f1_status_supersession.py"
+    ],
+    "only_test_file_modified": "tests/test_e7b_supersession.py",
+    "selected_any_checkpoint": false,
+    "test_modification_kind": "POST_CLOSURE_LIFECYCLE_DISCOVERABILITY_EXTENSION",
+    "test_modification_reopens_e7b_science": false,
+    "test_modification_requires_independent_pre_f1_review": true,
+    "trained_anything": false,
+    "why_the_test_review_is_required": "The accepted E7b supersession suite is being extended after E7b closed. The extension is lifecycle and discoverability only and asserts no scientific quantity, but a suite an independent review accepted should not grow without one."
+  },
+  "title": "Consolidated pre-F1 lifecycle status and wording supersession",
+  "ve0_pinned_status_treatment": {
+    "report": "docs/experiments/ve0_evidence_contract.md",
+    "report_byte_pinned_by": "results/ve0/VE0_MANIFEST.json",
+    "report_edited": false,
+    "report_sha256": "326bbc7c259aea808478e38358b3dc0eab12e1b61e03501927b9c2d4fc591188",
+    "resolution": "This record supersedes that section's lifecycle claims. VE-0 is CLOSED. The pinned report is not edited and remains readable as the state of the packet on the day it was submitted.",
+    "stale_section": "## Status",
+    "stale_text_summary": "It says VE-0 is 'submitted for independent re-review at packet state review_requested' and that 'VE-1, VE-2, F1 and F2 have not been started'. VE-0 has since closed at VE0_PASS with its amendment accepted at VE0_AMENDMENT_PASS, and VE-1 and VE-2 have both run and closed.",
+    "still_true_in_the_stale_section": [
+      "VE-0 authorises nothing",
+      "F1 and F2 have not been started",
+      "F1 and F2 remain unauthorised"
+    ]
+  },
+  "ve1_ve2_status_edits": {
+    "figures_or_tables_modified": false,
+    "results_ve1_modified": false,
+    "results_ve2_modified": false,
+    "scientific_content_modified": false,
+    "ve1_change": "the Status section now states VE-1 is CLOSED at VE1_PASS and no longer says VE-2 has not been started; it points here.",
+    "ve1_report": "docs/experiments/ve1_figures_and_tables.md",
+    "ve1_report_edited": true,
+    "ve2_change": "a Status section was added, stating VE-2 is CLOSED at VE2_PASS and pointing here. The report had no status section at all.",
+    "ve2_report": "docs/experiments/ve2_qualitative_evidence.md",
+    "ve2_report_edited": true
+  },
+  "verification_runners": {
+    "run_all_may_not_be_used_for_this": "tests/run_all.py imports tests/test_reproduction.py, which performs a CUDA forward pass. This task is zero-GPU, so it was not run. run_all.py is also inside E10's frozen SOURCE_PATHS and is byte-identical.",
+    "runner_count": 5,
+    "runners": [
+      {
+        "command": "python -B tests/run_closure.py",
+        "covers": "the statistical and efficiency evidence closure"
+      },
+      {
+        "command": "python -B tests/run_ve0.py",
+        "covers": "the VE-0 canonical evidence contract"
+      },
+      {
+        "command": "python -B tests/run_ve1.py",
+        "covers": "the VE-1 figures and tables"
+      },
+      {
+        "command": "python -B tests/run_ve2.py",
+        "covers": "the VE-2 qualitative evidence"
+      },
+      {
+        "command": "python -B tests/run_e7b_supersession.py",
+        "covers": "the E7b field-level withdrawal overlay and this consolidated lifecycle record"
+      }
+    ],
+    "why_separate": "tests/run_all.py is listed in E10's frozen SOURCE_PATHS, so importing a new suite into it moves the live source digest and the E10 phase verifiers correctly refuse the stale state. Each final-evidence layer therefore ships its own runner. New files under tests/ are safe, because SOURCE_PATHS names individual files."
+  },
+  "what_this_record_does_not_do": {
+    "authorises_nothing": true,
+    "changes_no_accuracy": true,
+    "changes_no_figure_or_table": true,
+    "changes_no_interval": true,
+    "changes_no_latency": true,
+    "changes_no_parameter_count": true,
+    "changes_no_pareto_membership": true,
+    "changes_no_raw_artefact": true,
+    "declares_f1_ready": false,
+    "introduces_no_replacement_value": true,
+    "reinstates_no_withdrawn_field": true,
+    "remeasures_nothing": true,
+    "reopens_no_closed_packet": true,
+    "statement": "This record is lifecycle and wording only. It resolves who says what about status, and it removes superseded numbers from current-facing prose. It creates no evidence, and it does not judge whether F1 may begin: that is the independent pre-F1 review's finding and the user's decision."
+  }
+}

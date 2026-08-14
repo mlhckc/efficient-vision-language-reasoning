@@ -94,19 +94,25 @@ hash no longer matches the worktree.
   250k, seed 0). Development results only; see
   docs/experiments/e3_vocab1000.md.
 - E7a (completed 1 August 2026) measured, under one protocol, the cost of
-  every stored head plus both frozen encoders: the encoder dominates
+  every stored head plus both frozen encoders. PARTLY SUPERSEDED, and the
+  boundary is binding. Its ADDITIVE end-to-end columns
+  gpu_encoder_plus_head_ms, full_pipeline_ms and amortised_ms, and every
+  Pareto front derived from those sums, are SUPERSEDED: they are sums of
+  stage medians timed in isolation, no serial pass was timed in E7a, and
+  they must not be used as current end-to-end latency evidence, in any
+  comparison, ranking or "cheaper" claim. They are NOT replaced by E7b
+  values; substituting one experiment's number into another's sentence
+  would manufacture a comparison neither made. For measured end-to-end
+  latency see E7b. Retained and valid: the isolated component latencies
   (CLIP 2.2510 ms image + 1.7309 ms text on GPU plus 2.295 ms CPU decode,
-  against 0.0162-0.0469 ms for the global heads, 0.26-0.74 per cent of
-  the full pipeline for image-using heads), caching image features
-  across about 10 questions
-  per image cuts a query from 6.35 to 2.25 ms, and on both end-to-end
-  latency Pareto fronts the only optimal models are top-1000 global
-  heads. The top-1000 product head at 250k is both more accurate
-  (0.4904 against 0.4594 raw-distribution) and cheaper (6.35 against
-  7.71 ms) than the 21.1M reasoner. Parameter count is a poor latency
-  proxy (fusion is 48% slower than concat_wide at equal parameters).
-  Supersedes the V1 stage-5 and src/efficiency.py-derived latencies.
-  Development results only; see docs/experiments/e7a_efficiency.md.
+  against 0.0162-0.0469 ms for the global heads), the peak-memory
+  components, the parameter counts and the accuracy column. Bounded
+  statement on those fields only: the top-1000 product head at 250k is
+  more accurate (0.4904 against 0.4594 raw-distribution) than the
+  21.1M-parameter reasoner, using 16 times fewer parameters. Parameter
+  count is a poor latency proxy (fusion is 48% slower than concat_wide at
+  equal parameters). Supersedes the V1 stage-5 and src/efficiency.py-derived
+  latencies. Development results only; see docs/experiments/e7a_efficiency.md.
 - E7b status, updated 14 August 2026 and BINDING. E7b measured the serial
   end-to-end batch-1 query on otter155 and is the authoritative end-to-end
   latency evidence. THREE of its stored fields are WITHDRAWN and must not
@@ -135,9 +141,15 @@ hash no longer matches the worktree.
   results/closure/e7b_evidence_supersession.json controls named E7b field
   validity; (2) results/ve0/supersession_map.json controls unnamed
   artefact-group status; (3) historical stored evidence_status is lowest
-  precedence. Historical numbers remain readable only as provenance. E7b
-  remains OPEN pending independent review; F1 stays blocked and F2 unstarted.
-  See docs/experiments/e7b_serial_efficiency.md.
+  precedence. Historical numbers remain readable only as provenance. E7b is
+  CLOSED: the independent review returned
+  E7B_CANONICAL_SUPERSESSION_REVIEW_PASS on 14 August 2026. The overlay's own
+  status block still reads OPEN and its f1 field still reads BLOCKED, because
+  it was written before that review returned and is byte-pinned; those
+  lifecycle fields are superseded by
+  results/closure/pre_f1_status_supersession_20260814.json, which controls
+  lifecycle and status only and changes no field validity. F1 and F2 remain
+  unstarted and unauthorised. See docs/experiments/e7b_serial_efficiency.md.
 - E9 (authorized and completed 10 August 2026) placed one frozen compact
   integrated VLM in context against the lightweight systems, evaluation only
   and with zero trainable parameters. On the 10,004-row raw development
@@ -395,8 +407,38 @@ hash no longer matches the worktree.
   and 12 non-E10 modules pass, run_all exits 0, and no accuracy, contrast,
   interval, checkpoint or per-row hash changed. See
   results/experiments/e10_capacity_360m_core/e10_core_r31_spent_grant_20260813.json.
-  R3.1 is review_requested and no final E10 PASS is declared. The clean test
+  E10 is CLOSED at E10_PASS, as recorded in the frozen VE-0 supersession map
+  (results/ve0/supersession_map.json): "E10 is CLOSED at E10_PASS and must not
+  be reopened. Its grant is operationally SPENT, its completed cells are
+  immutable and its live source digest is unchanged." The earlier note that
+  R3.1 was review_requested and that no final E10 PASS had been declared is
+  historical lifecycle state and is superseded by
+  results/closure/pre_f1_status_supersession_20260814.json. The clean test
   remains embargoed and F1/F2 remain unstarted and unauthorised.
+- Pre-F1 lifecycle status, updated 14 August 2026 and BINDING. Five review
+  packets are CLOSED with independently accepted verdicts: E7b
+  (E7B_CANONICAL_SUPERSESSION_REVIEW_PASS), VE-0 (VE0_PASS, with the
+  13 August 2026 amendment accepted at VE0_AMENDMENT_PASS), VE-1 (VE1_PASS,
+  after a first round of VE1_CHANGES_REQUIRED), VE-2 (VE2_PASS) and E10
+  (E10_PASS). Several closed artefacts still carry the status they had on the
+  day they were written, before their reviews returned: the E7b overlay's
+  status block reads OPEN with f1 BLOCKED, and the byte-pinned
+  docs/experiments/ve0_evidence_contract.md still says review_requested. Those
+  statements are historical lifecycle state, they are not edited, and they are
+  superseded by results/closure/pre_f1_status_supersession_20260814.json,
+  built by experiments/closure/build_pre_f1_status_supersession.py. Precedence,
+  binding: that record is highest for LIFECYCLE and STATUS; it controls NO
+  field validity, which stays with (1)
+  results/closure/e7b_evidence_supersession.json for named E7b fields and (2)
+  results/ve0/supersession_map.json for unnamed artefact-group status. It
+  changes no accuracy, latency, interval, parameter count, Pareto membership,
+  figure, table or raw artefact, reinstates no withdrawn field and authorises
+  nothing. F1 is UNSTARTED and unauthorised and is NOT declared ready by that
+  record; F2 is unstarted and unauthorised; the clean-test embargo is
+  unchanged. Each closed evidence layer ships its own CPU-only runner
+  (tests/run_closure.py, run_ve0.py, run_ve1.py, run_ve2.py,
+  run_e7b_supersession.py) because tests/run_all.py is inside E10's frozen
+  SOURCE_PATHS and must not gain an import.
 - Current gate, updated 2 August 2026 (E8A/E8B/E9 programme). The user
   authorized the E8A frozen-SLM question-encoder branch, the E8B frozen-SLM
   readout and bounded-generation branch, and the E9 evaluation-only compact-VLM
@@ -584,6 +626,37 @@ hash no longer matches the worktree.
 - All development decisions use data/v2/dev.csv only. The clean test must not
   be used for early stopping, hyperparameter tuning, architecture selection,
   fusion selection, latent-query-count selection or depth selection.
+- Clean-test governance, updated 14 August 2026 and BINDING. Required wording,
+  to be used verbatim wherever the embargo is described: "The clean-test
+  contents were never inspected or used for development, model selection, or
+  reporting decisions. Mechanical byte access occurred in two documented
+  governance incidents, on 13 and 14 August 2026." Both incidents are
+  classification B, mechanical byte access and nothing more, and both must be
+  identified separately:
+  13 August 2026 — an independent reviewer ran an integrity-hash command over
+  the target file, which read its bytes.
+  14 August 2026 — during the E7b canonical-supersession implementation, an
+  overly broad dependency-mapping scan walked the whole project root and read
+  every .json, .py, .md, .csv and .txt file, because the traversal was not
+  scoped away from data/.
+  For BOTH: contents were not inspected; no row, label, distribution or
+  prediction was examined; nothing informed development; nothing informed
+  model selection; nothing informed reporting. They are governance incidents,
+  not test-informed scientific selection, and neither invalidates a result nor
+  requires remediation of the blinded evaluation.
+  PROHIBITED wording: the project must not claim the clean test was never
+  accessed, because that claim would be false, and must not use any phrasing
+  implying a single total access. Do not open, read, hash, stat, glob, search,
+  parse or traverse the target, and do not "verify" the embargo by touching
+  it.
+  CORRECTIVE RULE, binding: a repository-wide scan must exclude data/ before
+  reading or traversing candidate files, not filter it afterward. Scoping the
+  traversal is the control; filtering the results is not, because by then the
+  bytes have already been read. This is how both incidents happened.
+  Canonical records: results/closure/e7b_evidence_supersession.json under
+  clean_test_governance, and
+  results/closure/pre_f1_status_supersession_20260814.json; the prose
+  disclosure is in docs/REPRODUCIBILITY.md.
 - Status: v2_01 (embedding extraction and zero-shot floor 0.080), v2_02
   (five-seed baselines: fusion 0.5384 beats concat 0.5240 in every seed),
   v2_03 (parameter matching halves the fusion gain), v2_04 (either

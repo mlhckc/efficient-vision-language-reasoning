@@ -17,10 +17,16 @@
   authorised: the historical node was otter155, the current copy is otter159
   and the cross-node bridge control failed at -18.7 per cent against a 10 per
   cent tolerance.
-- Canonical record, which takes precedence over every stored row-level
-  `evidence_status` for these fields:
+- Canonical record for FIELD VALIDITY, which takes precedence over every
+  stored row-level `evidence_status` for these fields:
   `results/closure/e7b_evidence_supersession.json`.
-- E7b remains OPEN pending independent review.
+- E7b is CLOSED. The independent review of the field-level withdrawal
+  returned `E7B_CANONICAL_SUPERSESSION_REVIEW_PASS` on 14 August 2026. The
+  canonical record's own status block still reads `OPEN`, because it was
+  written before that review returned and is byte-pinned; its lifecycle
+  fields are superseded by
+  `results/closure/pre_f1_status_supersession_20260814.json`, which controls
+  lifecycle and status only and changes no field validity.
 
 ## Purpose
 

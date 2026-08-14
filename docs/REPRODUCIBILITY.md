@@ -49,6 +49,33 @@ produced it.
 
 ## Which status wins when records disagree
 
+Two different questions get asked of these records and they are resolved by
+different authorities. Settle the lifecycle question first, then the field
+question.
+
+### 1. Lifecycle: is a packet still open?
+
+A closed packet's own artefacts state the lifecycle they had on the day they
+were written, which is usually before the review returned. For packet status,
+`results/closure/pre_f1_status_supersession_20260814.json` is highest
+precedence; a status block stored inside a closed packet is second. That
+record states the current lifecycle of the five closed packets — E7b
+(`E7B_CANONICAL_SUPERSESSION_REVIEW_PASS`), VE-0 (`VE0_PASS`, amendment
+`VE0_AMENDMENT_PASS`), VE-1 (`VE1_PASS`), VE-2 (`VE2_PASS`) and E10
+(`E10_PASS`) — and supersedes the stale text, including the `status.e7b =
+OPEN` and `status.f1 = BLOCKED` fields inside
+`results/closure/e7b_evidence_supersession.json` and the `review_requested`
+Status section of the byte-pinned `docs/experiments/ve0_evidence_contract.md`.
+Those historical statements are readable as the state of each packet when it
+was submitted; neither file is edited.
+
+It controls lifecycle and wording only. It changes no accuracy, latency,
+interval, parameter count, Pareto membership, figure, table or raw artefact,
+reinstates no withdrawn field, and does not declare F1 ready: F1 and F2 remain
+unstarted and unauthorised.
+
+### 2. Field validity: is a number still current evidence?
+
 Some artefacts are frozen by a closed review packet and cannot be amended in
 place, so a field can be withdrawn after the file carrying it was sealed. When
 two records disagree about whether a number is current evidence, resolve them
@@ -64,6 +91,32 @@ field-level: it removes the named fields from current evidence and leaves
 every other field in the same row standing. Withdrawn values are never
 replaced by an estimate, an inferred figure, a back-calculation or a
 measurement taken on a different node.
+
+The same rule governs E7a, whose additive `gpu_encoder_plus_head_ms`,
+`full_pipeline_ms` and `amortised_ms` columns and the Pareto fronts built on
+them are superseded for any end-to-end claim, while its isolated component
+latencies, peak-memory components and parameter counts stay valid. Those
+superseded columns are not replaced by E7b's measured serial values:
+substituting one experiment's number into another's sentence would manufacture
+a comparison neither made.
+
+## Verifying the final evidence
+
+`tests/run_all.py` is listed in E10's frozen source set, so a new suite cannot
+be imported into it without moving the sealed digest and making the E10 phase
+verifiers refuse the state. Each final-evidence layer therefore ships its own
+CPU-only runner. New files under `tests/` are safe, because the frozen set
+names individual files, and `run_all.py`'s embargo scan globs `tests/*.py`, so
+the new sources are still covered by it.
+
+    python -B tests/run_closure.py            # statistical and efficiency closure
+    python -B tests/run_ve0.py                # canonical evidence contract
+    python -B tests/run_ve1.py                # figures and tables
+    python -B tests/run_ve2.py                # qualitative evidence
+    python -B tests/run_e7b_supersession.py   # E7b withdrawal and lifecycle records
+
+`tests/run_all.py` itself imports `tests/test_reproduction.py`, which performs
+a CUDA forward pass, so it is not part of a zero-GPU verification pass.
 
 ## Clean-test governance
 
@@ -85,6 +138,12 @@ test-informed scientific selection, and they neither invalidate any result nor
 require remediation of the blinded evaluation. They are recorded because the
 project record must not overstate the embargo: the claim that the clean test
 was never accessed would be false.
+
+The corrective rule, recorded so the second incident cannot recur: a
+repository-wide scan must exclude `data/` before reading or traversing
+candidate files, not filter it afterward. Scoping the traversal is the
+control; filtering the results is not, because by then the bytes have already
+been read.
 
 The canonical machine-readable record, with both incidents identified
 separately, is `results/closure/e7b_evidence_supersession.json` under
