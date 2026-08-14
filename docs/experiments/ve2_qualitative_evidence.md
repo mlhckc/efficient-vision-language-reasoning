@@ -281,10 +281,32 @@ out-of-distribution compositional generalisation — in any reader-facing string
 with the sanctioned disclaimers exempted and negative tests on both sides.
 
 **Clean-test governance.** The clean-test contents were never inspected or used
-for development, model selection, or reporting decisions. Its bytes were
-mechanically read once by an independent reviewer integrity-hash command on
-13 August 2026. VE-2 did not open, hash, stat or parse the clean-test target,
-and no VE-2 module resolves its path. Image eligibility is established
+for development, model selection, or reporting decisions. Mechanical byte
+access occurred in two documented governance incidents, on 13 and 14 August
+2026. The first was an independent reviewer's integrity-hash command over the
+target file; the second was an overly broad dependency-mapping scan during the
+E7b canonical-supersession implementation, which walked the whole project root
+and read every `.csv` without scoping the traversal away from `data/`. Both are
+classification B, mechanical byte access only: no row, label, distribution or
+prediction was examined in either, and no information from the target entered
+development, model selection or any reporting decision. They are governance
+incidents, not test-informed scientific selection. The canonical record is
+`results/closure/e7b_evidence_supersession.json`.
+
+This section supersedes the wording written when only the first incident was
+known. That earlier sentence — "Its bytes were mechanically read once by an
+independent reviewer integrity-hash command on 13 August 2026" — survives
+verbatim in `results/ve2/VE2_MANIFEST.json` and in the `experiments/ve2/run_ve2.py`
+string the manifest is rebuilt from. Both are HISTORICAL, SUPERSEDED RESIDUALS
+whose wording predates the second incident. Neither is corrected in place: VE-2
+is closed, the manifest is immutable, and `tests/test_ve2.py` rebuilds VE-2 from
+that source and compares its scientific content, so editing either would reopen
+a closed packet. Read them as a record of what was known on 13 August 2026, not
+as the complete access history.
+
+VE-2 itself did not open, hash, stat or parse the clean-test target, and no
+VE-2 module resolves its path. Neither incident was caused by VE-2 code. Image
+eligibility is established
 positively, by membership in `data/v2/dev_image_ids.json`, rather than by
 absence from an embargoed list, so no embargoed identifier file is opened
 either. The path and payload guards both refuse the embargoed stem and both

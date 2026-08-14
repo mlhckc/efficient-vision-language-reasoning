@@ -71,6 +71,17 @@ design feedback will be recorded when available. The clean-test embargo
 remains unchanged: the clean test remains blinded and no confirmatory result
 has been reported. Every result above is a development-set result.
 
+The clean-test contents were never inspected or used for development, model
+selection, or reporting decisions. Mechanical byte access occurred in two
+documented governance incidents, on 13 and 14 August 2026: a reviewer's
+integrity-hash command over the target file, and an overly broad
+dependency-mapping scan that read every `.csv` under the project root. Neither
+inspected any row, label, distribution or prediction, and neither informed
+development, model selection or reporting. They are governance incidents, not
+test-informed scientific selection. The disclosure is in
+[docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md) and the canonical record is
+`results/closure/e7b_evidence_supersession.json`.
+
 The current project map and audit findings are in collab/PROJECT_CONTEXT.md.
 Claude-Codex planning, execution and review follow collab/PROTOCOL.md.
 

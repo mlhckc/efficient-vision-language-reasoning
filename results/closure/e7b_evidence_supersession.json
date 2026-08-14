@@ -24,7 +24,16 @@
     "clean_test_accessed_by_this_task": true,
     "clean_test_read_stat_hashed_opened_searched_or_parsed_by_this_task": true,
     "clean_test_used_for_development_model_selection_or_reporting": false,
-    "disclosure": "The clean-test contents were never inspected or used for development, model selection, or reporting decisions. Its bytes were mechanically read once by an independent reviewer integrity-hash command on 13 August 2026.",
+    "common_to_both_incidents": {
+      "classification": "B — MECHANICAL ACCESS INCIDENT",
+      "contents_inspected": false,
+      "informed_development": false,
+      "informed_model_selection": false,
+      "informed_reporting_decisions": false,
+      "rows_labels_distributions_or_predictions_examined": false,
+      "statement": "These are governance incidents, not test-informed scientific selection. In both cases a process read the file's bytes and nothing else: no row, label, distribution or prediction was examined, and no information from the target entered development, model selection or any reporting decision."
+    },
+    "disclosure": "The clean-test contents were never inspected or used for development, model selection, or reporting decisions. Mechanical byte access occurred in two documented governance incidents, on 13 and 14 August 2026.",
     "embargo_intact": true,
     "executor_mechanical_access_during_this_task": {
       "avoidable": true,
@@ -41,8 +50,99 @@
       "what_happened": "While mapping which artefacts carry the withdrawn fields, the executor ran one ad-hoc repository-wide scan that walked the whole project root and called read_text() on every .json, .py, .md, .csv and .txt file, searching for four documentation digests. The traversal was not scoped away from data/, so the embargoed target was among the files mechanically read."
     },
     "field_semantics": "The two access fields above are read LITERALLY, by explicit user decision of 14 August 2026: true because some process acting for this task read the target's bytes, whatever its purpose. They do NOT mean that experiment, builder, test or reporting code opened the target, and none did. The third field is what carries the scientific guarantee: no byte of the target reached any model, checkpoint, selection, figure, table or reported number. Elsewhere in the project a clean_test_accessed flag of false means 'no experiment or reporting code opened the target'; this record is stricter and the two conventions must not be read as one.",
+    "incident_count": 2,
+    "incidents": [
+      {
+        "actor": "an independent reviewer",
+        "classification": "B — MECHANICAL ACCESS INCIDENT",
+        "contents_inspected": false,
+        "date": "2026-08-13",
+        "incident_id": "A",
+        "informed_development": false,
+        "informed_model_selection": false,
+        "informed_reporting_decisions": false,
+        "mechanism": "an integrity-hash command over the target file, which read its bytes and moved its atime",
+        "nature": "mechanical byte access",
+        "rows_labels_distributions_or_predictions_examined": false
+      },
+      {
+        "actor": "the executor of the E7b canonical-supersession implementation",
+        "classification": "B — MECHANICAL ACCESS INCIDENT",
+        "contents_inspected": false,
+        "date": "2026-08-14",
+        "incident_id": "B",
+        "informed_development": false,
+        "informed_model_selection": false,
+        "informed_reporting_decisions": false,
+        "mechanism": "an overly broad dependency-mapping scan that walked the whole project root and read every .json, .py, .md, .csv and .txt file, searching for four documentation digests; the traversal was not scoped away from data/",
+        "nature": "mechanical byte access",
+        "rows_labels_distributions_or_predictions_examined": false
+      }
+    ],
     "no_project_global_claim": "This record deliberately asserts no project-global clean_test_accessed field. The claim that the clean test was never accessed at all would be false, and the scoped fields above are what this task can truthfully attest.",
-    "scope": "THIS_TASK_ONLY"
+    "scope": "THIS_TASK_ONLY",
+    "superseded_single_incident_wording": {
+      "corrected_in": [
+        "results/closure/e7b_evidence_supersession.json",
+        "docs/experiments/ve2_qualitative_evidence.md",
+        "docs/REPRODUCIBILITY.md",
+        "README.md"
+      ],
+      "permitted_residual_locations": [
+        {
+          "path": "results/ve2/VE2_MANIFEST.json",
+          "why": "an immutable VE-2 artefact. VE-2 is CLOSED and may not reopen, so the sentence stays as a historical, superseded residual whose wording predates the second incident."
+        },
+        {
+          "path": "experiments/ve2/run_ve2.py",
+          "why": "the source string the immutable manifest is rebuilt from. tests/test_ve2.py rebuilds VE-2 and compares scientific content, so editing it would change the manifest and reopen a closed packet."
+        }
+      ],
+      "superseded_on": "2026-08-14",
+      "text": "The clean-test contents were never inspected or used for development, model selection, or reporting decisions. Its bytes were mechanically read once by an independent reviewer integrity-hash command on 13 August 2026.",
+      "why": "It was accurate when written and is now incomplete as a history: it predates the second incident and, read as the whole record, understates the access to one occasion. It must never be presented as the complete history."
+    }
+  },
+  "conflict_coverage": {
+    "all_carriers_named": true,
+    "carrier_count": 33,
+    "method": "computed from the pinned artefacts' bytes, not hand-listed; the builder refuses to write if any carrier is unnamed",
+    "named_entry_count": 7,
+    "resolution": {
+      "results/closure/efficiency_closure_table.csv": "results/closure/efficiency_closure_table.csv",
+      "results/closure/efficiency_closure_table.json": "results/closure/efficiency_closure_table.json",
+      "results/experiments/e7b_serial_efficiency/e7b_results.json": "results/experiments/e7b_serial_efficiency/e7b_results.json",
+      "results/experiments/e7b_serial_efficiency/e7b_run_concat_pass1.json": "results/experiments/e7b_serial_efficiency/e7b_run_<system>_pass<n>.json",
+      "results/experiments/e7b_serial_efficiency/e7b_run_concat_pass2.json": "results/experiments/e7b_serial_efficiency/e7b_run_<system>_pass<n>.json",
+      "results/experiments/e7b_serial_efficiency/e7b_run_concat_pass3.json": "results/experiments/e7b_serial_efficiency/e7b_run_<system>_pass<n>.json",
+      "results/experiments/e7b_serial_efficiency/e7b_run_e8a_a0p_pass1.json": "results/experiments/e7b_serial_efficiency/e7b_run_<system>_pass<n>.json",
+      "results/experiments/e7b_serial_efficiency/e7b_run_e8a_a0p_pass2.json": "results/experiments/e7b_serial_efficiency/e7b_run_<system>_pass<n>.json",
+      "results/experiments/e7b_serial_efficiency/e7b_run_e8a_a0p_pass3.json": "results/experiments/e7b_serial_efficiency/e7b_run_<system>_pass<n>.json",
+      "results/experiments/e7b_serial_efficiency/e7b_run_e8a_a1_pass1.json": "results/experiments/e7b_serial_efficiency/e7b_run_<system>_pass<n>.json",
+      "results/experiments/e7b_serial_efficiency/e7b_run_e8a_a1_pass2.json": "results/experiments/e7b_serial_efficiency/e7b_run_<system>_pass<n>.json",
+      "results/experiments/e7b_serial_efficiency/e7b_run_e8a_a1_pass3.json": "results/experiments/e7b_serial_efficiency/e7b_run_<system>_pass<n>.json",
+      "results/experiments/e7b_serial_efficiency/e7b_run_fusion_pass1.json": "results/experiments/e7b_serial_efficiency/e7b_run_<system>_pass<n>.json",
+      "results/experiments/e7b_serial_efficiency/e7b_run_fusion_pass2.json": "results/experiments/e7b_serial_efficiency/e7b_run_<system>_pass<n>.json",
+      "results/experiments/e7b_serial_efficiency/e7b_run_fusion_pass3.json": "results/experiments/e7b_serial_efficiency/e7b_run_<system>_pass<n>.json",
+      "results/experiments/e7b_serial_efficiency/e7b_run_question_only_pass1.json": "results/experiments/e7b_serial_efficiency/e7b_run_<system>_pass<n>.json",
+      "results/experiments/e7b_serial_efficiency/e7b_run_question_only_pass2.json": "results/experiments/e7b_serial_efficiency/e7b_run_<system>_pass<n>.json",
+      "results/experiments/e7b_serial_efficiency/e7b_run_question_only_pass3.json": "results/experiments/e7b_serial_efficiency/e7b_run_<system>_pass<n>.json",
+      "results/experiments/e7b_serial_efficiency/e7b_run_reasoner_pass1.json": "results/experiments/e7b_serial_efficiency/e7b_run_<system>_pass<n>.json",
+      "results/experiments/e7b_serial_efficiency/e7b_run_reasoner_pass2.json": "results/experiments/e7b_serial_efficiency/e7b_run_<system>_pass<n>.json",
+      "results/experiments/e7b_serial_efficiency/e7b_run_reasoner_pass3.json": "results/experiments/e7b_serial_efficiency/e7b_run_<system>_pass<n>.json",
+      "results/experiments/e7b_serial_efficiency/e7b_run_siglip_fusion_pass1.json": "results/experiments/e7b_serial_efficiency/e7b_run_<system>_pass<n>.json",
+      "results/experiments/e7b_serial_efficiency/e7b_run_siglip_fusion_pass2.json": "results/experiments/e7b_serial_efficiency/e7b_run_<system>_pass<n>.json",
+      "results/experiments/e7b_serial_efficiency/e7b_run_siglip_fusion_pass3.json": "results/experiments/e7b_serial_efficiency/e7b_run_<system>_pass<n>.json",
+      "results/experiments/e7b_serial_efficiency/e7b_run_vocab1000_product_pass1.json": "results/experiments/e7b_serial_efficiency/e7b_run_<system>_pass<n>.json",
+      "results/experiments/e7b_serial_efficiency/e7b_run_vocab1000_product_pass2.json": "results/experiments/e7b_serial_efficiency/e7b_run_<system>_pass<n>.json",
+      "results/experiments/e7b_serial_efficiency/e7b_run_vocab1000_product_pass3.json": "results/experiments/e7b_serial_efficiency/e7b_run_<system>_pass<n>.json",
+      "results/experiments/e7b_serial_efficiency/latency_memory.csv": "results/experiments/e7b_serial_efficiency/latency_memory.csv",
+      "results/experiments/e7b_serial_efficiency/pilot_e8a_a1.json": "results/experiments/e7b_serial_efficiency/pilot_e8a_a1.json",
+      "results/experiments/e7b_serial_efficiency/pilot_evidence/e7b_run_e8a_a1_pass1.json": "results/experiments/e7b_serial_efficiency/e7b_run_<system>_pass<n>.json",
+      "results/experiments/e7b_serial_efficiency/pilot_evidence/e7b_run_e8a_a1_pass2.json": "results/experiments/e7b_serial_efficiency/e7b_run_<system>_pass<n>.json",
+      "results/experiments/e7b_serial_efficiency/pilot_evidence/e7b_run_e8a_a1_pass3.json": "results/experiments/e7b_serial_efficiency/e7b_run_<system>_pass<n>.json",
+      "results/experiments/e7b_serial_efficiency/results.json": "results/experiments/e7b_serial_efficiency/results.json"
+    }
   },
   "conflicting_historical_artefacts": [
     {
@@ -78,8 +178,20 @@
       "why_immutable": "a closed E7b artefact; the task forbids modifying it."
     },
     {
+      "conflict": "the full raw aggregate carries peak_allocated_mib, peak_reserved_mib and cold_first_query_ms for every system and pass, with no withdrawal marker. It is the artefact e7b_results.json is derived from.",
+      "immutable": true,
+      "path": "results/experiments/e7b_serial_efficiency/results.json",
+      "resolution": "rank 3, superseded field-by-field by this overlay; retained as raw provenance.",
+      "stored_row_level_status": "none recorded",
+      "why_immutable": "raw evidence is never rewritten."
+    },
+    {
       "conflict": "the 24 full-run child records and the 3 pilot child records carry the raw per-pass peak and cold values.",
       "immutable": true,
+      "match_globs": [
+        "results/experiments/e7b_serial_efficiency/e7b_run_*.json",
+        "results/experiments/e7b_serial_efficiency/pilot_evidence/e7b_run_*.json"
+      ],
       "path": "results/experiments/e7b_serial_efficiency/e7b_run_<system>_pass<n>.json",
       "resolution": "rank 3. Raw measurement evidence, preserved byte-for-byte and readable as provenance only.",
       "stored_row_level_status": "none recorded",
@@ -94,7 +206,7 @@
       "why_immutable": "raw evidence is never rewritten."
     }
   ],
-  "content_sha256": "c630682b95fa2a63d3e0847a6a084e2ed6c2090635a2ef3c402e542c2006cc3b",
+  "content_sha256": "47d02e5e2529020f31688d0c6973c0626c7725c371ada7c12b374f7dc524e4a0",
   "determinism": {
     "content_sha256": "the digest of this record with the provenance block and the digest field itself excluded; it is what a later build must reproduce",
     "file_bytes": "may differ across commits, because provenance carries the repository HEAD and worktree state"
@@ -558,12 +670,12 @@
     "pandas_version": "3.0.3",
     "python": "3.12.3",
     "remeasured_anything": false,
-    "repository_head": "05ffaac9497f35efc09580809dc99b6018433aec",
-    "repository_head_short": "05ffaac",
+    "repository_head": "2a96c6e69e55d947c7e5756fe9790b7faefabb4b",
+    "repository_head_short": "2a96c6e",
     "requirements_lock_sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
     "schema_version": 1,
     "script": "experiments/closure/build_e7b_supersession.py",
-    "script_sha256": "8b970645765b093e18adbf2281a3bd1ad10f4e2118d2f8b9ef523bf5abd0e5f7",
+    "script_sha256": "dc1434ad048c021feb6c77629120e17313654c34d0dc7ed2d29459e9f9cfa696",
     "selected_any_checkpoint": false,
     "torch_version": "2.12.1",
     "trained_anything": false,
@@ -589,8 +701,12 @@
       "results/closure/efficiency_closure_table.json",
       "results/closure/efficiency_closure_table.csv",
       "results/experiments/e7b_serial_efficiency/e7b_results.json",
-      "results/experiments/e7b_serial_efficiency/latency_memory.csv"
+      "results/experiments/e7b_serial_efficiency/results.json",
+      "results/experiments/e7b_serial_efficiency/latency_memory.csv",
+      "results/experiments/e7b_serial_efficiency/e7b_run_<system>_pass<n>.json, 27 raw child records",
+      "results/experiments/e7b_serial_efficiency/pilot_e8a_a1.json"
     ],
+    "residual_surfaces_are_the_computed_carrier_set": true,
     "risk_is_zero": false,
     "statement": "A reviewer who opens only an immutable historical closure file may still see a row-level evidence_status of VERIFIED next to a withdrawn value, with no marker in that file pointing here. Those files are byte-pinned by closed packets and cannot carry a marker without reopening them."
   },

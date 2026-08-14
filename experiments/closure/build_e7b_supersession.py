@@ -41,6 +41,7 @@ from __future__ import annotations
 
 import json
 import sys
+from fnmatch import fnmatch
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -57,6 +58,55 @@ OUTPUT = "results/closure/e7b_evidence_supersession.json"
 # still refuses any path that names it. closure_common.write_json refuses a
 # payload carrying the token as well, so the output cannot contain it either.
 EMBARGOED_TOKEN = "test_" + "clean_" + "targets"
+
+# --------------------------------------------------------------------------
+# clean-test governance
+#
+# TWO classification-B mechanical-access incidents are documented. The older
+# single-incident sentence was accurate when written and is now incomplete as
+# a history; it survives only where a closed packet froze it, and those
+# residuals are named as such in the record below.
+# --------------------------------------------------------------------------
+
+DISCLOSURE = (
+    "The clean-test contents were never inspected or used for development, "
+    "model selection, or reporting decisions. Mechanical byte access occurred "
+    "in two documented governance incidents, on 13 and 14 August 2026.")
+
+SUPERSEDED_DISCLOSURE = (
+    "The clean-test contents were never inspected or used for development, "
+    "model selection, or reporting decisions. Its bytes were mechanically "
+    "read once by an independent reviewer integrity-hash command on "
+    "13 August 2026.")
+
+_NEITHER = {
+    "classification": "B — MECHANICAL ACCESS INCIDENT",
+    "contents_inspected": False,
+    "rows_labels_distributions_or_predictions_examined": False,
+    "informed_development": False,
+    "informed_model_selection": False,
+    "informed_reporting_decisions": False,
+}
+
+INCIDENTS = (
+    dict(_NEITHER,
+         incident_id="A",
+         date="2026-08-13",
+         actor="an independent reviewer",
+         mechanism=("an integrity-hash command over the target file, which "
+                    "read its bytes and moved its atime"),
+         nature="mechanical byte access"),
+    dict(_NEITHER,
+         incident_id="B",
+         date="2026-08-14",
+         actor=("the executor of the E7b canonical-supersession "
+                "implementation"),
+         mechanism=("an overly broad dependency-mapping scan that walked the "
+                    "whole project root and read every .json, .py, .md, .csv "
+                    "and .txt file, searching for four documentation "
+                    "digests; the traversal was not scoped away from data/"),
+         nature="mechanical byte access"),
+)
 
 # The eight timed E7b systems. Every withdrawn field applies to all eight.
 SYSTEMS = ("concat", "e8a_a0p", "e8a_a1", "fusion", "question_only",
@@ -314,6 +364,73 @@ def _assert_pins() -> list:
     return records
 
 
+def _withdrawn_spellings() -> tuple:
+    """Every spelling a withdrawn field is written under, in any artefact."""
+    spellings = set()
+    for entry in WITHDRAWN:
+        spellings.add(entry["field"])
+        spellings.update(entry["also_written_as"])
+    return tuple(sorted(spellings))
+
+
+def _carriers() -> list:
+    """Pinned artefacts whose text actually contains a withdrawn field.
+
+    Computed, not hand-listed. The first version of this record named the
+    conflicting artefacts by hand and missed
+    results/experiments/e7b_serial_efficiency/results.json, which carries all
+    three. A list a human maintains is a list that goes stale; this derives
+    the set from the bytes each time.
+    """
+    spellings = _withdrawn_spellings()
+    carriers = []
+    for relative in sorted(PINS):
+        path = PROJECT_ROOT / cc.assert_not_embargoed(relative)
+        if path.suffix not in (".json", ".csv", ".txt"):
+            continue
+        text = path.read_text(encoding="utf-8", errors="ignore")
+        found = sorted({name for name in spellings if name in text})
+        if found:
+            carriers.append({"path": relative, "fields_present": found})
+    return carriers
+
+
+def _assert_conflict_coverage(named: list, carriers: list) -> dict:
+    """Fail closed unless every carrier is named in the precedence controls.
+
+    A carrier may be named exactly, or matched by an entry's match_globs, so
+    the 27 per-pass child records stay one entry instead of 27.
+    """
+    exact = {entry["path"] for entry in named}
+    globs = [(pattern, entry["path"]) for entry in named
+             for pattern in entry.get("match_globs", ())]
+    resolved, uncovered = {}, []
+    for carrier in carriers:
+        relative = carrier["path"]
+        if relative in exact:
+            resolved[relative] = relative
+            continue
+        hit = next((owner for pattern, owner in globs
+                    if fnmatch(relative, pattern)), None)
+        if hit is None:
+            uncovered.append(relative)
+        else:
+            resolved[relative] = hit
+    if uncovered:
+        raise AssertionError(
+            "a pinned artefact carries a withdrawn field but is named in no "
+            f"precedence control: {uncovered}")
+    return {
+        "carrier_count": len(carriers),
+        "named_entry_count": len(named),
+        "all_carriers_named": True,
+        "method": "computed from the pinned artefacts' bytes, not "
+                  "hand-listed; the builder refuses to write if any carrier "
+                  "is unnamed",
+        "resolution": dict(sorted(resolved.items())),
+    }
+
+
 def _content_digest(payload: dict) -> str:
     """Digest of the scientific content, provenance excluded.
 
@@ -522,11 +639,53 @@ def build() -> dict:
             "task": True,
             "clean_test_used_for_development_model_selection_or_reporting":
                 False,
-            "disclosure": (
-                "The clean-test contents were never inspected or used for "
-                "development, model selection, or reporting decisions. Its "
-                "bytes were mechanically read once by an independent "
-                "reviewer integrity-hash command on 13 August 2026."),
+            "disclosure": DISCLOSURE,
+            "incident_count": 2,
+            "incidents": list(INCIDENTS),
+            "common_to_both_incidents": {
+                "classification": "B — MECHANICAL ACCESS INCIDENT",
+                "contents_inspected": False,
+                "rows_labels_distributions_or_predictions_examined": False,
+                "informed_development": False,
+                "informed_model_selection": False,
+                "informed_reporting_decisions": False,
+                "statement": (
+                    "These are governance incidents, not test-informed "
+                    "scientific selection. In both cases a process read the "
+                    "file's bytes and nothing else: no row, label, "
+                    "distribution or prediction was examined, and no "
+                    "information from the target entered development, model "
+                    "selection or any reporting decision."),
+            },
+            "superseded_single_incident_wording": {
+                "text": SUPERSEDED_DISCLOSURE,
+                "superseded_on": "2026-08-14",
+                "why": (
+                    "It was accurate when written and is now incomplete as a "
+                    "history: it predates the second incident and, read as "
+                    "the whole record, understates the access to one "
+                    "occasion. It must never be presented as the complete "
+                    "history."),
+                "permitted_residual_locations": [
+                    {"path": "results/ve2/VE2_MANIFEST.json",
+                     "why": "an immutable VE-2 artefact. VE-2 is CLOSED and "
+                            "may not reopen, so the sentence stays as a "
+                            "historical, superseded residual whose wording "
+                            "predates the second incident."},
+                    {"path": "experiments/ve2/run_ve2.py",
+                     "why": "the source string the immutable manifest is "
+                            "rebuilt from. tests/test_ve2.py rebuilds VE-2 "
+                            "and compares scientific content, so editing it "
+                            "would change the manifest and reopen a closed "
+                            "packet."},
+                ],
+                "corrected_in": [
+                    "results/closure/e7b_evidence_supersession.json",
+                    "docs/experiments/ve2_qualitative_evidence.md",
+                    "docs/REPRODUCIBILITY.md",
+                    "README.md",
+                ],
+            },
             "no_project_global_claim": (
                 "This record deliberately asserts no project-global "
                 "clean_test_accessed field. The claim that the clean test "
@@ -630,7 +789,27 @@ def build() -> dict:
             },
             {
                 "path": "results/experiments/e7b_serial_efficiency/"
+                        "results.json",
+                "conflict": "the full raw aggregate carries "
+                            "peak_allocated_mib, peak_reserved_mib and "
+                            "cold_first_query_ms for every system and pass, "
+                            "with no withdrawal marker. It is the artefact "
+                            "e7b_results.json is derived from.",
+                "stored_row_level_status": "none recorded",
+                "resolution": "rank 3, superseded field-by-field by this "
+                              "overlay; retained as raw provenance.",
+                "immutable": True,
+                "why_immutable": "raw evidence is never rewritten.",
+            },
+            {
+                "path": "results/experiments/e7b_serial_efficiency/"
                         "e7b_run_<system>_pass<n>.json",
+                "match_globs": [
+                    "results/experiments/e7b_serial_efficiency/"
+                    "e7b_run_*.json",
+                    "results/experiments/e7b_serial_efficiency/"
+                    "pilot_evidence/e7b_run_*.json",
+                ],
                 "conflict": "the 24 full-run child records and the 3 pilot "
                             "child records carry the raw per-pass peak and "
                             "cold values.",
@@ -699,9 +878,14 @@ def build() -> dict:
                 "results/closure/efficiency_closure_table.json",
                 "results/closure/efficiency_closure_table.csv",
                 "results/experiments/e7b_serial_efficiency/e7b_results.json",
+                "results/experiments/e7b_serial_efficiency/results.json",
                 "results/experiments/e7b_serial_efficiency/"
                 "latency_memory.csv",
+                "results/experiments/e7b_serial_efficiency/"
+                "e7b_run_<system>_pass<n>.json, 27 raw child records",
+                "results/experiments/e7b_serial_efficiency/pilot_e8a_a1.json",
             ],
+            "residual_surfaces_are_the_computed_carrier_set": True,
             "mitigation": (
                 "Every human entry point that is not itself frozen names "
                 "this record: the E7b report banner, README and "
@@ -785,6 +969,12 @@ def build() -> dict:
     # this task can truthfully attest is task-scoped, and that is what
     # clean_test_governance states. The field is removed rather than set,
     # because a false value here would be a project-global claim either way.
+    # Every pinned artefact that actually carries a withdrawn field must be
+    # named in the precedence controls. Computed and asserted, so the
+    # omission the independent review found cannot recur.
+    payload["conflict_coverage"] = _assert_conflict_coverage(
+        payload["conflicting_historical_artefacts"], _carriers())
+
     prov.pop("clean_test_accessed", None)
     prov["clean_test_governance_pointer"] = (
         "see clean_test_governance; this record deliberately makes no "

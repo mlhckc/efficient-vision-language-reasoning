@@ -147,7 +147,7 @@ cache-integrity record), latency_memory.csv, stage_timings.csv,
 pareto_serial.png, cache_hashes_before/after.txt, and the pilot evidence
 (pilot_e8a_a1.json plus its three qualification per-run records under
 pilot_evidence/, tracked, and superseded for measurement by the
-full-run A1 records). tests/test_e7b.py (55 checks) covers the gates.
+full-run A1 records). tests/test_e7b.py (103 checks) covers the gates.
 
 The field-level withdrawal above is published separately, because every
 artefact in this directory is byte-pinned by the closed VE-0 and VE-1 packets

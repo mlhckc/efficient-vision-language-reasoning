@@ -104,9 +104,30 @@ CLOSED_PACKETS = {
 
 DISCLOSURE = (
     "The clean-test contents were never inspected or used for development, "
-    "model selection, or reporting decisions. Its bytes were mechanically "
-    "read once by an independent reviewer integrity-hash command on "
-    "13 August 2026.")
+    "model selection, or reporting decisions. Mechanical byte access occurred "
+    "in two documented governance incidents, on 13 and 14 August 2026.")
+
+# The wording written when only the first incident was known. Accurate then,
+# incomplete as a history now. It is permitted ONLY inside a closed packet
+# that cannot be reopened, and only where it is labelled as superseded.
+SUPERSEDED_DISCLOSURE_FRAGMENT = "mechanically read once"
+
+# Frozen surfaces that may still carry the superseded fragment. VE2_MANIFEST
+# is immutable; run_ve2.py is the source string the manifest is rebuilt from,
+# and tests/test_ve2.py compares that rebuild, so editing it reopens VE-2.
+PERMITTED_RESIDUALS = {
+    "results/ve2/VE2_MANIFEST.json",
+    "experiments/ve2/run_ve2.py",
+}
+
+# Human-facing documents a fresh reviewer would actually open.
+HUMAN_FACING_DOCS = (
+    "README.md",
+    "CLAUDE.md",
+    "docs/REPRODUCIBILITY.md",
+    "docs/experiments/ve2_qualitative_evidence.md",
+    "docs/experiments/e7b_serial_efficiency.md",
+)
 
 CANONICAL_E9 = (
     "SmolVLM-500M was approximately 24.7x slower in warm serial latency "
@@ -656,16 +677,21 @@ def test_task_scoped_governance() -> None:
     check("the disclosure records a corrective rule",
           "exclude data/" in incident["corrective_rule"])
 
-    # M. the disclosure is preserved verbatim, whitespace-normalised so
-    # reflowing the JSON does not break the check.
+    # M. the disclosure is the two-incident wording, verbatim, whitespace-
+    # normalised so reflowing the JSON does not break the check.
     stored = re.sub(r"\s+", " ", governance["disclosure"]).strip()
-    check("the governance disclosure is preserved verbatim",
+    check("the governance disclosure is the two-incident wording, verbatim",
           stored == re.sub(r"\s+", " ", DISCLOSURE).strip(), stored)
     check("the disclosure does not claim the clean test was never accessed",
           "never accessed" not in stored)
-    check("the disclosure records the reviewer integrity-hash read",
-          "mechanically read once" in stored
-          and "13 August 2026" in stored)
+    check("the disclosure does not claim the bytes were read only once",
+          SUPERSEDED_DISCLOSURE_FRAGMENT not in stored
+          and "read only once" not in stored)
+    check("the disclosure names both dates",
+          "13 and 14 August 2026" in stored)
+    check("the disclosure keeps the contents and use guarantees",
+          "never inspected or used for development, model selection, or "
+          "reporting decisions" in stored)
 
     # N. neither the builder nor the record names the embargoed target.
     check("the builder source does not name the embargoed target",
@@ -684,6 +710,213 @@ def test_task_scoped_governance() -> None:
     check("the known-negative wrote no file",
           not (PROJECT_ROOT / "results" / "closure"
                / "_never_written.json").exists())
+
+
+# --------------------------------------------------------------------------
+# Two-incident governance: both incidents recorded, the superseded wording
+# confined to closed packets, and the global entry points accurate.
+# --------------------------------------------------------------------------
+
+def test_two_incident_governance() -> None:
+    record = _record()
+    governance = record["clean_test_governance"]
+
+    check("two incidents are recorded", governance["incident_count"] == 2)
+    incidents = {row["incident_id"]: row for row in governance["incidents"]}
+    check("the incidents are A and B", sorted(incidents) == ["A", "B"])
+    check("incident A is the 13 August reviewer integrity hash",
+          incidents["A"]["date"] == "2026-08-13"
+          and "independent reviewer" in incidents["A"]["actor"]
+          and "integrity-hash" in incidents["A"]["mechanism"])
+    check("incident B is the 14 August dependency-mapping scan",
+          incidents["B"]["date"] == "2026-08-14"
+          and "dependency-mapping scan" in incidents["B"]["mechanism"]
+          and "data/" in incidents["B"]["mechanism"])
+    for key, row in sorted(incidents.items()):
+        check(f"incident {key} is classification B",
+              row["classification"].startswith("B"))
+        check(f"incident {key} is mechanical byte access",
+              row["nature"] == "mechanical byte access")
+        for guarantee in ("contents_inspected",
+                          "rows_labels_distributions_or_predictions_examined",
+                          "informed_development",
+                          "informed_model_selection",
+                          "informed_reporting_decisions"):
+            check(f"incident {key}: {guarantee} is false",
+                  row[guarantee] is False)
+
+    common = governance["common_to_both_incidents"]
+    check("both incidents share the classification-B guarantees",
+          common["contents_inspected"] is False
+          and common["informed_development"] is False
+          and common["informed_model_selection"] is False
+          and common["informed_reporting_decisions"] is False)
+    check("the record separates governance from scientific selection",
+          "not test-informed scientific selection" in common["statement"])
+
+    # The superseded wording is kept, labelled, and never presented as the
+    # whole history.
+    superseded = governance["superseded_single_incident_wording"]
+    check("the superseded wording is retained for lineage",
+          SUPERSEDED_DISCLOSURE_FRAGMENT in superseded["text"])
+    check("it is dated as superseded", superseded["superseded_on"]
+          == "2026-08-14")
+    check("the record says why it is now incomplete",
+          "incomplete as a history" in superseded["why"]
+          and "never be presented as the complete history" in superseded["why"])
+
+    # The permitted residuals are exactly the two frozen VE-2 surfaces, and
+    # each carries a reason that names the reopening risk.
+    residuals = {row["path"]: row["why"]
+                 for row in superseded["permitted_residual_locations"]}
+    check("the permitted residuals are the two frozen VE-2 surfaces",
+          set(residuals) == PERMITTED_RESIDUALS, str(sorted(residuals)))
+    check("the immutable manifest residual is labelled historical and "
+          "superseded",
+          "immutable" in residuals["results/ve2/VE2_MANIFEST.json"]
+          and "predates the second incident"
+          in residuals["results/ve2/VE2_MANIFEST.json"])
+    check("the run_ve2.py residual explains the rebuild coupling",
+          "rebuilds VE-2" in residuals["experiments/ve2/run_ve2.py"]
+          and "reopen" in residuals["experiments/ve2/run_ve2.py"])
+
+    # The frozen residuals really are frozen, and really do still carry it.
+    for relative in sorted(PERMITTED_RESIDUALS):
+        text = (PROJECT_ROOT / relative).read_text()
+        check(f"{relative} still carries the superseded wording, unedited",
+              SUPERSEDED_DISCLOSURE_FRAGMENT in text)
+    check("VE2_MANIFEST.json is byte-identical",
+          _sha256(PROJECT_ROOT / "results" / "ve2" / "VE2_MANIFEST.json")
+          == CLOSED_PACKETS["results/ve2/VE2_MANIFEST.json"])
+    check("experiments/ve2/run_ve2.py is byte-identical",
+          _sha256(PROJECT_ROOT / "experiments" / "ve2" / "run_ve2.py")
+          == "7fab3289488e05d89bd258aa04394df6bbdc88b8c82abe7071196b79dccd4e89")
+
+    # No editable human-facing surface presents the one-incident sentence as
+    # the complete history. Where the fragment appears at all, it must be
+    # accompanied by the correction in the same document.
+    for relative in HUMAN_FACING_DOCS:
+        text = (PROJECT_ROOT / relative).read_text()
+        flat = re.sub(r"\s+", " ", text)
+        if SUPERSEDED_DISCLOSURE_FRAGMENT in flat:
+            check(f"{relative} labels the one-incident sentence as "
+                  f"superseded rather than current",
+                  "SUPERSEDED" in text.upper()
+                  and "two documented governance incidents" in flat)
+        # The prohibited claim is "the clean test was never accessed". A
+        # sentence saying that claim WOULD BE FALSE is the opposite, and is
+        # exactly what the disclosure has to say, so each occurrence is
+        # judged in context rather than banned outright.
+        for hit in re.finditer("never accessed", flat):
+            window = flat[max(0, hit.start() - 160): hit.end() + 160]
+            check(f"{relative} refutes rather than makes the "
+                  f"never-accessed claim",
+                  "would be false" in window or "must not" in window,
+                  window[:200])
+
+    # The two global entry points carry the accurate disclosure.
+    for relative in ("README.md", "docs/REPRODUCIBILITY.md"):
+        flat = re.sub(r"\s+", " ",
+                      (PROJECT_ROOT / relative).read_text())
+        check(f"{relative} discloses two mechanical-access incidents",
+              "two documented governance incidents, on 13 and 14 August 2026"
+              in flat)
+        check(f"{relative} states neither inspected contents",
+              "never inspected or used for development, model selection, or "
+              "reporting decisions" in flat)
+        check(f"{relative} separates governance from scientific selection",
+              "not test-informed scientific selection" in flat)
+    reproducibility = (PROJECT_ROOT / "docs" / "REPRODUCIBILITY.md").read_text()
+    check("REPRODUCIBILITY identifies both incidents separately",
+          "13 August 2026 — an independent reviewer" in reproducibility
+          and "14 August 2026 — during the E7b canonical-supersession"
+          in reproducibility)
+    check("REPRODUCIBILITY names the frozen residuals",
+          "results/ve2/VE2_MANIFEST.json" in reproducibility
+          and "superseded residuals" in reproducibility)
+    check("README points a reader to the disclosure",
+          "docs/REPRODUCIBILITY.md" in (PROJECT_ROOT / "README.md").read_text())
+
+    # The VE-2 report carries the corrected wording next to the residual note.
+    # Markdown is hard-wrapped, so every prose assertion is made against the
+    # whitespace-normalised text rather than the raw bytes.
+    ve2 = re.sub(r"\s+", " ", (PROJECT_ROOT / "docs" / "experiments"
+                               / "ve2_qualitative_evidence.md").read_text())
+    check("the VE-2 report carries the two-incident disclosure",
+          "two documented governance incidents, on 13 and 14 August 2026"
+          in ve2)
+    check("the VE-2 report marks the manifest residual as superseded",
+          "HISTORICAL, SUPERSEDED RESIDUALS" in ve2)
+    check("the VE-2 report explains why the residual is not corrected",
+          "reopen a closed packet" in ve2)
+    check("the VE-2 report does not blame VE-2 for either incident",
+          "Neither incident was caused by VE-2 code" in ve2)
+
+
+# --------------------------------------------------------------------------
+# Conflict coverage: every artefact carrying a withdrawn field is named.
+# --------------------------------------------------------------------------
+
+def test_every_carrier_is_named() -> None:
+    record = _record()
+    coverage = record["conflict_coverage"]
+    check("the coverage set is computed, not hand-listed",
+          "not hand-listed" in coverage["method"])
+    check("every carrier is named", coverage["all_carriers_named"] is True)
+
+    # Re-derive the carrier set here rather than trusting the record.
+    spellings = set()
+    for entry in record["withdrawn_fields"]:
+        spellings.add(entry["field"])
+        spellings.update(entry["also_written_as"])
+    carriers = []
+    for row in record["frozen_pins"]["records"]:
+        path = PROJECT_ROOT / row["path"]
+        if path.suffix not in (".json", ".csv", ".txt"):
+            continue
+        text = path.read_text(encoding="utf-8", errors="ignore")
+        if any(name in text for name in spellings):
+            carriers.append(row["path"])
+    check("the record's carrier count matches a fresh derivation",
+          coverage["carrier_count"] == len(carriers),
+          f"{coverage['carrier_count']} against {len(carriers)}")
+    check("33 pinned artefacts carry a withdrawn field",
+          len(carriers) == 33, str(len(carriers)))
+    missing = [path for path in carriers if path not in coverage["resolution"]]
+    check("every derived carrier resolves to a named entry", missing == [],
+          str(missing[:5]))
+
+    # The artefact the independent review found missing is now named in its
+    # own right, not merely swept up by a glob.
+    raw = "results/experiments/e7b_serial_efficiency/results.json"
+    check("results.json is a carrier", raw in carriers)
+    check("results.json resolves to itself, as its own named entry",
+          coverage["resolution"].get(raw) == raw)
+    named = {row["path"] for row in record["conflicting_historical_artefacts"]}
+    check("results.json is named in the precedence controls", raw in named)
+    check("results.json is named in the residual surfaces",
+          raw in record["residual_discoverability_risk"]["residual_surfaces"])
+    entry = next(row for row in record["conflicting_historical_artefacts"]
+                 if row["path"] == raw)
+    check("the results.json entry is resolved by field-level precedence",
+          "rank 3" in entry["resolution"])
+    check("the results.json entry records it as immutable",
+          entry["immutable"] is True)
+    check("the results.json entry says what it carries",
+          all(field in entry["conflict"] for field in WITHDRAWN))
+    check("results.json is byte-identical",
+          _sha256(PROJECT_ROOT / raw)
+          == CLOSED_PACKETS[
+              "results/experiments/e7b_serial_efficiency/results.json"])
+
+    # Known-negative: dropping a named entry must make the builder refuse.
+    from experiments.closure import build_e7b_supersession as builder
+    must_fail("the builder writes when a carrier is left unnamed",
+              lambda: builder._assert_conflict_coverage(
+                  [row for row
+                   in builder.build()["conflicting_historical_artefacts"]
+                   if row["path"] != raw],
+                  builder._carriers()))
 
 
 # --------------------------------------------------------------------------
@@ -943,6 +1176,8 @@ def run() -> None:
     test_precedence_is_complete()
     test_no_substitute_value()
     test_task_scoped_governance()
+    test_two_incident_governance()
+    test_every_carrier_is_named()
     test_human_facing_discoverability()
     test_e9_wording()
     test_builder_is_mechanical()

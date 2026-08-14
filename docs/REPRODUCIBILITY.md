@@ -65,6 +65,34 @@ every other field in the same row standing. Withdrawn values are never
 replaced by an estimate, an inferred figure, a back-calculation or a
 measurement taken on a different node.
 
+## Clean-test governance
+
+The clean-test contents were never inspected or used for development, model
+selection, or reporting decisions. Mechanical byte access occurred in two
+documented governance incidents, on 13 and 14 August 2026:
+
+1. 13 August 2026 — an independent reviewer ran an integrity-hash command over
+   the target file, which read its bytes.
+2. 14 August 2026 — during the E7b canonical-supersession implementation, an
+   overly broad dependency-mapping scan walked the whole project root and read
+   every `.csv` file, because the traversal was not scoped away from `data/`.
+
+Both are classification B, mechanical byte access and nothing more. In neither
+case were contents inspected: no row, label, distribution or prediction was
+examined, and no information from the target entered development, model
+selection or any reporting decision. These are governance incidents, not
+test-informed scientific selection, and they neither invalidate any result nor
+require remediation of the blinded evaluation. They are recorded because the
+project record must not overstate the embargo: the claim that the clean test
+was never accessed would be false.
+
+The canonical machine-readable record, with both incidents identified
+separately, is `results/closure/e7b_evidence_supersession.json` under
+`clean_test_governance`. Some frozen artefacts — `results/ve2/VE2_MANIFEST.json`
+and the `experiments/ve2/run_ve2.py` string it is rebuilt from — still carry the
+wording written when only the first incident was known. Those are historical,
+superseded residuals inside a closed packet; this section is what governs.
+
 ## Caveats
 
 Fixing seeds and deterministic flags makes a run repeatable on the same
