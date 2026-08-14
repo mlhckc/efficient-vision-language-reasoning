@@ -874,14 +874,18 @@ def child_run(name: str, pass_index: int, out_path: Path) -> int:
 
     # Cold first query: after the model is ready, before any warm-up.
     reinfer_g21.assert_gpu_exclusive(f"{name} pre-cold")
-    synchronize()
-    cold_start = time.perf_counter()
-    index0, answer0, logits0, _, _ = pipeline.serial_query(rows[0])
-    synchronize()
-    cold_ms = (time.perf_counter() - cold_start) * 1000
+    # Hoisted no_grad, matching timed_calls, so the cold query and the
+    # determinism repeat run in the same inference mode as the primary
+    # serial benchmark and the peak below covers one regime only.
+    with torch.no_grad():
+        synchronize()
+        cold_start = time.perf_counter()
+        index0, answer0, logits0, _, _ = pipeline.serial_query(rows[0])
+        synchronize()
+        cold_ms = (time.perf_counter() - cold_start) * 1000
 
-    # Determinism: an immediate duplicate must be bitwise identical.
-    index_repeat, _, logits_repeat, _, _ = pipeline.serial_query(rows[0])
+        # Determinism: an immediate duplicate must be bitwise identical.
+        index_repeat, _, logits_repeat, _, _ = pipeline.serial_query(rows[0])
     if index_repeat != index0 or not torch.equal(logits0, logits_repeat):
         sys.exit(f"DETERMINISM GATE FAILED for {name}: consecutive "
                  f"identical queries disagree")
@@ -895,6 +899,13 @@ def child_run(name: str, pass_index: int, out_path: Path) -> int:
         pipeline.serial_query(row)
 
     warm = timed_calls(one_query, WARMUP_SINGLE, ITERS_SINGLE)
+
+    # Peak GPU memory for the serial end-to-end batch-1 regime: read
+    # after the primary serial timing and before the segmented,
+    # answer-sweep, cached and batch-64 workloads, none of which may
+    # contribute to the reported peaks.
+    peak_alloc = torch.cuda.max_memory_allocated() / 2 ** 20
+    peak_reserved = torch.cuda.max_memory_reserved() / 2 ** 20
     reinfer_g21.assert_gpu_exclusive(f"{name} post-warm")
 
     # Segmented stage passes (separate, so the headline stays unsegmented).
@@ -974,8 +985,6 @@ def child_run(name: str, pass_index: int, out_path: Path) -> int:
                                   f"{BENCH_BATCH}; a full batched serving "
                                   "chain is out of scope for the pilot")
 
-    peak_alloc = torch.cuda.max_memory_allocated() / 2 ** 20
-    peak_reserved = torch.cuda.max_memory_reserved() / 2 ** 20
     reinfer_g21.assert_gpu_exclusive(f"{name} pre-promotion")
 
     record = {
