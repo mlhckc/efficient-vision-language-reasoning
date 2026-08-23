@@ -91,9 +91,14 @@ exploratory evidence only. E4 (five-seed reasoner completion) and E5
 
 ## Not yet executed
 
-- Authorized but never run (no results exist): the remaining E8A arms
-  A2/A2r, A4, A5, A7c, A8c and the FLAN-T5-small sensitivity point.
-  Whether any of these run before F1 is an open user decision.
+- The seven remaining E8A arms (A2, A2r, A4, A5, A7c, A8c and the
+  FLAN-T5-small sensitivity point AF) are authorised-but-unrun and were
+  deferred from the current MSc execution scope by explicit user
+  decision on 23 August 2026, before F1 and F2. No canonical or
+  accepted experimental result exists for any of them. None is
+  withdrawn; before F1, an explicit user authorization (which may
+  follow supervisor feedback) may reopen an arm or required pair. See
+  docs/experiments/pre_f1_unrun_arms_disposition.md.
 - The post-core research backlog is recorded but not authorized.
 - The three audit findings from `collab/PROJECT_CONTEXT.md`
   (slice-correlation independence in v2_05; the v3_01 search-grid

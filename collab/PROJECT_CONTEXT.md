@@ -616,6 +616,19 @@ user on 2 August 2026. No result-dependent trigger governs them. The
 random-initialised SmolLM2-135M and SmolLM2-360M controls are likewise
 unconditional and authorised in both E8A and E8B at the same scales and seeds.
 
+By a further explicit user decision of 23 August 2026, all seven unexecuted
+E8A arms (A2, A2r, A4, A5, A7c, A8c, AF) are authorised-but-unrun and
+deferred from the current MSc execution scope. The unconditional-core
+sentences above are preserved as history; only their operational execution
+obligation is superseded, for the current MSc scope. No arm is withdrawn,
+cancelled or judged failed. No canonical or accepted experimental result
+exists for any of them, and the scoped execution/result audit found no
+execution artefact for them, so the deferral is not based on observing
+their experimental outcomes. Before F1, an explicit user authorization —
+including authorization made in response to supervisor feedback — may
+reopen an arm or required pair, preserving the pair rule (A2 with A2r).
+See docs/experiments/pre_f1_unrun_arms_disposition.md.
+
 Scoring and comparison restrictions. No direct comparison is drawn between
 published official-GQA scores and this project's custom development split, in
 either direction: the split, the answer support and the scorer all differ, so

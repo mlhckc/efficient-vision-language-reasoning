@@ -509,6 +509,20 @@ hash no longer matches the worktree.
   360M question features) are unconditional core controls at 40k and 250k with
   seeds 0/1/2. Random-initialised SmolLM2-135M and SmolLM2-360M are authorized
   in both E8A and E8B, unconditionally, at the same scales and seeds.
+  Deferral decision, 23 August 2026: the seven unexecuted E8A arms (A2,
+  A2r, A4, A5, A7c, A8c and AF/FLAN-T5-small) are authorised-but-unrun
+  and deferred from the current MSc execution scope by explicit user
+  decision, made before F1 and F2. No canonical or accepted
+  experimental result exists for any of them, and the scoped
+  execution/result audit found no execution artefact for them, so the
+  deferral is not based on observing their experimental outcomes. The
+  A5/A8c unconditional-core sentences above are preserved as the
+  historical record; only their operational execution obligation is
+  superseded, for the current MSc scope. No arm is withdrawn or
+  cancelled. Before F1, an explicit user authorization — including
+  authorization made in response to supervisor feedback — may reopen an
+  arm or required pair, preserving pair integrity (A2 with A2r). See
+  docs/experiments/pre_f1_unrun_arms_disposition.md.
   Scoring and comparison restrictions: no direct comparison between published
   official-GQA scores and this project's custom development split, in either
   direction, because the split, the answer support and the scorer all differ;
@@ -748,7 +762,12 @@ hash no longer matches the worktree.
   360M). The user decided on 2 August 2026 that A5 and A8c are unconditional
   core controls, run at 40k and at 250k with seeds 0/1/2; no result-dependent
   trigger governs them, and the earlier "conditionally authorised 360M" and
-  result-dependent wordings no longer govern. Also authorised in both branches:
+  result-dependent wordings no longer govern. By a further explicit user
+  decision of 23 August 2026, the unexecuted arms A4, A5, A7c and A8c
+  are deferred from the current MSc execution scope,
+  authorised-but-unrun and not withdrawn; see
+  docs/experiments/pre_f1_unrun_arms_disposition.md. Also authorised in
+  both branches:
   deterministic random-initialised SmolLM2-135M and SmolLM2-360M, each with
   architecture and tokenizer configuration identical to its pretrained
   counterpart, weights created from a pinned seed, fully frozen, used as the
