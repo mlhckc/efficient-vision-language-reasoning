@@ -74,9 +74,12 @@ semantic/embedding/LLM-judged scoring in any primary metric.
 - Primary metrics: strict raw exact match and one pinned VQA-style
   normalised exact match (G21). On the top-100 vocabulary the two provably
   coincide (zero normalised collisions).
-- Denominators: in-vocabulary dev accuracy (7,714 rows), raw-distribution
-  accuracy (10,004 rows), and coverage-adjusted raw-distribution accuracy
-  for cross-vocabulary comparisons. Never mix them silently.
+- Denominators, three, never silently mixed: 7,714 rows = top-100
+  in-vocabulary development accuracy; 9,823 rows = top-1000
+  in-vocabulary development accuracy; 10,004 rows = raw-distribution
+  development accuracy (with coverage-adjusted raw-distribution
+  accuracy for cross-vocabulary comparisons). Top-100 and top-1000
+  rows are never paired.
 
 # System evolution
 
@@ -208,6 +211,12 @@ not confidence intervals):
   measurements, labelled as such, never end-to-end costs.
 - Parameter count is a poor latency proxy (fusion is 48 per cent slower
   than concat_wide at equal parameters). Quote measured latency.
+- The retained "16 times fewer parameters" comparison (the top-1000
+  product head against the reasoner) is a TRAINABLE-parameter ratio:
+  about 1.30M against 21.1M trainable parameters. It must not be read
+  as 16 times fewer total loaded parameters; total loaded parameters
+  differ by only about 1.13 times, both systems being dominated by the
+  same frozen CLIP encoder.
 
 # Main positive findings
 
@@ -392,6 +401,21 @@ them with overlay records. Consequences you must handle:
 - E8B grid points 1-3 — exploratory only; grids 4-8 never ran.
 - V1 results and v3_01/v3_02a latency figures — legacy/superseded (E7a
   supersedes the old latency protocol; accuracy unaffected).
+- A draft-manuscript claim of a repaired V1 11-model 100k/250k rerun
+  is NOT VERIFIED and not canonically accepted: no such result exists
+  in this repository. Do not use it as dissertation evidence; the
+  canonical 100k/250k scaling evidence is v2_07, v3_03 and E3.
+
+# Unexecuted E8A arms
+
+The seven E8A arms A2, A2r, A4, A5, A7c, A8c and AF (FLAN-T5-small)
+are authorised-but-unrun and deferred from the current MSc execution
+scope (docs/experiments/pre_f1_unrun_arms_disposition.md). Required
+wording: "No canonical or accepted experimental result exists for any
+of these seven arms, and the scoped execution audit found no execution
+artefact for them. The pre-F1 deferral was therefore not based on
+observing their experimental outcomes." Do not use the absolute
+wording "no experimental result exists anywhere".
 
 # Recommended dissertation chapter mapping
 
