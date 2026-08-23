@@ -128,7 +128,7 @@ Discovery-by-discovery detail:
 
 E7b is the authoritative end-to-end evidence: measured warm serial
 batch-1 queries (raw image and question to answer, node otter155) cost
-about 7.6 ms for the CLIP global heads, 9.2-20.1 ms for the
+about 7.6 ms per query for the CLIP global heads, 9.2-20.1 ms for the
 reasoner-class and SLM systems; the primary accuracy-latency frontier is
 concat, fusion and the top-1000 product head. Under the same-node E9
 protocol (otter159), SmolVLM-500M measured 151.380 ms on its open-readout
@@ -137,17 +137,24 @@ row (accuracy 0.489004) and 152.854 ms on its constrained row (accuracy
 approximately 24.4 and 24.7 times the warm serial latency respectively.
 These are
 latency and parameter statements only: no energy, power, carbon or
-monetary measurement exists, so no such claim is made anywhere. E7a's
+monetary measurement exists, so no such claim is made anywhere. On
+E7a's retained fields, the top-1000 product head at 250k is more
+accurate (0.4904 against 0.4594 raw-distribution) than the
+21.1M-parameter reasoner, using 16 times fewer parameters. E7a's
 additive end-to-end sums and three E7b fields (peak memory, cold-start)
 are withdrawn; field validity resolves through
 `results/closure/e7b_evidence_supersession.json`.
 
 ## Current status
 
-Current to 14 August 2026. All experimental packets are complete. Five
+The scientific evidence summarised here is current to 14 August 2026
+(governance and status records are dated separately in
+[docs/PROJECT_STATUS.md](docs/PROJECT_STATUS.md)). All experimental
+packets are complete. Five
 review packets are closed with independently accepted verdicts: E7b,
 VE-0, VE-1, VE-2 and E10 (lifecycle record:
-`results/closure/pre_f1_status_supersession_20260814.json`). The 14
+`results/closure/pre_f1_status_supersession_20260814.json`); E7b is CLOSED
+at E7B_CANONICAL_SUPERSESSION_REVIEW_PASS. The 14
 August pre-F1 evidence metadata repair — correcting nine E8B B1-bearing
 checkpoint-selection rows (B1 is best-on-development; B2/B3 are fixed
 epoch 22), five presentation-precision fields, the E7a locator and one
@@ -157,13 +164,15 @@ Detailed state: [docs/PROJECT_STATUS.md](docs/PROJECT_STATUS.md).
 
 The clean-test contents were never inspected or used for development,
 model selection, or reporting decisions. Mechanical byte access occurred
-in two documented governance incidents, on 13 and 14 August 2026: an
-independent reviewer's integrity-hash command over the target file, and
-an overly broad dependency-mapping scan that read every .json, .py, .md,
-.csv and .txt file under the project root because the traversal was not
-scoped away from data/. Neither inspected any row, label, distribution
-or prediction, and neither informed development, model selection or
-reporting. The governing disclosure is in
+in two documented governance incidents, on 13 and 14 August 2026. The
+first was an independent reviewer's integrity-hash command over the
+target file; the second was an overly broad dependency-mapping scan that
+read every .json, .py, .md, .csv and .txt file under the project root
+because the traversal was not scoped away from data/. Neither inspected
+any row, label, distribution or prediction, and neither informed
+development, model selection or reporting. They are governance
+incidents, not test-informed scientific selection. The governing
+disclosure is in
 [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md).
 
 ## What remains
