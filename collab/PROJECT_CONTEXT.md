@@ -517,12 +517,21 @@ separate planned, reviewed task before relying on the affected claim.
    The correlations are descriptive; those p-values are not calibrated for the
    overlap. v2_05b row-level intervals also ignore repeated questions per image.
    v3_02a clusters only the repaired step-deficit analysis.
+   Dispositioned 23 August 2026: accepted limitation; the correlation
+   p-values are descriptive only and excluded from inference. See
+   docs/experiments/pre_f1_open_findings_disposition.md (D1).
 5. v3_01 writes a search grid before execution but later overwrites the same
    JSON with results. The final file alone does not independently prove temporal
    preregistration.
+   Dispositioned 23 August 2026: temporal preregistration accepted as not
+   independently provable; binding limitation wording recorded. See
+   docs/experiments/pre_f1_open_findings_disposition.md (D2).
 6. Multi-seed result files call top-level `run_metadata()` with its default
    seed 42. Nested run records carry the real seeds, but the top-level field can
    mislead.
+   Dispositioned 23 August 2026: accepted metadata-clarity limitation;
+   nested per-run seed records are authoritative. See
+   docs/experiments/pre_f1_open_findings_disposition.md (D3).
 
 ### Workflow and implementation findings
 

@@ -1,7 +1,9 @@
 # Project status
 
-Current to 14 August 2026, at commit db5a1bf on branch v2-protocol
-(synchronised with origin/v2-protocol, divergence 0/0, clean worktree).
+Latest canonical scientific evidence: 14 August 2026. Status reviewed
+and the open audit findings dispositioned on 23 August 2026 against
+repository baseline 860d67e, the commit inspected for the
+disposition, on branch v2-protocol.
 
 Lifecycle and status statements resolve through
 `results/closure/pre_f1_status_supersession_20260814.json`; field validity
@@ -93,18 +95,23 @@ exploratory evidence only. E4 (five-seed reasoner completion) and E5
   A2/A2r, A4, A5, A7c, A8c and the FLAN-T5-small sensitivity point.
   Whether any of these run before F1 is an open user decision.
 - The post-core research backlog is recorded but not authorized.
-- Three audit findings from `collab/PROJECT_CONTEXT.md` remain open
+- The three audit findings from `collab/PROJECT_CONTEXT.md`
   (slice-correlation independence in v2_05; the v3_01 search-grid
-  preregistration proof; run_metadata seed reporting in multi-seed files).
-  They are recorded findings, not blockers to F1 unless the user judges
-  otherwise.
+  preregistration proof; run_metadata seed reporting in multi-seed
+  files) were dispositioned by explicit user decision on 23 August
+  2026 as accepted, transparently worded limitations; none required
+  new computation. See
+  docs/experiments/pre_f1_open_findings_disposition.md.
 
 ## Remaining before F1
 
 - The user's decision on the final model list, informed by the frozen
   evidence inventory and the independent pre-F1 review process.
 - Any supervisor feedback the user wants reflected before freezing.
-- Resolution or explicit acceptance of the open audit findings above.
+- Resolved 23 August 2026: the open audit findings above were
+  dispositioned by explicit user decision (accepted limitations,
+  including the C02 reporting asymmetry; see
+  docs/experiments/pre_f1_open_findings_disposition.md).
 
 ## F1 — model-list freeze
 
