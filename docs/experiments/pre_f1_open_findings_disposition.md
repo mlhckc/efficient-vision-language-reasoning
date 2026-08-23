@@ -199,9 +199,10 @@ output remain byte-identical.
   that those suites require README.md to carry, while the last
   reviewed README.md at db5a1bf carries both. README.md in the
   worktree is byte-identical to HEAD 860d67e, so both failures
-  pre-date this task. Every other E7b supersession check passed in
-  the same run, including the results/closure 22-file count, the
-  .gitignore byte identity and the 19 frozen pins. The
+  pre-date this task. The E7b suite stops at its first failing check,
+  so its later checks were not exercised in that run; the
+  results/closure 22-file count, the .gitignore byte identity and
+  the 19 frozen pins were instead verified directly and all hold. The
   metadata-repair suite's disclosure loop stops at its first entry
   (README.md), so its remaining surfaces were verified directly with
   the same predicates and all satisfy them; the guard predicates on
