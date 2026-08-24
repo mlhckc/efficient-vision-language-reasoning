@@ -1,0 +1,539 @@
+{
+  "schema_version": 1,
+  "task_id": "dissertation-01-ch3-prep-s2",
+  "stage": 2,
+  "status": "PREPARATION_ONLY",
+  "generated_utc": "2026-08-24T17:52:49Z",
+  "substantive_assessed_prose_authorized": false,
+  "result_recomputation_authorized": false,
+  "later_stages_authorized": false,
+  "authorized_subsections": [
+    "3.4 Answer-space construction: top-100 and top-1000",
+    "3.5 Scoring metrics and evaluation denominators",
+    "3.6 Frozen representations and feature extraction"
+  ],
+  "authority_order": [
+    "canonical repair / supersession / closure authority",
+    "canonical result records and manifests",
+    "protocol artefacts",
+    "current experiment reports",
+    "context documentation",
+    "historical artefacts for provenance only"
+  ],
+  "governance_records_checked": [
+    {
+      "path": "results/closure/pre_f1_evidence_metadata_repair_20260814.json",
+      "sha256": "e35db6dddca6f587791527f3a9e9846905486413c851d1f896129a3f6a015f42",
+      "scope": "current source-proven presentation and selection-metadata corrections"
+    },
+    {
+      "path": "results/closure/e7b_evidence_supersession.json",
+      "sha256": "2fb6561b3916b83603631c0feb35d716dc9bbf3e1ed1ef3d4e7286516a0a0c75",
+      "scope": "current field-level E7b validity and clean-test governance"
+    },
+    {
+      "path": "results/ve0/supersession_map.json",
+      "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c",
+      "scope": "current unnamed artefact-group validity"
+    },
+    {
+      "path": "results/closure/pre_f1_status_supersession_20260814.json",
+      "sha256": "8b04d10f8f1df74eefd73ee0b507aa2ca600cd9c3d0675279f0ddb72c8ed57c3",
+      "scope": "current lifecycle and status only"
+    }
+  ],
+  "sources": [
+    {
+      "path": "CLAUDE.md",
+      "sha256": "25c8bd700435990d0edfa6d487da1780d6c1676d649cc96fe65d880d37311893",
+      "authority_class": "binding repository scope and scoring restrictions"
+    },
+    {
+      "path": "results/ve0/canonical_evidence_inventory.json",
+      "sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3",
+      "authority_class": "canonical evidence inventory"
+    },
+    {
+      "path": "docs/experiments/v2_00_protocol.md",
+      "sha256": "af91acda8bfaef600b3e5c2bbd0ffaeac1e431a174d8784ed1af01c39fa3d013",
+      "authority_class": "current protocol experiment report"
+    },
+    {
+      "path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+      "sha256": "cfe82a17f0353a9bb6f107f770e59b6b7321ff69ab8d31eda2f49f16d5976e62",
+      "authority_class": "canonical tracked protocol-build evidence"
+    },
+    {
+      "path": "artifacts/v2_00_protocol/answer_vocab_v2.json",
+      "sha256": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680",
+      "authority_class": "authorised non-data protocol-artifact vocabulary copy"
+    },
+    {
+      "path": "artifacts/v2_00_protocol/v1_v2_vocab_index_comparison.json",
+      "sha256": "510b5ad24e0c5f6f0553bee8076e13ff0507390b7ac06fa242764888da25fff3",
+      "authority_class": "canonical tracked V1/V2 label-map comparison"
+    },
+    {
+      "path": "docs/experiments/e3_vocab1000.md",
+      "sha256": "e565217e2e0629a8740c8f923c1844376ef619d13fa262de8e55ffb6c62db0b1",
+      "authority_class": "current E3 method report"
+    },
+    {
+      "path": "artifacts/results_export/e3_vocab1000/preflight.json",
+      "sha256": "af64a0d688807a3aa245692400a514c9465cee48d9022678fa347f08652e8e16",
+      "authority_class": "canonical exported E3 preflight record"
+    },
+    {
+      "path": "artifacts/results_export/e3_vocab1000/results.json",
+      "sha256": "bbdf65f724ee89cc6078628cd85684ad64a06585b6d34bdf0638b364c2a52be6",
+      "authority_class": "canonical exported E3 result and build record"
+    },
+    {
+      "path": "results/experiments/e8a_question_encoder/e8a_135m_core_frozen_g21.json",
+      "sha256": "84403265ef8391241ad77ae147a445c1f73844532a702791a613076a5068e471",
+      "authority_class": "operative post-G21 remediation freeze and scorer pin"
+    },
+    {
+      "path": "results/experiments/e8a_question_encoder/g21_scorer_inventory.json",
+      "sha256": "0120b0af61eb492cad5c93da85e9bac6d2e286f97ed48e8288112ce7c3ca75d9",
+      "authority_class": "canonical normalisation and collision inventory"
+    },
+    {
+      "path": "docs/experiments/e9_compact_vlm.md",
+      "sha256": "6303aede69f12850c6ba8ecaf7f80eb2101f976705f6094cb8d9363d1086ad8c",
+      "authority_class": "current cross-system scoring-method report"
+    },
+    {
+      "path": "docs/experiments/v2_01_embeddings.md",
+      "sha256": "e608aac6fa5bb33e75afedab95035ec31f34c8b95e921ec0a94908516616e2c6",
+      "authority_class": "current frozen-CLIP global-representation report"
+    },
+    {
+      "path": "docs/experiments/v3_00_tokens.md",
+      "sha256": "4751aa0ef6224bb4504dfd9206b8abc562de178db4e0f39fa237f9bbe0affcdf",
+      "authority_class": "current frozen-CLIP token-store design report"
+    },
+    {
+      "path": "docs/experiments/e2_siglip.md",
+      "sha256": "715960c1c2bbc912fb04616b2af5c988cefbad5c4290b070f4a266adc66ed56d",
+      "authority_class": "current SigLIP encoder-swap method report"
+    },
+    {
+      "path": "artifacts/results_export/e2_siglip/preflight.json",
+      "sha256": "dfea5990e8680b2918b40e77f3e7bbfd6512aa46b2515ace5429e48fdf0798e1",
+      "authority_class": "canonical exported SigLIP identity preflight"
+    },
+    {
+      "path": "docs/experiments/e8a_core_135m.md",
+      "sha256": "7d6c0626e4e1e3aa56978f15e180357f398f3c0481701bf0e667fa6f8d6f3e65",
+      "authority_class": "current executed E8A 135M method report"
+    },
+    {
+      "path": "results/experiments/e8a_question_encoder/extraction.json",
+      "sha256": "f156d074d53d2e8c16f4e443cc3b27859f9c2c042f56d911fd0756850b38aad4",
+      "authority_class": "canonical executed E8A model, tokenizer and configuration identity record"
+    },
+    {
+      "path": "docs/experiments/pre_f1_unrun_arms_disposition.md",
+      "sha256": "3ce87dfa1968fcec9184a74b1bc840b3bd4c5c99bec2c1d04664cfa741b1a9e8",
+      "authority_class": "current execution-scope authority for unrun E8A arms"
+    },
+    {
+      "path": "docs/experiments/e10_core_matrix.md",
+      "sha256": "11491ff36bd14417f9991787a008285590bedfb80dc8f84e617da87b9b4f0ddd",
+      "authority_class": "current executed answer-side 360M method report"
+    },
+    {
+      "path": "results/experiments/e8b_readout_generation/protocol_amendment_20260807_fp32.json",
+      "sha256": "2e935d74104cdbf5814cdd322ed3334a55c0903f88751206065fad857eede2d3",
+      "authority_class": "controlling E8B-only evaluation-precision amendment"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/references/references.bib",
+      "sha256": "ebff6b25ef20b0672c154e56e678356bc8245b6cbf5d85aff63371968b6d2705",
+      "authority_class": "frozen dissertation bibliography copy"
+    }
+  ],
+  "subsections": [
+    {
+      "id": "3.4",
+      "title": "Answer-space construction: top-100 and top-1000",
+      "planned_later_prose_budget_words": 250,
+      "supported_facts": [
+        {
+          "fact_id": "top100_construction",
+          "fact": "The V2 answer space contains the 100 most frequent raw training-pool answers, ordered by descending frequency with alphabetical tie-breaking; development images contribute nothing to its construction.",
+          "sources": [
+            {
+              "path": "docs/experiments/v2_00_protocol.md",
+              "location": "The V2 partition, V2 vocabulary bullet"
+            },
+            {
+              "path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+              "location": "$.vocabulary"
+            }
+          ]
+        },
+        {
+          "fact_id": "top100_artifact",
+          "fact": "The authorised non-data protocol-artifact copy of the V2 top-100 vocabulary is byte-pinned in this manifest.",
+          "sources": [
+            {
+              "path": "artifacts/v2_00_protocol/answer_vocab_v2.json",
+              "location": "complete JSON object"
+            }
+          ]
+        },
+        {
+          "fact_id": "top1000_extension",
+          "fact": "E3 extends the identical count-descending, lexicographic-tie-break rule to 1,000 answers using raw training-pool answers only.",
+          "sources": [
+            {
+              "path": "docs/experiments/e3_vocab1000.md",
+              "location": "Method, paragraphs 1-2"
+            }
+          ]
+        },
+        {
+          "fact_id": "prefix_identity_gate",
+          "fact": "The first 100 top-1000 entries, including their indices, were gated identical to the V2 top-100 vocabulary.",
+          "sources": [
+            {
+              "path": "docs/experiments/e3_vocab1000.md",
+              "location": "Method, paragraph 1"
+            },
+            {
+              "path": "artifacts/results_export/e3_vocab1000/preflight.json",
+              "location": "$.e3_preflight.prefix_gate"
+            }
+          ]
+        },
+        {
+          "fact_id": "coverage_design_properties",
+          "fact": "On the same 10,004-row raw development distribution, top-100 supports 7,714 rows (0.771092, approximately 0.7711) and top-1000 supports 9,823 rows (0.981907, approximately 0.9819). These are answer-space coverage properties, not model performance.",
+          "sources": [
+            {
+              "path": "docs/experiments/v2_00_protocol.md",
+              "location": "The V2 partition, dev.csv bullet"
+            },
+            {
+              "path": "artifacts/results_export/e3_vocab1000/preflight.json",
+              "location": "$.e3_preflight.dev_invocab and $.e3_preflight.dev_coverage_top1000"
+            },
+            {
+              "path": "artifacts/results_export/e3_vocab1000/results.json",
+              "location": "$.e3_vocab1000.build_summary.dev"
+            }
+          ]
+        },
+        {
+          "fact_id": "v1_v2_label_guard",
+          "fact": "V1 and V2 contain the same 100 answer strings but 11 answers have different indices, so their label maps are not interchangeable.",
+          "sources": [
+            {
+              "path": "artifacts/v2_00_protocol/v1_v2_vocab_index_comparison.json",
+              "location": "$.answer_sets_identical, $.answer_to_index_identical and $.n_answers_with_changed_index"
+            }
+          ]
+        }
+      ],
+      "required_citation_keys_resolved": [
+        "antol2015vqa",
+        "jabri2016revisiting"
+      ],
+      "bibliography_gaps": [
+        "VQA-v2 citation absent from references/references.bib"
+      ],
+      "excluded_claims": [
+        "head accuracy under either vocabulary",
+        "tail behaviour",
+        "model-performance interpretation"
+      ],
+      "pending_source_verification": []
+    },
+    {
+      "id": "3.5",
+      "title": "Scoring metrics and evaluation denominators",
+      "planned_later_prose_budget_words": 250,
+      "controlling_records": {
+        "g21_scorer_pin": {
+          "path": "results/experiments/e8a_question_encoder/e8a_135m_core_frozen_g21.json",
+          "location": "$.e8a_135m_core_frozen_g21.scorer and $.e8a_135m_core_frozen_g21.analysis.metrics",
+          "reason": "Operative post-remediation freeze binds the adapter and upstream/vendored identities."
+        },
+        "top100_raw_normalised_coincidence": {
+          "path": "results/experiments/e8a_question_encoder/g21_scorer_inventory.json",
+          "location": "$.g21_scorer_inventory.top_100 and $.g21_scorer_inventory.raw_versus_normalized_consequence",
+          "reason": "Exact canonical collision and fixed-point inventory."
+        },
+        "top1000_denominator": {
+          "path": "artifacts/results_export/e3_vocab1000/preflight.json",
+          "location": "$.e3_preflight.dev_invocab",
+          "reason": "Exact canonical exported preflight scalar."
+        }
+      },
+      "supported_facts": [
+        {
+          "fact_id": "strict_raw_exact",
+          "fact": "Strict raw exact match compares the prediction string and canonical gold string without semantic matching and remains separately labelled.",
+          "sources": [
+            {
+              "path": "results/experiments/e8a_question_encoder/e8a_135m_core_frozen_g21.json",
+              "location": "$.e8a_135m_core_frozen_g21.analysis.metrics.secondary"
+            }
+          ]
+        },
+        {
+          "fact_id": "g21_normalised_exact",
+          "fact": "The primary cross-system normalised metric is one pinned single-gold VQA-style normalised exact match, G21, applied to predictions and canonical gold strings.",
+          "sources": [
+            {
+              "path": "results/experiments/e8a_question_encoder/e8a_135m_core_frozen_g21.json",
+              "location": "$.e8a_135m_core_frozen_g21.analysis.metrics"
+            },
+            {
+              "path": "docs/experiments/e9_compact_vlm.md",
+              "location": "Scoring method, lines 78-86"
+            }
+          ]
+        },
+        {
+          "fact_id": "top100_coincidence",
+          "fact": "The top-100 vocabulary has zero normalised collisions and zero strings changed by normalisation; raw and normalised row correctness therefore coincide for classifiers whose predictions and golds are top-100 strings.",
+          "sources": [
+            {
+              "path": "results/experiments/e8a_question_encoder/g21_scorer_inventory.json",
+              "location": "$.g21_scorer_inventory.top_100 and $.g21_scorer_inventory.raw_versus_normalized_consequence"
+            }
+          ]
+        },
+        {
+          "fact_id": "denominators",
+          "fact": "The distinct development denominators are 7,714 top-100 in-vocabulary rows, 9,823 top-1000 in-vocabulary rows, and 10,004 raw-distribution rows.",
+          "sources": [
+            {
+              "path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+              "location": "$.manifests.dev.n_questions and $.dev.n_raw_questions"
+            },
+            {
+              "path": "artifacts/results_export/e3_vocab1000/preflight.json",
+              "location": "$.e3_preflight.dev_invocab"
+            },
+            {
+              "path": "artifacts/results_export/e3_vocab1000/results.json",
+              "location": "$.e3_vocab1000.build_summary.dev.n_raw_questions"
+            }
+          ]
+        },
+        {
+          "fact_id": "coverage_adjustment",
+          "fact": "For cross-vocabulary comparison on the shared raw distribution, raw-distribution accuracy is the in-vocabulary accuracy multiplied by answer-space coverage because an OOV row is necessarily incorrect under a closed answer set.",
+          "sources": [
+            {
+              "path": "docs/experiments/e3_vocab1000.md",
+              "location": "Raw-distribution accuracy method immediately before its table"
+            }
+          ]
+        },
+        {
+          "fact_id": "denominator_guard",
+          "fact": "A reported score must name its denominator; the 7,714-row, 9,823-row and 10,004-row quantities must not be silently mixed.",
+          "sources": [
+            {
+              "path": "CLAUDE.md",
+              "location": "Scoring and comparison restrictions"
+            },
+            {
+              "path": "docs/experiments/e9_compact_vlm.md",
+              "location": "Scoring method, lines 78-86"
+            }
+          ]
+        },
+        {
+          "fact_id": "primary_metric_exclusions",
+          "fact": "Semantic matching, synonym lists, embedding similarity and language-model judging are excluded from every primary score.",
+          "sources": [
+            {
+              "path": "CLAUDE.md",
+              "location": "Scoring and comparison restrictions"
+            }
+          ]
+        },
+        {
+          "fact_id": "official_gqa_comparison_guard",
+          "fact": "Published official-GQA scores cannot be compared directly with this project's custom development split in either direction because split, answer support and scorer differ.",
+          "sources": [
+            {
+              "path": "CLAUDE.md",
+              "location": "Scoring and comparison restrictions"
+            }
+          ]
+        }
+      ],
+      "required_citation_keys_resolved": [
+        "antol2015vqa"
+      ],
+      "bibliography_gaps": [
+        "VQA-v2 citation absent from references/references.bib"
+      ],
+      "model_scores_included": false,
+      "pending_source_verification": []
+    },
+    {
+      "id": "3.6",
+      "title": "Frozen representations and feature extraction",
+      "planned_later_prose_budget_words": 250,
+      "supported_facts": [
+        {
+          "fact_id": "clip_global",
+          "fact": "One frozen OpenCLIP ViT-B-32 model with laion2b_s34b_b79k weights serves both image and question towers, producing L2-normalised float32 512-dimensional global vectors; the two modalities share this pretrained space by construction.",
+          "sources": [
+            {
+              "path": "docs/experiments/v2_01_embeddings.md",
+              "location": "Method, paragraphs 1-2"
+            },
+            {
+              "path": "CLAUDE.md",
+              "location": "Locked scope, encoders"
+            }
+          ]
+        },
+        {
+          "fact_id": "siglip_global_swap",
+          "fact": "E2 replaces the global-path encoder with one frozen OpenCLIP ViT-B-16-SigLIP model using webli weights for both modalities under the v2_02 recipe; this does not replace the CLIP token stores.",
+          "sources": [
+            {
+              "path": "docs/experiments/e2_siglip.md",
+              "location": "Purpose and Method, paragraphs 1-3"
+            },
+            {
+              "path": "artifacts/results_export/e2_siglip/preflight.json",
+              "location": "$.e2_preflight.model, $.e2_preflight.pretrained and $.e2_preflight.versions"
+            },
+            {
+              "path": "docs/experiments/v3_00_tokens.md",
+              "location": "Purpose and Method"
+            }
+          ]
+        },
+        {
+          "fact_id": "clip_token_stores",
+          "fact": "The latent-reasoner store design uses frozen CLIP tokens: 50 projected visual tokens comprising CLS plus 49 patches, and packed projected question tokens; stored token values are unnormalised fp16.",
+          "sources": [
+            {
+              "path": "docs/experiments/v3_00_tokens.md",
+              "location": "Method, paragraphs 1-2"
+            }
+          ]
+        },
+        {
+          "fact_id": "e8a_executed_capacity",
+          "fact": "The executed E8A question-side family is A0p, A1 and A1r only; the SmolLM2 arms use the 135M family. No 360M E8A question-side arm was executed.",
+          "sources": [
+            {
+              "path": "docs/experiments/e8a_core_135m.md",
+              "location": "Purpose and Method, arms and eighteen-cell design"
+            },
+            {
+              "path": "docs/experiments/pre_f1_unrun_arms_disposition.md",
+              "location": "Results, execution audit and disposition table"
+            }
+          ]
+        },
+        {
+          "fact_id": "e8a_projection_and_space_disclosure",
+          "fact": "A1 and A1r project 576-dimensional SmolLM2-135M hidden states through one trainable Linear(576, 512) layer into the reasoner width. A learned common 512-dimensional width is not a naturally shared pretrained CLIP/SmolLM2 semantic space.",
+          "sources": [
+            {
+              "path": "docs/experiments/e8a_core_135m.md",
+              "location": "Purpose, arm definitions; Method, projection disclosure"
+            },
+            {
+              "path": "CLAUDE.md",
+              "location": "Locked scope, encoders"
+            }
+          ]
+        },
+        {
+          "fact_id": "e8a_pinned_identity",
+          "fact": "The executed pretrained question-side identity is HuggingFaceTB/SmolLM2-135M at revision 93efa2f097d58c2a74874c7e644dbc9b0cee75a2, with config SHA-256 1d556eab73b69c7f11f64c557a2f9c6f440bd4c6b89bb2584a6b498c92603843, tokenizer-config SHA-256 4bb9af56a342753d39374f4016a16574cab299fe088e896f425ce3c433f61424, and tokenizer-file SHA-256 9ca9acddb6525a194ec8ac7a87f24fbba7232a9a15ffa1af0c1224fcd888e47c.",
+          "sources": [
+            {
+              "path": "results/experiments/e8a_question_encoder/extraction.json",
+              "location": "$.e8a_extraction.preflight.A1.model_provenance"
+            },
+            {
+              "path": "results/experiments/e8a_question_encoder/e8a_135m_core_frozen_g21.json",
+              "location": "$.e8a_135m_core_frozen_g21 results manifest"
+            }
+          ]
+        },
+        {
+          "fact_id": "e8a_360m_disposition",
+          "fact": "A2/A2r and the other 360M E8A question-side arms are authorised-but-unrun and deferred from the current MSc execution scope; E10's executed 360M capacity point is answer-side B4/B4r.",
+          "sources": [
+            {
+              "path": "docs/experiments/pre_f1_unrun_arms_disposition.md",
+              "location": "Disposition table and A2/A2r definition"
+            },
+            {
+              "path": "docs/experiments/e10_core_matrix.md",
+              "location": "Purpose and Method"
+            }
+          ]
+        },
+        {
+          "fact_id": "e8b_fp32_evaluation_only",
+          "fact": "For E8B only, canonical scientific evaluation is FP32 and supersedes the master protocol's native-BF16 evaluation clause; this Stage-2 fact is evaluation-precision methodology only.",
+          "sources": [
+            {
+              "path": "results/experiments/e8b_readout_generation/protocol_amendment_20260807_fp32.json",
+              "location": "$.e8b_protocol_amendment.supersedes[0] and $.e8b_protocol_amendment.amendment.A1_precision"
+            }
+          ]
+        }
+      ],
+      "excluded_claims": [
+        "CLS-removal outcome",
+        "patches-only diagnostic outcome",
+        "SigLIP or CLIP model-performance comparison",
+        "bf16 training-path details owned by section 3.8",
+        "claim that SmolLM2-360M ran on the E8A question side"
+      ],
+      "required_citation_keys_resolved": [
+        "bourigault2025frevl",
+        "tsimpoukelli2021frozen",
+        "li2023blip2"
+      ],
+      "bibliography_gaps": [
+        "foundational CLIP citation absent from references/references.bib",
+        "SigLIP citation absent from references/references.bib",
+        "SmolLM2 citation absent from references/references.bib",
+        "foundational Vision Transformer citation absent if later prose requires a separate token/patch citation"
+      ],
+      "pending_source_verification": []
+    }
+  ],
+  "source_discrepancies": [
+    {
+      "class": "SigLIP bibliography",
+      "planned_expectation": "An existing SigLIP entry appeared likely.",
+      "verified_tree_state": "No SigLIP or Sigmoid Loss for Language Image Pre-Training entry exists in references/references.bib.",
+      "non_substitute": "zhai2022scaling is Scaling Vision Transformers and is not a SigLIP paper.",
+      "stage2_action": "Record a bibliography gap; do not invent, add or substitute an entry."
+    }
+  ],
+  "provenance_sidecars_created": false,
+  "provenance_sidecar_decision": "The subsection manifest contains exact source paths, SHA-256 values and record locations, so a separate denominator or coverage sidecar would duplicate this deterministic provenance.",
+  "model_scores_included": false,
+  "pending_source_verification": [],
+  "unresolved_genai_gate": "PENDING OFFICIAL VERIFICATION — EEEM004 assessment-specific GenAI permission/disclosure",
+  "clean_test_governance": {
+    "stage2_access_or_traversal_under_data": false,
+    "clean_test_inspection": false,
+    "embargo_status": "UNCHANGED",
+    "structural_or_label_statistics_added": false,
+    "current_governance_claim": "No claim that the project was never accessed is introduced; current disclosure remains controlled by the named closure records."
+  },
+  "implementation_note": "This file is evidence-engineering metadata, not assessed dissertation prose."
+}

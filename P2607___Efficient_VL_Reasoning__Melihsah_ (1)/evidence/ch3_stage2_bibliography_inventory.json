@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "task_id": "dissertation-01-ch3-prep-s2",
+  "stage": 2,
+  "status": "INVENTORY_ONLY",
+  "generated_utc": "2026-08-24T17:52:49Z",
+  "source_bibliography": {
+    "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/references/references.bib",
+    "sha256": "ebff6b25ef20b0672c154e56e678356bc8245b6cbf5d85aff63371968b6d2705",
+    "entry_count": 72
+  },
+  "bibliography_modified": false,
+  "citation_classes": [
+    {
+      "class_id": "closed_vocabulary_vqa_convention",
+      "status": "RESOLVED",
+      "required_for": [
+        "3.4"
+      ],
+      "keys": [
+        {
+          "key": "antol2015vqa",
+          "entry_type": "inproceedings",
+          "title": "VQA: Visual Question Answering",
+          "year": 2015,
+          "source_location": "references/references.bib:105-110",
+          "fit": "Foundational VQA task context; use only for the general convention, not as evidence for this project's answer-space counts."
+        },
+        {
+          "key": "jabri2016revisiting",
+          "entry_type": "inproceedings",
+          "title": "Revisiting Visual Question Answering Baselines",
+          "year": 2016,
+          "source_location": "references/references.bib:119-126",
+          "fit": "Existing classification-baseline context for fixed-answer VQA."
+        }
+      ]
+    },
+    {
+      "class_id": "vqa_metric_tradition",
+      "status": "RESOLVED_WITH_SCOPE_NOTE",
+      "required_for": [
+        "3.5"
+      ],
+      "keys": [
+        {
+          "key": "antol2015vqa",
+          "entry_type": "inproceedings",
+          "title": "VQA: Visual Question Answering",
+          "year": 2015,
+          "source_location": "references/references.bib:105-110",
+          "fit": "VQA evaluation tradition only.",
+          "scope_note": "The project's primary G21 metric is a pinned single-gold normalised exact match, not the official multi-annotator VQA accuracy formula."
+        }
+      ]
+    },
+    {
+      "class_id": "vqa_v2",
+      "status": "GAP_ABSENT_EXISTING_KEY",
+      "required_for": [
+        "3.4",
+        "3.5"
+      ],
+      "keys": [],
+      "carried_from_stage1": true,
+      "evidence_of_absence": "No Goyal key, Making the V in VQA Matter title, or explicit VQA-v2 record among 72 entries.",
+      "stage2_action": "Do not invent or add an entry."
+    },
+    {
+      "class_id": "clip_foundation",
+      "status": "GAP_ABSENT_EXISTING_KEY",
+      "required_for": [
+        "3.6"
+      ],
+      "keys": [],
+      "carried_from_stage1": true,
+      "evidence_of_absence": "No Radford key or Learning Transferable Visual Models From Natural Language Supervision record among 72 entries.",
+      "non_substitutes": [
+        "song2022tapc",
+        "shen2022clipvil",
+        "deuser2022less",
+        "lin2022evl"
+      ],
+      "stage2_action": "Do not substitute a downstream application and do not invent or add an entry."
+    },
+    {
+      "class_id": "siglip",
+      "status": "GAP_ABSENT_EXISTING_KEY",
+      "required_for": [
+        "3.6"
+      ],
+      "keys": [],
+      "evidence_of_absence": "No SigLIP or Sigmoid Loss for Language Image Pre-Training title and no matching key among 72 entries.",
+      "non_substitutes": [
+        {
+          "key": "zhai2022scaling",
+          "reason": "The entry is Scaling Vision Transformers, not the SigLIP paper."
+        }
+      ],
+      "plan_discrepancy": "The handoff expected that an entry appeared to exist; real-tree inspection proves it does not.",
+      "stage2_action": "Report the gap; do not invent, add or substitute an entry."
+    },
+    {
+      "class_id": "smollm2",
+      "status": "GAP_ABSENT_EXISTING_KEY",
+      "required_for": [
+        "3.6"
+      ],
+      "keys": [],
+      "evidence_of_absence": "No SmolLM, SmolLM2, Allal or corresponding model-paper entry among 72 entries.",
+      "stage2_action": "Report the gap; do not invent or add an entry."
+    },
+    {
+      "class_id": "token_level_or_vit_representation",
+      "status": "NOT_REQUIRED_FOR_STAGE2_PREPARATION",
+      "required_for": [],
+      "keys": [],
+      "decision": "The project's token-store design is pinned to its internal method record, so no unrelated ViT paper is forced into this preparation inventory.",
+      "later_gap_if_needed": "A foundational Vision Transformer citation is absent if assessed section 3.6 prose later requires a separate patch-token literature citation.",
+      "non_substitutes": [
+        "darcet2024registers",
+        "zhai2022scaling"
+      ]
+    },
+    {
+      "class_id": "frozen_representation_context",
+      "status": "RESOLVED_WITH_SCOPE_NOTES",
+      "required_for": [
+        "3.6"
+      ],
+      "keys": [
+        {
+          "key": "bourigault2025frevl",
+          "entry_type": "article",
+          "title": "FrEVL: Leveraging Frozen Pretrained Embeddings for Efficient Vision-Language Understanding",
+          "year": 2025,
+          "source_location": "references/references.bib:9-16",
+          "fit": "General frozen-representation context; not a CLIP, SigLIP or SmolLM2 identity citation."
+        },
+        {
+          "key": "tsimpoukelli2021frozen",
+          "entry_type": "inproceedings",
+          "title": "Multimodal Few-Shot Learning with Frozen Language Models",
+          "year": 2021,
+          "source_location": "references/references.bib:213-220",
+          "fit": "Frozen-language-model multimodal context; not a SmolLM2 identity citation."
+        },
+        {
+          "key": "li2023blip2",
+          "entry_type": "inproceedings",
+          "title": "BLIP-2: Bootstrapping Language-Image Pre-training with Frozen Image Encoders and Large Language Models",
+          "year": 2023,
+          "source_location": "references/references.bib:197-204",
+          "fit": "Frozen image-encoder/language-model context; not a model-identity substitute."
+        }
+      ]
+    }
+  ],
+  "inherited_quality_notes": [
+    "Many author fields use literal 'and others'; the bibliography header requires full-author verification before submission.",
+    "All 14 article entries omit a journal field and may produce inherited BibTeX empty-journal warnings.",
+    "No external bibliographic verification or network lookup is authorised in Stage 2."
+  ],
+  "gaps": [
+    "foundational CLIP citation",
+    "VQA-v2 citation",
+    "SigLIP citation",
+    "SmolLM2 citation",
+    "foundational Vision Transformer citation if later section 3.6 prose genuinely requires one"
+  ],
+  "entries_added": [],
+  "implementation_note": "This inventory maps existing keys and exact gaps only and is not assessed dissertation prose."
+}
