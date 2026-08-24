@@ -1,0 +1,8 @@
+region_or_scale,question_count,image_count,count_scope,nesting_or_boundary
+Development partition,10004,777,Raw questions and complete-partition images,Image-disjoint from training pool
+Development manifest,7714,768,Top-100 in-vocabulary questions and represented images,Subset of the development partition
+Training pool,724074,71363,Eligible top-100 questions and remaining partition images,Source pool for all training scales
+Train 40k,40000,27622,Selected questions and represented images,Row-prefix of Train 100k and Train 250k
+Train 100k,100000,46158,Selected questions and represented images,Row-prefix of Train 250k
+Train 250k,250000,61859,Selected questions and represented images,Largest nested training prefix
+Clean test,8013,972,Structural counts only; targets embargoed,Image-disjoint from training and development

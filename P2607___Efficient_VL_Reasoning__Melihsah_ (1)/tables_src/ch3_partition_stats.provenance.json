@@ -1,0 +1,570 @@
+{
+  "schema_version": 1,
+  "task_id": "dissertation-01-ch3-prep-s1",
+  "stage": 1,
+  "status": "CELL_LEVEL_PROVENANCE_COMPLETE",
+  "generated_utc": "2026-08-24T16:35:42Z",
+  "csv_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch3_partition_stats.csv",
+  "csv_sha256": "5d31d53f2b7c81168a6df872dbff9fc3fe65d57b4ea93345691b5b63e4495e7e",
+  "encoding": "UTF-8",
+  "header_row_index": 0,
+  "data_row_count": 7,
+  "column_count": 5,
+  "populated_cell_count": 40,
+  "all_populated_cells_have_provenance": true,
+  "all_digit_bearing_cells_have_numeric_token_provenance": true,
+  "cells": [
+    {
+      "row_index": 0,
+      "column_index": 0,
+      "column_name": "region_or_scale",
+      "value": "region_or_scale",
+      "source_artifact_path": ".agent-bridge/tasks/dissertation-01-ch3-prep-s1/10-claude-plan.md",
+      "source_location": "section STAGE-1 DELIVERABLES ONLY / TAB-3.1 SOURCE + CELL-LEVEL PROVENANCE",
+      "authority_status": "accepted task schema; not scientific evidence"
+    },
+    {
+      "row_index": 0,
+      "column_index": 1,
+      "column_name": "question_count",
+      "value": "question_count",
+      "source_artifact_path": ".agent-bridge/tasks/dissertation-01-ch3-prep-s1/10-claude-plan.md",
+      "source_location": "section STAGE-1 DELIVERABLES ONLY / TAB-3.1 SOURCE + CELL-LEVEL PROVENANCE",
+      "authority_status": "accepted task schema; not scientific evidence"
+    },
+    {
+      "row_index": 0,
+      "column_index": 2,
+      "column_name": "image_count",
+      "value": "image_count",
+      "source_artifact_path": ".agent-bridge/tasks/dissertation-01-ch3-prep-s1/10-claude-plan.md",
+      "source_location": "section STAGE-1 DELIVERABLES ONLY / TAB-3.1 SOURCE + CELL-LEVEL PROVENANCE",
+      "authority_status": "accepted task schema; not scientific evidence"
+    },
+    {
+      "row_index": 0,
+      "column_index": 3,
+      "column_name": "count_scope",
+      "value": "count_scope",
+      "source_artifact_path": ".agent-bridge/tasks/dissertation-01-ch3-prep-s1/10-claude-plan.md",
+      "source_location": "section STAGE-1 DELIVERABLES ONLY / TAB-3.1 SOURCE + CELL-LEVEL PROVENANCE",
+      "authority_status": "accepted task schema; not scientific evidence"
+    },
+    {
+      "row_index": 0,
+      "column_index": 4,
+      "column_name": "nesting_or_boundary",
+      "value": "nesting_or_boundary",
+      "source_artifact_path": ".agent-bridge/tasks/dissertation-01-ch3-prep-s1/10-claude-plan.md",
+      "source_location": "section STAGE-1 DELIVERABLES ONLY / TAB-3.1 SOURCE + CELL-LEVEL PROVENANCE",
+      "authority_status": "accepted task schema; not scientific evidence"
+    },
+    {
+      "row_index": 1,
+      "column_index": 0,
+      "column_name": "region_or_scale",
+      "value": "Development partition",
+      "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+      "source_location": "$.dev",
+      "authority_status": "canonical tracked deterministic protocol-build evidence"
+    },
+    {
+      "row_index": 1,
+      "column_index": 1,
+      "column_name": "question_count",
+      "value": "10004",
+      "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+      "source_location": "$.dev.n_raw_questions",
+      "authority_status": "canonical tracked deterministic protocol-build evidence",
+      "numeric_token_provenance": [
+        {
+          "token": "10004",
+          "canonical_value": 10004,
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.dev.n_raw_questions"
+        }
+      ]
+    },
+    {
+      "row_index": 1,
+      "column_index": 2,
+      "column_name": "image_count",
+      "value": "777",
+      "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+      "source_location": "$.dev.n_images",
+      "authority_status": "canonical tracked deterministic protocol-build evidence",
+      "numeric_token_provenance": [
+        {
+          "token": "777",
+          "canonical_value": 777,
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.dev.n_images"
+        }
+      ]
+    },
+    {
+      "row_index": 1,
+      "column_index": 3,
+      "column_name": "count_scope",
+      "value": "Raw questions and complete-partition images",
+      "source_artifact_path": "docs/experiments/v2_00_protocol.md",
+      "source_location": "lines 31-37",
+      "authority_status": "current protocol experiment report"
+    },
+    {
+      "row_index": 1,
+      "column_index": 4,
+      "column_name": "nesting_or_boundary",
+      "value": "Image-disjoint from training pool",
+      "source_artifact_path": "docs/experiments/v2_00_protocol.md",
+      "source_location": "lines 31-37",
+      "authority_status": "current protocol experiment report"
+    },
+    {
+      "row_index": 2,
+      "column_index": 0,
+      "column_name": "region_or_scale",
+      "value": "Development manifest",
+      "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+      "source_location": "$.manifests.dev",
+      "authority_status": "canonical tracked deterministic protocol-build evidence"
+    },
+    {
+      "row_index": 2,
+      "column_index": 1,
+      "column_name": "question_count",
+      "value": "7714",
+      "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+      "source_location": "$.dev.n_invocab_questions",
+      "authority_status": "canonical tracked deterministic protocol-build evidence",
+      "numeric_token_provenance": [
+        {
+          "token": "7714",
+          "canonical_value": 7714,
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.dev.n_invocab_questions"
+        }
+      ]
+    },
+    {
+      "row_index": 2,
+      "column_index": 2,
+      "column_name": "image_count",
+      "value": "768",
+      "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+      "source_location": "$.manifests.dev.n_unique_images",
+      "authority_status": "canonical tracked deterministic protocol-build evidence",
+      "numeric_token_provenance": [
+        {
+          "token": "768",
+          "canonical_value": 768,
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.manifests.dev.n_unique_images"
+        }
+      ]
+    },
+    {
+      "row_index": 2,
+      "column_index": 3,
+      "column_name": "count_scope",
+      "value": "Top-100 in-vocabulary questions and represented images",
+      "source_artifact_path": "docs/experiments/v2_00_protocol.md",
+      "source_location": "lines 38-47",
+      "authority_status": "current protocol experiment report",
+      "numeric_token_provenance": [
+        {
+          "token": "100",
+          "canonical_value": 100,
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.vocabulary.top_k"
+        }
+      ]
+    },
+    {
+      "row_index": 2,
+      "column_index": 4,
+      "column_name": "nesting_or_boundary",
+      "value": "Subset of the development partition",
+      "source_artifact_path": "docs/experiments/v2_00_protocol.md",
+      "source_location": "lines 44-47",
+      "authority_status": "current protocol experiment report"
+    },
+    {
+      "row_index": 3,
+      "column_index": 0,
+      "column_name": "region_or_scale",
+      "value": "Training pool",
+      "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+      "source_location": "$.pool",
+      "authority_status": "canonical tracked deterministic protocol-build evidence"
+    },
+    {
+      "row_index": 3,
+      "column_index": 1,
+      "column_name": "question_count",
+      "value": "724074",
+      "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+      "source_location": "$.pool.n_eligible_questions",
+      "authority_status": "canonical tracked deterministic protocol-build evidence",
+      "numeric_token_provenance": [
+        {
+          "token": "724074",
+          "canonical_value": 724074,
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.pool.n_eligible_questions"
+        }
+      ]
+    },
+    {
+      "row_index": 3,
+      "column_index": 2,
+      "column_name": "image_count",
+      "value": "71363",
+      "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+      "source_location": "$.pool.n_images",
+      "authority_status": "canonical tracked deterministic protocol-build evidence",
+      "numeric_token_provenance": [
+        {
+          "token": "71363",
+          "canonical_value": 71363,
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.pool.n_images"
+        }
+      ]
+    },
+    {
+      "row_index": 3,
+      "column_index": 3,
+      "column_name": "count_scope",
+      "value": "Eligible top-100 questions and remaining partition images",
+      "source_artifact_path": "docs/experiments/v2_00_protocol.md",
+      "source_location": "lines 35 and 48-50",
+      "authority_status": "current protocol experiment report",
+      "numeric_token_provenance": [
+        {
+          "token": "100",
+          "canonical_value": 100,
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.vocabulary.top_k"
+        }
+      ]
+    },
+    {
+      "row_index": 3,
+      "column_index": 4,
+      "column_name": "nesting_or_boundary",
+      "value": "Source pool for all training scales",
+      "source_artifact_path": "docs/experiments/v2_00_protocol.md",
+      "source_location": "lines 48-56",
+      "authority_status": "current protocol experiment report"
+    },
+    {
+      "row_index": 4,
+      "column_index": 0,
+      "column_name": "region_or_scale",
+      "value": "Train 40k",
+      "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+      "source_location": "$.manifests.train_40k",
+      "authority_status": "canonical tracked deterministic protocol-build evidence",
+      "numeric_token_provenance": [
+        {
+          "token": "40",
+          "canonical_value": 40000,
+          "display_transform": "k denotes thousands",
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.manifests.train_40k.n_questions"
+        }
+      ]
+    },
+    {
+      "row_index": 4,
+      "column_index": 1,
+      "column_name": "question_count",
+      "value": "40000",
+      "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+      "source_location": "$.manifests.train_40k.n_questions",
+      "authority_status": "canonical tracked deterministic protocol-build evidence",
+      "numeric_token_provenance": [
+        {
+          "token": "40000",
+          "canonical_value": 40000,
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.manifests.train_40k.n_questions"
+        }
+      ]
+    },
+    {
+      "row_index": 4,
+      "column_index": 2,
+      "column_name": "image_count",
+      "value": "27622",
+      "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+      "source_location": "$.manifests.train_40k.n_unique_images",
+      "authority_status": "canonical tracked deterministic protocol-build evidence",
+      "numeric_token_provenance": [
+        {
+          "token": "27622",
+          "canonical_value": 27622,
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.manifests.train_40k.n_unique_images"
+        }
+      ]
+    },
+    {
+      "row_index": 4,
+      "column_index": 3,
+      "column_name": "count_scope",
+      "value": "Selected questions and represented images",
+      "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+      "source_location": "$.manifests.train_40k",
+      "authority_status": "canonical tracked deterministic protocol-build evidence"
+    },
+    {
+      "row_index": 4,
+      "column_index": 4,
+      "column_name": "nesting_or_boundary",
+      "value": "Row-prefix of Train 100k and Train 250k",
+      "source_artifact_path": "artifacts/v2_00_protocol/protocol_report.json",
+      "source_location": "$.checks[name='row-for-row prefix equality: train_100k[:40000] == train_40k'] and $.checks[name='row-for-row prefix equality: train_250k[:100000] == train_100k']",
+      "authority_status": "canonical tracked independent-verifier evidence; PASS",
+      "numeric_token_provenance": [
+        {
+          "token": "100",
+          "canonical_value": 100000,
+          "display_transform": "k denotes thousands",
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.manifests.train_100k.n_questions"
+        },
+        {
+          "token": "250",
+          "canonical_value": 250000,
+          "display_transform": "k denotes thousands",
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.manifests.train_250k.n_questions"
+        }
+      ]
+    },
+    {
+      "row_index": 5,
+      "column_index": 0,
+      "column_name": "region_or_scale",
+      "value": "Train 100k",
+      "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+      "source_location": "$.manifests.train_100k",
+      "authority_status": "canonical tracked deterministic protocol-build evidence",
+      "numeric_token_provenance": [
+        {
+          "token": "100",
+          "canonical_value": 100000,
+          "display_transform": "k denotes thousands",
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.manifests.train_100k.n_questions"
+        }
+      ]
+    },
+    {
+      "row_index": 5,
+      "column_index": 1,
+      "column_name": "question_count",
+      "value": "100000",
+      "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+      "source_location": "$.manifests.train_100k.n_questions",
+      "authority_status": "canonical tracked deterministic protocol-build evidence",
+      "numeric_token_provenance": [
+        {
+          "token": "100000",
+          "canonical_value": 100000,
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.manifests.train_100k.n_questions"
+        }
+      ]
+    },
+    {
+      "row_index": 5,
+      "column_index": 2,
+      "column_name": "image_count",
+      "value": "46158",
+      "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+      "source_location": "$.manifests.train_100k.n_unique_images",
+      "authority_status": "canonical tracked deterministic protocol-build evidence",
+      "numeric_token_provenance": [
+        {
+          "token": "46158",
+          "canonical_value": 46158,
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.manifests.train_100k.n_unique_images"
+        }
+      ]
+    },
+    {
+      "row_index": 5,
+      "column_index": 3,
+      "column_name": "count_scope",
+      "value": "Selected questions and represented images",
+      "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+      "source_location": "$.manifests.train_100k",
+      "authority_status": "canonical tracked deterministic protocol-build evidence"
+    },
+    {
+      "row_index": 5,
+      "column_index": 4,
+      "column_name": "nesting_or_boundary",
+      "value": "Row-prefix of Train 250k",
+      "source_artifact_path": "artifacts/v2_00_protocol/protocol_report.json",
+      "source_location": "$.checks[name='row-for-row prefix equality: train_250k[:100000] == train_100k']",
+      "authority_status": "canonical tracked independent-verifier evidence; PASS",
+      "numeric_token_provenance": [
+        {
+          "token": "250",
+          "canonical_value": 250000,
+          "display_transform": "k denotes thousands",
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.manifests.train_250k.n_questions"
+        }
+      ]
+    },
+    {
+      "row_index": 6,
+      "column_index": 0,
+      "column_name": "region_or_scale",
+      "value": "Train 250k",
+      "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+      "source_location": "$.manifests.train_250k",
+      "authority_status": "canonical tracked deterministic protocol-build evidence",
+      "numeric_token_provenance": [
+        {
+          "token": "250",
+          "canonical_value": 250000,
+          "display_transform": "k denotes thousands",
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.manifests.train_250k.n_questions"
+        }
+      ]
+    },
+    {
+      "row_index": 6,
+      "column_index": 1,
+      "column_name": "question_count",
+      "value": "250000",
+      "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+      "source_location": "$.manifests.train_250k.n_questions",
+      "authority_status": "canonical tracked deterministic protocol-build evidence",
+      "numeric_token_provenance": [
+        {
+          "token": "250000",
+          "canonical_value": 250000,
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.manifests.train_250k.n_questions"
+        }
+      ]
+    },
+    {
+      "row_index": 6,
+      "column_index": 2,
+      "column_name": "image_count",
+      "value": "61859",
+      "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+      "source_location": "$.manifests.train_250k.n_unique_images",
+      "authority_status": "canonical tracked deterministic protocol-build evidence",
+      "numeric_token_provenance": [
+        {
+          "token": "61859",
+          "canonical_value": 61859,
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.manifests.train_250k.n_unique_images"
+        }
+      ]
+    },
+    {
+      "row_index": 6,
+      "column_index": 3,
+      "column_name": "count_scope",
+      "value": "Selected questions and represented images",
+      "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+      "source_location": "$.manifests.train_250k",
+      "authority_status": "canonical tracked deterministic protocol-build evidence"
+    },
+    {
+      "row_index": 6,
+      "column_index": 4,
+      "column_name": "nesting_or_boundary",
+      "value": "Largest nested training prefix",
+      "source_artifact_path": "docs/experiments/v2_00_protocol.md",
+      "source_location": "lines 48-56",
+      "authority_status": "current protocol experiment report"
+    },
+    {
+      "row_index": 7,
+      "column_index": 0,
+      "column_name": "region_or_scale",
+      "value": "Clean test",
+      "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+      "source_location": "$.manifests.test_clean",
+      "authority_status": "canonical tracked structural protocol evidence"
+    },
+    {
+      "row_index": 7,
+      "column_index": 1,
+      "column_name": "question_count",
+      "value": "8013",
+      "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+      "source_location": "$.manifests.test_clean.n_questions",
+      "authority_status": "canonical tracked structural protocol evidence",
+      "numeric_token_provenance": [
+        {
+          "token": "8013",
+          "canonical_value": 8013,
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.manifests.test_clean.n_questions"
+        }
+      ]
+    },
+    {
+      "row_index": 7,
+      "column_index": 2,
+      "column_name": "image_count",
+      "value": "972",
+      "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+      "source_location": "$.manifests.test_clean.n_unique_images",
+      "authority_status": "canonical tracked structural protocol evidence",
+      "numeric_token_provenance": [
+        {
+          "token": "972",
+          "canonical_value": 972,
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.manifests.test_clean.n_unique_images"
+        }
+      ]
+    },
+    {
+      "row_index": 7,
+      "column_index": 3,
+      "column_name": "count_scope",
+      "value": "Structural counts only; targets embargoed",
+      "source_artifact_path": "artifacts/v2_00_protocol/protocol_report.json",
+      "source_location": "$.embargo",
+      "authority_status": "canonical tracked independent-verifier evidence; structural-only boundary"
+    },
+    {
+      "row_index": 7,
+      "column_index": 4,
+      "column_name": "nesting_or_boundary",
+      "value": "Image-disjoint from training and development",
+      "source_artifact_path": "artifacts/v2_00_protocol/protocol_report.json",
+      "source_location": "$.checks entries for train/dev/test imageId overlap",
+      "authority_status": "canonical tracked independent-verifier evidence; PASS"
+    }
+  ],
+  "distinctions": [
+    "777 is the complete development partition image count; 768 is the in-vocabulary development manifest's represented-image count.",
+    "71,363 is the count of all remaining training-partition images; it is not relabelled as the number represented among eligible rows.",
+    "Clean-test values are structural counts only."
+  ],
+  "omitted_unresolved_cell": {
+    "proposed_meaning": "unique images represented among all 724,074 eligible training-pool questions",
+    "status": "OMITTED",
+    "reason": "No authorised non-data source supplies that distinct count; the 71,363 partition-image count is not substituted.",
+    "pending_source_verification": "PENDING SOURCE VERIFICATION if this optional statistic is later requested."
+  },
+  "no_data_access": true
+}

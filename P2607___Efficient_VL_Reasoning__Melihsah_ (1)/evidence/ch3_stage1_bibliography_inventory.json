@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "task_id": "dissertation-01-ch3-prep-s1",
+  "stage": 1,
+  "status": "INVENTORY_ONLY",
+  "generated_utc": "2026-08-24T16:35:42Z",
+  "source_bibliography": {
+    "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/references/references.bib",
+    "sha256": "ebff6b25ef20b0672c154e56e678356bc8245b6cbf5d85aff63371968b6d2705",
+    "entry_count": 72
+  },
+  "bibliography_modified": false,
+  "citation_classes": [
+    {
+      "class_id": "gqa",
+      "status": "RESOLVED",
+      "required_for": [
+        "3.1",
+        "3.2",
+        "3.3"
+      ],
+      "keys": [
+        {
+          "key": "hudson2019gqa",
+          "entry_type": "inproceedings",
+          "authors": "Hudson, Drew A. and Manning, Christopher D.",
+          "title": "GQA: A New Dataset for Real-World Visual Reasoning and Compositional Question Answering",
+          "year": 2019,
+          "source_location": "references/references.bib:523-530",
+          "fit": "Foundational GQA dataset citation."
+        }
+      ]
+    },
+    {
+      "class_id": "vqa_origins",
+      "status": "RESOLVED",
+      "required_for": [
+        "3.1",
+        "3.2"
+      ],
+      "keys": [
+        {
+          "key": "antol2015vqa",
+          "entry_type": "inproceedings",
+          "authors": "Antol, Stanislaw and others",
+          "title": "VQA: Visual Question Answering",
+          "year": 2015,
+          "source_location": "references/references.bib:105-110",
+          "fit": "Original VQA citation.",
+          "verification_note": "Author list is abbreviated in the existing entry and requires completion before submission."
+        }
+      ]
+    },
+    {
+      "class_id": "vqa_v2",
+      "status": "GAP_ABSENT_EXISTING_KEY",
+      "required_for": [
+        "3.2"
+      ],
+      "keys": [],
+      "evidence_of_absence": "No Goyal key, Making the V in VQA Matter title, or explicit VQA-v2 record among 72 entries.",
+      "stage1_action": "Do not invent or add an entry."
+    },
+    {
+      "class_id": "clip_foundation",
+      "status": "GAP_ABSENT_EXISTING_KEY",
+      "required_for": [
+        "3.1",
+        "3.2"
+      ],
+      "keys": [],
+      "evidence_of_absence": "No Radford key or Learning Transferable Visual Models From Natural Language Supervision record among 72 entries.",
+      "non_substitutes": [
+        "song2022tapc",
+        "shen2022clipvil",
+        "deuser2022less"
+      ],
+      "stage1_action": "Do not substitute a downstream application and do not invent or add an entry."
+    },
+    {
+      "class_id": "frozen_representation_or_model_context",
+      "status": "RESOLVED_WITH_SCOPE_NOTES",
+      "required_for": [
+        "3.1"
+      ],
+      "keys": [
+        {
+          "key": "bourigault2025frevl",
+          "entry_type": "article",
+          "authors": "Bourigault, Edouard and others",
+          "title": "FrEVL: Leveraging Frozen Pretrained Embeddings for Efficient Vision-Language Understanding",
+          "year": 2025,
+          "source_location": "references/references.bib:9-16",
+          "fit": "Direct frozen-representation and efficiency context.",
+          "scope_note": "arXiv-only entry; venue and full authors require later verification."
+        },
+        {
+          "key": "tsimpoukelli2021frozen",
+          "entry_type": "inproceedings",
+          "authors": "Tsimpoukelli, Maria and others",
+          "title": "Multimodal Few-Shot Learning with Frozen Language Models",
+          "year": 2021,
+          "source_location": "references/references.bib:213-220",
+          "fit": "Direct frozen-language-model multimodal context."
+        },
+        {
+          "key": "li2023blip2",
+          "entry_type": "inproceedings",
+          "authors": "Li, Junnan and others",
+          "title": "BLIP-2: Bootstrapping Language-Image Pre-training with Frozen Image Encoders and Large Language Models",
+          "year": 2023,
+          "source_location": "references/references.bib:197-204",
+          "fit": "Frozen image-encoder and language-model VLM context."
+        },
+        {
+          "key": "lin2022evl",
+          "entry_type": "inproceedings",
+          "authors": "Lin, Ziyi and others",
+          "title": "Frozen CLIP Models are Efficient Video Learners",
+          "year": 2022,
+          "source_location": "references/references.bib:235-242",
+          "fit": "Frozen-CLIP context only.",
+          "scope_note": "Video rather than VQA; not a foundational CLIP citation."
+        }
+      ]
+    }
+  ],
+  "structural_audit": {
+    "entry_count": 72,
+    "inproceedings_count": 58,
+    "article_count": 14,
+    "balanced_braces": true,
+    "duplicate_keys": [],
+    "case_normalized_duplicate_keys": [],
+    "duplicate_titles": [],
+    "required_identifying_fields_present": true
+  },
+  "inherited_quality_notes": [
+    "Many author fields use literal 'and others'; the bibliography header requires full-author verification before submission.",
+    "All 14 article entries omit a journal field and may produce inherited BibTeX empty-journal warnings.",
+    "No external bibliographic verification or network lookup is authorized in Stage 1."
+  ],
+  "gaps": [
+    "foundational CLIP citation",
+    "VQA-v2 citation"
+  ],
+  "entries_added": [],
+  "implementation_note": "This inventory maps existing keys only and is not assessed dissertation prose."
+}

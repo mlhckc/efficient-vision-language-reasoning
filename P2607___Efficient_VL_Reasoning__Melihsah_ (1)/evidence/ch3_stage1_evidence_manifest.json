@@ -1,0 +1,525 @@
+{
+  "schema_version": 1,
+  "task_id": "dissertation-01-ch3-prep-s1",
+  "stage": 1,
+  "status": "PREPARATION_ONLY",
+  "generated_utc": "2026-08-24T16:35:42Z",
+  "substantive_assessed_prose_authorized": false,
+  "figure_rendering_authorized": false,
+  "later_stages_authorized": false,
+  "authorized_subsections": [
+    "3.1 Methodological framing and design principles",
+    "3.2 Task definition: closed-set VQA on GQA",
+    "3.3 Data partitioning and nested training scales"
+  ],
+  "authority_order": [
+    "canonical repair / supersession / closure authority",
+    "canonical result records and manifests",
+    "protocol artefacts",
+    "current experiment reports",
+    "context documentation",
+    "historical artefacts for provenance only"
+  ],
+  "sources": [
+    {
+      "path": "CLAUDE.md",
+      "sha256": "25c8bd700435990d0edfa6d487da1780d6c1676d649cc96fe65d880d37311893",
+      "authority_class": "binding repository scope"
+    },
+    {
+      "path": "docs/DISSERTATION_HANDOFF.md",
+      "sha256": "588b6124713b4eae65a0d3f714c9477e16dd9bfda0a6f72386a5935bdb9cbc80",
+      "authority_class": "current dissertation claim-boundary synthesis"
+    },
+    {
+      "path": "docs/PROJECT_OVERVIEW.md",
+      "sha256": "6c92ad151eda61c1b5863e9fc4c96c593e572d0193e5eed24693f1d2deec49cf",
+      "authority_class": "current contextual project narrative"
+    },
+    {
+      "path": "docs/REPRODUCIBILITY.md",
+      "sha256": "246d7f16e2b92fe427949dd3623d1826df56ed3f54bd0de53cb70400e42c0228",
+      "authority_class": "current reproducibility and clean-test disclosure"
+    },
+    {
+      "path": "docs/experiments/v2_00_protocol.md",
+      "sha256": "af91acda8bfaef600b3e5c2bbd0ffaeac1e431a174d8784ed1af01c39fa3d013",
+      "authority_class": "current protocol experiment report"
+    },
+    {
+      "path": "docs/experiments/e8b_core_matrix.md",
+      "sha256": "328e1a1c311daa08fcb182e67652b1d37e81108ee3572bd8297cb26b486b4a93",
+      "authority_class": "experiment report with recorded stale lifecycle text"
+    },
+    {
+      "path": "docs/experiments/e9_compact_vlm.md",
+      "sha256": "6303aede69f12850c6ba8ecaf7f80eb2101f976705f6094cb8d9363d1086ad8c",
+      "authority_class": "current E9 method report"
+    },
+    {
+      "path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+      "sha256": "cfe82a17f0353a9bb6f107f770e59b6b7321ff69ab8d31eda2f49f16d5976e62",
+      "authority_class": "canonical tracked deterministic protocol-build evidence"
+    },
+    {
+      "path": "artifacts/v2_00_protocol/protocol_report.json",
+      "sha256": "21632f2d03aade8930e12a6e9ac9dd6fe2c73c0dc6003ec66933dad20e034dea",
+      "authority_class": "canonical tracked independent-verifier evidence"
+    },
+    {
+      "path": "artifacts/v2_00_protocol/DAY1_COMPLETION.md",
+      "sha256": "99e5149b732144618652763c8352f8dacaaba3e15d44df6a82bccf905de51eb6",
+      "authority_class": "tracked protocol completion summary"
+    },
+    {
+      "path": "results/closure/e7b_evidence_supersession.json",
+      "sha256": "2fb6561b3916b83603631c0feb35d716dc9bbf3e1ed1ef3d4e7286516a0a0c75",
+      "authority_class": "canonical clean-test governance authority"
+    },
+    {
+      "path": "results/closure/pre_f1_status_supersession_20260814.json",
+      "sha256": "8b04d10f8f1df74eefd73ee0b507aa2ca600cd9c3d0675279f0ddb72c8ed57c3",
+      "authority_class": "canonical lifecycle/status authority"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/references/references.bib",
+      "sha256": "ebff6b25ef20b0672c154e56e678356bc8245b6cbf5d85aff63371968b6d2705",
+      "authority_class": "frozen dissertation bibliography copy"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/Dissertation_Template.tex",
+      "sha256": "b041582cfcf55ce1e874304a64f89c848447bd70f79c55f4cd6f310567502d89",
+      "authority_class": "approved dissertation structure"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/technical.tex",
+      "sha256": "6850d7c9fb4eecc28114bb4a8791f699a1872b1f89b5d9b1acf07d025ea411e9",
+      "authority_class": "approved RQ1 chapter-title structure"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/technical2.tex",
+      "sha256": "531e7488f0dfc25df7c4dbf98a974197ff8ab845fb2151a22643012e2ce030a7",
+      "authority_class": "approved RQ2 chapter-title structure"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/slm.tex",
+      "sha256": "044a4e38926bb5e101f1dfd9c98147981a3043fd5a09a20103d5e6ed92a59bcd",
+      "authority_class": "approved RQ3 chapter-title structure"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/efficiency.tex",
+      "sha256": "31cdb2549d527d54a3a325e6617d34081af906f027b58bf8528a7722d700942c",
+      "authority_class": "approved measured-efficiency chapter-title structure"
+    }
+  ],
+  "subsections": [
+    {
+      "id": "3.1",
+      "title": "Methodological framing and design principles",
+      "planned_later_prose_budget_words": 200,
+      "planned_stage1_visual_or_table": [],
+      "supported_facts": [
+        {
+          "fact_id": "framing",
+          "fact": "The methodological question concerns lightweight trainable components over frozen multimodal representations for closed-set VQA, evaluated on measured accuracy and efficiency axes.",
+          "sources": [
+            {
+              "path": "docs/DISSERTATION_HANDOFF.md",
+              "location": "lines 20-28"
+            },
+            {
+              "path": "docs/PROJECT_OVERVIEW.md",
+              "location": "lines 14-25"
+            }
+          ]
+        },
+        {
+          "fact_id": "frozen_lightweight",
+          "fact": "Representations remain frozen and trainable interfaces or heads remain lightweight within the approved scope.",
+          "sources": [
+            {
+              "path": "docs/DISSERTATION_HANDOFF.md",
+              "location": "lines 52-59"
+            },
+            {
+              "path": "CLAUDE.md",
+              "location": "Locked scope, lines 717-766"
+            }
+          ]
+        },
+        {
+          "fact_id": "controls_replication",
+          "fact": "The design uses controlled comparisons, matched or random controls where registered, and multi-seed replication.",
+          "sources": [
+            {
+              "path": "docs/DISSERTATION_HANDOFF.md",
+              "location": "lines 32-47 and 72-73"
+            }
+          ]
+        },
+        {
+          "fact_id": "development_confirmatory_separation",
+          "fact": "Development evidence is separated from confirmatory evaluation; F1 and F2 remain unstarted and unauthorised.",
+          "sources": [
+            {
+              "path": "docs/DISSERTATION_HANDOFF.md",
+              "location": "lines 49-50, 265-266, 478-482"
+            },
+            {
+              "path": "results/closure/pre_f1_status_supersession_20260814.json",
+              "location": "$.f1_f2"
+            }
+          ]
+        },
+        {
+          "fact_id": "chapter_organization",
+          "fact": "RQ-labelled chapters occupy Chapters 4-6 and the measured-efficiency axis occupies Chapter 7 in the approved scaffold.",
+          "sources": [
+            {
+              "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/Dissertation_Template.tex",
+              "location": "lines 170-174"
+            },
+            {
+              "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/technical.tex",
+              "location": "line 1"
+            },
+            {
+              "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/technical2.tex",
+              "location": "line 1"
+            },
+            {
+              "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/slm.tex",
+              "location": "line 1"
+            },
+            {
+              "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/efficiency.tex",
+              "location": "line 1"
+            }
+          ]
+        },
+        {
+          "fact_id": "efficiency_boundary",
+          "fact": "Efficiency language is limited to quantities measured under named protocols, including warm-serial latency and correctly qualified parameter or model-size fields.",
+          "sources": [
+            {
+              "path": "docs/DISSERTATION_HANDOFF.md",
+              "location": "lines 188-219 and 304-308"
+            }
+          ]
+        },
+        {
+          "fact_id": "forbidden_cost_generalization",
+          "fact": "Energy, power, carbon, monetary cost, deployment cost, and universal computational-efficiency claims are unsupported.",
+          "sources": [
+            {
+              "path": "docs/DISSERTATION_HANDOFF.md",
+              "location": "lines 304-308 and 525-526"
+            }
+          ]
+        }
+      ],
+      "required_citation_keys_resolved": [
+        "hudson2019gqa",
+        "antol2015vqa",
+        "bourigault2025frevl",
+        "tsimpoukelli2021frozen",
+        "li2023blip2",
+        "lin2022evl"
+      ],
+      "bibliography_gaps": [
+        "foundational CLIP citation absent from references/references.bib"
+      ],
+      "uncertainty": [
+        "Model-size wording must later identify the exact canonical field and must not substitute parameter count for measured latency."
+      ],
+      "pending_source_verification": [
+        "PENDING SOURCE VERIFICATION — complete formal wording of RQ1, RQ2 and RQ3 beyond the approved chapter-title labels."
+      ]
+    },
+    {
+      "id": "3.2",
+      "title": "Task definition: closed-set VQA on GQA",
+      "planned_later_prose_budget_words": 250,
+      "planned_stage1_visual_or_table": [],
+      "supported_facts": [
+        {
+          "fact_id": "primary_task",
+          "fact": "The primary task is discriminative closed-set VQA classification: image and question inputs map to one answer in a fixed vocabulary.",
+          "sources": [
+            {
+              "path": "CLAUDE.md",
+              "location": "lines 717-724"
+            },
+            {
+              "path": "docs/PROJECT_OVERVIEW.md",
+              "location": "lines 16-20"
+            }
+          ]
+        },
+        {
+          "fact_id": "vocabulary_construction",
+          "fact": "The V2 top-100 vocabulary is computed from training-pool questions, excluding development images from vocabulary construction.",
+          "sources": [
+            {
+              "path": "docs/experiments/v2_00_protocol.md",
+              "location": "lines 38-47"
+            },
+            {
+              "path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+              "location": "$.vocabulary.top_k"
+            }
+          ]
+        },
+        {
+          "fact_id": "e8b_r2",
+          "fact": "E8B R2 is a narrow evaluation/readout exception constrained to the closed answer vocabulary by a prefix trie.",
+          "sources": [
+            {
+              "path": "CLAUDE.md",
+              "location": "lines 718-724"
+            }
+          ]
+        },
+        {
+          "fact_id": "e8b_r3",
+          "fact": "E8B R3 is a narrow free greedy readout exception bounded by a fixed maximum token count.",
+          "sources": [
+            {
+              "path": "CLAUDE.md",
+              "location": "lines 718-724"
+            }
+          ]
+        },
+        {
+          "fact_id": "e9",
+          "fact": "E9 uses frozen compact VLMs for evaluation-only greedy readout; its open and constrained modes remain contextual variants and do not redefine the primary task.",
+          "sources": [
+            {
+              "path": "docs/experiments/e9_compact_vlm.md",
+              "location": "lines 29-45 and 60-67"
+            },
+            {
+              "path": "CLAUDE.md",
+              "location": "lines 718-724"
+            }
+          ]
+        },
+        {
+          "fact_id": "generation_exclusions",
+          "fact": "Sampling, temperature search, prompt search, and long-form generation remain excluded.",
+          "sources": [
+            {
+              "path": "CLAUDE.md",
+              "location": "lines 722-724"
+            },
+            {
+              "path": "docs/experiments/e9_compact_vlm.md",
+              "location": "lines 29-32"
+            }
+          ]
+        }
+      ],
+      "required_citation_keys_resolved": [
+        "hudson2019gqa",
+        "antol2015vqa"
+      ],
+      "bibliography_gaps": [
+        "VQA-v2 citation absent from references/references.bib",
+        "foundational CLIP citation absent from references/references.bib"
+      ],
+      "uncertainty": [
+        "E9's constrained top-1000 diagnostic is not methodologically identical to E8B's top-100 classifier."
+      ],
+      "pending_source_verification": []
+    },
+    {
+      "id": "3.3",
+      "title": "Data partitioning and nested training scales",
+      "planned_later_prose_budget_words": 300,
+      "planned_stage1_visual_or_table": [
+        "tables_src/ch3_partition_stats.csv",
+        "figures_src/FIG-3-A.specification.json"
+      ],
+      "supported_facts": [
+        {
+          "fact_id": "development_partition",
+          "fact": "The complete development partition contains 777 images and 10,004 raw questions; 7,714 questions are top-100 in-vocabulary.",
+          "sources": [
+            {
+              "path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+              "location": "$.dev"
+            },
+            {
+              "path": "docs/experiments/v2_00_protocol.md",
+              "location": "lines 31-47"
+            }
+          ]
+        },
+        {
+          "fact_id": "development_manifest_images",
+          "fact": "The in-vocabulary development manifest represents 768 images; nine complete-partition images have no in-vocabulary row.",
+          "sources": [
+            {
+              "path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+              "location": "$.manifests.dev.n_unique_images"
+            },
+            {
+              "path": "docs/experiments/v2_00_protocol.md",
+              "location": "lines 44-47"
+            }
+          ]
+        },
+        {
+          "fact_id": "training_pool",
+          "fact": "The remaining training partition contains 71,363 images and 724,074 eligible top-100 questions.",
+          "sources": [
+            {
+              "path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+              "location": "$.pool.n_images and $.pool.n_eligible_questions"
+            }
+          ]
+        },
+        {
+          "fact_id": "nested_scales",
+          "fact": "The 40,000, 100,000 and 250,000 question manifests represent 27,622, 46,158 and 61,859 images and are strict row-for-row prefixes.",
+          "sources": [
+            {
+              "path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+              "location": "$.manifests.train_40k, $.manifests.train_100k, $.manifests.train_250k"
+            },
+            {
+              "path": "artifacts/v2_00_protocol/protocol_report.json",
+              "location": "$.checks entries named row-for-row prefix equality"
+            },
+            {
+              "path": "docs/experiments/v2_00_protocol.md",
+              "location": "lines 48-56 and 126-131"
+            }
+          ]
+        },
+        {
+          "fact_id": "clean_test_structure",
+          "fact": "The clean test has 8,013 questions on 972 images; these are structural counts only and targets remain embargoed.",
+          "sources": [
+            {
+              "path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+              "location": "$.manifests.test_clean"
+            },
+            {
+              "path": "artifacts/v2_00_protocol/protocol_report.json",
+              "location": "$.embargo"
+            },
+            {
+              "path": "results/closure/pre_f1_status_supersession_20260814.json",
+              "location": "$.f1_f2.clean_test_embargo"
+            }
+          ]
+        },
+        {
+          "fact_id": "image_disjointness",
+          "fact": "Development, training, and clean-test regions are image-disjoint by construction and independent verifier checks.",
+          "sources": [
+            {
+              "path": "docs/experiments/v2_00_protocol.md",
+              "location": "lines 31-37 and 57-63"
+            },
+            {
+              "path": "artifacts/v2_00_protocol/protocol_report.json",
+              "location": "$.checks entries for imageId overlap"
+            }
+          ]
+        },
+        {
+          "fact_id": "verification",
+          "fact": "The independent verifier passed 99 checks with zero failures.",
+          "sources": [
+            {
+              "path": "artifacts/v2_00_protocol/protocol_report.json",
+              "location": "$.status, $.n_checks, $.n_failed, $.failed_checks"
+            }
+          ]
+        },
+        {
+          "fact_id": "idempotence",
+          "fact": "Exactly 13 generated-group files were compared and were byte-identical; volatile build metadata was excluded and manifest-hash JSON identity is recorded separately.",
+          "sources": [
+            {
+              "path": "artifacts/v2_00_protocol/protocol_report.json",
+              "location": "$.idempotence"
+            },
+            {
+              "path": "docs/experiments/v2_00_protocol.md",
+              "location": "lines 200-207"
+            }
+          ]
+        },
+        {
+          "fact_id": "scaling_property",
+          "fact": "Question-level scaling mixes additional images with additional questions on previously represented images; these effects are not separable in this design.",
+          "sources": [
+            {
+              "path": "docs/experiments/v2_00_protocol.md",
+              "location": "lines 124-131"
+            }
+          ]
+        }
+      ],
+      "planned_table": {
+        "id": "TAB-3.1",
+        "path": "tables_src/ch3_partition_stats.csv",
+        "provenance_path": "tables_src/ch3_partition_stats.provenance.json"
+      },
+    "planned_figure": {
+      "id": "FIG-3.A",
+      "path": "figures_src/FIG-3-A.specification.json",
+      "render_authorized": false
+    },
+    "required_citation_keys_resolved": [
+      "hudson2019gqa"
+    ],
+    "bibliography_gaps": [],
+    "uncertainty": [
+        "The 71,363 value is the remaining partition-image count, not a reported count of images represented among the 724,074 eligible rows.",
+        "The verifier is implementation-independent, not specification-independent."
+      ],
+      "pending_source_verification": []
+    }
+  ],
+  "source_discrepancies": [
+    {
+      "path": "docs/experiments/e8b_core_matrix.md",
+      "locations": [
+        "lines 100-104",
+        "lines 261-266"
+      ],
+      "discrepancy": "Stale text says the R1/R2/R3 tables were not produced although populated tables follow.",
+      "resolution_authority": "docs/DISSERTATION_HANDOFF.md:375-379 identifies the text as a stale stub; no E8B performance claim is used in Stage 1.",
+      "stage1_action": "Use binding CLAUDE.md for the non-performance R2/R3 method boundary."
+    }
+  ],
+  "bibliography_gaps": [
+    {
+      "class": "foundational CLIP",
+      "status": "ABSENT_EXISTING_KEY",
+      "action": "Report only; adding an entry is not authorized in Stage 1."
+    },
+    {
+      "class": "VQA-v2",
+      "status": "ABSENT_EXISTING_KEY",
+      "action": "Report only; adding an entry is not authorized in Stage 1."
+    }
+  ],
+  "clean_test_governance": {
+    "stage1_access_or_traversal_under_data": false,
+    "structural_counts_only": true,
+    "embargo_status": "UNCHANGED",
+    "never_accessed_claim_permitted": false,
+    "later_prose_required_wording": "The clean-test contents were never inspected or used for development, model selection, or reporting decisions. Mechanical byte access occurred in two documented governance incidents, on 13 and 14 August 2026.",
+    "authority": "results/closure/pre_f1_status_supersession_20260814.json:$.clean_test_governance"
+  },
+  "pending_source_verification": [
+    "PENDING SOURCE VERIFICATION — complete formal wording of RQ1, RQ2 and RQ3 beyond the approved chapter-title labels."
+  ],
+  "unresolved_genai_gate": "PENDING OFFICIAL VERIFICATION — EEEM004 assessment-specific GenAI permission/disclosure",
+  "implementation_note": "This file is evidence-engineering metadata, not assessed dissertation prose."
+}

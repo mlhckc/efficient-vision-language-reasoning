@@ -1,0 +1,243 @@
+{
+  "schema_version": 1,
+  "task_id": "dissertation-01-ch3-prep-s1",
+  "stage": 1,
+  "figure_id": "FIG-3.A",
+  "title": "Data partition and nested-scale diagram",
+  "status": "SPECIFICATION_ONLY",
+  "generated_utc": "2026-08-24T16:35:42Z",
+  "render_authorized": false,
+  "rendered_asset": null,
+  "scientific_purpose": "Show the pre-model data regions, their image-disjoint boundaries, and the row-prefix nesting of training scales.",
+  "information_represented": [
+    "development complete-image partition and in-vocabulary manifest distinction",
+    "remaining training pool",
+    "strictly nested training-question prefixes",
+    "clean-test structural region and embargo boundary"
+  ],
+  "methodology_not_results_rationale": "The diagram defines the evaluation and sampling protocol used before model fitting; it contains no model outcome or result comparison.",
+  "planned_layout": {
+    "development_region": "Separate left region with complete-partition and in-vocabulary-manifest annotations.",
+    "training_region": "Large central pool containing three nested boxes ordered from the largest outer prefix to the smallest inner prefix.",
+    "clean_test_region": "Separate right region behind an embargo boundary.",
+    "boundary_style": "Explicit no-shared-image boundaries between development, training, and clean test.",
+    "nesting_style": "Subset symbols plus a note that nesting is row-for-row over question records."
+  },
+  "numeric_labels": [
+    {
+      "label_id": "development",
+      "proposed_text": "777 complete-partition images; 10,004 raw questions; 7,714 top-100 in-vocabulary questions; 768 represented images in the in-vocabulary manifest",
+      "values": [
+        {
+          "display_token": "777",
+          "canonical_value": 777,
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.dev.n_images",
+          "authority_status": "canonical tracked deterministic protocol-build evidence"
+        },
+        {
+          "display_token": "10,004",
+          "canonical_value": 10004,
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.dev.n_raw_questions",
+          "authority_status": "canonical tracked deterministic protocol-build evidence"
+        },
+        {
+          "display_token": "7,714",
+          "canonical_value": 7714,
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.dev.n_invocab_questions",
+          "authority_status": "canonical tracked deterministic protocol-build evidence"
+        },
+        {
+          "display_token": "100",
+          "canonical_value": 100,
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.vocabulary.top_k",
+          "authority_status": "canonical tracked deterministic protocol-build evidence"
+        },
+        {
+          "display_token": "768",
+          "canonical_value": 768,
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.manifests.dev.n_unique_images",
+          "authority_status": "canonical tracked deterministic protocol-build evidence"
+        }
+      ]
+    },
+    {
+      "label_id": "training_pool",
+      "proposed_text": "71,363 remaining partition images; 724,074 eligible top-100 questions",
+      "values": [
+        {
+          "display_token": "71,363",
+          "canonical_value": 71363,
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.pool.n_images",
+          "authority_status": "canonical tracked deterministic protocol-build evidence"
+        },
+        {
+          "display_token": "724,074",
+          "canonical_value": 724074,
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.pool.n_eligible_questions",
+          "authority_status": "canonical tracked deterministic protocol-build evidence"
+        },
+        {
+          "display_token": "100",
+          "canonical_value": 100,
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.vocabulary.top_k",
+          "authority_status": "canonical tracked deterministic protocol-build evidence"
+        }
+      ]
+    },
+    {
+      "label_id": "train_small",
+      "proposed_text": "Train 40k: 40,000 questions; 27,622 unique represented images",
+      "values": [
+        {
+          "display_token": "40k",
+          "canonical_value": 40000,
+          "display_transform": "k denotes thousands",
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.manifests.train_40k.n_questions",
+          "authority_status": "canonical tracked deterministic protocol-build evidence"
+        },
+        {
+          "display_token": "40,000",
+          "canonical_value": 40000,
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.manifests.train_40k.n_questions",
+          "authority_status": "canonical tracked deterministic protocol-build evidence"
+        },
+        {
+          "display_token": "27,622",
+          "canonical_value": 27622,
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.manifests.train_40k.n_unique_images",
+          "authority_status": "canonical tracked deterministic protocol-build evidence"
+        }
+      ]
+    },
+    {
+      "label_id": "train_medium",
+      "proposed_text": "Train 100k: 100,000 questions; 46,158 unique represented images",
+      "values": [
+        {
+          "display_token": "100k",
+          "canonical_value": 100000,
+          "display_transform": "k denotes thousands",
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.manifests.train_100k.n_questions",
+          "authority_status": "canonical tracked deterministic protocol-build evidence"
+        },
+        {
+          "display_token": "100,000",
+          "canonical_value": 100000,
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.manifests.train_100k.n_questions",
+          "authority_status": "canonical tracked deterministic protocol-build evidence"
+        },
+        {
+          "display_token": "46,158",
+          "canonical_value": 46158,
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.manifests.train_100k.n_unique_images",
+          "authority_status": "canonical tracked deterministic protocol-build evidence"
+        }
+      ]
+    },
+    {
+      "label_id": "train_large",
+      "proposed_text": "Train 250k: 250,000 questions; 61,859 unique represented images",
+      "values": [
+        {
+          "display_token": "250k",
+          "canonical_value": 250000,
+          "display_transform": "k denotes thousands",
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.manifests.train_250k.n_questions",
+          "authority_status": "canonical tracked deterministic protocol-build evidence"
+        },
+        {
+          "display_token": "250,000",
+          "canonical_value": 250000,
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.manifests.train_250k.n_questions",
+          "authority_status": "canonical tracked deterministic protocol-build evidence"
+        },
+        {
+          "display_token": "61,859",
+          "canonical_value": 61859,
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.manifests.train_250k.n_unique_images",
+          "authority_status": "canonical tracked deterministic protocol-build evidence"
+        }
+      ]
+    },
+    {
+      "label_id": "clean_test",
+      "proposed_text": "8,013 questions; 972 images; STRUCTURAL COUNTS ONLY — TARGETS EMBARGOED",
+      "values": [
+        {
+          "display_token": "8,013",
+          "canonical_value": 8013,
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.manifests.test_clean.n_questions",
+          "authority_status": "canonical tracked structural protocol evidence"
+        },
+        {
+          "display_token": "972",
+          "canonical_value": 972,
+          "source_artifact_path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+          "source_location": "$.manifests.test_clean.n_unique_images",
+          "authority_status": "canonical tracked structural protocol evidence"
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "relation": "Train 40k is a row-for-row prefix of Train 100k",
+      "source_artifact_path": "artifacts/v2_00_protocol/protocol_report.json",
+      "source_location": "$.checks[name='row-for-row prefix equality: train_100k[:40000] == train_40k']",
+      "authority_status": "canonical tracked independent-verifier evidence; PASS"
+    },
+    {
+      "relation": "Train 100k is a row-for-row prefix of Train 250k",
+      "source_artifact_path": "artifacts/v2_00_protocol/protocol_report.json",
+      "source_location": "$.checks[name='row-for-row prefix equality: train_250k[:100000] == train_100k']",
+      "authority_status": "canonical tracked independent-verifier evidence; PASS"
+    },
+    {
+      "relation": "Development and training-pool images are disjoint by complete-image construction",
+      "source_artifact_path": "docs/experiments/v2_00_protocol.md",
+      "source_location": "lines 31-37",
+      "authority_status": "current protocol experiment report"
+    },
+    {
+      "relation": "Clean-test images are disjoint from development and all training scales",
+      "source_artifact_path": "artifacts/v2_00_protocol/protocol_report.json",
+      "source_location": "$.checks entries for dev/train/test imageId overlap",
+      "authority_status": "canonical tracked independent-verifier evidence; PASS"
+    }
+  ],
+  "embargo_boundary": {
+    "proposed_label": "STRUCTURAL COUNTS ONLY — TARGETS EMBARGOED",
+    "current_status": "UNCHANGED",
+    "never_accessed_claim_permitted": false,
+    "source_artifact_path": "results/closure/pre_f1_status_supersession_20260814.json",
+    "source_location": "$.clean_test_governance and $.f1_f2",
+    "authority_status": "canonical lifecycle and governance authority"
+  },
+  "methodological_property": {
+    "text": "Question-level scale increases combine new images with additional questions on already represented images; those effects are not separable in this design.",
+    "source_artifact_path": "docs/experiments/v2_00_protocol.md",
+    "source_location": "lines 124-131",
+    "authority_status": "current protocol experiment report"
+  },
+  "all_proposed_numerical_labels_have_provenance": true,
+  "pending_source_verification": [],
+  "implementation_note": "No figure was rendered or generated in Stage 1."
+}
