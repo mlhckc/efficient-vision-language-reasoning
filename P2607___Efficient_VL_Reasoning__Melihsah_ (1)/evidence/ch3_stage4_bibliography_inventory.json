@@ -1,0 +1,153 @@
+{
+  "schema_version": 1,
+  "task_id": "dissertation-01-ch3-prep-s4",
+  "stage": 4,
+  "status": "INVENTORY_ONLY",
+  "generated_utc": "2026-08-24T20:35:14Z",
+  "source_bibliography": {
+    "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/references/references.bib",
+    "sha256": "ebff6b25ef20b0672c154e56e678356bc8245b6cbf5d85aff63371968b6d2705",
+    "entry_count": 72
+  },
+  "bibliography_modified": false,
+  "citation_classes": [
+    {
+      "class_id": "bootstrap_methodology",
+      "status": "GAP_ABSENT_EXISTING_KEY",
+      "required_for": [
+        "3.9"
+      ],
+      "keys": [],
+      "evidence_of_absence": "No Efron, Tibshirani, resampling, confidence-interval or statistical-bootstrap methodology entry exists among 72 entries.",
+      "non_substitutes": [
+        {
+          "key": "li2023blip2",
+          "source_location": "references/references.bib:197-204",
+          "reason": "The word 'Bootstrapping' describes language-image pre-training, not statistical resampling."
+        }
+      ],
+      "plan_discrepancy": "The handoff expected one apparent candidate. Real-tree inspection shows that the only lexical match is not methodologically relevant.",
+      "stage4_action": "Record the gap; do not invent, add or substitute an entry."
+    },
+    {
+      "class_id": "clustered_or_cluster_robust_inference",
+      "status": "GAP_ABSENT_EXISTING_KEY",
+      "required_for": [
+        "3.9"
+      ],
+      "keys": [],
+      "evidence_of_absence": "No cluster bootstrap, cluster-robust variance, dependence-aware resampling or related inference-method entry exists among 72 entries.",
+      "stage4_action": "Record the new gap; do not invent or add an entry."
+    },
+    {
+      "class_id": "evaluation_and_benchmarking_methodology",
+      "status": "RESOLVED_WITH_SCOPE_NOTES",
+      "required_for": [
+        "3.11"
+      ],
+      "keys": [
+        {
+          "key": "zhao2022vlchecklist",
+          "entry_type": "inproceedings",
+          "title": "VL-CheckList: Evaluating Pre-trained Vision-Language Models with Objects, Attributes and Relations",
+          "year": 2022,
+          "source_location": "references/references.bib:439-446",
+          "fit": "Evaluation-design context for structured vision-language capabilities; not evidence for this project's estimator or efficiency measurements."
+        },
+        {
+          "key": "hsieh2023sugarcrepe",
+          "entry_type": "inproceedings",
+          "title": "SugarCrepe: Fixing Hackable Benchmarks for Vision-Language Compositionality",
+          "year": 2023,
+          "source_location": "references/references.bib:447-454",
+          "fit": "Benchmark-construction and benchmark-failure context; not an efficiency-protocol or bootstrap citation."
+        },
+        {
+          "key": "huang2024conme",
+          "entry_type": "inproceedings",
+          "title": "ConMe: Rethinking Evaluation of Compositional Reasoning for Modern VLMs",
+          "year": 2024,
+          "source_location": "references/references.bib:463-470",
+          "fit": "Evaluation-scope context for compositional reasoning; not evidence that a wrong-image intervention establishes reasoning."
+        },
+        {
+          "key": "udandarao2025crepe",
+          "entry_type": "article",
+          "title": "A Good CREPE Needs More Than Just Sugar: Investigating Biases in Compositional Vision-Language Benchmarks",
+          "year": 2025,
+          "source_location": "references/references.bib:479-486",
+          "fit": "Benchmark-bias and validity context; arXiv-only existing entry and not a statistical-method citation."
+        }
+      ]
+    },
+    {
+      "class_id": "wrong_image_intervention_methodology",
+      "status": "NOT_REQUIRED_FOR_STAGE4_PREPARATION",
+      "required_for": [],
+      "keys": [],
+      "decision": "The intervention construction is project-specific and pinned to canonical internal protocol evidence; Stage 4 does not force an unrelated external citation.",
+      "non_substitutes": [
+        {
+          "key": "hessel2020emap",
+          "reason": "Cross-modal interaction analysis context, not the source of the imageId-level derangement used here."
+        }
+      ]
+    },
+    {
+      "class_id": "clip_foundation",
+      "status": "GAP_ABSENT_EXISTING_KEY",
+      "required_for": [],
+      "keys": [],
+      "carried_forward": true,
+      "evidence_of_absence": "No foundational CLIP entry among 72 entries."
+    },
+    {
+      "class_id": "vqa_v2",
+      "status": "GAP_ABSENT_EXISTING_KEY",
+      "required_for": [],
+      "keys": [],
+      "carried_forward": true,
+      "evidence_of_absence": "No VQA-v2 entry among 72 entries."
+    },
+    {
+      "class_id": "siglip",
+      "status": "GAP_ABSENT_EXISTING_KEY",
+      "required_for": [],
+      "keys": [],
+      "carried_forward": true,
+      "evidence_of_absence": "No SigLIP entry among 72 entries."
+    },
+    {
+      "class_id": "smollm2",
+      "status": "GAP_ABSENT_EXISTING_KEY",
+      "required_for": [],
+      "keys": [],
+      "carried_forward": true,
+      "evidence_of_absence": "No SmolLM2 entry among 72 entries."
+    },
+    {
+      "class_id": "smolvlm",
+      "status": "GAP_ABSENT_EXISTING_KEY",
+      "required_for": [],
+      "keys": [],
+      "carried_forward": true,
+      "evidence_of_absence": "No SmolVLM entry among 72 entries."
+    }
+  ],
+  "inherited_quality_notes": [
+    "Many author fields use literal 'and others'; the bibliography header requires full-author verification before submission.",
+    "All 14 article entries omit a journal field and may produce inherited BibTeX empty-journal warnings.",
+    "No external bibliographic verification or network lookup is authorised in Stage 4."
+  ],
+  "gaps": [
+    "statistical bootstrap methodology citation",
+    "clustered or cluster-robust inference citation",
+    "foundational CLIP citation",
+    "VQA-v2 citation",
+    "SigLIP citation",
+    "SmolLM2 citation",
+    "SmolVLM citation"
+  ],
+  "entries_added": [],
+  "implementation_note": "This inventory maps existing keys and exact gaps only and is not assessed dissertation prose."
+}

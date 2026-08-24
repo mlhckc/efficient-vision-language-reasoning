@@ -1,0 +1,644 @@
+{
+  "schema_version": 1,
+  "task_id": "dissertation-01-ch3-prep-s4",
+  "stage": 4,
+  "status": "PREPARATION_ONLY",
+  "generated_utc": "2026-08-24T20:35:14Z",
+  "substantive_assessed_prose_authorized": false,
+  "result_recomputation_authorized": false,
+  "bootstrap_execution_authorized": false,
+  "later_stages_authorized": false,
+  "authorized_subsections": [
+    "3.9 Statistical methodology",
+    "3.10 Visual-reliance intervention design",
+    "3.11 Efficiency measurement protocol"
+  ],
+  "authority_order": [
+    "canonical repair / supersession / closure authority",
+    "canonical result records and manifests",
+    "protocol artefacts",
+    "current experiment reports",
+    "implementation or source files where needed",
+    "context documentation",
+    "historical artefacts for provenance only"
+  ],
+  "governance_records_checked": [
+    {
+      "path": "results/closure/pre_f1_evidence_metadata_repair_20260814.json",
+      "sha256": "e35db6dddca6f587791527f3a9e9846905486413c851d1f896129a3f6a015f42",
+      "scope": "current E7a canonical-locator repair and preservation of the additive-sum withdrawal"
+    },
+    {
+      "path": "results/closure/e7b_evidence_supersession.json",
+      "sha256": "2fb6561b3916b83603631c0feb35d716dc9bbf3e1ed1ef3d4e7286516a0a0c75",
+      "scope": "controlling named E7b field validity and cross-node bridge boundary"
+    },
+    {
+      "path": "results/ve0/supersession_map.json",
+      "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c",
+      "scope": "current unnamed artefact-group validity"
+    },
+    {
+      "path": "results/closure/pre_f1_status_supersession_20260814.json",
+      "sha256": "8b04d10f8f1df74eefd73ee0b507aa2ca600cd9c3d0675279f0ddb72c8ed57c3",
+      "scope": "current lifecycle and status only"
+    },
+    {
+      "path": "results/closure/F_multiplicity_status.json",
+      "sha256": "7ab15242d892e02d6c397e96a4b002fe839b311100c61093cc214c2152d2cc41",
+      "scope": "canonical multiplicity disclosure"
+    }
+  ],
+  "sources": [
+    {
+      "path": "results/closure/A_evidence_registry.json",
+      "sha256": "b8b47e024c49a599a425894f34c24b4375958998401a311605694027257de122",
+      "authority_class": "canonical family-level evidence and uncertainty registry"
+    },
+    {
+      "path": "results/closure/C_reconstructed_evidence_manifest.json",
+      "sha256": "a7c72050f4032d6f0c1c24e9cf5e334db4e1698c31c83c4907513a290e21dff5",
+      "authority_class": "canonical reconstruction-gate and stopped-family record"
+    },
+    {
+      "path": "results/closure/reconstructed_statistics.json",
+      "sha256": "88edeaf6ec787d754c8b0e006e00556895ea69dd8cbd215f391265c9e9643097",
+      "authority_class": "canonical uncertainty and seed-variability semantics"
+    },
+    {
+      "path": "results/closure/efficiency_closure_table.json",
+      "sha256": "be1781efeece841cc75df126fab43c9e9946437957c1ea6401ee1f86c8b47d5e",
+      "authority_class": "canonical E7a component/additive validity carrier"
+    },
+    {
+      "path": "results/experiments/v2_05_types/addendum_clustered.json",
+      "sha256": "86c7969ec36121ca387cd98da3319e1cd1a6ff9ba021241c85f057bfca11f312",
+      "authority_class": "canonical v2_05c clustered-method record"
+    },
+    {
+      "path": "docs/experiments/v2_05_types.md",
+      "sha256": "8794267888c33c6b939f0c76a170233637c0972b508f6742aa0b9c2704891ab9",
+      "authority_class": "current v2_05b to v2_05c supersession report"
+    },
+    {
+      "path": "results/experiments/v3_02a_refs/step_statistics.json",
+      "sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3",
+      "authority_class": "canonical V3 pooled-definition and clustered-bootstrap record"
+    },
+    {
+      "path": "docs/experiments/v3_02a_refs.md",
+      "sha256": "48febee3d1effc770435c30b598fdcd4b507424abda98aa1426f596a0b890c65",
+      "authority_class": "current V3 definition and supersession report"
+    },
+    {
+      "path": "results/experiments/v3_03_scaling/results.json",
+      "sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "authority_class": "canonical later-V3 bootstrap configuration record"
+    },
+    {
+      "path": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
+      "sha256": "9774bd5bf4ead561635327645397314a9cc4dd7262dccc20f9c184f73ef31562",
+      "authority_class": "canonical E8A clustered-analysis record"
+    },
+    {
+      "path": "docs/experiments/e8a_core_135m.md",
+      "sha256": "7d6c0626e4e1e3aa56978f15e180357f398f3c0481701bf0e667fa6f8d6f3e65",
+      "authority_class": "current E8A uncertainty and directional-rule report"
+    },
+    {
+      "path": "results/experiments/e8b_readout_generation/e8b_core_analysis_20260809.json",
+      "sha256": "fca554aa1b78127f03796988f25c945b69f3b8cd104c90b272cc0723b00627d7",
+      "authority_class": "canonical E8B paired-bootstrap record"
+    },
+    {
+      "path": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+      "sha256": "0ce63d09454b13b157dd2f58ebefad315c2903f9c1f097497652d7085d466138",
+      "authority_class": "canonical final E8B statistical carrier"
+    },
+    {
+      "path": "docs/experiments/e8b_core_matrix.md",
+      "sha256": "328e1a1c311daa08fcb182e67652b1d37e81108ee3572bd8297cb26b486b4a93",
+      "authority_class": "current E8B statistical-method report"
+    },
+    {
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
+      "sha256": "37ffdcd09aa2bcd306ca9b54229a1d0d17ff203b6b0900e09e5f876ad1ed0748",
+      "authority_class": "canonical E10 clustered-analysis record"
+    },
+    {
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_execution_correction_20260813.json",
+      "sha256": "5d7d281fecb4505332b7d773e2ccc5c2ea1bcaabd9e6add22879b62ce3674b4d",
+      "authority_class": "canonical no-equivalence wording correction"
+    },
+    {
+      "path": "docs/experiments/e10_core_matrix.md",
+      "sha256": "11491ff36bd14417f9991787a008285590bedfb80dc8f84e617da87b9b4f0ddd",
+      "authority_class": "current E10 statistical-method report"
+    },
+    {
+      "path": "results/experiments/v2_06_reliance/results.json",
+      "sha256": "45763fe56be11d42421a968922ac3212b5d1a21af77ccd87706ed44549b6a66b",
+      "authority_class": "historical v2_06 intervention record read through its current supersession note"
+    },
+    {
+      "path": "docs/experiments/v2_06_reliance.md",
+      "sha256": "6e5b4ee448749c7eb1b4e5852b94a02d8fdbe0e5f8fc5de717a5dca5b3d7a932",
+      "authority_class": "current intervention self-pair and supersession report"
+    },
+    {
+      "path": "results/experiments/e9_compact_vlm/frozen_protocol.json",
+      "sha256": "e38c0b9e6702cebd97f08487d70177ac49064df5db3e2e1c0d38601415769b02",
+      "authority_class": "canonical E9 matched image-partner intervention definition"
+    },
+    {
+      "path": "results/experiments/e9_compact_vlm/e9_efficiency.json",
+      "sha256": "929c45ae2544a7a70416c5ebb1fea0c2871c943e5d59e24b67aae60676922d0b",
+      "authority_class": "canonical E9 serial-method and bridge-control record"
+    },
+    {
+      "path": "docs/experiments/e9_compact_vlm.md",
+      "sha256": "6303aede69f12850c6ba8ecaf7f80eb2101f976705f6094cb8d9363d1086ad8c",
+      "authority_class": "current E9 intervention and contextual-efficiency report"
+    },
+    {
+      "path": "artifacts/results_export/e7a_efficiency/results.json",
+      "sha256": "368ba5c2a149953193cf237bdf77023c17b244540ef7b9bfac55cb5a7fdc1a85",
+      "authority_class": "repaired canonical E7a component-evidence locator"
+    },
+    {
+      "path": "docs/experiments/e7a_efficiency.md",
+      "sha256": "4d554080d749f6f2ec2b88f09910d9591cdc2dc313c0c91aa63e7001c2d5f5f6",
+      "authority_class": "current E7a component/additive scope report"
+    },
+    {
+      "path": "results/experiments/e7b_serial_efficiency/e7b_results.json",
+      "sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
+      "authority_class": "canonical E7b serial protocol summary, subject to the field-validity overlay"
+    },
+    {
+      "path": "docs/experiments/e7b_serial_efficiency.md",
+      "sha256": "453fa6a0c85cd5ab45871ae0e558a28a84b53480c0f64d6e88cc266570f7c46f",
+      "authority_class": "current E7b serial-method report, subject to the field-validity overlay"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/references/references.bib",
+      "sha256": "ebff6b25ef20b0672c154e56e678356bc8245b6cbf5d85aff63371968b6d2705",
+      "authority_class": "frozen dissertation bibliography copy"
+    }
+  ],
+  "subsections": [
+    {
+      "id": "3.9",
+      "title": "Statistical methodology",
+      "planned_later_prose_budget_words": 300,
+      "bootstrap_configuration_by_family": [
+        {
+          "family": "v2_05c",
+          "status": "CONFIRMED",
+          "configuration": "Image-clustered percentile bootstrap; 2,000 draws from NumPy default_rng(0); clusters are each slice's represented development imageIds; 2.5th and 97.5th percentiles; multi-seed rows combine seeds by the within-draw mean.",
+          "sources": [
+            {
+              "path": "results/experiments/v2_05_types/addendum_clustered.json",
+              "location": "$.v2_05c_clustered_correction.method"
+            }
+          ]
+        },
+        {
+          "family": "V3",
+          "status": "CONFIRMED",
+          "configuration": "Image-clustered paired bootstrap over represented development imageIds; 2,000 draws at RNG seed 0; paired quantities remain paired inside a draw.",
+          "sources": [
+            {
+              "path": "results/experiments/v3_02a_refs/step_statistics.json",
+              "location": "$.v3_02a_step_statistics.bootstrap and $.v3_02a_step_statistics.reasoner_minus_fusion_deficit_paired"
+            },
+            {
+              "path": "results/experiments/v3_03_scaling/results.json",
+              "location": "$.v3_03_scaling.bootstrap.*.reasoner_minus_fusion_deficit_paired"
+            }
+          ]
+        },
+        {
+          "family": "E8A",
+          "status": "CONFIRMED",
+          "configuration": "Image-clustered paired percentile bootstrap; 2,000 draws from a fresh default_rng(0); represented development imageId clusters; seeds combined by the within-draw mean; 2.5th and 97.5th percentiles.",
+          "sources": [
+            {
+              "path": "results/experiments/e8a_question_encoder/core_analysis_g21.json",
+              "location": "$.e8a_core_analysis_g21.analyses.*.contrasts_normalized.*.{n_draws,rng_seed,n_clusters}"
+            },
+            {
+              "path": "docs/experiments/e8a_core_135m.md",
+              "location": "Uncertainty method, lines 57-62"
+            }
+          ]
+        },
+        {
+          "family": "E8B",
+          "status": "CONFIRMED",
+          "configuration": "Image-clustered paired percentile bootstrap; 2,000 draws at seed 0; represented development imageId clusters; seeds combined by the within-draw mean.",
+          "sources": [
+            {
+              "path": "results/experiments/e8b_readout_generation/e8b_core_analysis_20260809.json",
+              "location": "$.e8b_core_analysis.paired_contrasts[*].bootstrap and .n_image_clusters"
+            },
+            {
+              "path": "docs/experiments/e8b_core_matrix.md",
+              "location": "Primary uncertainty method, lines 21-27"
+            }
+          ]
+        },
+        {
+          "family": "E10",
+          "status": "CONFIRMED",
+          "configuration": "Image-clustered paired percentile bootstrap; 2,000 draws at seed 0 with alpha 0.05; clustering by development imageId; seeds combined through the pinned E8A analysis implementation.",
+          "sources": [
+            {
+              "path": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
+              "location": "$.e10_core_analysis.contrasts.*.metrics.*.bootstrap"
+            }
+          ]
+        }
+      ],
+      "supported_facts": [
+        {
+          "fact_id": "canonical_clustered_interval",
+          "fact": "The canonical inferential interval resamples represented development imageIds because questions sharing an image are not independent rows. Paired contrasts resample both sides together within each draw.",
+          "sources": [
+            {
+              "path": "results/experiments/v2_05_types/addendum_clustered.json",
+              "location": "$.v2_05c_clustered_correction.method and $.v2_05c_clustered_correction.reason"
+            },
+            {
+              "path": "results/closure/reconstructed_statistics.json",
+              "location": "$.cluster_units and $.uncertainty_note"
+            }
+          ]
+        },
+        {
+          "fact_id": "row_level_supersession",
+          "fact": "The v2_05b row-level normal-approximation intervals are superseded for inference by v2_05c image-clustered intervals and are never re-quoted as inferential evidence.",
+          "sources": [
+            {
+              "path": "docs/experiments/v2_05_types.md",
+              "location": "Correction v2_05c, lines 145-158"
+            },
+            {
+              "path": "results/closure/A_evidence_registry.json",
+              "location": "$.registry[family=v2_05b] and $.registry[family=v2_05c]"
+            }
+          ]
+        },
+        {
+          "fact_id": "seed_sd_separation",
+          "fact": "The image-clustered interval is evaluation-sampling uncertainty conditioned on the fixed trained seed set. Across-seed variability is the sample standard deviation over independently trained seeds with ddof=1, reported separately and never as a confidence interval.",
+          "sources": [
+            {
+              "path": "results/closure/reconstructed_statistics.json",
+              "location": "$.uncertainty_note"
+            }
+          ]
+        },
+        {
+          "fact_id": "directional_claim_rule",
+          "fact": "For a paired contrast, positive directional evidence requires a positive mean, an interval lower bound above zero, and at least two of three seed differences above zero; negative directional evidence uses the mirrored conditions. Everything else is uncertain or mixed evidence.",
+          "sources": [
+            {
+              "path": "docs/experiments/e8a_core_135m.md",
+              "location": "Uncertainty method, lines 57-62"
+            },
+            {
+              "path": "results/experiments/e8b_readout_generation/e8b_final_report_20260810.json",
+              "location": "$.e8b_final_report.PRIMARY.paired_contrasts_in_vocabulary[*].directional_rule_outcome"
+            },
+            {
+              "path": "results/experiments/e10_capacity_360m_core/e10_core_analysis.json",
+              "location": "$.e10_core_analysis.contrasts.*.metrics.*.directional_rule"
+            }
+          ]
+        },
+        {
+          "fact_id": "no_equivalence_from_zero_inclusion",
+          "fact": "An interval including zero does not establish equivalence or the absence of an effect.",
+          "sources": [
+            {
+              "path": "results/experiments/e10_capacity_360m_core/e10_core_execution_correction_20260813.json",
+              "location": "$.e10_core_execution_correction.interpretation_narrowing.adopted_wording"
+            }
+          ]
+        },
+        {
+          "fact_id": "multiplicity_disclosure",
+          "fact": "Multiple comparisons exist. Every interval is nominal and uncorrected for multiplicity; no family-wise correction was applied and no adjusted procedure is introduced here.",
+          "sources": [
+            {
+              "path": "results/closure/F_multiplicity_status.json",
+              "location": "$.multiplicity_statement and $.no_fishing_statement"
+            }
+          ]
+        },
+        {
+          "fact_id": "pooled_ge4_definition_only",
+          "fact": "Combined four-or-more-step lift is the question-weighted pool of the 4-step and at-least-5-step bucket lifts under the fixed per-bucket prior. The pooled deficit is the mean of the four bucket lifts minus that combined lift. This single combined definition supersedes v3_01's unweighted mean of the two higher-step bucket lifts.",
+          "sources": [
+            {
+              "path": "results/experiments/v3_02a_refs/step_statistics.json",
+              "location": "$.v3_02a_step_statistics.definitions"
+            },
+            {
+              "path": "docs/experiments/v3_02a_refs.md",
+              "location": "Definition and supersession, lines 64-74"
+            }
+          ]
+        },
+        {
+          "fact_id": "v2_07_inference_limit",
+          "fact": "The v2_07 family has no image-clustered interval: row-level reconstruction stopped after one stored point estimate failed exact reproduction at the canonical precision. No row array or interval was created; stored per-seed aggregates and across-seed standard deviations remain verified only within their stated scope.",
+          "sources": [
+            {
+              "path": "results/closure/C_reconstructed_evidence_manifest.json",
+              "location": "$.blockers[family=v2_07] and $.reproduction_gate"
+            },
+            {
+              "path": "results/closure/A_evidence_registry.json",
+              "location": "$.registry[family=v2_07]"
+            }
+          ]
+        }
+      ],
+      "required_citation_keys_resolved": [],
+      "bibliography_gaps": [
+        "statistical bootstrap methodology citation",
+        "clustered or cluster-robust inference citation"
+      ],
+      "excluded_claims": [
+        "every confidence-interval endpoint",
+        "every deficit magnitude",
+        "superseded row-level inferential result",
+        "equivalence or absence from non-significance"
+      ],
+      "pending_source_verification": []
+    },
+    {
+      "id": "3.10",
+      "title": "Visual-reliance intervention design",
+      "planned_later_prose_budget_words": 150,
+      "interpretation_boundary_verbatim": "the intervention measures image reliance / sensitivity to visual information; it does not, by itself, establish compositional reasoning, causal visual reasoning, or general reasoning ability.",
+      "supported_facts": [
+        {
+          "fact_id": "wrong_image_matched_logic",
+          "fact": "The wrong-image condition holds the question and evaluation row fixed while replacing the associated image through one deterministic partner mapping, so normal and intervened correctness can be compared on matched questions.",
+          "sources": [
+            {
+              "path": "results/experiments/e9_compact_vlm/frozen_protocol.json",
+              "location": "$.derangement and $.conditions.deranged"
+            },
+            {
+              "path": "docs/experiments/e9_compact_vlm.md",
+              "location": "Image conditions, lines 69-74"
+            }
+          ]
+        },
+        {
+          "fact_id": "canonical_imageid_derangement",
+          "fact": "The operative intervention from the E8 programme onward is an imageId-level derangement: a permutation of sorted unique imageIds is rejection-sampled until it has no fixed point, then the same image-partner mapping is used for every matching question row.",
+          "sources": [
+            {
+              "path": "results/experiments/e9_compact_vlm/frozen_protocol.json",
+              "location": "$.derangement.construction, $.derangement.rng, $.derangement.self_pairs and $.derangement.intervention_kind"
+            },
+            {
+              "path": "docs/experiments/v2_06_reliance.md",
+              "location": "Self-pair disclosure and supersession note, lines 109-122"
+            }
+          ]
+        },
+        {
+          "fact_id": "row_shuffle_supersession_reason",
+          "fact": "The earlier row-level shuffle is superseded wherever the imageId derangement exists because it left 11 rows paired with their own imageId, approximately 0.14 per cent of rows. This is a method-supersession property, not an outcome claim.",
+          "sources": [
+            {
+              "path": "docs/experiments/v2_06_reliance.md",
+              "location": "Self-pair disclosure and supersession note, lines 109-122"
+            }
+          ]
+        },
+        {
+          "fact_id": "e9_matched_partner_scope",
+          "fact": "E9 uses the identical image-partner derangement as E8B, but not an identical feature-space intervention because preprocessing differs.",
+          "sources": [
+            {
+              "path": "results/experiments/e9_compact_vlm/frozen_protocol.json",
+              "location": "$.derangement.intervention_kind"
+            },
+            {
+              "path": "docs/experiments/e9_compact_vlm.md",
+              "location": "Image conditions, lines 69-74"
+            }
+          ]
+        }
+      ],
+      "required_citation_keys_resolved": [],
+      "bibliography_gaps": [],
+      "excluded_claims": [
+        "every visual-reliance magnitude",
+        "every model comparison",
+        "compositional-reasoning inference",
+        "causal-visual-reasoning inference",
+        "general-reasoning inference"
+      ],
+      "pending_source_verification": []
+    },
+    {
+      "id": "3.11",
+      "title": "Efficiency measurement protocol",
+      "planned_later_prose_budget_words": 250,
+      "efficiency_claim_boundary_verbatim": "efficiency claims are limited to measured warm-serial latency under the defined protocol, trainable parameter count, and canonically reported model size; no energy, power, carbon, monetary-cost or universal-deployment claim.",
+      "controlling_records": {
+        "e7a_locator_and_scope": {
+          "path": "results/closure/pre_f1_evidence_metadata_repair_20260814.json",
+          "location": "$.e7a_locator",
+          "reason": "Repairs the auditable locator to the results export while preserving component validity and additive-sum withdrawal."
+        },
+        "e7b_field_validity": {
+          "path": "results/closure/e7b_evidence_supersession.json",
+          "location": "$.withdrawn_fields, $.retained_field_names, $.cause_separation, $.no_substitute_value and $.remeasurement",
+          "reason": "Highest authority for named E7b field validity and the bridge boundary."
+        }
+      },
+      "supported_facts": [
+        {
+          "fact_id": "e7a_component_scope",
+          "fact": "E7a timed stages in isolation. Its isolated encoder and head component measurements and retained parameter fields remain valid within that component scope.",
+          "sources": [
+            {
+              "path": "results/closure/pre_f1_evidence_metadata_repair_20260814.json",
+              "location": "$.e7a_locator.component_validity_unchanged and $.e7a_locator.withdrawal_guard"
+            },
+            {
+              "path": "results/closure/efficiency_closure_table.json",
+              "location": "row E7a::e7a_component_measurements"
+            },
+            {
+              "path": "docs/experiments/e7a_efficiency.md",
+              "location": "Status, lines 3-18"
+            }
+          ]
+        },
+        {
+          "fact_id": "e7a_additive_withdrawal",
+          "fact": "E7a's gpu_encoder_plus_head_ms, full_pipeline_ms and amortised_ms fields, and every frontier derived from those additive sums, are withdrawn from end-to-end use. They are not replaced by E7b values and must not be quoted for any purpose.",
+          "sources": [
+            {
+              "path": "results/closure/pre_f1_evidence_metadata_repair_20260814.json",
+              "location": "$.e7a_locator.withdrawal_guard.superseded_fields"
+            },
+            {
+              "path": "docs/experiments/e7a_efficiency.md",
+              "location": "Status, lines 3-18"
+            }
+          ]
+        },
+        {
+          "fact_id": "e7b_serial_protocol",
+          "fact": "E7b is the authoritative serial end-to-end protocol: batch size 1; one unbroken pass from image-file read and question input through answer decoding; three pass-major passes in pinned randomised order; a fresh subprocess per system and pass; 50 warm-up queries followed by 300 timed serial queries per pass; warm-run medians; historical node otter155.",
+          "sources": [
+            {
+              "path": "docs/experiments/e7b_serial_efficiency.md",
+              "location": "Purpose and Method, lines 31-64"
+            },
+            {
+              "path": "results/experiments/e7b_serial_efficiency/e7b_results.json",
+              "location": "$.e7b_analysis.fingerprint, $.e7b_analysis.pass_orders and $.e7b_analysis.systems[*]"
+            }
+          ]
+        },
+        {
+          "fact_id": "e7b_memory_withdrawal",
+          "fact": "peak_allocated_mib and peak_reserved_mib are INVALID_WITHDRAWN for cause class MEASUREMENT_BOUNDARY_DEFECT: the historical window did not isolate the intended batch-1 serial inference envelope.",
+          "sources": [
+            {
+              "path": "results/closure/e7b_evidence_supersession.json",
+              "location": "$.withdrawn_fields[field=peak_allocated_mib or peak_reserved_mib]"
+            }
+          ]
+        },
+        {
+          "fact_id": "e7b_cold_withdrawal",
+          "fact": "cold_first_query_ms is SUPERSEDED_WITHDRAWN for cause class GRAD_MODE_STANDARDISATION: the historical cold query used a grad-enabled path and does not measure the current no-grad path.",
+          "sources": [
+            {
+              "path": "results/closure/e7b_evidence_supersession.json",
+              "location": "$.withdrawn_fields[field=cold_first_query_ms]"
+            }
+          ]
+        },
+        {
+          "fact_id": "withdrawal_cause_separation",
+          "fact": "The memory-boundary and grad-mode causes are distinct and must not be conflated. No replacement value exists; estimation, inference, back-calculation, substitution and remeasurement are not authorised.",
+          "sources": [
+            {
+              "path": "results/closure/e7b_evidence_supersession.json",
+              "location": "$.cause_separation, $.no_substitute_value and $.remeasurement.remeasurement_authorised"
+            }
+          ]
+        },
+        {
+          "fact_id": "e9_contextual_protocol",
+          "fact": "E9 imports the frozen E7b harness at batch size 1 with 50 warm-up queries, 300 timed queries and three passes on otter159. It is contextual evidence and is not automatically combined with E7b systems.",
+          "sources": [
+            {
+              "path": "results/experiments/e9_compact_vlm/e9_efficiency.json",
+              "location": "$.e9_efficiency.{harness,warmup,iterations,passes,batch} and $.e9_efficiency.aggregate[*].node"
+            },
+            {
+              "path": "docs/experiments/e9_compact_vlm.md",
+              "location": "Purpose and efficiency method, lines 9-14 and 92-95"
+            }
+          ]
+        },
+        {
+          "fact_id": "cross_node_bridge_boundary",
+          "fact": "The fusion bridge control failed its pre-registered 10 per cent tolerance at approximately -18.7 per cent. This is a protocol-validation observation, not model-performance evidence. E7b/otter155 and E9/otter159 timings are never merged into one cross-node frontier or comparison, and no adjustment factor is applied.",
+          "sources": [
+            {
+              "path": "results/closure/e7b_evidence_supersession.json",
+              "location": "$.remeasurement"
+            },
+            {
+              "path": "results/experiments/e9_compact_vlm/e9_efficiency.json",
+              "location": "$.e9_efficiency.e7b_bridge"
+            }
+          ]
+        },
+        {
+          "fact_id": "partial_pipeline_label",
+          "fact": "Cached-image question-side and cached-feature head-only timings are partial-pipeline measurements and are never labelled raw-input-to-answer latency.",
+          "sources": [
+            {
+              "path": "results/closure/e7b_evidence_supersession.json",
+              "location": "$.retained_but_labelled_not_comparable_with_end_to_end"
+            }
+          ]
+        },
+        {
+          "fact_id": "parameter_count_boundary",
+          "fact": "Parameter count is an architecture and capacity measure, not a latency proxy.",
+          "sources": [
+            {
+              "path": "docs/experiments/e7a_efficiency.md",
+              "location": "Status and retained-field scope"
+            }
+          ]
+        }
+      ],
+      "required_citation_keys_resolved": [
+        "zhao2022vlchecklist",
+        "hsieh2023sugarcrepe",
+        "huang2024conme",
+        "udandarao2025crepe"
+      ],
+      "bibliography_gaps": [],
+      "excluded_claims": [
+        "every model latency value",
+        "Pareto-frontier membership",
+        "winner language",
+        "accuracy-efficiency conclusions",
+        "energy, power, carbon, monetary-cost or universal-deployment claims",
+        "the excluded parameter-count versus latency empirical example"
+      ],
+      "pending_source_verification": []
+    }
+  ],
+  "source_discrepancies": [
+    {
+      "class": "directional-rule seed signs",
+      "planned_expectation": "Directional evidence requires the interval criterion and agreement of seed-level signs.",
+      "verified_tree_state": "The canonical E8A rule requires the matching sign in at least two of three seed differences, together with the mean and interval bound; it does not require unanimity.",
+      "stage4_action": "Record the exact at-least-two-of-three rule and the exact fallback phrase 'uncertain or mixed evidence'."
+    },
+    {
+      "class": "bootstrap bibliography",
+      "planned_expectation": "One candidate bootstrap-method entry appeared to exist.",
+      "verified_tree_state": "The only title-word match is li2023blip2, where 'Bootstrapping' describes model pre-training rather than statistical resampling; no statistical bootstrap-method entry exists.",
+      "stage4_action": "Record a bibliography gap and identify li2023blip2 as a non-substitute."
+    }
+  ],
+  "tables_created": false,
+  "figures_created": false,
+  "renders_created": false,
+  "model_scores_included": false,
+  "latency_values_included": false,
+  "interval_values_included": false,
+  "deficit_values_included": false,
+  "reliance_values_included": false,
+  "pending_source_verification": [],
+  "unresolved_genai_gate": "PENDING OFFICIAL VERIFICATION — EEEM004 assessment-specific GenAI permission/disclosure",
+  "clean_test_governance": {
+    "stage4_access_or_traversal_under_data": false,
+    "clean_test_inspection": false,
+    "embargo_status": "UNCHANGED",
+    "scientific_statistics_recomputed": false
+  },
+  "implementation_note": "This file is evidence-engineering metadata, not assessed dissertation prose."
+}
