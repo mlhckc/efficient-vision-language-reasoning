@@ -1,0 +1,53 @@
+\chapter{Technical Chapter}
+
+The technical body of the report consists of a number of chapters (just one here, but there will usually be more) of work you have carried out to date. Follow a logical structure in how you present your work. This will usually be the phases of the work you carried out which will link loosely to the objectives. Note that these chapters are not meant to be a log book, thus do not write them like a diary of work carried out but as a technical report specifying clearly what has been implemented and presented in a way that someone else could carry out the work based on what they have read.
+
+Again you need to consult with your supervisor on the technical chapters you plan to write by providing a draft contents page. It should show clearly the sections in it and every chapter should have a clear paragraph introducing it and what to expect in it.
+
+\section{First Section}
+Structure your text into sections.
+
+\subsection{First Subsection}
+If necessary, also use subsections. Subsections are entered using the Heading 3 paragraph style (all these heading styles are self-numbering).
+
+\subsubsection{First Subsubsection}
+If you really need subsubsections.
+
+\subsection{Second Subsection}
+And, as required, more subsections.
+
+\section{Second Section}
+As an example of a figure, consider Figure \ref{fig:figure1} and note how it is referenced here by cross referencing to a caption method so that also you can form a list of figures at the start. You should be familiar with how to insert a caption and refer to it in Word from the training needs analysis form you were given. The caption should include title and essential information about figure and figures must always be referred to in the text. Ensure you insert figures into appropriate points in the text so they are both near to the text that is referring to the figure but also ensure that they are arranged in a tidy fashion so they do not leave big gaps with no text.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.6\textwidth]{figure1}
+  \caption{Example figure and caption.}
+  \label{fig:figure1}
+\end{figure}% 
+
+\begin{table}[H]
+	\renewcommand{\arraystretch}{1.5}
+	\centering
+	\caption{\large Make sure to set caption to \\large size.}
+	\begin{tabular}{|l|l|}
+		\hline
+		Test & Test  \\ \hline
+		More & Testing\\
+		More & Testing\\
+		\hline
+	\end{tabular}
+	
+	\label{tab:rtos}
+\end{table}
+
+\section{Third Section}
+
+This sections hows how to do equations and to show that they number correctly as LaTeX can do with the chapter number and equation number to refer to equation in a piece of text:
+
+\begin{equation}
+y = x^2
+\label{eq_test}
+\end{equation}
+
+but note it is usually after putting in an equation that you may refer back to equation (\ref{eq_test}) later in the document or chapter.
