@@ -1,0 +1,702 @@
+{
+  "schema_version": "1.0",
+  "task_id": "dissertation-01-ch3-prep-s5",
+  "stage": 5,
+  "status": "PREPARATION_ONLY",
+  "generated_utc": "2026-08-24T21:50:00Z",
+  "authorized_subsections": [
+    "3.12"
+  ],
+  "authority_order": [
+    "canonical repair, supersession and lifecycle authority",
+    "canonical closure evidence and current evidence inventories",
+    "canonical experiment evidence and protocol artefacts",
+    "current reporting and reproducibility artefacts",
+    "implementation sources where needed",
+    "historical artefacts for provenance only"
+  ],
+  "authority_reconciliation": {
+    "status": "PASS_WITH_RECORDED_GRANULARITY_NOTE",
+    "dissertation_handoff_rule": "docs/DISSERTATION_HANDOFF.md groups canonical experiment records, closure registries, exports and the VE0 inventory within one source-of-truth tier.",
+    "stage5_mapping": "Stage 5 names repair and supersession authority first, then uses the grouped current-canonical sources according to the field each controls. It does not invent an unsupported total order within the grouped current-canonical tier.",
+    "core_principle_verbatim": "never trust an isolated historical result file when a canonical, repair or supersession authority exists.",
+    "sources": [
+      {
+        "path": "docs/DISSERTATION_HANDOFF.md",
+        "location": "Source-of-truth hierarchy, lines 490-505"
+      },
+      {
+        "path": "results/closure/pre_f1_status_supersession_20260814.json",
+        "location": "$.precedence"
+      }
+    ]
+  },
+  "subsections": [
+    {
+      "id": "3.12",
+      "title": "Reproducibility, provenance and clean-test governance",
+      "planned_later_prose_budget_words": 250,
+      "supported_facts": [
+        {
+          "fact_id": "fixed_seed_mechanism",
+          "fact": "The repository seed mechanism takes the configured RANDOM_SEED through utils.set_seed; experiment-family seed sets and selection recipes remain owned by the approved Stage-3 protocol records.",
+          "sources": [
+            {
+              "path": "config.py",
+              "location": "RANDOM_SEED and DETERMINISTIC"
+            },
+            {
+              "path": "src/utils.py",
+              "location": "set_seed"
+            },
+            {
+              "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage3_evidence_manifest.json",
+              "location": "$.subsection_3_8.protocol_families"
+            }
+          ]
+        },
+        {
+          "fact_id": "run_metadata_contract",
+          "fact": "The reproducibility contract requires run metadata with result artefacts, and utils.run_metadata implements the common metadata carrier.",
+          "sources": [
+            {
+              "path": "src/utils.py",
+              "location": "run_metadata and file_sha256"
+            },
+            {
+              "path": "docs/REPRODUCIBILITY.md",
+              "location": "Seeds and determinism; provenance metadata"
+            }
+          ]
+        },
+        {
+          "fact_id": "dependency_lock_presence",
+          "fact": "requirements.lock.txt is the tracked dependency lock. Its existence is pinned; complete cross-node or cross-hardware portability is not claimed.",
+          "sources": [
+            {
+              "path": "requirements.lock.txt",
+              "location": "whole tracked file"
+            },
+            {
+              "path": "docs/REPRODUCIBILITY.md",
+              "location": "Environment contract and portability qualifications"
+            }
+          ]
+        },
+        {
+          "fact_id": "hash_pinned_provenance",
+          "fact": "Canonical records, manifests and provenance sidecars pin inputs and deliverables by path and digest; closed artefacts are not rewritten, and later corrections are expressed through amendment or supersession overlays.",
+          "sources": [
+            {
+              "path": "results/closure/pre_f1_status_supersession_20260814.json",
+              "location": "$.frozen_pins, $.precedence and $.provenance"
+            },
+            {
+              "path": "results/ve0/supersession_map.json",
+              "location": "canonical status and supersession mappings"
+            },
+            {
+              "path": "results/ve0/canonical_evidence_inventory.json",
+              "location": "canonical evidence entries and hashes"
+            }
+          ]
+        },
+        {
+          "fact_id": "checkpoint_selection_provenance",
+          "fact": "Checkpoint-selection provenance is resolved through the corrected selection metadata and its row-level effective selection classes, not through superseded stored labels.",
+          "sources": [
+            {
+              "path": "results/closure/pre_f1_evidence_metadata_repair_20260814.json",
+              "location": "$.e8b_checkpoint_selection"
+            },
+            {
+              "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage3_evidence_manifest.json",
+              "location": "$.subsection_3_8.checkpoint_selection_authority"
+            }
+          ]
+        },
+        {
+          "fact_id": "deterministic_conversion",
+          "fact": "Chapter-3 CSV tables have deterministic conversion checks through the dissertation-local tab2latex.py --verify interface.",
+          "sources": [
+            {
+              "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tools/tab2latex.py",
+              "location": "--verify implementation"
+            },
+            {
+              "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch3_partition_stats.provenance.json",
+              "location": "converter verification record"
+            },
+            {
+              "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch3_architecture_params.provenance.json",
+              "location": "converter verification record"
+            },
+            {
+              "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch3_protocol_summary.provenance.json",
+              "location": "converter verification record"
+            }
+          ]
+        },
+        {
+          "fact_id": "frozen_render_identity",
+          "fact": "The tracked dissertation copy and tracked source copy of the frozen SmolLM2 interface render are byte-identical; the generator remains unexecuted and no Stage-5 rendering is authorised.",
+          "sources": [
+            {
+              "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage3_evidence_manifest.json",
+              "location": "$.frozen_figure_verification"
+            },
+            {
+              "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/images/arch/p2607_smollm2_interface_architecture.pdf",
+              "location": "whole tracked file; SHA-256 619ff8a31f4e4d2e1e2b483e946026a28ac3ee66259bd2c7c70091c7b321f1eb"
+            },
+            {
+              "path": "docs/figures/p2607_smollm2_interface_architecture.pdf",
+              "location": "whole tracked file; SHA-256 619ff8a31f4e4d2e1e2b483e946026a28ac3ee66259bd2c7c70091c7b321f1eb"
+            }
+          ]
+        },
+        {
+          "fact_id": "reproducibility_limits",
+          "fact": "Reproducibility claims are bounded by the recorded determinism, node and environment limitations.",
+          "honest_limits_verbatim": [
+            "Strict determinism could not be established once at startup and must be re-imposed after every reseeding point.",
+            "The historical E7b measurement node is not the current node.",
+            "Environment/hardware portability is limited (node-local venv, single-GPU environment).",
+            "No energy or power measurement exists anywhere in the project."
+          ],
+          "sources": [
+            {
+              "path": "results/experiments/e8b_readout_generation/determinism_call_scan_20260807.json",
+              "location": "$.determinism_call_scan.rule and $.determinism_call_scan.core_path_notes"
+            },
+            {
+              "path": "results/closure/e7b_evidence_supersession.json",
+              "location": "$.remeasurement"
+            },
+            {
+              "path": "docs/REPRODUCIBILITY.md",
+              "location": "Environment contract and limitations"
+            },
+            {
+              "path": "CLAUDE.md",
+              "location": "environment and determinism constraints"
+            }
+          ]
+        },
+        {
+          "fact_id": "scientific_record_boundary",
+          "fact": "The dissertation provenance surface rests on tracked scientific records. .agent-bridge packets are process coordination, are not the scientific record and are never dissertation evidence.",
+          "sources": [
+            {
+              "path": "collab/PROTOCOL.md",
+              "location": "packet scope and durable-scientific-record rules"
+            },
+            {
+              "path": "AGENTS.md",
+              "location": "Workflow"
+            }
+          ]
+        },
+        {
+          "fact_id": "clean_test_disclosure",
+          "fact": "The clean-test contents were never inspected or used for development, model selection, or reporting decisions. Mechanical byte access occurred in two documented governance incidents, on 13 and 14 August 2026.",
+          "byte_verification": "PASS_EXACT",
+          "sources": [
+            {
+              "path": "results/closure/e7b_evidence_supersession.json",
+              "location": "$.clean_test_governance.disclosure"
+            },
+            {
+              "path": "results/closure/pre_f1_status_supersession_20260814.json",
+              "location": "$.clean_test_governance"
+            }
+          ]
+        },
+        {
+          "fact_id": "clean_test_incidents",
+          "fact": "Incident A was the 13-August-2026 reviewer integrity-hash command. Incident B was the 14-August-2026 unscoped dependency-mapping traversal. Both are classification B mechanical byte access only, with no content inspection and no development, model-selection or reporting use.",
+          "sources": [
+            {
+              "path": "results/closure/e7b_evidence_supersession.json",
+              "location": "$.clean_test_governance.incidents and $.clean_test_governance.common_to_both_incidents"
+            },
+            {
+              "path": "results/closure/pre_f1_status_supersession_20260814.json",
+              "location": "$.clean_test_governance.incidents"
+            }
+          ]
+        },
+        {
+          "fact_id": "clean_test_language_guard",
+          "fact": "Governance reporting distinguishes semantic inspection or use, mechanical byte access, and development/model-selection/reporting use. It prohibits the phrasings never accessed, unread and untouched, and prohibits any implication that only one access event occurred.",
+          "sources": [
+            {
+              "path": "results/closure/e7b_evidence_supersession.json",
+              "location": "$.clean_test_governance"
+            }
+          ]
+        },
+        {
+          "fact_id": "clean_test_structural_counts",
+          "fact": "The clean-test structural counts are 8,013 questions and 972 images, referenced only through the already approved non-data Stage-1 pinning.",
+          "sources": [
+            {
+              "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage1_evidence_manifest.json",
+              "location": "$.subsections[id=3.3].supported_facts[fact_id=clean_test_structure]"
+            },
+            {
+              "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch3_partition_stats.provenance.json",
+              "location": "clean-test structural-count cells"
+            }
+          ]
+        },
+        {
+          "fact_id": "f1_f2_state_boundary",
+          "fact": "F1 has not been performed. F2 has not been performed and is unauthorised. No held-out clean-test result exists for any dissertation claim; every currently citable result is development-set evidence until F2.",
+          "sources": [
+            {
+              "path": "results/closure/pre_f1_status_supersession_20260814.json",
+              "location": "$.f1_f2"
+            },
+            {
+              "path": "docs/DISSERTATION_HANDOFF.md",
+              "location": "lifecycle and clean-test governance sections"
+            }
+          ]
+        },
+        {
+          "fact_id": "pre_f2_marker_convention",
+          "fact": "% PRE-F2 PENDING F2 REVIEW: <what depends>",
+          "constraint": "A marker contains no number, expected outcome, implied success or F1 model-list membership.",
+          "sources": [
+            {
+              "path": "results/closure/pre_f1_status_supersession_20260814.json",
+              "location": "$.f1_f2"
+            }
+          ]
+        },
+        {
+          "fact_id": "development_confirmatory_distinction",
+          "fact": "Development-set evidence supports model development, diagnostics and Chapters 4-7 preparation. Future clean held-out confirmatory evidence can exist only after an explicit F1 freeze and one-shot F2 evaluation; no held-out generalisation claim is available before F2.",
+          "sources": [
+            {
+              "path": "docs/DISSERTATION_HANDOFF.md",
+              "location": "development/confirmatory boundary and F1/F2 lifecycle"
+            },
+            {
+              "path": "results/closure/pre_f1_status_supersession_20260814.json",
+              "location": "$.f1_f2 and $.clean_test_governance"
+            }
+          ]
+        }
+      ],
+      "required_citation_keys_resolved": [],
+      "bibliography_gaps": [],
+      "pending_source_verification": []
+    }
+  ],
+  "cross_stage_integration_audit": {
+    "scaffold": {
+      "status": "PASS",
+      "heading_count": 12,
+      "unique_heading_count": 12,
+      "approved_order": [
+        "Methodological framing and design principles",
+        "Task definition: closed-set VQA on GQA",
+        "Data partitioning and nested training scales",
+        "Answer-space construction: top-100 and top-1000",
+        "Scoring metrics and evaluation denominators",
+        "Frozen representations and feature extraction",
+        "Architecture families",
+        "Training, checkpoints and model selection",
+        "Statistical methodology",
+        "Visual-reliance intervention design",
+        "Efficiency measurement protocol",
+        "Reproducibility, provenance and clean-test governance"
+      ],
+      "budgets_words": [
+        200,
+        250,
+        300,
+        250,
+        250,
+        250,
+        600,
+        250,
+        300,
+        150,
+        250,
+        250
+      ],
+      "budget_total_words": 3300,
+      "stage1_through_stage4_lines_unchanged": true,
+      "pre_stage5_methodology_sha256": "6241c4e77a9471d9fe12a99085679cf5038854005757d8750b5df1d716e44fe3"
+    },
+    "terminology_consistency": {
+      "status": "PASS",
+      "conflicts": [],
+      "domains_checked": [
+        {
+          "domain": "dataset and partitioning",
+          "result": "PASS",
+          "references": [
+            "stage1:3.3/development_partition",
+            "stage1:3.3/development_manifest_images",
+            "stage1:3.3/training_pool",
+            "stage1:3.3/nested_scales"
+          ],
+          "terms_verified": [
+            "10,004 raw development rows versus 7,714 top-100 in-vocabulary rows",
+            "768 represented manifest images versus 777 complete-partition images",
+            "eligible remaining partition pool wording without an inferred represented-image count",
+            "nested training scales and image-disjoint boundaries"
+          ]
+        },
+        {
+          "domain": "answer space and denominators",
+          "result": "PASS",
+          "references": [
+            "stage2:3.4/coverage_design_properties",
+            "stage2:3.5/denominators",
+            "stage2:3.5/denominator_guard"
+          ],
+          "terms_verified": [
+            "top-100 versus top-1000",
+            "coverage as an answer-space design property",
+            "strict raw versus pinned normalised exact match",
+            "7,714, 9,823 and 10,004 denominators kept distinct"
+          ]
+        },
+        {
+          "domain": "representations",
+          "result": "PASS",
+          "references": [
+            "stage2:3.6/clip_global",
+            "stage2:3.6/siglip_global_swap",
+            "stage2:3.6/e8a_projection_and_space_disclosure"
+          ],
+          "terms_verified": [
+            "separate CLIP image and text encoders within one jointly pretrained checkpoint",
+            "SigLIP global-path-only swap while token stores remain CLIP",
+            "SmolLM2 question-token interface through Linear(576, 512) without a naturally shared pretrained space claim"
+          ]
+        },
+        {
+          "domain": "architecture and parameter semantics",
+          "result": "PASS",
+          "references": [
+            "stage3:3.7/global_embedding_heads",
+            "stage3:3.7/latent_query_reasoner",
+            "stage3:3.7/question_side_interface",
+            "stage3:3.7/answer_side_interface",
+            "stage3:3.7/parameter_accounting"
+          ],
+          "terms_verified": [
+            "approved global-head, 32-latent reasoner, question-side, answer-side and compact-VLM family names",
+            "trainable, total-loaded and resident-frozen parameter semantics",
+            "B1, B2, B3, B4r and B4 family labels",
+            "E8A 135M executed question-side boundary and E10 360M answer-side boundary"
+          ]
+        },
+        {
+          "domain": "checkpoint selection",
+          "result": "PASS",
+          "references": [
+            "stage3:3.8/checkpoint_selection_authority",
+            "stage3:3.8/protocol_families"
+          ],
+          "terms_verified": [
+            "B1 best-on-development over 100 epochs with patience 10 and earliest epoch on ties",
+            "fixed-epoch-22 families",
+            "five BEST_ON_DEVELOPMENT rows and four MIXED_WITHIN_ROW rows",
+            "only selection-matched contrasts support causal component attribution"
+          ]
+        },
+        {
+          "domain": "statistics",
+          "result": "PASS",
+          "references": [
+            "stage4:3.9/canonical_clustered_interval",
+            "stage4:3.9/seed_sd_separation",
+            "stage4:3.9/directional_claim_rule",
+            "stage4:3.9/pooled_ge4_definition_only",
+            "stage4:3.9/v2_07_inference_limit"
+          ],
+          "terms_verified": [
+            "per-family image-clustered bootstrap configuration",
+            "seed sample SD with ddof=1 kept separate from clustered uncertainty",
+            "mean and interval direction plus at least two of three seed signs",
+            "uncertain or mixed evidence fallback, no-equivalence guard and uncorrected multiplicity",
+            "pooled four-or-more-step definition only and v2_07 clustered-inference limitation"
+          ]
+        },
+        {
+          "domain": "visual reliance",
+          "result": "PASS",
+          "references": [
+            "stage4:3.10/canonical_imageid_derangement",
+            "stage4:3.10/row_shuffle_supersession_reason"
+          ],
+          "terms_verified": [
+            "imageId-level derangement with no fixed points where canonically established",
+            "row-level shuffle retained only as a superseded method",
+            "image-reliance interpretation boundary without a reasoning claim"
+          ]
+        },
+        {
+          "domain": "efficiency",
+          "result": "PASS",
+          "references": [
+            "stage4:3.11/e7a_component_scope",
+            "stage4:3.11/e7b_serial_protocol",
+            "stage4:3.11/withdrawal_cause_separation",
+            "stage4:3.11/cross_node_bridge_boundary",
+            "stage4:3.11/parameter_count_boundary"
+          ],
+          "terms_verified": [
+            "E7a retained component scope versus withdrawn additive end-to-end fields",
+            "E7b serial protocol and distinct memory-boundary versus grad-mode withdrawal causes",
+            "otter155 E7b versus otter159 E9 context with failed bridge and no merge or adjustment",
+            "partial-pipeline labelling and parameter-count-not-latency rule",
+            "claims bounded to measured warm-serial latency, trainable parameter count and canonical model size"
+          ]
+        }
+      ]
+    },
+    "semantic_result_leakage_sweep": {
+      "status": "PASS",
+      "scope": "Stage-1 through Stage-5 committed Chapter-3 preparation artefacts and chapters/methodology.tex",
+      "method": "Candidate numeric and outcome-language occurrences were reviewed semantically; hashes, commit IDs, dates, section numbers, paths, file/version identifiers, record IDs and word budgets were classified as non-result metadata.",
+      "unapproved_scientific_results_found": 0,
+      "approved_scientific_or_design_numeric_classes_accounted_for": [
+        "answer-space coverage design properties",
+        "cross-node bridge protocol-validation observation",
+        "wrong-image supersession self-pair diagnostic",
+        "parameter and model-size counts",
+        "dataset and partition counts",
+        "protocol constants including seeds, learning rates, epochs, draws, alpha and percentiles"
+      ],
+      "prohibition_list_mentions_are_assertions": true,
+      "excluded_outcome_classes": [
+        "model accuracy",
+        "effect-size or scientific confidence-interval values",
+        "visual-reliance magnitude",
+        "model latency value",
+        "Pareto membership outside prohibition lists",
+        "winner language",
+        "research-question conclusion"
+      ]
+    },
+    "bibliography_entry_count": 72,
+    "prior_stage_bytes_modified": false,
+    "new_tables": 0,
+    "new_figures": 0,
+    "renders_created": 0
+  },
+  "classified_pending_register": [
+    {
+      "pending_id": "rq_formal_wording",
+      "classification": "PENDING SOURCE VERIFICATION",
+      "scope": "Formal wording of RQ1, RQ2 and RQ3",
+      "required_before": "Section 3.1 prose",
+      "owner": "user/Claude decision"
+    },
+    {
+      "pending_id": "eligible_pool_represented_images",
+      "classification": "PENDING SOURCE VERIFICATION",
+      "scope": "Optional represented-image count among eligible training-pool rows",
+      "action": "Omit unless a canonical non-data source is pinned."
+    },
+    {
+      "pending_id": "omitted_parameter_accounting_groups",
+      "classification": "PENDING SOURCE VERIFICATION",
+      "scope": [
+        "TAB-3.2-A1r-full-accounting",
+        "TAB-3.2-E10-full-accounting",
+        "TAB-3.2-resident-breakdowns"
+      ],
+      "action": "Keep omitted unless canonically pinned."
+    },
+    {
+      "pending_id": "genai_gate",
+      "classification": "PENDING OFFICIAL VERIFICATION",
+      "scope": "EEEM004 assessment-specific GenAI permission/disclosure",
+      "action": "Blocks substantive assessed dissertation prose."
+    }
+  ],
+  "drafting_constraints_carried_forward": [
+    "Resolve the formal RQ1-RQ3 wording before Section 3.1 prose.",
+    "Describe CLIP as separate image and text encoders within one jointly pretrained checkpoint, aligned in a shared embedding space.",
+    "Quote top-100 coverage as 0.7711 reported, or label 0.771092 as derived from the canonical counts.",
+    "Disambiguate per-control counts for the aggregated single_interaction_natural row.",
+    "Keep unpinned loaded/resident-frozen cells omitted.",
+    "Use the exact two-of-three directional rule and the fallback wording uncertain or mixed evidence.",
+    "Never recall pooled-deficit bucket priors without independent canonical pinning."
+  ],
+  "source_discrepancies": [
+    {
+      "class": "converter path",
+      "planned_expectation": "tools/tab2latex.py at repository root",
+      "verified_tree_state": "The converter is dissertation-local at P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tools/tab2latex.py.",
+      "stage5_action": "Use and pin the real path."
+    },
+    {
+      "class": "source hierarchy granularity",
+      "planned_expectation": "A strict sequence through closure, VE0/VE1/VE2, experiment and reporting evidence.",
+      "verified_tree_state": "docs/DISSERTATION_HANDOFF.md groups current canonical result records, closure registries, exports and VE0 inventory within one tier.",
+      "stage5_action": "Preserve controlling-record precedence and do not invent a total order within the grouped tier."
+    },
+    {
+      "class": "clean-test incident-B summary",
+      "planned_expectation": "Use exact controlling governance wording.",
+      "verified_tree_state": "docs/REPRODUCIBILITY.md abbreviates incident B to CSV files; the controlling JSON records JSON, Python, Markdown, CSV and text files.",
+      "stage5_action": "Use the controlling JSON mechanism; treat the documentation sentence as an incomplete summary."
+    },
+    {
+      "class": "historical metadata-repair lifecycle wording",
+      "planned_expectation": "Use current lifecycle authority.",
+      "verified_tree_state": "docs/REPRODUCIBILITY.md still describes the metadata repair as awaiting independent review; the controlling pre-F1 status supersession record carries the current accepted lifecycle.",
+      "stage5_action": "Treat the documentation lifecycle sentence as historical and use the controlling supersession record."
+    },
+    {
+      "class": "coordination packet as frozen-render locator",
+      "planned_expectation": ".agent-bridge packets are never dissertation evidence.",
+      "verified_tree_state": "The closed Stage-3 manifest includes one Phase-0 packet locator alongside tracked render evidence.",
+      "stage5_action": "Do not propagate the packet locator; use the tracked Stage-3 manifest and tracked byte-identical render paths."
+    }
+  ],
+  "sources": [
+    {
+      "path": "CLAUDE.md",
+      "sha256": "25c8bd700435990d0edfa6d487da1780d6c1676d649cc96fe65d880d37311893",
+      "authority_class": "binding project scope, determinism and environment constraints"
+    },
+    {
+      "path": "config.py",
+      "sha256": "2612dfeaa2a2ca54888bd0be2004a90efaa533c16c75db2ed08baadf3f060574",
+      "authority_class": "configured seed and determinism flags"
+    },
+    {
+      "path": "src/utils.py",
+      "sha256": "3e9af4431b68f96c10d1d6d7842a82ffe34e9100c09e1206d05bbb112c01d3ee",
+      "authority_class": "seed, run-metadata and digest mechanisms"
+    },
+    {
+      "path": "docs/REPRODUCIBILITY.md",
+      "sha256": "246d7f16e2b92fe427949dd3623d1826df56ed3f54bd0de53cb70400e42c0228",
+      "authority_class": "current reproducibility contract, subject to controlling overlays"
+    },
+    {
+      "path": "docs/DISSERTATION_HANDOFF.md",
+      "sha256": "588b6124713b4eae65a0d3f714c9477e16dd9bfda0a6f72386a5935bdb9cbc80",
+      "authority_class": "current dissertation evidence and source-hierarchy handoff"
+    },
+    {
+      "path": "requirements.lock.txt",
+      "sha256": "644a7e9db3cfe8632f2802314ca0296cf07dc5e3a41abf6728f3a7904c8a04be",
+      "authority_class": "tracked dependency lock"
+    },
+    {
+      "path": "results/closure/e7b_evidence_supersession.json",
+      "sha256": "2fb6561b3916b83603631c0feb35d716dc9bbf3e1ed1ef3d4e7286516a0a0c75",
+      "authority_class": "controlling clean-test governance and E7b field-validity record"
+    },
+    {
+      "path": "results/closure/pre_f1_status_supersession_20260814.json",
+      "sha256": "8b04d10f8f1df74eefd73ee0b507aa2ca600cd9c3d0675279f0ddb72c8ed57c3",
+      "authority_class": "controlling lifecycle and F1/F2 status record"
+    },
+    {
+      "path": "results/closure/pre_f1_evidence_metadata_repair_20260814.json",
+      "sha256": "e35db6dddca6f587791527f3a9e9846905486413c851d1f896129a3f6a015f42",
+      "authority_class": "controlling metadata and checkpoint-selection repair"
+    },
+    {
+      "path": "results/ve0/supersession_map.json",
+      "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c",
+      "authority_class": "canonical supersession map"
+    },
+    {
+      "path": "results/ve0/canonical_evidence_inventory.json",
+      "sha256": "a1f49a0f99ddf4cffac591fcf24b3cf7ba9638de349898fd4a525aed96ae66d3",
+      "authority_class": "canonical evidence inventory"
+    },
+    {
+      "path": "results/experiments/e8b_readout_generation/determinism_call_scan_20260807.json",
+      "sha256": "dd2bc324408d9ed56757a96fd0ecb061f952adbd84e6fcb357af91394f68fbb6",
+      "authority_class": "canonical E8B determinism re-imposition record"
+    },
+    {
+      "path": "collab/PROTOCOL.md",
+      "sha256": "1e2b543e619a7f55d2cf79e575279678974bf829a9b3e89010904387b5652ec5",
+      "authority_class": "coordination versus durable scientific-record rule"
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "ab7134e72c365c7981f7ae9826e7bcb57fc6b7ced5d34c7afb66da9e591b642c",
+      "authority_class": "binding workflow and durable-record rule"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tools/tab2latex.py",
+      "sha256": "1931004db031c343026f55bcc2f110c12217b7fb3a9aa99275fc70b1ba3abfb7",
+      "authority_class": "deterministic Chapter-3 table converter"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch3_partition_stats.provenance.json",
+      "sha256": "605a04419821faff9de72b71aea6ad369eb987ea3ef51289133fbe491c804d9b",
+      "authority_class": "approved TAB-3.1 provenance and conversion pin"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch3_architecture_params.provenance.json",
+      "sha256": "d68a4eeabbec5a3cd92f6ee7fca46c78c4f54d222de4a47eb086dd4560516afd",
+      "authority_class": "approved TAB-3.2 provenance and conversion pin"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch3_protocol_summary.provenance.json",
+      "sha256": "bf5d88b3811e1f6d7c1f5cf66a51526f26d15eb5abae147e85ebf0655b347438",
+      "authority_class": "approved TAB-3.3 provenance and conversion pin"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/references/references.bib",
+      "sha256": "ebff6b25ef20b0672c154e56e678356bc8245b6cbf5d85aff63371968b6d2705",
+      "authority_class": "current 72-entry dissertation bibliography"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage1_evidence_manifest.json",
+      "sha256": "ce4062e96e37220ad28ac9e0ab2e13c0ade422b1f216996cc5d00984aee1caf3",
+      "authority_class": "closed Stage-1 Chapter-3 evidence"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage2_evidence_manifest.json",
+      "sha256": "d7de03355f3419cb1896abbf13e2214eb159e59ae0080abd8bc5ec6882694d35",
+      "authority_class": "closed Stage-2 Chapter-3 evidence"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage3_evidence_manifest.json",
+      "sha256": "3f566fa3c33e05ab4feb50a305d9286481191e1317348ab834a94d00a1fb116e",
+      "authority_class": "closed Stage-3 Chapter-3 evidence"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage4_evidence_manifest.json",
+      "sha256": "80b24aaade4fe6f0dc0ecc98ea977894d94bc1907ce322c602d185bf7dfc7e2c",
+      "authority_class": "closed Stage-4 Chapter-3 evidence"
+    }
+  ],
+  "implementation_note": "Metadata and non-prose scaffold only; no scientific result was recomputed and no substantive assessed prose was drafted.",
+  "substantive_assessed_prose_authorized": false,
+  "result_recomputation_authorized": false,
+  "training_or_evaluation_authorized": false,
+  "f1_authorized": false,
+  "f2_authorized": false,
+  "tables_created": 0,
+  "figures_created": 0,
+  "renders_created": 0,
+  "clean_test_governance": {
+    "stage5_access_or_traversal_under_data": false,
+    "clean_test_semantic_inspection": false,
+    "clean_test_mechanical_access_by_stage5": false,
+    "embargo_status": "UNCHANGED"
+  },
+  "unresolved_genai_gate": "PENDING OFFICIAL VERIFICATION — EEEM004 assessment-specific GenAI permission/disclosure; substantive assessed dissertation prose remains blocked.",
+  "later_work_authorized": false
+}

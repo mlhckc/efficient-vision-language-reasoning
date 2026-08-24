@@ -1,0 +1,265 @@
+{
+  "schema_version": "1.0",
+  "task_id": "dissertation-01-ch3-prep-s5",
+  "stage": 5,
+  "status": "CONSOLIDATED_INVENTORY_ONLY",
+  "generated_utc": "2026-08-24T21:52:00Z",
+  "bibliography_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/references/references.bib",
+  "bibliography_sha256": "ebff6b25ef20b0672c154e56e678356bc8245b6cbf5d85aff63371968b6d2705",
+  "bibliography_entry_count": 72,
+  "entries_added": 0,
+  "entries_modified": false,
+  "source_inventories": [
+    {
+      "stage": 1,
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage1_bibliography_inventory.json",
+      "sha256": "1e635a367301f8b241f7e5f5f797a67bfa45c46d7a086e79d8d4fac2acdedab8"
+    },
+    {
+      "stage": 2,
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage2_bibliography_inventory.json",
+      "sha256": "db44745ff7b0d96e472b3627f14c93be7044e00eb64c6e2bc952d2f92aa4020e"
+    },
+    {
+      "stage": 3,
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage3_bibliography_inventory.json",
+      "sha256": "c877f9dd60afc319aeaa1c9fd922ca3f50c9f8befb813d460807759f9d8f3433"
+    },
+    {
+      "stage": 4,
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage4_bibliography_inventory.json",
+      "sha256": "4f08eaf8111279413e5959f2e225d96ea6cd11e1abb3451ba3afd9277dd1999e"
+    }
+  ],
+  "citation_classes": [
+    {
+      "class_id": "gqa_dataset_and_task",
+      "status": "RESOLVED",
+      "keys": [
+        "hudson2019gqa"
+      ],
+      "required_for": [
+        "3.1",
+        "3.2",
+        "3.3"
+      ]
+    },
+    {
+      "class_id": "vqa_origins",
+      "status": "RESOLVED",
+      "keys": [
+        "antol2015vqa"
+      ],
+      "required_for": [
+        "3.1",
+        "3.2"
+      ]
+    },
+    {
+      "class_id": "vqa_v2",
+      "status": "GAP_ABSENT_EXISTING_KEY",
+      "keys": [],
+      "required_for": [],
+      "carried_forward": true
+    },
+    {
+      "class_id": "clip_foundation",
+      "status": "GAP_ABSENT_EXISTING_KEY",
+      "keys": [],
+      "required_for": [
+        "3.6"
+      ],
+      "carried_forward": true
+    },
+    {
+      "class_id": "frozen_representation_or_model_context",
+      "status": "RESOLVED_WITH_SCOPE_NOTES",
+      "keys": [
+        "bourigault2025frevl",
+        "tsimpoukelli2021frozen",
+        "li2023blip2",
+        "lin2022evl"
+      ],
+      "required_for": [
+        "3.1",
+        "3.6"
+      ],
+      "scope_note": "Context only; none substitutes for the missing foundational CLIP, SigLIP, SmolLM2 or SmolVLM citation."
+    },
+    {
+      "class_id": "closed_vocabulary_vqa_convention",
+      "status": "RESOLVED",
+      "keys": [
+        "antol2015vqa",
+        "jabri2016revisiting"
+      ],
+      "required_for": [
+        "3.4"
+      ]
+    },
+    {
+      "class_id": "vqa_metric_tradition",
+      "status": "RESOLVED_WITH_SCOPE_NOTE",
+      "keys": [
+        "antol2015vqa"
+      ],
+      "required_for": [
+        "3.5"
+      ],
+      "scope_note": "Tradition/context only; the exact primary scorer remains internally pinned."
+    },
+    {
+      "class_id": "siglip",
+      "status": "GAP_ABSENT_EXISTING_KEY",
+      "keys": [],
+      "required_for": [
+        "3.6"
+      ],
+      "carried_forward": true,
+      "non_substitute": "zhai2022scaling is a different paper."
+    },
+    {
+      "class_id": "smollm2",
+      "status": "GAP_ABSENT_EXISTING_KEY",
+      "keys": [],
+      "required_for": [
+        "3.6",
+        "3.7"
+      ],
+      "carried_forward": true
+    },
+    {
+      "class_id": "token_level_or_vit_representation",
+      "status": "NOT_REQUIRED_FOR_PREPARATION",
+      "keys": [],
+      "required_for": [],
+      "decision": "No unrelated citation is forced; revisit only if later prose makes a claim requiring an external source."
+    },
+    {
+      "class_id": "latent_query_processing",
+      "status": "RESOLVED",
+      "keys": [
+        "jaegle2021perceiver"
+      ],
+      "required_for": [
+        "3.7"
+      ]
+    },
+    {
+      "class_id": "cross_attention_connector_architecture",
+      "status": "RESOLVED",
+      "keys": [
+        "alayrac2022flamingo",
+        "li2023blip2",
+        "dai2023instructblip"
+      ],
+      "required_for": [
+        "3.7"
+      ]
+    },
+    {
+      "class_id": "multimodal_fusion",
+      "status": "RESOLVED",
+      "keys": [
+        "fukui2016mcb",
+        "kim2017mlb",
+        "benyounes2017mutan",
+        "benyounes2019block"
+      ],
+      "required_for": [
+        "3.7"
+      ]
+    },
+    {
+      "class_id": "smolvlm",
+      "status": "GAP_ABSENT_EXISTING_KEY",
+      "keys": [],
+      "required_for": [
+        "3.7"
+      ],
+      "carried_forward": true
+    },
+    {
+      "class_id": "bootstrap_methodology",
+      "status": "GAP_ABSENT_EXISTING_KEY",
+      "keys": [],
+      "required_for": [
+        "3.9"
+      ],
+      "lexical_false_positive": {
+        "key": "li2023blip2",
+        "reason": "Bootstrapping in its title describes language-image pre-training, not statistical resampling."
+      }
+    },
+    {
+      "class_id": "clustered_or_cluster_robust_inference",
+      "status": "GAP_ABSENT_EXISTING_KEY",
+      "keys": [],
+      "required_for": [
+        "3.9"
+      ]
+    },
+    {
+      "class_id": "evaluation_and_benchmarking_methodology",
+      "status": "RESOLVED_WITH_SCOPE_NOTES",
+      "keys": [
+        "zhao2022vlchecklist",
+        "hsieh2023sugarcrepe",
+        "huang2024conme",
+        "udandarao2025crepe"
+      ],
+      "required_for": [
+        "3.11"
+      ],
+      "scope_note": "Benchmark design and validity context only; none supplies the project's bootstrap estimator or efficiency measurements."
+    },
+    {
+      "class_id": "wrong_image_intervention_methodology",
+      "status": "NOT_REQUIRED_FOR_PREPARATION",
+      "keys": [],
+      "required_for": [],
+      "decision": "The project-specific intervention is internally pinned; hessel2020emap is not the source of the imageId derangement."
+    }
+  ],
+  "gap_register": [
+    {
+      "class_id": "clip_foundation",
+      "search_result": "No foundational CLIP entry among 72 entries."
+    },
+    {
+      "class_id": "vqa_v2",
+      "search_result": "No VQA-v2 entry among 72 entries."
+    },
+    {
+      "class_id": "siglip",
+      "search_result": "No SigLIP entry among 72 entries."
+    },
+    {
+      "class_id": "smollm2",
+      "search_result": "No SmolLM2 or Allal entry among 72 entries."
+    },
+    {
+      "class_id": "smolvlm",
+      "search_result": "No SmolVLM entry among 72 entries."
+    },
+    {
+      "class_id": "bootstrap_methodology",
+      "search_result": "No statistical-bootstrap methodology entry; li2023blip2 is a lexical false positive."
+    },
+    {
+      "class_id": "clustered_or_cluster_robust_inference",
+      "search_result": "No clustered-bootstrap or cluster-robust inference entry among 72 entries."
+    }
+  ],
+  "resolved_key_verification": {
+    "status": "PASS",
+    "actual_bibliography_entry_count": 72,
+    "missing_resolved_keys": [],
+    "lexical_false_positives_substituted": false
+  },
+  "quality_notes": [
+    "Inherited bibliography-quality warnings remain a later verification obligation.",
+    "No entry was added, edited, invented or silently substituted during Stage 5."
+  ],
+  "genai_gate": "PENDING OFFICIAL VERIFICATION — inventory preparation does not authorise substantive assessed prose."
+}

@@ -1,0 +1,414 @@
+{
+  "schema_version": "1.0",
+  "task_id": "dissertation-01-ch3-prep-s5",
+  "stage": 5,
+  "status": "DRAFTING_INTEGRATION_INDEX_ONLY",
+  "generated_utc": "2026-08-24T21:52:00Z",
+  "index_rule": "References only: approved facts remain owned by their closed stage manifests and are addressed by path, SHA-256 and fact or field identifier.",
+  "stage_manifests": [
+    {
+      "stage": 1,
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage1_evidence_manifest.json",
+      "sha256": "ce4062e96e37220ad28ac9e0ab2e13c0ade422b1f216996cc5d00984aee1caf3",
+      "immutable": true
+    },
+    {
+      "stage": 2,
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage2_evidence_manifest.json",
+      "sha256": "d7de03355f3419cb1896abbf13e2214eb159e59ae0080abd8bc5ec6882694d35",
+      "immutable": true
+    },
+    {
+      "stage": 3,
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage3_evidence_manifest.json",
+      "sha256": "3f566fa3c33e05ab4feb50a305d9286481191e1317348ab834a94d00a1fb116e",
+      "immutable": true
+    },
+    {
+      "stage": 4,
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage4_evidence_manifest.json",
+      "sha256": "80b24aaade4fe6f0dc0ecc98ea977894d94bc1907ce322c602d185bf7dfc7e2c",
+      "immutable": true
+    },
+    {
+      "stage": 5,
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage5_evidence_manifest.json",
+      "sha256": "e95f0b844b6654163e52f3878667ec13924e6d3b210f9d691c9a31186a84d150",
+      "immutable_after_stage5_approval": true
+    }
+  ],
+  "sections": [
+    {
+      "section": "3.1",
+      "title": "Methodological framing and design principles",
+      "owning_stage": 1,
+      "manifest_stage": 1,
+      "key_fact_identifiers": [
+        "framing",
+        "frozen_lightweight",
+        "controls_replication",
+        "development_confirmatory_separation",
+        "chapter_organization",
+        "efficiency_boundary",
+        "forbidden_cost_generalization"
+      ],
+      "planned_visuals_or_tables": [],
+      "citation_keys": [
+        "hudson2019gqa",
+        "antol2015vqa",
+        "bourigault2025frevl",
+        "tsimpoukelli2021frozen",
+        "li2023blip2",
+        "lin2022evl"
+      ]
+    },
+    {
+      "section": "3.2",
+      "title": "Task definition: closed-set VQA on GQA",
+      "owning_stage": 1,
+      "manifest_stage": 1,
+      "key_fact_identifiers": [
+        "primary_task",
+        "vocabulary_construction",
+        "e8b_r2",
+        "e8b_r3",
+        "e9",
+        "generation_exclusions"
+      ],
+      "planned_visuals_or_tables": [],
+      "citation_keys": [
+        "hudson2019gqa",
+        "antol2015vqa"
+      ]
+    },
+    {
+      "section": "3.3",
+      "title": "Data partitioning and nested training scales",
+      "owning_stage": 1,
+      "manifest_stage": 1,
+      "key_fact_identifiers": [
+        "development_partition",
+        "development_manifest_images",
+        "training_pool",
+        "nested_scales",
+        "clean_test_structure",
+        "image_disjointness",
+        "verification",
+        "idempotence",
+        "scaling_property"
+      ],
+      "planned_visuals_or_tables": [
+        {
+          "id": "TAB-3.1",
+          "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch3_partition_stats.csv",
+          "sha256": "5d31d53f2b7c81168a6df872dbff9fc3fe65d57b4ea93345691b5b63e4495e7e",
+          "provenance_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch3_partition_stats.provenance.json",
+          "provenance_sha256": "605a04419821faff9de72b71aea6ad369eb987ea3ef51289133fbe491c804d9b"
+        },
+        {
+          "id": "FIG-3.A",
+          "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/figures_src/FIG-3-A.specification.json",
+          "sha256": "2dbc6209338e721c61ddc27c46aeeaaf9abe2122ba430f199955f3fb9ae1263e",
+          "status": "SPECIFICATION_ONLY_RENDER_NOT_AUTHORISED"
+        }
+      ],
+      "citation_keys": [
+        "hudson2019gqa"
+      ]
+    },
+    {
+      "section": "3.4",
+      "title": "Answer-space construction: top-100 and top-1000",
+      "owning_stage": 2,
+      "manifest_stage": 2,
+      "key_fact_identifiers": [
+        "top100_construction",
+        "top100_artifact",
+        "top1000_extension",
+        "prefix_identity_gate",
+        "coverage_design_properties",
+        "v1_v2_label_guard"
+      ],
+      "planned_visuals_or_tables": [],
+      "citation_keys": [
+        "antol2015vqa",
+        "jabri2016revisiting"
+      ]
+    },
+    {
+      "section": "3.5",
+      "title": "Scoring metrics and evaluation denominators",
+      "owning_stage": 2,
+      "manifest_stage": 2,
+      "key_fact_identifiers": [
+        "strict_raw_exact",
+        "g21_normalised_exact",
+        "top100_coincidence",
+        "denominators",
+        "coverage_adjustment",
+        "denominator_guard",
+        "primary_metric_exclusions",
+        "official_gqa_comparison_guard"
+      ],
+      "planned_visuals_or_tables": [],
+      "citation_keys": [
+        "antol2015vqa"
+      ]
+    },
+    {
+      "section": "3.6",
+      "title": "Frozen representations and feature extraction",
+      "owning_stage": 2,
+      "manifest_stage": 2,
+      "key_fact_identifiers": [
+        "clip_global",
+        "siglip_global_swap",
+        "clip_token_stores",
+        "e8a_executed_capacity",
+        "e8a_projection_and_space_disclosure",
+        "e8a_pinned_identity",
+        "e8a_360m_disposition",
+        "e8b_fp32_evaluation_only"
+      ],
+      "planned_visuals_or_tables": [],
+      "citation_keys": [
+        "bourigault2025frevl",
+        "tsimpoukelli2021frozen",
+        "li2023blip2"
+      ]
+    },
+    {
+      "section": "3.7",
+      "title": "Architecture families",
+      "owning_stage": 3,
+      "manifest_stage": 3,
+      "key_fact_identifiers": [
+        "subsection_3_7.global_embedding_heads",
+        "subsection_3_7.latent_query_reasoner",
+        "subsection_3_7.question_side_interface",
+        "subsection_3_7.answer_side_interface",
+        "subsection_3_7.compact_vlm_context",
+        "subsection_3_7.random_controls",
+        "subsection_3_7.parameter_accounting"
+      ],
+      "planned_visuals_or_tables": [
+        {
+          "id": "TAB-3.2",
+          "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch3_architecture_params.csv",
+          "sha256": "0c6225bb2873462b1d4fa8d319e8356cd67cf33e63ace4b0fa27eb435067779e",
+          "provenance_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch3_architecture_params.provenance.json",
+          "provenance_sha256": "d68a4eeabbec5a3cd92f6ee7fca46c78c4f54d222de4a47eb086dd4560516afd"
+        },
+        {
+          "id": "FIG-3.B",
+          "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/figures_src/FIG-3-B.specification.json",
+          "sha256": "2285aa7cdc630d92aa618a6ef69c53c642510c4db2761764b3c209b52256ba1e",
+          "status": "SPECIFICATION_ONLY_RENDER_NOT_AUTHORISED"
+        },
+        {
+          "id": "frozen-smollm2-interface",
+          "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/images/arch/p2607_smollm2_interface_architecture.pdf",
+          "sha256": "619ff8a31f4e4d2e1e2b483e946026a28ac3ee66259bd2c7c70091c7b321f1eb",
+          "status": "FROZEN_EXISTING_RENDER"
+        }
+      ],
+      "citation_keys": [
+        "jaegle2021perceiver",
+        "alayrac2022flamingo",
+        "li2023blip2",
+        "dai2023instructblip",
+        "fukui2016mcb",
+        "kim2017mlb",
+        "benyounes2017mutan",
+        "benyounes2019block"
+      ]
+    },
+    {
+      "section": "3.8",
+      "title": "Training, checkpoints and model selection",
+      "owning_stage": 3,
+      "manifest_stage": 3,
+      "key_fact_identifiers": [
+        "subsection_3_8.protocol_families",
+        "subsection_3_8.checkpoint_selection_authority",
+        "subsection_3_8.precision_rules"
+      ],
+      "planned_visuals_or_tables": [
+        {
+          "id": "TAB-3.3",
+          "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch3_protocol_summary.csv",
+          "sha256": "466cbafb77a51c8fcd5031fb19479d7c0e6a8ffcdb893185953ba3c285142164",
+          "provenance_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch3_protocol_summary.provenance.json",
+          "provenance_sha256": "bf5d88b3811e1f6d7c1f5cf66a51526f26d15eb5abae147e85ebf0655b347438"
+        }
+      ],
+      "citation_keys": []
+    },
+    {
+      "section": "3.9",
+      "title": "Statistical methodology",
+      "owning_stage": 4,
+      "manifest_stage": 4,
+      "key_fact_identifiers": [
+        "canonical_clustered_interval",
+        "row_level_supersession",
+        "seed_sd_separation",
+        "directional_claim_rule",
+        "no_equivalence_from_zero_inclusion",
+        "multiplicity_disclosure",
+        "pooled_ge4_definition_only",
+        "v2_07_inference_limit"
+      ],
+      "planned_visuals_or_tables": [],
+      "citation_keys": []
+    },
+    {
+      "section": "3.10",
+      "title": "Visual-reliance intervention design",
+      "owning_stage": 4,
+      "manifest_stage": 4,
+      "key_fact_identifiers": [
+        "wrong_image_matched_logic",
+        "canonical_imageid_derangement",
+        "row_shuffle_supersession_reason",
+        "e9_matched_partner_scope"
+      ],
+      "planned_visuals_or_tables": [],
+      "citation_keys": []
+    },
+    {
+      "section": "3.11",
+      "title": "Efficiency measurement protocol",
+      "owning_stage": 4,
+      "manifest_stage": 4,
+      "key_fact_identifiers": [
+        "e7a_component_scope",
+        "e7a_additive_withdrawal",
+        "e7b_serial_protocol",
+        "e7b_memory_withdrawal",
+        "e7b_cold_withdrawal",
+        "withdrawal_cause_separation",
+        "e9_contextual_protocol",
+        "cross_node_bridge_boundary",
+        "partial_pipeline_label",
+        "parameter_count_boundary"
+      ],
+      "planned_visuals_or_tables": [],
+      "citation_keys": [
+        "zhao2022vlchecklist",
+        "hsieh2023sugarcrepe",
+        "huang2024conme",
+        "udandarao2025crepe"
+      ]
+    },
+    {
+      "section": "3.12",
+      "title": "Reproducibility, provenance and clean-test governance",
+      "owning_stage": 5,
+      "manifest_stage": 5,
+      "key_fact_identifiers": [
+        "fixed_seed_mechanism",
+        "run_metadata_contract",
+        "dependency_lock_presence",
+        "hash_pinned_provenance",
+        "checkpoint_selection_provenance",
+        "deterministic_conversion",
+        "frozen_render_identity",
+        "reproducibility_limits",
+        "scientific_record_boundary",
+        "clean_test_disclosure",
+        "clean_test_incidents",
+        "clean_test_language_guard",
+        "clean_test_structural_counts",
+        "f1_f2_state_boundary",
+        "pre_f2_marker_convention",
+        "development_confirmatory_distinction"
+      ],
+      "planned_visuals_or_tables": [],
+      "citation_keys": []
+    }
+  ],
+  "drafting_constraints_register": [
+    {
+      "constraint_id": "s1_rq_wording",
+      "source": "stage1:3.1/pending_source_verification",
+      "constraint": "Formal RQ1-RQ3 wording must be resolved before Section 3.1 prose."
+    },
+    {
+      "constraint_id": "s2_clip_two_tower",
+      "source": "stage2:3.6/clip_global",
+      "constraint": "Use separate image and text encoders within one jointly pretrained checkpoint, aligned into a shared embedding space; never imply one encoder processes both modalities."
+    },
+    {
+      "constraint_id": "s2_coverage_precision",
+      "source": "stage2:3.4/coverage_design_properties",
+      "constraint": "Quote 0.7711 as reported, or label 0.771092 as derived from the canonical counts."
+    },
+    {
+      "constraint_id": "s3_single_interaction_count",
+      "source": "stage3:subsection_3_7.parameter_accounting and TAB-3.2",
+      "constraint": "Disambiguate per-control counts for the aggregated single_interaction_natural row."
+    },
+    {
+      "constraint_id": "s3_omitted_accounting",
+      "source": "stage3:pending_source_verification",
+      "constraint": "Omitted loaded/resident-frozen cells remain omitted unless a canonical source is pinned."
+    },
+    {
+      "constraint_id": "s4_directional_rule",
+      "source": "stage4:3.9/directional_claim_rule",
+      "constraint": "Use the exact mean-plus-interval-plus-at-least-two-of-three-seed-sign rule and the fallback wording uncertain or mixed evidence."
+    },
+    {
+      "constraint_id": "s4_bucket_priors",
+      "source": "stage4:3.9/pooled_ge4_definition_only",
+      "constraint": "Do not recall omitted bucket-prior constants; independently provenance-pin them if later required."
+    }
+  ],
+  "classified_pending_register": [
+    {
+      "pending_id": "rq_formal_wording",
+      "classification": "PENDING SOURCE VERIFICATION",
+      "required_before": "Section 3.1 prose",
+      "decision_owner": "user/Claude"
+    },
+    {
+      "pending_id": "eligible_pool_represented_images",
+      "classification": "PENDING SOURCE VERIFICATION",
+      "required": false,
+      "default_action": "omit"
+    },
+    {
+      "pending_id": "omitted_parameter_accounting_groups",
+      "classification": "PENDING SOURCE VERIFICATION",
+      "required": false,
+      "items": [
+        "TAB-3.2-A1r-full-accounting",
+        "TAB-3.2-E10-full-accounting",
+        "TAB-3.2-resident-breakdowns"
+      ],
+      "default_action": "keep omitted"
+    },
+    {
+      "pending_id": "genai_gate",
+      "classification": "PENDING OFFICIAL VERIFICATION",
+      "required_before": "substantive assessed dissertation prose",
+      "scope": "EEEM004 assessment-specific GenAI permission/disclosure"
+    }
+  ],
+  "pre_f2_marker_convention": {
+    "marker": "% PRE-F2 PENDING F2 REVIEW: <what depends>",
+    "constraints": [
+      "No numeric placeholder.",
+      "No expected outcome.",
+      "No implied success.",
+      "No F1 model-list membership."
+    ]
+  },
+  "governance_boundary": {
+    "f1": "UNSTARTED_AND_NOT_AUTHORISED",
+    "f2": "UNSTARTED_AND_UNAUTHORISED",
+    "drafting": "BLOCKED_BY_PENDING_OFFICIAL_GENAI_VERIFICATION",
+    "next_stage_automatically_authorized": false
+  }
+}
