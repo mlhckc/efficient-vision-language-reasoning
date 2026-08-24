@@ -1,0 +1,6 @@
+system,language model,effect (250k minus 40k),95% CI (image-clustered),excludes zero,"sd (training seeds, ddof=1)",evidence id
+B4 (answer side),"SmolLM2-360M, pretrained",0.06771,"[0.05800, 0.07738]",true,0.01208,EV-CON-E10.scale_effect_B4
+B4r (answer side),"SmolLM2-360M, random",0.06326,"[0.05287, 0.07296]",true,0.00611,EV-CON-E10.scale_effect_B4r
+B1 (answer side (no language model)),none (lightweight classifier readout),0.04887,"[0.03943, 0.05801]",true,not available,EV-CON-E8B.scale_effect_B1
+B2 (answer side),"SmolLM2-135M, random",0.06693,"[0.05683, 0.07633]",true,not available,EV-CON-E8B.scale_effect_B2
+B3 (answer side),"SmolLM2-135M, pretrained",0.08681,"[0.07781, 0.09640]",true,not available,EV-CON-E8B.scale_effect_B3

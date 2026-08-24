@@ -37,7 +37,7 @@
 %%% Setting the Chapter and Section settings to Surrey requirements %%%
 \usepackage{titlesec}
 \titleformat{\chapter}[block]
-{\fontsize{12}{15}\bfseries}
+{\fontsize{12}{15}\bfseries\raggedright}
 {\thechapter}
 {1em}
 {\MakeUppercase}
@@ -80,7 +80,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 \normalsize
-\rhead{\textcolor{ashgrey}{, MSc dissertation}}
+\rhead{\textcolor{ashgrey}{M. Cekic, MSc dissertation}}
 \renewcommand{\headrulewidth}{0pt}
 %%%%%%%%%%%%%%%%%COVER PAGE%%%%%%%%%%%%%%%%%
 %\thispagestyle{empty}
@@ -90,7 +90,7 @@
 \vspace{3em}
         {\Large \bf Melihsah Cekic}\\
         \vspace{2em}
-        {\Large\textit{Master of Science in PATHWAY}\\
+        {\Large\textit{Master of Science in Artificial Intelligence}\\
         from the\\
         University of Surrey\\
         \vspace{2em}
@@ -150,12 +150,12 @@
 \end{spacing}
 
 %%%%%%%%%%%%%%%%%TABLES%%%%%%%%%%%%%%%%%%%%%%
-%\clearpage
-%\newpage
-%\addcontentsline{toc}{chapter}{List of tables}
-%\begin{spacing}{1.4}
-%\listoftables
-%\end{spacing}
+\clearpage
+\newpage
+\addcontentsline{toc}{chapter}{List of tables}
+\begin{spacing}{1.4}
+\listoftables
+\end{spacing}
 
 \newpage
 \pagenumbering{arabic}
@@ -167,14 +167,20 @@
 %%%%%%%%%%%%%%%%CHAPTERS%%%%%%%%%%%%%%%%%%%%%
 \include{./chapters/introduction}
 \include{./chapters/theory}
+\include{./chapters/methodology}
 \include{./chapters/technical}
 \include{./chapters/technical2}
+\include{./chapters/slm}
+\include{./chapters/efficiency}
+\include{./chapters/discussion}
 \include{./chapters/conclusions}
 
 %%%%%%%%%%%%%%%%%%%ETC%%%%%%%%%%%%%%%%%%%%%%
 \addcontentsline{toc}{chapter}{Bibliography}
+% Temporary Phase-0 bibliography exercise; remove once Phase-1 citations exist.
+\nocite{*}
 \bibliographystyle{./style/myabbrvnat}
-\bibliography{./references/thesisbib}
+\bibliography{./references/references}
 
 
 %\addcontentsline{toc}{chapter}{List of Publications} % If you have published anything during your research
