@@ -1,0 +1,306 @@
+{
+  "schema_version": 1,
+  "task_id": "dissertation-01-ch3-prep-s3",
+  "stage": 3,
+  "status": "CELL_LEVEL_PROVENANCE_COMPLETE",
+  "csv_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch3_architecture_params.csv",
+  "data_row_count": 20,
+  "column_count": 8,
+  "populated_cell_count": 144,
+  "all_populated_cells_have_provenance": true,
+  "all_digit_bearing_cells_have_numeric_token_provenance": true,
+  "forbidden_columns_absent": [
+    "latency",
+    "memory",
+    "accuracy"
+  ],
+  "parameter_semantics": {
+    "trainable_parameters": "parameters optimised for the named system or shared arm pair",
+    "total_loaded_parameters": "all parameters loaded for the stated accounting scope",
+    "resident_frozen_parameters": "loaded parameters retained frozen for the stated accounting scope",
+    "blank": "the value is deliberately omitted where no directly comparable canonical field was located"
+  },
+  "sources": {
+    "plan": {
+      "path": ".agent-bridge/tasks/dissertation-01-ch3-prep-s3/10-claude-plan.md",
+      "sha256": "d6e2091bf24390f06b0e7efbbf97be83b71e959f2de2b155a850ab81f56b3dcf"
+    },
+    "src_models": {
+      "path": "src/models.py",
+      "sha256": "6fb21220797d851597fc9b727480315e8a211b38220ad8d696d6b5d3278ec0da"
+    },
+    "v203": {
+      "path": "artifacts/results_export/v2_03_param_match/results.json",
+      "sha256": "9494f8a706b26dc82a66bb28280411acbd079991f353da8467248ac0c1947f92"
+    },
+    "v204_source": {
+      "path": "experiments/v2_04_ablation/run.py",
+      "sha256": "f4e1986209e28f15114d23003c28edd02455c260bb38f6ace045fb32683c73f4"
+    },
+    "v204": {
+      "path": "artifacts/results_export/v2_04_ablation/results.json",
+      "sha256": "3e4a7652dd1e7418b1a19244d85017a4442b6638e86c3d85b1c4888cbceed608"
+    },
+    "v302a_source": {
+      "path": "experiments/v3_02a_refs/run_refs.py",
+      "sha256": "44c2fa2c311a6307626d0e612b7c691d156e1f0533cdb25c3601eeeddf887b11"
+    },
+    "v302a": {
+      "path": "artifacts/results_export/v3_02a_refs/refs_results.json",
+      "sha256": "f3994a00e84999bf721af45f774c023a7cd0ab0e298668c94b9044ce5bb160e9"
+    },
+    "reasoner_source": {
+      "path": "src/reasoner.py",
+      "sha256": "3faafcd25e3f9e233c5173b71c1e1bbdd92859047d7b701d97ee16049892062c"
+    },
+    "e7b": {
+      "path": "results/experiments/e7b_serial_efficiency/e7b_results.json",
+      "sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4"
+    },
+    "e8a_source": {
+      "path": "experiments/e8a_question_encoder/e8a_common.py",
+      "sha256": "cd6c8ce0f0f9d93ec367d9e4c9ec611e5768e334964fe6d7c18bb3a04a70ba20"
+    },
+    "e8a_a1r": {
+      "path": "results/experiments/e8a_question_encoder/run_A1r_train_40k_seed1.json",
+      "sha256": "68964a6fa4449bd9984c2d33cff5bc6758f97ac6ccc2dc1f38ea3332e34c3232"
+    },
+    "e8b_source": {
+      "path": "experiments/e8b_readout_generation/run.py",
+      "sha256": "d05c79a749f6c4dc17e37d81f4f7598ea7f74d2e6573c4feae8243c2253e1430"
+    },
+    "closure_params": {
+      "path": "results/closure/efficiency_closure_table.json",
+      "sha256": "be1781efeece841cc75df126fab43c9e9946437957c1ea6401ee1f86c8b47d5e"
+    },
+    "e10_source": {
+      "path": "experiments/e10_capacity_360m/e10_common.py",
+      "sha256": "2f4b490d80112aba71c4acc4f4cdd57c9465a9c2ceb2add39f64e02682546065"
+    },
+    "e10_b4": {
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4_train_40k_seed0.json",
+      "sha256": "3f7e3ef2bd73a860ca00b0f62ff73572c710fc9f0ed54006054943d50b0b5d22"
+    },
+    "e10_b4r": {
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4r_train_40k_seed0.json",
+      "sha256": "6ad47230bfbde18c6d1a16eb1ebc9403ead65ddfd4fd6fdab7c2bee2f9327201"
+    },
+    "e9": {
+      "path": "results/experiments/e9_compact_vlm/frozen_protocol.json",
+      "sha256": "e38c0b9e6702cebd97f08487d70177ac49064df5db3e2e1c0d38601415769b02"
+    }
+  },
+  "header_provenance": {
+    "columns": [
+      "family",
+      "system",
+      "implemented_form",
+      "interface_summary",
+      "trainable_parameters",
+      "total_loaded_parameters",
+      "resident_frozen_parameters",
+      "count_scope"
+    ],
+    "source_id": "plan",
+    "source_location": "STAGE 3 OWNED DELIVERABLES / TAB-3.2"
+  },
+  "row_provenance": [
+    {
+      "row_index": 1,
+      "row_key": "question_only",
+      "populated_columns": ["family", "system", "implemented_form", "interface_summary", "trainable_parameters", "total_loaded_parameters", "resident_frozen_parameters", "count_scope"],
+      "default_source": {"source_id": "src_models", "source_location": "QuestionOnlyModel and MLPHead"},
+      "cell_overrides": {
+        "trainable_parameters": {"source_id": "v203", "source_location": "$.v2_03_param_match.parameter_counts.question_only", "numeric_value": 313956},
+        "total_loaded_parameters": {"source_id": "e7b", "source_location": "$.e7b_analysis.systems.question_only.parameters.total_loaded", "numeric_value": 151591269},
+        "resident_frozen_parameters": {"source_id": "e7b", "source_location": "$.e7b_analysis.systems.question_only.parameters.resident_frozen", "numeric_value": 151277313},
+        "count_scope": {"source_id": "e7b", "source_location": "$.e7b_analysis.systems.question_only.parameters.convention"}
+      }
+    },
+    {
+      "row_index": 2,
+      "row_key": "image_only",
+      "populated_columns": ["family", "system", "implemented_form", "interface_summary", "trainable_parameters", "count_scope"],
+      "default_source": {"source_id": "src_models", "source_location": "ImageOnlyModel and MLPHead"},
+      "cell_overrides": {"trainable_parameters": {"source_id": "v203", "source_location": "$.v2_03_param_match.parameter_counts.image_only", "numeric_value": 313956}}
+    },
+    {
+      "row_index": 3,
+      "row_key": "concat",
+      "populated_columns": ["family", "system", "implemented_form", "interface_summary", "trainable_parameters", "total_loaded_parameters", "resident_frozen_parameters", "count_scope"],
+      "default_source": {"source_id": "src_models", "source_location": "ConcatModel.forward and MLPHead"},
+      "cell_overrides": {
+        "trainable_parameters": {"source_id": "v203", "source_location": "$.v2_03_param_match.parameter_counts.concat", "numeric_value": 576100},
+        "total_loaded_parameters": {"source_id": "e7b", "source_location": "$.e7b_analysis.systems.concat.parameters.total_loaded", "numeric_value": 151853413},
+        "resident_frozen_parameters": {"source_id": "e7b", "source_location": "$.e7b_analysis.systems.concat.parameters.resident_frozen", "numeric_value": 151277313},
+        "count_scope": {"source_id": "e7b", "source_location": "$.e7b_analysis.systems.concat.parameters.convention"}
+      }
+    },
+    {
+      "row_index": 4,
+      "row_key": "fusion",
+      "populated_columns": ["family", "system", "implemented_form", "interface_summary", "trainable_parameters", "total_loaded_parameters", "resident_frozen_parameters", "count_scope"],
+      "default_source": {"source_id": "src_models", "source_location": "FusionModel.forward and MLPHead"},
+      "cell_overrides": {
+        "trainable_parameters": {"source_id": "v203", "source_location": "$.v2_03_param_match.parameter_counts.fusion", "numeric_value": 1100388},
+        "total_loaded_parameters": {"source_id": "e7b", "source_location": "$.e7b_analysis.systems.fusion.parameters.total_loaded", "numeric_value": 152377701},
+        "resident_frozen_parameters": {"source_id": "e7b", "source_location": "$.e7b_analysis.systems.fusion.parameters.resident_frozen", "numeric_value": 151277313},
+        "count_scope": {"source_id": "e7b", "source_location": "$.e7b_analysis.systems.fusion.parameters.convention"}
+      }
+    },
+    {
+      "row_index": 5,
+      "row_key": "concat_wide",
+      "populated_columns": ["family", "system", "implemented_form", "interface_summary", "trainable_parameters", "count_scope"],
+      "default_source": {"source_id": "v203", "source_location": "$.v2_03_param_match.matched_widths.concat_wide"},
+      "cell_overrides": {"implemented_form": {"source_id": "src_models", "source_location": "ConcatModel(hidden_dim)"}, "trainable_parameters": {"source_id": "v203", "source_location": "$.v2_03_param_match.parameter_counts.concat_wide", "numeric_value": 1101475}}
+    },
+    {
+      "row_index": 6,
+      "row_key": "fusion_narrow",
+      "populated_columns": ["family", "system", "implemented_form", "interface_summary", "trainable_parameters", "count_scope"],
+      "default_source": {"source_id": "v203", "source_location": "$.v2_03_param_match.matched_widths.fusion_narrow"},
+      "cell_overrides": {"implemented_form": {"source_id": "src_models", "source_location": "FusionModel(hidden_dim)"}, "trainable_parameters": {"source_id": "v203", "source_location": "$.v2_03_param_match.parameter_counts.fusion_narrow", "numeric_value": 576032}}
+    },
+    {
+      "row_index": 7,
+      "row_key": "product_576k",
+      "populated_columns": ["family", "system", "implemented_form", "interface_summary", "trainable_parameters", "count_scope"],
+      "default_source": {"source_id": "v204_source", "source_location": "ProductFusion"},
+      "cell_overrides": {"trainable_parameters": {"source_id": "v204", "source_location": "$.v2_04_ablation.parameter_counts.product_576k", "numeric_value": 574687}}
+    },
+    {
+      "row_index": 8,
+      "row_key": "difference_576k",
+      "populated_columns": ["family", "system", "implemented_form", "interface_summary", "trainable_parameters", "count_scope"],
+      "default_source": {"source_id": "v204_source", "source_location": "DifferenceFusion"},
+      "cell_overrides": {"trainable_parameters": {"source_id": "v204", "source_location": "$.v2_04_ablation.parameter_counts.difference_576k", "numeric_value": 574687}}
+    },
+    {
+      "row_index": 9,
+      "row_key": "single_interaction_natural",
+      "populated_columns": ["family", "system", "implemented_form", "interface_summary", "trainable_parameters", "count_scope"],
+      "default_source": {"source_id": "v204_source", "source_location": "ProductFusion and DifferenceFusion natural-width variants"},
+      "cell_overrides": {"trainable_parameters": {"source_id": "v204", "source_location": "$.v2_04_ablation.parameter_counts.product_natural and $.v2_04_ablation.parameter_counts.difference_natural", "numeric_value": 838244}}
+    },
+    {
+      "row_index": 10,
+      "row_key": "direct_linear",
+      "populated_columns": ["family", "system", "implemented_form", "interface_summary", "trainable_parameters", "count_scope"],
+      "default_source": {"source_id": "v302a_source", "source_location": "DirectLinear"},
+      "cell_overrides": {"trainable_parameters": {"source_id": "v302a", "source_location": "$.v3_02a_refs.direct_linear.trainable_parameters", "numeric_value": 102500}}
+    },
+    {
+      "row_index": 11,
+      "row_key": "meanpatch_concat",
+      "populated_columns": ["family", "system", "implemented_form", "interface_summary", "trainable_parameters", "count_scope"],
+      "default_source": {"source_id": "v302a_source", "source_location": "meanpatch_concat construction"},
+      "cell_overrides": {"trainable_parameters": {"source_id": "v302a", "source_location": "$.v3_02a_refs.meanpatch_concat.trainable_parameters", "numeric_value": 576100}}
+    },
+    {
+      "row_index": 12,
+      "row_key": "latent_reasoner",
+      "populated_columns": ["family", "system", "implemented_form", "interface_summary", "trainable_parameters", "total_loaded_parameters", "resident_frozen_parameters", "count_scope"],
+      "default_source": {"source_id": "reasoner_source", "source_location": "LatentQueryReasoner and ReasonerBlock"},
+      "cell_overrides": {
+        "trainable_parameters": {"source_id": "e7b", "source_location": "$.e7b_analysis.systems.reasoner.parameters.trainable", "numeric_value": 21099620},
+        "total_loaded_parameters": {"source_id": "e7b", "source_location": "$.e7b_analysis.systems.reasoner.parameters.total_loaded", "numeric_value": 172376933},
+        "resident_frozen_parameters": {"source_id": "e7b", "source_location": "$.e7b_analysis.systems.reasoner.parameters.resident_frozen", "numeric_value": 151277313},
+        "count_scope": {"source_id": "e7b", "source_location": "$.e7b_analysis.systems.reasoner.parameters.convention"}
+      }
+    },
+    {
+      "row_index": 13,
+      "row_key": "A0p",
+      "populated_columns": ["family", "system", "implemented_form", "interface_summary", "trainable_parameters", "total_loaded_parameters", "resident_frozen_parameters", "count_scope"],
+      "default_source": {"source_id": "e8a_source", "source_location": "ARM_SPECS.A0p and build_reasoner"},
+      "cell_overrides": {
+        "trainable_parameters": {"source_id": "e7b", "source_location": "$.e7b_analysis.systems.e8a_a0p.parameters.trainable", "numeric_value": 21362276},
+        "total_loaded_parameters": {"source_id": "e7b", "source_location": "$.e7b_analysis.systems.e8a_a0p.parameters.total_loaded", "numeric_value": 172639589},
+        "resident_frozen_parameters": {"source_id": "e7b", "source_location": "$.e7b_analysis.systems.e8a_a0p.parameters.resident_frozen", "numeric_value": 151277313},
+        "count_scope": {"source_id": "e7b", "source_location": "$.e7b_analysis.systems.e8a_a0p.parameters.convention"}
+      }
+    },
+    {
+      "row_index": 14,
+      "row_key": "A1",
+      "populated_columns": ["family", "system", "implemented_form", "interface_summary", "trainable_parameters", "total_loaded_parameters", "resident_frozen_parameters", "count_scope"],
+      "default_source": {"source_id": "e8a_source", "source_location": "ARM_SPECS.A1 and build_reasoner"},
+      "cell_overrides": {
+        "trainable_parameters": {"source_id": "e7b", "source_location": "$.e7b_analysis.systems.e8a_a1.parameters.trainable", "numeric_value": 21395044},
+        "total_loaded_parameters": {"source_id": "e7b", "source_location": "$.e7b_analysis.systems.e8a_a1.parameters.total_loaded", "numeric_value": 307187365},
+        "resident_frozen_parameters": {"source_id": "e7b", "source_location": "$.e7b_analysis.systems.e8a_a1.parameters.resident_frozen", "numeric_value": 285792321},
+        "count_scope": {"source_id": "e7b", "source_location": "$.e7b_analysis.systems.e8a_a1.parameters.convention"}
+      }
+    },
+    {
+      "row_index": 15,
+      "row_key": "A1r",
+      "populated_columns": ["family", "system", "implemented_form", "interface_summary", "trainable_parameters", "count_scope"],
+      "default_source": {"source_id": "e8a_source", "source_location": "ARM_SPECS.A1r and build_reasoner"},
+      "cell_overrides": {"trainable_parameters": {"source_id": "e8a_a1r", "source_location": "$.e8a_core_run.evaluation.efficiency.trainable_parameters", "numeric_value": 21395044}}
+    },
+    {
+      "row_index": 16,
+      "row_key": "B1",
+      "populated_columns": ["family", "system", "implemented_form", "interface_summary", "trainable_parameters", "total_loaded_parameters", "count_scope"],
+      "default_source": {"source_id": "e8b_source", "source_location": "AttentionPoolReadout and ARMS.B1"},
+      "cell_overrides": {
+        "trainable_parameters": {"source_id": "closure_params", "source_location": "$.rows[25].trainable_parameters where system_id=e8b_B1", "numeric_value": 21100132},
+        "total_loaded_parameters": {"source_id": "closure_params", "source_location": "$.rows[25].total_loaded_parameters where system_id=e8b_B1", "numeric_value": 172377445},
+        "count_scope": {"source_id": "closure_params", "source_location": "$.rows[25] full loaded system row"}
+      }
+    },
+    {
+      "row_index": 17,
+      "row_key": "B2_and_B3",
+      "populated_columns": ["family", "system", "implemented_form", "interface_summary", "trainable_parameters", "total_loaded_parameters", "count_scope"],
+      "default_source": {"source_id": "e8b_source", "source_location": "ARMS.B2, ARMS.B3 and LM readout construction"},
+      "cell_overrides": {
+        "trainable_parameters": {"source_id": "closure_params", "source_location": "$.rows[26].trainable_parameters and $.rows[28].trainable_parameters", "numeric_value": 21343808},
+        "total_loaded_parameters": {"source_id": "closure_params", "source_location": "$.rows[26].total_loaded_parameters and $.rows[28].total_loaded_parameters", "numeric_value": 307136129},
+        "count_scope": {"source_id": "closure_params", "source_location": "$.rows[26] and $.rows[28] full loaded system rows"}
+      }
+    },
+    {
+      "row_index": 18,
+      "row_key": "B4r_and_B4",
+      "populated_columns": ["family", "system", "implemented_form", "interface_summary", "trainable_parameters", "count_scope"],
+      "default_source": {"source_id": "e10_source", "source_location": "ARMS, build_trainable and EXPECTED_*_PARAMETERS"},
+      "cell_overrides": {"trainable_parameters": {"source_id": "e10_b4", "source_location": "$.e10_core_cell.setup.construction.trainable_parameters; equal field independently present in e10_b4r", "numeric_value": 21540800}, "count_scope": {"source_id": "e10_b4r", "source_location": "$.e10_core_cell.setup.construction.trainable_parameters confirms identical B4r count"}}
+    },
+    {
+      "row_index": 19,
+      "row_key": "SmolVLM-256M-Instruct",
+      "populated_columns": ["family", "system", "implemented_form", "interface_summary", "trainable_parameters", "total_loaded_parameters", "count_scope"],
+      "default_source": {"source_id": "e9", "source_location": "$.models.smolvlm_256m"},
+      "cell_overrides": {"trainable_parameters": {"source_id": "e9", "source_location": "$.models.smolvlm_256m.trainable_parameters", "numeric_value": 0}, "total_loaded_parameters": {"source_id": "e9", "source_location": "$.models.smolvlm_256m.parameters", "numeric_value": 256484928}}
+    },
+    {
+      "row_index": 20,
+      "row_key": "SmolVLM-500M-Instruct",
+      "populated_columns": ["family", "system", "implemented_form", "interface_summary", "trainable_parameters", "total_loaded_parameters", "count_scope"],
+      "default_source": {"source_id": "e9", "source_location": "$.models.smolvlm_500m"},
+      "cell_overrides": {"trainable_parameters": {"source_id": "e9", "source_location": "$.models.smolvlm_500m.trainable_parameters", "numeric_value": 0}, "total_loaded_parameters": {"source_id": "e9", "source_location": "$.models.smolvlm_500m.parameters", "numeric_value": 507482304}}
+    }
+  ],
+  "omissions": [
+    "No withdrawn E7b latency, memory or cold-query field is imported.",
+    "A1r full-system total-loaded/resident-frozen counts are omitted because no directly comparable canonical full-system field was located: PENDING SOURCE VERIFICATION.",
+    "E10 full-system total-loaded/resident-frozen counts are omitted; the canonical completed cells directly pin only the trainable interface total and frozen-LM component count: PENDING SOURCE VERIFICATION.",
+    "A separately recorded resident-frozen breakdown for B1, B2/B3 and the two E9 contextual systems was not located and is omitted: PENDING SOURCE VERIFICATION.",
+    "Parameter count is not used as a proxy for measured latency."
+  ],
+  "pending_source_verification": [
+    {"cells": ["A1r.total_loaded_parameters", "A1r.resident_frozen_parameters"], "status": "PENDING SOURCE VERIFICATION"},
+    {"cells": ["B4r_and_B4.total_loaded_parameters", "B4r_and_B4.resident_frozen_parameters"], "status": "PENDING SOURCE VERIFICATION"},
+    {"cells": ["B1.resident_frozen_parameters", "B2_and_B3.resident_frozen_parameters", "SmolVLM-256M-Instruct.resident_frozen_parameters", "SmolVLM-500M-Instruct.resident_frozen_parameters"], "status": "PENDING SOURCE VERIFICATION"}
+  ],
+  "converter_verification": {
+    "command": "python3 tools/tab2latex.py tables_src/ch3_architecture_params.csv --output tables_src/ch3_architecture_params.demo.tex --verify",
+    "exit_code": 0,
+    "output_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch3_architecture_params.demo.tex",
+    "output_sha256": "0f5add22a8f1bf33eba143d8a924697d4a1d07bbf63a46d4d8a8019a839f10df"
+  },
+  "no_data_access": true
+}

@@ -1,0 +1,21 @@
+family,system,implemented_form,interface_summary,trainable_parameters,total_loaded_parameters,resident_frozen_parameters,count_scope
+Global-embedding heads,question_only,QuestionOnlyModel with MLPHead,question global vector to classifier,313956,151591269,151277313,full E7b system accounting
+Global-embedding heads,image_only,ImageOnlyModel with MLPHead,image global vector to classifier,313956,,,trainable head only
+Global-embedding heads,concat,ConcatModel with MLPHead,ordered image and question concatenation,576100,151853413,151277313,full E7b system accounting
+Global-embedding heads,fusion,FusionModel with MLPHead,ordered globals plus product and absolute difference,1100388,152377701,151277313,full E7b system accounting
+Global-embedding heads,concat_wide,ConcatModel with widened MLPHead,bidirectional parameter-matched concat control,1101475,,,trainable head only
+Global-embedding heads,fusion_narrow,FusionModel with narrowed MLPHead,bidirectional parameter-matched fusion control,576032,,,trainable head only
+Global-embedding heads,product_576k,ProductFusion,globals plus elementwise product,574687,,,trainable head only
+Global-embedding heads,difference_576k,DifferenceFusion,globals plus absolute difference,574687,,,trainable head only
+Global-embedding heads,single_interaction_natural,ProductFusion or DifferenceFusion,natural-width single-interaction controls,838244,,,trainable head per control
+Global-embedding references,direct_linear,DirectLinear,concatenated globals to one linear classifier,102500,,,trainable reference only
+Global-embedding references,meanpatch_concat,ConcatModel with MLPHead,mean image patches plus question global vector,576100,,,trainable reference only
+Token-level reasoner,latent_reasoner,LatentQueryReasoner,learned latent queries over cached question and image tokens,21099620,172376933,151277313,full E7b system accounting
+Question-side SLM interface,A0p,E8A interface-matched CLIP control,CLIP question tokens projected to reasoner width,21362276,172639589,151277313,full E7b system accounting
+Question-side SLM interface,A1,E8A pretrained SmolLM2-135M arm,frozen language-model states projected to reasoner width,21395044,307187365,285792321,full E7b system accounting
+Question-side SLM interface,A1r,E8A matched-random SmolLM2-135M arm,frozen random language-model states projected to reasoner width,21395044,,,trainable reasoner plus projection
+Answer-side SLM interface,B1,attention-pool classifier,language-model-free readout over reasoner latents,21100132,172377445,,full closure-table loaded-system accounting
+Answer-side SLM interface,B2 and B3,E8B random and pretrained SmolLM2-135M arms,reasoner trunk plus projection into frozen language model,21343808,307136129,,full closure-table loaded-system accounting
+Answer-side SLM interface,B4r and B4,E10 random and pretrained SmolLM2-360M arms,reasoner trunk plus wider projection into frozen language model,21540800,,,trainable trunk plus projection
+Compact-VLM contextual class,SmolVLM-256M-Instruct,frozen integrated VLM,evaluation only,0,256484928,,total model parameters with zero trainable
+Compact-VLM contextual class,SmolVLM-500M-Instruct,frozen integrated VLM,evaluation only,0,507482304,,total model parameters with zero trainable

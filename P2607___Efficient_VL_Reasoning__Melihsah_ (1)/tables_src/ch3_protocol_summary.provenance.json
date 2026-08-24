@@ -1,0 +1,214 @@
+{
+  "schema_version": 1,
+  "task_id": "dissertation-01-ch3-prep-s3",
+  "stage": 3,
+  "status": "CELL_LEVEL_PROVENANCE_COMPLETE",
+  "csv_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch3_protocol_summary.csv",
+  "data_row_count": 7,
+  "column_count": 11,
+  "populated_cell_count": 81,
+  "all_populated_cells_have_provenance": true,
+  "all_digit_bearing_cells_have_numeric_token_provenance": true,
+  "protocol_constants_only": true,
+  "empirical_outcomes_absent": true,
+  "sources": {
+    "plan": {
+      "path": ".agent-bridge/tasks/dissertation-01-ch3-prep-s3/10-claude-plan.md",
+      "sha256": "d6e2091bf24390f06b0e7efbbf97be83b71e959f2de2b155a850ab81f56b3dcf"
+    },
+    "v2": {
+      "path": "docs/experiments/v2_02_multiseed.md",
+      "sha256": "9c8ab58933caf050e9206f8a402186fabc75559997dca4a5d794ca25b5ed9f8d"
+    },
+    "v3_01": {
+      "path": "docs/experiments/v3_01_reasoner.md",
+      "sha256": "cec00aef691c7c384ce5fbde42bce611e112260e59a3ba1718a2c5f89d9bbf21"
+    },
+    "v3_03": {
+      "path": "docs/experiments/v3_03_scaling.md",
+      "sha256": "52c7560f9d2d4a99eff5810108ae5ff501626c1f59b094672f6d7abdb41f8e8f"
+    },
+    "e8a": {
+      "path": "docs/experiments/e8a_core_135m.md",
+      "sha256": "7d6c0626e4e1e3aa56978f15e180357f398f3c0481701bf0e667fa6f8d6f3e65"
+    },
+    "e8b_report": {
+      "path": "docs/experiments/e8b_core_matrix.md",
+      "sha256": "328e1a1c311daa08fcb182e67652b1d37e81108ee3572bd8297cb26b486b4a93"
+    },
+    "e8b_b1": {
+      "path": "results/experiments/e8b_readout_generation/e8b_core_B1_train_40k_seed0.json",
+      "sha256": "77a0a26ab8f828134f0f44e46a725c5ffffeb7e3ad8b62216e608fbf0b898920"
+    },
+    "e8b_b2": {
+      "path": "results/experiments/e8b_readout_generation/e8b_core_B2_train_40k_seed0.json",
+      "sha256": "1c9b7699ac7100e553bdd6d6db920f5f75576253b70af5adcd3e92378060449c"
+    },
+    "e8b_b3": {
+      "path": "results/experiments/e8b_readout_generation/e8b_core_B3_train_40k_seed0.json",
+      "sha256": "df16f96c1be90c5bfa6f94e35435c39c56e1a0e02fb47204c62723aa0104d315"
+    },
+    "selection_repair": {
+      "path": "results/closure/pre_f1_evidence_metadata_repair_20260814.json",
+      "sha256": "e35db6dddca6f587791527f3a9e9846905486413c851d1f896129a3f6a015f42"
+    },
+    "e10_report": {
+      "path": "docs/experiments/e10_core_matrix.md",
+      "sha256": "11491ff36bd14417f9991787a008285590bedfb80dc8f84e617da87b9b4f0ddd"
+    },
+    "e10_method": {
+      "path": "docs/experiments/e10_phase2_scientific_pipeline.md",
+      "sha256": "c82a0bc177cb169725906dbcd2493f89ec7abcf95b55639222e61db4a9eb0d6b"
+    },
+    "e9_report": {
+      "path": "docs/experiments/e9_compact_vlm.md",
+      "sha256": "6303aede69f12850c6ba8ecaf7f80eb2101f976705f6094cb8d9363d1086ad8c"
+    },
+    "e9_protocol": {
+      "path": "results/experiments/e9_compact_vlm/frozen_protocol.json",
+      "sha256": "e38c0b9e6702cebd97f08487d70177ac49064df5db3e2e1c0d38601415769b02"
+    }
+  },
+  "header_provenance": {
+    "columns": ["family", "systems", "seeds", "training_scales", "learning_rate", "warmup_fraction", "dropout", "max_epochs", "early_stopping", "checkpoint_selection", "matched_or_fixed_control"],
+    "source_id": "plan",
+    "source_location": "STAGE 3 OWNED DELIVERABLES / TAB-3.3"
+  },
+  "row_provenance": [
+    {
+      "row_index": 1,
+      "row_key": "V2_controlled_global_heads",
+      "populated_columns": ["family", "systems", "seeds", "training_scales", "learning_rate", "dropout", "max_epochs", "early_stopping", "checkpoint_selection", "matched_or_fixed_control"],
+      "default_source": {"source_id": "v2", "source_location": "Purpose and Method"},
+      "numeric_tokens": {
+        "seeds": {"values": [0, 1, 2, 3, 42], "source_location": "Method: seeds 0, 1, 2, 3 and 42"},
+        "training_scales": {"values": [40000], "display_transform": "train_40k", "source_location": "Purpose: V2 train_40k manifest"},
+        "learning_rate": {"values": [0.001], "source_location": "Method: learning rate 1e-3"},
+        "dropout": {"values": [0.3], "source_location": "Method: dropout 0.3"},
+        "max_epochs": {"values": [30], "source_location": "Method: 30 epochs"}
+      },
+      "blank_cells": {"warmup_fraction": "The V2 report does not define a warmup fraction; no zero is inferred."}
+    },
+    {
+      "row_index": 2,
+      "row_key": "V3_latent_reasoner",
+      "populated_columns": ["family", "systems", "seeds", "training_scales", "learning_rate", "warmup_fraction", "dropout", "max_epochs", "early_stopping", "checkpoint_selection", "matched_or_fixed_control"],
+      "default_source": {"source_id": "v3_03", "source_location": "Method"},
+      "additional_sources": {"training_scales": {"source_id": "v3_01", "source_location": "40k final plus v3_03 100k/250k extension"}},
+      "numeric_tokens": {
+        "seeds": {"values": [0, 1, 2], "source_location": "Method: six final runs, seeds 0,1,2"},
+        "training_scales": {"values": [40000, 100000, 250000], "display_transform": "train_40k; train_100k; train_250k"},
+        "learning_rate": {"values": [0.0003], "source_location": "Method: selected configuration learning rate 3e-4"},
+        "warmup_fraction": {"values": [0], "source_location": "Method: no warmup"},
+        "dropout": {"values": [0.1], "source_location": "Method: dropout 0.1"},
+        "max_epochs": {"values": [100], "source_location": "Method: max 100 epochs"},
+        "early_stopping": {"values": [10], "source_location": "Method: patience 10"}
+      }
+    },
+    {
+      "row_index": 3,
+      "row_key": "E8A_question_side_interface",
+      "populated_columns": ["family", "systems", "seeds", "training_scales", "learning_rate", "warmup_fraction", "dropout", "max_epochs", "early_stopping", "checkpoint_selection", "matched_or_fixed_control"],
+      "default_source": {"source_id": "e8a", "source_location": "Method"},
+      "numeric_tokens": {
+        "seeds": {"values": [0, 1, 2], "source_location": "Method: seeds 0, 1 and 2"},
+        "training_scales": {"values": [40000, 250000], "display_transform": "train_40k; train_250k"},
+        "learning_rate": {"values": [0.0003], "source_location": "Method: AdamW at 3e-4"},
+        "warmup_fraction": {"values": [0], "source_location": "Method: inherited no-warmup selected recipe"},
+        "dropout": {"values": [0.1], "source_location": "Method: dropout 0.1"},
+        "max_epochs": {"values": [100], "source_location": "Method: at most 100 epochs"},
+        "early_stopping": {"values": [10], "source_location": "Method: patience 10"}
+      }
+    },
+    {
+      "row_index": 4,
+      "row_key": "E8B_B1",
+      "populated_columns": ["family", "systems", "seeds", "training_scales", "learning_rate", "warmup_fraction", "dropout", "max_epochs", "early_stopping", "checkpoint_selection", "matched_or_fixed_control"],
+      "default_source": {"source_id": "e8b_b1", "source_location": "$.e8b_core_cell.recipe"},
+      "cell_overrides": {"checkpoint_selection": {"source_id": "selection_repair", "source_location": "$.e8b_checkpoint_selection.authoritative_policy.B1.class"}},
+      "numeric_tokens": {
+        "seeds": {"values": [0, 1, 2], "source_id": "e8b_report", "source_location": "Method: three arms, two scales, three seeds"},
+        "training_scales": {"values": [40000, 250000], "display_transform": "train_40k; train_250k", "source_id": "e8b_report"},
+        "learning_rate": {"values": [0.0003], "source_location": "$.e8b_core_cell.recipe.lr"},
+        "warmup_fraction": {"values": [0], "source_location": "$.e8b_core_cell.recipe.warmup_frac"},
+        "dropout": {"values": [0.1], "source_location": "$.e8b_core_cell.recipe.dropout"},
+        "max_epochs": {"values": [100], "source_location": "$.e8b_core_cell.recipe.max_epochs"},
+        "early_stopping": {"values": [10], "source_location": "$.e8b_core_cell.recipe.patience"},
+        "matched_or_fixed_control": {"values": [22], "source_location": "$.e8b_core_cell.recipe.fixed_hyperparameters_justification states fixed-22 never applied to B1"}
+      }
+    },
+    {
+      "row_index": 5,
+      "row_key": "E8B_B2_B3",
+      "populated_columns": ["family", "systems", "seeds", "training_scales", "learning_rate", "warmup_fraction", "dropout", "max_epochs", "early_stopping", "checkpoint_selection", "matched_or_fixed_control"],
+      "default_source": {"source_id": "e8b_b2", "source_location": "$.e8b_core_cell.recipe; equal recipe fields in e8b_b3"},
+      "cell_overrides": {"checkpoint_selection": {"source_id": "selection_repair", "source_location": "$.e8b_checkpoint_selection.authoritative_policy.B2.class and .B3.class"}, "matched_or_fixed_control": {"source_id": "e8b_report", "source_location": "Method and fixed-recipe outcome-independent qualification"}},
+      "numeric_tokens": {
+        "seeds": {"values": [0, 1, 2], "source_id": "e8b_report", "source_location": "Method"},
+        "training_scales": {"values": [40000, 250000], "display_transform": "train_40k; train_250k", "source_id": "e8b_report"},
+        "learning_rate": {"values": [0.0003], "source_location": "$.e8b_core_cell.recipe.lr"},
+        "warmup_fraction": {"values": [0], "source_location": "$.e8b_core_cell.recipe.warmup_frac"},
+        "dropout": {"values": [0.1], "source_location": "$.e8b_core_cell.recipe.dropout"},
+        "max_epochs": {"values": [22], "source_location": "$.e8b_core_cell.recipe.max_epochs"}
+      },
+      "pair_verification": {"B2_source_id": "e8b_b2", "B3_source_id": "e8b_b3", "equal_fixed_recipe": true}
+    },
+    {
+      "row_index": 6,
+      "row_key": "E10_B4r_B4",
+      "populated_columns": ["family", "systems", "seeds", "training_scales", "learning_rate", "warmup_fraction", "dropout", "max_epochs", "early_stopping", "checkpoint_selection", "matched_or_fixed_control"],
+      "default_source": {"source_id": "e10_report", "source_location": "Method"},
+      "cell_overrides": {"matched_or_fixed_control": {"source_id": "e10_method", "source_location": "Differences from E8B: cadence, G8 omission, and no-resume rule"}},
+      "numeric_tokens": {
+        "seeds": {"values": [0, 1, 2], "source_location": "lines 9-10"},
+        "training_scales": {"values": [40000, 250000], "display_transform": "train_40k; train_250k", "source_location": "lines 9-10"},
+        "learning_rate": {"values": [0.0003], "source_location": "lines 54-59"},
+        "warmup_fraction": {"values": [0], "source_location": "lines 54-59: no warmup"},
+        "dropout": {"values": [0.1], "source_location": "lines 54-59"},
+        "max_epochs": {"values": [22], "source_location": "lines 54-56"},
+        "matched_or_fixed_control": {"values": [1, 2, 3, 4, 5, 6, 8, 10, 13, 16, 19, 22, 8], "source_id": "e10_method", "source_location": "pinned evaluation cadence and no G8"}
+      }
+    },
+    {
+      "row_index": 7,
+      "row_key": "E9_contextual",
+      "populated_columns": ["family", "systems", "training_scales", "checkpoint_selection", "matched_or_fixed_control"],
+      "default_source": {"source_id": "e9_report", "source_location": "Method"},
+      "cell_overrides": {"systems": {"source_id": "e9_protocol", "source_location": "$.models"}, "checkpoint_selection": {"source_id": "e9_protocol", "source_location": "$.models.*.trainable_parameters and evaluation-only protocol"}},
+      "numeric_tokens": {"systems": {"values": [256, 500], "source_id": "e9_protocol", "source_location": "$.models.smolvlm_256m and $.models.smolvlm_500m"}},
+      "blank_cells": {
+        "seeds": "Evaluation-only contextual systems have no training-seed set.",
+        "learning_rate": "Not applicable: zero project trainable parameters.",
+        "warmup_fraction": "Not applicable: zero project trainable parameters.",
+        "dropout": "Not applicable: zero project trainable parameters.",
+        "max_epochs": "Not applicable: evaluation only.",
+        "early_stopping": "Not applicable: evaluation only."
+      }
+    }
+  ],
+  "selection_class_authority": {
+    "critical_methodological_rule": "only checkpoint-selection-matched contrasts may be interpreted causally; a mixed-selection comparison must never be turned into a causal result.",
+    "b1_only_best_on_development": [
+      "EV-CON-E8B.image_reliance.B1.train_250k",
+      "EV-CON-E8B.image_reliance.B1.train_40k",
+      "EV-CON-E8B.scale_effect_B1",
+      "EV-SEED-E8B.B1.train_250k",
+      "EV-SEED-E8B.B1.train_40k"
+    ],
+    "b1_versus_b2_b3_mixed_within_row": [
+      "EV-CON-E8B.B2_-_B1.train_250k",
+      "EV-CON-E8B.B2_-_B1.train_40k",
+      "EV-CON-E8B.B3_-_B1.train_250k",
+      "EV-CON-E8B.B3_-_B1.train_40k"
+    ],
+    "source_id": "selection_repair",
+    "source_location": "$.e8b_checkpoint_selection.corrections"
+  },
+  "converter_verification": {
+    "command": "python3 tools/tab2latex.py tables_src/ch3_protocol_summary.csv --output tables_src/ch3_protocol_summary.demo.tex --verify",
+    "exit_code": 0,
+    "output_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch3_protocol_summary.demo.tex",
+    "output_sha256": "5357e25a3d1aad9bf3d97904da2e80aa57e34ee30dffec2cc59533f3fcf457f2"
+  },
+  "no_data_access": true
+}

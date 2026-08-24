@@ -1,0 +1,232 @@
+{
+  "schema_version": 1,
+  "task_id": "dissertation-01-ch3-prep-s3",
+  "stage": 3,
+  "scope": ["3.7", "3.8"],
+  "status": "VERIFIED_NON_PROSE_PREPARATION",
+  "authority_policy": {
+    "order": [
+      "canonical repair, supersession and closure records",
+      "canonical result records and manifests",
+      "canonical protocol artefacts",
+      "current experiment reports",
+      "implementation source for architecture definitions",
+      "context documentation",
+      "historical artefacts for provenance only"
+    ],
+    "data_tree_accessed": false,
+    "clean_test_accessed": false,
+    "model_results_reported": false,
+    "scientific_results_recomputed": false,
+    "assessed_dissertation_prose_written": false
+  },
+  "sources": {
+    "models_source": {"path": "src/models.py", "sha256": "6fb21220797d851597fc9b727480315e8a211b38220ad8d696d6b5d3278ec0da"},
+    "reasoner_source": {"path": "src/reasoner.py", "sha256": "3faafcd25e3f9e233c5173b71c1e1bbdd92859047d7b701d97ee16049892062c"},
+    "v203_source": {"path": "experiments/v2_03_param_match/run.py", "sha256": "f346036c3bedb9258581ed0316354d711325c1ba3f5042b14c8af1c48b48037f"},
+    "v203_results": {"path": "artifacts/results_export/v2_03_param_match/results.json", "sha256": "9494f8a706b26dc82a66bb28280411acbd079991f353da8467248ac0c1947f92"},
+    "v204_source": {"path": "experiments/v2_04_ablation/run.py", "sha256": "f4e1986209e28f15114d23003c28edd02455c260bb38f6ace045fb32683c73f4"},
+    "v204_results": {"path": "artifacts/results_export/v2_04_ablation/results.json", "sha256": "3e4a7652dd1e7418b1a19244d85017a4442b6638e86c3d85b1c4888cbceed608"},
+    "v3_tokens": {"path": "docs/experiments/v3_00_tokens.md", "sha256": "4751aa0ef6224bb4504dfd9206b8abc562de178db4e0f39fa237f9bbe0affcdf"},
+    "v3_reasoner": {"path": "docs/experiments/v3_01_reasoner.md", "sha256": "cec00aef691c7c384ce5fbde42bce611e112260e59a3ba1718a2c5f89d9bbf21"},
+    "v3_scaling": {"path": "docs/experiments/v3_03_scaling.md", "sha256": "52c7560f9d2d4a99eff5810108ae5ff501626c1f59b094672f6d7abdb41f8e8f"},
+    "v302a_source": {"path": "experiments/v3_02a_refs/run_refs.py", "sha256": "44c2fa2c311a6307626d0e612b7c691d156e1f0533cdb25c3601eeeddf887b11"},
+    "v302a_results": {"path": "artifacts/results_export/v3_02a_refs/refs_results.json", "sha256": "f3994a00e84999bf721af45f774c023a7cd0ab0e298668c94b9044ce5bb160e9"},
+    "e7b_results": {"path": "results/experiments/e7b_serial_efficiency/e7b_results.json", "sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4"},
+    "e7b_supersession": {"path": "results/closure/e7b_evidence_supersession.json", "sha256": "2fb6561b3916b83603631c0feb35d716dc9bbf3e1ed1ef3d4e7286516a0a0c75"},
+    "closure_parameter_table": {"path": "results/closure/efficiency_closure_table.json", "sha256": "be1781efeece841cc75df126fab43c9e9946437957c1ea6401ee1f86c8b47d5e"},
+    "e8a_source": {"path": "experiments/e8a_question_encoder/e8a_common.py", "sha256": "cd6c8ce0f0f9d93ec367d9e4c9ec611e5768e334964fe6d7c18bb3a04a70ba20"},
+    "e8a_report": {"path": "docs/experiments/e8a_core_135m.md", "sha256": "7d6c0626e4e1e3aa56978f15e180357f398f3c0481701bf0e667fa6f8d6f3e65"},
+    "e8a_unrun_disposition": {"path": "docs/experiments/pre_f1_unrun_arms_disposition.md", "sha256": "3ce87dfa1968fcec9184a74b1bc840b3bd4c5c99bec2c1d04664cfa741b1a9e8"},
+    "e8b_source": {"path": "experiments/e8b_readout_generation/run.py", "sha256": "d05c79a749f6c4dc17e37d81f4f7598ea7f74d2e6573c4feae8243c2253e1430"},
+    "e8b_report": {"path": "docs/experiments/e8b_core_matrix.md", "sha256": "328e1a1c311daa08fcb182e67652b1d37e81108ee3572bd8297cb26b486b4a93"},
+    "e8b_fp32_amendment": {"path": "results/experiments/e8b_readout_generation/protocol_amendment_20260807_fp32.json", "sha256": "2e935d74104cdbf5814cdd322ed3334a55c0903f88751206065fad857eede2d3"},
+    "selection_repair": {"path": "results/closure/pre_f1_evidence_metadata_repair_20260814.json", "sha256": "e35db6dddca6f587791527f3a9e9846905486413c851d1f896129a3f6a015f42"},
+    "e10_source": {"path": "experiments/e10_capacity_360m/e10_common.py", "sha256": "2f4b490d80112aba71c4acc4f4cdd57c9465a9c2ceb2add39f64e02682546065"},
+    "e10_report": {"path": "docs/experiments/e10_core_matrix.md", "sha256": "11491ff36bd14417f9991787a008285590bedfb80dc8f84e617da87b9b4f0ddd"},
+    "e10_method": {"path": "docs/experiments/e10_phase2_scientific_pipeline.md", "sha256": "c82a0bc177cb169725906dbcd2493f89ec7abcf95b55639222e61db4a9eb0d6b"},
+    "e9_protocol": {"path": "results/experiments/e9_compact_vlm/frozen_protocol.json", "sha256": "e38c0b9e6702cebd97f08487d70177ac49064df5db3e2e1c0d38601415769b02"},
+    "e9_report": {"path": "docs/experiments/e9_compact_vlm.md", "sha256": "6303aede69f12850c6ba8ecaf7f80eb2101f976705f6094cb8d9363d1086ad8c"}
+  },
+  "subsection_3_7": {
+    "global_embedding_heads": {
+      "common_head": "Linear(input_width, hidden_width), ReLU, Dropout, Linear(hidden_width, answer_count)",
+      "question_only": {"input": "question global vector", "input_width": 512, "trainable_parameters": 313956},
+      "image_only": {"input": "image global vector", "input_width": 512, "trainable_parameters": 313956},
+      "concat": {"input": "ordered [image, question]", "input_width": 1024, "trainable_parameters": 576100},
+      "fusion": {"input": "ordered [image, question, image times question, absolute image-minus-question]", "input_width": 2048, "trainable_parameters": 1100388},
+      "matched_controls": [
+        {"system": "concat_wide", "hidden_width": 979, "trainable_parameters": 1101475},
+        {"system": "fusion_narrow", "hidden_width": 268, "trainable_parameters": 576032}
+      ],
+      "interaction_ablations": [
+        {"system": "product_576k", "input_width": 1536, "hidden_width": 351, "trainable_parameters": 574687},
+        {"system": "difference_576k", "input_width": 1536, "hidden_width": 351, "trainable_parameters": 574687},
+        {"system": "single_interaction_natural", "hidden_width": 512, "trainable_parameters": 838244}
+      ],
+      "references": [
+        {"system": "direct_linear", "form": "Linear(1024, 100)", "trainable_parameters": 102500},
+        {"system": "meanpatch_concat", "image_view": "mean of cached patch tokens", "question_view": "question global vector", "trainable_parameters": 576100}
+      ],
+      "source_ids": ["models_source", "v203_source", "v203_results", "v204_source", "v204_results", "v302a_source", "v302a_results"]
+    },
+    "latent_query_reasoner": {
+      "cached_image_store": {"tokens": 50, "composition": "CLS plus 49 patch tokens", "width": 512},
+      "cached_question_store": {"composition": "variable-length packed question tokens", "width": 512, "padding_mask_semantics": "True marks padding"},
+      "learned_latents": 32,
+      "model_width": 512,
+      "blocks": 4,
+      "attention_heads": 8,
+      "block_order": ["question cross-attention", "image cross-attention", "latent self-attention", "four-times-width feed-forward network"],
+      "normalisation_and_residuals": "pre-layer-normalisation with residual connections",
+      "readout": "mean over latent slots, layer normalisation, linear answer classifier",
+      "trainable_parameters": 21099620,
+      "total_loaded_parameters": 172376933,
+      "resident_frozen_parameters": 151277313,
+      "excluded_result_topics": ["CLS-removal diagnostics", "patches-only diagnostics", "accuracy", "latency", "memory"],
+      "source_ids": ["reasoner_source", "v3_tokens", "v3_reasoner", "e7b_results", "e7b_supersession"]
+    },
+    "question_side_interface": {
+      "executed_arms": {
+        "A0p": {"question_state_source": "frozen CLIP text-token store", "projection": "Linear(512, 512)", "trainable_parameters": 21362276},
+        "A1": {"question_state_source": "frozen pretrained SmolLM2-135M", "projection": "Linear(576, 512)", "trainable_parameters": 21395044},
+        "A1r": {"question_state_source": "frozen matched-random SmolLM2-135M", "projection": "Linear(576, 512)", "trainable_parameters": 21395044}
+      },
+      "capacity_precision_check": "Only the 135M family was executed on the E8A question-side path: A0p, A1 and A1r. The 360M question-side arms were authorised but unrun and deferred; 360M capacity was exercised answer-side in E10.",
+      "common_width_disclosure": "A learned projection into a common 512-dimensional width does not establish a naturally shared pretrained CLIP/SmolLM2 semantic space.",
+      "source_ids": ["e8a_source", "e8a_report", "e8a_unrun_disposition", "e7b_results"]
+    },
+    "answer_side_interface": {
+      "B1": {
+        "form": "trainable learned-query attention pool over reasoner latents, then layer normalisation and Linear(512, 100)",
+        "language_model": "none",
+        "trainable_parameters": 21100132,
+        "methodological_role": "separate language-model-free classifier control"
+      },
+      "B2": {"language_model": "frozen matched-random SmolLM2-135M", "readout": "R1 candidate-answer likelihood ranking; R2 trie-constrained greedy; R3 bounded free greedy", "trainable_parameters": 21343808},
+      "B3": {"language_model": "frozen pretrained SmolLM2-135M", "readout": "R1 candidate-answer likelihood ranking; R2 trie-constrained greedy; R3 bounded free greedy", "trainable_parameters": 21343808},
+      "R1_precision": "R1 ranks candidate answers using mean token log-likelihood including EOS; it is not the B1 classifier.",
+      "B4r": {"language_model": "frozen matched-random SmolLM2-360M", "projection": "Linear(512, 960)", "trainable_parameters": 21540800},
+      "B4": {"language_model": "frozen pretrained SmolLM2-360M", "projection": "Linear(512, 960)", "trainable_parameters": 21540800},
+      "capacity_count_precision": "Both B4 and B4r have 21,540,800 trainable parameters; 21,343,808 applies to both B2 and B3. The counts distinguish the 135M and 360M family endpoints, not pretrained versus random arms within either matched pair.",
+      "source_ids": ["e8b_source", "e8b_report", "closure_parameter_table", "e10_source", "e10_report"]
+    },
+    "compact_vlm_context": {
+      "role": "frozen evaluation-only contextual systems, not recipe-matched trained arms",
+      "systems": [
+        {"name": "HuggingFaceTB/SmolVLM-256M-Instruct", "revision": "7e3e67edbbed1bf9888184d9df282b700a323964", "total_parameters": 256484928, "project_trainable_parameters": 0},
+        {"name": "HuggingFaceTB/SmolVLM-500M-Instruct", "revision": "a7da5b986cb59b408707209984f360a5f4ad7e47", "total_parameters": 507482304, "project_trainable_parameters": 0}
+      ],
+      "identity_boundary": "The 256M system's text backbone is an instruction-tuned SmolLM2-135M variant; E8A and E8B use pinned base-model identities, so these are not interchangeable model identities.",
+      "source_ids": ["e9_protocol", "e9_report"]
+    },
+    "random_controls": {
+      "pairs": [["A1", "A1r"], ["B2", "B3"], ["B4r", "B4"]],
+      "rule": "Within each pair, architecture, configuration and tokenizer are held fixed; the random arm uses a deterministic pinned random initialisation and remains frozen. Pairing is preserved and arms are not independently tuned."
+    },
+    "parameter_accounting": {
+      "valid_fields": ["trainable_parameters", "total_loaded_parameters", "resident_frozen_parameters"],
+      "controlling_sources": ["closure_parameter_table", "e7b_results", "e7b_supersession"],
+      "withdrawn_or_excluded": ["memory", "cold-query timing", "latency proxy", "accuracy"]
+    }
+  },
+  "subsection_3_8": {
+    "protocol_families": [
+      {"family": "V2 controlled global heads", "seeds": [0, 1, 2, 3, 42], "scales": ["train_40k"], "learning_rate": 0.001, "dropout": 0.3, "max_epochs": 30, "selection": "BEST_ON_DEVELOPMENT"},
+      {"family": "V3 latent reasoner", "seeds": [0, 1, 2], "scales": ["train_40k", "train_100k", "train_250k"], "learning_rate": 0.0003, "warmup_fraction": 0, "dropout": 0.1, "max_epochs": 100, "early_stopping_patience": 10, "selection": "BEST_ON_DEVELOPMENT"},
+      {"family": "E8A question-side interface", "systems": ["A0p", "A1", "A1r"], "seeds": [0, 1, 2], "scales": ["train_40k", "train_250k"], "learning_rate": 0.0003, "warmup_fraction": 0, "dropout": 0.1, "max_epochs": 100, "early_stopping_patience": 10, "selection": "BEST_ON_DEVELOPMENT"},
+      {"family": "E8B B1", "seeds": [0, 1, 2], "scales": ["train_40k", "train_250k"], "learning_rate": 0.0003, "warmup_fraction": 0, "dropout": 0.1, "max_epochs": 100, "early_stopping_patience": 10, "selection": "BEST_ON_DEVELOPMENT", "fixed_epoch_22_applies": false},
+      {"family": "E8B B2/B3", "seeds": [0, 1, 2], "scales": ["train_40k", "train_250k"], "learning_rate": 0.0003, "warmup_fraction": 0, "dropout": 0.1, "max_epochs": 22, "early_stopping": false, "selection": "FIXED_EPOCH_22"},
+      {"family": "E10 B4r/B4", "seeds": [0, 1, 2], "scales": ["train_40k", "train_250k"], "learning_rate": 0.0003, "warmup_fraction": 0, "dropout": 0.1, "max_epochs": 22, "early_stopping": false, "selection": "FIXED_EPOCH_22", "evaluation_epochs": [1, 2, 3, 4, 5, 6, 8, 10, 13, 16, 19, 22], "G8": "not run", "resume": "never"},
+      {"family": "E9 compact VLM", "systems": ["SmolVLM-256M-Instruct", "SmolVLM-500M-Instruct"], "training": "none", "selection": "NOT_APPLICABLE_EVALUATION_ONLY"}
+    ],
+    "checkpoint_selection_authority": {
+      "controlling_record": "results/closure/pre_f1_evidence_metadata_repair_20260814.json",
+      "best_on_development_rows": [
+        "EV-CON-E8B.image_reliance.B1.train_250k",
+        "EV-CON-E8B.image_reliance.B1.train_40k",
+        "EV-CON-E8B.scale_effect_B1",
+        "EV-SEED-E8B.B1.train_250k",
+        "EV-SEED-E8B.B1.train_40k"
+      ],
+      "mixed_within_row": [
+        "EV-CON-E8B.B2_-_B1.train_250k",
+        "EV-CON-E8B.B2_-_B1.train_40k",
+        "EV-CON-E8B.B3_-_B1.train_250k",
+        "EV-CON-E8B.B3_-_B1.train_40k"
+      ],
+      "critical_methodological_rule": "only checkpoint-selection-matched contrasts may be interpreted causally; a mixed-selection comparison must never be turned into a causal result."
+    },
+    "precision_rules": [
+      "B1 is a trainable language-model-free classifier selected on development data; it is not a frozen classifier and is not governed by the fixed-epoch rule.",
+      "B2, B3, B4r and B4 use fixed epoch 22 without early stopping.",
+      "E8B canonical evaluation is FP32 under its controlling amendment; BF16 is a training-path property, not the canonical-evaluation precision.",
+      "The abandoned exploratory grid is not a scientific justification and is excluded from the methodology preparation."
+    ]
+  },
+  "deliverable_ownership": {
+    "TAB_3_2": {
+      "csv": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch3_architecture_params.csv",
+      "provenance": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch3_architecture_params.provenance.json"
+    },
+    "TAB_3_3": {
+      "csv": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch3_protocol_summary.csv",
+      "provenance": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch3_protocol_summary.provenance.json"
+    },
+    "FIG_3_B": {
+      "specification": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/figures_src/FIG-3-B.specification.json",
+      "render": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/images/arch/p2607_smollm2_interface_architecture.pdf",
+      "render_status": "FROZEN_EXISTING_ASSET"
+    }
+  },
+  "frozen_figure_verification": {
+    "render_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/images/arch/p2607_smollm2_interface_architecture.pdf",
+    "render_sha256": "619ff8a31f4e4d2e1e2b483e946026a28ac3ee66259bd2c7c70091c7b321f1eb",
+    "phase_0_manifest_path": ".agent-bridge/tasks/dissertation-00-scaffold/30-implementation.json",
+    "phase_0_manifest_sha256": "5b371e73fb16a0db1a235aa57b05fb00df1544b634d3b19d69a79cd586cc935a",
+    "source_render_path": "docs/figures/p2607_smollm2_interface_architecture.pdf",
+    "source_render_sha256": "619ff8a31f4e4d2e1e2b483e946026a28ac3ee66259bd2c7c70091c7b321f1eb",
+    "generator_path": "docs/figures/p2607_smollm2_interface_architecture.py",
+    "generator_sha256": "afc4915eaa209db2ee8e3a062250cfc986999b3190281157000d2f706e2f7412",
+    "generator_executed": false,
+    "render_modified": false
+  },
+  "citation_keys": {
+    "latent_query_or_cross_attention": ["jaegle2021perceiver", "alayrac2022flamingo"],
+    "query_connector": ["li2023blip2", "dai2023instructblip"],
+    "multimodal_fusion": ["fukui2016mcb", "kim2017mlb", "benyounes2017mutan", "benyounes2019block"]
+  },
+  "discrepancies_resolved_by_real_tree": [
+    "B4 and B4r each use 21,540,800 trainable parameters; 21,343,808 is the B2/B3 value.",
+    "R1 is candidate-answer likelihood ranking; B1 is the separate language-model-free classifier.",
+    "B1 is trainable and selected on development data, not frozen.",
+    "The actual table converter is the dissertation-local tools/tab2latex.py.",
+    "No current bibliography entry was located for foundational CLIP, VQA-v2, SigLIP, SmolLM2 or SmolVLM."
+  ],
+  "pending_source_verification": [
+    {
+      "item": "EEEM004 assessment-specific GenAI permission and disclosure for substantive assessed dissertation prose",
+      "status": "PENDING OFFICIAL VERIFICATION",
+      "effect": "The prose gate remains closed; this non-prose preparation is not blocked."
+    },
+    {
+      "item_id": "TAB-3.2-A1r-full-accounting",
+      "item": "A1r total-loaded and resident-frozen full-system counts",
+      "status": "PENDING SOURCE VERIFICATION",
+      "effect": "Cells are omitted; the exact trainable count remains canonically supported."
+    },
+    {
+      "item_id": "TAB-3.2-E10-full-accounting",
+      "item": "B4r/B4 total-loaded and resident-frozen full-system counts",
+      "status": "PENDING SOURCE VERIFICATION",
+      "effect": "Cells are omitted; the exact shared trainable count remains canonically supported."
+    },
+    {
+      "item_id": "TAB-3.2-resident-breakdowns",
+      "item": "Separately recorded resident-frozen counts for B1, B2/B3 and the two E9 contextual systems",
+      "status": "PENDING SOURCE VERIFICATION",
+      "effect": "Cells are omitted rather than inferred from related parameter fields."
+    }
+  ],
+  "unresolved_stage_3_scientific_facts": ["TAB-3.2-A1r-full-accounting", "TAB-3.2-E10-full-accounting", "TAB-3.2-resident-breakdowns"]
+}

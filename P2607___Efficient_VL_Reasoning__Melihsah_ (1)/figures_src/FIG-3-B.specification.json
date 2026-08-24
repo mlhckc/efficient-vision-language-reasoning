@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "task_id": "dissertation-01-ch3-prep-s3",
+  "stage": 3,
+  "figure_id": "FIG-3.B",
+  "status": "SPECIFICATION_ONLY",
+  "render_authorized": false,
+  "render_created": false,
+  "purpose": "Methodology system-family overview without empirical outcomes.",
+  "families": [
+    {
+      "name": "global-embedding heads",
+      "inputs": ["frozen image global vector (512)", "frozen question global vector (512)"],
+      "trainable_path": "linear/ReLU/dropout/linear head over the selected global-vector composition",
+      "source_paths": ["src/models.py", "artifacts/results_export/v2_03_param_match/results.json", "artifacts/results_export/v2_04_ablation/results.json"]
+    },
+    {
+      "name": "token-level latent reasoner",
+      "inputs": ["50 frozen image tokens: CLS plus 49 patches, width 512", "variable-length frozen question tokens, width 512"],
+      "trainable_path": "32 learned latent queries; 4 blocks at width 512 with 8 attention heads; question cross-attention, image cross-attention, self-attention and feed-forward processing",
+      "source_paths": ["src/reasoner.py", "docs/experiments/v3_00_tokens.md", "docs/experiments/v3_01_reasoner.md"]
+    },
+    {
+      "name": "question-side SLM interface",
+      "frozen_components": ["CLIP question-token store for A0p", "pretrained or matched-random SmolLM2-135M for A1/A1r"],
+      "trainable_components": ["A0p Linear(512, 512)", "A1/A1r Linear(576, 512)", "latent reasoner and classifier"],
+      "boundary": "Projection to common width 512 is an interface operation and is not evidence of a naturally shared pretrained CLIP/SmolLM2 semantic space.",
+      "source_paths": ["experiments/e8a_question_encoder/e8a_common.py", "docs/experiments/e8a_core_135m.md", "docs/experiments/pre_f1_unrun_arms_disposition.md"]
+    },
+    {
+      "name": "answer-side SLM interface",
+      "trainable_components": ["reasoner trunk", "projection to language-model width", "B1 attention-pool classifier where applicable"],
+      "frozen_components": ["matched-random or pretrained SmolLM2-135M for B2/B3", "matched-random or pretrained SmolLM2-360M for B4r/B4"],
+      "readout_paths": ["B1 language-model-free classifier", "R1 candidate-answer likelihood ranking", "R2 trie-constrained greedy", "R3 bounded free greedy"],
+      "source_paths": ["experiments/e8b_readout_generation/run.py", "experiments/e10_capacity_360m/e10_common.py", "results/closure/efficiency_closure_table.json"]
+    },
+    {
+      "name": "compact-VLM contextual class",
+      "systems": ["SmolVLM-256M-Instruct", "SmolVLM-500M-Instruct"],
+      "frozen_components": ["entire integrated VLM"],
+      "trainable_components": [],
+      "role": "evaluation-only contextual systems; not recipe-matched trained arms",
+      "source_paths": ["results/experiments/e9_compact_vlm/frozen_protocol.json", "docs/experiments/e9_compact_vlm.md"]
+    }
+  ],
+  "visual_encoding": {
+    "frozen_components": "visually distinct frozen style",
+    "trainable_components": "visually distinct trainable style",
+    "flow": "left-to-right inputs, representation/interface, latent or global path, readout",
+    "result_arrows": false,
+    "accuracy_values": false,
+    "winner_language": false
+  },
+  "numeric_provenance": [
+    {"tokens": [512, 512], "meaning": "global image and question vector widths", "path": "src/models.py", "location": "QuestionOnlyModel, ImageOnlyModel, ConcatModel and FusionModel constructors"},
+    {"tokens": [50, 49, 512], "meaning": "stored image-token composition and width", "path": "docs/experiments/v3_00_tokens.md", "location": "token store design"},
+    {"tokens": [32, 4, 512, 8], "meaning": "latent count, block count, model width and head count", "path": "src/reasoner.py", "location": "LatentQueryReasoner defaults and ReasonerBlock construction"},
+    {"tokens": [512, 512, 576, 512, 135], "meaning": "E8A projection dimensions and executed SLM family label", "path": "experiments/e8a_question_encoder/e8a_common.py", "location": "ARM_SPECS and build_reasoner"},
+    {"tokens": [135, 360], "meaning": "answer-side frozen language-model family labels", "path": "experiments/e8b_readout_generation/run.py; experiments/e10_capacity_360m/e10_common.py", "location": "arm definitions"},
+    {"tokens": [256, 500], "meaning": "compact-VLM family labels", "path": "results/experiments/e9_compact_vlm/frozen_protocol.json", "location": "$.models"}
+  ],
+  "frozen_existing_asset_reference": {
+    "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/images/arch/p2607_smollm2_interface_architecture.pdf",
+    "sha256": "619ff8a31f4e4d2e1e2b483e946026a28ac3ee66259bd2c7c70091c7b321f1eb",
+    "modified": false,
+    "regenerated": false
+  },
+  "prohibited_content": ["model performance", "latency", "memory", "causal outcomes", "clean-test claims"],
+  "evidence_manifest": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage3_evidence_manifest.json"
+}

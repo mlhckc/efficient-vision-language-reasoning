@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "task_id": "dissertation-01-ch3-prep-s3",
+  "stage": 3,
+  "scope": ["3.7", "3.8"],
+  "bibliography_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/references/references.bib",
+  "bibliography_sha256": "ebff6b25ef20b0672c154e56e678356bc8245b6cbf5d85aff63371968b6d2705",
+  "entry_count": 72,
+  "entries_modified": false,
+  "resolved_classes": [
+    {"citation_class": "latent-query processing", "keys": ["jaegle2021perceiver"], "status": "RESOLVED"},
+    {"citation_class": "cross-attention connector architecture", "keys": ["alayrac2022flamingo", "li2023blip2", "dai2023instructblip"], "status": "RESOLVED"},
+    {"citation_class": "multimodal fusion", "keys": ["fukui2016mcb", "kim2017mlb", "benyounes2017mutan", "benyounes2019block"], "status": "RESOLVED"}
+  ],
+  "gaps": [
+    {"citation_class": "foundational CLIP", "status": "GAP_CARRIED_FORWARD_FROM_STAGE_1", "search_outcome": "No Radford/CLIP foundational entry located in the current bibliography."},
+    {"citation_class": "VQA-v2 dataset or benchmark", "status": "GAP_CARRIED_FORWARD_FROM_STAGE_1", "search_outcome": "No Goyal/VQA-v2 entry located in the current bibliography."},
+    {"citation_class": "SigLIP", "status": "GAP_CARRIED_FORWARD_FROM_STAGE_2", "search_outcome": "No SigLIP entry located; zhai2022scaling is a different paper and is not substituted."},
+    {"citation_class": "SmolLM2", "status": "GAP_CARRIED_FORWARD_FROM_STAGE_2", "search_outcome": "No SmolLM or Allal entry located in the current bibliography."},
+    {"citation_class": "SmolVLM", "status": "NEW_GAP", "search_outcome": "No SmolVLM entry located in the current bibliography."}
+  ],
+  "near_miss_non_substitutions": [
+    {"key": "zhai2022scaling", "not_a_substitute_for": "SigLIP", "reason": "The existing entry is a different Zhai paper; surname matching is not bibliographic identity."}
+  ],
+  "rules": {
+    "invented_entries": false,
+    "bibliography_edits": false,
+    "citation_keys_verified_against_real_tree": true,
+    "later_bibliography_work_required": true
+  }
+}

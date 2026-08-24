@@ -1,0 +1,8 @@
+family,systems,seeds,training_scales,learning_rate,warmup_fraction,dropout,max_epochs,early_stopping,checkpoint_selection,matched_or_fixed_control
+V2 controlled global heads,question_only; image_only; concat; fusion; matched and ablation heads,0; 1; 2; 3; 42,train_40k,0.001,,0.3,30,false,BEST_ON_DEVELOPMENT,same loaders and hyperparameters with seed-specific initialisation and shuffle
+V3 latent reasoner,latent_reasoner,0; 1; 2,train_40k; train_100k; train_250k,0.0003,0,0.1,100,true with patience 10,BEST_ON_DEVELOPMENT,one frozen recipe across scales
+E8A question-side interface,A0p; A1; A1r,0; 1; 2,train_40k; train_250k,0.0003,0,0.1,100,true with patience 10,BEST_ON_DEVELOPMENT,A1 and A1r pair-preserved; A0p is interface-matched
+E8B language-model-free control,B1,0; 1; 2,train_40k; train_250k,0.0003,0,0.1,100,true with patience 10,BEST_ON_DEVELOPMENT,own classifier recipe; exempt from fixed epoch 22
+E8B answer-side SLM interface,B2; B3,0; 1; 2,train_40k; train_250k,0.0003,0,0.1,22,false,FIXED_EPOCH_22,matched random and pretrained pair; no abandoned-grid justification
+E10 answer-side SLM interface,B4r; B4,0; 1; 2,train_40k; train_250k,0.0003,0,0.1,22,false,FIXED_EPOCH_22,matched random and pretrained pair; pinned cadence; no G8; no resume
+E9 compact-VLM contextual class,SmolVLM-256M-Instruct; SmolVLM-500M-Instruct,,evaluation only,,,,,,NOT_APPLICABLE_EVALUATION_ONLY,frozen contextual systems; no matched training pair
