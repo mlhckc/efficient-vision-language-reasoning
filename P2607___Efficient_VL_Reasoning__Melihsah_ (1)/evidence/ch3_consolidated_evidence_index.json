@@ -33,7 +33,7 @@
     {
       "stage": 5,
       "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage5_evidence_manifest.json",
-      "sha256": "e95f0b844b6654163e52f3878667ec13924e6d3b210f9d691c9a31186a84d150",
+      "sha256": "253e786b3ea34cfcaa0828e123bdb5f824f2cef549d75929954fbfc60a4dedad",
       "immutable_after_stage5_approval": true
     }
   ],
@@ -368,9 +368,11 @@
   "classified_pending_register": [
     {
       "pending_id": "rq_formal_wording",
-      "classification": "PENDING SOURCE VERIFICATION",
+      "classification": "PENDING AUTHOR DECISION",
       "required_before": "Section 3.1 prose",
-      "decision_owner": "user/Claude"
+      "decision_owner": "user/Claude",
+      "rationale": "No canonical source contains formal RQ1–RQ3 wording; Stage 1 verified this, so the item awaits an explicit user/Claude authoring decision rather than further source discovery.",
+      "presentation_supersession_note": "The closed Stage-1 manifest's historical PENDING SOURCE VERIFICATION label is superseded in the consolidated drafting presentation only. The Stage-1 file itself remains immutable and is not edited."
     },
     {
       "pending_id": "eligible_pool_represented_images",

@@ -496,10 +496,12 @@
   "classified_pending_register": [
     {
       "pending_id": "rq_formal_wording",
-      "classification": "PENDING SOURCE VERIFICATION",
+      "classification": "PENDING AUTHOR DECISION",
       "scope": "Formal wording of RQ1, RQ2 and RQ3",
       "required_before": "Section 3.1 prose",
-      "owner": "user/Claude decision"
+      "owner": "user/Claude decision",
+      "rationale": "No canonical source contains formal RQ1–RQ3 wording; Stage 1 verified this, so the item awaits an explicit user/Claude authoring decision rather than further source discovery.",
+      "presentation_supersession_note": "The closed Stage-1 manifest's historical PENDING SOURCE VERIFICATION label is superseded in the consolidated drafting presentation only. The Stage-1 file itself remains immutable and is not edited."
     },
     {
       "pending_id": "eligible_pool_represented_images",
