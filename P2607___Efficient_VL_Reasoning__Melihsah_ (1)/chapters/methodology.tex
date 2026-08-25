@@ -166,14 +166,14 @@ A matched-random control keeps its partner's architecture and tokenizer. Pinned-
 
 \section{Training, checkpoints and model selection}
 \label{sec:ch3-training}
-The controlled V2 global-head studies used AdamW with learning rate
+The controlled global-head studies (V2) used AdamW with learning rate
 $10^{-3}$, weight decay $10^{-4}$, batch size 256 and dropout 0.3. They ran
-for at most 30 epochs on \texttt{train\_40k} with seeds 0, 1, 2, 3 and 42.
+for a fixed 30 epochs on \texttt{train\_40k} with seeds 0, 1, 2, 3 and 42.
 A later V2 scaling study reused this recipe at 100k and 250k; the V2 row in
 Table~\ref{tab:ch3-protocol} therefore describes only the controlled studies.
 
-V3, the question-side interface and the language-model-free B1 control shared
-the reasoner recipe. It used AdamW at $3\times10^{-4}$, with weight decay
+The latent reasoner (V3), the question-side interface and the language-model-free
+B1 control shared the reasoner recipe. It used AdamW at $3\times10^{-4}$, with weight decay
 $10^{-2}$ excluding biases and LayerNorm terms, batch size 128, gradient
 clipping at 1.0 and a cosine schedule without warm-up. Training kept fp32
 master weights with bf16 autocasting; evaluation used fp32. V3 covered 40k,
@@ -191,9 +191,13 @@ answer-side systems.
 Table~\ref{tab:ch3-protocol} separates training from selection. V2, V3, the
 question-side interface and B1 kept the checkpoint with the highest
 development accuracy, using the earliest epoch on a tie. The answer-side
-systems used the fixed epoch-22 checkpoint. Every choice used the development
-split, and each recipe was fixed before its results were examined.
-Selection-matched contrasts support controlled comparisons within the design.
+systems used the fixed epoch-22 checkpoint. Performance-based checkpoint
+selection used the development split only. The answer-side systems did not
+select a checkpoint by development accuracy; their epoch-22 checkpoint was
+fixed by protocol. Every recipe was either fixed in advance or, for the
+answer-side systems, retained as the pre-existing default without reference to
+any observed result. Selection-matched contrasts support controlled comparisons
+within the design.
 B1 comparisons with B2 or B3 mix selection classes and retain that
 methodological caveat.
 
@@ -241,9 +245,12 @@ separate canonical authority. An interval containing zero establishes neither
 equivalence nor absence of an effect. Intervals are nominal and uncorrected
 for multiple comparisons.
 
-For questions requiring at least four reasoning steps, the primary pooled
-compositional deficit is the unweighted mean of four per-bucket lifts under
-fixed priors, minus the question-weighted combined lift over those buckets.
+The primary compositional quantity is a pooled deficit for questions with four
+or more reasoning steps. Development questions are grouped into four step
+buckets, and each bucket's lift is computed under a fixed per-bucket question
+prior. The combined lift for four or more steps pools the four-step and
+five-or-more-step buckets, weighted by those fixed priors. The pooled deficit
+is the unweighted mean of the four bucket lifts minus that combined lift.
 The definition is recorded without an outcome value. V2 scaling has no valid
 reconstructed image-clustered interval, so reporting is limited to canonical
 per-seed aggregates and seed variability.
