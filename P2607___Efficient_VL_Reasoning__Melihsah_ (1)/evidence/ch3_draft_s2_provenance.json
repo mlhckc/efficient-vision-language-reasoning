@@ -1,0 +1,797 @@
+{
+  "schema_version": 1,
+  "task_id": "dissertation-02-ch3-draft-s2",
+  "implementation_revision": 1,
+  "generated_utc": "2026-08-25T13:50:43Z",
+  "status": "DRAFT_PROVENANCE_COMPLETE_PENDING_INDEPENDENT_REVIEW",
+  "scope": [
+    "Section 3.4",
+    "Section 3.5",
+    "Section 3.6",
+    "Section 3.7",
+    "Table 3.2",
+    "Figure 3.2",
+    "Figure 3.3",
+    "Figure 3.4",
+    "Table 3.3"
+  ],
+  "authority_rule": "Closed Chapter-3 preparation evidence is the drafting control surface. Canonical repair, supersession and closure authority overrides lower-level or isolated historical records.",
+  "data_embargo": {
+    "project_data_tree_used": false,
+    "clean_test_contact": false,
+    "scientific_recomputation": false
+  },
+  "closed_inputs": [
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_consolidated_evidence_index.json",
+      "sha256": "e15da5411ad565e4d893792da35123d1783cb4053b1df04f90a2250208710a96"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage2_evidence_manifest.json",
+      "sha256": "d7de03355f3419cb1896abbf13e2214eb159e59ae0080abd8bc5ec6882694d35"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage3_evidence_manifest.json",
+      "sha256": "3f566fa3c33e05ab4feb50a305d9286481191e1317348ab834a94d00a1fb116e"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch3_architecture_params.csv",
+      "sha256": "0c6225bb2873462b1d4fa8d319e8356cd67cf33e63ace4b0fa27eb435067779e"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch3_architecture_params.provenance.json",
+      "sha256": "d68a4eeabbec5a3cd92f6ee7fca46c78c4f54d222de4a47eb086dd4560516afd"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/figures_src/FIG-3-B.specification.json",
+      "sha256": "2285aa7cdc630d92aa618a6ef69c53c642510c4db2761764b3c209b52256ba1e"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/images/arch/p2607_smollm2_interface_architecture.pdf",
+      "sha256": "619ff8a31f4e4d2e1e2b483e946026a28ac3ee66259bd2c7c70091c7b321f1eb",
+      "modified": false,
+      "included_in_methodology": false,
+      "role": "Immutable historical asset retained outside Chapter 3 Methodology after the human-authorised FIG-3.D replacement."
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/references/references.bib",
+      "sha256": "ebff6b25ef20b0672c154e56e678356bc8245b6cbf5d85aff63371968b6d2705"
+    }
+  ],
+  "source_registry": {
+    "v2_protocol": {
+      "path": "docs/experiments/v2_00_protocol.md",
+      "sha256": "af91acda8bfaef600b3e5c2bbd0ffaeac1e431a174d8784ed1af01c39fa3d013"
+    },
+    "v2_build": {
+      "path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+      "sha256": "cfe82a17f0353a9bb6f107f770e59b6b7321ff69ab8d31eda2f49f16d5976e62"
+    },
+    "top100_vocab": {
+      "path": "artifacts/v2_00_protocol/answer_vocab_v2.json",
+      "sha256": "f92618b2f59939586d5ad79b184a44ed5f3c9d2aaf4d6e10f6a3947d90358680"
+    },
+    "e3_report": {
+      "path": "docs/experiments/e3_vocab1000.md",
+      "sha256": "e565217e2e0629a8740c8f923c1844376ef619d13fa262de8e55ffb6c62db0b1"
+    },
+    "e3_preflight": {
+      "path": "artifacts/results_export/e3_vocab1000/preflight.json",
+      "sha256": "af64a0d688807a3aa245692400a514c9465cee48d9022678fa347f08652e8e16"
+    },
+    "e3_results": {
+      "path": "artifacts/results_export/e3_vocab1000/results.json",
+      "sha256": "bbdf65f724ee89cc6078628cd85684ad64a06585b6d34bdf0638b364c2a52be6"
+    },
+    "g21_freeze": {
+      "path": "results/experiments/e8a_question_encoder/e8a_135m_core_frozen_g21.json",
+      "sha256": "84403265ef8391241ad77ae147a445c1f73844532a702791a613076a5068e471"
+    },
+    "g21_inventory": {
+      "path": "results/experiments/e8a_question_encoder/g21_scorer_inventory.json",
+      "sha256": "0120b0af61eb492cad5c93da85e9bac6d2e286f97ed48e8288112ce7c3ca75d9"
+    },
+    "binding_scope": {
+      "path": "CLAUDE.md",
+      "sha256": "25c8bd700435990d0edfa6d487da1780d6c1676d649cc96fe65d880d37311893"
+    },
+    "v2_embeddings": {
+      "path": "docs/experiments/v2_01_embeddings.md",
+      "sha256": "e608aac6fa5bb33e75afedab95035ec31f34c8b95e921ec0a94908516616e2c6"
+    },
+    "siglip_report": {
+      "path": "docs/experiments/e2_siglip.md",
+      "sha256": "715960c1c2bbc912fb04616b2af5c988cefbad5c4290b070f4a266adc66ed56d"
+    },
+    "siglip_preflight": {
+      "path": "artifacts/results_export/e2_siglip/preflight.json",
+      "sha256": "dfea5990e8680b2918b40e77f3e7bbfd6512aa46b2515ace5429e48fdf0798e1"
+    },
+    "v3_tokens": {
+      "path": "docs/experiments/v3_00_tokens.md",
+      "sha256": "4751aa0ef6224bb4504dfd9206b8abc562de178db4e0f39fa237f9bbe0affcdf"
+    },
+    "e8a_report": {
+      "path": "docs/experiments/e8a_core_135m.md",
+      "sha256": "7d6c0626e4e1e3aa56978f15e180357f398f3c0481701bf0e667fa6f8d6f3e65"
+    },
+    "e8a_identity": {
+      "path": "results/experiments/e8a_question_encoder/extraction.json",
+      "sha256": "f156d074d53d2e8c16f4e443cc3b27859f9c2c042f56d911fd0756850b38aad4"
+    },
+    "unrun_disposition": {
+      "path": "docs/experiments/pre_f1_unrun_arms_disposition.md",
+      "sha256": "3ce87dfa1968fcec9184a74b1bc840b3bd4c5c99bec2c1d04664cfa741b1a9e8"
+    },
+    "e10_report": {
+      "path": "docs/experiments/e10_core_matrix.md",
+      "sha256": "11491ff36bd14417f9991787a008285590bedfb80dc8f84e617da87b9b4f0ddd"
+    },
+    "e8b_fp32": {
+      "path": "results/experiments/e8b_readout_generation/protocol_amendment_20260807_fp32.json",
+      "sha256": "2e935d74104cdbf5814cdd322ed3334a55c0903f88751206065fad857eede2d3"
+    },
+    "models_source": {
+      "path": "src/models.py",
+      "sha256": "6fb21220797d851597fc9b727480315e8a211b38220ad8d696d6b5d3278ec0da"
+    },
+    "reasoner_source": {
+      "path": "src/reasoner.py",
+      "sha256": "3faafcd25e3f9e233c5173b71c1e1bbdd92859047d7b701d97ee16049892062c"
+    },
+    "v203_source": {
+      "path": "experiments/v2_03_param_match/run.py",
+      "sha256": "f346036c3bedb9258581ed0316354d711325c1ba3f5042b14c8af1c48b48037f"
+    },
+    "v204_source": {
+      "path": "experiments/v2_04_ablation/run.py",
+      "sha256": "f4e1986209e28f15114d23003c28edd02455c260bb38f6ace045fb32683c73f4"
+    },
+    "v3_reasoner": {
+      "path": "docs/experiments/v3_01_reasoner.md",
+      "sha256": "cec00aef691c7c384ce5fbde42bce611e112260e59a3ba1718a2c5f89d9bbf21"
+    },
+    "e8a_source": {
+      "path": "experiments/e8a_question_encoder/e8a_common.py",
+      "sha256": "cd6c8ce0f0f9d93ec367d9e4c9ec611e5768e334964fe6d7c18bb3a04a70ba20"
+    },
+    "e8b_source": {
+      "path": "experiments/e8b_readout_generation/run.py",
+      "sha256": "d05c79a749f6c4dc17e37d81f4f7598ea7f74d2e6573c4feae8243c2253e1430"
+    },
+    "e8b_report": {
+      "path": "docs/experiments/e8b_core_matrix.md",
+      "sha256": "328e1a1c311daa08fcb182e67652b1d37e81108ee3572bd8297cb26b486b4a93"
+    },
+    "e10_source": {
+      "path": "experiments/e10_capacity_360m/e10_common.py",
+      "sha256": "2f4b490d80112aba71c4acc4f4cdd57c9465a9c2ceb2add39f64e02682546065"
+    },
+    "e9_protocol": {
+      "path": "results/experiments/e9_compact_vlm/frozen_protocol.json",
+      "sha256": "e38c0b9e6702cebd97f08487d70177ac49064df5db3e2e1c0d38601415769b02"
+    },
+    "e9_report": {
+      "path": "docs/experiments/e9_compact_vlm.md",
+      "sha256": "6303aede69f12850c6ba8ecaf7f80eb2101f976705f6094cb8d9363d1086ad8c"
+    },
+    "parameter_closure": {
+      "path": "results/closure/efficiency_closure_table.json",
+      "sha256": "be1781efeece841cc75df126fab43c9e9946437957c1ea6401ee1f86c8b47d5e"
+    },
+    "stage3_manifest": {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage3_evidence_manifest.json",
+      "sha256": "3f566fa3c33e05ab4feb50a305d9286481191e1317348ab834a94d00a1fb116e"
+    },
+    "e8b_b2_cell": {
+      "path": "results/experiments/e8b_readout_generation/e8b_core_B2_train_40k_seed0.json",
+      "sha256": "1c9b7699ac7100e553bdd6d6db920f5f75576253b70af5adcd3e92378060449c"
+    },
+    "e8b_b3_cell": {
+      "path": "results/experiments/e8b_readout_generation/e8b_core_B3_train_40k_seed0.json",
+      "sha256": "df16f96c1be90c5bfa6f94e35435c39c56e1a0e02fb47204c62723aa0104d315"
+    },
+    "e10_b4_cell": {
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4_train_40k_seed0.json",
+      "sha256": "3f7e3ef2bd73a860ca00b0f62ff73572c710fc9f0ed54006054943d50b0b5d22"
+    },
+    "e10_b4r_cell": {
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4r_train_40k_seed0.json",
+      "sha256": "6ad47230bfbde18c6d1a16eb1ebc9403ead65ddfd4fd6fdab7c2bee2f9327201"
+    }
+  },
+  "fact_registry": {
+    "S2:top100_construction": {
+      "fact_id": "top100_construction",
+      "sources": [
+        "v2_protocol",
+        "v2_build"
+      ]
+    },
+    "S2:top100_artifact": {
+      "fact_id": "top100_artifact",
+      "sources": [
+        "top100_vocab"
+      ]
+    },
+    "S2:top1000_extension": {
+      "fact_id": "top1000_extension",
+      "sources": [
+        "e3_report"
+      ]
+    },
+    "S2:prefix_identity_gate": {
+      "fact_id": "prefix_identity_gate",
+      "sources": [
+        "e3_report",
+        "e3_preflight"
+      ]
+    },
+    "S2:coverage_design_properties": {
+      "fact_id": "coverage_design_properties",
+      "sources": [
+        "v2_protocol",
+        "e3_preflight",
+        "e3_results"
+      ]
+    },
+    "S2:strict_raw_exact": {
+      "fact_id": "strict_raw_exact",
+      "sources": [
+        "g21_freeze"
+      ]
+    },
+    "S2:g21_normalised_exact": {
+      "fact_id": "g21_normalised_exact",
+      "sources": [
+        "g21_freeze",
+        "e9_report"
+      ]
+    },
+    "S2:top100_coincidence": {
+      "fact_id": "top100_coincidence",
+      "sources": [
+        "g21_inventory"
+      ]
+    },
+    "S2:denominators": {
+      "fact_id": "denominators",
+      "sources": [
+        "v2_build",
+        "e3_preflight",
+        "e3_results"
+      ]
+    },
+    "S2:coverage_adjustment": {
+      "fact_id": "coverage_adjustment",
+      "sources": [
+        "e3_report"
+      ]
+    },
+    "S2:denominator_guard": {
+      "fact_id": "denominator_guard",
+      "sources": [
+        "binding_scope",
+        "e9_report"
+      ]
+    },
+    "S2:primary_metric_exclusions": {
+      "fact_id": "primary_metric_exclusions",
+      "sources": [
+        "binding_scope"
+      ]
+    },
+    "S2:official_gqa_comparison_guard": {
+      "fact_id": "official_gqa_comparison_guard",
+      "sources": [
+        "binding_scope"
+      ]
+    },
+    "S2:clip_global": {
+      "fact_id": "clip_global",
+      "sources": [
+        "v2_embeddings",
+        "binding_scope"
+      ]
+    },
+    "S2:siglip_global_swap": {
+      "fact_id": "siglip_global_swap",
+      "sources": [
+        "siglip_report",
+        "siglip_preflight",
+        "v3_tokens"
+      ]
+    },
+    "S2:clip_token_stores": {
+      "fact_id": "clip_token_stores",
+      "sources": [
+        "v3_tokens"
+      ]
+    },
+    "S2:e8a_executed_capacity": {
+      "fact_id": "e8a_executed_capacity",
+      "sources": [
+        "e8a_report",
+        "unrun_disposition"
+      ]
+    },
+    "S2:e8a_projection_and_space_disclosure": {
+      "fact_id": "e8a_projection_and_space_disclosure",
+      "sources": [
+        "e8a_report",
+        "binding_scope"
+      ]
+    },
+    "S2:e8a_pinned_identity": {
+      "fact_id": "e8a_pinned_identity",
+      "sources": [
+        "e8a_identity",
+        "g21_freeze"
+      ]
+    },
+    "S2:e8a_360m_disposition": {
+      "fact_id": "e8a_360m_disposition",
+      "sources": [
+        "unrun_disposition",
+        "e10_report"
+      ]
+    },
+    "S2:e8b_fp32_evaluation_only": {
+      "fact_id": "e8b_fp32_evaluation_only",
+      "sources": [
+        "e8b_fp32"
+      ]
+    },
+    "S3:global_embedding_heads": {
+      "fact_id": "subsection_3_7.global_embedding_heads",
+      "sources": [
+        "models_source",
+        "v203_source",
+        "v204_source"
+      ]
+    },
+    "S3:latent_query_reasoner": {
+      "fact_id": "subsection_3_7.latent_query_reasoner",
+      "sources": [
+        "reasoner_source",
+        "v3_tokens",
+        "v3_reasoner"
+      ]
+    },
+    "S3:question_side_interface": {
+      "fact_id": "subsection_3_7.question_side_interface",
+      "sources": [
+        "e8a_source",
+        "e8a_report",
+        "unrun_disposition"
+      ]
+    },
+    "S3:answer_side_interface": {
+      "fact_id": "subsection_3_7.answer_side_interface",
+      "sources": [
+        "e8b_source",
+        "e8b_report",
+        "e10_source",
+        "e10_report"
+      ]
+    },
+    "S3:compact_vlm_context": {
+      "fact_id": "subsection_3_7.compact_vlm_context",
+      "sources": [
+        "e9_protocol",
+        "e9_report"
+      ]
+    },
+    "S3:random_controls": {
+      "fact_id": "subsection_3_7.random_controls",
+      "sources": [
+        "e8a_source",
+        "e8b_source",
+        "e10_source"
+      ]
+    },
+    "S3:parameter_accounting": {
+      "fact_id": "subsection_3_7.parameter_accounting",
+      "sources": [
+        "parameter_closure"
+      ]
+    }
+  },
+  "claim_mappings": [
+    {
+      "claim_id": "3.4.answer_space_rules",
+      "sentence_scope": "The top-100 and top-1000 construction rules, training-pool-only boundary, shared first-100 entries and index identity.",
+      "fact_refs": [
+        "S2:top100_construction",
+        "S2:top1000_extension",
+        "S2:prefix_identity_gate"
+      ]
+    },
+    {
+      "claim_id": "3.4.coverage",
+      "sentence_scope": "7,714/10,004 (0.7711) and 9,823 (0.9819) as answer-space design properties rather than model performance.",
+      "fact_refs": [
+        "S2:coverage_design_properties",
+        "S2:denominators"
+      ]
+    },
+    {
+      "claim_id": "3.4.protocol_artifacts_and_indexing",
+      "sentence_scope": "Pinned vocabulary artefacts, experiment-specific mappings, shared-prefix role and separate denominators.",
+      "fact_refs": [
+        "S2:top100_artifact",
+        "S2:prefix_identity_gate",
+        "S2:denominator_guard"
+      ]
+    },
+    {
+      "claim_id": "3.5.scorers",
+      "sentence_scope": "Strict raw exact match and pinned single-gold normalised exact match, explicitly distinguished from official VQA consensus accuracy.",
+      "fact_refs": [
+        "S2:strict_raw_exact",
+        "S2:g21_normalised_exact"
+      ],
+      "citation_keys": [
+        "antol2015vqa"
+      ]
+    },
+    {
+      "claim_id": "3.5.top100_fixed_points_and_exclusions",
+      "sentence_scope": "Zero top-100 normalisation changes/collisions, resulting correctness coincidence, and excluded semantic or model-judged metrics.",
+      "fact_refs": [
+        "S2:top100_coincidence",
+        "S2:primary_metric_exclusions"
+      ]
+    },
+    {
+      "claim_id": "3.5.denominator_rules",
+      "sentence_scope": "The 7,714, 9,823 and 10,004 denominators, no-mixing rule and coverage-adjustment definition.",
+      "fact_refs": [
+        "S2:denominators",
+        "S2:denominator_guard",
+        "S2:coverage_adjustment"
+      ]
+    },
+    {
+      "claim_id": "3.5.published_score_guard",
+      "sentence_scope": "No direct comparison with published GQA scores because the answer support, scorer and split differ.",
+      "fact_refs": [
+        "S2:official_gqa_comparison_guard"
+      ],
+      "citation_keys": [
+        "hudson2019gqa"
+      ]
+    },
+    {
+      "claim_id": "3.6.clip_global",
+      "sentence_scope": "Frozen OpenCLIP ViT-B-32 laion2b_s34b_b79k, separate image/text towers, L2-normalised 512-dimensional aligned global vectors and frozen-interface boundary.",
+      "fact_refs": [
+        "S2:clip_global"
+      ],
+      "citation_keys": [
+        "tsimpoukelli2021frozen"
+      ]
+    },
+    {
+      "claim_id": "3.6.siglip_swap",
+      "sentence_scope": "Frozen ViT-B-16-SigLIP webli, 768-dimensional global inputs, same head recipe and unchanged CLIP token stores.",
+      "fact_refs": [
+        "S2:siglip_global_swap"
+      ]
+    },
+    {
+      "claim_id": "3.6.token_stores",
+      "sentence_scope": "50 visual tokens comprising CLS plus 49 patches, packed question tokens, width 512 and joint CLIP token space.",
+      "fact_refs": [
+        "S2:clip_token_stores"
+      ]
+    },
+    {
+      "claim_id": "3.6.e8a_interface",
+      "sentence_scope": "Executed SmolLM2-135M revision, Linear(576,512), learned-width disclosure and unrun 360M question-side arms.",
+      "fact_refs": [
+        "S2:e8a_executed_capacity",
+        "S2:e8a_projection_and_space_disclosure",
+        "S2:e8a_pinned_identity",
+        "S2:e8a_360m_disposition"
+      ]
+    },
+    {
+      "claim_id": "3.6.e8b_fp32",
+      "sentence_scope": "E8B-only FP32 canonical evaluation rule, explicitly not a training-precision rule.",
+      "fact_refs": [
+        "S2:e8b_fp32_evaluation_only"
+      ]
+    },
+    {
+      "claim_id": "3.7.family_overview_and_accounting",
+      "sentence_scope": "Five-family frozen/trainable/contextual organisation and parameter-count-not-latency boundary.",
+      "fact_refs": [
+        "S3:global_embedding_heads",
+        "S3:latent_query_reasoner",
+        "S3:question_side_interface",
+        "S3:answer_side_interface",
+        "S3:compact_vlm_context",
+        "S3:parameter_accounting"
+      ]
+    },
+    {
+      "claim_id": "3.7.1.global_heads",
+      "sentence_scope": "MLPHead order; question/image controls; concat/fusion order; widths 512, 979, 268, 351; four separately named single-interaction controls; Linear(1024,100); E2/E3 and by-design v2_03/v2_04/E2 distinctions.",
+      "fact_refs": [
+        "S3:global_embedding_heads"
+      ]
+    },
+    {
+      "claim_id": "3.7.2.reasoner",
+      "sentence_scope": "32 latent queries, four pre-LN blocks in the exact cross-attention/self-attention/FFN order, fourfold GELU expansion, 8 heads, width 512, no input projections, mean/LN/Linear(512,100) readout and 21,099,620 trainable parameters.",
+      "fact_refs": [
+        "S3:latent_query_reasoner"
+      ],
+      "citation_keys": [
+        "jaegle2021perceiver"
+      ]
+    },
+    {
+      "claim_id": "3.7.3.question_side",
+      "sentence_scope": "A0p Linear(512,512); A1/A1r Linear(576,512); frozen CLIP/pretrained/random encoders; trainable projection/reasoner/classifier; learned-space disclosure.",
+      "fact_refs": [
+        "S3:question_side_interface",
+        "S2:e8a_projection_and_space_disclosure"
+      ]
+    },
+    {
+      "claim_id": "3.7.4.answer_side",
+      "sentence_scope": "32-latent projection, B1, B2/B3, B4r/B4, family-level counts and R1/R2/R3 method identities.",
+      "fact_refs": [
+        "S3:answer_side_interface"
+      ]
+    },
+    {
+      "claim_id": "3.7.figure_slm_interfaces",
+      "sentence_scope": "Figure 3.4 shows only the question-side and answer-side frozen small-language-model attachment points, trainable projections, reasoner connections, matched-random pairs and R1/R2/R3 method roles.",
+      "fact_refs": [
+        "S3:question_side_interface",
+        "S3:answer_side_interface",
+        "S3:random_controls"
+      ],
+      "sources": [
+        "stage3_manifest",
+        "e8a_report",
+        "e8a_source",
+        "e8b_report",
+        "e8b_source",
+        "e8b_b2_cell",
+        "e8b_b3_cell",
+        "e10_report",
+        "e10_source",
+        "e10_b4_cell",
+        "e10_b4r_cell"
+      ]
+    },
+    {
+      "claim_id": "3.7.5.compact_context",
+      "sentence_scope": "SmolVLM-256M-Instruct and SmolVLM-500M-Instruct as frozen evaluation-only contextual systems with zero project-trainable parameters and no matched/base contrast.",
+      "fact_refs": [
+        "S3:compact_vlm_context"
+      ]
+    },
+    {
+      "claim_id": "3.7.6.random_controls",
+      "sentence_scope": "Within-size architecture/tokenizer matching, pinned-seed frozen random weights, no separate tuning, and the question/readout isolation boundaries.",
+      "fact_refs": [
+        "S3:random_controls"
+      ]
+    },
+    {
+      "claim_id": "3.7.table_parameter_accounting",
+      "sentence_scope": "Trainable counts only, loaded/resident-frozen omission and separate product_natural/difference_natural execution at 838,244 each.",
+      "fact_refs": [
+        "S3:global_embedding_heads",
+        "S3:parameter_accounting"
+      ]
+    }
+  ],
+  "citation_registry": [
+    {
+      "key": "antol2015vqa",
+      "use": "contextual lineage for VQA normalisation and contrast with official consensus scoring",
+      "exists_in_bibliography": true
+    },
+    {
+      "key": "hudson2019gqa",
+      "use": "published-GQA comparison boundary",
+      "exists_in_bibliography": true
+    },
+    {
+      "key": "tsimpoukelli2021frozen",
+      "use": "frozen-model literature context",
+      "exists_in_bibliography": true
+    },
+    {
+      "key": "jaegle2021perceiver",
+      "use": "latent-query architecture context",
+      "exists_in_bibliography": true
+    }
+  ],
+  "gap_markers": [
+    {
+      "marker": "% CITE-GAP clip_foundation",
+      "section": "3.6"
+    },
+    {
+      "marker": "% CITE-GAP siglip",
+      "section": "3.6"
+    },
+    {
+      "marker": "% CITE-GAP smollm2",
+      "section": "3.6"
+    },
+    {
+      "marker": "% CITE-GAP smolvlm",
+      "section": "3.7.5"
+    }
+  ],
+  "table_objects": {
+    "TAB-3.2": {
+      "source_csv": {
+        "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch3_answer_spaces.csv",
+        "sha256": "f2654294c6b46dc8c780cd9f5e376d41ce3bd2f9bda96b523c8c96fea7a4d5e8"
+      },
+      "cell_provenance": {
+        "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch3_answer_spaces.provenance.json",
+        "sha256": "1d59aa83f8ccb53463edf5fda302e1633042aa09e139d37d4a9942de08745d27"
+      },
+      "generated_output": {
+        "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables/ch3_answer_spaces.tex",
+        "sha256": "12de670f135ebdad7a7fb8555093b034b84e90710564448a47514d74116f7051"
+      },
+      "options": [
+        "--header-map",
+        "--thousands",
+        "--verify"
+      ],
+      "round_trip": "PASS"
+    },
+    "TAB-3.3": {
+      "source_csv": {
+        "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch3_architecture_params.csv",
+        "sha256": "0c6225bb2873462b1d4fa8d319e8356cd67cf33e63ace4b0fa27eb435067779e"
+      },
+      "cell_provenance": {
+        "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch3_architecture_params.provenance.json",
+        "sha256": "d68a4eeabbec5a3cd92f6ee7fca46c78c4f54d222de4a47eb086dd4560516afd"
+      },
+      "generated_output": {
+        "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables/ch3_architecture_params.tex",
+        "sha256": "57fb4f4536cafdf44b9180d4c6984daa7444333f602d2619d245827496be407b"
+      },
+      "options": [
+        "--columns family,system,implemented_form,trainable_parameters",
+        "--header-map",
+        "--thousands",
+        "--verify"
+      ],
+      "dropped_columns": [
+        "interface_summary",
+        "total_loaded_parameters",
+        "resident_frozen_parameters",
+        "count_scope"
+      ],
+      "round_trip": "PASS"
+    }
+  },
+  "converter": {
+    "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tools/tab2latex.py",
+    "sha256": "c441d40b2b10a7a4294c4f15b12bc450f7ae73a9435e3d15394940c0f0c5a546",
+    "columns_feature": "optional presentation-only projection with retained-cell round trip and dropped-column metadata",
+    "reference_hashes": {
+      "default": "ddc71d7acb962f4d6e8b4c886700998f76ac343ee3990e38280e3d02c5611b2c",
+      "header_map_only": "e4570b76f376c79578def0a82e4452538ffde7c9a03cc58b4b75cdf27dd74157",
+      "thousands_only": "293733e45ed27e91089b72c84cee68df20ba464942f0410843745d11ae096b23",
+      "header_map_and_thousands": "62ea08095541f2bfcc31a5612fb389ca41e845aad23e9a192f5d17c6486d9442"
+    },
+    "all_reference_modes_verified": true
+  },
+  "figure_objects": {
+    "FIG-3.B": {
+      "specification": {
+        "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/figures_src/FIG-3-B.specification.json",
+        "sha256": "2285aa7cdc630d92aa618a6ef69c53c642510c4db2761764b3c209b52256ba1e",
+        "modified": false
+      },
+      "render_authority": "Explicit human Chapter-3 Draft-Stage-2 authorisation prospectively permits this bounded first render despite the closed preparation-time render_authorized field.",
+      "renderer": {
+        "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/figures_src/render_fig_3b.py",
+        "sha256": "413b4e10badbb82872c41eaa3e822d9c395ae87e228fe9c210fa00b0c04525c0",
+        "output_argument_required": true
+      },
+      "output": {
+        "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/images/ch3/FIG-3-B.pdf",
+        "sha256": "15b1b367a2f6436b1fca5e1ee3299edbe5e25c4314c326e9a6bcd62682203213"
+      },
+      "label_set_verification": "PASS",
+      "deterministic_same_environment_verification": "PASS"
+    },
+    "FIG-3.C": {
+      "specification": {
+        "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/figures_src/FIG-3-C.specification.json",
+        "sha256": "e397e255b6e73adfa0b0e024aeda4980696d5dd2a1f5467b0f97018fc5431529"
+      },
+      "renderer": {
+        "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/figures_src/render_fig_3c.py",
+        "sha256": "d6bbd6919d080f84148de5f1208cecfde0cf61d7f8803346893d2e40467a2cd6",
+        "output_argument_required": true
+      },
+      "output": {
+        "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/images/ch3/FIG-3-C.pdf",
+        "sha256": "b7b2e2309e084cdc42ff46c3ad2869fa4752379926a3cdd229cbc5c998c74262"
+      },
+      "architecture_order_verification": "PASS",
+      "no_input_projection_verification": "PASS",
+      "deterministic_same_environment_verification": "PASS"
+    },
+    "FIG-3.D": {
+      "display_identity": "Figure 3.4",
+      "specification": {
+        "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/figures_src/FIG-3-D.specification.json",
+        "sha256": "5336ac34fb641d292279aa7b32b0499b3186b8cabde9e991a5d9791b94e3905d"
+      },
+      "renderer": {
+        "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/figures_src/render_fig_3d.py",
+        "sha256": "bc020af6b25811ab1042da46ff38b0b0ba37793d374b6e8693addf3b02f3fa36",
+        "output_argument_required": true,
+        "existing_output_refusal": true,
+        "protected_historical_and_closed_outputs": true
+      },
+      "output": {
+        "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/images/ch3/FIG-3-D.pdf",
+        "sha256": "24d246082dc81298537d78cc7e7d8904efc873e863be75ed6c06117d4ba83c50",
+        "bytes": 99437
+      },
+      "human_resolution": {
+        "packet_record": ".agent-bridge/tasks/dissertation-02-ch3-draft-s2/human-decision-01.md",
+        "packet_record_sha256": "437803aea377a297602dabf3f66d713c145a573d9be71eb851f56c4ddf389166",
+        "scope": "Prospective methodology-only replacement for Figure 3.4; no closed artefact changed."
+      },
+      "label_and_relationship_provenance": "PASS",
+      "result_free_boundary": "PASS",
+      "deterministic_same_environment_verification": "PASS"
+    },
+    "historical_SmolLM2_interface_asset": {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/images/arch/p2607_smollm2_interface_architecture.pdf",
+      "sha256": "619ff8a31f4e4d2e1e2b483e946026a28ac3ee66259bd2c7c70091c7b321f1eb",
+      "modified_or_rendered": false,
+      "included_in_methodology": false,
+      "reason": "Human-authorised result-free FIG-3.D replacement; historical empirical diagnostic content excluded."
+    }
+  },
+  "render_environment": {
+    "matplotlib_version": "3.11.0",
+    "font_family": "DejaVu Sans",
+    "font_style": "Book",
+    "font_version": "2.35",
+    "font_path": "/scratch/Efficient Vision-Language Reasoning with Small Language Models/.venv/lib/python3.12/site-packages/matplotlib/mpl-data/fonts/ttf/DejaVuSans.ttf",
+    "font_sha256": "3fdf69cabf06049ea70a00b5919340e2ce1e6d02b0cc3c4b44fb6801bd1e0d22",
+    "reproducibility_limit": "Renderer verification establishes deterministic bytes in this pinned local environment. Cross-environment byte identity is not claimed because Matplotlib, PDF backend and font stacks can differ."
+  },
+  "draft_target": {
+    "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/methodology.tex",
+    "sha256": "1db75fc897e08174cd6f0ac8522038fe2073f096bf4d7cf011fef6138edfef26",
+    "immutable_prefix_through_section_3_3_sha256": "695de515972db07e41dfcf2f69226894bf7781a010ad0d828b14cc45f9df7c3b",
+    "immutable_tail_from_section_3_8_sha256": "ea6c693fa082ed6fe4e6011df7b481cc41f23332bd85c2cc185874ed0b7abe66"
+  },
+  "claim_boundaries": {
+    "model_performance_results_included": false,
+    "latency_results_included": false,
+    "pretraining_effect_claims_included": false,
+    "published_gqa_score_comparison_included": false,
+    "parameter_count_used_as_latency_proxy": false
+  },
+  "block_and_human_resolution": {
+    "initial_block": "The mandatory historical Figure 3.4 asset contained an empirical diagnostic statement that conflicted with the methodology-only boundary.",
+    "human_decision": "Create prospective result-free FIG-3.D and retain the historical PDF byte-identically outside Chapter 3 Methodology.",
+    "scientific_content_changed_in_historical_asset": false,
+    "new_figure_empirical_outcomes_included": false
+  }
+}

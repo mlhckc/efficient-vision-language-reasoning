@@ -1,0 +1,304 @@
+{
+  "schema_version": 1,
+  "task_id": "dissertation-02-ch3-draft-s2",
+  "stage": "chapter-3-draft-stage-2",
+  "figure_id": "FIG-3.D",
+  "status": "DRAFT_RENDER_SOURCE",
+  "render_authorized": true,
+  "render_authority": "Explicit human methodology-only replacement authorisation for Chapter 3 Draft Stage 2, 2026-08-25",
+  "generated_utc": "2026-08-25T14:40:00Z",
+  "purpose": "Methodology diagram of the question-side and answer-side frozen small-language-model interfaces.",
+  "labels": [
+    {
+      "label_id": "question_panel",
+      "text": "Question-side interface",
+      "source_ids": [
+        "stage3_manifest",
+        "e8a_report"
+      ]
+    },
+    {
+      "label_id": "clip_question",
+      "text": "Frozen CLIP question tokens (A0p)",
+      "source_ids": [
+        "stage3_manifest",
+        "e8a_report",
+        "e8a_source"
+      ]
+    },
+    {
+      "label_id": "smollm_question",
+      "text": "Frozen SmolLM2-135M states (A1 pretrained / A1r matched random)",
+      "source_ids": [
+        "stage3_manifest",
+        "e8a_report",
+        "e8a_source"
+      ]
+    },
+    {
+      "label_id": "question_projection",
+      "text": "Trainable projection: Linear(512, 512) or Linear(576, 512)",
+      "source_ids": [
+        "stage3_manifest",
+        "e8a_report",
+        "e8a_source"
+      ]
+    },
+    {
+      "label_id": "image_tokens",
+      "text": "Frozen CLIP image tokens",
+      "source_ids": [
+        "stage3_manifest",
+        "e8a_report",
+        "e8a_source"
+      ]
+    },
+    {
+      "label_id": "question_reasoner",
+      "text": "Trainable latent reasoner",
+      "source_ids": [
+        "stage3_manifest",
+        "e8a_report",
+        "e8a_source"
+      ]
+    },
+    {
+      "label_id": "question_classifier",
+      "text": "Trainable classifier",
+      "source_ids": [
+        "stage3_manifest",
+        "e8a_report",
+        "e8a_source"
+      ]
+    },
+    {
+      "label_id": "answer_panel",
+      "text": "Answer-side interface",
+      "source_ids": [
+        "stage3_manifest",
+        "e8b_report",
+        "e10_report"
+      ]
+    },
+    {
+      "label_id": "answer_reasoner",
+      "text": "Trainable latent reasoner (32 latent outputs)",
+      "source_ids": [
+        "stage3_manifest",
+        "e8b_source",
+        "e10_source"
+      ]
+    },
+    {
+      "label_id": "answer_projection",
+      "text": "Trainable projection into the frozen language-model embedding width",
+      "source_ids": [
+        "stage3_manifest",
+        "e8b_source",
+        "e10_source",
+        "e10_b4",
+        "e10_b4r"
+      ]
+    },
+    {
+      "label_id": "readout_135",
+      "text": "Frozen SmolLM2-135M readout (B2 matched random / B3 pretrained)",
+      "source_ids": [
+        "stage3_manifest",
+        "e8b_report",
+        "e8b_b2",
+        "e8b_b3"
+      ]
+    },
+    {
+      "label_id": "readout_360",
+      "text": "Frozen SmolLM2-360M readout (B4r matched random / B4 pretrained)",
+      "source_ids": [
+        "stage3_manifest",
+        "e10_report",
+        "e10_b4r",
+        "e10_b4"
+      ]
+    },
+    {
+      "label_id": "readout_roles",
+      "text": "R1 candidate ranking | R2 trie-constrained greedy | R3 bounded free greedy",
+      "source_ids": [
+        "stage3_manifest",
+        "e8b_report",
+        "e8b_source"
+      ]
+    },
+    {
+      "label_id": "frozen_key",
+      "text": "Frozen component",
+      "source_ids": [
+        "stage3_manifest"
+      ]
+    },
+    {
+      "label_id": "trainable_key",
+      "text": "Trainable component",
+      "source_ids": [
+        "stage3_manifest"
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "from": "clip_question",
+      "to": "question_projection",
+      "source_ids": [
+        "stage3_manifest",
+        "e8a_report",
+        "e8a_source"
+      ]
+    },
+    {
+      "from": "smollm_question",
+      "to": "question_projection",
+      "source_ids": [
+        "stage3_manifest",
+        "e8a_report",
+        "e8a_source"
+      ]
+    },
+    {
+      "from": "question_projection",
+      "to": "question_reasoner",
+      "source_ids": [
+        "stage3_manifest",
+        "e8a_report",
+        "e8a_source"
+      ]
+    },
+    {
+      "from": "image_tokens",
+      "to": "question_reasoner",
+      "source_ids": [
+        "stage3_manifest",
+        "e8a_report",
+        "e8a_source"
+      ]
+    },
+    {
+      "from": "question_reasoner",
+      "to": "question_classifier",
+      "source_ids": [
+        "stage3_manifest",
+        "e8a_report",
+        "e8a_source"
+      ]
+    },
+    {
+      "from": "answer_reasoner",
+      "to": "answer_projection",
+      "source_ids": [
+        "stage3_manifest",
+        "e8b_source",
+        "e10_source"
+      ]
+    },
+    {
+      "from": "answer_projection",
+      "to": "readout_135",
+      "source_ids": [
+        "stage3_manifest",
+        "e8b_report",
+        "e8b_b2",
+        "e8b_b3"
+      ]
+    },
+    {
+      "from": "answer_projection",
+      "to": "readout_360",
+      "source_ids": [
+        "stage3_manifest",
+        "e10_report",
+        "e10_b4r",
+        "e10_b4"
+      ]
+    },
+    {
+      "from": "readout_135",
+      "to": "readout_roles",
+      "source_ids": [
+        "stage3_manifest",
+        "e8b_report",
+        "e8b_source"
+      ]
+    },
+    {
+      "from": "readout_360",
+      "to": "readout_roles",
+      "source_ids": [
+        "stage3_manifest",
+        "e10_report",
+        "e10_source"
+      ]
+    }
+  ],
+  "sources": {
+    "stage3_manifest": {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage3_evidence_manifest.json",
+      "sha256": "3f566fa3c33e05ab4feb50a305d9286481191e1317348ab834a94d00a1fb116e",
+      "location": "subsection_3_7.question_side_interface, answer_side_interface and random_controls"
+    },
+    "e8a_report": {
+      "path": "docs/experiments/e8a_core_135m.md",
+      "sha256": "7d6c0626e4e1e3aa56978f15e180357f398f3c0481701bf0e667fa6f8d6f3e65",
+      "location": "Method and interface boundaries only"
+    },
+    "e8a_source": {
+      "path": "experiments/e8a_question_encoder/e8a_common.py",
+      "sha256": "cd6c8ce0f0f9d93ec367d9e4c9ec611e5768e334964fe6d7c18bb3a04a70ba20",
+      "location": "A0p/A1/A1r interface construction"
+    },
+    "e8b_report": {
+      "path": "docs/experiments/e8b_core_matrix.md",
+      "sha256": "328e1a1c311daa08fcb182e67652b1d37e81108ee3572bd8297cb26b486b4a93",
+      "location": "Methods and R1/R2/R3 definitions only"
+    },
+    "e8b_source": {
+      "path": "experiments/e8b_readout_generation/run.py",
+      "sha256": "d05c79a749f6c4dc17e37d81f4f7598ea7f74d2e6573c4feae8243c2253e1430",
+      "location": "B2/B3 construction and readout protocol"
+    },
+    "e8b_b2": {
+      "path": "results/experiments/e8b_readout_generation/e8b_core_B2_train_40k_seed0.json",
+      "sha256": "1c9b7699ac7100e553bdd6d6db920f5f75576253b70af5adcd3e92378060449c",
+      "location": "e8b_core_cell recipe and provenance gates; result fields excluded"
+    },
+    "e8b_b3": {
+      "path": "results/experiments/e8b_readout_generation/e8b_core_B3_train_40k_seed0.json",
+      "sha256": "df16f96c1be90c5bfa6f94e35435c39c56e1a0e02fb47204c62723aa0104d315",
+      "location": "e8b_core_cell recipe and provenance gates; result fields excluded"
+    },
+    "e10_report": {
+      "path": "docs/experiments/e10_core_matrix.md",
+      "sha256": "11491ff36bd14417f9991787a008285590bedfb80dc8f84e617da87b9b4f0ddd",
+      "location": "Methods and capacity-pair architecture only"
+    },
+    "e10_source": {
+      "path": "experiments/e10_capacity_360m/e10_common.py",
+      "sha256": "2f4b490d80112aba71c4acc4f4cdd57c9465a9c2ceb2add39f64e02682546065",
+      "location": "B4/B4r construction and interface width"
+    },
+    "e10_b4": {
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4_train_40k_seed0.json",
+      "sha256": "3f7e3ef2bd73a860ca00b0f62ff73572c710fc9f0ed54006054943d50b0b5d22",
+      "location": "e10_core_cell.setup frozen recipe and model identity; result fields excluded"
+    },
+    "e10_b4r": {
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4r_train_40k_seed0.json",
+      "sha256": "6ad47230bfbde18c6d1a16eb1ebc9403ead65ddfd4fd6fdab7c2bee2f9327201",
+      "location": "e10_core_cell.setup frozen recipe and model identity; result fields excluded"
+    }
+  },
+  "scientific_guards": {
+    "empirical_outcomes_displayed": false,
+    "matched_random_pairing_displayed_without_directional_cues": true,
+    "frozen_trainable_boundary_displayed": true,
+    "historical_figure_used_as_scientific_source": false
+  }
+}

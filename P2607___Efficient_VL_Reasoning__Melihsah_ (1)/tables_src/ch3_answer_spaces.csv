@@ -1,0 +1,4 @@
+answer_space,vocabulary_size,in_vocabulary_development_rows,coverage,denominator_role,applicable_primary_metrics
+top-100,100,7714,0.7711,top-100 in-vocabulary development rows,strict raw exact; pinned normalised exact
+top-1000,1000,9823,0.9819,top-1000 in-vocabulary development rows,strict raw exact; pinned normalised exact
+raw distribution,n/a,n/a,n/a,"shared raw-distribution development rows (10,004)",coverage-adjusted raw-distribution accuracy

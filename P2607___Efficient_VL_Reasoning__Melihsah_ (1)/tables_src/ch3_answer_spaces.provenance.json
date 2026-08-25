@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "task_id": "dissertation-02-ch3-draft-s2",
+  "table_id": "TAB-3.2",
+  "status": "DRAFTING_SOURCE",
+  "purpose": "Answer-space design properties and evaluation-denominator roles; no model performance.",
+  "source_csv": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch3_answer_spaces.csv",
+  "authority_manifest": {
+    "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage2_evidence_manifest.json",
+    "sha256": "d7de03355f3419cb1896abbf13e2214eb159e59ae0080abd8bc5ec6882694d35"
+  },
+  "canonical_sources": {
+    "v2_protocol_report": {
+      "path": "docs/experiments/v2_00_protocol.md",
+      "sha256": "af91acda8bfaef600b3e5c2bbd0ffaeac1e431a174d8784ed1af01c39fa3d013"
+    },
+    "v2_build_summary": {
+      "path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+      "sha256": "cfe82a17f0353a9bb6f107f770e59b6b7321ff69ab8d31eda2f49f16d5976e62"
+    },
+    "e3_report": {
+      "path": "docs/experiments/e3_vocab1000.md",
+      "sha256": "e565217e2e0629a8740c8f923c1844376ef619d13fa262de8e55ffb6c62db0b1"
+    },
+    "e3_preflight": {
+      "path": "artifacts/results_export/e3_vocab1000/preflight.json",
+      "sha256": "af64a0d688807a3aa245692400a514c9465cee48d9022678fa347f08652e8e16"
+    },
+    "g21_freeze": {
+      "path": "results/experiments/e8a_question_encoder/e8a_135m_core_frozen_g21.json",
+      "sha256": "84403265ef8391241ad77ae147a445c1f73844532a702791a613076a5068e471"
+    }
+  },
+  "rows": [
+    {
+      "row_id": "top-100",
+      "cells": {
+        "answer_space": {"value": "top-100", "fact_ids": ["top100_construction"]},
+        "vocabulary_size": {"value": "100", "fact_ids": ["top100_construction"]},
+        "in_vocabulary_development_rows": {"value": "7714", "fact_ids": ["coverage_design_properties", "denominators"]},
+        "coverage": {"value": "0.7711", "fact_ids": ["coverage_design_properties"], "precision": "reported four-decimal form"},
+        "denominator_role": {"value": "top-100 in-vocabulary development rows", "fact_ids": ["denominators", "denominator_guard"]},
+        "applicable_primary_metrics": {"value": "strict raw exact; pinned normalised exact", "fact_ids": ["strict_raw_exact", "g21_normalised_exact", "top100_coincidence"]}
+      },
+      "source_ids": ["v2_protocol_report", "v2_build_summary", "g21_freeze"]
+    },
+    {
+      "row_id": "top-1000",
+      "cells": {
+        "answer_space": {"value": "top-1000", "fact_ids": ["top1000_extension", "prefix_identity_gate"]},
+        "vocabulary_size": {"value": "1000", "fact_ids": ["top1000_extension"]},
+        "in_vocabulary_development_rows": {"value": "9823", "fact_ids": ["coverage_design_properties", "denominators"]},
+        "coverage": {"value": "0.9819", "fact_ids": ["coverage_design_properties"], "precision": "reported four-decimal form"},
+        "denominator_role": {"value": "top-1000 in-vocabulary development rows", "fact_ids": ["denominators", "denominator_guard"]},
+        "applicable_primary_metrics": {"value": "strict raw exact; pinned normalised exact", "fact_ids": ["strict_raw_exact", "g21_normalised_exact"]}
+      },
+      "source_ids": ["e3_report", "e3_preflight", "g21_freeze"]
+    },
+    {
+      "row_id": "raw-distribution",
+      "cells": {
+        "answer_space": {"value": "raw distribution", "fact_ids": ["denominators"]},
+        "vocabulary_size": {"value": "n/a", "fact_ids": ["denominators"]},
+        "in_vocabulary_development_rows": {"value": "n/a", "fact_ids": ["denominators"]},
+        "coverage": {"value": "n/a", "fact_ids": ["coverage_adjustment"]},
+        "denominator_role": {"value": "shared raw-distribution development rows (10,004)", "fact_ids": ["denominators", "denominator_guard"]},
+        "applicable_primary_metrics": {"value": "coverage-adjusted raw-distribution accuracy", "fact_ids": ["coverage_adjustment"]}
+      },
+      "source_ids": ["v2_build_summary", "e3_report", "e3_preflight"]
+    }
+  ],
+  "guards": {
+    "coverage_is_design_not_performance": true,
+    "model_scores_included": false,
+    "scientific_cells_hand_typed_in_generated_table": false,
+    "data_tree_source": false
+  }
+}

@@ -127,6 +127,34 @@ def _parse_header_map(raw_mapping: str | None) -> dict[str, str]:
     return parsed
 
 
+def _parse_columns(
+    raw_columns: str | None, source_headers: list[str]
+) -> list[str] | None:
+    if raw_columns is None:
+        return None
+    columns = [column.strip() for column in raw_columns.split(",")]
+    if not columns or any(not column for column in columns):
+        raise ConversionError("--columns must name one or more source headers")
+    if len(set(columns)) != len(columns):
+        raise ConversionError("--columns must not contain duplicate headers")
+    unknown = [column for column in columns if column not in source_headers]
+    if unknown:
+        raise ConversionError(f"--columns names unknown source headers: {unknown}")
+    return columns
+
+
+def _select_columns(
+    rows: list[list[str]], columns: list[str] | None
+) -> tuple[list[list[str]], list[str]]:
+    if columns is None:
+        return [list(row) for row in rows], []
+    source_headers = rows[0]
+    indices = [source_headers.index(column) for column in columns]
+    selected = [[row[index] for index in indices] for row in rows]
+    dropped = [header for header in source_headers if header not in columns]
+    return selected, dropped
+
+
 def _format_integer(cell: str) -> str:
     if not _CANONICAL_INTEGER.fullmatch(cell):
         return cell
@@ -134,15 +162,23 @@ def _format_integer(cell: str) -> str:
 
 
 def _presentation_metadata(
-    source_headers: list[str], header_map: dict[str, str], thousands: bool
+    source_headers: list[str],
+    header_map: dict[str, str],
+    thousands: bool,
+    columns: list[str] | None = None,
+    dropped_columns: list[str] | None = None,
 ) -> dict:
     if header_map:
         _validate_header_map(source_headers, header_map)
-    return {
+    metadata = {
         "header_map": header_map,
         "source_headers": source_headers,
         "thousands": thousands,
     }
+    if columns is not None:
+        metadata["columns"] = columns
+        metadata["dropped_columns"] = dropped_columns or []
+    return metadata
 
 
 def _metadata_comment(metadata: dict) -> str:
@@ -177,7 +213,9 @@ def _render(rows: list[list[str]], metadata: dict) -> str:
     body = "".join(row + _ROW_SUFFIX for row in encoded_rows[1:])
     presentation_comment = (
         _metadata_comment(metadata)
-        if metadata["header_map"] or metadata["thousands"]
+        if metadata["header_map"]
+        or metadata["thousands"]
+        or "columns" in metadata
         else ""
     )
     return _COMMENT + presentation_comment + begin + _HLINE + header + body + _END
@@ -206,7 +244,12 @@ def _parse_generated(text: str) -> tuple[list[list[str]], dict]:
             metadata = json.loads(first_line[len(_PRESENTATION_PREFIX) :])
         except json.JSONDecodeError as error:
             raise ConversionError("generated presentation metadata is invalid") from error
-        if set(metadata) != {"header_map", "source_headers", "thousands"}:
+        base_fields = {"header_map", "source_headers", "thousands"}
+        column_fields = base_fields | {"columns", "dropped_columns"}
+        if frozenset(metadata) not in {
+            frozenset(base_fields),
+            frozenset(column_fields),
+        }:
             raise ConversionError("generated presentation metadata has unexpected fields")
         if not isinstance(metadata["source_headers"], list) or any(
             not isinstance(header, str) for header in metadata["source_headers"]
@@ -219,7 +262,35 @@ def _parse_generated(text: str) -> tuple[list[list[str]], dict]:
             raise ConversionError("generated header-map metadata is invalid")
         if not isinstance(metadata["thousands"], bool):
             raise ConversionError("generated thousands metadata is invalid")
-        if not metadata["header_map"] and not metadata["thousands"]:
+        if "columns" in metadata:
+            if (
+                not isinstance(metadata["columns"], list)
+                or not metadata["columns"]
+                or any(not isinstance(column, str) or not column for column in metadata["columns"])
+                or len(set(metadata["columns"])) != len(metadata["columns"])
+            ):
+                raise ConversionError("generated retained-column metadata is invalid")
+            if (
+                not isinstance(metadata["dropped_columns"], list)
+                or any(
+                    not isinstance(column, str) or not column
+                    for column in metadata["dropped_columns"]
+                )
+                or len(set(metadata["dropped_columns"]))
+                != len(metadata["dropped_columns"])
+            ):
+                raise ConversionError("generated dropped-column metadata is invalid")
+            if metadata["columns"] != metadata["source_headers"]:
+                raise ConversionError(
+                    "retained columns must equal the generated source-header order"
+                )
+            if set(metadata["columns"]) & set(metadata["dropped_columns"]):
+                raise ConversionError("retained and dropped columns overlap")
+        if (
+            not metadata["header_map"]
+            and not metadata["thousands"]
+            and "columns" not in metadata
+        ):
             raise ConversionError(
                 "presentation metadata is forbidden when no presentation option is active"
             )
@@ -305,8 +376,12 @@ def _restore_source_rows(presented_rows: list[list[str]], metadata: dict) -> lis
     return restored
 
 
-def _assert_round_trip(expected: list[list[str]], generated: str) -> None:
+def _assert_round_trip(
+    expected: list[list[str]], generated: str, expected_metadata: dict | None = None
+) -> None:
     presented_rows, metadata = _parse_generated(generated)
+    if expected_metadata is not None and metadata != expected_metadata:
+        raise ConversionError("generated presentation metadata differs from the request")
     _assert_same(expected, _restore_source_rows(presented_rows, metadata))
 
 
@@ -338,6 +413,11 @@ def _parse_args() -> argparse.Namespace:
     )
     parser.add_argument("input_csv", type=Path, help="input UTF-8 CSV file")
     parser.add_argument("--output", required=True, type=Path, help="output .tex file")
+    parser.add_argument(
+        "--columns",
+        metavar="HEADER,...",
+        help="retain named source columns in the requested order",
+    )
     parser.add_argument(
         "--header-map",
         metavar="JSON",
@@ -371,11 +451,19 @@ def main() -> int:
         ):
             raise ConversionError("input and output paths must differ")
 
-        rows = _read_csv(input_path)
+        source_rows = _read_csv(input_path)
+        columns = _parse_columns(arguments.columns, source_rows[0])
+        rows, dropped_columns = _select_columns(source_rows, columns)
         header_map = _parse_header_map(arguments.header_map)
-        metadata = _presentation_metadata(rows[0], header_map, arguments.thousands)
+        metadata = _presentation_metadata(
+            rows[0],
+            header_map,
+            arguments.thousands,
+            columns,
+            dropped_columns,
+        )
         rendered = _render(rows, metadata)
-        _assert_round_trip(rows, rendered)
+        _assert_round_trip(rows, rendered, metadata)
 
         temporary_path = output_path.with_name(f".{output_path.name}.tmp")
         temporary_created = False
@@ -392,7 +480,7 @@ def main() -> int:
                     "r", encoding="utf-8", newline=""
                 ) as handle:
                     written = handle.read()
-                _assert_round_trip(rows, written)
+                _assert_round_trip(rows, written, metadata)
 
             temporary_path.replace(output_path)
             promoted = True
@@ -403,7 +491,7 @@ def main() -> int:
         if arguments.verify:
             with output_path.open("r", encoding="utf-8", newline="") as handle:
                 written = handle.read()
-            _assert_round_trip(rows, written)
+            _assert_round_trip(rows, written, metadata)
     except (ConversionError, OSError, UnicodeError, csv.Error) as error:
         print(f"error: {error}", file=sys.stderr)
         return 1

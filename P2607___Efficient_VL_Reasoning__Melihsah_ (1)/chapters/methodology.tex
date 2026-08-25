@@ -52,16 +52,117 @@ This is a question-level scaling design. Moving to a larger prefix adds images t
 The clean-test region is image-disjoint from both development and training. Only its structural counts are reported: 8,013 questions on 972 images. Targets remain embargoed until the model list is frozen, as set out in Section 3.12. No clean-test result exists yet, and none has informed the methods or development choices reported here.
 
 \section{Answer-space construction: top-100 and top-1000}
-% TODO dissertation-01-ch3-prep-s2: internal budget 250 words; structural scaffold only.
+\label{sec:ch3-answer-space}
+The main answer space contains the 100 most frequent raw answers in the training pool. Answers are ordered by decreasing count, with alphabetical order used to break ties. Development examples do not contribute to this construction. A second answer space extends the same rule to the 1,000 most frequent training-pool answers. Its first 100 entries are identical to the smaller vocabulary, including their indices, so the extension does not silently change the meaning of an existing class.
+
+These choices define which development questions can be scored within each closed vocabulary. The top-100 vocabulary covers 7,714 of the 10,004 raw development rows, giving a coverage of 0.7711. The top-1000 extension covers 9,823 rows, or 0.9819. These figures describe answer-space coverage rather than model performance. They show the evaluation support for each experiment, not how accurately any system answers the retained questions.
+
+Pinned protocol artefacts give each experiment its answer-to-index mapping. The shared prefix extends rather than revises the top-100 labels, keeping answer-space design separate from representation and architecture choices. Section~\ref{sec:ch3-scoring} defines how the vocabularies lead to different evaluation denominators.
 
 \section{Scoring metrics and evaluation denominators}
-% TODO dissertation-01-ch3-prep-s2: internal budget 250 words; structural scaffold only.
+\label{sec:ch3-scoring}
+The primary strict metric is raw exact match: a prediction is correct only when its answer string exactly matches the single canonical gold answer. The project also uses one pinned normalised exact-match metric. It applies a fixed, single-gold translation of the standard VQA answer normalisation before making the same exact comparison. This retains the normalisation lineage of VQA evaluation \citep{antol2015vqa}, but it is not the official VQA soft or consensus accuracy, which averages agreement over several human answers.
+
+Within the top-100 vocabulary, normalisation changes none of the answer strings and creates no collisions. Raw and normalised correctness therefore coincide for these classifiers. This is a property of the pinned answer set, not a general claim about normalised scoring. Semantic similarity, synonym matching, embedding-based scoring and language-model judgement are excluded from the primary metrics.
+
+Table~\ref{tab:ch3-answer-spaces} separates the three reporting denominators: 7,714 top-100 rows, 9,823 top-1000 rows and all 10,004 raw development rows. They are never mixed silently. Across answer spaces, coverage-adjusted raw-distribution accuracy is the in-vocabulary accuracy multiplied by coverage. Project scores are not compared with published GQA scores \citep{hudson2019gqa}, because the answer spaces, scoring rule and denominators differ.
+
+\begin{table}[htbp]
+\centering
+\caption{Answer-space coverage and evaluation roles. Coverage values are design properties, not model-accuracy results.}
+\label{tab:ch3-answer-spaces}
+\begingroup
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewenvironment{longtable}[1]
+  {\begin{tabular}{|p{0.12\textwidth}|p{0.09\textwidth}|p{0.13\textwidth}|p{0.08\textwidth}|p{0.23\textwidth}|p{0.25\textwidth}|}}
+  {\end{tabular}}
+\let\endhead\relax
+\input{tables/ch3_answer_spaces.tex}
+\endgroup
+\end{table}
 
 \section{Frozen representations and feature extraction}
-% TODO dissertation-01-ch3-prep-s2: internal budget 250 words; structural scaffold only.
+\label{sec:ch3-representations}
+The global pathway uses one frozen OpenCLIP ViT-B-32 checkpoint, \texttt{laion2b\_s34b\_b79k}. Its separate image and text towers produce L2-normalised 512-dimensional global vectors. The towers belong to one jointly pretrained checkpoint, so their outputs occupy an aligned pretrained space; this does not mean that the same encoder processes both modalities.
+% CITE-GAP clip_foundation
+Freezing the representation model keeps training focused on the lightweight interface, following the broader frozen-model setting described by \citet{tsimpoukelli2021frozen}.
+
+\begingroup
+\setlength{\emergencystretch}{2em}
+The SigLIP comparison replaces only this global pathway with the frozen \texttt{ViT-B-16-}\allowbreak\texttt{SigLIP} checkpoint using \texttt{webli} weights. It supplies 768-dimensional inputs to the same head recipe. The token-level stores used by the reasoner remain CLIP features, so this encoder swap is not carried into the token pathway.\par
+\endgroup
+% CITE-GAP siglip
+
+The visual token store contains 50 vectors per image: one CLS token and 49 patch tokens, all with width 512. Question tokens are stored at their packed sequence lengths with the same width. These CLIP stores provide a jointly pretrained token space for the latent reasoner. The question-side small-language-model interface instead uses frozen SmolLM2-135M hidden states from pinned revision \texttt{93efa2f0...}. A trainable \texttt{Linear(576, 512)} layer connects those states to the reasoner. This common width is a learned interface and is not evidence that CLIP and SmolLM2 naturally share a pretrained semantic space. The 360M question-side arms were authorised but not run.
+% CITE-GAP smollm2
+
+For the answer-side E8B family, canonical evaluation is performed in FP32. This precision rule applies only to E8B evaluation; it does not redefine training precision elsewhere.
 
 \section{Architecture families}
-% TODO dissertation-01-ch3-prep-s3: internal budget 600 words; structural scaffold only.
+\label{sec:ch3-architectures}
+Figure~\ref{fig:ch3-families} separates frozen components, trainable interfaces and the contextual class. Table~\ref{tab:ch3-architectures} gives exact trainable-parameter counts, which measure capacity rather than latency.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{ch3/FIG-3-B.pdf}
+    \caption[Architecture-family overview.]{Architecture families and their frozen, trainable or evaluation-only contextual roles.}
+    \label{fig:ch3-families}
+\end{figure}
+
+\subsection{Global-embedding heads}
+Global heads share an \texttt{MLPHead}, normally at hidden width 512. Its layers are linear, ReLU, dropout and linear. The \texttt{question\_only} and \texttt{image\_only} controls use one vector. \texttt{concat} uses $[i;q]$; \texttt{fusion} uses the two globals, their product and absolute difference in the order $[i;q;i\odot q;|i-q|]$.
+
+Capacity controls use width 979 for \texttt{concat\_wide} and 268 for \texttt{fusion\_narrow}. Product-only and difference-only controls use width 351 (\texttt{product\_576k}, \texttt{difference\_576k}) or the natural width 512 (the separately executed \texttt{product\_natural}, \texttt{difference\_natural}). The \texttt{direct\_linear} reference is \texttt{Linear(1024, 100)}.
+
+E2 applies the same head family to 768-dimensional inputs and is not parameter-matched to the 512-dimensional heads; E3 changes the output to 1,000 classes. Thus v2\_03 varies capacity with features fixed, v2\_04 varies features at controlled capacity, and E2 varies the frozen representation with the head recipe fixed.
+
+\subsection{Token-level latent reasoner}
+The reasoner uses 32 learned latent queries \citep{jaegle2021perceiver}. Four pre-layer-normalised blocks apply question cross-attention, image cross-attention, latent self-attention and a fourfold GELU feed-forward network, in that order. Cross-attention reads an input sequence; self-attention connects the latents. Attention has 8 heads at width 512 and no input projections.
+
+The final latents are mean-pooled and layer-normalised. The readout is \texttt{Linear(512,100)}. The reasoner has 21,099,620 trainable parameters. Figure~\ref{fig:ch3-reasoner} shows this order and the frozen inputs. Mean-patch concatenation and \texttt{direct\_linear} are references.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{ch3/FIG-3-C.pdf}
+    \caption[Token-level latent reasoner.]{Token-level reasoner, showing the ordered block operations and the absence of input projections.}
+    \label{fig:ch3-reasoner}
+\end{figure}
+
+\subsection{Question-side small-language-model interface}
+The question-side interface supplies three inputs to one trainable reasoner and classifier. A0p applies \texttt{Linear(512,\allowbreak 512)} to frozen CLIP tokens. A1/A1r apply \texttt{Linear(576,\allowbreak 512)} to frozen pretrained/matched-random SmolLM2-135M states. The encoders stay frozen; a learned common width does not create a shared pretrained space.
+
+\subsection{Answer-side small-language-model interface}
+The answer-side path projects 32 latents into the frozen model's embedding width. B1 is an attention-pool classifier. B2/B3 are matched-random/pretrained 135M readouts; B4r/B4 are the 360M pair. Counts are shared within each size, not between initialisations. R1 ranks candidate answers by likelihood, while R2 and R3 are the trie-constrained greedy and bounded free-greedy readouts from Section~\ref{sec:ch3-task}. Figure~\ref{fig:ch3-slm-interface} relates both interfaces.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{ch3/FIG-3-D.pdf}
+    \caption[Small-language-model interfaces.]{Question- and answer-side frozen small-language-model interfaces, showing trainable projections and matched-random controls.}
+    \label{fig:ch3-slm-interface}
+\end{figure}
+
+\subsection{Compact vision--language models for context}
+Frozen SmolVLM-256M-Instruct and SmolVLM-500M-Instruct are contextual only. They have zero trainable parameters and are not matched with the trained systems. The pinned Instruct checkpoints do not define a base-versus-Instruct contrast.
+% CITE-GAP smolvlm
+
+\subsection{Matched random controls}
+A matched-random control keeps its partner's architecture and tokenizer. Pinned-seed random weights are frozen and not tuned separately. Within-size question-side pairs isolate the input representation; answer-side pairs isolate readout initialisation. Effects are reported outside this chapter.
+
+\begin{table}[p]
+\centering
+\caption[Trainable-parameter accounting by architecture family.]{Trainable parameters by architecture. Loaded and resident-frozen totals are omitted. The shared natural-width row covers separately executed \texttt{product\_natural} and \texttt{difference\_natural} systems, with 838,244 parameters each.}
+\label{tab:ch3-architectures}
+\begingroup
+\scriptsize
+\setlength{\tabcolsep}{2.2pt}
+\renewenvironment{longtable}[1]
+  {\begin{tabular}{|p{0.17\textwidth}|p{0.25\textwidth}|p{0.35\textwidth}|p{0.14\textwidth}|}}
+  {\end{tabular}}
+\let\endhead\relax
+\input{tables/ch3_architecture_params.tex}
+\endgroup
+\end{table}
 
 \section{Training, checkpoints and model selection}
 % TODO dissertation-01-ch3-prep-s3: internal budget 250 words; structural scaffold only.

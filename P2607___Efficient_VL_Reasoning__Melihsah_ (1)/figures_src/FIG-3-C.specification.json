@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "task_id": "dissertation-02-ch3-draft-s2",
+  "stage": "chapter-3-draft-stage-2",
+  "figure_id": "FIG-3.C",
+  "status": "DRAFT_RENDER_SOURCE",
+  "render_authorized": true,
+  "render_authority": "Explicit human Chapter 3 Draft Stage 2 authorisation, 2026-08-25",
+  "generated_utc": "2026-08-25T13:30:00Z",
+  "purpose": "Methodology diagram of the token-level latent-query reasoner without empirical outcomes.",
+  "labels": [
+    {"label_id": "image_tokens", "text": "50 frozen image tokens (CLS + 49 patches, width 512)", "source_ids": ["v3_tokens", "v3_reasoner"]},
+    {"label_id": "question_tokens", "text": "Frozen question tokens (variable length, width 512)", "source_ids": ["v3_tokens", "reasoner_source"]},
+    {"label_id": "latent_queries", "text": "32 learned latent queries", "source_ids": ["v3_reasoner", "reasoner_source"]},
+    {"label_id": "blocks", "text": "4 pre-LN residual blocks", "source_ids": ["v3_reasoner", "reasoner_source"]},
+    {"label_id": "question_cross_attention", "text": "question cross-attention", "source_ids": ["v3_reasoner", "reasoner_source"]},
+    {"label_id": "image_cross_attention", "text": "image cross-attention", "source_ids": ["v3_reasoner", "reasoner_source"]},
+    {"label_id": "latent_self_attention", "text": "latent self-attention", "source_ids": ["v3_reasoner", "reasoner_source"]},
+    {"label_id": "ffn", "text": "4× GELU feed-forward network", "source_ids": ["v3_reasoner", "reasoner_source"]},
+    {"label_id": "block_metadata", "text": "8 attention heads; d_model 512; no input projections", "source_ids": ["v3_reasoner", "reasoner_source"]},
+    {"label_id": "readout", "text": "Mean-pool latents → LayerNorm → Linear(512, 100)", "source_ids": ["v3_reasoner", "reasoner_source"]},
+    {"label_id": "parameters", "text": "21,099,620 trainable parameters", "source_ids": ["v3_reasoner", "stage3_manifest"]}
+  ],
+  "block_order": [
+    "question_cross_attention",
+    "image_cross_attention",
+    "latent_self_attention",
+    "ffn"
+  ],
+  "sources": {
+    "v3_tokens": {"path": "docs/experiments/v3_00_tokens.md", "sha256": "4751aa0ef6224bb4504dfd9206b8abc562de178db4e0f39fa237f9bbe0affcdf", "location": "Method, lines 13–27"},
+    "v3_reasoner": {"path": "docs/experiments/v3_01_reasoner.md", "sha256": "cec00aef691c7c384ce5fbde42bce611e112260e59a3ba1718a2c5f89d9bbf21", "location": "Method, lines 13–20"},
+    "reasoner_source": {"path": "src/reasoner.py", "sha256": "3faafcd25e3f9e233c5173b71c1e1bbdd92859047d7b701d97ee16049892062c", "location": "ReasonerBlock and LatentQueryReasoner"},
+    "architecture_context": {"path": "docs/ARCHITECTURE.md", "sha256": "987fbaaecf76b189e0f8b7d75d094ade384ea921d4f0458372e4f90d838d20bb", "location": "Family 2 architecture only; result passages excluded"},
+    "stage3_manifest": {"path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage3_evidence_manifest.json", "sha256": "3f566fa3c33e05ab4feb50a305d9286481191e1317348ab834a94d00a1fb116e", "location": "subsection_3_7.latent_query_reasoner"}
+  },
+  "scientific_guards": {
+    "input_projections": "absent",
+    "block_order_exact": true,
+    "attention_weights_displayed": false,
+    "diagnostics_displayed": false,
+    "model_performance_displayed": false
+  }
+}
