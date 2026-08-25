@@ -1,0 +1,171 @@
+{
+  "schema_version": 1,
+  "task_id": "dissertation-02-ch3-draft-s3",
+  "implementation_revision": 1,
+  "generated_utc": "2026-08-25T20:00:27Z",
+  "status": "DRAFT_PROVENANCE_COMPLETE_PENDING_INDEPENDENT_REVIEW",
+  "scope": [
+    "Section 3.8",
+    "Section 3.9",
+    "Section 3.10",
+    "Section 3.11",
+    "Section 3.12",
+    "Table 3.4"
+  ],
+  "authority_rule": "Closed Chapter-3 preparation evidence is the drafting control surface. Canonical repair, supersession and closure authority overrides lower-level or isolated historical records.",
+  "data_embargo": {
+    "project_data_tree_used": false,
+    "clean_test_content_contact": false,
+    "training_or_evaluation": false,
+    "bootstrap_or_scientific_recomputation": false,
+    "f1_or_f2": false
+  },
+  "closed_inputs": [
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_consolidated_evidence_index.json",
+      "sha256": "e15da5411ad565e4d893792da35123d1783cb4053b1df04f90a2250208710a96"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage1_evidence_manifest.json",
+      "sha256": "ce4062e96e37220ad28ac9e0ab2e13c0ade422b1f216996cc5d00984aee1caf3"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage3_evidence_manifest.json",
+      "sha256": "3f566fa3c33e05ab4feb50a305d9286481191e1317348ab834a94d00a1fb116e"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage4_evidence_manifest.json",
+      "sha256": "80b24aaade4fe6f0dc0ecc98ea977894d94bc1907ce322c602d185bf7dfc7e2c"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage5_evidence_manifest.json",
+      "sha256": "253e786b3ea34cfcaa0828e123bdb5f824f2cef549d75929954fbfc60a4dedad"
+    }
+  ],
+  "source_registry": {
+    "v2_multiseed": {"path": "docs/experiments/v2_02_multiseed.md", "sha256": "9c8ab58933caf050e9206f8a402186fabc75559997dca4a5d794ca25b5ed9f8d"},
+    "v2_scaling": {"path": "docs/experiments/v2_07_scaling.md", "sha256": "d5f1cf821fc9226b4c24664243f188ec75b000d25e9c3c03755bad59f98ecb9a"},
+    "v3_reasoner": {"path": "docs/experiments/v3_01_reasoner.md", "sha256": "cec00aef691c7c384ce5fbde42bce611e112260e59a3ba1718a2c5f89d9bbf21"},
+    "v3_scaling": {"path": "docs/experiments/v3_03_scaling.md", "sha256": "52c7560f9d2d4a99eff5810108ae5ff501626c1f59b094672f6d7abdb41f8e8f"},
+    "e8a_report": {"path": "docs/experiments/e8a_core_135m.md", "sha256": "7d6c0626e4e1e3aa56978f15e180357f398f3c0481701bf0e667fa6f8d6f3e65"},
+    "e8b_report": {"path": "docs/experiments/e8b_core_matrix.md", "sha256": "328e1a1c311daa08fcb182e67652b1d37e81108ee3572bd8297cb26b486b4a93"},
+    "e10_report": {"path": "docs/experiments/e10_core_matrix.md", "sha256": "11491ff36bd14417f9991787a008285590bedfb80dc8f84e617da87b9b4f0ddd"},
+    "selection_repair": {"path": "results/closure/pre_f1_evidence_metadata_repair_20260814.json", "sha256": "e35db6dddca6f587791527f3a9e9846905486413c851d1f896129a3f6a015f42"},
+    "v2_statistics": {"path": "docs/experiments/v2_05_types.md", "sha256": "8794267888c33c6b939f0c76a170233637c0972b508f6742aa0b9c2704891ab9"},
+    "v3_statistics": {"path": "docs/experiments/v3_02a_refs.md", "sha256": "48febee3d1effc770435c30b598fdcd4b507424abda98aa1426f596a0b890c65"},
+    "multiplicity": {"path": "results/closure/F_multiplicity_status.json", "sha256": "7ab15242d892e02d6c397e96a4b002fe839b311100c61093cc214c2152d2cc41"},
+    "v2_reliance": {"path": "docs/experiments/v2_06_reliance.md", "sha256": "6e5b4ee448749c7eb1b4e5852b94a02d8fdbe0e5f8fc5de717a5dca5b3d7a932"},
+    "e7a_report": {"path": "docs/experiments/e7a_efficiency.md", "sha256": "4d554080d749f6f2ec2b88f09910d9591cdc2dc313c0c91aa63e7001c2d5f5f6"},
+    "e7b_report": {"path": "docs/experiments/e7b_serial_efficiency.md", "sha256": "453fa6a0c85cd5ab45871ae0e558a28a84b53480c0f64d6e88cc266570f7c46f"},
+    "e9_report": {"path": "docs/experiments/e9_compact_vlm.md", "sha256": "6303aede69f12850c6ba8ecaf7f80eb2101f976705f6094cb8d9363d1086ad8c"},
+    "e7b_supersession": {"path": "results/closure/e7b_evidence_supersession.json", "sha256": "2fb6561b3916b83603631c0feb35d716dc9bbf3e1ed1ef3d4e7286516a0a0c75", "record_location": "clean_test_governance and efficiency supersession fields"},
+    "reproducibility": {"path": "docs/REPRODUCIBILITY.md", "sha256": "246d7f16e2b92fe427949dd3623d1826df56ed3f54bd0de53cb70400e42c0228"},
+    "project_status": {"path": "docs/PROJECT_STATUS.md", "sha256": "ee02e8fddd9e1dfc31a8a01e17b54bd51f08790cd88c48d6efb2340cbebf56c9"},
+    "stage1_manifest": {"path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage1_evidence_manifest.json", "sha256": "ce4062e96e37220ad28ac9e0ab2e13c0ade422b1f216996cc5d00984aee1caf3"},
+    "stage3_manifest": {"path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage3_evidence_manifest.json", "sha256": "3f566fa3c33e05ab4feb50a305d9286481191e1317348ab834a94d00a1fb116e"},
+    "stage4_manifest": {"path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage4_evidence_manifest.json", "sha256": "80b24aaade4fe6f0dc0ecc98ea977894d94bc1907ce322c602d185bf7dfc7e2c"},
+    "stage5_manifest": {"path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage5_evidence_manifest.json", "sha256": "253e786b3ea34cfcaa0828e123bdb5f824f2cef549d75929954fbfc60a4dedad"}
+  },
+  "fact_registry": {
+    "S3:protocol_families": {"fact_id": "protocol_families", "sources": ["stage3_manifest", "v2_multiseed", "v2_scaling", "v3_reasoner", "v3_scaling", "e8a_report", "e8b_report", "e10_report"]},
+    "S3:checkpoint_selection_authority": {"fact_id": "checkpoint_selection_authority", "sources": ["stage3_manifest", "selection_repair"]},
+    "S3:precision_rules": {"fact_id": "precision_rules", "sources": ["stage3_manifest", "e8b_report", "e10_report"]},
+    "S4:canonical_clustered_interval": {"fact_id": "canonical_clustered_interval", "sources": ["stage4_manifest", "v2_statistics", "v3_statistics", "e8a_report"]},
+    "S4:row_level_supersession": {"fact_id": "row_level_supersession", "sources": ["stage4_manifest", "v2_statistics"]},
+    "S4:seed_sd_separation": {"fact_id": "seed_sd_separation", "sources": ["stage4_manifest", "e8a_report"]},
+    "S4:directional_claim_rule": {"fact_id": "directional_claim_rule", "sources": ["stage4_manifest", "e8a_report", "e8b_report", "e10_report"]},
+    "S4:no_equivalence_from_zero_inclusion": {"fact_id": "no_equivalence_from_zero_inclusion", "sources": ["stage4_manifest", "e8a_report"]},
+    "S4:multiplicity_disclosure": {"fact_id": "multiplicity_disclosure", "sources": ["stage4_manifest", "multiplicity"]},
+    "S4:pooled_ge4_definition_only": {"fact_id": "pooled_ge4_definition_only", "sources": ["stage4_manifest", "v3_statistics"]},
+    "S4:v2_07_inference_limit": {"fact_id": "v2_07_inference_limit", "sources": ["stage4_manifest", "v2_scaling"]},
+    "S4:wrong_image_matched_logic": {"fact_id": "wrong_image_matched_logic", "sources": ["stage4_manifest", "v2_reliance"]},
+    "S4:canonical_imageid_derangement": {"fact_id": "canonical_imageid_derangement", "sources": ["stage4_manifest", "e8a_report", "e8b_report"]},
+    "S4:row_shuffle_supersession_reason": {"fact_id": "row_shuffle_supersession_reason", "sources": ["stage4_manifest", "v2_reliance"]},
+    "S4:e9_matched_partner_scope": {"fact_id": "e9_matched_partner_scope", "sources": ["stage4_manifest", "e9_report"]},
+    "S4:e7a_component_scope": {"fact_id": "e7a_component_scope", "sources": ["stage4_manifest", "e7a_report"]},
+    "S4:e7a_additive_withdrawal": {"fact_id": "e7a_additive_withdrawal", "sources": ["stage4_manifest", "e7a_report"]},
+    "S4:e7b_serial_protocol": {"fact_id": "e7b_serial_protocol", "sources": ["stage4_manifest", "e7b_report", "e7b_supersession"]},
+    "S4:e7b_memory_withdrawal": {"fact_id": "e7b_memory_withdrawal", "sources": ["stage4_manifest", "e7b_supersession"]},
+    "S4:e7b_cold_withdrawal": {"fact_id": "e7b_cold_withdrawal", "sources": ["stage4_manifest", "e7b_supersession"]},
+    "S4:withdrawal_cause_separation": {"fact_id": "withdrawal_cause_separation", "sources": ["stage4_manifest", "e7b_supersession"]},
+    "S4:e9_contextual_protocol": {"fact_id": "e9_contextual_protocol", "sources": ["stage4_manifest", "e9_report"]},
+    "S4:cross_node_bridge_boundary": {"fact_id": "cross_node_bridge_boundary", "sources": ["stage4_manifest", "e7b_supersession"]},
+    "S4:partial_pipeline_label": {"fact_id": "partial_pipeline_label", "sources": ["stage4_manifest", "e7a_report"]},
+    "S4:parameter_count_boundary": {"fact_id": "parameter_count_boundary", "sources": ["stage4_manifest", "e7b_supersession"]},
+    "S5:fixed_seed_mechanism": {"fact_id": "fixed_seed_mechanism", "sources": ["stage5_manifest", "reproducibility"]},
+    "S5:run_metadata_contract": {"fact_id": "run_metadata_contract", "sources": ["stage5_manifest", "reproducibility"]},
+    "S5:dependency_lock_presence": {"fact_id": "dependency_lock_presence", "sources": ["stage5_manifest", "reproducibility"]},
+    "S5:hash_pinned_provenance": {"fact_id": "hash_pinned_provenance", "sources": ["stage5_manifest"]},
+    "S5:deterministic_conversion": {"fact_id": "deterministic_conversion", "sources": ["stage5_manifest"]},
+    "S5:reproducibility_limits": {"fact_id": "reproducibility_limits", "sources": ["stage5_manifest", "reproducibility", "e7b_supersession"]},
+    "S5:clean_test_disclosure": {"fact_id": "clean_test_disclosure", "sources": ["stage5_manifest", "e7b_supersession"]},
+    "S5:clean_test_incidents": {"fact_id": "clean_test_incidents", "sources": ["stage5_manifest", "e7b_supersession"]},
+    "S5:clean_test_structural_counts": {"fact_id": "clean_test_structural_counts", "sources": ["stage5_manifest", "stage1_manifest"]},
+    "S5:f1_f2_state_boundary": {"fact_id": "f1_f2_state_boundary", "sources": ["stage5_manifest", "project_status"]},
+    "S5:pre_f2_marker_convention": {"fact_id": "pre_f2_marker_convention", "sources": ["stage5_manifest", "project_status"]},
+    "S5:development_confirmatory_distinction": {"fact_id": "development_confirmatory_distinction", "sources": ["stage5_manifest", "project_status"]}
+  },
+  "claim_mappings": [
+    {"claim_id": "3.8.v2_recipe_and_scales", "sentence_scope": "Controlled V2 recipe, five-seed train_40k scope and the separately pinned 100k/250k scaling extension.", "fact_refs": ["S3:protocol_families"]},
+    {"claim_id": "3.8.reasoner_recipe", "sentence_scope": "V3/E8A/B1 optimiser, precision, scale, seed, epoch and early-stopping protocol.", "fact_refs": ["S3:protocol_families", "S3:precision_rules"]},
+    {"claim_id": "3.8.answer_side_recipe", "sentence_scope": "B2/B3/B4r/B4 fixed 22-epoch recipe, precision boundary and E10 cadence/no-resume controls.", "fact_refs": ["S3:protocol_families", "S3:precision_rules"]},
+    {"claim_id": "3.8.selection", "sentence_scope": "Best-on-development with earliest ties versus fixed epoch 22, development-only selection and the selection-mismatch caveat.", "fact_refs": ["S3:checkpoint_selection_authority"]},
+    {"claim_id": "3.9.seed_variability", "sentence_scope": "Predefined five- and three-seed scopes; mean and sample SD with ddof=1 as between-training-run variability.", "fact_refs": ["S4:seed_sd_separation"]},
+    {"claim_id": "3.9.clustered_bootstrap", "sentence_scope": "Image as cluster; 2,000 paired draws using default_rng(0); within-draw seed mean; 2.5/97.5 percentiles; conditional evaluation-sampling interpretation.", "fact_refs": ["S4:canonical_clustered_interval", "S4:row_level_supersession", "S4:seed_sd_separation"]},
+    {"claim_id": "3.9.directional_rule", "sentence_scope": "Exact positive/mirrored-negative/uncertain-or-mixed rule, scoped only to the canonically governed three-seed E8A/E8B/E10 paired contrasts.", "fact_refs": ["S4:directional_claim_rule"]},
+    {"claim_id": "3.9.caveats", "sentence_scope": "Zero-containing intervals do not establish equivalence or absence; nominal intervals are uncorrected for multiplicity.", "fact_refs": ["S4:no_equivalence_from_zero_inclusion", "S4:multiplicity_disclosure"]},
+    {"claim_id": "3.9.pooled_deficit", "sentence_scope": "Definition-only pooled four-or-more-step deficit and omission of all outcome values and bucket-prior constants.", "fact_refs": ["S4:pooled_ge4_definition_only"]},
+    {"claim_id": "3.9.v2_limit", "sentence_scope": "V2 scaling inference limited to canonical per-seed aggregates and seed variability because no valid reconstructed clustered interval exists.", "fact_refs": ["S4:v2_07_inference_limit"]},
+    {"claim_id": "3.10.initial_interventions", "sentence_scope": "Normal, row-shuffled and zeroed inputs, seed 42, unchanged questions, question-only control and the zeroed fusion form.", "fact_refs": ["S4:wrong_image_matched_logic", "S4:row_shuffle_supersession_reason"]},
+    {"claim_id": "3.10.derangement", "sentence_scope": "No-fixed-point imageId derangement, one partner per image, 11/0.14 per cent supersession fact and E9 partner-mapping scope.", "fact_refs": ["S4:canonical_imageid_derangement", "S4:row_shuffle_supersession_reason", "S4:e9_matched_partner_scope"]},
+    {"claim_id": "3.11.e7a", "sentence_scope": "Component-only validity and unreplaced withdrawal of additive end-to-end sums.", "fact_refs": ["S4:e7a_component_scope", "S4:e7a_additive_withdrawal"]},
+    {"claim_id": "3.11.e7b", "sentence_scope": "Authoritative serial batch-1 protocol, pass/subprocess/warm-up/timed-query constants, warm median, synchronisation and otter155 hardware.", "fact_refs": ["S4:e7b_serial_protocol"]},
+    {"claim_id": "3.11.withdrawals", "sentence_scope": "Separate peak-memory measurement-boundary and cold-query grad-mode withdrawal causes, with no replacement or estimate.", "fact_refs": ["S4:e7b_memory_withdrawal", "S4:e7b_cold_withdrawal", "S4:withdrawal_cause_separation"]},
+    {"claim_id": "3.11.node_boundary", "sentence_scope": "E9 contextual otter159 protocol; failed pre-registered 10 per cent bridge tolerance; no merge or adjustment.", "fact_refs": ["S4:e9_contextual_protocol", "S4:cross_node_bridge_boundary"]},
+    {"claim_id": "3.11.claim_boundary", "sentence_scope": "Partial-pipeline label, parameter count as capacity rather than latency proxy, and restricted efficiency claim classes with no energy/power/carbon/cost measure.", "fact_refs": ["S4:partial_pipeline_label", "S4:parameter_count_boundary"]},
+    {"claim_id": "3.12.mechanisms", "sentence_scope": "Fixed seeding, deterministic algorithms/loaders, run metadata, dependency lock, hash pinning, immutable supersession and deterministic table conversion.", "fact_refs": ["S5:fixed_seed_mechanism", "S5:run_metadata_contract", "S5:dependency_lock_presence", "S5:hash_pinned_provenance", "S5:deterministic_conversion"]},
+    {"claim_id": "3.12.limits", "sentence_scope": "Node-local single-GPU environment, historical-node boundary, determinism re-imposition after reseeding, limited portability and absence of energy/power measurement.", "fact_refs": ["S5:reproducibility_limits"]},
+    {"claim_id": "3.12.development_confirmatory", "sentence_scope": "Development evidence versus future post-freeze one-shot confirmatory evidence.", "fact_refs": ["S5:development_confirmatory_distinction"]},
+    {"claim_id": "3.12.f1_f2_counts", "sentence_scope": "PRE-F2 marker, F1/F2 unperformed and unauthorised, no clean-test result, and the 8,013-question/972-image structural counts.", "fact_refs": ["S5:f1_f2_state_boundary", "S5:pre_f2_marker_convention", "S5:clean_test_structural_counts"]},
+    {"claim_id": "3.12.governance", "sentence_scope": "Verbatim clean-test governance disclosure and separate 13/14 August 2026 mechanical-access incidents.", "fact_refs": ["S5:clean_test_disclosure", "S5:clean_test_incidents"], "sources": ["e7b_supersession"]}
+  ],
+  "citation_registry": [],
+  "gap_markers_added": [
+    {"marker": "% CITE-GAP bootstrap_methodology", "section": "3.9"},
+    {"marker": "% CITE-GAP clustered_or_cluster_robust_inference", "section": "3.9"}
+  ],
+  "operational_markers": [
+    {"marker": "% PRE-F2 PENDING F2 REVIEW: F1/F2 status sentence", "section": "3.12"}
+  ],
+  "table_objects": {
+    "TAB-3.4": {
+      "source_csv": {"path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch3_protocol_summary.csv", "sha256": "466cbafb77a51c8fcd5031fb19479d7c0e6a8ffcdb893185953ba3c285142164"},
+      "cell_provenance": {"path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch3_protocol_summary.provenance.json", "sha256": "bf5d88b3811e1f6d7c1f5cf66a51526f26d15eb5abae147e85ebf0655b347438"},
+      "generated_output": {"path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables/ch3_protocol_summary.tex", "sha256": "c200b9d9aa2f0b7194f461a972ad65c410ee760073b1708c7014aaf38bdb6a0d"},
+      "columns": ["family", "systems", "seeds", "training_scales", "max_epochs", "early_stopping", "checkpoint_selection"],
+      "dropped_columns": ["learning_rate", "warmup_fraction", "dropout", "matched_or_fixed_control"],
+      "header_map": {"family": "Family", "systems": "Systems", "seeds": "Seeds", "training_scales": "Training scales", "max_epochs": "Max epochs", "early_stopping": "Early stopping", "checkpoint_selection": "Checkpoint selection"},
+      "round_trip": "PASS",
+      "hand_typed_scientific_cells": false
+    }
+  },
+  "converter": {
+    "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tools/tab2latex.py",
+    "sha256": "c441d40b2b10a7a4294c4f15b12bc450f7ae73a9435e3d15394940c0f0c5a546",
+    "modified": false,
+    "reference_hashes": {
+      "default": "ddc71d7acb962f4d6e8b4c886700998f76ac343ee3990e38280e3d02c5611b2c",
+      "header_map_only": "e4570b76f376c79578def0a82e4452538ffde7c9a03cc58b4b75cdf27dd74157",
+      "thousands_only": "293733e45ed27e91089b72c84cee68df20ba464942f0410843745d11ae096b23",
+      "header_map_and_thousands": "62ea08095541f2bfcc31a5612fb389ca41e845aad23e9a192f5d17c6486d9442"
+    },
+    "verification_status": "PASS: Table 3.4 and all four immutable reference modes round-trip verified to fresh temporary outputs"
+  },
+  "drafting_boundaries": {
+    "selection_matched_language": "controlled or matched comparison; no broad causal-identification claim",
+    "directional_rule_scope": "three-seed paired E8A, E8B and E10 comparisons only",
+    "bridge_status": "protocol-validation fact only",
+    "result_values_in_prose_or_table": false,
+    "substantive_scope_outside_sections_3_8_to_3_12": false
+  }
+}
