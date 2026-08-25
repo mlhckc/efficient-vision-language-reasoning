@@ -17,7 +17,7 @@
     {"label_id": "image_cross_attention", "text": "image cross-attention", "source_ids": ["v3_reasoner", "reasoner_source"]},
     {"label_id": "latent_self_attention", "text": "latent self-attention", "source_ids": ["v3_reasoner", "reasoner_source"]},
     {"label_id": "ffn", "text": "4× GELU feed-forward network", "source_ids": ["v3_reasoner", "reasoner_source"]},
-    {"label_id": "block_metadata", "text": "8 attention heads; d_model 512; no input projections", "source_ids": ["v3_reasoner", "reasoner_source"]},
+    {"label_id": "block_metadata", "text": "8 attention heads; d_model 512; no separate input projection before the blocks", "source_ids": ["v3_reasoner", "reasoner_source"]},
     {"label_id": "readout", "text": "Mean-pool latents → LayerNorm → Linear(512, 100)", "source_ids": ["v3_reasoner", "reasoner_source"]},
     {"label_id": "parameters", "text": "21,099,620 trainable parameters", "source_ids": ["v3_reasoner", "stage3_manifest"]}
   ],
@@ -30,12 +30,13 @@
   "sources": {
     "v3_tokens": {"path": "docs/experiments/v3_00_tokens.md", "sha256": "4751aa0ef6224bb4504dfd9206b8abc562de178db4e0f39fa237f9bbe0affcdf", "location": "Method, lines 13–27"},
     "v3_reasoner": {"path": "docs/experiments/v3_01_reasoner.md", "sha256": "cec00aef691c7c384ce5fbde42bce611e112260e59a3ba1718a2c5f89d9bbf21", "location": "Method, lines 13–20"},
-    "reasoner_source": {"path": "src/reasoner.py", "sha256": "3faafcd25e3f9e233c5173b71c1e1bbdd92859047d7b701d97ee16049892062c", "location": "ReasonerBlock and LatentQueryReasoner"},
+    "reasoner_source": {"path": "src/reasoner.py", "sha256": "3faafcd25e3f9e233c5173b71c1e1bbdd92859047d7b701d97ee16049892062c", "location": "Module contract line 7; ReasonerBlock and LatentQueryReasoner"},
     "architecture_context": {"path": "docs/ARCHITECTURE.md", "sha256": "987fbaaecf76b189e0f8b7d75d094ade384ea921d4f0458372e4f90d838d20bb", "location": "Family 2 architecture only; result passages excluded"},
     "stage3_manifest": {"path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage3_evidence_manifest.json", "sha256": "3f566fa3c33e05ab4feb50a305d9286481191e1317348ab834a94d00a1fb116e", "location": "subsection_3_7.latent_query_reasoner"}
   },
   "scientific_guards": {
-    "input_projections": "absent",
+    "separate_input_projection_before_blocks": "absent",
+    "internal_attention_qkv_projections": "present_via_nn.MultiheadAttention",
     "block_order_exact": true,
     "attention_weights_displayed": false,
     "diagnostics_displayed": false,

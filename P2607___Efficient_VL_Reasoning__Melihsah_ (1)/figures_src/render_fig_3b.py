@@ -103,10 +103,15 @@ def _box(axis, x, y, width, height, text, face, *, size=8.0, bold=False) -> None
         facecolor=face,
     )
     axis.add_patch(patch)
+    wrap_width = max(18, int(width * 74))
+    wrapped_text = "\n".join(
+        textwrap.fill(part, width=wrap_width, break_long_words=False)
+        for part in text.splitlines()
+    )
     axis.text(
         x + width / 2,
         y + height / 2,
-        textwrap.fill(text, width=max(18, int(width * 95)), break_long_words=False),
+        wrapped_text,
         ha="center",
         va="center",
         fontsize=size,
@@ -118,29 +123,48 @@ def _box(axis, x, y, width, height, text, face, *, size=8.0, bold=False) -> None
 
 def _render(specification: dict, output_path: Path) -> None:
     matplotlib.rcParams.update(
-        {"font.family": "DejaVu Sans", "font.size": 8, "pdf.fonttype": 42}
+        {"font.family": "DejaVu Sans", "font.size": 9.2, "pdf.fonttype": 42}
     )
-    figure, axis = plt.subplots(figsize=(11.2, 7.2))
+    # The near-page-width canvas and vertically stacked cards preserve the
+    # specification labels while keeping them readable at dissertation scale.
+    figure, axis = plt.subplots(figsize=(7.0, 10.0))
     figure.patch.set_facecolor("white")
     axis.set_xlim(0, 1)
     axis.set_ylim(0, 1)
     axis.axis("off")
 
-    lane_height = 0.17
-    lane_gap = 0.018
-    for index, family in enumerate(specification["families"]):
-        y = 0.81 - index * (lane_height + lane_gap)
-        frozen, trainable, role = _family_text(family)
-        _box(axis, 0.015, y, 0.18, lane_height, family["name"], ROLE_FACE, size=9.0, bold=True)
-        _box(axis, 0.22, y, 0.32, lane_height, frozen, FROZEN_FACE, size=7.7)
-        _box(axis, 0.57, y, 0.26, lane_height, trainable, TRAINABLE_FACE, size=7.7)
-        if role:
-            _box(axis, 0.86, y, 0.125, lane_height, role, ROLE_FACE, size=6.6)
-        axis.annotate("", xy=(0.57, y + lane_height / 2), xytext=(0.54, y + lane_height / 2), arrowprops={"arrowstyle": "->", "color": EDGE, "lw": 1.1})
+    axis.text(0.25, 0.993, "Frozen representations or models", ha="center", va="top", fontsize=9.6, fontweight="bold", color=TEXT)
+    axis.text(0.75, 0.993, "Trainable interface or head", ha="center", va="top", fontsize=9.6, fontweight="bold", color=TEXT)
 
-    axis.text(0.38, 0.992, "Frozen representations or models", ha="center", va="top", fontsize=9, fontweight="bold", color=TEXT)
-    axis.text(0.70, 0.992, "Trainable interface or head", ha="center", va="top", fontsize=9, fontweight="bold", color=TEXT)
-    axis.text(0.92, 0.992, "Methodological role", ha="center", va="top", fontsize=9, fontweight="bold", color=TEXT)
+    panel_height = 0.178
+    panel_gap = 0.014
+    first_bottom = 0.775
+    for index, family in enumerate(specification["families"]):
+        bottom = first_bottom - index * (panel_height + panel_gap)
+        frozen, trainable, role = _family_text(family)
+
+        axis.text(
+            0.02,
+            bottom + panel_height - 0.002,
+            family["name"],
+            ha="left",
+            va="top",
+            fontsize=10.4,
+            fontweight="bold",
+            color=TEXT,
+        )
+        content_bottom = bottom + (0.076 if role else 0.012)
+        content_height = 0.079 if role else 0.140
+        _box(axis, 0.015, content_bottom, 0.465, content_height, frozen, FROZEN_FACE, size=9.2)
+        _box(axis, 0.520, content_bottom, 0.465, content_height, trainable, TRAINABLE_FACE, size=9.2)
+        axis.annotate(
+            "",
+            xy=(0.520, content_bottom + content_height / 2),
+            xytext=(0.480, content_bottom + content_height / 2),
+            arrowprops={"arrowstyle": "->", "color": EDGE, "lw": 1.1},
+        )
+        if role:
+            _box(axis, 0.015, bottom + 0.002, 0.970, 0.065, role, ROLE_FACE, size=9.0)
 
     metadata = {
         "Title": "FIG-3.B methodology system-family overview",

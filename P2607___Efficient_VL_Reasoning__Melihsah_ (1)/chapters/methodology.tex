@@ -90,11 +90,11 @@ Freezing the representation model keeps training focused on the lightweight inte
 
 \begingroup
 \setlength{\emergencystretch}{2em}
-The SigLIP comparison replaces only this global pathway with the frozen \texttt{ViT-B-16-}\allowbreak\texttt{SigLIP} checkpoint using \texttt{webli} weights. It supplies 768-dimensional inputs to the same head recipe. The token-level stores used by the reasoner remain CLIP features, so this encoder swap is not carried into the token pathway.\par
+The SigLIP encoder comparison (E2) replaces only this global pathway with the frozen \texttt{ViT-B-16-}\allowbreak\texttt{SigLIP} checkpoint using \texttt{webli} weights. It supplies 768-dimensional inputs to the same head recipe. The token-level stores used by the reasoner remain CLIP features, so this encoder swap is not carried into the token pathway.\par
 \endgroup
 % CITE-GAP siglip
 
-The visual token store contains 50 vectors per image: one CLS token and 49 patch tokens, all with width 512. Question tokens are stored at their packed sequence lengths with the same width. These CLIP stores provide a jointly pretrained token space for the latent reasoner. The question-side small-language-model interface instead uses frozen SmolLM2-135M hidden states from pinned revision \texttt{93efa2f0...}. A trainable \texttt{Linear(576, 512)} layer connects those states to the reasoner. This common width is a learned interface and is not evidence that CLIP and SmolLM2 naturally share a pretrained semantic space. The 360M question-side arms were authorised but not run.
+The visual token store contains 50 vectors per image: one CLS token and 49 patch tokens, all with width 512. Question tokens are stored at their packed sequence lengths with the same width. These CLIP stores provide a jointly pretrained token space for the latent reasoner. The question-side small-language-model interface instead uses frozen SmolLM2-135M hidden states from a pinned model revision recorded in the provenance record. A trainable \texttt{Linear(576, 512)} layer connects those states to the reasoner. This common width is a learned interface and is not evidence that CLIP and SmolLM2 naturally share a pretrained semantic space. The 360M question-side arms were authorised but not run.
 % CITE-GAP smollm2
 
 For the answer-side E8B family, canonical evaluation is performed in FP32. This precision rule applies only to E8B evaluation; it does not redefine training precision elsewhere.
@@ -113,19 +113,19 @@ Figure~\ref{fig:ch3-families} separates frozen components, trainable interfaces 
 \subsection{Global-embedding heads}
 Global heads share an \texttt{MLPHead}, normally at hidden width 512. Its layers are linear, ReLU, dropout and linear. The \texttt{question\_only} and \texttt{image\_only} controls use one vector. \texttt{concat} uses $[i;q]$; \texttt{fusion} uses the two globals, their product and absolute difference in the order $[i;q;i\odot q;|i-q|]$.
 
-Capacity controls use width 979 for \texttt{concat\_wide} and 268 for \texttt{fusion\_narrow}. Product-only and difference-only controls use width 351 (\texttt{product\_576k}, \texttt{difference\_576k}) or the natural width 512 (the separately executed \texttt{product\_natural}, \texttt{difference\_natural}). The \texttt{direct\_linear} reference is \texttt{Linear(1024, 100)}.
+Two capacity-matched controls change only the hidden width: \texttt{concat\_wide} (979) matches \texttt{fusion}'s parameter count, and \texttt{fusion\_narrow} (268) matches \texttt{concat}'s. Product-only and difference-only controls use width 351 (\texttt{product\_576k}, \texttt{difference\_576k}) or the natural width 512 (the separately executed \texttt{product\_natural}, \texttt{difference\_natural}). The \texttt{direct\_linear} reference is \texttt{Linear(1024, 100)}.
 
-E2 applies the same head family to 768-dimensional inputs and is not parameter-matched to the 512-dimensional heads; E3 changes the output to 1,000 classes. Thus v2\_03 varies capacity with features fixed, v2\_04 varies features at controlled capacity, and E2 varies the frozen representation with the head recipe fixed.
+The SigLIP encoder comparison (E2) applies the same head family to 768-dimensional inputs and is not parameter-matched to the 512-dimensional heads. The top-1000 answer-space experiment (E3) changes the output to 1,000 classes. The capacity-matching experiment (v2\_03) varies capacity with the features fixed; the interaction ablation (v2\_04) varies the features at controlled capacity; E2 varies the frozen representation with the head recipe fixed.
 
 \subsection{Token-level latent reasoner}
-The reasoner uses 32 learned latent queries \citep{jaegle2021perceiver}. Four pre-layer-normalised blocks apply question cross-attention, image cross-attention, latent self-attention and a fourfold GELU feed-forward network, in that order. Cross-attention reads an input sequence; self-attention connects the latents. Attention has 8 heads at width 512 and no input projections.
+The reasoner uses 32 learned latent queries \citep{jaegle2021perceiver}. Four pre-layer-normalised blocks apply question cross-attention, image cross-attention, latent self-attention and a fourfold GELU feed-forward network, in that order. Cross-attention reads an input sequence; self-attention connects the latents. Attention has 8 heads at width 512. Because the token stores already lie in the 512-dimensional joint space, no separate learned input projection is applied before the attention blocks.
 
-The final latents are mean-pooled and layer-normalised. The readout is \texttt{Linear(512,100)}. The reasoner has 21,099,620 trainable parameters. Figure~\ref{fig:ch3-reasoner} shows this order and the frozen inputs. Mean-patch concatenation and \texttt{direct\_linear} are references.
+The final latents are mean-pooled and layer-normalised. The readout is \texttt{Linear(512,100)}. The reasoner has 21,099,620 trainable parameters. Figure~\ref{fig:ch3-reasoner} shows this order and the frozen inputs. Two references bracket the reasoner: a concat head over mean-pooled patch tokens, and the direct linear classifier.
 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{ch3/FIG-3-C.pdf}
-    \caption[Token-level latent reasoner.]{Token-level reasoner, showing the ordered block operations and the absence of input projections.}
+    \caption[Token-level latent reasoner.]{Token-level reasoner, showing the ordered block operations and the absence of any separate input projection before the blocks.}
     \label{fig:ch3-reasoner}
 \end{figure}
 
@@ -133,7 +133,7 @@ The final latents are mean-pooled and layer-normalised. The readout is \texttt{L
 The question-side interface supplies three inputs to one trainable reasoner and classifier. A0p applies \texttt{Linear(512,\allowbreak 512)} to frozen CLIP tokens. A1/A1r apply \texttt{Linear(576,\allowbreak 512)} to frozen pretrained/matched-random SmolLM2-135M states. The encoders stay frozen; a learned common width does not create a shared pretrained space.
 
 \subsection{Answer-side small-language-model interface}
-The answer-side path projects 32 latents into the frozen model's embedding width. B1 is an attention-pool classifier. B2/B3 are matched-random/pretrained 135M readouts; B4r/B4 are the 360M pair. Counts are shared within each size, not between initialisations. R1 ranks candidate answers by likelihood, while R2 and R3 are the trie-constrained greedy and bounded free-greedy readouts from Section~\ref{sec:ch3-task}. Figure~\ref{fig:ch3-slm-interface} relates both interfaces.
+The answer-side path projects 32 latents into the frozen model's embedding width. B1 is an attention-pool classifier. B2/B3 are matched-random/pretrained 135M readouts; B4r/B4 are the 360M pair. Within each size the pretrained and random partners have identical trainable-parameter counts, because they share one architecture. R1 scores every candidate answer in the closed vocabulary by its likelihood under the frozen language model and selects the highest, while R2 and R3 are the trie-constrained greedy and bounded free-greedy readouts from Section~\ref{sec:ch3-task}. Figure~\ref{fig:ch3-slm-interface} relates both interfaces.
 
 \begin{figure}[htbp]
     \centering
@@ -147,7 +147,7 @@ Frozen SmolVLM-256M-Instruct and SmolVLM-500M-Instruct are contextual only. They
 % CITE-GAP smolvlm
 
 \subsection{Matched random controls}
-A matched-random control keeps its partner's architecture and tokenizer. Pinned-seed random weights are frozen and not tuned separately. Within-size question-side pairs isolate the input representation; answer-side pairs isolate readout initialisation. Effects are reported outside this chapter.
+A matched-random control keeps its partner's architecture and tokenizer. Pinned-seed random weights are frozen and not tuned separately. Within-size question-side pairs isolate the effect of the frozen input representation; answer-side pairs isolate the effect of pretrained versus matched-random frozen language-model weights within the same architecture and size. Any measured effect of these controls is reported in Chapters 4--6.
 
 \begin{table}[p]
 \centering

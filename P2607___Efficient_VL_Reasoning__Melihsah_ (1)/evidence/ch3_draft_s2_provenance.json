@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "task_id": "dissertation-02-ch3-draft-s2",
-  "implementation_revision": 1,
-  "generated_utc": "2026-08-25T13:50:43Z",
+  "implementation_revision": 2,
+  "generated_utc": "2026-08-25T15:53:32Z",
   "status": "DRAFT_PROVENANCE_COMPLETE_PENDING_INDEPENDENT_REVIEW",
   "scope": [
     "Section 3.4",
@@ -117,7 +117,9 @@
     },
     "e8a_identity": {
       "path": "results/experiments/e8a_question_encoder/extraction.json",
-      "sha256": "f156d074d53d2e8c16f4e443cc3b27859f9c2c042f56d911fd0756850b38aad4"
+      "sha256": "f156d074d53d2e8c16f4e443cc3b27859f9c2c042f56d911fd0756850b38aad4",
+      "record_location": "pinned_revision and resolved_revision fields",
+      "pinned_model_revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2"
     },
     "unrun_disposition": {
       "path": "docs/experiments/pre_f1_unrun_arms_disposition.md",
@@ -198,6 +200,11 @@
     "e10_b4r_cell": {
       "path": "results/experiments/e10_capacity_360m_core/e10_core_B4r_train_40k_seed0.json",
       "sha256": "6ad47230bfbde18c6d1a16eb1ebc9403ead65ddfd4fd6fdab7c2bee2f9327201"
+    },
+    "e8b_serial_efficiency": {
+      "path": "experiments/e8b_readout_generation/serial_efficiency.py",
+      "sha256": "1dcbae50fb688bff21933503c7091ee296700a3d2584d9561b0d5c9828ba7c39",
+      "record_location": "R1 candidate scoring; one frozen-LM forward pass per candidate answer"
     }
   },
   "fact_registry": {
@@ -372,7 +379,9 @@
         "e8b_source",
         "e8b_report",
         "e10_source",
-        "e10_report"
+        "e10_report",
+        "e8b_serial_efficiency",
+        "e8b_b3_cell"
       ]
     },
     "S3:compact_vlm_context": {
@@ -474,7 +483,7 @@
     },
     {
       "claim_id": "3.6.siglip_swap",
-      "sentence_scope": "Frozen ViT-B-16-SigLIP webli, 768-dimensional global inputs, same head recipe and unchanged CLIP token stores.",
+      "sentence_scope": "The SigLIP encoder comparison (E2): frozen ViT-B-16-SigLIP webli, 768-dimensional global inputs, same head recipe and unchanged CLIP token stores.",
       "fact_refs": [
         "S2:siglip_global_swap"
       ]
@@ -488,7 +497,7 @@
     },
     {
       "claim_id": "3.6.e8a_interface",
-      "sentence_scope": "Executed SmolLM2-135M revision, Linear(576,512), learned-width disclosure and unrun 360M question-side arms.",
+      "sentence_scope": "Executed SmolLM2-135M at pinned full revision 93efa2f097d58c2a74874c7e644dbc9b0cee75a2 (kept in provenance rather than shortened in prose), Linear(576,512), learned-width disclosure and unrun 360M question-side arms.",
       "fact_refs": [
         "S2:e8a_executed_capacity",
         "S2:e8a_projection_and_space_disclosure",
@@ -517,14 +526,14 @@
     },
     {
       "claim_id": "3.7.1.global_heads",
-      "sentence_scope": "MLPHead order; question/image controls; concat/fusion order; widths 512, 979, 268, 351; four separately named single-interaction controls; Linear(1024,100); E2/E3 and by-design v2_03/v2_04/E2 distinctions.",
+      "sentence_scope": "MLPHead order; question/image controls; concat/fusion order; widths 512, 979, 268, 351; four separately named single-interaction controls; Linear(1024,100); and reader-facing definitions of the SigLIP encoder comparison (E2), top-1000 answer-space experiment (E3), capacity-matching experiment (v2_03) and interaction ablation (v2_04).",
       "fact_refs": [
         "S3:global_embedding_heads"
       ]
     },
     {
       "claim_id": "3.7.2.reasoner",
-      "sentence_scope": "32 latent queries, four pre-LN blocks in the exact cross-attention/self-attention/FFN order, fourfold GELU expansion, 8 heads, width 512, no input projections, mean/LN/Linear(512,100) readout and 21,099,620 trainable parameters.",
+      "sentence_scope": "32 latent queries, four pre-LN blocks in the exact cross-attention/self-attention/FFN order, fourfold GELU expansion, 8 heads, width 512, no separate learned input projection before the blocks because the stores already share that width, internal learned Q/K/V projections within nn.MultiheadAttention, mean/LN/Linear(512,100) readout, two reference heads and 21,099,620 trainable parameters.",
       "fact_refs": [
         "S3:latent_query_reasoner"
       ],
@@ -542,9 +551,13 @@
     },
     {
       "claim_id": "3.7.4.answer_side",
-      "sentence_scope": "32-latent projection, B1, B2/B3, B4r/B4, family-level counts and R1/R2/R3 method identities.",
+      "sentence_scope": "32-latent projection; B1, B2/B3 and B4r/B4; equal trainable-parameter counts within each same-architecture size pair; R1 scoring every closed-vocabulary candidate under the frozen LM and selecting the highest-likelihood answer; and R2/R3 method identities.",
       "fact_refs": [
         "S3:answer_side_interface"
+      ],
+      "sources": [
+        "e8b_serial_efficiency",
+        "e8b_b3_cell"
       ]
     },
     {
@@ -578,7 +591,7 @@
     },
     {
       "claim_id": "3.7.6.random_controls",
-      "sentence_scope": "Within-size architecture/tokenizer matching, pinned-seed frozen random weights, no separate tuning, and the question/readout isolation boundaries.",
+      "sentence_scope": "Within-size architecture/tokenizer matching, pinned-seed frozen random weights, no separate tuning, question-side frozen-input-representation isolation, answer-side pretrained-versus-matched-random frozen-LM-weight isolation, and deferral of measured effects to Chapters 4–6.",
       "fact_refs": [
         "S3:random_controls"
       ]
@@ -703,33 +716,36 @@
       "render_authority": "Explicit human Chapter-3 Draft-Stage-2 authorisation prospectively permits this bounded first render despite the closed preparation-time render_authorized field.",
       "renderer": {
         "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/figures_src/render_fig_3b.py",
-        "sha256": "413b4e10badbb82872c41eaa3e822d9c395ae87e228fe9c210fa00b0c04525c0",
+        "sha256": "c09fc6bda940c52114790ebd9507035fad849eeb5fa7b12b44d30cb54cadd7e2",
         "output_argument_required": true
       },
       "output": {
         "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/images/ch3/FIG-3-B.pdf",
-        "sha256": "15b1b367a2f6436b1fca5e1ee3299edbe5e25c4314c326e9a6bcd62682203213"
+        "sha256": "dac78188974ca4c18f86c42f96e455f62e33093547a96e02b9f2d0e6a5f5b408",
+        "bytes": 101004
       },
-      "label_set_verification": "PASS",
-      "deterministic_same_environment_verification": "PASS"
+      "label_set_verification": "PASS: exact immutable specification strings preserved",
+      "deterministic_same_environment_verification": "PASS: committed output equals fresh temporary --verify output",
+      "layout_verification": "PASS: 7.0-by-10.0-inch near-page-width stacked layout, 9.0-point minimum body/role text, no text overflow or clipping at dissertation-page scale; immutable specification labels and relationships unchanged."
     },
     "FIG-3.C": {
       "specification": {
         "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/figures_src/FIG-3-C.specification.json",
-        "sha256": "e397e255b6e73adfa0b0e024aeda4980696d5dd2a1f5467b0f97018fc5431529"
+        "sha256": "e7ba86ace6ed026f7140f3f2e959a0e9327b7a8692ea245c4a02fb86900ff3bb"
       },
       "renderer": {
         "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/figures_src/render_fig_3c.py",
-        "sha256": "d6bbd6919d080f84148de5f1208cecfde0cf61d7f8803346893d2e40467a2cd6",
+        "sha256": "9d5e3b011b11c29622caf3066d4313380619bd5d0d2324ec22d16d8885c77eba",
         "output_argument_required": true
       },
       "output": {
         "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/images/ch3/FIG-3-C.pdf",
-        "sha256": "b7b2e2309e084cdc42ff46c3ad2869fa4752379926a3cdd229cbc5c998c74262"
+        "sha256": "3cb979ba6640fa9fff5c2ee226f9749d6f3165636033a7d73e65fb29dd4d48f9",
+        "bytes": 70586
       },
       "architecture_order_verification": "PASS",
-      "no_input_projection_verification": "PASS",
-      "deterministic_same_environment_verification": "PASS"
+      "deterministic_same_environment_verification": "PASS: committed output equals fresh temporary --verify output",
+      "separate_input_projection_semantics_verification": "PASS: no separate learned adapter precedes the blocks; internal nn.MultiheadAttention Q/K/V projections remain explicit in the scientific guard."
     },
     "FIG-3.D": {
       "display_identity": "Figure 3.4",
@@ -777,7 +793,7 @@
   },
   "draft_target": {
     "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/methodology.tex",
-    "sha256": "1db75fc897e08174cd6f0ac8522038fe2073f096bf4d7cf011fef6138edfef26",
+    "sha256": "a79a3c1306dca1a7146c9aa55d71b5031f11b8f60617efb81cec63e802c04484",
     "immutable_prefix_through_section_3_3_sha256": "695de515972db07e41dfcf2f69226894bf7781a010ad0d828b14cc45f9df7c3b",
     "immutable_tail_from_section_3_8_sha256": "ea6c693fa082ed6fe4e6011df7b481cc41f23332bd85c2cc185874ed0b7abe66"
   },
@@ -793,5 +809,20 @@
     "human_decision": "Create prospective result-free FIG-3.D and retain the historical PDF byte-identically outside Chapter 3 Methodology.",
     "scientific_content_changed_in_historical_asset": false,
     "new_figure_empirical_outcomes_included": false
+  },
+  "revision_2_review_resolution": {
+    "review_round": 1,
+    "findings_resolved": [
+      "R1",
+      "R2",
+      "R3",
+      "R4",
+      "R5",
+      "R6",
+      "R7"
+    ],
+    "optional_table_3_2_adjustment_applied": false,
+    "optional_renderer_protected_output_guards_applied": false,
+    "scientific_result_recomputed": false
   }
 }

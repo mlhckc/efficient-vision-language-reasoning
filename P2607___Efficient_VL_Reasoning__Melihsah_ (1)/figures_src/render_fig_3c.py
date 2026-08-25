@@ -65,8 +65,10 @@ def _load_specification(path: Path) -> dict:
     if specification.get("block_order") != EXPECTED_BLOCK_ORDER:
         raise ValueError("the reasoner block order has changed")
     guards = specification.get("scientific_guards", {})
-    if guards.get("input_projections") != "absent":
-        raise ValueError("input-projection guard is not pinned to absent")
+    if guards.get("separate_input_projection_before_blocks") != "absent":
+        raise ValueError("separate input-projection guard is not pinned to absent")
+    if guards.get("internal_attention_qkv_projections") != "present_via_nn.MultiheadAttention":
+        raise ValueError("internal attention Q/K/V projection semantics are not pinned")
     for label in labels:
         if not label.get("source_ids"):
             raise ValueError("a displayed label lacks provenance")
