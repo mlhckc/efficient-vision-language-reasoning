@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "task_id": "dissertation-02-ch3-draft-s1",
-  "implementation_revision": 1,
-  "generated_utc": "2026-08-25T10:37:39Z",
+  "implementation_revision": 2,
+  "generated_utc": "2026-08-25T11:31:26Z",
   "status": "DRAFT_PROVENANCE_COMPLETE_PENDING_INDEPENDENT_REVIEW",
   "scope": [
     "Section 3.1",
@@ -20,6 +20,14 @@
     {
       "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage1_evidence_manifest.json",
       "sha256": "ce4062e96e37220ad28ac9e0ab2e13c0ade422b1f216996cc5d00984aee1caf3"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage3_evidence_manifest.json",
+      "sha256": "3f566fa3c33e05ab4feb50a305d9286481191e1317348ab834a94d00a1fb116e"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage4_evidence_manifest.json",
+      "sha256": "80b24aaade4fe6f0dc0ecc98ea977894d94bc1907ce322c602d185bf7dfc7e2c"
     },
     {
       "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch3_partition_stats.csv",
@@ -70,6 +78,30 @@
     "pre_f1_lifecycle": {
       "path": "results/closure/pre_f1_status_supersession_20260814.json",
       "sha256": "8b04d10f8f1df74eefd73ee0b507aa2ca600cd9c3d0675279f0ddb72c8ed57c3"
+    },
+    "classifier_training_source": {
+      "path": "src/train.py",
+      "sha256": "81bdff7fe7121248f6722bfa58f8331ca193c7ee09247ed746574669455fffd9"
+    },
+    "e8b_b1_objective": {
+      "path": "results/experiments/e8b_readout_generation/e8b_core_B1_train_40k_seed0.json",
+      "sha256": "77a0a26ab8f828134f0f44e46a725c5ffffeb7e3ad8b62216e608fbf0b898920"
+    },
+    "e8b_b2_objective": {
+      "path": "results/experiments/e8b_readout_generation/e8b_core_B2_train_40k_seed0.json",
+      "sha256": "1c9b7699ac7100e553bdd6d6db920f5f75576253b70af5adcd3e92378060449c"
+    },
+    "e8b_b3_objective": {
+      "path": "results/experiments/e8b_readout_generation/e8b_core_B3_train_40k_seed0.json",
+      "sha256": "df16f96c1be90c5bfa6f94e35435c39c56e1a0e02fb47204c62723aa0104d315"
+    },
+    "e10_b4_objective": {
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4_train_40k_seed0.json",
+      "sha256": "3f7e3ef2bd73a860ca00b0f62ff73572c710fc9f0ed54006054943d50b0b5d22"
+    },
+    "e10_b4r_objective": {
+      "path": "results/experiments/e10_capacity_360m_core/e10_core_B4r_train_40k_seed0.json",
+      "sha256": "6ad47230bfbde18c6d1a16eb1ebc9403ead65ddfd4fd6fdab7c2bee2f9327201"
     }
   },
   "fact_registry": [
@@ -138,6 +170,14 @@
       ]
     },
     {
+      "fact_ref": "S4:efficiency_claim_boundary",
+      "manifest_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage4_evidence_manifest.json",
+      "fact_id": "subsections[id='3.11'].efficiency_claim_boundary_verbatim",
+      "sources": [
+        {"path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage4_evidence_manifest.json", "location": "$.subsections[?(@.id=='3.11')].efficiency_claim_boundary_verbatim"}
+      ]
+    },
+    {
       "fact_ref": "S1:primary_task",
       "manifest_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage1_evidence_manifest.json",
       "fact_id": "primary_task",
@@ -187,6 +227,19 @@
       "sources": [
         {"source_ref": "binding_scope", "location": "lines 722-724"},
         {"source_ref": "e9_report", "location": "lines 29-32"}
+      ]
+    },
+    {
+      "fact_ref": "S3:answer_side_interface",
+      "manifest_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage3_evidence_manifest.json",
+      "fact_id": "subsection_3_7.answer_side_interface",
+      "sources": [
+        {"source_ref": "classifier_training_source", "location": "train_model cross_entropy call"},
+        {"source_ref": "e8b_b1_objective", "location": "$.e8b_core_cell.recipe.objective"},
+        {"source_ref": "e8b_b2_objective", "location": "$.e8b_core_cell.recipe.objective"},
+        {"source_ref": "e8b_b3_objective", "location": "$.e8b_core_cell.recipe.objective"},
+        {"source_ref": "e10_b4_objective", "location": "$.e10_core_cell.recipe.objective"},
+        {"source_ref": "e10_b4r_objective", "location": "$.e10_core_cell.recipe.objective"}
       ]
     },
     {
@@ -293,9 +346,9 @@
     },
     {
       "claim_id": "3.1-S02",
-      "text": "The central problem is whether lightweight trainable heads can make effective use of frozen multimodal representations, while keeping both development-set accuracy and measured computational cost in view.",
+      "text": "The central problem is whether lightweight trainable heads can make effective use of frozen multimodal representations, while keeping development-set accuracy and measured efficiency, understood here as warm-serial latency and trainable parameter count, in view.",
       "claim_types": ["project_methodology"],
-      "project_fact_refs": ["S1:framing", "S1:efficiency_boundary"],
+      "project_fact_refs": ["S1:framing", "S1:efficiency_boundary", "S4:efficiency_claim_boundary"],
       "citation_keys": []
     },
     {
@@ -401,73 +454,78 @@
     },
     {
       "claim_id": "3.2-S05",
-      "text": "The bounded generative modes are evaluation readout variants, not alternative training tasks.",
+      "text": "Two later experiment families use bounded generation only as an evaluation readout.",
       "claim_types": ["project_methodology"],
       "project_fact_refs": ["S1:e8b_r2", "S1:e8b_r3", "S1:e9"],
       "citation_keys": []
     },
     {
       "claim_id": "3.2-S06",
-      "text": "E8B's R2 readout uses greedy decoding constrained by a prefix trie over the closed answer vocabulary.",
+      "text": "In the answer-side language-model family (E8B, described in Section 3.7), the R2 readout decodes greedily under a prefix trie restricted to the closed answer vocabulary, while the R3 readout removes that restriction but stays greedy and stops at a fixed token cap.",
       "claim_types": ["project_methodology"],
-      "project_fact_refs": ["S1:e8b_r2"],
+      "project_fact_refs": ["S1:e8b_r2", "S1:e8b_r3", "S3:answer_side_interface"],
       "citation_keys": []
     },
     {
       "claim_id": "3.2-S07",
-      "text": "R3 removes the vocabulary constraint but remains greedy and stops at a fixed token cap.",
-      "claim_types": ["project_methodology"],
-      "project_fact_refs": ["S1:e8b_r3"],
-      "citation_keys": []
-    },
-    {
-      "claim_id": "3.2-S08",
-      "text": "E9 likewise evaluates frozen compact vision-language models with pinned greedy readouts.",
+      "text": "The compact vision-language models used for context (E9, Chapter 6) are likewise evaluated with a pinned greedy readout.",
       "claim_types": ["project_methodology"],
       "project_fact_refs": ["S1:e9"],
       "citation_keys": []
     },
     {
-      "claim_id": "3.2-S09",
-      "text": "These exceptions test how an already defined representation or readout produces an answer; they do not authorise open-ended generation.",
+      "claim_id": "3.2-S08",
+      "text": "These exceptions test how an already defined representation or readout produces an answer; they do not extend the task to open-ended generation.",
       "claim_types": ["project_methodology"],
       "project_fact_refs": ["S1:e8b_r2", "S1:e8b_r3", "S1:e9", "S1:generation_exclusions"],
       "citation_keys": []
     },
     {
-      "claim_id": "3.2-S10",
+      "claim_id": "3.2-S09",
       "text": "Sampling, temperature search and prompt search are excluded.",
       "claim_types": ["project_methodology"],
       "project_fact_refs": ["S1:generation_exclusions"],
       "citation_keys": []
     },
     {
-      "claim_id": "3.2-S11",
+      "claim_id": "3.2-S10",
       "text": "Keeping this distinction explicit prevents a change in output mechanism from being mistaken for a change in the scientific task.",
       "claim_types": ["project_methodology"],
       "project_fact_refs": ["S1:primary_task", "S1:generation_exclusions"],
       "citation_keys": []
     },
     {
-      "claim_id": "3.2-S12",
-      "text": "It also preserves a common methodological boundary across the classifier and readout families: the image-question input is fixed, answer production is bounded, and no model is trained through a generative objective in these experiments.",
+      "claim_id": "3.2-S11",
+      "text": "It also preserves a common methodological boundary across the classifier and readout families: the image-question input is fixed, answer production is bounded, and every trainable component is fitted to the same fixed answer set.",
       "claim_types": ["project_methodology"],
-      "project_fact_refs": ["S1:primary_task", "S1:generation_exclusions"],
+      "project_fact_refs": ["S1:primary_task", "S1:generation_exclusions", "S3:answer_side_interface"],
+      "citation_keys": []
+    },
+    {
+      "claim_id": "3.2-S12",
+      "text": "The training objective differs by family: the classifier heads and the language-model-free readout use a cross-entropy loss over the closed answer vocabulary, whereas the answer-side language-model readouts are trained with a teacher-forced token-level loss on the answer tokens, with decoding bounded at evaluation as described above.",
+      "claim_types": ["project_methodology"],
+      "project_fact_refs": ["S1:primary_task", "S3:answer_side_interface"],
+      "canonical_source_refs": ["classifier_training_source", "e8b_b1_objective", "e8b_b2_objective", "e8b_b3_objective", "e10_b4_objective", "e10_b4r_objective"],
       "citation_keys": []
     },
     {
       "claim_id": "3.2-S13",
-      "text": "Section 3.5 defines the exact scoring rules and evaluation denominators; they are not inferred from the decoding description.",
+      "text": "The scoring rules and evaluation denominators are defined in Section 3.5.",
       "claim_types": ["cross_reference", "project_methodology"],
       "project_fact_refs": ["S1:primary_task"],
       "citation_keys": []
     },
     {
       "claim_id": "3.3-S01",
-      "text": "The GQA partition was constructed at image level so that questions associated with one image cannot be split between development and the training pool.",
+      "text": "The GQA data were partitioned at image level so that questions associated with one image cannot be split between development and the training pool.",
       "claim_types": ["project_methodology", "literature_context"],
       "project_fact_refs": ["S1:image_disjointness"],
-      "citation_keys": ["hudson2019gqa"]
+      "citation_keys": ["hudson2019gqa"],
+      "claim_components": {
+        "literature_context": "GQA dataset identity is supported by hudson2019gqa.",
+        "project_methodology": "Image-level project partition construction is supported by S1:image_disjointness and its v2_00 sources."
+      }
     },
     {
       "claim_id": "3.3-S02",
@@ -554,7 +612,7 @@
     },
     {
       "claim_id": "3.3-S11",
-      "text": "Those effects cannot be separated by these manifests, so their implications are considered as a design limitation in Chapter 8 rather than attributed to image count alone.",
+      "text": "The manifests cannot separate these two effects, so Chapter 8 treats this as a design limitation rather than attributing scaling effects to image count alone.",
       "claim_types": ["project_methodology", "project_limitation", "cross_reference"],
       "project_fact_refs": ["S1:scaling_property"],
       "citation_keys": []
@@ -568,7 +626,7 @@
     },
     {
       "claim_id": "3.3-S13",
-      "text": "Its approved structural description is 8,013 questions on 972 images.",
+      "text": "Only its structural counts are reported: 8,013 questions on 972 images.",
       "claim_types": ["project_methodology", "project_numeric"],
       "project_fact_refs": ["S1:clean_test_structure"],
       "citation_keys": [],
@@ -576,9 +634,17 @@
     },
     {
       "claim_id": "3.3-S14",
-      "text": "Targets remain embargoed until the model list is frozen, as set out in Section 3.12; no clean-test outcome contributes to the methods or development choices reported here.",
+      "text": "Targets remain embargoed until the model list is frozen, as set out in Section 3.12.",
       "claim_types": ["project_governance", "cross_reference"],
       "project_fact_refs": ["S1:clean_test_structure", "S1:development_confirmatory_separation"],
+      "citation_keys": []
+    },
+    {
+      "claim_id": "3.3-S15",
+      "text": "No clean-test result exists yet, and none has informed the methods or development choices reported here.",
+      "claim_types": ["project_governance"],
+      "project_fact_refs": ["S1:development_confirmatory_separation"],
+      "canonical_source_refs": ["pre_f1_lifecycle"],
       "citation_keys": []
     }
   ],
@@ -589,10 +655,14 @@
       "cell_provenance_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch3_partition_stats.provenance.json",
       "cell_provenance_sha256": "605a04419821faff9de72b71aea6ad369eb987ea3ef51289133fbe491c804d9b",
       "converter_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tools/tab2latex.py",
-      "command": "./tools/tab2latex.py tables_src/ch3_partition_stats.csv --output tables/ch3_partition_stats.tex --verify",
+      "command": "./tools/tab2latex.py tables_src/ch3_partition_stats.csv --output tables/ch3_partition_stats.tex --header-map '{\"region_or_scale\":\"Region or scale\",\"question_count\":\"Questions\",\"image_count\":\"Images\",\"count_scope\":\"Count scope\",\"nesting_or_boundary\":\"Nesting or boundary\"}' --thousands --verify",
       "verify_exit_code": 0,
+      "header_mapping_bijective": true,
+      "thousands_integer_round_trip_exact": true,
+      "scientific_values_changed_by_presentation": false,
+      "converter_sha256": "529f779a81a2c77e3913ad9ef530e542c1a7b7a227f6cabd1db379049e429866",
       "output_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables/ch3_partition_stats.tex",
-      "output_sha256": "ddc71d7acb962f4d6e8b4c886700998f76ac343ee3990e38280e3d02c5611b2c",
+      "output_sha256": "62ea08095541f2bfcc31a5612fb389ca41e845aad23e9a192f5d17c6486d9442",
       "numeric_cells_hand_typed": false
     },
     "figure_3_1": {
@@ -600,12 +670,24 @@
       "specification_sha256": "2dbc6209338e721c61ddc27c46aeeaaf9abe2122ba430f199955f3fb9ae1263e",
       "authorization_note": "The immutable specification's preparation-stage render_authorized=false field is superseded only for this render by the explicit human Draft-Stage-1 authorisation; the specification was not edited.",
       "generator_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/figures_src/render_fig_3a.py",
-      "generator_sha256": "d92e19ce57e5a18d9beaafda815b47ac939168b8f76ef12478afcd62b84f55b9",
+      "generator_sha256": "7e145f33756b901565fe1b5da17a40c4f3bc81e2eb58bf95be1a74509e223ed6",
       "command": "python3 figures_src/render_fig_3a.py --verify",
-      "byte_identical_repeat_render": true,
+      "same_environment_byte_identical_repeat_render": true,
+      "cross_environment_byte_identity_claimed": false,
       "verify_exit_code": 0,
       "output_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/images/ch3/FIG-3-A.pdf",
-      "output_sha256": "0f9539905e205d618c064a0a6659c5b3854ad314f08f6f562578d2ff404643f8",
+      "output_sha256": "623e5068c263b213ce4526b8c797803dd8ba339d247d4aa4c71c0b26fde53909",
+      "output_bytes": 22966,
+      "reproducibility_environment": {
+        "matplotlib_version": "3.6.3",
+        "backend": "pdf",
+        "freetype_version": "2.13.2",
+        "font_family": "DejaVu Sans",
+        "font_path": "/usr/share/matplotlib/mpl-data/fonts/ttf/DejaVuSans.ttf",
+        "font_revision": 2.3499908447265625,
+        "font_sha256": "3fdf69cabf06049ea70a00b5919340e2ce1e6d02b0cc3c4b44fb6801bd1e0d22",
+        "limitation": "Repeated renders are required to be byte-identical in this recorded environment; byte identity is not claimed across different matplotlib, FreeType or font stacks."
+      },
       "network_used": false,
       "data_tree_used": false,
       "scientific_computation_performed": false

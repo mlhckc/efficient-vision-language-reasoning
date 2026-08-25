@@ -103,6 +103,7 @@ def _add_box(
     label_id: str,
     body: str,
     body_width: int,
+    body_fontsize: float = 10.4,
     linewidth: float = 1.4,
 ) -> None:
     patch = FancyBboxPatch(
@@ -121,7 +122,7 @@ def _add_box(
         _derived_heading(label_id),
         ha="center",
         va="top",
-        fontsize=10,
+        fontsize=12.5,
         fontweight="bold",
         color=(0.10, 0.15, 0.18),
     )
@@ -131,7 +132,7 @@ def _add_box(
         textwrap.fill(body, width=body_width, break_long_words=False),
         ha="center",
         va="center",
-        fontsize=8.2,
+        fontsize=body_fontsize,
         linespacing=1.3,
         color=(0.10, 0.15, 0.18),
     )
@@ -155,46 +156,26 @@ def _render(specification: dict, output_path: Path) -> None:
             "pdf.fonttype": 42,
         }
     )
-    figure, axis = plt.subplots(figsize=(11.2, 6.2))
+    figure, axis = plt.subplots(figsize=(10.0, 4.8))
     figure.patch.set_facecolor("white")
     axis.set_xlim(0, 1)
     axis.set_ylim(0, 1)
     axis.axis("off")
 
-    axis.text(
-        0.5,
-        0.955,
-        specification["title"],
-        ha="center",
-        va="center",
-        fontsize=15,
-        fontweight="bold",
-        color=(0.08, 0.13, 0.17),
-    )
-    axis.text(
-        0.5,
-        0.91,
-        textwrap.fill(specification["scientific_purpose"], width=105),
-        ha="center",
-        va="center",
-        fontsize=8.5,
-        color=(0.25, 0.30, 0.34),
-    )
-
     _add_box(
         axis,
-        x=0.035,
-        y=0.19,
+        x=0.025,
+        y=0.17,
         width=0.245,
-        height=0.64,
+        height=0.72,
         label_id="development",
         body=labels["development"],
-        body_width=34,
+        body_width=28,
     )
     training_patch = FancyBboxPatch(
-        (0.315, 0.12),
-        0.40,
-        0.71,
+        (0.30, 0.10),
+        0.47,
+        0.81,
         boxstyle="round,pad=0.008,rounding_size=0.012",
         linewidth=1.4,
         edgecolor=(0.18, 0.24, 0.29),
@@ -202,30 +183,30 @@ def _render(specification: dict, output_path: Path) -> None:
     )
     axis.add_patch(training_patch)
     axis.text(
-        0.515,
-        0.795,
+        0.535,
+        0.875,
         _derived_heading("training_pool"),
         ha="center",
         va="top",
-        fontsize=10,
+        fontsize=12.5,
         fontweight="bold",
         color=(0.10, 0.15, 0.18),
     )
     axis.text(
-        0.515,
-        0.745,
-        textwrap.fill(labels["training_pool"], width=58, break_long_words=False),
+        0.535,
+        0.815,
+        textwrap.fill(labels["training_pool"], width=48, break_long_words=False),
         ha="center",
         va="top",
-        fontsize=8.0,
+        fontsize=10.2,
         linespacing=1.25,
         color=(0.10, 0.15, 0.18),
     )
 
     nested_boxes = [
-        ("train_large", 0.340, 0.185, 0.185, 0.455, 0.600),
-        ("train_medium", 0.365, 0.235, 0.135, 0.355, 0.455),
-        ("train_small", 0.390, 0.285, 0.085, 0.255, 0.315),
+        ("train_large", 0.325, 0.18, 0.16, 0.52, 0.625),
+        ("train_medium", 0.350, 0.245, 0.11, 0.39, 0.465),
+        ("train_small", 0.375, 0.31, 0.06, 0.26, 0.305),
     ]
     for label_id, x, y, width, height, callout_y in nested_boxes:
         colour = COLOURS[label_id]
@@ -240,43 +221,44 @@ def _render(specification: dict, output_path: Path) -> None:
         )
         axis.add_patch(nested_patch)
         axis.plot(
-            [x + width, 0.548],
+            [x + width, 0.495],
             [callout_y, callout_y],
             linewidth=0.8,
             color=(0.30, 0.35, 0.38),
         )
         callout = labels[label_id]
         axis.text(
-            0.558,
+            0.505,
             callout_y,
-            textwrap.fill(callout, width=31, break_long_words=False),
+            textwrap.fill(callout, width=29, break_long_words=False),
             ha="left",
             va="center",
-            fontsize=7.3,
+            fontsize=9.2,
             linespacing=1.2,
             color=(0.10, 0.15, 0.18),
         )
     _add_box(
         axis,
-        x=0.75,
-        y=0.19,
-        width=0.215,
-        height=0.64,
+        x=0.80,
+        y=0.17,
+        width=0.175,
+        height=0.72,
         label_id="clean_test",
         body=labels["clean_test"],
-        body_width=31,
+        body_width=20,
+        body_fontsize=9.0,
     )
 
     axis.plot(
-        [0.297, 0.297],
-        [0.14, 0.85],
+        [0.285, 0.285],
+        [0.13, 0.93],
         linestyle=(0, (4, 4)),
         linewidth=1.2,
         color=(0.42, 0.46, 0.49),
     )
     axis.plot(
-        [0.732, 0.732],
-        [0.14, 0.85],
+        [0.785, 0.785],
+        [0.13, 0.93],
         linestyle=(0, (4, 4)),
         linewidth=1.2,
         color=(0.42, 0.46, 0.49),
@@ -284,11 +266,11 @@ def _render(specification: dict, output_path: Path) -> None:
 
     axis.text(
         0.5,
-        0.065,
+        0.045,
         "\n".join(relation_text),
         ha="center",
         va="center",
-        fontsize=8.2,
+        fontsize=9.3,
         color=(0.20, 0.25, 0.28),
     )
 
@@ -309,7 +291,7 @@ def _render(specification: dict, output_path: Path) -> None:
         output_path,
         format="pdf",
         bbox_inches="tight",
-        pad_inches=0.04,
+        pad_inches=0.02,
         metadata=metadata,
     )
     plt.close(figure)

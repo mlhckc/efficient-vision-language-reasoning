@@ -1,7 +1,7 @@
 \chapter{Methodology: Data, Evaluation Protocol and Architectures}
 \section{Methodological framing and design principles}
 \label{sec:ch3-framing}
-This chapter defines the methodology used to study closed-set visual question answering on GQA \citep{hudson2019gqa}. The central problem is whether lightweight trainable heads can make effective use of frozen multimodal representations, while keeping both development-set accuracy and measured computational cost in view. Within the global pathway, fixed representations come from the separate image and text towers of a frozen CLIP checkpoint.
+This chapter defines the methodology used to study closed-set visual question answering on GQA \citep{hudson2019gqa}. The central problem is whether lightweight trainable heads can make effective use of frozen multimodal representations, while keeping development-set accuracy and measured efficiency, understood here as warm-serial latency and trainable parameter count, in view. Within the global pathway, fixed representations come from the separate image and text towers of a frozen CLIP checkpoint.
 % CITE-GAP clip_foundation
 This broader use of frozen pretrained components is established in vision--language research \citep{tsimpoukelli2021frozen}, but here it is treated as a controlled design choice rather than a claim about any one architecture.
 
@@ -15,13 +15,13 @@ As an organising map, RQ1 concerns global heads and representation or answer-spa
 \label{sec:ch3-task}
 The experimental task uses the balanced release of GQA, a benchmark designed around questions grounded in image content and compositional scene structure \citep{hudson2019gqa}. Each example supplies an image and a natural-language question, and the system maps that pair to one answer from a fixed vocabulary. This is the primary task throughout the dissertation: discriminative closed-set VQA, rather than unrestricted language generation. Closed-vocabulary classification has a long-standing role in VQA evaluation \citep{antol2015vqa,jabri2016revisiting}; in this project, the answer vocabulary is constructed from the training pool only, so development images cannot determine its support.
 
-The bounded generative modes are evaluation readout variants, not alternative training tasks. E8B's R2 readout uses greedy decoding constrained by a prefix trie over the closed answer vocabulary. R3 removes the vocabulary constraint but remains greedy and stops at a fixed token cap. E9 likewise evaluates frozen compact vision--language models with pinned greedy readouts. These exceptions test how an already defined representation or readout produces an answer; they do not authorise open-ended generation. Sampling, temperature search and prompt search are excluded.
+Two later experiment families use bounded generation only as an evaluation readout. In the answer-side language-model family (E8B, described in Section 3.7), the R2 readout decodes greedily under a prefix trie restricted to the closed answer vocabulary, while the R3 readout removes that restriction but stays greedy and stops at a fixed token cap. The compact vision--language models used for context (E9, Chapter 6) are likewise evaluated with a pinned greedy readout. These exceptions test how an already defined representation or readout produces an answer; they do not extend the task to open-ended generation. Sampling, temperature search and prompt search are excluded.
 
-Keeping this distinction explicit prevents a change in output mechanism from being mistaken for a change in the scientific task. It also preserves a common methodological boundary across the classifier and readout families: the image--question input is fixed, answer production is bounded, and no model is trained through a generative objective in these experiments. Section 3.5 defines the exact scoring rules and evaluation denominators; they are not inferred from the decoding description.
+Keeping this distinction explicit prevents a change in output mechanism from being mistaken for a change in the scientific task. It also preserves a common methodological boundary across the classifier and readout families: the image--question input is fixed, answer production is bounded, and every trainable component is fitted to the same fixed answer set. The training objective differs by family: the classifier heads and the language-model-free readout use a cross-entropy loss over the closed answer vocabulary, whereas the answer-side language-model readouts are trained with a teacher-forced token-level loss on the answer tokens, with decoding bounded at evaluation as described above. The scoring rules and evaluation denominators are defined in Section 3.5.
 
 \section{Data partitioning and nested training scales}
 \label{sec:ch3-data}
-The GQA partition was constructed at image level so that questions associated with one image cannot be split between development and the training pool \citep{hudson2019gqa}. As summarised in Table~\ref{tab:ch3-partition}, the complete development partition contains 10,004 raw questions on 777 images. Applying the fixed-vocabulary filter retains 7,714 questions represented across 768 images. The two image counts therefore describe different scopes: 777 is the complete partition, whereas 768 counts images represented by retained in-vocabulary rows.
+The GQA data \citep{hudson2019gqa} were partitioned at image level so that questions associated with one image cannot be split between development and the training pool. As summarised in Table~\ref{tab:ch3-partition}, the complete development partition contains 10,004 raw questions on 777 images. Applying the fixed-vocabulary filter retains 7,714 questions represented across 768 images. The two image counts therefore describe different scopes: 777 is the complete partition, whereas 768 counts images represented by retained in-vocabulary rows.
 
 \begin{table}[htbp]
 \centering
@@ -47,9 +47,9 @@ The remaining training partition contains 71,363 images, while the vocabulary ru
     \label{fig:ch3-partition}
 \end{figure}
 
-This is a question-level scaling design. Moving to a larger prefix adds images that were not represented earlier, but can also add further questions for images already present. Those effects cannot be separated by these manifests, so their implications are considered as a design limitation in Chapter 8 rather than attributed to image count alone.
+This is a question-level scaling design. Moving to a larger prefix adds images that were not represented earlier, but can also add further questions for images already present. The manifests cannot separate these two effects, so Chapter 8 treats this as a design limitation rather than attributing scaling effects to image count alone.
 
-The clean-test region is image-disjoint from both development and training. Its approved structural description is 8,013 questions on 972 images. Targets remain embargoed until the model list is frozen, as set out in Section 3.12; no clean-test outcome contributes to the methods or development choices reported here.
+The clean-test region is image-disjoint from both development and training. Only its structural counts are reported: 8,013 questions on 972 images. Targets remain embargoed until the model list is frozen, as set out in Section 3.12. No clean-test result exists yet, and none has informed the methods or development choices reported here.
 
 \section{Answer-space construction: top-100 and top-1000}
 % TODO dissertation-01-ch3-prep-s2: internal budget 250 words; structural scaffold only.
