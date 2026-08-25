@@ -1,12 +1,55 @@
 \chapter{Methodology: Data, Evaluation Protocol and Architectures}
 \section{Methodological framing and design principles}
-% TODO dissertation-01-ch3-prep-s1: internal budget 200 words; structural scaffold only.
+\label{sec:ch3-framing}
+This chapter defines the methodology used to study closed-set visual question answering on GQA \citep{hudson2019gqa}. The central problem is whether lightweight trainable heads can make effective use of frozen multimodal representations, while keeping both development-set accuracy and measured computational cost in view. Within the global pathway, fixed representations come from the separate image and text towers of a frozen CLIP checkpoint.
+% CITE-GAP clip_foundation
+This broader use of frozen pretrained components is established in vision--language research \citep{tsimpoukelli2021frozen}, but here it is treated as a controlled design choice rather than a claim about any one architecture.
+
+Four principles govern the experiments. First, representation encoders remain frozen, so comparisons concern the trainable interface or head. Second, matched controls are used wherever an architectural or pretraining choice is isolated. Third, models are replicated across predefined seeds rather than interpreted from a single run. Finally, development evidence is kept separate from future confirmatory evaluation: it supports model development and analysis, but not a held-out generalisation claim.
+
+The formal research questions are to be stated in Chapter 1.
+% XREF-PENDING: Chapter 1 RQ definitions
+As an organising map, RQ1 concerns global heads and representation or answer-space choices; RQ2 concerns token-level reasoning under data scaling; and RQ3 concerns frozen small-language-model interfaces and their bounded efficiency evidence. Chapters 4--6 address these questions in turn, while Chapter 7 reports the efficiency analysis.
 
 \section{Task definition: closed-set VQA on GQA}
-% TODO dissertation-01-ch3-prep-s1: internal budget 250 words; structural scaffold only.
+\label{sec:ch3-task}
+The experimental task uses the balanced release of GQA, a benchmark designed around questions grounded in image content and compositional scene structure \citep{hudson2019gqa}. Each example supplies an image and a natural-language question, and the system maps that pair to one answer from a fixed vocabulary. This is the primary task throughout the dissertation: discriminative closed-set VQA, rather than unrestricted language generation. Closed-vocabulary classification has a long-standing role in VQA evaluation \citep{antol2015vqa,jabri2016revisiting}; in this project, the answer vocabulary is constructed from the training pool only, so development images cannot determine its support.
+
+The bounded generative modes are evaluation readout variants, not alternative training tasks. E8B's R2 readout uses greedy decoding constrained by a prefix trie over the closed answer vocabulary. R3 removes the vocabulary constraint but remains greedy and stops at a fixed token cap. E9 likewise evaluates frozen compact vision--language models with pinned greedy readouts. These exceptions test how an already defined representation or readout produces an answer; they do not authorise open-ended generation. Sampling, temperature search and prompt search are excluded.
+
+Keeping this distinction explicit prevents a change in output mechanism from being mistaken for a change in the scientific task. It also preserves a common methodological boundary across the classifier and readout families: the image--question input is fixed, answer production is bounded, and no model is trained through a generative objective in these experiments. Section 3.5 defines the exact scoring rules and evaluation denominators; they are not inferred from the decoding description.
 
 \section{Data partitioning and nested training scales}
-% TODO dissertation-01-ch3-prep-s1: internal budget 300 words; structural scaffold only.
+\label{sec:ch3-data}
+The GQA partition was constructed at image level so that questions associated with one image cannot be split between development and the training pool \citep{hudson2019gqa}. As summarised in Table~\ref{tab:ch3-partition}, the complete development partition contains 10,004 raw questions on 777 images. Applying the fixed-vocabulary filter retains 7,714 questions represented across 768 images. The two image counts therefore describe different scopes: 777 is the complete partition, whereas 768 counts images represented by retained in-vocabulary rows.
+
+\begin{table}[htbp]
+\centering
+\caption{Data partitions and nested training scales. Image counts distinguish complete-partition images from images represented by retained rows; question counts distinguish eligible pool rows from selected training-prefix rows.}
+\label{tab:ch3-partition}
+\begingroup
+\footnotesize
+\setlength{\tabcolsep}{2.5pt}
+\renewenvironment{longtable}[1]
+  {\begin{tabular}{|p{0.15\textwidth}|p{0.13\textwidth}|p{0.11\textwidth}|p{0.27\textwidth}|p{0.26\textwidth}|}}
+  {\end{tabular}}
+\let\endhead\relax
+\input{tables/ch3_partition_stats.tex}
+\endgroup
+\end{table}
+
+The remaining training partition contains 71,363 images, while the vocabulary rule makes 724,074 questions eligible for selection. Three training manifests take strict row-for-row prefixes of this shared question order: 40k is contained in 100k, which is contained in 250k. Their represented-image counts are 27,622, 46,158 and 61,859 respectively. Figure~\ref{fig:ch3-partition} shows this nesting together with the image-disjoint boundaries.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{ch3/FIG-3-A.pdf}
+    \caption{Image-disjoint data regions and row-for-row nesting of the training-question prefixes. The clean-test region is shown only at structural level; its targets remain embargoed.}
+    \label{fig:ch3-partition}
+\end{figure}
+
+This is a question-level scaling design. Moving to a larger prefix adds images that were not represented earlier, but can also add further questions for images already present. Those effects cannot be separated by these manifests, so their implications are considered as a design limitation in Chapter 8 rather than attributed to image count alone.
+
+The clean-test region is image-disjoint from both development and training. Its approved structural description is 8,013 questions on 972 images. Targets remain embargoed until the model list is frozen, as set out in Section 3.12; no clean-test outcome contributes to the methods or development choices reported here.
 
 \section{Answer-space construction: top-100 and top-1000}
 % TODO dissertation-01-ch3-prep-s2: internal budget 250 words; structural scaffold only.

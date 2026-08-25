@@ -1,0 +1,683 @@
+{
+  "schema_version": 1,
+  "task_id": "dissertation-02-ch3-draft-s1",
+  "implementation_revision": 1,
+  "generated_utc": "2026-08-25T10:37:39Z",
+  "status": "DRAFT_PROVENANCE_COMPLETE_PENDING_INDEPENDENT_REVIEW",
+  "scope": [
+    "Section 3.1",
+    "Section 3.2",
+    "Section 3.3",
+    "Table 3.1",
+    "Figure 3.1"
+  ],
+  "authority_rule": "Closed Chapter-3 preparation evidence is the drafting control surface; canonical repair, supersession and closure authority overrides lower-level or isolated historical records.",
+  "closed_inputs": [
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_consolidated_evidence_index.json",
+      "sha256": "e15da5411ad565e4d893792da35123d1783cb4053b1df04f90a2250208710a96"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage1_evidence_manifest.json",
+      "sha256": "ce4062e96e37220ad28ac9e0ab2e13c0ade422b1f216996cc5d00984aee1caf3"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch3_partition_stats.csv",
+      "sha256": "5d31d53f2b7c81168a6df872dbff9fc3fe65d57b4ea93345691b5b63e4495e7e"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch3_partition_stats.provenance.json",
+      "sha256": "605a04419821faff9de72b71aea6ad369eb987ea3ef51289133fbe491c804d9b"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/figures_src/FIG-3-A.specification.json",
+      "sha256": "2dbc6209338e721c61ddc27c46aeeaaf9abe2122ba430f199955f3fb9ae1263e"
+    }
+  ],
+  "source_registry": {
+    "dissertation_handoff": {
+      "path": "docs/DISSERTATION_HANDOFF.md",
+      "sha256": "588b6124713b4eae65a0d3f714c9477e16dd9bfda0a6f72386a5935bdb9cbc80"
+    },
+    "project_overview": {
+      "path": "docs/PROJECT_OVERVIEW.md",
+      "sha256": "6c92ad151eda61c1b5863e9fc4c96c593e572d0193e5eed24693f1d2deec49cf"
+    },
+    "binding_scope": {
+      "path": "CLAUDE.md",
+      "sha256": "25c8bd700435990d0edfa6d487da1780d6c1676d649cc96fe65d880d37311893"
+    },
+    "v2_protocol_report": {
+      "path": "docs/experiments/v2_00_protocol.md",
+      "sha256": "af91acda8bfaef600b3e5c2bbd0ffaeac1e431a174d8784ed1af01c39fa3d013"
+    },
+    "v2_embedding_report": {
+      "path": "docs/experiments/v2_01_embeddings.md",
+      "sha256": "e608aac6fa5bb33e75afedab95035ec31f34c8b95e921ec0a94908516616e2c6"
+    },
+    "e9_report": {
+      "path": "docs/experiments/e9_compact_vlm.md",
+      "sha256": "6303aede69f12850c6ba8ecaf7f80eb2101f976705f6094cb8d9363d1086ad8c"
+    },
+    "protocol_build_summary": {
+      "path": "artifacts/v2_00_protocol/protocol_build_summary.json",
+      "sha256": "cfe82a17f0353a9bb6f107f770e59b6b7321ff69ab8d31eda2f49f16d5976e62"
+    },
+    "protocol_verifier": {
+      "path": "artifacts/v2_00_protocol/protocol_report.json",
+      "sha256": "21632f2d03aade8930e12a6e9ac9dd6fe2c73c0dc6003ec66933dad20e034dea"
+    },
+    "pre_f1_lifecycle": {
+      "path": "results/closure/pre_f1_status_supersession_20260814.json",
+      "sha256": "8b04d10f8f1df74eefd73ee0b507aa2ca600cd9c3d0675279f0ddb72c8ed57c3"
+    }
+  },
+  "fact_registry": [
+    {
+      "fact_ref": "S1:framing",
+      "manifest_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage1_evidence_manifest.json",
+      "fact_id": "framing",
+      "sources": [
+        {"source_ref": "dissertation_handoff", "location": "lines 20-28"},
+        {"source_ref": "project_overview", "location": "lines 14-25"}
+      ]
+    },
+    {
+      "fact_ref": "S1:frozen_lightweight",
+      "manifest_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage1_evidence_manifest.json",
+      "fact_id": "frozen_lightweight",
+      "sources": [
+        {"source_ref": "dissertation_handoff", "location": "lines 52-59"},
+        {"source_ref": "binding_scope", "location": "Locked scope, lines 717-766"}
+      ]
+    },
+    {
+      "fact_ref": "S2:clip_global",
+      "manifest_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage2_evidence_manifest.json",
+      "fact_id": "clip_global",
+      "sources": [
+        {"source_ref": "v2_embedding_report", "location": "Method, paragraphs 1-2"},
+        {"source_ref": "binding_scope", "location": "Locked scope, encoders"}
+      ]
+    },
+    {
+      "fact_ref": "S1:controls_replication",
+      "manifest_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage1_evidence_manifest.json",
+      "fact_id": "controls_replication",
+      "sources": [
+        {"source_ref": "dissertation_handoff", "location": "lines 32-47 and 72-73"}
+      ]
+    },
+    {
+      "fact_ref": "S1:development_confirmatory_separation",
+      "manifest_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage1_evidence_manifest.json",
+      "fact_id": "development_confirmatory_separation",
+      "sources": [
+        {"source_ref": "dissertation_handoff", "location": "lines 49-50, 265-266, 478-482"},
+        {"source_ref": "pre_f1_lifecycle", "location": "$.f1_f2"}
+      ]
+    },
+    {
+      "fact_ref": "S1:chapter_organization",
+      "manifest_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage1_evidence_manifest.json",
+      "fact_id": "chapter_organization",
+      "sources": [
+        {"path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/Dissertation_Template.tex", "location": "chapter include order"},
+        {"path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/technical.tex", "location": "chapter title"},
+        {"path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/technical2.tex", "location": "chapter title"},
+        {"path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/slm.tex", "location": "chapter title"},
+        {"path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/efficiency.tex", "location": "chapter title"}
+      ]
+    },
+    {
+      "fact_ref": "S1:efficiency_boundary",
+      "manifest_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage1_evidence_manifest.json",
+      "fact_id": "efficiency_boundary",
+      "sources": [
+        {"source_ref": "dissertation_handoff", "location": "lines 188-219 and 304-308"}
+      ]
+    },
+    {
+      "fact_ref": "S1:primary_task",
+      "manifest_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage1_evidence_manifest.json",
+      "fact_id": "primary_task",
+      "sources": [
+        {"source_ref": "binding_scope", "location": "lines 717-724"},
+        {"source_ref": "project_overview", "location": "lines 16-20"}
+      ]
+    },
+    {
+      "fact_ref": "S1:vocabulary_construction",
+      "manifest_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage1_evidence_manifest.json",
+      "fact_id": "vocabulary_construction",
+      "sources": [
+        {"source_ref": "v2_protocol_report", "location": "lines 38-47"},
+        {"source_ref": "protocol_build_summary", "location": "$.vocabulary.top_k"}
+      ]
+    },
+    {
+      "fact_ref": "S1:e8b_r2",
+      "manifest_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage1_evidence_manifest.json",
+      "fact_id": "e8b_r2",
+      "sources": [
+        {"source_ref": "binding_scope", "location": "lines 718-724"}
+      ]
+    },
+    {
+      "fact_ref": "S1:e8b_r3",
+      "manifest_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage1_evidence_manifest.json",
+      "fact_id": "e8b_r3",
+      "sources": [
+        {"source_ref": "binding_scope", "location": "lines 718-724"}
+      ]
+    },
+    {
+      "fact_ref": "S1:e9",
+      "manifest_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage1_evidence_manifest.json",
+      "fact_id": "e9",
+      "sources": [
+        {"source_ref": "e9_report", "location": "lines 29-45 and 60-67"},
+        {"source_ref": "binding_scope", "location": "lines 718-724"}
+      ]
+    },
+    {
+      "fact_ref": "S1:generation_exclusions",
+      "manifest_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage1_evidence_manifest.json",
+      "fact_id": "generation_exclusions",
+      "sources": [
+        {"source_ref": "binding_scope", "location": "lines 722-724"},
+        {"source_ref": "e9_report", "location": "lines 29-32"}
+      ]
+    },
+    {
+      "fact_ref": "S1:development_partition",
+      "manifest_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage1_evidence_manifest.json",
+      "fact_id": "development_partition",
+      "sources": [
+        {"source_ref": "protocol_build_summary", "location": "$.dev"},
+        {"source_ref": "v2_protocol_report", "location": "lines 31-47"}
+      ]
+    },
+    {
+      "fact_ref": "S1:development_manifest_images",
+      "manifest_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage1_evidence_manifest.json",
+      "fact_id": "development_manifest_images",
+      "sources": [
+        {"source_ref": "protocol_build_summary", "location": "$.manifests.dev.n_unique_images"},
+        {"source_ref": "v2_protocol_report", "location": "lines 44-47"}
+      ]
+    },
+    {
+      "fact_ref": "S1:training_pool",
+      "manifest_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage1_evidence_manifest.json",
+      "fact_id": "training_pool",
+      "sources": [
+        {"source_ref": "protocol_build_summary", "location": "$.pool.n_images and $.pool.n_eligible_questions"}
+      ]
+    },
+    {
+      "fact_ref": "S1:nested_scales",
+      "manifest_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage1_evidence_manifest.json",
+      "fact_id": "nested_scales",
+      "sources": [
+        {"source_ref": "protocol_build_summary", "location": "$.manifests.train_40k, $.manifests.train_100k, $.manifests.train_250k"},
+        {"source_ref": "protocol_verifier", "location": "$.checks entries named row-for-row prefix equality"},
+        {"source_ref": "v2_protocol_report", "location": "lines 48-56 and 126-131"}
+      ]
+    },
+    {
+      "fact_ref": "S1:image_disjointness",
+      "manifest_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage1_evidence_manifest.json",
+      "fact_id": "image_disjointness",
+      "sources": [
+        {"source_ref": "v2_protocol_report", "location": "lines 31-37 and 57-63"},
+        {"source_ref": "protocol_verifier", "location": "$.checks entries for imageId overlap"}
+      ]
+    },
+    {
+      "fact_ref": "S1:scaling_property",
+      "manifest_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage1_evidence_manifest.json",
+      "fact_id": "scaling_property",
+      "sources": [
+        {"source_ref": "v2_protocol_report", "location": "lines 124-131"}
+      ]
+    },
+    {
+      "fact_ref": "S1:clean_test_structure",
+      "manifest_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage1_evidence_manifest.json",
+      "fact_id": "clean_test_structure",
+      "sources": [
+        {"source_ref": "protocol_build_summary", "location": "$.manifests.test_clean"},
+        {"source_ref": "protocol_verifier", "location": "$.embargo"},
+        {"source_ref": "pre_f1_lifecycle", "location": "$.f1_f2.clean_test_embargo"}
+      ]
+    }
+  ],
+  "citation_registry": [
+    {
+      "key": "hudson2019gqa",
+      "bibliography_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/references/references.bib",
+      "entry_type": "inproceedings",
+      "title": "GQA: A New Dataset for Real-World Visual Reasoning and Compositional Question Answering",
+      "verified_present": true
+    },
+    {
+      "key": "antol2015vqa",
+      "bibliography_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/references/references.bib",
+      "entry_type": "inproceedings",
+      "title": "VQA: Visual Question Answering",
+      "verified_present": true
+    },
+    {
+      "key": "jabri2016revisiting",
+      "bibliography_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/references/references.bib",
+      "entry_type": "inproceedings",
+      "title": "Revisiting Visual Question Answering Baselines",
+      "verified_present": true
+    },
+    {
+      "key": "tsimpoukelli2021frozen",
+      "bibliography_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/references/references.bib",
+      "entry_type": "inproceedings",
+      "title": "Multimodal Few-Shot Learning with Frozen Language Models",
+      "verified_present": true
+    }
+  ],
+  "sentence_claims": [
+    {
+      "claim_id": "3.1-S01",
+      "text": "This chapter defines the methodology used to study closed-set visual question answering on GQA.",
+      "claim_types": ["project_methodology", "literature_background"],
+      "project_fact_refs": ["S1:framing", "S1:primary_task"],
+      "citation_keys": ["hudson2019gqa"]
+    },
+    {
+      "claim_id": "3.1-S02",
+      "text": "The central problem is whether lightweight trainable heads can make effective use of frozen multimodal representations, while keeping both development-set accuracy and measured computational cost in view.",
+      "claim_types": ["project_methodology"],
+      "project_fact_refs": ["S1:framing", "S1:efficiency_boundary"],
+      "citation_keys": []
+    },
+    {
+      "claim_id": "3.1-S03",
+      "text": "Within the global pathway, fixed representations come from the separate image and text towers of a frozen CLIP checkpoint.",
+      "claim_types": ["project_methodology", "literature_gap"],
+      "project_fact_refs": ["S1:frozen_lightweight", "S2:clip_global"],
+      "citation_keys": [],
+      "gap_marker": "CITE-GAP clip_foundation"
+    },
+    {
+      "claim_id": "3.1-S04",
+      "text": "This broader use of frozen pretrained components is established in vision-language research, but here it is treated as a controlled design choice rather than a claim about any one architecture.",
+      "claim_types": ["literature_background", "project_methodology"],
+      "project_fact_refs": ["S1:frozen_lightweight"],
+      "citation_keys": ["tsimpoukelli2021frozen"]
+    },
+    {
+      "claim_id": "3.1-S05",
+      "text": "Four principles govern the experiments.",
+      "claim_types": ["project_methodology"],
+      "project_fact_refs": ["S1:frozen_lightweight", "S1:controls_replication", "S1:development_confirmatory_separation"],
+      "citation_keys": []
+    },
+    {
+      "claim_id": "3.1-S06",
+      "text": "First, representation encoders remain frozen, so comparisons concern the trainable interface or head.",
+      "claim_types": ["project_methodology"],
+      "project_fact_refs": ["S1:frozen_lightweight"],
+      "citation_keys": []
+    },
+    {
+      "claim_id": "3.1-S07",
+      "text": "Second, matched controls are used wherever an architectural or pretraining choice is isolated.",
+      "claim_types": ["project_methodology"],
+      "project_fact_refs": ["S1:controls_replication"],
+      "citation_keys": []
+    },
+    {
+      "claim_id": "3.1-S08",
+      "text": "Third, models are replicated across predefined seeds rather than interpreted from a single run.",
+      "claim_types": ["project_methodology"],
+      "project_fact_refs": ["S1:controls_replication"],
+      "citation_keys": []
+    },
+    {
+      "claim_id": "3.1-S09",
+      "text": "Finally, development evidence is kept separate from future confirmatory evaluation: it supports model development and analysis, but not a held-out generalisation claim.",
+      "claim_types": ["project_methodology", "project_governance"],
+      "project_fact_refs": ["S1:development_confirmatory_separation"],
+      "citation_keys": []
+    },
+    {
+      "claim_id": "3.1-S10",
+      "text": "The formal research questions are to be stated in Chapter 1.",
+      "claim_types": ["project_structure", "author_decision"],
+      "project_fact_refs": ["S1:chapter_organization"],
+      "citation_keys": [],
+      "xref_marker": "XREF-PENDING: Chapter 1 RQ definitions",
+      "author_decision_note": "Formal RQ wording was resolved by explicit human decision in this task's coordination request; the packet records the decision but is not cited as scientific evidence."
+    },
+    {
+      "claim_id": "3.1-S11",
+      "text": "As an organising map, RQ1 concerns global heads and representation or answer-space choices; RQ2 concerns token-level reasoning under data scaling; and RQ3 concerns frozen small-language-model interfaces and their bounded efficiency evidence.",
+      "claim_types": ["project_structure", "author_decision"],
+      "project_fact_refs": ["S1:chapter_organization", "S1:efficiency_boundary"],
+      "citation_keys": []
+    },
+    {
+      "claim_id": "3.1-S12",
+      "text": "Chapters 4-6 address these questions in turn, while Chapter 7 reports the efficiency analysis.",
+      "claim_types": ["project_structure"],
+      "project_fact_refs": ["S1:chapter_organization", "S1:efficiency_boundary"],
+      "citation_keys": []
+    },
+    {
+      "claim_id": "3.2-S01",
+      "text": "The experimental task uses the balanced release of GQA, a benchmark designed around questions grounded in image content and compositional scene structure.",
+      "claim_types": ["project_methodology", "literature_background"],
+      "project_fact_refs": ["S1:primary_task"],
+      "citation_keys": ["hudson2019gqa"]
+    },
+    {
+      "claim_id": "3.2-S02",
+      "text": "Each example supplies an image and a natural-language question, and the system maps that pair to one answer from a fixed vocabulary.",
+      "claim_types": ["project_methodology"],
+      "project_fact_refs": ["S1:primary_task"],
+      "citation_keys": []
+    },
+    {
+      "claim_id": "3.2-S03",
+      "text": "This is the primary task throughout the dissertation: discriminative closed-set VQA, rather than unrestricted language generation.",
+      "claim_types": ["project_methodology"],
+      "project_fact_refs": ["S1:primary_task"],
+      "citation_keys": []
+    },
+    {
+      "claim_id": "3.2-S04",
+      "text": "Closed-vocabulary classification has a long-standing role in VQA evaluation; the project vocabulary is constructed from the training pool only so development images cannot determine its support.",
+      "claim_types": ["literature_background", "project_methodology"],
+      "project_fact_refs": ["S1:vocabulary_construction"],
+      "citation_keys": ["antol2015vqa", "jabri2016revisiting"]
+    },
+    {
+      "claim_id": "3.2-S05",
+      "text": "The bounded generative modes are evaluation readout variants, not alternative training tasks.",
+      "claim_types": ["project_methodology"],
+      "project_fact_refs": ["S1:e8b_r2", "S1:e8b_r3", "S1:e9"],
+      "citation_keys": []
+    },
+    {
+      "claim_id": "3.2-S06",
+      "text": "E8B's R2 readout uses greedy decoding constrained by a prefix trie over the closed answer vocabulary.",
+      "claim_types": ["project_methodology"],
+      "project_fact_refs": ["S1:e8b_r2"],
+      "citation_keys": []
+    },
+    {
+      "claim_id": "3.2-S07",
+      "text": "R3 removes the vocabulary constraint but remains greedy and stops at a fixed token cap.",
+      "claim_types": ["project_methodology"],
+      "project_fact_refs": ["S1:e8b_r3"],
+      "citation_keys": []
+    },
+    {
+      "claim_id": "3.2-S08",
+      "text": "E9 likewise evaluates frozen compact vision-language models with pinned greedy readouts.",
+      "claim_types": ["project_methodology"],
+      "project_fact_refs": ["S1:e9"],
+      "citation_keys": []
+    },
+    {
+      "claim_id": "3.2-S09",
+      "text": "These exceptions test how an already defined representation or readout produces an answer; they do not authorise open-ended generation.",
+      "claim_types": ["project_methodology"],
+      "project_fact_refs": ["S1:e8b_r2", "S1:e8b_r3", "S1:e9", "S1:generation_exclusions"],
+      "citation_keys": []
+    },
+    {
+      "claim_id": "3.2-S10",
+      "text": "Sampling, temperature search and prompt search are excluded.",
+      "claim_types": ["project_methodology"],
+      "project_fact_refs": ["S1:generation_exclusions"],
+      "citation_keys": []
+    },
+    {
+      "claim_id": "3.2-S11",
+      "text": "Keeping this distinction explicit prevents a change in output mechanism from being mistaken for a change in the scientific task.",
+      "claim_types": ["project_methodology"],
+      "project_fact_refs": ["S1:primary_task", "S1:generation_exclusions"],
+      "citation_keys": []
+    },
+    {
+      "claim_id": "3.2-S12",
+      "text": "It also preserves a common methodological boundary across the classifier and readout families: the image-question input is fixed, answer production is bounded, and no model is trained through a generative objective in these experiments.",
+      "claim_types": ["project_methodology"],
+      "project_fact_refs": ["S1:primary_task", "S1:generation_exclusions"],
+      "citation_keys": []
+    },
+    {
+      "claim_id": "3.2-S13",
+      "text": "Section 3.5 defines the exact scoring rules and evaluation denominators; they are not inferred from the decoding description.",
+      "claim_types": ["cross_reference", "project_methodology"],
+      "project_fact_refs": ["S1:primary_task"],
+      "citation_keys": []
+    },
+    {
+      "claim_id": "3.3-S01",
+      "text": "The GQA partition was constructed at image level so that questions associated with one image cannot be split between development and the training pool.",
+      "claim_types": ["project_methodology", "literature_context"],
+      "project_fact_refs": ["S1:image_disjointness"],
+      "citation_keys": ["hudson2019gqa"]
+    },
+    {
+      "claim_id": "3.3-S02",
+      "text": "As summarised in Table 3.1, the complete development partition contains 10,004 raw questions on 777 images.",
+      "claim_types": ["project_methodology", "project_numeric"],
+      "project_fact_refs": ["S1:development_partition"],
+      "citation_keys": [],
+      "numeric_tokens": ["10,004", "777"]
+    },
+    {
+      "claim_id": "3.3-S03",
+      "text": "Applying the fixed-vocabulary filter retains 7,714 questions represented across 768 images.",
+      "claim_types": ["project_methodology", "project_numeric"],
+      "project_fact_refs": ["S1:development_partition", "S1:development_manifest_images"],
+      "citation_keys": [],
+      "numeric_tokens": ["7,714", "768"]
+    },
+    {
+      "claim_id": "3.3-S04",
+      "text": "The two image counts therefore describe different scopes: 777 is the complete partition, whereas 768 counts images represented by retained in-vocabulary rows.",
+      "claim_types": ["project_methodology", "project_numeric"],
+      "project_fact_refs": ["S1:development_partition", "S1:development_manifest_images"],
+      "citation_keys": [],
+      "numeric_tokens": ["777", "768"]
+    },
+    {
+      "claim_id": "TAB-3.1-CAPTION",
+      "text": "Data partitions and nested training scales. Image counts distinguish complete-partition images from images represented by retained rows; question counts distinguish eligible pool rows from selected training-prefix rows.",
+      "claim_types": ["project_methodology"],
+      "project_fact_refs": ["S1:development_partition", "S1:development_manifest_images", "S1:training_pool", "S1:nested_scales"],
+      "citation_keys": []
+    },
+    {
+      "claim_id": "3.3-S05",
+      "text": "The remaining training partition contains 71,363 images, while the vocabulary rule makes 724,074 questions eligible for selection.",
+      "claim_types": ["project_methodology", "project_numeric"],
+      "project_fact_refs": ["S1:training_pool"],
+      "citation_keys": [],
+      "numeric_tokens": ["71,363", "724,074"]
+    },
+    {
+      "claim_id": "3.3-S06",
+      "text": "Three training manifests take strict row-for-row prefixes of this shared question order: 40k is contained in 100k, which is contained in 250k.",
+      "claim_types": ["project_methodology", "project_numeric"],
+      "project_fact_refs": ["S1:nested_scales"],
+      "citation_keys": [],
+      "numeric_tokens": ["40k", "100k", "250k"]
+    },
+    {
+      "claim_id": "3.3-S07",
+      "text": "Their represented-image counts are 27,622, 46,158 and 61,859 respectively.",
+      "claim_types": ["project_methodology", "project_numeric"],
+      "project_fact_refs": ["S1:nested_scales"],
+      "citation_keys": [],
+      "numeric_tokens": ["27,622", "46,158", "61,859"]
+    },
+    {
+      "claim_id": "3.3-S08",
+      "text": "Figure 3.1 shows this nesting together with the image-disjoint boundaries.",
+      "claim_types": ["project_methodology", "cross_reference"],
+      "project_fact_refs": ["S1:nested_scales", "S1:image_disjointness"],
+      "citation_keys": []
+    },
+    {
+      "claim_id": "FIG-3.1-CAPTION",
+      "text": "Image-disjoint data regions and row-for-row nesting of the training-question prefixes. The clean-test region is shown only at structural level; its targets remain embargoed.",
+      "claim_types": ["project_methodology"],
+      "project_fact_refs": ["S1:nested_scales", "S1:image_disjointness", "S1:clean_test_structure"],
+      "citation_keys": []
+    },
+    {
+      "claim_id": "3.3-S09",
+      "text": "This is a question-level scaling design.",
+      "claim_types": ["project_methodology"],
+      "project_fact_refs": ["S1:scaling_property"],
+      "citation_keys": []
+    },
+    {
+      "claim_id": "3.3-S10",
+      "text": "Moving to a larger prefix adds images that were not represented earlier, but can also add further questions for images already present.",
+      "claim_types": ["project_methodology", "project_limitation"],
+      "project_fact_refs": ["S1:scaling_property"],
+      "citation_keys": []
+    },
+    {
+      "claim_id": "3.3-S11",
+      "text": "Those effects cannot be separated by these manifests, so their implications are considered as a design limitation in Chapter 8 rather than attributed to image count alone.",
+      "claim_types": ["project_methodology", "project_limitation", "cross_reference"],
+      "project_fact_refs": ["S1:scaling_property"],
+      "citation_keys": []
+    },
+    {
+      "claim_id": "3.3-S12",
+      "text": "The clean-test region is image-disjoint from both development and training.",
+      "claim_types": ["project_methodology"],
+      "project_fact_refs": ["S1:image_disjointness"],
+      "citation_keys": []
+    },
+    {
+      "claim_id": "3.3-S13",
+      "text": "Its approved structural description is 8,013 questions on 972 images.",
+      "claim_types": ["project_methodology", "project_numeric"],
+      "project_fact_refs": ["S1:clean_test_structure"],
+      "citation_keys": [],
+      "numeric_tokens": ["8,013", "972"]
+    },
+    {
+      "claim_id": "3.3-S14",
+      "text": "Targets remain embargoed until the model list is frozen, as set out in Section 3.12; no clean-test outcome contributes to the methods or development choices reported here.",
+      "claim_types": ["project_governance", "cross_reference"],
+      "project_fact_refs": ["S1:clean_test_structure", "S1:development_confirmatory_separation"],
+      "citation_keys": []
+    }
+  ],
+  "visual_and_table_provenance": {
+    "table_3_1": {
+      "source_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch3_partition_stats.csv",
+      "source_sha256": "5d31d53f2b7c81168a6df872dbff9fc3fe65d57b4ea93345691b5b63e4495e7e",
+      "cell_provenance_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch3_partition_stats.provenance.json",
+      "cell_provenance_sha256": "605a04419821faff9de72b71aea6ad369eb987ea3ef51289133fbe491c804d9b",
+      "converter_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tools/tab2latex.py",
+      "command": "./tools/tab2latex.py tables_src/ch3_partition_stats.csv --output tables/ch3_partition_stats.tex --verify",
+      "verify_exit_code": 0,
+      "output_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables/ch3_partition_stats.tex",
+      "output_sha256": "ddc71d7acb962f4d6e8b4c886700998f76ac343ee3990e38280e3d02c5611b2c",
+      "numeric_cells_hand_typed": false
+    },
+    "figure_3_1": {
+      "specification_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/figures_src/FIG-3-A.specification.json",
+      "specification_sha256": "2dbc6209338e721c61ddc27c46aeeaaf9abe2122ba430f199955f3fb9ae1263e",
+      "authorization_note": "The immutable specification's preparation-stage render_authorized=false field is superseded only for this render by the explicit human Draft-Stage-1 authorisation; the specification was not edited.",
+      "generator_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/figures_src/render_fig_3a.py",
+      "generator_sha256": "d92e19ce57e5a18d9beaafda815b47ac939168b8f76ef12478afcd62b84f55b9",
+      "command": "python3 figures_src/render_fig_3a.py --verify",
+      "byte_identical_repeat_render": true,
+      "verify_exit_code": 0,
+      "output_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/images/ch3/FIG-3-A.pdf",
+      "output_sha256": "0f9539905e205d618c064a0a6659c5b3854ad314f08f6f562578d2ff404643f8",
+      "network_used": false,
+      "data_tree_used": false,
+      "scientific_computation_performed": false
+    }
+  },
+  "markers": {
+    "cite_gaps": [
+      {
+        "marker": "CITE-GAP clip_foundation",
+        "location": "Section 3.1, immediately after the first CLIP mention",
+        "reason": "The closed consolidated bibliography inventory confirms that the foundational CLIP citation is absent."
+      }
+    ],
+    "xref_pending": [
+      {
+        "marker": "XREF-PENDING: Chapter 1 RQ definitions",
+        "location": "Section 3.1",
+        "reason": "Chapter 1 has not yet been drafted and no label exists."
+      }
+    ],
+    "unused_gap_markers": [
+      {
+        "class_id": "vqa_v2",
+        "reason": "VQA-v2 is not mentioned in the draft, so no artificial marker was inserted."
+      }
+    ]
+  },
+  "numeric_guard": {
+    "project_specific_values_used_in_prose_or_captions": [
+      "10,004",
+      "777",
+      "7,714",
+      "768",
+      "71,363",
+      "724,074",
+      "40k",
+      "100k",
+      "250k",
+      "27,622",
+      "46,158",
+      "61,859",
+      "8,013",
+      "972"
+    ],
+    "allowed_but_omitted_from_prose": [
+      "99 verifier checks",
+      "0 verifier failures",
+      "13 byte-identical regenerated files"
+    ],
+    "generated_object_rule": "All scientific values in Table 3.1 come from the approved CSV and all scientific labels in Figure 3.1 come from the approved specification; their per-value provenance is retained by the closed sidecar/specification.",
+    "unapproved_project_specific_values_present": false
+  },
+  "boundary_audit": {
+    "model_accuracy_result_present": false,
+    "winner_or_better_claim_present": false,
+    "effect_size_or_interval_outcome_present": false,
+    "latency_result_present": false,
+    "visual_reliance_result_present": false,
+    "pareto_conclusion_present": false,
+    "rq_answer_present": false,
+    "held_out_generalisation_claim_present": false,
+    "clean_test_two_incident_disclosure_paraphrased_in_section_3_3": false,
+    "prohibited_clean_test_phrasing_present": false
+  },
+  "main_file_change": {
+    "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/Dissertation_Template.tex",
+    "change": "Removed only the temporary Phase-0 bibliography comment and nocite-all command.",
+    "bibliography_entry_modified": false,
+    "live_title_unchanged": true,
+    "live_title": "Efficient Vision–Language Reasoning with Small Language Models"
+  },
+  "data_tree_read_or_traversed": false,
+  "clean_test_contents_inspected": false,
+  "training_evaluation_recomputation_f1_or_f2_performed": false
+}
