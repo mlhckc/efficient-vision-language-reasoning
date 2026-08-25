@@ -175,7 +175,12 @@ def _render(rows: list[list[str]], metadata: dict) -> str:
     ]
     header = encoded_rows[0] + _ROW_SUFFIX + _ENDHEAD
     body = "".join(row + _ROW_SUFFIX for row in encoded_rows[1:])
-    return _COMMENT + _metadata_comment(metadata) + begin + _HLINE + header + body + _END
+    presentation_comment = (
+        _metadata_comment(metadata)
+        if metadata["header_map"] or metadata["thousands"]
+        else ""
+    )
+    return _COMMENT + presentation_comment + begin + _HLINE + header + body + _END
 
 
 def _decode_row(encoded_row: str, width: int) -> list[str]:
@@ -192,34 +197,42 @@ def _parse_generated(text: str) -> tuple[list[list[str]], dict]:
         raise ConversionError("generated LaTeX has an invalid provenance comment")
 
     remaining = text[len(_COMMENT) :]
-    metadata_line, newline, remaining = remaining.partition("\n")
-    if not newline or not metadata_line.startswith(_PRESENTATION_PREFIX):
-        raise ConversionError("generated LaTeX has no presentation metadata")
-    try:
-        metadata = json.loads(metadata_line[len(_PRESENTATION_PREFIX) :])
-    except json.JSONDecodeError as error:
-        raise ConversionError("generated presentation metadata is invalid") from error
-    if set(metadata) != {"header_map", "source_headers", "thousands"}:
-        raise ConversionError("generated presentation metadata has unexpected fields")
-    if not isinstance(metadata["source_headers"], list) or any(
-        not isinstance(header, str) for header in metadata["source_headers"]
-    ):
-        raise ConversionError("generated source-header metadata is invalid")
-    if not isinstance(metadata["header_map"], dict) or any(
-        not isinstance(key, str) or not isinstance(value, str)
-        for key, value in metadata["header_map"].items()
-    ):
-        raise ConversionError("generated header-map metadata is invalid")
-    if not isinstance(metadata["thousands"], bool):
-        raise ConversionError("generated thousands metadata is invalid")
-    if metadata["header_map"]:
-        _validate_header_map(metadata["source_headers"], metadata["header_map"])
-    if metadata_line + "\n" != _metadata_comment(metadata):
-        raise ConversionError("presentation metadata is not canonical")
-
-    begin_line, newline, remaining = remaining.partition("\n")
+    first_line, newline, remaining_after_first = remaining.partition("\n")
     if not newline:
         raise ConversionError("generated LaTeX has no longtable declaration")
+    metadata: dict | None = None
+    if first_line.startswith(_PRESENTATION_PREFIX):
+        try:
+            metadata = json.loads(first_line[len(_PRESENTATION_PREFIX) :])
+        except json.JSONDecodeError as error:
+            raise ConversionError("generated presentation metadata is invalid") from error
+        if set(metadata) != {"header_map", "source_headers", "thousands"}:
+            raise ConversionError("generated presentation metadata has unexpected fields")
+        if not isinstance(metadata["source_headers"], list) or any(
+            not isinstance(header, str) for header in metadata["source_headers"]
+        ):
+            raise ConversionError("generated source-header metadata is invalid")
+        if not isinstance(metadata["header_map"], dict) or any(
+            not isinstance(key, str) or not isinstance(value, str)
+            for key, value in metadata["header_map"].items()
+        ):
+            raise ConversionError("generated header-map metadata is invalid")
+        if not isinstance(metadata["thousands"], bool):
+            raise ConversionError("generated thousands metadata is invalid")
+        if not metadata["header_map"] and not metadata["thousands"]:
+            raise ConversionError(
+                "presentation metadata is forbidden when no presentation option is active"
+            )
+        if metadata["header_map"]:
+            _validate_header_map(metadata["source_headers"], metadata["header_map"])
+        if first_line + "\n" != _metadata_comment(metadata):
+            raise ConversionError("presentation metadata is not canonical")
+        begin_line, newline, remaining = remaining_after_first.partition("\n")
+        if not newline:
+            raise ConversionError("generated LaTeX has no longtable declaration")
+    else:
+        begin_line = first_line
+        remaining = remaining_after_first
     if not begin_line.startswith(_BEGIN_PREFIX) or not begin_line.endswith("}"):
         raise ConversionError("generated LaTeX has an invalid longtable declaration")
 
@@ -256,7 +269,10 @@ def _parse_generated(text: str) -> tuple[list[list[str]], dict]:
             encoded_body[: -len(_ROW_SUFFIX)].split(_ROW_SUFFIX)
         )
 
-    return [_decode_row(row, width) for row in encoded_rows], metadata
+    decoded_rows = [_decode_row(row, width) for row in encoded_rows]
+    if metadata is None:
+        metadata = _presentation_metadata(decoded_rows[0], {}, False)
+    return decoded_rows, metadata
 
 
 def _restore_source_rows(presented_rows: list[list[str]], metadata: dict) -> list[list[str]]:

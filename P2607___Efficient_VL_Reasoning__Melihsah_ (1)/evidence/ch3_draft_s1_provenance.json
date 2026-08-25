@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "task_id": "dissertation-02-ch3-draft-s1",
-  "implementation_revision": 2,
-  "generated_utc": "2026-08-25T11:31:26Z",
+  "implementation_revision": 3,
+  "generated_utc": "2026-08-25T12:27:48Z",
   "status": "DRAFT_PROVENANCE_COMPLETE_PENDING_INDEPENDENT_REVIEW",
   "scope": [
     "Section 3.1",
@@ -20,6 +20,10 @@
     {
       "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage1_evidence_manifest.json",
       "sha256": "ce4062e96e37220ad28ac9e0ab2e13c0ade422b1f216996cc5d00984aee1caf3"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage2_evidence_manifest.json",
+      "sha256": "d7de03355f3419cb1896abbf13e2214eb159e59ae0080abd8bc5ec6882694d35"
     },
     {
       "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage3_evidence_manifest.json",
@@ -66,6 +70,10 @@
     "e9_report": {
       "path": "docs/experiments/e9_compact_vlm.md",
       "sha256": "6303aede69f12850c6ba8ecaf7f80eb2101f976705f6094cb8d9363d1086ad8c"
+    },
+    "e3_vocab1000_report": {
+      "path": "docs/experiments/e3_vocab1000.md",
+      "sha256": "e565217e2e0629a8740c8f923c1844376ef619d13fa262de8e55ffb6c62db0b1"
     },
     "protocol_build_summary": {
       "path": "artifacts/v2_00_protocol/protocol_build_summary.json",
@@ -193,6 +201,17 @@
       "sources": [
         {"source_ref": "v2_protocol_report", "location": "lines 38-47"},
         {"source_ref": "protocol_build_summary", "location": "$.vocabulary.top_k"}
+      ]
+    },
+    {
+      "fact_ref": "S2:top1000_extension",
+      "manifest_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_stage2_evidence_manifest.json",
+      "fact_id": "top1000_extension",
+      "sources": [
+        {
+          "source_ref": "e3_vocab1000_report",
+          "location": "Method, top-1000 construction and 1000-way v2_02 training recipe, lines 14-44"
+        }
       ]
     },
     {
@@ -468,7 +487,7 @@
     },
     {
       "claim_id": "3.2-S07",
-      "text": "The compact vision-language models used for context (E9, Chapter 6) are likewise evaluated with a pinned greedy readout.",
+      "text": "The compact vision-language models used for context (E9, defined in Section 3.7) are likewise evaluated with a pinned greedy readout.",
       "claim_types": ["project_methodology"],
       "project_fact_refs": ["S1:e9"],
       "citation_keys": []
@@ -496,14 +515,15 @@
     },
     {
       "claim_id": "3.2-S11",
-      "text": "It also preserves a common methodological boundary across the classifier and readout families: the image-question input is fixed, answer production is bounded, and every trainable component is fitted to the same fixed answer set.",
+      "text": "The same boundary applies to every classifier and readout family: the image-question input is fixed, answer production is bounded, and every trainable component is fitted to a fixed answer set defined for that experiment.",
       "claim_types": ["project_methodology"],
-      "project_fact_refs": ["S1:primary_task", "S1:generation_exclusions", "S3:answer_side_interface"],
+      "project_fact_refs": ["S1:primary_task", "S1:generation_exclusions", "S1:vocabulary_construction", "S2:top1000_extension", "S3:answer_side_interface"],
+      "canonical_source_refs": ["e3_vocab1000_report"],
       "citation_keys": []
     },
     {
       "claim_id": "3.2-S12",
-      "text": "The training objective differs by family: the classifier heads and the language-model-free readout use a cross-entropy loss over the closed answer vocabulary, whereas the answer-side language-model readouts are trained with a teacher-forced token-level loss on the answer tokens, with decoding bounded at evaluation as described above.",
+      "text": "The training objective differs by family: the classifier heads and the language-model-free readout use a cross-entropy loss over the closed answer vocabulary, whereas the answer-side language-model readouts are trained with a teacher-forced token-level loss on the answer tokens (each answer token is predicted from the preceding gold tokens), with decoding bounded at evaluation as described above.",
       "claim_types": ["project_methodology"],
       "project_fact_refs": ["S1:primary_task", "S3:answer_side_interface"],
       "canonical_source_refs": ["classifier_training_source", "e8b_b1_objective", "e8b_b2_objective", "e8b_b3_objective", "e10_b4_objective", "e10_b4r_objective"],
@@ -657,10 +677,19 @@
       "converter_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tools/tab2latex.py",
       "command": "./tools/tab2latex.py tables_src/ch3_partition_stats.csv --output tables/ch3_partition_stats.tex --header-map '{\"region_or_scale\":\"Region or scale\",\"question_count\":\"Questions\",\"image_count\":\"Images\",\"count_scope\":\"Count scope\",\"nesting_or_boundary\":\"Nesting or boundary\"}' --thousands --verify",
       "verify_exit_code": 0,
+      "default_mode_regression": {
+        "command": "./tools/tab2latex.py tables_src/ch3_partition_stats.csv --output /tmp/ch3_partition_stats_default_rev3.tex --verify",
+        "verify_exit_code": 0,
+        "presentation_options_active": false,
+        "presentation_metadata_comment_emitted": false,
+        "output_sha256": "ddc71d7acb962f4d6e8b4c886700998f76ac343ee3990e38280e3d02c5611b2c",
+        "byte_identical_to_pre_revision_2_output": true
+      },
+      "presentation_metadata_comment_emitted": true,
       "header_mapping_bijective": true,
       "thousands_integer_round_trip_exact": true,
       "scientific_values_changed_by_presentation": false,
-      "converter_sha256": "529f779a81a2c77e3913ad9ef530e542c1a7b7a227f6cabd1db379049e429866",
+      "converter_sha256": "053b74e080e343bdcfb39f50b42d908892b2ff4ada3c8ecfeb2a546f8190df87",
       "output_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables/ch3_partition_stats.tex",
       "output_sha256": "62ea08095541f2bfcc31a5612fb389ca41e845aad23e9a192f5d17c6486d9442",
       "numeric_cells_hand_typed": false
