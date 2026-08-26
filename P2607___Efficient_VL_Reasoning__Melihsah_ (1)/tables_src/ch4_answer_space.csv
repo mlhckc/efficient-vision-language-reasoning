@@ -1,0 +1,7 @@
+answer space,system,denominator,in-vocabulary accuracy,95% CI (image-clustered),coverage,derived raw-distribution accuracy
+top-100,concat,"7,714",0.57861,not available,0.77109,0.4462
+top-100,fusion,"7,714",0.58226,not available,0.77109,0.4490
+top-1000,question_only,"9,823",0.40625,"[0.39630, 0.41655]",0.98191,
+top-1000,concat,"9,823",0.49111,"[0.47957, 0.50229]",0.98191,0.4822
+top-1000,product,"9,823",0.49946,"[0.48765, 0.51060]",0.98191,0.4905
+top-1000,fusion,"9,823",0.49547,"[0.48321, 0.50775]",0.98191,0.4866

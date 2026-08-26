@@ -1,0 +1,377 @@
+{
+  "schema_version": 1,
+  "artefact": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch4_contrasts.csv",
+  "generation": "deterministic evidence-id selection; no scientific recomputation",
+  "source": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-02.csv",
+  "source_sha256": "849d2f5a64e4864aeef0960f4cea9aa774a83d222d15fdec40429c580a51d672",
+  "selected_evidence_ids": [
+    "EV-CON-v2_02.concat_minus_question_only.train_40k",
+    "EV-CON-v2_02.fusion_minus_concat.train_40k",
+    "EV-CON-v2_03.concat_wide_minus_concat.train_40k",
+    "EV-CON-v2_03.fusion_minus_concat_wide.train_40k",
+    "EV-CON-v2_03.fusion_minus_fusion_narrow.train_40k",
+    "EV-CON-v2_03.fusion_narrow_minus_concat.train_40k"
+  ],
+  "cells": [
+    {
+      "output_row_id": "EV-CON-v2_02.concat_minus_question_only.train_40k",
+      "output_field": "contrast",
+      "value": "concat minus question only",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-02.csv",
+      "frozen_source_sha256": "849d2f5a64e4864aeef0960f4cea9aa774a83d222d15fdec40429c580a51d672",
+      "source_row_identifier": "EV-CON-v2_02.concat_minus_question_only.train_40k",
+      "source_field": "contrast",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-v2_02.concat_minus_question_only.train_40k",
+      "output_field": "comparison class",
+      "value": "CAPACITY_CONFOUNDED",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-02.csv",
+      "frozen_source_sha256": "849d2f5a64e4864aeef0960f4cea9aa774a83d222d15fdec40429c580a51d672",
+      "source_row_identifier": "EV-CON-v2_02.concat_minus_question_only.train_40k",
+      "source_field": "comparison class",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-v2_02.concat_minus_question_only.train_40k",
+      "output_field": "effect",
+      "value": "0.06601",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-02.csv",
+      "frozen_source_sha256": "849d2f5a64e4864aeef0960f4cea9aa774a83d222d15fdec40429c580a51d672",
+      "source_row_identifier": "EV-CON-v2_02.concat_minus_question_only.train_40k",
+      "source_field": "effect",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-v2_02.concat_minus_question_only.train_40k",
+      "output_field": "95% CI (image-clustered)",
+      "value": "[0.05395, 0.07747]",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-02.csv",
+      "frozen_source_sha256": "849d2f5a64e4864aeef0960f4cea9aa774a83d222d15fdec40429c580a51d672",
+      "source_row_identifier": "EV-CON-v2_02.concat_minus_question_only.train_40k",
+      "source_field": "95% CI (image-clustered)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-v2_02.concat_minus_question_only.train_40k",
+      "output_field": "excludes zero",
+      "value": "true",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-02.csv",
+      "frozen_source_sha256": "849d2f5a64e4864aeef0960f4cea9aa774a83d222d15fdec40429c580a51d672",
+      "source_row_identifier": "EV-CON-v2_02.concat_minus_question_only.train_40k",
+      "source_field": "excludes zero",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-v2_02.concat_minus_question_only.train_40k",
+      "output_field": "sd (training seeds, ddof=1)",
+      "value": "0.00318",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-02.csv",
+      "frozen_source_sha256": "849d2f5a64e4864aeef0960f4cea9aa774a83d222d15fdec40429c580a51d672",
+      "source_row_identifier": "EV-CON-v2_02.concat_minus_question_only.train_40k",
+      "source_field": "sd (training seeds, ddof=1)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-v2_02.fusion_minus_concat.train_40k",
+      "output_field": "contrast",
+      "value": "fusion minus concat",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-02.csv",
+      "frozen_source_sha256": "849d2f5a64e4864aeef0960f4cea9aa774a83d222d15fdec40429c580a51d672",
+      "source_row_identifier": "EV-CON-v2_02.fusion_minus_concat.train_40k",
+      "source_field": "contrast",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-v2_02.fusion_minus_concat.train_40k",
+      "output_field": "comparison class",
+      "value": "CAPACITY_CONFOUNDED",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-02.csv",
+      "frozen_source_sha256": "849d2f5a64e4864aeef0960f4cea9aa774a83d222d15fdec40429c580a51d672",
+      "source_row_identifier": "EV-CON-v2_02.fusion_minus_concat.train_40k",
+      "source_field": "comparison class",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-v2_02.fusion_minus_concat.train_40k",
+      "output_field": "effect",
+      "value": "0.01442",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-02.csv",
+      "frozen_source_sha256": "849d2f5a64e4864aeef0960f4cea9aa774a83d222d15fdec40429c580a51d672",
+      "source_row_identifier": "EV-CON-v2_02.fusion_minus_concat.train_40k",
+      "source_field": "effect",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-v2_02.fusion_minus_concat.train_40k",
+      "output_field": "95% CI (image-clustered)",
+      "value": "[0.00794, 0.02095]",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-02.csv",
+      "frozen_source_sha256": "849d2f5a64e4864aeef0960f4cea9aa774a83d222d15fdec40429c580a51d672",
+      "source_row_identifier": "EV-CON-v2_02.fusion_minus_concat.train_40k",
+      "source_field": "95% CI (image-clustered)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-v2_02.fusion_minus_concat.train_40k",
+      "output_field": "excludes zero",
+      "value": "true",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-02.csv",
+      "frozen_source_sha256": "849d2f5a64e4864aeef0960f4cea9aa774a83d222d15fdec40429c580a51d672",
+      "source_row_identifier": "EV-CON-v2_02.fusion_minus_concat.train_40k",
+      "source_field": "excludes zero",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-v2_02.fusion_minus_concat.train_40k",
+      "output_field": "sd (training seeds, ddof=1)",
+      "value": "0.00141",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-02.csv",
+      "frozen_source_sha256": "849d2f5a64e4864aeef0960f4cea9aa774a83d222d15fdec40429c580a51d672",
+      "source_row_identifier": "EV-CON-v2_02.fusion_minus_concat.train_40k",
+      "source_field": "sd (training seeds, ddof=1)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-v2_03.concat_wide_minus_concat.train_40k",
+      "output_field": "contrast",
+      "value": "concat wide minus concat",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-02.csv",
+      "frozen_source_sha256": "849d2f5a64e4864aeef0960f4cea9aa774a83d222d15fdec40429c580a51d672",
+      "source_row_identifier": "EV-CON-v2_03.concat_wide_minus_concat.train_40k",
+      "source_field": "contrast",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-v2_03.concat_wide_minus_concat.train_40k",
+      "output_field": "comparison class",
+      "value": "CLEAN_PAIRED_CONTROL",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-02.csv",
+      "frozen_source_sha256": "849d2f5a64e4864aeef0960f4cea9aa774a83d222d15fdec40429c580a51d672",
+      "source_row_identifier": "EV-CON-v2_03.concat_wide_minus_concat.train_40k",
+      "source_field": "comparison class",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-v2_03.concat_wide_minus_concat.train_40k",
+      "output_field": "effect",
+      "value": "0.00863",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-02.csv",
+      "frozen_source_sha256": "849d2f5a64e4864aeef0960f4cea9aa774a83d222d15fdec40429c580a51d672",
+      "source_row_identifier": "EV-CON-v2_03.concat_wide_minus_concat.train_40k",
+      "source_field": "effect",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-v2_03.concat_wide_minus_concat.train_40k",
+      "output_field": "95% CI (image-clustered)",
+      "value": "[0.00376, 0.01378]",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-02.csv",
+      "frozen_source_sha256": "849d2f5a64e4864aeef0960f4cea9aa774a83d222d15fdec40429c580a51d672",
+      "source_row_identifier": "EV-CON-v2_03.concat_wide_minus_concat.train_40k",
+      "source_field": "95% CI (image-clustered)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-v2_03.concat_wide_minus_concat.train_40k",
+      "output_field": "excludes zero",
+      "value": "true",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-02.csv",
+      "frozen_source_sha256": "849d2f5a64e4864aeef0960f4cea9aa774a83d222d15fdec40429c580a51d672",
+      "source_row_identifier": "EV-CON-v2_03.concat_wide_minus_concat.train_40k",
+      "source_field": "excludes zero",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-v2_03.concat_wide_minus_concat.train_40k",
+      "output_field": "sd (training seeds, ddof=1)",
+      "value": "0.00302",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-02.csv",
+      "frozen_source_sha256": "849d2f5a64e4864aeef0960f4cea9aa774a83d222d15fdec40429c580a51d672",
+      "source_row_identifier": "EV-CON-v2_03.concat_wide_minus_concat.train_40k",
+      "source_field": "sd (training seeds, ddof=1)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-v2_03.fusion_minus_concat_wide.train_40k",
+      "output_field": "contrast",
+      "value": "fusion minus concat wide",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-02.csv",
+      "frozen_source_sha256": "849d2f5a64e4864aeef0960f4cea9aa774a83d222d15fdec40429c580a51d672",
+      "source_row_identifier": "EV-CON-v2_03.fusion_minus_concat_wide.train_40k",
+      "source_field": "contrast",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-v2_03.fusion_minus_concat_wide.train_40k",
+      "output_field": "comparison class",
+      "value": "CLEAN_PAIRED_CONTROL",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-02.csv",
+      "frozen_source_sha256": "849d2f5a64e4864aeef0960f4cea9aa774a83d222d15fdec40429c580a51d672",
+      "source_row_identifier": "EV-CON-v2_03.fusion_minus_concat_wide.train_40k",
+      "source_field": "comparison class",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-v2_03.fusion_minus_concat_wide.train_40k",
+      "output_field": "effect",
+      "value": "0.00578",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-02.csv",
+      "frozen_source_sha256": "849d2f5a64e4864aeef0960f4cea9aa774a83d222d15fdec40429c580a51d672",
+      "source_row_identifier": "EV-CON-v2_03.fusion_minus_concat_wide.train_40k",
+      "source_field": "effect",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-v2_03.fusion_minus_concat_wide.train_40k",
+      "output_field": "95% CI (image-clustered)",
+      "value": "[-0.00116, 0.01226]",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-02.csv",
+      "frozen_source_sha256": "849d2f5a64e4864aeef0960f4cea9aa774a83d222d15fdec40429c580a51d672",
+      "source_row_identifier": "EV-CON-v2_03.fusion_minus_concat_wide.train_40k",
+      "source_field": "95% CI (image-clustered)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-v2_03.fusion_minus_concat_wide.train_40k",
+      "output_field": "excludes zero",
+      "value": "false",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-02.csv",
+      "frozen_source_sha256": "849d2f5a64e4864aeef0960f4cea9aa774a83d222d15fdec40429c580a51d672",
+      "source_row_identifier": "EV-CON-v2_03.fusion_minus_concat_wide.train_40k",
+      "source_field": "excludes zero",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-v2_03.fusion_minus_concat_wide.train_40k",
+      "output_field": "sd (training seeds, ddof=1)",
+      "value": "0.00298",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-02.csv",
+      "frozen_source_sha256": "849d2f5a64e4864aeef0960f4cea9aa774a83d222d15fdec40429c580a51d672",
+      "source_row_identifier": "EV-CON-v2_03.fusion_minus_concat_wide.train_40k",
+      "source_field": "sd (training seeds, ddof=1)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-v2_03.fusion_minus_fusion_narrow.train_40k",
+      "output_field": "contrast",
+      "value": "fusion minus fusion narrow",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-02.csv",
+      "frozen_source_sha256": "849d2f5a64e4864aeef0960f4cea9aa774a83d222d15fdec40429c580a51d672",
+      "source_row_identifier": "EV-CON-v2_03.fusion_minus_fusion_narrow.train_40k",
+      "source_field": "contrast",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-v2_03.fusion_minus_fusion_narrow.train_40k",
+      "output_field": "comparison class",
+      "value": "CLEAN_PAIRED_CONTROL",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-02.csv",
+      "frozen_source_sha256": "849d2f5a64e4864aeef0960f4cea9aa774a83d222d15fdec40429c580a51d672",
+      "source_row_identifier": "EV-CON-v2_03.fusion_minus_fusion_narrow.train_40k",
+      "source_field": "comparison class",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-v2_03.fusion_minus_fusion_narrow.train_40k",
+      "output_field": "effect",
+      "value": "0.00498",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-02.csv",
+      "frozen_source_sha256": "849d2f5a64e4864aeef0960f4cea9aa774a83d222d15fdec40429c580a51d672",
+      "source_row_identifier": "EV-CON-v2_03.fusion_minus_fusion_narrow.train_40k",
+      "source_field": "effect",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-v2_03.fusion_minus_fusion_narrow.train_40k",
+      "output_field": "95% CI (image-clustered)",
+      "value": "[0.00025, 0.00967]",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-02.csv",
+      "frozen_source_sha256": "849d2f5a64e4864aeef0960f4cea9aa774a83d222d15fdec40429c580a51d672",
+      "source_row_identifier": "EV-CON-v2_03.fusion_minus_fusion_narrow.train_40k",
+      "source_field": "95% CI (image-clustered)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-v2_03.fusion_minus_fusion_narrow.train_40k",
+      "output_field": "excludes zero",
+      "value": "true",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-02.csv",
+      "frozen_source_sha256": "849d2f5a64e4864aeef0960f4cea9aa774a83d222d15fdec40429c580a51d672",
+      "source_row_identifier": "EV-CON-v2_03.fusion_minus_fusion_narrow.train_40k",
+      "source_field": "excludes zero",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-v2_03.fusion_minus_fusion_narrow.train_40k",
+      "output_field": "sd (training seeds, ddof=1)",
+      "value": "0.00170",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-02.csv",
+      "frozen_source_sha256": "849d2f5a64e4864aeef0960f4cea9aa774a83d222d15fdec40429c580a51d672",
+      "source_row_identifier": "EV-CON-v2_03.fusion_minus_fusion_narrow.train_40k",
+      "source_field": "sd (training seeds, ddof=1)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-v2_03.fusion_narrow_minus_concat.train_40k",
+      "output_field": "contrast",
+      "value": "fusion narrow minus concat",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-02.csv",
+      "frozen_source_sha256": "849d2f5a64e4864aeef0960f4cea9aa774a83d222d15fdec40429c580a51d672",
+      "source_row_identifier": "EV-CON-v2_03.fusion_narrow_minus_concat.train_40k",
+      "source_field": "contrast",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-v2_03.fusion_narrow_minus_concat.train_40k",
+      "output_field": "comparison class",
+      "value": "CLEAN_PAIRED_CONTROL",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-02.csv",
+      "frozen_source_sha256": "849d2f5a64e4864aeef0960f4cea9aa774a83d222d15fdec40429c580a51d672",
+      "source_row_identifier": "EV-CON-v2_03.fusion_narrow_minus_concat.train_40k",
+      "source_field": "comparison class",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-v2_03.fusion_narrow_minus_concat.train_40k",
+      "output_field": "effect",
+      "value": "0.00944",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-02.csv",
+      "frozen_source_sha256": "849d2f5a64e4864aeef0960f4cea9aa774a83d222d15fdec40429c580a51d672",
+      "source_row_identifier": "EV-CON-v2_03.fusion_narrow_minus_concat.train_40k",
+      "source_field": "effect",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-v2_03.fusion_narrow_minus_concat.train_40k",
+      "output_field": "95% CI (image-clustered)",
+      "value": "[0.00285, 0.01592]",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-02.csv",
+      "frozen_source_sha256": "849d2f5a64e4864aeef0960f4cea9aa774a83d222d15fdec40429c580a51d672",
+      "source_row_identifier": "EV-CON-v2_03.fusion_narrow_minus_concat.train_40k",
+      "source_field": "95% CI (image-clustered)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-v2_03.fusion_narrow_minus_concat.train_40k",
+      "output_field": "excludes zero",
+      "value": "true",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-02.csv",
+      "frozen_source_sha256": "849d2f5a64e4864aeef0960f4cea9aa774a83d222d15fdec40429c580a51d672",
+      "source_row_identifier": "EV-CON-v2_03.fusion_narrow_minus_concat.train_40k",
+      "source_field": "excludes zero",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-v2_03.fusion_narrow_minus_concat.train_40k",
+      "output_field": "sd (training seeds, ddof=1)",
+      "value": "0.00175",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-02.csv",
+      "frozen_source_sha256": "849d2f5a64e4864aeef0960f4cea9aa774a83d222d15fdec40429c580a51d672",
+      "source_row_identifier": "EV-CON-v2_03.fusion_narrow_minus_concat.train_40k",
+      "source_field": "sd (training seeds, ddof=1)",
+      "transformation": "identity / selection only"
+    }
+  ]
+}

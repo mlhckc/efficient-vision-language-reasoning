@@ -1,0 +1,447 @@
+{
+  "schema_version": 1,
+  "artefact": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch4_answer_space.csv",
+  "generation": "deterministic selection and presentation from frozen VE1/E3 records; no evaluation or scientific recomputation",
+  "sources": [
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-01.csv",
+      "sha256": "7e50b88b635ab246bbb672352c2dfeac148a19c61f07554b787fced46cfd6826"
+    },
+    {
+      "path": "results/ve1/figures/VE1-FIG-03.data.json",
+      "sha256": "b0bdc3db56a1776806a110e273ba38687f581950e09848baf1127f9d69741b73"
+    },
+    {
+      "path": "results/ve1/figures/VE1-FIG-A3.data.json",
+      "sha256": "f1476ccaf964b5735ae4551423288548789efcd258c3ace72ccf8785b08e63a0"
+    },
+    {
+      "path": "docs/experiments/e3_vocab1000.md",
+      "sha256": "e565217e2e0629a8740c8f923c1844376ef619d13fa262de8e55ffb6c62db0b1"
+    }
+  ],
+  "cells": [
+    {
+      "output_row_id": "top-100:concat:250k",
+      "output_field": "answer space",
+      "value": "top-100",
+      "frozen_source_file": "results/ve1/figures/VE1-FIG-A3.data.json",
+      "frozen_source_sha256": "f1476ccaf964b5735ae4551423288548789efcd258c3ace72ccf8785b08e63a0",
+      "source_row_identifier": "EV-DSC-dev.coverage_top100",
+      "source_field": "drawn_values[evidence_id=EV-DSC-dev.coverage_top100].role",
+      "transformation": "presentation label from the pinned top-100 coverage record"
+    },
+    {
+      "output_row_id": "top-100:concat:250k",
+      "output_field": "system",
+      "value": "concat",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-01.csv",
+      "frozen_source_sha256": "7e50b88b635ab246bbb672352c2dfeac148a19c61f07554b787fced46cfd6826",
+      "source_row_identifier": "EV-SEED-v2_07.concat.train_250k",
+      "source_field": "system",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "top-100:concat:250k",
+      "output_field": "denominator",
+      "value": "7,714",
+      "frozen_source_file": "results/ve1/figures/VE1-FIG-03.data.json",
+      "frozen_source_sha256": "b0bdc3db56a1776806a110e273ba38687f581950e09848baf1127f9d69741b73",
+      "source_row_identifier": "EV-SEED-v2_07.concat.train_250k",
+      "source_field": "drawn_values[evidence_id=EV-SEED-v2_07.concat.train_250k].n_questions",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "top-100:concat:250k",
+      "output_field": "in-vocabulary accuracy",
+      "value": "0.57861",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-01.csv",
+      "frozen_source_sha256": "7e50b88b635ab246bbb672352c2dfeac148a19c61f07554b787fced46cfd6826",
+      "source_row_identifier": "EV-SEED-v2_07.concat.train_250k",
+      "source_field": "mean accuracy",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "top-100:concat:250k",
+      "output_field": "95% CI (image-clustered)",
+      "value": "not available",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-01.csv",
+      "frozen_source_sha256": "7e50b88b635ab246bbb672352c2dfeac148a19c61f07554b787fced46cfd6826",
+      "source_row_identifier": "EV-SEED-v2_07.concat.train_250k",
+      "source_field": "95% CI (image-clustered)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "top-100:concat:250k",
+      "output_field": "coverage",
+      "value": "0.77109",
+      "frozen_source_file": "results/ve1/figures/VE1-FIG-A3.data.json",
+      "frozen_source_sha256": "f1476ccaf964b5735ae4551423288548789efcd258c3ace72ccf8785b08e63a0",
+      "source_row_identifier": "EV-DSC-dev.coverage_top100",
+      "source_field": "drawn_values[evidence_id=EV-DSC-dev.coverage_top100].value",
+      "transformation": "canonical coverage rounded to five decimals for presentation"
+    },
+    {
+      "output_row_id": "top-100:concat:250k",
+      "output_field": "derived raw-distribution accuracy",
+      "value": "0.4462",
+      "frozen_source_file": "docs/experiments/e3_vocab1000.md",
+      "frozen_source_sha256": "e565217e2e0629a8740c8f923c1844376ef619d13fa262de8e55ffb6c62db0b1",
+      "source_row_identifier": "EV-SEED-v2_07.concat.train_250k",
+      "source_field": "reported raw-distribution row top-100 concat",
+      "transformation": "reported derived value: in-vocabulary accuracy × coverage; copied without recomputation"
+    },
+    {
+      "output_row_id": "top-100:fusion:250k",
+      "output_field": "answer space",
+      "value": "top-100",
+      "frozen_source_file": "results/ve1/figures/VE1-FIG-A3.data.json",
+      "frozen_source_sha256": "f1476ccaf964b5735ae4551423288548789efcd258c3ace72ccf8785b08e63a0",
+      "source_row_identifier": "EV-DSC-dev.coverage_top100",
+      "source_field": "drawn_values[evidence_id=EV-DSC-dev.coverage_top100].role",
+      "transformation": "presentation label from the pinned top-100 coverage record"
+    },
+    {
+      "output_row_id": "top-100:fusion:250k",
+      "output_field": "system",
+      "value": "fusion",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-01.csv",
+      "frozen_source_sha256": "7e50b88b635ab246bbb672352c2dfeac148a19c61f07554b787fced46cfd6826",
+      "source_row_identifier": "EV-SEED-v2_07.fusion.train_250k",
+      "source_field": "system",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "top-100:fusion:250k",
+      "output_field": "denominator",
+      "value": "7,714",
+      "frozen_source_file": "results/ve1/figures/VE1-FIG-03.data.json",
+      "frozen_source_sha256": "b0bdc3db56a1776806a110e273ba38687f581950e09848baf1127f9d69741b73",
+      "source_row_identifier": "EV-SEED-v2_07.fusion.train_250k",
+      "source_field": "drawn_values[evidence_id=EV-SEED-v2_07.fusion.train_250k].n_questions",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "top-100:fusion:250k",
+      "output_field": "in-vocabulary accuracy",
+      "value": "0.58226",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-01.csv",
+      "frozen_source_sha256": "7e50b88b635ab246bbb672352c2dfeac148a19c61f07554b787fced46cfd6826",
+      "source_row_identifier": "EV-SEED-v2_07.fusion.train_250k",
+      "source_field": "mean accuracy",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "top-100:fusion:250k",
+      "output_field": "95% CI (image-clustered)",
+      "value": "not available",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-01.csv",
+      "frozen_source_sha256": "7e50b88b635ab246bbb672352c2dfeac148a19c61f07554b787fced46cfd6826",
+      "source_row_identifier": "EV-SEED-v2_07.fusion.train_250k",
+      "source_field": "95% CI (image-clustered)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "top-100:fusion:250k",
+      "output_field": "coverage",
+      "value": "0.77109",
+      "frozen_source_file": "results/ve1/figures/VE1-FIG-A3.data.json",
+      "frozen_source_sha256": "f1476ccaf964b5735ae4551423288548789efcd258c3ace72ccf8785b08e63a0",
+      "source_row_identifier": "EV-DSC-dev.coverage_top100",
+      "source_field": "drawn_values[evidence_id=EV-DSC-dev.coverage_top100].value",
+      "transformation": "canonical coverage rounded to five decimals for presentation"
+    },
+    {
+      "output_row_id": "top-100:fusion:250k",
+      "output_field": "derived raw-distribution accuracy",
+      "value": "0.4490",
+      "frozen_source_file": "docs/experiments/e3_vocab1000.md",
+      "frozen_source_sha256": "e565217e2e0629a8740c8f923c1844376ef619d13fa262de8e55ffb6c62db0b1",
+      "source_row_identifier": "EV-SEED-v2_07.fusion.train_250k",
+      "source_field": "reported raw-distribution row top-100 fusion",
+      "transformation": "reported derived value: in-vocabulary accuracy × coverage; copied without recomputation"
+    },
+    {
+      "output_row_id": "top-1000:question_only:250k",
+      "output_field": "answer space",
+      "value": "top-1000",
+      "frozen_source_file": "results/ve1/figures/VE1-FIG-A3.data.json",
+      "frozen_source_sha256": "f1476ccaf964b5735ae4551423288548789efcd258c3ace72ccf8785b08e63a0",
+      "source_row_identifier": "EV-DSC-dev.coverage_top1000",
+      "source_field": "drawn_values[evidence_id=EV-DSC-dev.coverage_top1000].role",
+      "transformation": "presentation label from the pinned top-1000 coverage record"
+    },
+    {
+      "output_row_id": "top-1000:question_only:250k",
+      "output_field": "system",
+      "value": "question_only",
+      "frozen_source_file": "results/ve1/figures/VE1-FIG-A3.data.json",
+      "frozen_source_sha256": "f1476ccaf964b5735ae4551423288548789efcd258c3ace72ccf8785b08e63a0",
+      "source_row_identifier": "EV-ARM-e3.question_only.train_250k",
+      "source_field": "drawn_values[evidence_id=EV-ARM-e3.question_only.train_250k].model_system",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "top-1000:question_only:250k",
+      "output_field": "denominator",
+      "value": "9,823",
+      "frozen_source_file": "results/ve1/figures/VE1-FIG-A3.data.json",
+      "frozen_source_sha256": "f1476ccaf964b5735ae4551423288548789efcd258c3ace72ccf8785b08e63a0",
+      "source_row_identifier": "EV-ARM-e3.question_only.train_250k",
+      "source_field": "drawn_values[evidence_id=EV-ARM-e3.question_only.train_250k].n_questions",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "top-1000:question_only:250k",
+      "output_field": "in-vocabulary accuracy",
+      "value": "0.40625",
+      "frozen_source_file": "results/ve1/figures/VE1-FIG-A3.data.json",
+      "frozen_source_sha256": "f1476ccaf964b5735ae4551423288548789efcd258c3ace72ccf8785b08e63a0",
+      "source_row_identifier": "EV-ARM-e3.question_only.train_250k",
+      "source_field": "drawn_values[evidence_id=EV-ARM-e3.question_only.train_250k].value",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "top-1000:question_only:250k",
+      "output_field": "95% CI (image-clustered)",
+      "value": "[0.39630, 0.41655]",
+      "frozen_source_file": "results/ve1/figures/VE1-FIG-A3.data.json",
+      "frozen_source_sha256": "f1476ccaf964b5735ae4551423288548789efcd258c3ace72ccf8785b08e63a0",
+      "source_row_identifier": "EV-ARM-e3.question_only.train_250k",
+      "source_field": "drawn_values[evidence_id=EV-ARM-e3.question_only.train_250k].ci95",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "top-1000:question_only:250k",
+      "output_field": "coverage",
+      "value": "0.98191",
+      "frozen_source_file": "results/ve1/figures/VE1-FIG-A3.data.json",
+      "frozen_source_sha256": "f1476ccaf964b5735ae4551423288548789efcd258c3ace72ccf8785b08e63a0",
+      "source_row_identifier": "EV-DSC-dev.coverage_top1000",
+      "source_field": "drawn_values[evidence_id=EV-DSC-dev.coverage_top1000].value",
+      "transformation": "canonical coverage rounded to five decimals for presentation"
+    },
+    {
+      "output_row_id": "top-1000:question_only:250k",
+      "output_field": "derived raw-distribution accuracy",
+      "value": "",
+      "frozen_source_file": null,
+      "frozen_source_sha256": null,
+      "source_row_identifier": "EV-ARM-e3.question_only.train_250k",
+      "source_field": null,
+      "transformation": "not reported by controlling E3 table; deliberately blank"
+    },
+    {
+      "output_row_id": "top-1000:concat:250k",
+      "output_field": "answer space",
+      "value": "top-1000",
+      "frozen_source_file": "results/ve1/figures/VE1-FIG-A3.data.json",
+      "frozen_source_sha256": "f1476ccaf964b5735ae4551423288548789efcd258c3ace72ccf8785b08e63a0",
+      "source_row_identifier": "EV-DSC-dev.coverage_top1000",
+      "source_field": "drawn_values[evidence_id=EV-DSC-dev.coverage_top1000].role",
+      "transformation": "presentation label from the pinned top-1000 coverage record"
+    },
+    {
+      "output_row_id": "top-1000:concat:250k",
+      "output_field": "system",
+      "value": "concat",
+      "frozen_source_file": "results/ve1/figures/VE1-FIG-A3.data.json",
+      "frozen_source_sha256": "f1476ccaf964b5735ae4551423288548789efcd258c3ace72ccf8785b08e63a0",
+      "source_row_identifier": "EV-ARM-e3.concat.train_250k",
+      "source_field": "drawn_values[evidence_id=EV-ARM-e3.concat.train_250k].model_system",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "top-1000:concat:250k",
+      "output_field": "denominator",
+      "value": "9,823",
+      "frozen_source_file": "results/ve1/figures/VE1-FIG-A3.data.json",
+      "frozen_source_sha256": "f1476ccaf964b5735ae4551423288548789efcd258c3ace72ccf8785b08e63a0",
+      "source_row_identifier": "EV-ARM-e3.concat.train_250k",
+      "source_field": "drawn_values[evidence_id=EV-ARM-e3.concat.train_250k].n_questions",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "top-1000:concat:250k",
+      "output_field": "in-vocabulary accuracy",
+      "value": "0.49111",
+      "frozen_source_file": "results/ve1/figures/VE1-FIG-A3.data.json",
+      "frozen_source_sha256": "f1476ccaf964b5735ae4551423288548789efcd258c3ace72ccf8785b08e63a0",
+      "source_row_identifier": "EV-ARM-e3.concat.train_250k",
+      "source_field": "drawn_values[evidence_id=EV-ARM-e3.concat.train_250k].value",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "top-1000:concat:250k",
+      "output_field": "95% CI (image-clustered)",
+      "value": "[0.47957, 0.50229]",
+      "frozen_source_file": "results/ve1/figures/VE1-FIG-A3.data.json",
+      "frozen_source_sha256": "f1476ccaf964b5735ae4551423288548789efcd258c3ace72ccf8785b08e63a0",
+      "source_row_identifier": "EV-ARM-e3.concat.train_250k",
+      "source_field": "drawn_values[evidence_id=EV-ARM-e3.concat.train_250k].ci95",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "top-1000:concat:250k",
+      "output_field": "coverage",
+      "value": "0.98191",
+      "frozen_source_file": "results/ve1/figures/VE1-FIG-A3.data.json",
+      "frozen_source_sha256": "f1476ccaf964b5735ae4551423288548789efcd258c3ace72ccf8785b08e63a0",
+      "source_row_identifier": "EV-DSC-dev.coverage_top1000",
+      "source_field": "drawn_values[evidence_id=EV-DSC-dev.coverage_top1000].value",
+      "transformation": "canonical coverage rounded to five decimals for presentation"
+    },
+    {
+      "output_row_id": "top-1000:concat:250k",
+      "output_field": "derived raw-distribution accuracy",
+      "value": "0.4822",
+      "frozen_source_file": "docs/experiments/e3_vocab1000.md",
+      "frozen_source_sha256": "e565217e2e0629a8740c8f923c1844376ef619d13fa262de8e55ffb6c62db0b1",
+      "source_row_identifier": "EV-ARM-e3.concat.train_250k",
+      "source_field": "reported raw-distribution row top-1000 concat",
+      "transformation": "reported derived value: in-vocabulary accuracy × coverage; copied without recomputation"
+    },
+    {
+      "output_row_id": "top-1000:product:250k",
+      "output_field": "answer space",
+      "value": "top-1000",
+      "frozen_source_file": "results/ve1/figures/VE1-FIG-A3.data.json",
+      "frozen_source_sha256": "f1476ccaf964b5735ae4551423288548789efcd258c3ace72ccf8785b08e63a0",
+      "source_row_identifier": "EV-DSC-dev.coverage_top1000",
+      "source_field": "drawn_values[evidence_id=EV-DSC-dev.coverage_top1000].role",
+      "transformation": "presentation label from the pinned top-1000 coverage record"
+    },
+    {
+      "output_row_id": "top-1000:product:250k",
+      "output_field": "system",
+      "value": "product",
+      "frozen_source_file": "results/ve1/figures/VE1-FIG-A3.data.json",
+      "frozen_source_sha256": "f1476ccaf964b5735ae4551423288548789efcd258c3ace72ccf8785b08e63a0",
+      "source_row_identifier": "EV-ARM-e3.product.train_250k",
+      "source_field": "drawn_values[evidence_id=EV-ARM-e3.product.train_250k].model_system",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "top-1000:product:250k",
+      "output_field": "denominator",
+      "value": "9,823",
+      "frozen_source_file": "results/ve1/figures/VE1-FIG-A3.data.json",
+      "frozen_source_sha256": "f1476ccaf964b5735ae4551423288548789efcd258c3ace72ccf8785b08e63a0",
+      "source_row_identifier": "EV-ARM-e3.product.train_250k",
+      "source_field": "drawn_values[evidence_id=EV-ARM-e3.product.train_250k].n_questions",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "top-1000:product:250k",
+      "output_field": "in-vocabulary accuracy",
+      "value": "0.49946",
+      "frozen_source_file": "results/ve1/figures/VE1-FIG-A3.data.json",
+      "frozen_source_sha256": "f1476ccaf964b5735ae4551423288548789efcd258c3ace72ccf8785b08e63a0",
+      "source_row_identifier": "EV-ARM-e3.product.train_250k",
+      "source_field": "drawn_values[evidence_id=EV-ARM-e3.product.train_250k].value",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "top-1000:product:250k",
+      "output_field": "95% CI (image-clustered)",
+      "value": "[0.48765, 0.51060]",
+      "frozen_source_file": "results/ve1/figures/VE1-FIG-A3.data.json",
+      "frozen_source_sha256": "f1476ccaf964b5735ae4551423288548789efcd258c3ace72ccf8785b08e63a0",
+      "source_row_identifier": "EV-ARM-e3.product.train_250k",
+      "source_field": "drawn_values[evidence_id=EV-ARM-e3.product.train_250k].ci95",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "top-1000:product:250k",
+      "output_field": "coverage",
+      "value": "0.98191",
+      "frozen_source_file": "results/ve1/figures/VE1-FIG-A3.data.json",
+      "frozen_source_sha256": "f1476ccaf964b5735ae4551423288548789efcd258c3ace72ccf8785b08e63a0",
+      "source_row_identifier": "EV-DSC-dev.coverage_top1000",
+      "source_field": "drawn_values[evidence_id=EV-DSC-dev.coverage_top1000].value",
+      "transformation": "canonical coverage rounded to five decimals for presentation"
+    },
+    {
+      "output_row_id": "top-1000:product:250k",
+      "output_field": "derived raw-distribution accuracy",
+      "value": "0.4905",
+      "frozen_source_file": "docs/experiments/e3_vocab1000.md",
+      "frozen_source_sha256": "e565217e2e0629a8740c8f923c1844376ef619d13fa262de8e55ffb6c62db0b1",
+      "source_row_identifier": "EV-ARM-e3.product.train_250k",
+      "source_field": "reported raw-distribution row top-1000 product",
+      "transformation": "reported derived value: in-vocabulary accuracy × coverage; copied without recomputation"
+    },
+    {
+      "output_row_id": "top-1000:fusion:250k",
+      "output_field": "answer space",
+      "value": "top-1000",
+      "frozen_source_file": "results/ve1/figures/VE1-FIG-A3.data.json",
+      "frozen_source_sha256": "f1476ccaf964b5735ae4551423288548789efcd258c3ace72ccf8785b08e63a0",
+      "source_row_identifier": "EV-DSC-dev.coverage_top1000",
+      "source_field": "drawn_values[evidence_id=EV-DSC-dev.coverage_top1000].role",
+      "transformation": "presentation label from the pinned top-1000 coverage record"
+    },
+    {
+      "output_row_id": "top-1000:fusion:250k",
+      "output_field": "system",
+      "value": "fusion",
+      "frozen_source_file": "results/ve1/figures/VE1-FIG-A3.data.json",
+      "frozen_source_sha256": "f1476ccaf964b5735ae4551423288548789efcd258c3ace72ccf8785b08e63a0",
+      "source_row_identifier": "EV-ARM-e3.fusion.train_250k",
+      "source_field": "drawn_values[evidence_id=EV-ARM-e3.fusion.train_250k].model_system",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "top-1000:fusion:250k",
+      "output_field": "denominator",
+      "value": "9,823",
+      "frozen_source_file": "results/ve1/figures/VE1-FIG-A3.data.json",
+      "frozen_source_sha256": "f1476ccaf964b5735ae4551423288548789efcd258c3ace72ccf8785b08e63a0",
+      "source_row_identifier": "EV-ARM-e3.fusion.train_250k",
+      "source_field": "drawn_values[evidence_id=EV-ARM-e3.fusion.train_250k].n_questions",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "top-1000:fusion:250k",
+      "output_field": "in-vocabulary accuracy",
+      "value": "0.49547",
+      "frozen_source_file": "results/ve1/figures/VE1-FIG-A3.data.json",
+      "frozen_source_sha256": "f1476ccaf964b5735ae4551423288548789efcd258c3ace72ccf8785b08e63a0",
+      "source_row_identifier": "EV-ARM-e3.fusion.train_250k",
+      "source_field": "drawn_values[evidence_id=EV-ARM-e3.fusion.train_250k].value",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "top-1000:fusion:250k",
+      "output_field": "95% CI (image-clustered)",
+      "value": "[0.48321, 0.50775]",
+      "frozen_source_file": "results/ve1/figures/VE1-FIG-A3.data.json",
+      "frozen_source_sha256": "f1476ccaf964b5735ae4551423288548789efcd258c3ace72ccf8785b08e63a0",
+      "source_row_identifier": "EV-ARM-e3.fusion.train_250k",
+      "source_field": "drawn_values[evidence_id=EV-ARM-e3.fusion.train_250k].ci95",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "top-1000:fusion:250k",
+      "output_field": "coverage",
+      "value": "0.98191",
+      "frozen_source_file": "results/ve1/figures/VE1-FIG-A3.data.json",
+      "frozen_source_sha256": "f1476ccaf964b5735ae4551423288548789efcd258c3ace72ccf8785b08e63a0",
+      "source_row_identifier": "EV-DSC-dev.coverage_top1000",
+      "source_field": "drawn_values[evidence_id=EV-DSC-dev.coverage_top1000].value",
+      "transformation": "canonical coverage rounded to five decimals for presentation"
+    },
+    {
+      "output_row_id": "top-1000:fusion:250k",
+      "output_field": "derived raw-distribution accuracy",
+      "value": "0.4866",
+      "frozen_source_file": "docs/experiments/e3_vocab1000.md",
+      "frozen_source_sha256": "e565217e2e0629a8740c8f923c1844376ef619d13fa262de8e55ffb6c62db0b1",
+      "source_row_identifier": "EV-ARM-e3.fusion.train_250k",
+      "source_field": "reported raw-distribution row top-1000 fusion",
+      "transformation": "reported derived value: in-vocabulary accuracy × coverage; copied without recomputation"
+    }
+  ],
+  "blank_policy": "question_only top-1000 raw-distribution value is blank because the controlling E3 report table does not report it",
+  "cross_vocabulary_difference_performed": false
+}

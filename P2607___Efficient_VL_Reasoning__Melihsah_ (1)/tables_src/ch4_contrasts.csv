@@ -1,0 +1,7 @@
+contrast,comparison class,effect,95% CI (image-clustered),excludes zero,"sd (training seeds, ddof=1)"
+concat minus question only,CAPACITY_CONFOUNDED,0.06601,"[0.05395, 0.07747]",true,0.00318
+fusion minus concat,CAPACITY_CONFOUNDED,0.01442,"[0.00794, 0.02095]",true,0.00141
+concat wide minus concat,CLEAN_PAIRED_CONTROL,0.00863,"[0.00376, 0.01378]",true,0.00302
+fusion minus concat wide,CLEAN_PAIRED_CONTROL,0.00578,"[-0.00116, 0.01226]",false,0.00298
+fusion minus fusion narrow,CLEAN_PAIRED_CONTROL,0.00498,"[0.00025, 0.00967]",true,0.00170
+fusion narrow minus concat,CLEAN_PAIRED_CONTROL,0.00944,"[0.00285, 0.01592]",true,0.00175

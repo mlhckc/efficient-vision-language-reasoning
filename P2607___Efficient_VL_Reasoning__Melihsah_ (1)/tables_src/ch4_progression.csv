@@ -1,0 +1,7 @@
+system,mean accuracy,"sd (training seeds, ddof=1)",95% CI (image-clustered)
+question only,0.45797,0.00290,"[0.44717, 0.46917]"
+image only,0.23438,0.00033,"[0.22586, 0.24374]"
+concat,0.52398,0.00276,"[0.51265, 0.53504]"
+concat_wide (matched budget),0.53262,0.00259,"[0.52154, 0.54394]"
+fusion_narrow (matched budget),0.53342,0.00139,"[0.52130, 0.54546]"
+fusion,0.53840,0.00218,"[0.52679, 0.55028]"

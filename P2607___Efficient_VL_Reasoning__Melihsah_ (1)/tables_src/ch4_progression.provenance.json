@@ -1,0 +1,257 @@
+{
+  "schema_version": 1,
+  "artefact": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch4_progression.csv",
+  "generation": "deterministic evidence-id selection; no scientific recomputation",
+  "source": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-01.csv",
+  "source_sha256": "7e50b88b635ab246bbb672352c2dfeac148a19c61f07554b787fced46cfd6826",
+  "selected_evidence_ids": [
+    "EV-ARM-v2_02.question_only.train_40k",
+    "EV-ARM-v2_02.image_only.train_40k",
+    "EV-ARM-v2_02.concat.train_40k",
+    "EV-ARM-v2_03.concat_wide.train_40k",
+    "EV-ARM-v2_03.fusion_narrow.train_40k",
+    "EV-ARM-v2_02.fusion.train_40k"
+  ],
+  "cells": [
+    {
+      "output_row_id": "EV-ARM-v2_02.question_only.train_40k",
+      "output_field": "system",
+      "value": "question only",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-01.csv",
+      "frozen_source_sha256": "7e50b88b635ab246bbb672352c2dfeac148a19c61f07554b787fced46cfd6826",
+      "source_row_identifier": "EV-ARM-v2_02.question_only.train_40k",
+      "source_field": "system",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-ARM-v2_02.question_only.train_40k",
+      "output_field": "mean accuracy",
+      "value": "0.45797",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-01.csv",
+      "frozen_source_sha256": "7e50b88b635ab246bbb672352c2dfeac148a19c61f07554b787fced46cfd6826",
+      "source_row_identifier": "EV-ARM-v2_02.question_only.train_40k",
+      "source_field": "mean accuracy",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-ARM-v2_02.question_only.train_40k",
+      "output_field": "sd (training seeds, ddof=1)",
+      "value": "0.00290",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-01.csv",
+      "frozen_source_sha256": "7e50b88b635ab246bbb672352c2dfeac148a19c61f07554b787fced46cfd6826",
+      "source_row_identifier": "EV-ARM-v2_02.question_only.train_40k",
+      "source_field": "sd (training seeds, ddof=1)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-ARM-v2_02.question_only.train_40k",
+      "output_field": "95% CI (image-clustered)",
+      "value": "[0.44717, 0.46917]",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-01.csv",
+      "frozen_source_sha256": "7e50b88b635ab246bbb672352c2dfeac148a19c61f07554b787fced46cfd6826",
+      "source_row_identifier": "EV-ARM-v2_02.question_only.train_40k",
+      "source_field": "95% CI (image-clustered)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-ARM-v2_02.image_only.train_40k",
+      "output_field": "system",
+      "value": "image only",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-01.csv",
+      "frozen_source_sha256": "7e50b88b635ab246bbb672352c2dfeac148a19c61f07554b787fced46cfd6826",
+      "source_row_identifier": "EV-ARM-v2_02.image_only.train_40k",
+      "source_field": "system",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-ARM-v2_02.image_only.train_40k",
+      "output_field": "mean accuracy",
+      "value": "0.23438",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-01.csv",
+      "frozen_source_sha256": "7e50b88b635ab246bbb672352c2dfeac148a19c61f07554b787fced46cfd6826",
+      "source_row_identifier": "EV-ARM-v2_02.image_only.train_40k",
+      "source_field": "mean accuracy",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-ARM-v2_02.image_only.train_40k",
+      "output_field": "sd (training seeds, ddof=1)",
+      "value": "0.00033",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-01.csv",
+      "frozen_source_sha256": "7e50b88b635ab246bbb672352c2dfeac148a19c61f07554b787fced46cfd6826",
+      "source_row_identifier": "EV-ARM-v2_02.image_only.train_40k",
+      "source_field": "sd (training seeds, ddof=1)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-ARM-v2_02.image_only.train_40k",
+      "output_field": "95% CI (image-clustered)",
+      "value": "[0.22586, 0.24374]",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-01.csv",
+      "frozen_source_sha256": "7e50b88b635ab246bbb672352c2dfeac148a19c61f07554b787fced46cfd6826",
+      "source_row_identifier": "EV-ARM-v2_02.image_only.train_40k",
+      "source_field": "95% CI (image-clustered)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-ARM-v2_02.concat.train_40k",
+      "output_field": "system",
+      "value": "concat",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-01.csv",
+      "frozen_source_sha256": "7e50b88b635ab246bbb672352c2dfeac148a19c61f07554b787fced46cfd6826",
+      "source_row_identifier": "EV-ARM-v2_02.concat.train_40k",
+      "source_field": "system",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-ARM-v2_02.concat.train_40k",
+      "output_field": "mean accuracy",
+      "value": "0.52398",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-01.csv",
+      "frozen_source_sha256": "7e50b88b635ab246bbb672352c2dfeac148a19c61f07554b787fced46cfd6826",
+      "source_row_identifier": "EV-ARM-v2_02.concat.train_40k",
+      "source_field": "mean accuracy",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-ARM-v2_02.concat.train_40k",
+      "output_field": "sd (training seeds, ddof=1)",
+      "value": "0.00276",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-01.csv",
+      "frozen_source_sha256": "7e50b88b635ab246bbb672352c2dfeac148a19c61f07554b787fced46cfd6826",
+      "source_row_identifier": "EV-ARM-v2_02.concat.train_40k",
+      "source_field": "sd (training seeds, ddof=1)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-ARM-v2_02.concat.train_40k",
+      "output_field": "95% CI (image-clustered)",
+      "value": "[0.51265, 0.53504]",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-01.csv",
+      "frozen_source_sha256": "7e50b88b635ab246bbb672352c2dfeac148a19c61f07554b787fced46cfd6826",
+      "source_row_identifier": "EV-ARM-v2_02.concat.train_40k",
+      "source_field": "95% CI (image-clustered)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-ARM-v2_03.concat_wide.train_40k",
+      "output_field": "system",
+      "value": "concat_wide (matched budget)",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-01.csv",
+      "frozen_source_sha256": "7e50b88b635ab246bbb672352c2dfeac148a19c61f07554b787fced46cfd6826",
+      "source_row_identifier": "EV-ARM-v2_03.concat_wide.train_40k",
+      "source_field": "system",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-ARM-v2_03.concat_wide.train_40k",
+      "output_field": "mean accuracy",
+      "value": "0.53262",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-01.csv",
+      "frozen_source_sha256": "7e50b88b635ab246bbb672352c2dfeac148a19c61f07554b787fced46cfd6826",
+      "source_row_identifier": "EV-ARM-v2_03.concat_wide.train_40k",
+      "source_field": "mean accuracy",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-ARM-v2_03.concat_wide.train_40k",
+      "output_field": "sd (training seeds, ddof=1)",
+      "value": "0.00259",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-01.csv",
+      "frozen_source_sha256": "7e50b88b635ab246bbb672352c2dfeac148a19c61f07554b787fced46cfd6826",
+      "source_row_identifier": "EV-ARM-v2_03.concat_wide.train_40k",
+      "source_field": "sd (training seeds, ddof=1)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-ARM-v2_03.concat_wide.train_40k",
+      "output_field": "95% CI (image-clustered)",
+      "value": "[0.52154, 0.54394]",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-01.csv",
+      "frozen_source_sha256": "7e50b88b635ab246bbb672352c2dfeac148a19c61f07554b787fced46cfd6826",
+      "source_row_identifier": "EV-ARM-v2_03.concat_wide.train_40k",
+      "source_field": "95% CI (image-clustered)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-ARM-v2_03.fusion_narrow.train_40k",
+      "output_field": "system",
+      "value": "fusion_narrow (matched budget)",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-01.csv",
+      "frozen_source_sha256": "7e50b88b635ab246bbb672352c2dfeac148a19c61f07554b787fced46cfd6826",
+      "source_row_identifier": "EV-ARM-v2_03.fusion_narrow.train_40k",
+      "source_field": "system",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-ARM-v2_03.fusion_narrow.train_40k",
+      "output_field": "mean accuracy",
+      "value": "0.53342",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-01.csv",
+      "frozen_source_sha256": "7e50b88b635ab246bbb672352c2dfeac148a19c61f07554b787fced46cfd6826",
+      "source_row_identifier": "EV-ARM-v2_03.fusion_narrow.train_40k",
+      "source_field": "mean accuracy",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-ARM-v2_03.fusion_narrow.train_40k",
+      "output_field": "sd (training seeds, ddof=1)",
+      "value": "0.00139",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-01.csv",
+      "frozen_source_sha256": "7e50b88b635ab246bbb672352c2dfeac148a19c61f07554b787fced46cfd6826",
+      "source_row_identifier": "EV-ARM-v2_03.fusion_narrow.train_40k",
+      "source_field": "sd (training seeds, ddof=1)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-ARM-v2_03.fusion_narrow.train_40k",
+      "output_field": "95% CI (image-clustered)",
+      "value": "[0.52130, 0.54546]",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-01.csv",
+      "frozen_source_sha256": "7e50b88b635ab246bbb672352c2dfeac148a19c61f07554b787fced46cfd6826",
+      "source_row_identifier": "EV-ARM-v2_03.fusion_narrow.train_40k",
+      "source_field": "95% CI (image-clustered)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-ARM-v2_02.fusion.train_40k",
+      "output_field": "system",
+      "value": "fusion",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-01.csv",
+      "frozen_source_sha256": "7e50b88b635ab246bbb672352c2dfeac148a19c61f07554b787fced46cfd6826",
+      "source_row_identifier": "EV-ARM-v2_02.fusion.train_40k",
+      "source_field": "system",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-ARM-v2_02.fusion.train_40k",
+      "output_field": "mean accuracy",
+      "value": "0.53840",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-01.csv",
+      "frozen_source_sha256": "7e50b88b635ab246bbb672352c2dfeac148a19c61f07554b787fced46cfd6826",
+      "source_row_identifier": "EV-ARM-v2_02.fusion.train_40k",
+      "source_field": "mean accuracy",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-ARM-v2_02.fusion.train_40k",
+      "output_field": "sd (training seeds, ddof=1)",
+      "value": "0.00218",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-01.csv",
+      "frozen_source_sha256": "7e50b88b635ab246bbb672352c2dfeac148a19c61f07554b787fced46cfd6826",
+      "source_row_identifier": "EV-ARM-v2_02.fusion.train_40k",
+      "source_field": "sd (training seeds, ddof=1)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-ARM-v2_02.fusion.train_40k",
+      "output_field": "95% CI (image-clustered)",
+      "value": "[0.52679, 0.55028]",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-01.csv",
+      "frozen_source_sha256": "7e50b88b635ab246bbb672352c2dfeac148a19c61f07554b787fced46cfd6826",
+      "source_row_identifier": "EV-ARM-v2_02.fusion.train_40k",
+      "source_field": "95% CI (image-clustered)",
+      "transformation": "identity / selection only"
+    }
+  ]
+}
