@@ -1,0 +1,408 @@
+{
+  "schema_version": 1,
+  "chapter": 2,
+  "title": "Background and Related Work",
+  "task_id": "dissertation-10-ch2-background-related-work",
+  "evidence_scope": "local verified literature support and architectural lineage; no project or paper performance quantities",
+  "sources": [
+    {
+      "path": "docs/RELATED_WORK.md",
+      "sha256": "82265cb85b103c6607120c99b4785801498232a9626a9792ed3aba965ef5acc0",
+      "role": "primary verified local literature authority"
+    },
+    {
+      "path": ".agent-bridge/tasks/p2-related-work/05-survey-tables.md",
+      "sha256": "21c2d903d180f6b036b29c4338a4c84fdd79c16bd12af2174e5ddd535249f1d3",
+      "role": "archived per-axis survey index"
+    },
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "sha256": "987fbaaecf76b189e0f8b7d75d094ade384ea921d4f0458372e4f90d838d20bb",
+      "role": "project architecture and family-boundary authority"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/references/references.bib",
+      "sha256": "ebff6b25ef20b0672c154e56e678356bc8245b6cbf5d85aff63371968b6d2705",
+      "role": "citation-key and bibliography-metadata authority"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/introduction.tex",
+      "sha256": "8c21de8baa819ad0d0de053dd66b11a71f46b7a2714816a48b1cc3715c1a6b0f",
+      "role": "Chapter-1 motivation and RQ boundary"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch1_provenance.json",
+      "sha256": "59ffce3ded9bcae8387cac0df26b935bac207e417d457cfcc003d60badecc277",
+      "role": "closed Chapter-1 literature audit"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/methodology.tex",
+      "sha256": "fdea277a70be5abb4dc779be541a9a011c19841785223e82e13e3fc14b8ecab5",
+      "role": "Chapter-3 implementation-detail boundary"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch3_draft_s1_provenance.json",
+      "sha256": "e999d7d606d2772ed6cc6d225d19bf38bb61ba687b9e09762abe3e51ce3189fa",
+      "role": "Chapter-3 source and bibliography-gap boundary"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/discussion.tex",
+      "sha256": "2d200fc14175013a50d8edf564afe2c810527de2bfb7311b8652a8570f7e5baa",
+      "role": "Chapter-8 project-interpretation boundary"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch8_provenance.json",
+      "sha256": "2c484d85f005f587b3bbd0996a24fc5b228ed4a66ef0f5d66dda23041f53b9ae",
+      "role": "closed Chapter-8 literature-support audit"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/efficiency.tex",
+      "sha256": "72f23e40df2db84e54a8ec9100f44427ca428a4da774d01517f67052c84f2088",
+      "role": "closed Chapter-7 measurement-terminology boundary"
+    }
+  ],
+  "claim_mappings": [
+    {
+      "claim_id": "2.1.p1.vqa_formulations",
+      "section": "sec:ch2-vqa",
+      "paragraph_index": 1,
+      "class": "BACKGROUND",
+      "claim_scope": "VQA maps image and question to an answer; closed-answer classification differs from generation; direct concatenation/classifier baselines are an important reference",
+      "citation_keys": ["antol2015vqa", "zhou2015ibowimg", "jabri2016revisiting"],
+      "local_support": [{"path": "docs/RELATED_WORK.md", "location": "Section 1, classic fusion and simple-baseline lineage", "verification": "verified consolidated survey wording"}],
+      "qualification": "task and architectural background only; no benchmark score or project result"
+    },
+    {
+      "claim_id": "2.1.p2.gqa_programs",
+      "section": "sec:ch2-vqa",
+      "paragraph_index": 2,
+      "class": "BACKGROUND",
+      "claim_scope": "GQA supplies scene-graph-derived questions and functional programs; program length is a proxy rather than ground-truth internal reasoning depth",
+      "citation_keys": ["hudson2019gqa"],
+      "local_support": [{"path": "docs/RELATED_WORK.md", "location": "Section 3, probing and pathology-to-VQA links", "verification": "verified program-metadata description"}],
+      "qualification": "no claim that program buckets isolate reasoning"
+    },
+    {
+      "claim_id": "2.1.p3.gqa_priors",
+      "section": "sec:ch2-vqa",
+      "paragraph_index": 3,
+      "class": "RELATED_WORK",
+      "claim_scope": "answer-distribution and language-prior effects can influence GQA behaviour and evaluation",
+      "citation_keys": ["kervadec2021gqaood", "kervadec2021reasoning"],
+      "local_support": [{"path": "docs/RELATED_WORK.md", "location": "Section 3, GQA-OOD and Kervadec entries", "verification": "verified consolidated survey wording, deliberately narrowed from 'dominate'"}],
+      "qualification": "does not infer a mechanism or eliminate visual dependence"
+    },
+    {
+      "claim_id": "2.2.p1.foundational_representations",
+      "section": "sec:ch2-representations",
+      "paragraph_index": 1,
+      "class": "BACKGROUND",
+      "claim_scope": "CLIP and SigLIP foundational representation-learning concepts; exact project checkpoint identities are separately governed; headline encoders stay frozen",
+      "citation_keys": [],
+      "cite_gap_markers": ["clip_foundation", "siglip"],
+      "local_support": [
+        {"path": ".agent-bridge/tasks/dissertation-02-ch3-draft-s1/20-codex-plan-review.md", "location": "bibliography gap audit", "verification": "local foundational-gap identification"},
+        {"path": "docs/ARCHITECTURE.md", "location": "Shared frozen base", "verification": "project checkpoint and freezing authority"}
+      ],
+      "qualification": "foundational papers are not presented as the exact OpenCLIP/SigLIP weights"
+    },
+    {
+      "claim_id": "2.2.p2.frozen_transfer",
+      "section": "sec:ch2-representations",
+      "paragraph_index": 2,
+      "class": "RELATED_WORK",
+      "claim_scope": "small classifiers and larger fusion networks over frozen CLIP features establish architectural precedents",
+      "citation_keys": ["deuser2022less", "bourigault2025frevl"],
+      "local_support": [{"path": "docs/RELATED_WORK.md", "location": "Section 1, Less Is More and FrEVL", "verification": "verified architectural descriptions"}],
+      "qualification": "different tasks, capacities and protocols; no numerical comparison"
+    },
+    {
+      "claim_id": "2.2.p3.global_token_granularity",
+      "section": "sec:ch2-representations",
+      "paragraph_index": 3,
+      "class": "COUNTERPOINT",
+      "claim_scope": "global pooling and attentive token probing can behave differently depending on the backbone",
+      "citation_keys": ["zhai2022scaling", "psomas2026ep"],
+      "local_support": [{"path": "docs/RELATED_WORK.md", "location": "Section 2, probing-protocol context and Efficient Probing", "verification": "verified qualitative findings"}],
+      "qualification": "classification/probing context only; no VQA performance inference"
+    },
+    {
+      "claim_id": "2.3.p1.explicit_interaction_template",
+      "section": "sec:ch2-fusion",
+      "paragraph_index": 1,
+      "class": "ARCHITECTURAL_LINEAGE",
+      "claim_scope": "concatenation and the product/absolute-difference interaction template",
+      "citation_keys": ["conneau2017infersent"],
+      "local_support": [{"path": "docs/RELATED_WORK.md", "location": "Section 1, classic fusion lineage", "verification": "verified template origin"}],
+      "qualification": "template lineage only; no superiority claim"
+    },
+    {
+      "claim_id": "2.3.p2.fusion_families",
+      "section": "sec:ch2-fusion",
+      "paragraph_index": 2,
+      "class": "ARCHITECTURAL_LINEAGE",
+      "claim_scope": "factorised fusion links interaction design and parameter budget; attention is another interaction family",
+      "citation_keys": ["benyounes2017mutan"],
+      "local_support": [{"path": "docs/RELATED_WORK.md", "location": "Section 1, classic fusion lineage", "verification": "verified parameter-versus-accuracy framing"}],
+      "qualification": "no universal ranking of fusion constructions"
+    },
+    {
+      "claim_id": "2.3.p3.capacity_interaction_controls",
+      "section": "sec:ch2-fusion",
+      "paragraph_index": 3,
+      "class": "RELATED_WORK",
+      "claim_scope": "capacity can be confounded with interaction structure; cross-scale and additive-projection studies motivate controls",
+      "citation_keys": ["zhou2026alignment", "hessel2020emap"],
+      "local_support": [{"path": "docs/RELATED_WORK.md", "location": "Section 1, Zhou and Xie; EMAP", "verification": "verified task/regime and diagnostic descriptions"}],
+      "qualification": "different tasks and diagnostics; no Chapter-4 result"
+    },
+    {
+      "claim_id": "2.4.p1.latent_bottleneck_lineage",
+      "section": "sec:ch2-latent",
+      "paragraph_index": 1,
+      "class": "ARCHITECTURAL_LINEAGE",
+      "claim_scope": "Perceiver latent bottlenecks and Flamingo's Perceiver Resampler organise access to large inputs",
+      "citation_keys": ["jaegle2021perceiver", "alayrac2022flamingo"],
+      "local_support": [{"path": "docs/RELATED_WORK.md", "location": "Section 2, Flamingo/BLIP-2 and Perceiver ancestry", "verification": "verified architectural lineage"}],
+      "qualification": "connector ancestry only"
+    },
+    {
+      "claim_id": "2.4.p2.qformer_mapl",
+      "section": "sec:ch2-latent",
+      "paragraph_index": 2,
+      "class": "ARCHITECTURAL_LINEAGE",
+      "claim_scope": "BLIP-2 Q-Former uses learned queries as an LM connector and MAPL uses learned-query mapping between frozen components",
+      "citation_keys": ["li2023blip2", "manas2023mapl"],
+      "local_support": [{"path": "docs/RELATED_WORK.md", "location": "Section 2, Flamingo/BLIP-2 and MAPL", "verification": "verified module descriptions and structural query count"}],
+      "qualification": "no numerical performance comparison"
+    },
+    {
+      "claim_id": "2.4.p3.connector_counterpoints",
+      "section": "sec:ch2-latent",
+      "paragraph_index": 3,
+      "class": "COUNTERPOINT",
+      "claim_scope": "connector comparisons give regime-dependent evidence, including simple-mapper and positive latent-pooling outcomes",
+      "citation_keys": ["vallaeys2024depalm", "mckinzie2024mm1", "laurencon2024idefics2"],
+      "local_support": [{"path": "docs/RELATED_WORK.md", "location": "Section 2, DePALM and connector null-results paragraph", "verification": "verified qualitative findings; numeric magnitudes omitted"}],
+      "qualification": "generative systems with different scale and training histories"
+    },
+    {
+      "claim_id": "2.4.p4.project_reasoner_distinction",
+      "section": "sec:ch2-latent",
+      "paragraph_index": 4,
+      "class": "POSITIONING",
+      "claim_scope": "project reasoner shares a broad learned-query mechanism and structural count but is not a Q-Former",
+      "citation_keys": [],
+      "local_support": [
+        {"path": "docs/ARCHITECTURE.md", "location": "Family 2", "verification": "project reasoner role and structural count"},
+        {"path": "docs/RELATED_WORK.md", "location": "Section 2, BLIP-2 differentiation", "verification": "connector role and pretraining distinction"}
+      ],
+      "qualification": "explicit role, regime, scale and objective distinction; shared count is not equivalence"
+    },
+    {
+      "claim_id": "2.5.p1.frozen_lm_bridges",
+      "section": "sec:ch2-lm-interfaces",
+      "paragraph_index": 1,
+      "class": "ARCHITECTURAL_LINEAGE",
+      "claim_scope": "visual-prefix, linear-map and soft-token interfaces into frozen language models",
+      "citation_keys": ["tsimpoukelli2021frozen", "merullo2023limber", "shukor2023epalm"],
+      "local_support": [{"path": "docs/RELATED_WORK.md", "location": "Section 1, Frozen, LiMBeR and eP-ALM entries", "verification": "verified architectural descriptions"}],
+      "qualification": "the vision component's training status differs across papers"
+    },
+    {
+      "claim_id": "2.5.p2.interface_placement_controls",
+      "section": "sec:ch2-lm-interfaces",
+      "paragraph_index": 2,
+      "class": "POSITIONING",
+      "claim_scope": "question-side representation and answer-side readout are distinct interfaces; matched random frozen controls isolate pretraining within placement",
+      "citation_keys": [],
+      "cite_gap_markers": ["smollm2"],
+      "local_support": [{"path": "docs/ARCHITECTURE.md", "location": "Families 3 and 4", "verification": "project interface and matched-control authority"}],
+      "qualification": "project design choice, not an absence or priority claim"
+    },
+    {
+      "claim_id": "2.5.p3.within_interface_causality",
+      "section": "sec:ch2-lm-interfaces",
+      "paragraph_index": 3,
+      "class": "POSITIONING",
+      "claim_scope": "pretraining controls must be within architecture and placement; cross-placement comparisons are system-level",
+      "citation_keys": [],
+      "local_support": [{"path": "docs/ARCHITECTURE.md", "location": "Families 3 and 4", "verification": "architecture-matched comparison boundary"}],
+      "qualification": "no Chapter-6 result or causal cross-placement claim"
+    },
+    {
+      "claim_id": "2.6.p1.multistep_priors",
+      "section": "sec:ch2-composition",
+      "paragraph_index": 1,
+      "class": "RELATED_WORK",
+      "claim_scope": "hop-stratified GQA difficulty and prior effects motivate a prior-sensitive diagnostic rather than a pure reasoning measure",
+      "citation_keys": ["kil2024iimmr", "kervadec2021gqaood", "kervadec2021reasoning"],
+      "local_support": [{"path": "docs/RELATED_WORK.md", "location": "Section 3, II-MMR and GQA-prior entries", "verification": "verified qualitative phenomena; numeric findings omitted"}],
+      "qualification": "cannot identify internal process or localise cause"
+    },
+    {
+      "claim_id": "2.6.p2.composition_binding_probes",
+      "section": "sec:ch2-composition",
+      "paragraph_index": 2,
+      "class": "COUNTERPOINT",
+      "claim_scope": "relational benchmarks/probes expose compositional sensitivity while binding can remain recoverable in unimodal embeddings",
+      "citation_keys": ["yuksekgonul2023aro", "thrush2022winoground", "lewis2024bind", "koishigarina2026bow"],
+      "local_support": [{"path": "docs/RELATED_WORK.md", "location": "Section 3, bag-of-words line, probing links and Koishigarina", "verification": "verified or consolidated non-numerical descriptions"}],
+      "qualification": "distinguishes absence from interface accessibility; no mechanism for project results"
+    },
+    {
+      "claim_id": "2.6.p3.competing_attribution",
+      "section": "sec:ch2-composition",
+      "paragraph_index": 3,
+      "class": "COUNTERPOINT",
+      "claim_scope": "representation-side and downstream-use/decoder-compensation accounts coexist across regimes",
+      "citation_keys": ["tong2024mmvp", "fu2025hidden", "takishita2025compensate"],
+      "local_support": [{"path": "docs/RELATED_WORK.md", "location": "Section 3, MMVP and Counter-attribution at scale", "verification": "verified qualitative attribution findings"}],
+      "qualification": "positions remain open and do not establish project mechanism"
+    },
+    {
+      "claim_id": "2.7.p1.metric_non_equivalence",
+      "section": "sec:ch2-efficiency",
+      "paragraph_index": 1,
+      "class": "BACKGROUND",
+      "claim_scope": "parameter counts, partial timings and end-to-end latency are non-equivalent; cross-paper timing requires aligned boundaries",
+      "citation_keys": ["benyounes2017mutan", "vallaeys2024depalm", "hu2024mqt"],
+      "local_support": [
+        {"path": "docs/RELATED_WORK.md", "location": "Sections 1–2, parameter framing and compact connectors", "verification": "verified qualitative framing; paper numbers omitted"},
+        {"path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/efficiency.tex", "location": "measurement-boundary definitions", "verification": "closed dissertation boundary only"}
+      ],
+      "qualification": "does not attribute the project's runtime contract to prior work or infer runtime from parameters"
+    },
+    {
+      "claim_id": "2.7.p2.compact_vlm_context",
+      "section": "sec:ch2-efficiency",
+      "paragraph_index": 2,
+      "class": "POSITIONING",
+      "claim_scope": "SmolVLM is an external integrated contextual class, not a project-developed head; runtime comparisons require matched boundaries",
+      "citation_keys": [],
+      "cite_gap_markers": ["smolvlm"],
+      "local_support": [{"path": "docs/ARCHITECTURE.md", "location": "External class — compact integrated VLMs", "verification": "project system-class authority"}],
+      "qualification": "no matched comparison or latency value"
+    },
+    {
+      "claim_id": "2.8.p1.literature_synthesis",
+      "section": "sec:ch2-positioning",
+      "paragraph_index": 1,
+      "class": "POSITIONING",
+      "claim_scope": "reviewed works address different subsets of representations, heads, fusion, connectors, frozen-LM interfaces, composition and compactness",
+      "citation_keys": [],
+      "local_support": [{"path": "docs/RELATED_WORK.md", "location": "Sections 1–3", "verification": "synthesis of verified representative literature"}],
+      "qualification": "positive synthesis with no rarity, absence or priority claim"
+    },
+    {
+      "claim_id": "2.8.p2.dissertation_positioning",
+      "section": "sec:ch2-positioning",
+      "paragraph_index": 2,
+      "class": "POSITIONING",
+      "claim_scope": "the dissertation studies representation, interaction, latent reasoning, matched SLM interfaces and governed runtime in one closed-set VQA framework",
+      "citation_keys": [],
+      "local_support": [
+        {"path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/introduction.tex", "location": "Sections 1.2–1.4", "verification": "closed aim, RQ and contribution framing"},
+        {"path": "docs/ARCHITECTURE.md", "location": "model-family overview", "verification": "project design-axis authority"}
+      ],
+      "qualification": "no novelty, priority or project-result adjudication"
+    }
+  ],
+  "paragraph_mapping_audit": {
+    "prose_paragraphs": 23,
+    "claim_mappings": 23,
+    "one_mapping_per_paragraph": true
+  },
+  "citation_key_verification": {
+    "bibliography_entries": 72,
+    "used_unique_keys": 33,
+    "all_used_keys_exist": true,
+    "keys": [
+      "antol2015vqa", "hudson2019gqa", "zhou2015ibowimg", "jabri2016revisiting",
+      "kervadec2021gqaood", "kervadec2021reasoning", "deuser2022less",
+      "bourigault2025frevl", "zhai2022scaling", "psomas2026ep",
+      "conneau2017infersent", "benyounes2017mutan", "zhou2026alignment",
+      "hessel2020emap", "jaegle2021perceiver", "alayrac2022flamingo",
+      "li2023blip2", "manas2023mapl", "vallaeys2024depalm", "mckinzie2024mm1",
+      "laurencon2024idefics2", "tsimpoukelli2021frozen", "merullo2023limber",
+      "shukor2023epalm", "kil2024iimmr", "yuksekgonul2023aro",
+      "thrush2022winoground", "lewis2024bind", "koishigarina2026bow",
+      "tong2024mmvp", "fu2025hidden", "takishita2025compensate", "hu2024mqt"
+    ]
+  },
+  "cite_gap_markers": [
+    {
+      "marker": "% CITE-GAP clip_foundation",
+      "section": "sec:ch2-representations",
+      "dependent_claim": "foundational CLIP representation-learning concept",
+      "status": "DEFERRED — bibliography/final-QA integration"
+    },
+    {
+      "marker": "% CITE-GAP siglip",
+      "section": "sec:ch2-representations",
+      "dependent_claim": "foundational SigLIP sigmoid-loss representation-learning concept",
+      "status": "DEFERRED — bibliography/final-QA integration"
+    },
+    {
+      "marker": "% CITE-GAP smollm2",
+      "section": "sec:ch2-lm-interfaces",
+      "dependent_claim": "SmolLM2 family named as the project's frozen interface model",
+      "status": "DEFERRED — bibliography/final-QA integration"
+    },
+    {
+      "marker": "% CITE-GAP smolvlm",
+      "section": "sec:ch2-efficiency",
+      "dependent_claim": "SmolVLM family named as an external contextual class",
+      "status": "DEFERRED — bibliography/final-QA integration"
+    }
+  ],
+  "foundational_checkpoint_separation": {
+    "clip": "foundational concept only; exact OpenCLIP checkpoint authority remains in Chapter 3",
+    "siglip": "foundational concept only; exact project checkpoint authority remains in Chapter 3",
+    "smollm2": "family naming only; exact model identity remains governed in Chapter 3",
+    "smolvlm": "contextual external family only; exact E9 identities remain governed in Chapters 3 and 7"
+  },
+  "structural_counts": [
+    {
+      "displayed_value": "32 learned queries",
+      "subject": "BLIP-2 Q-Former",
+      "source": "docs/RELATED_WORK.md, Section 2, Flamingo and BLIP-2",
+      "verification": "verified structural architecture fact"
+    },
+    {
+      "displayed_value": "32 latents",
+      "subject": "dissertation latent-query reasoner",
+      "source": "docs/ARCHITECTURE.md, Family 2",
+      "verification": "project architecture fact"
+    }
+  ],
+  "unverified_survey_content": {
+    "excluded": true,
+    "unverified_numbers_used": 0,
+    "reader_facing_unverified_claims_used": 0,
+    "policy": "Only verified local survey wording or bibliography metadata may support an attribution. Titles alone are insufficient."
+  },
+  "bibliography_gap_backlog": [
+    {"item": "CLIP foundational source", "status": "deferred; human metadata verification required"},
+    {"item": "SigLIP foundational source", "status": "deferred; human metadata verification required"},
+    {"item": "SmolLM2 source", "status": "deferred; human metadata verification required"},
+    {"item": "SmolVLM source", "status": "deferred; human metadata verification required"},
+    {"item": "bootstrap methodology", "status": "deferred Chapter-3 bibliography/QA item; not discussed in Chapter 2"},
+    {"item": "clustered or cluster-robust inference methodology", "status": "deferred Chapter-3 bibliography/QA item; no local source selected"},
+    {"item": "vallaeys2024depalm empty-journal warning", "status": "deferred bibliography/final QA"},
+    {"item": "14 arXiv-only bibliography records", "status": "venue status to be re-verified during bibliography/final QA"}
+  ],
+  "chapter_boundaries": {
+    "chapter_1": "research questions cross-referenced once; motivation and contributions not repeated",
+    "chapter_3": "checkpoint identities, model dimensions, statistics and runtime protocol deferred",
+    "chapter_8": "no project-result interpretation or mechanistic adjudication"
+  },
+  "numeric_anchors": [],
+  "tables": [],
+  "figures": [],
+  "bibliography_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/references/references.bib",
+  "bibliography_sha256": "ebff6b25ef20b0672c154e56e678356bc8245b6cbf5d85aff63371968b6d2705",
+  "bibliography_modified": false,
+  "f1_status": "not authorised",
+  "f2_status": "not authorised, not performed"
+}
