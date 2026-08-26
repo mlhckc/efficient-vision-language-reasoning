@@ -1,0 +1,400 @@
+{
+  "schema_version": 1,
+  "artefact": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch5_diagnostics.csv",
+  "generation": "deterministic selection and presentation formatting from canonical stored records; no scientific recomputation",
+  "sources": [
+    {
+      "path": "results/experiments/v3_02a_refs/diagnostics.json",
+      "sha256": "a192322c877bf5b855ae6dfa47c00e572acedb143a75585f442b7c170c808743"
+    },
+    {
+      "path": "results/experiments/v3_02a_refs/patches_probe.json",
+      "sha256": "90513aa905d6d79b05e5e76c69e5a1955fd7bd44171ac8939d43b49b2e2a66d8"
+    },
+    {
+      "path": "docs/experiments/v3_02a_refs.md",
+      "sha256": "48febee3d1effc770435c30b598fdcd4b507424abda98aa1426f596a0b890c65"
+    }
+  ],
+  "cells": [
+    {
+      "output_row_id": "D2:0",
+      "output_field": "probe",
+      "value": "D2 CLS removal",
+      "frozen_source_file": "results/experiments/v3_02a_refs/diagnostics.json",
+      "frozen_source_sha256": "a192322c877bf5b855ae6dfa47c00e572acedb143a75585f442b7c170c808743",
+      "source_row_identifier": "v3_02a_diagnostics.d2.0",
+      "source_field": "probe",
+      "transformation": "presentation label for the stored test-time D2 record"
+    },
+    {
+      "output_row_id": "D2:0",
+      "output_field": "intervention timing",
+      "value": "test time",
+      "frozen_source_file": "results/experiments/v3_02a_refs/diagnostics.json",
+      "frozen_source_sha256": "a192322c877bf5b855ae6dfa47c00e572acedb143a75585f442b7c170c808743",
+      "source_row_identifier": "v3_02a_diagnostics.d2.0",
+      "source_field": "intervention timing",
+      "transformation": "presentation label for the stored test-time D2 record"
+    },
+    {
+      "output_row_id": "D2:0",
+      "output_field": "seed",
+      "value": "0",
+      "frozen_source_file": "results/experiments/v3_02a_refs/diagnostics.json",
+      "frozen_source_sha256": "a192322c877bf5b855ae6dfa47c00e572acedb143a75585f442b7c170c808743",
+      "source_row_identifier": "v3_02a_diagnostics.d2.0",
+      "source_field": "seed",
+      "transformation": "presentation label for the stored test-time D2 record"
+    },
+    {
+      "output_row_id": "D2:0",
+      "output_field": "standard accuracy",
+      "value": "0.54641",
+      "frozen_source_file": "results/experiments/v3_02a_refs/diagnostics.json",
+      "frozen_source_sha256": "a192322c877bf5b855ae6dfa47c00e572acedb143a75585f442b7c170c808743",
+      "source_row_identifier": "v3_02a_diagnostics.d2.0",
+      "source_field": "normal_accuracy",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "D2:0",
+      "output_field": "intervened accuracy",
+      "value": "0.49624",
+      "frozen_source_file": "results/experiments/v3_02a_refs/diagnostics.json",
+      "frozen_source_sha256": "a192322c877bf5b855ae6dfa47c00e572acedb143a75585f442b7c170c808743",
+      "source_row_identifier": "v3_02a_diagnostics.d2.0",
+      "source_field": "cls_removed_accuracy",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "D2:0",
+      "output_field": "accuracy change",
+      "value": "-0.05017",
+      "frozen_source_file": "results/experiments/v3_02a_refs/diagnostics.json",
+      "frozen_source_sha256": "a192322c877bf5b855ae6dfa47c00e572acedb143a75585f442b7c170c808743",
+      "source_row_identifier": "v3_02a_diagnostics.d2.0",
+      "source_field": "accuracy_change",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "D2:0",
+      "output_field": "standard >=4 lift",
+      "value": "0.15978",
+      "frozen_source_file": "results/experiments/v3_02a_refs/diagnostics.json",
+      "frozen_source_sha256": "a192322c877bf5b855ae6dfa47c00e572acedb143a75585f442b7c170c808743",
+      "source_row_identifier": "v3_02a_diagnostics.d2.0",
+      "source_field": "normal_ge4_lift",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "D2:0",
+      "output_field": "intervened >=4 lift",
+      "value": "0.13810",
+      "frozen_source_file": "results/experiments/v3_02a_refs/diagnostics.json",
+      "frozen_source_sha256": "a192322c877bf5b855ae6dfa47c00e572acedb143a75585f442b7c170c808743",
+      "source_row_identifier": "v3_02a_diagnostics.d2.0",
+      "source_field": "cls_removed_ge4_lift",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "D2:0",
+      "output_field": "shuffled drop (probe; full)",
+      "value": "",
+      "frozen_source_file": "results/experiments/v3_02a_refs/diagnostics.json",
+      "frozen_source_sha256": "a192322c877bf5b855ae6dfa47c00e572acedb143a75585f442b7c170c808743",
+      "source_row_identifier": "v3_02a_diagnostics.d2.0",
+      "source_field": "not applicable",
+      "transformation": "not part of D2; deliberately blank"
+    },
+    {
+      "output_row_id": "D2:1",
+      "output_field": "probe",
+      "value": "D2 CLS removal",
+      "frozen_source_file": "results/experiments/v3_02a_refs/diagnostics.json",
+      "frozen_source_sha256": "a192322c877bf5b855ae6dfa47c00e572acedb143a75585f442b7c170c808743",
+      "source_row_identifier": "v3_02a_diagnostics.d2.1",
+      "source_field": "probe",
+      "transformation": "presentation label for the stored test-time D2 record"
+    },
+    {
+      "output_row_id": "D2:1",
+      "output_field": "intervention timing",
+      "value": "test time",
+      "frozen_source_file": "results/experiments/v3_02a_refs/diagnostics.json",
+      "frozen_source_sha256": "a192322c877bf5b855ae6dfa47c00e572acedb143a75585f442b7c170c808743",
+      "source_row_identifier": "v3_02a_diagnostics.d2.1",
+      "source_field": "intervention timing",
+      "transformation": "presentation label for the stored test-time D2 record"
+    },
+    {
+      "output_row_id": "D2:1",
+      "output_field": "seed",
+      "value": "1",
+      "frozen_source_file": "results/experiments/v3_02a_refs/diagnostics.json",
+      "frozen_source_sha256": "a192322c877bf5b855ae6dfa47c00e572acedb143a75585f442b7c170c808743",
+      "source_row_identifier": "v3_02a_diagnostics.d2.1",
+      "source_field": "seed",
+      "transformation": "presentation label for the stored test-time D2 record"
+    },
+    {
+      "output_row_id": "D2:1",
+      "output_field": "standard accuracy",
+      "value": "0.54058",
+      "frozen_source_file": "results/experiments/v3_02a_refs/diagnostics.json",
+      "frozen_source_sha256": "a192322c877bf5b855ae6dfa47c00e572acedb143a75585f442b7c170c808743",
+      "source_row_identifier": "v3_02a_diagnostics.d2.1",
+      "source_field": "normal_accuracy",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "D2:1",
+      "output_field": "intervened accuracy",
+      "value": "0.51219",
+      "frozen_source_file": "results/experiments/v3_02a_refs/diagnostics.json",
+      "frozen_source_sha256": "a192322c877bf5b855ae6dfa47c00e572acedb143a75585f442b7c170c808743",
+      "source_row_identifier": "v3_02a_diagnostics.d2.1",
+      "source_field": "cls_removed_accuracy",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "D2:1",
+      "output_field": "accuracy change",
+      "value": "-0.02839",
+      "frozen_source_file": "results/experiments/v3_02a_refs/diagnostics.json",
+      "frozen_source_sha256": "a192322c877bf5b855ae6dfa47c00e572acedb143a75585f442b7c170c808743",
+      "source_row_identifier": "v3_02a_diagnostics.d2.1",
+      "source_field": "accuracy_change",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "D2:1",
+      "output_field": "standard >=4 lift",
+      "value": "0.16532",
+      "frozen_source_file": "results/experiments/v3_02a_refs/diagnostics.json",
+      "frozen_source_sha256": "a192322c877bf5b855ae6dfa47c00e572acedb143a75585f442b7c170c808743",
+      "source_row_identifier": "v3_02a_diagnostics.d2.1",
+      "source_field": "normal_ge4_lift",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "D2:1",
+      "output_field": "intervened >=4 lift",
+      "value": "0.14718",
+      "frozen_source_file": "results/experiments/v3_02a_refs/diagnostics.json",
+      "frozen_source_sha256": "a192322c877bf5b855ae6dfa47c00e572acedb143a75585f442b7c170c808743",
+      "source_row_identifier": "v3_02a_diagnostics.d2.1",
+      "source_field": "cls_removed_ge4_lift",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "D2:1",
+      "output_field": "shuffled drop (probe; full)",
+      "value": "",
+      "frozen_source_file": "results/experiments/v3_02a_refs/diagnostics.json",
+      "frozen_source_sha256": "a192322c877bf5b855ae6dfa47c00e572acedb143a75585f442b7c170c808743",
+      "source_row_identifier": "v3_02a_diagnostics.d2.1",
+      "source_field": "not applicable",
+      "transformation": "not part of D2; deliberately blank"
+    },
+    {
+      "output_row_id": "D2:2",
+      "output_field": "probe",
+      "value": "D2 CLS removal",
+      "frozen_source_file": "results/experiments/v3_02a_refs/diagnostics.json",
+      "frozen_source_sha256": "a192322c877bf5b855ae6dfa47c00e572acedb143a75585f442b7c170c808743",
+      "source_row_identifier": "v3_02a_diagnostics.d2.2",
+      "source_field": "probe",
+      "transformation": "presentation label for the stored test-time D2 record"
+    },
+    {
+      "output_row_id": "D2:2",
+      "output_field": "intervention timing",
+      "value": "test time",
+      "frozen_source_file": "results/experiments/v3_02a_refs/diagnostics.json",
+      "frozen_source_sha256": "a192322c877bf5b855ae6dfa47c00e572acedb143a75585f442b7c170c808743",
+      "source_row_identifier": "v3_02a_diagnostics.d2.2",
+      "source_field": "intervention timing",
+      "transformation": "presentation label for the stored test-time D2 record"
+    },
+    {
+      "output_row_id": "D2:2",
+      "output_field": "seed",
+      "value": "2",
+      "frozen_source_file": "results/experiments/v3_02a_refs/diagnostics.json",
+      "frozen_source_sha256": "a192322c877bf5b855ae6dfa47c00e572acedb143a75585f442b7c170c808743",
+      "source_row_identifier": "v3_02a_diagnostics.d2.2",
+      "source_field": "seed",
+      "transformation": "presentation label for the stored test-time D2 record"
+    },
+    {
+      "output_row_id": "D2:2",
+      "output_field": "standard accuracy",
+      "value": "0.53967",
+      "frozen_source_file": "results/experiments/v3_02a_refs/diagnostics.json",
+      "frozen_source_sha256": "a192322c877bf5b855ae6dfa47c00e572acedb143a75585f442b7c170c808743",
+      "source_row_identifier": "v3_02a_diagnostics.d2.2",
+      "source_field": "normal_accuracy",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "D2:2",
+      "output_field": "intervened accuracy",
+      "value": "0.49806",
+      "frozen_source_file": "results/experiments/v3_02a_refs/diagnostics.json",
+      "frozen_source_sha256": "a192322c877bf5b855ae6dfa47c00e572acedb143a75585f442b7c170c808743",
+      "source_row_identifier": "v3_02a_diagnostics.d2.2",
+      "source_field": "cls_removed_accuracy",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "D2:2",
+      "output_field": "accuracy change",
+      "value": "-0.04161",
+      "frozen_source_file": "results/experiments/v3_02a_refs/diagnostics.json",
+      "frozen_source_sha256": "a192322c877bf5b855ae6dfa47c00e572acedb143a75585f442b7c170c808743",
+      "source_row_identifier": "v3_02a_diagnostics.d2.2",
+      "source_field": "accuracy_change",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "D2:2",
+      "output_field": "standard >=4 lift",
+      "value": "0.18246",
+      "frozen_source_file": "results/experiments/v3_02a_refs/diagnostics.json",
+      "frozen_source_sha256": "a192322c877bf5b855ae6dfa47c00e572acedb143a75585f442b7c170c808743",
+      "source_row_identifier": "v3_02a_diagnostics.d2.2",
+      "source_field": "normal_ge4_lift",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "D2:2",
+      "output_field": "intervened >=4 lift",
+      "value": "0.15070",
+      "frozen_source_file": "results/experiments/v3_02a_refs/diagnostics.json",
+      "frozen_source_sha256": "a192322c877bf5b855ae6dfa47c00e572acedb143a75585f442b7c170c808743",
+      "source_row_identifier": "v3_02a_diagnostics.d2.2",
+      "source_field": "cls_removed_ge4_lift",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "D2:2",
+      "output_field": "shuffled drop (probe; full)",
+      "value": "",
+      "frozen_source_file": "results/experiments/v3_02a_refs/diagnostics.json",
+      "frozen_source_sha256": "a192322c877bf5b855ae6dfa47c00e572acedb143a75585f442b7c170c808743",
+      "source_row_identifier": "v3_02a_diagnostics.d2.2",
+      "source_field": "not applicable",
+      "transformation": "not part of D2; deliberately blank"
+    },
+    {
+      "output_row_id": "D3:0",
+      "output_field": "probe",
+      "value": "D3 patches only",
+      "frozen_source_file": "results/experiments/v3_02a_refs/patches_probe.json",
+      "frozen_source_sha256": "90513aa905d6d79b05e5e76c69e5a1955fd7bd44171ac8939d43b49b2e2a66d8",
+      "source_row_identifier": "v3_02a_patches_probe",
+      "source_field": "experiment",
+      "transformation": "presentation label for the stored patches-only probe"
+    },
+    {
+      "output_row_id": "D3:0",
+      "output_field": "intervention timing",
+      "value": "training and test time",
+      "frozen_source_file": "results/experiments/v3_02a_refs/patches_probe.json",
+      "frozen_source_sha256": "90513aa905d6d79b05e5e76c69e5a1955fd7bd44171ac8939d43b49b2e2a66d8",
+      "source_row_identifier": "v3_02a_patches_probe",
+      "source_field": "cls_removed_in",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "D3:0",
+      "output_field": "seed",
+      "value": "0",
+      "frozen_source_file": "results/experiments/v3_02a_refs/patches_probe.json",
+      "frozen_source_sha256": "90513aa905d6d79b05e5e76c69e5a1955fd7bd44171ac8939d43b49b2e2a66d8",
+      "source_row_identifier": "v3_02a_patches_probe",
+      "source_field": "seed",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "D3:0",
+      "output_field": "standard accuracy",
+      "value": "0.54641",
+      "frozen_source_file": "results/experiments/v3_02a_refs/diagnostics.json",
+      "frozen_source_sha256": "a192322c877bf5b855ae6dfa47c00e572acedb143a75585f442b7c170c808743",
+      "source_row_identifier": "v3_02a_diagnostics.d2.0",
+      "source_field": "normal_accuracy",
+      "transformation": "stored full-token seed-0 comparator; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "D3:0",
+      "output_field": "intervened accuracy",
+      "value": "0.53591",
+      "frozen_source_file": "results/experiments/v3_02a_refs/patches_probe.json",
+      "frozen_source_sha256": "90513aa905d6d79b05e5e76c69e5a1955fd7bd44171ac8939d43b49b2e2a66d8",
+      "source_row_identifier": "v3_02a_patches_probe",
+      "source_field": "dev_accuracy",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "D3:0",
+      "output_field": "accuracy change",
+      "value": "",
+      "frozen_source_file": "results/experiments/v3_02a_refs/patches_probe.json",
+      "frozen_source_sha256": "90513aa905d6d79b05e5e76c69e5a1955fd7bd44171ac8939d43b49b2e2a66d8",
+      "source_row_identifier": "v3_02a_patches_probe",
+      "source_field": "not stored",
+      "transformation": "no canonical change field; deliberately blank"
+    },
+    {
+      "output_row_id": "D3:0",
+      "output_field": "standard >=4 lift",
+      "value": "0.15978",
+      "frozen_source_file": "results/experiments/v3_02a_refs/diagnostics.json",
+      "frozen_source_sha256": "a192322c877bf5b855ae6dfa47c00e572acedb143a75585f442b7c170c808743",
+      "source_row_identifier": "v3_02a_diagnostics.d2.0",
+      "source_field": "normal_ge4_lift",
+      "transformation": "stored full-token seed-0 comparator; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "D3:0",
+      "output_field": "intervened >=4 lift",
+      "value": "0.14617",
+      "frozen_source_file": "results/experiments/v3_02a_refs/patches_probe.json",
+      "frozen_source_sha256": "90513aa905d6d79b05e5e76c69e5a1955fd7bd44171ac8939d43b49b2e2a66d8",
+      "source_row_identifier": "v3_02a_patches_probe",
+      "source_field": "combined_ge4_lift",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "D3:0",
+      "output_field": "shuffled drop (probe; full)",
+      "value": "0.1155; 0.1101",
+      "frozen_source_file": "docs/experiments/v3_02a_refs.md",
+      "frozen_source_sha256": "48febee3d1effc770435c30b598fdcd4b507424abda98aa1426f596a0b890c65",
+      "source_row_identifier": "D3 patches-only probe and full-token seed-0 comparator",
+      "source_field": "shuffled-image drop",
+      "transformation": "both reported values copied without recomputation"
+    }
+  ],
+  "csv_sha256": "4c5406590c9050908a4e67b1b21f03a27fdb8068bff69a734d325a4f05cb65f3",
+  "generated_tex": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables/ch5_diagnostics.tex",
+  "generated_tex_sha256": "56434641753dbb8a9d9a7e505eeb7de377d0292d4e0ebdcbc29ec8540455fe17",
+  "converter": {
+    "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tools/tab2latex.py",
+    "sha256": "c441d40b2b10a7a4294c4f15b12bc450f7ae73a9435e3d15394940c0f0c5a546",
+    "header_map": {
+      "probe": "Probe",
+      "intervention timing": "Timing",
+      "seed": "Seed",
+      "standard accuracy": "Standard accuracy",
+      "intervened accuracy": "Intervened accuracy",
+      "accuracy change": "Accuracy change",
+      "standard >=4 lift": "Standard >=4 lift",
+      "intervened >=4 lift": "Intervened >=4 lift",
+      "shuffled drop (probe; full)": "Shuffled drop (probe; full)"
+    },
+    "verify": true
+  }
+}

@@ -1,2 +1,274 @@
 \chapter{RQ2 — Latent Reasoning and Compositional Difficulty}
-% TODO Phase 1 (dissertation-05): sources per docs/DISSERTATION_HANDOFF.md; internal budget 1900 words; stub only in Phase 0.
+
+\section{Scope and comparison boundary}
+\label{sec:ch5-scope}
+RQ2 examines whether the token-level latent reasoner improves on the global
+heads and how its accuracy changes across questions of different program
+lengths. All results in this chapter use the top-100 development view: 7,714
+questions over 768 represented images. They therefore describe development
+evidence only and make no held-out claim. The reasoner architecture and its
+32 learned queries are defined in Section~\ref{sec:ch3-architectures} and
+Figure~\ref{fig:ch3-reasoner}; the training and checkpoint rules are given in
+Section~\ref{sec:ch3-training}.
+
+Three quantities are kept separate. Overall accuracy measures correct answers
+across the complete 7,714-row view. A pooled four-or-more-step deficit describes
+one system's relative accuracy profile across fixed-prior program-length
+buckets. A paired deficit difference compares that profile between the
+reasoner and fusion. The paired deficit difference is not an overall accuracy
+gap, and it is taken directly from the canonical paired analysis rather than
+reconstructed from displayed deficit levels.
+
+Seed SD describes variation across trained seeds. Image-clustered intervals,
+where available, describe evaluation-sampling uncertainty conditional on the
+stored models, following Section~\ref{sec:ch3-statistics}. No reasoner
+accuracy, overall accuracy gap, 100k or 250k deficit level, or token diagnostic
+has an evaluation-sampling interval. Comparisons with the global fusion head
+are configuration-level: architecture, token-level visual access and trainable
+capacity change together, while seed counts and training streams are not fully
+matched. The evidence cannot attribute a difference to any one of these
+changes.
+
+\section{Latent-reasoner scaling}
+\label{sec:ch5-scaling}
+The reasoner's stored seed means rise with the number of labelled training
+questions. Mean development accuracy is 0.54222 at 40k, 0.57061 at 100k and
+0.59580 at 250k. The corresponding seed SDs are 0.00366, 0.00020 and 0.00741.
+Table~\ref{tab:ch5-scaling} gives the three constituent seed values as well as
+the five-seed fusion reference. The 250k reasoner value of 0.60436 is one
+seed-level observation; the three-seed mean of 0.59580 remains the reporting
+unit.
+
+The stored fusion means also increase, from 0.53840 to 0.56308 and 0.58226,
+with seed SDs of 0.00218, 0.00268 and 0.00197. These series use the identical
+7,714-question development denominator, but panel and table comparisons remain
+descriptive because the reasoner has three seeds and fusion has five. As in the
+global-head scaling study in Section~\ref{sec:ch4-scaling}, three training
+sizes do not establish a general scaling law.
+
+The seed-level rows explain why the mean and SD are reported together. The
+three reasoner values are tightly grouped at 100k, whereas the 250k set contains
+a higher seed-2 value and therefore a larger SD. This does not make the largest
+seed the representative result. It shows that the stored mean at each scale
+must be read alongside variation across its trained seeds. Fusion has a
+separate five-seed distribution, so its smaller SD cannot be used as an
+uncertainty estimate for the reasoner.
+
+The ordered means provide evidence only for the three completed training
+conditions. They do not supply an evaluation-sampling interval, a smooth
+learning curve, or an estimate between the recorded scales. The comparison
+therefore establishes that the stored reasoner configurations improve over
+these three development runs, while leaving extrapolation outside the measured
+settings open.
+
+\begin{table}[p]
+\centering
+\caption[Reasoner and fusion accuracy by training scale.]{Development accuracy on the 7,714-row top-100 view. Reasoner levels use seeds 0/1/2; displayed fusion levels use seeds 0/1/2/3/42. The R--F gaps are canonical reasoner-minus-fusion comparisons on seeds 0/1/2 only and have no clustered interval. SD is variation across training seeds, not a confidence interval.}
+\label{tab:ch5-scaling}
+\begingroup\scriptsize\setlength{\tabcolsep}{0.5pt}
+\renewenvironment{longtable}[1]{\begin{tabular}{|p{0.075\textwidth}|p{0.05\textwidth}|p{0.085\textwidth}|p{0.27\textwidth}|p{0.085\textwidth}|p{0.065\textwidth}|p{0.075\textwidth}|p{0.075\textwidth}|}}{\end{tabular}}
+\let\endhead\relax\renewcommand{\_}{\textunderscore\allowbreak}
+\input{tables/ch5_scaling.tex}
+\endgroup
+\end{table}
+
+\section{Reasoner against the global fusion head}
+\label{sec:ch5-fusion}
+The controlled comparison uses only seeds 0, 1 and 2 from both systems. At
+40k, the canonical reasoner-minus-fusion accuracy gap is +0.00307 with seed SD
+0.00622. Its seed-level values are +0.01024, -0.00025 and -0.00078, so two of
+the three stored gaps are negative. This agrees with the bounded 40k finding
+that the reasoner does not materially improve on fusion at this scale.
+
+At 100k, the gap is +0.00652 with seed SD 0.00094; the three stored gaps are
++0.00713, +0.00544 and +0.00700. At 250k, it is +0.01361 with seed SD
+0.00870; the corresponding values are +0.00700, +0.01037 and +0.02347.
+Every stored seed therefore favours the reasoner at these two scales. There is
+no image-clustered interval for any of these accuracy gaps, so this is
+seed-consistent configuration-level evidence rather than an
+evaluation-sampling claim.
+
+Figure~\ref{fig:ch5-reasoner-fusion} places the accuracy series beside the
+paired deficit contrasts, but the two panels show different quantities and
+uncertainty. Panel (a) uses seed SD. Panel (b) uses image-clustered intervals
+for reasoner deficit minus fusion deficit. The 40k value +0.00473 is therefore
+not an accuracy gain: its positive sign means that the reasoner's pooled
+deficit is larger. The corresponding 100k and 250k values are -0.00037 and
+-0.00275. All three intervals include zero, so each paired deficit contrast is
+not resolved clearly by its interval.
+
+The reasoner has 21,099,620 trainable parameters, compared with 1,100,388 for
+fusion, and it receives token-level rather than global visual features.
+Architecture, access pattern and capacity all co-vary. The observed accuracy
+advantage at 100k and 250k belongs to the implemented configuration; it does
+not identify latent queries, token-level access or capacity as its cause.
+
+\begin{figure}[p]
+\centering\includegraphics[width=\textwidth]{ve1/VE1-FIG-06.pdf}
+\caption[Latent reasoner against global fusion.]{Development evidence on 7,714 questions over 768 images. Panel (a) shows reasoner and fusion means with training-seed SD, not confidence intervals; the series use three and five seeds respectively. Panel (b) shows paired image-clustered intervals on seeds 0/1/2 for reasoner pooled $\geq$4-step deficit minus fusion deficit. Positive means a larger reasoner deficit. All three intervals include zero, so the contrasts are not resolved clearly by these intervals. Architecture, token access and capacity co-vary.}
+\label{fig:ch5-reasoner-fusion}
+\end{figure}
+
+\section{Token-level input diagnostics}
+\label{sec:ch5-diagnostics}
+The diagnostics test whether the reasoner is sensitive to the composition of
+its token-level visual input. They do not identify an internal reasoning
+mechanism. The D2 intervention removes the CLS token at test time from the
+three trained 40k reasoners. Accuracy changes by -0.05017, -0.02839 and
+-0.04161 for seeds 0, 1 and 2. Their pooled four-or-more-step lifts also fall,
+from 0.15978 to 0.13810, from 0.16532 to 0.14718, and from 0.18246 to
+0.15070. No interval was constructed for this intervention.
+
+D3 asks a different question. It trains and evaluates a patches-only model
+for seed 0, rather than altering a previously trained model at test time. Its
+development accuracy is 0.53591, compared with 0.54641 for the full-token
+seed-0 reasoner, and its pooled four-or-more-step lift is 0.14617 rather than
+0.15978. Its shuffled-image drop is 0.1155, with 0.1101 reported for the
+full-token seed-0 comparator. Because this is a single-seed training probe,
+these values describe that configuration only.
+
+Table~\ref{tab:ch5-diagnostics} makes the test-time and training-time
+interventions explicit. The observational attention diagnostic supplies
+context but not a mechanism: mean visual cross-attention mass on CLS was
+0.3803, 0.3340 and 0.2642 across the three seeds, compared with a uniform token
+share of 0.02. Attention mass does not explain a prediction or establish that
+CLS contains a reasoning process. Together, the diagnostics support only that
+the tested reasoner is sensitive to its token-input composition.
+
+Two simpler token references also remain below the reasoner at 40k. Mean-patch
+concatenation reaches 0.51449 with seed SD 0.00191, while a direct linear
+classifier reaches 0.48125 with seed SD 0.00107. These reported references
+place the diagnostic in context but do not isolate why the full reasoner
+performs differently.
+
+\begin{table}[p]
+\centering
+\caption[Token-input diagnostics at 40k.]{Stored 40k diagnostic values without evaluation-sampling intervals. D2 removes CLS only at test time for seeds 0/1/2. D3 trains and evaluates a patches-only model for seed 0. The standard columns are the corresponding full-token values. These probes test input sensitivity, not an internal reasoning mechanism.}
+\label{tab:ch5-diagnostics}
+\begingroup\scriptsize\setlength{\tabcolsep}{0.4pt}
+\renewenvironment{longtable}[1]{\begin{tabular}{|p{0.10\textwidth}|p{0.10\textwidth}|p{0.045\textwidth}|p{0.09\textwidth}|p{0.09\textwidth}|p{0.085\textwidth}|p{0.09\textwidth}|p{0.09\textwidth}|p{0.12\textwidth}|}}{\end{tabular}}
+\let\endhead\relax\renewcommand{\_}{\textunderscore\allowbreak}
+\input{tables/ch5_diagnostics.tex}
+\endgroup
+\end{table}
+
+\section{Accuracy by reasoning depth}
+\label{sec:ch5-depth}
+Figure~\ref{fig:ch5-depth} groups the 40k development questions by GQA
+semantic-program length. Program length is used as an in-distribution proxy for
+reasoning depth; it is not a count of internal steps taken by a model. The
+buckets contain 2,400 questions at two or fewer steps, 3,330 at three steps,
+870 at four steps and 1,114 at five or more steps. The last two buckets pool to
+1,984 questions for the four-or-more-step analysis.
+
+Raw accuracy need not fall monotonically with program length because the
+buckets have different answer priors. For example, at 40k the reasoner records
+0.55944, 0.50791, 0.52605 and 0.62029 across the four buckets, while fusion
+records 0.54942, 0.50312, 0.53425 and 0.62334. These values should not be read
+as evidence that the longest questions are inherently easier, nor as a trace
+of the models' internal computation.
+
+The fixed-prior lift analysis adjusts each bucket against its stored question
+prior before forming the pooled profile. The priors are 0.20917, 0.14625,
+0.27356 and 0.51616; the pooled four-or-more-step prior is 0.40978. At 40k,
+the combined four-or-more-step lifts are 0.16919 for the reasoner and 0.17449
+for fusion, with image-clustered intervals [0.14046, 0.19768] and [0.14402,
+0.20372]. This analysis describes relative difficulty under the fixed priors,
+not compositional generalisation or internal reasoning depth.
+
+The clustered intervals also follow the evaluation structure rather than the
+training-seed structure. Questions attached to one image may share visual
+content, so the represented image is the resampling unit. Each bucket has its
+own image set: 674, 658, 396 and 531 images, with 620 images in the pooled
+four-or-more-step view. The bucket intervals consequently describe sampling
+uncertainty within those particular development slices; they are not
+interchangeable with seed SD.
+
+The pooled deficit combines two operations defined in Methodology. First, each
+bucket accuracy is compared with its fixed question prior to form a lift.
+Second, the unweighted mean of all four lifts is compared with the
+question-weighted combined lift for the four-step and five-or-more-step buckets.
+This definition makes the deficit a profile statistic. It does not turn the
+bucket order into a sequence of computations performed by the model.
+
+% XREF-PENDING: appendix figure VE1-FIG-04-FULL
+% XREF-PENDING: appendix table VE1-TAB-A1
+\begin{figure}[p]
+\centering\includegraphics[width=\textwidth]{ve1/VE1-FIG-04.pdf}
+\caption[Accuracy by program length and pooled deficit.]{Development accuracy by GQA program-length proxy and fixed-prior pooled $\geq$4-step deficits. The buckets contain 2,400, 3,330, 870 and 1,114 questions over 674, 658, 396 and 531 represented images; the pooled $\geq$4 view has 1,984 questions over 620 images. Buckets are unequal and dependent, and each clustered interval uses that bucket's represented images. Program length is a proxy, not a measure of internal reasoning. Deficit levels describe one system's profile and establish no cause.}
+\label{fig:ch5-depth}
+\end{figure}
+
+\section{The pooled four-or-more-step deficit}
+\label{sec:ch5-deficit}
+Table~\ref{tab:ch5-deficits} reports deficit levels separately from paired
+contrasts. At 40k, the reasoner level is 0.09795 with interval [0.08236,
+0.11434], while the displayed five-seed fusion level is 0.09175 with interval
+[0.07548, 0.10771]. At 100k and 250k the reasoner seed means are 0.08605 and
+0.07753; the corresponding fusion means on seeds 0/1/2 are 0.08642 and
+0.08028. No per-model interval exists for the 100k or 250k levels.
+
+A lower pooled deficit should not be interpreted as higher overall accuracy or
+stronger reasoning ability. It describes the relative difficulty profile under
+the fixed step-depth analysis. This boundary is visible in the question-only
+levels, which are 0.08090, 0.06897 and 0.06384 despite question only having
+lower overall accuracy than the multimodal systems. Deficit ordering is not a
+model-quality ranking.
+
+The paired comparisons use canonical records on seeds 0/1/2. They are
+reasoner deficit minus fusion deficit: +0.00473 [-0.00672, +0.01702] at 40k,
+-0.00037 [-0.01211, +0.01057] at 100k, and -0.00275 [-0.01323, +0.00760]
+at 250k. Positive means a larger reasoner deficit. Every interval includes
+zero, so the paired deficit contrast is not resolved clearly at any scale.
+
+The displayed 40k fusion level averages five seeds, while the paired 40k
+contrast uses only seeds 0/1/2. The level cells must therefore not be
+subtracted to reconstruct the paired value. The canonical paired records are
+used directly at every scale, even where a displayed subtraction would happen
+to give the recorded point estimate.
+
+The reasoner level decreases across the three stored scale means, but that
+within-system pattern answers a different question from the paired contrast.
+The contrast asks whether the reasoner's profile differs from fusion's under
+paired evaluation. Its point estimate changes sign after 40k, yet every
+clustered interval spans zero. These intervals therefore do not resolve the
+relative deficit profile clearly at any tested scale. In particular, the
+positive and seed-consistent overall accuracy gaps at 100k and 250k cannot be
+relabelled as evidence that fusion's multi-step profile has been improved upon.
+
+\begin{table}[p]
+\centering
+\caption[Pooled four-or-more-step deficits.]{Development-set pooled $\geq$4-step deficit levels and separate paired reasoner-minus-fusion deficit differences. Forty-k level intervals are image-clustered; 100k/250k levels have no interval. Displayed 40k fusion uses five seeds, whereas paired contrasts use seeds 0/1/2, so level cells must not be subtracted. Positive contrast means a larger reasoner deficit. A lower deficit is not a ranking of overall accuracy or reasoning ability; it describes the relative fixed-prior step-depth profile.}
+\label{tab:ch5-deficits}
+\begingroup\scriptsize\setlength{\tabcolsep}{1pt}
+\renewenvironment{longtable}[1]{\begin{tabular}{|p{0.10\textwidth}|p{0.18\textwidth}|p{0.06\textwidth}|p{0.13\textwidth}|p{0.18\textwidth}|p{0.20\textwidth}|}}{\end{tabular}}
+\let\endhead\relax\renewcommand{\_}{\textunderscore\allowbreak}
+\input{tables/ch5_deficits.tex}
+\endgroup
+\end{table}
+
+\clearpage
+\section{RQ2 summary}
+\label{sec:ch5-summary}
+On the 7,714-row top-100 development view, the 32-query latent reasoner rises
+from 0.54222 to 0.57061 and 0.59580 mean accuracy as training increases from
+40k to 100k and 250k questions. At 40k its canonical same-seed gap from fusion
+is +0.00307 and is negative in two of three seeds. At 100k and 250k the gaps
+are +0.00652 and +0.01361 and positive in every stored seed, although no
+evaluation-sampling interval exists for these accuracy comparisons.
+
+This is evidence about the implemented configuration. The reasoner changes
+architecture, token-level visual access and trainable capacity together, and
+the wider series use different seed counts and training streams. The token
+diagnostics show sensitivity to input composition, but do not identify a
+reasoning mechanism or explain the accuracy differences.
+
+The fixed-prior analysis gives reasoner pooled four-or-more-step deficit levels
+from 0.09795 to 0.07753 across the three scales. Its paired difference from
+fusion has a zero-containing interval at every scale. Higher overall accuracy
+therefore does not show that persistent multi-step difficulty has been removed.
+Nor does the evidence establish that latent queries, token access or capacity
+caused the gain; that either system performs compositional reasoning; that
+program length measures internal reasoning; or that the three tested scales
+define a scaling law. Broader mechanism and literature interpretation is
+deferred to Chapter~8, and no held-out conclusion is made here.

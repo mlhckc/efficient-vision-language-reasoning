@@ -1,0 +1,519 @@
+{
+  "schema_version": 1,
+  "artefact": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch5_scaling.csv",
+  "generation": "deterministic selection and presentation formatting from canonical stored records; no scientific recomputation",
+  "sources": [
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A2.csv",
+      "sha256": "082ab86bb925c471311e269f878ab9c7ca25851aa5ca62bc4d7846f5361315ff"
+    },
+    {
+      "path": "results/experiments/v3_01_reasoner/results.json",
+      "sha256": "472fe626775d755e1a24ae3da814466773b3e067537201cb88351ea27d8abfd9"
+    },
+    {
+      "path": "results/experiments/v3_03_scaling/results.json",
+      "sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339"
+    }
+  ],
+  "cells": [
+    {
+      "output_row_id": "reasoner:40k",
+      "output_field": "system",
+      "value": "reasoner",
+      "frozen_source_file": "results/experiments/v3_01_reasoner/results.json",
+      "frozen_source_sha256": "472fe626775d755e1a24ae3da814466773b3e067537201cb88351ea27d8abfd9",
+      "source_row_identifier": "v3_01_reasoner.final / gaps_same_seeds.reasoner_minus_fusion",
+      "source_field": "system",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "reasoner:40k",
+      "output_field": "scale",
+      "value": "40k",
+      "frozen_source_file": "results/experiments/v3_01_reasoner/results.json",
+      "frozen_source_sha256": "472fe626775d755e1a24ae3da814466773b3e067537201cb88351ea27d8abfd9",
+      "source_row_identifier": "v3_01_reasoner.final / gaps_same_seeds.reasoner_minus_fusion",
+      "source_field": "scale",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "reasoner:40k",
+      "output_field": "seed set",
+      "value": "0, 1, 2",
+      "frozen_source_file": "results/experiments/v3_01_reasoner/results.json",
+      "frozen_source_sha256": "472fe626775d755e1a24ae3da814466773b3e067537201cb88351ea27d8abfd9",
+      "source_row_identifier": "v3_01_reasoner.final / gaps_same_seeds.reasoner_minus_fusion",
+      "source_field": "seed set",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "reasoner:40k",
+      "output_field": "per-seed accuracies",
+      "value": "0: 0.54641; 1: 0.54058; 2: 0.53967",
+      "frozen_source_file": "results/experiments/v3_01_reasoner/results.json",
+      "frozen_source_sha256": "472fe626775d755e1a24ae3da814466773b3e067537201cb88351ea27d8abfd9",
+      "source_row_identifier": "v3_01_reasoner.final / gaps_same_seeds.reasoner_minus_fusion",
+      "source_field": "v3_01_reasoner.final.per_seed",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "reasoner:40k",
+      "output_field": "mean accuracy",
+      "value": "0.54222",
+      "frozen_source_file": "results/experiments/v3_01_reasoner/results.json",
+      "frozen_source_sha256": "472fe626775d755e1a24ae3da814466773b3e067537201cb88351ea27d8abfd9",
+      "source_row_identifier": "v3_01_reasoner.final / gaps_same_seeds.reasoner_minus_fusion",
+      "source_field": "v3_01_reasoner.final.mean",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "reasoner:40k",
+      "output_field": "seed SD",
+      "value": "0.00366",
+      "frozen_source_file": "results/experiments/v3_01_reasoner/results.json",
+      "frozen_source_sha256": "472fe626775d755e1a24ae3da814466773b3e067537201cb88351ea27d8abfd9",
+      "source_row_identifier": "v3_01_reasoner.final / gaps_same_seeds.reasoner_minus_fusion",
+      "source_field": "v3_01_reasoner.final.std",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "reasoner:40k",
+      "output_field": "same-seed R-F gap",
+      "value": "+0.00307",
+      "frozen_source_file": "results/experiments/v3_01_reasoner/results.json",
+      "frozen_source_sha256": "472fe626775d755e1a24ae3da814466773b3e067537201cb88351ea27d8abfd9",
+      "source_row_identifier": "v3_01_reasoner.final / gaps_same_seeds.reasoner_minus_fusion",
+      "source_field": "v3_01_reasoner.gaps_same_seeds.reasoner_minus_fusion.mean",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "reasoner:40k",
+      "output_field": "gap seed SD",
+      "value": "0.00622",
+      "frozen_source_file": "results/experiments/v3_01_reasoner/results.json",
+      "frozen_source_sha256": "472fe626775d755e1a24ae3da814466773b3e067537201cb88351ea27d8abfd9",
+      "source_row_identifier": "v3_01_reasoner.final / gaps_same_seeds.reasoner_minus_fusion",
+      "source_field": "v3_01_reasoner.gaps_same_seeds.reasoner_minus_fusion.std",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "fusion:40k",
+      "output_field": "system",
+      "value": "fusion",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A2.csv",
+      "frozen_source_sha256": "082ab86bb925c471311e269f878ab9c7ca25851aa5ca62bc4d7846f5361315ff",
+      "source_row_identifier": "EV-SEED-v2_07.fusion.train_40k",
+      "source_field": "system",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "fusion:40k",
+      "output_field": "scale",
+      "value": "40k",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A2.csv",
+      "frozen_source_sha256": "082ab86bb925c471311e269f878ab9c7ca25851aa5ca62bc4d7846f5361315ff",
+      "source_row_identifier": "EV-SEED-v2_07.fusion.train_40k",
+      "source_field": "scale",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "fusion:40k",
+      "output_field": "seed set",
+      "value": "0, 1, 2, 3, 42",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A2.csv",
+      "frozen_source_sha256": "082ab86bb925c471311e269f878ab9c7ca25851aa5ca62bc4d7846f5361315ff",
+      "source_row_identifier": "EV-SEED-v2_07.fusion.train_40k",
+      "source_field": "seed set",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "fusion:40k",
+      "output_field": "per-seed accuracies",
+      "value": "0: 0.53617; 1: 0.54083; 2: 0.54045; 3: 0.53811; 42: 0.53643",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A2.csv",
+      "frozen_source_sha256": "082ab86bb925c471311e269f878ab9c7ca25851aa5ca62bc4d7846f5361315ff",
+      "source_row_identifier": "EV-SEED-v2_07.fusion.train_40k",
+      "source_field": "per-seed accuracies",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "fusion:40k",
+      "output_field": "mean accuracy",
+      "value": "0.53840",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A2.csv",
+      "frozen_source_sha256": "082ab86bb925c471311e269f878ab9c7ca25851aa5ca62bc4d7846f5361315ff",
+      "source_row_identifier": "EV-SEED-v2_07.fusion.train_40k",
+      "source_field": "mean",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "fusion:40k",
+      "output_field": "seed SD",
+      "value": "0.00218",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A2.csv",
+      "frozen_source_sha256": "082ab86bb925c471311e269f878ab9c7ca25851aa5ca62bc4d7846f5361315ff",
+      "source_row_identifier": "EV-SEED-v2_07.fusion.train_40k",
+      "source_field": "sd (training seeds, ddof=1)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "fusion:40k",
+      "output_field": "same-seed R-F gap",
+      "value": "",
+      "frozen_source_file": "results/experiments/v3_01_reasoner/results.json",
+      "frozen_source_sha256": "472fe626775d755e1a24ae3da814466773b3e067537201cb88351ea27d8abfd9",
+      "source_row_identifier": "v3_01_reasoner.final / gaps_same_seeds.reasoner_minus_fusion",
+      "source_field": "v3_01_reasoner.gaps_same_seeds.reasoner_minus_fusion.mean",
+      "transformation": "gap is reported once on the reasoner row; deliberately blank on the fusion row"
+    },
+    {
+      "output_row_id": "fusion:40k",
+      "output_field": "gap seed SD",
+      "value": "",
+      "frozen_source_file": "results/experiments/v3_01_reasoner/results.json",
+      "frozen_source_sha256": "472fe626775d755e1a24ae3da814466773b3e067537201cb88351ea27d8abfd9",
+      "source_row_identifier": "v3_01_reasoner.final / gaps_same_seeds.reasoner_minus_fusion",
+      "source_field": "v3_01_reasoner.gaps_same_seeds.reasoner_minus_fusion.std",
+      "transformation": "gap is reported once on the reasoner row; deliberately blank on the fusion row"
+    },
+    {
+      "output_row_id": "reasoner:100k",
+      "output_field": "system",
+      "value": "reasoner",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.summary.100k / gaps_same_seeds.100k.reasoner_minus_fusion",
+      "source_field": "system",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "reasoner:100k",
+      "output_field": "scale",
+      "value": "100k",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.summary.100k / gaps_same_seeds.100k.reasoner_minus_fusion",
+      "source_field": "scale",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "reasoner:100k",
+      "output_field": "seed set",
+      "value": "0, 1, 2",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.summary.100k / gaps_same_seeds.100k.reasoner_minus_fusion",
+      "source_field": "seed set",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "reasoner:100k",
+      "output_field": "per-seed accuracies",
+      "value": "0: 0.57078; 1: 0.57065; 2: 0.57039",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.summary.100k / gaps_same_seeds.100k.reasoner_minus_fusion",
+      "source_field": "v3_03_scaling.summary.100k.per_seed",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "reasoner:100k",
+      "output_field": "mean accuracy",
+      "value": "0.57061",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.summary.100k / gaps_same_seeds.100k.reasoner_minus_fusion",
+      "source_field": "v3_03_scaling.summary.100k.mean",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "reasoner:100k",
+      "output_field": "seed SD",
+      "value": "0.00020",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.summary.100k / gaps_same_seeds.100k.reasoner_minus_fusion",
+      "source_field": "v3_03_scaling.summary.100k.std",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "reasoner:100k",
+      "output_field": "same-seed R-F gap",
+      "value": "+0.00652",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.summary.100k / gaps_same_seeds.100k.reasoner_minus_fusion",
+      "source_field": "v3_03_scaling.gaps_same_seeds.100k.reasoner_minus_fusion.mean",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "reasoner:100k",
+      "output_field": "gap seed SD",
+      "value": "0.00094",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.summary.100k / gaps_same_seeds.100k.reasoner_minus_fusion",
+      "source_field": "v3_03_scaling.gaps_same_seeds.100k.reasoner_minus_fusion.std",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "fusion:100k",
+      "output_field": "system",
+      "value": "fusion",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A2.csv",
+      "frozen_source_sha256": "082ab86bb925c471311e269f878ab9c7ca25851aa5ca62bc4d7846f5361315ff",
+      "source_row_identifier": "EV-SEED-v2_07.fusion.train_100k",
+      "source_field": "system",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "fusion:100k",
+      "output_field": "scale",
+      "value": "100k",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A2.csv",
+      "frozen_source_sha256": "082ab86bb925c471311e269f878ab9c7ca25851aa5ca62bc4d7846f5361315ff",
+      "source_row_identifier": "EV-SEED-v2_07.fusion.train_100k",
+      "source_field": "scale",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "fusion:100k",
+      "output_field": "seed set",
+      "value": "0, 1, 2, 3, 42",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A2.csv",
+      "frozen_source_sha256": "082ab86bb925c471311e269f878ab9c7ca25851aa5ca62bc4d7846f5361315ff",
+      "source_row_identifier": "EV-SEED-v2_07.fusion.train_100k",
+      "source_field": "seed set",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "fusion:100k",
+      "output_field": "per-seed accuracies",
+      "value": "0: 0.56365; 1: 0.56521; 2: 0.56339; 3: 0.55847; 42: 0.56469",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A2.csv",
+      "frozen_source_sha256": "082ab86bb925c471311e269f878ab9c7ca25851aa5ca62bc4d7846f5361315ff",
+      "source_row_identifier": "EV-SEED-v2_07.fusion.train_100k",
+      "source_field": "per-seed accuracies",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "fusion:100k",
+      "output_field": "mean accuracy",
+      "value": "0.56308",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A2.csv",
+      "frozen_source_sha256": "082ab86bb925c471311e269f878ab9c7ca25851aa5ca62bc4d7846f5361315ff",
+      "source_row_identifier": "EV-SEED-v2_07.fusion.train_100k",
+      "source_field": "mean",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "fusion:100k",
+      "output_field": "seed SD",
+      "value": "0.00268",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A2.csv",
+      "frozen_source_sha256": "082ab86bb925c471311e269f878ab9c7ca25851aa5ca62bc4d7846f5361315ff",
+      "source_row_identifier": "EV-SEED-v2_07.fusion.train_100k",
+      "source_field": "sd (training seeds, ddof=1)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "fusion:100k",
+      "output_field": "same-seed R-F gap",
+      "value": "",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.summary.100k / gaps_same_seeds.100k.reasoner_minus_fusion",
+      "source_field": "v3_03_scaling.gaps_same_seeds.100k.reasoner_minus_fusion.mean",
+      "transformation": "gap is reported once on the reasoner row; deliberately blank on the fusion row"
+    },
+    {
+      "output_row_id": "fusion:100k",
+      "output_field": "gap seed SD",
+      "value": "",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.summary.100k / gaps_same_seeds.100k.reasoner_minus_fusion",
+      "source_field": "v3_03_scaling.gaps_same_seeds.100k.reasoner_minus_fusion.std",
+      "transformation": "gap is reported once on the reasoner row; deliberately blank on the fusion row"
+    },
+    {
+      "output_row_id": "reasoner:250k",
+      "output_field": "system",
+      "value": "reasoner",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.summary.250k / gaps_same_seeds.250k.reasoner_minus_fusion",
+      "source_field": "system",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "reasoner:250k",
+      "output_field": "scale",
+      "value": "250k",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.summary.250k / gaps_same_seeds.250k.reasoner_minus_fusion",
+      "source_field": "scale",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "reasoner:250k",
+      "output_field": "seed set",
+      "value": "0, 1, 2",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.summary.250k / gaps_same_seeds.250k.reasoner_minus_fusion",
+      "source_field": "seed set",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "reasoner:250k",
+      "output_field": "per-seed accuracies",
+      "value": "0: 0.59139; 1: 0.59165; 2: 0.60436",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.summary.250k / gaps_same_seeds.250k.reasoner_minus_fusion",
+      "source_field": "v3_03_scaling.summary.250k.per_seed",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "reasoner:250k",
+      "output_field": "mean accuracy",
+      "value": "0.59580",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.summary.250k / gaps_same_seeds.250k.reasoner_minus_fusion",
+      "source_field": "v3_03_scaling.summary.250k.mean",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "reasoner:250k",
+      "output_field": "seed SD",
+      "value": "0.00741",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.summary.250k / gaps_same_seeds.250k.reasoner_minus_fusion",
+      "source_field": "v3_03_scaling.summary.250k.std",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "reasoner:250k",
+      "output_field": "same-seed R-F gap",
+      "value": "+0.01361",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.summary.250k / gaps_same_seeds.250k.reasoner_minus_fusion",
+      "source_field": "v3_03_scaling.gaps_same_seeds.250k.reasoner_minus_fusion.mean",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "reasoner:250k",
+      "output_field": "gap seed SD",
+      "value": "0.00870",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.summary.250k / gaps_same_seeds.250k.reasoner_minus_fusion",
+      "source_field": "v3_03_scaling.gaps_same_seeds.250k.reasoner_minus_fusion.std",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "fusion:250k",
+      "output_field": "system",
+      "value": "fusion",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A2.csv",
+      "frozen_source_sha256": "082ab86bb925c471311e269f878ab9c7ca25851aa5ca62bc4d7846f5361315ff",
+      "source_row_identifier": "EV-SEED-v2_07.fusion.train_250k",
+      "source_field": "system",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "fusion:250k",
+      "output_field": "scale",
+      "value": "250k",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A2.csv",
+      "frozen_source_sha256": "082ab86bb925c471311e269f878ab9c7ca25851aa5ca62bc4d7846f5361315ff",
+      "source_row_identifier": "EV-SEED-v2_07.fusion.train_250k",
+      "source_field": "scale",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "fusion:250k",
+      "output_field": "seed set",
+      "value": "0, 1, 2, 3, 42",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A2.csv",
+      "frozen_source_sha256": "082ab86bb925c471311e269f878ab9c7ca25851aa5ca62bc4d7846f5361315ff",
+      "source_row_identifier": "EV-SEED-v2_07.fusion.train_250k",
+      "source_field": "seed set",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "fusion:250k",
+      "output_field": "per-seed accuracies",
+      "value": "0: 0.58439; 1: 0.58128; 2: 0.58089; 3: 0.58439; 42: 0.58037",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A2.csv",
+      "frozen_source_sha256": "082ab86bb925c471311e269f878ab9c7ca25851aa5ca62bc4d7846f5361315ff",
+      "source_row_identifier": "EV-SEED-v2_07.fusion.train_250k",
+      "source_field": "per-seed accuracies",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "fusion:250k",
+      "output_field": "mean accuracy",
+      "value": "0.58226",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A2.csv",
+      "frozen_source_sha256": "082ab86bb925c471311e269f878ab9c7ca25851aa5ca62bc4d7846f5361315ff",
+      "source_row_identifier": "EV-SEED-v2_07.fusion.train_250k",
+      "source_field": "mean",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "fusion:250k",
+      "output_field": "seed SD",
+      "value": "0.00197",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A2.csv",
+      "frozen_source_sha256": "082ab86bb925c471311e269f878ab9c7ca25851aa5ca62bc4d7846f5361315ff",
+      "source_row_identifier": "EV-SEED-v2_07.fusion.train_250k",
+      "source_field": "sd (training seeds, ddof=1)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "fusion:250k",
+      "output_field": "same-seed R-F gap",
+      "value": "",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.summary.250k / gaps_same_seeds.250k.reasoner_minus_fusion",
+      "source_field": "v3_03_scaling.gaps_same_seeds.250k.reasoner_minus_fusion.mean",
+      "transformation": "gap is reported once on the reasoner row; deliberately blank on the fusion row"
+    },
+    {
+      "output_row_id": "fusion:250k",
+      "output_field": "gap seed SD",
+      "value": "",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.summary.250k / gaps_same_seeds.250k.reasoner_minus_fusion",
+      "source_field": "v3_03_scaling.gaps_same_seeds.250k.reasoner_minus_fusion.std",
+      "transformation": "gap is reported once on the reasoner row; deliberately blank on the fusion row"
+    }
+  ],
+  "csv_sha256": "ae5566b33c00c7caf00fde6c06d0dc79b57eb3e2d9532a4b318b1191deaae922",
+  "generated_tex": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables/ch5_scaling.tex",
+  "generated_tex_sha256": "8b689a08ba648e0a5ba497fc442b15ed70befd99cf400765d8f23f3b33aa77a9",
+  "converter": {
+    "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tools/tab2latex.py",
+    "sha256": "c441d40b2b10a7a4294c4f15b12bc450f7ae73a9435e3d15394940c0f0c5a546",
+    "header_map": {
+      "system": "System",
+      "scale": "Scale",
+      "seed set": "Seeds",
+      "per-seed accuracies": "Per-seed accuracies",
+      "mean accuracy": "Mean accuracy",
+      "seed SD": "Seed SD",
+      "same-seed R-F gap": "R-F gap",
+      "gap seed SD": "Gap seed SD"
+    },
+    "verify": true
+  }
+}

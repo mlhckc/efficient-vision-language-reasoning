@@ -1,0 +1,5 @@
+probe,intervention timing,seed,standard accuracy,intervened accuracy,accuracy change,standard >=4 lift,intervened >=4 lift,shuffled drop (probe; full)
+D2 CLS removal,test time,0,0.54641,0.49624,-0.05017,0.15978,0.13810,
+D2 CLS removal,test time,1,0.54058,0.51219,-0.02839,0.16532,0.14718,
+D2 CLS removal,test time,2,0.53967,0.49806,-0.04161,0.18246,0.15070,
+D3 patches only,training and test time,0,0.54641,0.53591,,0.15978,0.14617,0.1155; 0.1101

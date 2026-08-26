@@ -1,0 +1,19 @@
+record type,system or contrast,scale,seed aggregation,pooled >=4 deficit or difference,95% CI
+level,question_only,40k,"0,1,2,3,42",0.08090,"[0.06710, 0.09561]"
+level,concat,40k,"0,1,2,3,42",0.10502,"[0.08915, 0.12065]"
+level,product_576k,40k,"0,1,2,3,42",0.09784,"[0.08230, 0.11449]"
+level,fusion,40k,"0,1,2,3,42",0.09175,"[0.07548, 0.10771]"
+level,reasoner,40k,"0,1,2",0.09795,"[0.08236, 0.11434]"
+level,question_only,100k,"0,1,2",0.06897,not available
+level,concat,100k,"0,1,2",0.09576,not available
+level,product_576k,100k,"0,1,2",0.08739,not available
+level,fusion,100k,"0,1,2",0.08642,not available
+level,reasoner,100k,"0,1,2",0.08605,not available
+level,question_only,250k,"0,1,2",0.06384,not available
+level,concat,250k,"0,1,2",0.08417,not available
+level,product_576k,250k,"0,1,2",0.07713,not available
+level,fusion,250k,"0,1,2",0.08028,not available
+level,reasoner,250k,"0,1,2",0.07753,not available
+paired contrast,reasoner - fusion,40k,"paired 0,1,2",0.00473,"[-0.00672, 0.01702]"
+paired contrast,reasoner - fusion,100k,"paired 0,1,2",-0.00037,"[-0.01211, 0.01057]"
+paired contrast,reasoner - fusion,250k,"paired 0,1,2",-0.00275,"[-0.01323, 0.00760]"

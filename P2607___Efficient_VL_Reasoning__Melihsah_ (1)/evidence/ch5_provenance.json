@@ -1,0 +1,338 @@
+{
+  "schema_version": 1,
+  "task_id": "dissertation-04-ch5-rq2",
+  "development_set_only": true,
+  "clean_test_accessed": false,
+  "scientific_recomputation": false,
+  "denominator_policy": "All Chapter-5 accuracies use the 7,714-row top-100 development view over 768 images; step-bucket counts are reported separately and are never substituted for the full denominator.",
+  "quantity_policy": "Overall accuracy gaps, pooled >=4-step deficit levels, and paired reasoner-minus-fusion deficit differences are distinct quantities. Paired contrasts are copied from canonical records and never reconstructed from level cells.",
+  "sources": [
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A1.csv",
+      "sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A2.csv",
+      "sha256": "082ab86bb925c471311e269f878ab9c7ca25851aa5ca62bc4d7846f5361315ff"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A4.csv",
+      "sha256": "d47be489cd51a75ddd6a823a33035115de557798cb6543ab010ce79c81a158f3"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-07.csv",
+      "sha256": "6f20e51875b3c4cd5cbcbfb43a7f7980e16c98d0b2b64a139371a9c00aa409b2"
+    },
+    {
+      "path": "results/experiments/v3_01_reasoner/results.json",
+      "sha256": "472fe626775d755e1a24ae3da814466773b3e067537201cb88351ea27d8abfd9"
+    },
+    {
+      "path": "results/experiments/v3_03_scaling/results.json",
+      "sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339"
+    },
+    {
+      "path": "results/experiments/v3_02a_refs/step_statistics.json",
+      "sha256": "1124139e70ece466c7f8a759089c5eb9700ebc4b3fcfdd1adc4e6b90a957c6a3"
+    },
+    {
+      "path": "results/experiments/v3_02a_refs/diagnostics.json",
+      "sha256": "a192322c877bf5b855ae6dfa47c00e572acedb143a75585f442b7c170c808743"
+    },
+    {
+      "path": "results/experiments/v3_02a_refs/patches_probe.json",
+      "sha256": "90513aa905d6d79b05e5e76c69e5a1955fd7bd44171ac8939d43b49b2e2a66d8"
+    },
+    {
+      "path": "results/experiments/v3_02a_refs/refs_results.json",
+      "sha256": "f3994a00e84999bf721af45f774c023a7cd0ab0e298668c94b9044ce5bb160e9"
+    },
+    {
+      "path": "docs/experiments/v3_01_reasoner.md",
+      "sha256": "cec00aef691c7c384ce5fbde42bce611e112260e59a3ba1718a2c5f89d9bbf21"
+    },
+    {
+      "path": "docs/experiments/v3_02a_refs.md",
+      "sha256": "48febee3d1effc770435c30b598fdcd4b507424abda98aa1426f596a0b890c65"
+    },
+    {
+      "path": "docs/experiments/v3_03_scaling.md",
+      "sha256": "52c7560f9d2d4a99eff5810108ae5ff501626c1f59b094672f6d7abdb41f8e8f"
+    },
+    {
+      "path": "results/closure/B_primary_contrasts.csv",
+      "sha256": "cb906806efd197a9f55cdf83757e9e4342415e7d7d2fde8294c029293b81e653"
+    },
+    {
+      "path": "results/closure/E_seed_variability.csv",
+      "sha256": "c2e73043e67494ec7ddb622da59fa8907fe44aaa53aca3233d2007be6bcdc269"
+    },
+    {
+      "path": "results/ve0/supersession_map.json",
+      "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
+    },
+    {
+      "path": "results/ve1/VE1_MANIFEST.json",
+      "sha256": "021592025cbfcdeb145441799d7b5c6ff341a0945289f8927230a89e16eb986a"
+    },
+    {
+      "path": "results/ve1/captions.json",
+      "sha256": "15fbf210cf2b81d8aec3052e5b1d8f6ba561a8fe569e3d278a1bab2c5d7baad9"
+    },
+    {
+      "path": "results/ve1/figures/VE1-FIG-04.data.json",
+      "sha256": "39eb587cfab39ba721fed55bec0fd6e01a0f19e79499b7af1f55495b76461488"
+    },
+    {
+      "path": "results/ve1/figures/VE1-FIG-06.data.json",
+      "sha256": "f5d18def74e7fdf1affd0cdb5d67f42da5b09f7b0f433fbc2793da045701614f"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables/ch3_architecture_params.tex",
+      "sha256": "57fb4f4536cafdf44b9180d4c6984daa7444333f602d2619d245827496be407b"
+    }
+  ],
+  "claim_mappings": [
+    {
+      "claim_id": "5.1.scope_and_quantities",
+      "sentence_scope": "development-only 7,714-row/768-image top-100 scope; 32 queries; separation of overall accuracy, deficit levels and paired deficit differences; uncertainty boundaries and configuration-level comparison",
+      "evidence_ids": [
+        "EV-DSC-v3_01.reasoner.train_40k.seed_mean",
+        "EV-CON-v3_02a.reasoner_minus_fusion_deficit.train_40k"
+      ],
+      "ledger_ids": [
+        "C07",
+        "C15",
+        "C20",
+        "C21"
+      ],
+      "sources": [
+        "docs/experiments/v3_01_reasoner.md",
+        "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-07.csv",
+        "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables/ch3_architecture_params.tex"
+      ]
+    },
+    {
+      "claim_id": "5.2.reasoner_and_fusion_scaling",
+      "sentence_scope": "reasoner and fusion means, seed SDs, per-seed context, 0.60436 seed-level boundary and absence of clustered intervals",
+      "evidence_ids": [
+        "EV-DSC-v3_01.reasoner.train_40k.seed_mean",
+        "EV-SEED-v3_03.reasoner.train_100k",
+        "EV-SEED-v3_03.reasoner.train_250k",
+        "EV-SEED-v2_07.fusion.train_40k",
+        "EV-SEED-v2_07.fusion.train_100k",
+        "EV-SEED-v2_07.fusion.train_250k"
+      ],
+      "ledger_ids": [
+        "C07"
+      ],
+      "sources": [
+        "results/experiments/v3_01_reasoner/results.json",
+        "results/experiments/v3_03_scaling/results.json",
+        "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A2.csv"
+      ]
+    },
+    {
+      "claim_id": "5.3.accuracy_gaps",
+      "sentence_scope": "canonical same-seed reasoner-minus-fusion overall accuracy gaps, per-seed signs, seed SDs, interval absence and configuration-level capacity/input/architecture caveat",
+      "evidence_ids": [
+        "EV-DSC-v3_01.reasoner_minus_fusion.train_40k.seed_mean"
+      ],
+      "sources": [
+        "results/experiments/v3_01_reasoner/results.json",
+        "results/experiments/v3_03_scaling/results.json",
+        "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables/ch3_architecture_params.tex"
+      ]
+    },
+    {
+      "claim_id": "5.3.paired_deficit_contrasts",
+      "sentence_scope": "+0.00473/-0.00037/-0.00275 are reasoner-minus-fusion deficit differences, positive means larger reasoner deficit, and all intervals include zero",
+      "evidence_ids": [
+        "EV-CON-v3_02a.reasoner_minus_fusion_deficit.train_40k",
+        "EV-CON-v3_03.reasoner_minus_fusion_deficit.train_100k",
+        "EV-CON-v3_03.reasoner_minus_fusion_deficit.train_250k"
+      ],
+      "ledger_ids": [
+        "C06",
+        "C07"
+      ],
+      "sources": [
+        "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A4.csv",
+        "results/experiments/v3_02a_refs/step_statistics.json",
+        "results/experiments/v3_03_scaling/results.json"
+      ]
+    },
+    {
+      "claim_id": "5.4.token_diagnostics",
+      "sentence_scope": "D2 test-time CLS removal per seed; D3 training-time patches-only single-seed probe; observational attention masses; reported mean-patch and direct-linear references; no intervals or mechanism claim",
+      "sources": [
+        "results/experiments/v3_02a_refs/diagnostics.json",
+        "results/experiments/v3_02a_refs/patches_probe.json",
+        "results/experiments/v3_02a_refs/refs_results.json",
+        "docs/experiments/v3_02a_refs.md"
+      ]
+    },
+    {
+      "claim_id": "5.5.step_depth",
+      "sentence_scope": "bucket counts/images/priors, per-bucket 40k accuracies, pooled lifts and intervals, program length as in-distribution proxy and fixed-prior interpretation",
+      "evidence_ids": [
+        "EV-SLC-v3_02a.reasoner.train_40k.steps-le2.accuracy",
+        "EV-SLC-v3_02a.reasoner.train_40k.steps-3.accuracy",
+        "EV-SLC-v3_02a.reasoner.train_40k.steps-4.accuracy",
+        "EV-SLC-v3_02a.reasoner.train_40k.steps-ge5.accuracy"
+      ],
+      "ledger_ids": [
+        "C06",
+        "C21"
+      ],
+      "sources": [
+        "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A1.csv",
+        "results/experiments/v3_02a_refs/step_statistics.json",
+        "results/ve1/figures/VE1-FIG-04.data.json",
+        "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-07.csv"
+      ]
+    },
+    {
+      "claim_id": "5.6.deficit_levels_and_contrasts",
+      "sentence_scope": "40k stored deficit levels/intervals; 100k/250k seed-mean levels without intervals; lower-deficit interpretation boundary; canonical paired contrasts and seed-aggregation non-subtraction rule",
+      "evidence_ids": [
+        "EV-SLC-v3_02a.reasoner.train_40k.steps-ge4_combined.deficit",
+        "EV-SLC-v3_02a.fusion.train_40k.steps-ge4_combined.deficit",
+        "EV-SLC-v3_02a.question_only.train_40k.steps-ge4_combined.deficit",
+        "EV-CON-v3_02a.reasoner_minus_fusion_deficit.train_40k",
+        "EV-CON-v3_03.reasoner_minus_fusion_deficit.train_100k",
+        "EV-CON-v3_03.reasoner_minus_fusion_deficit.train_250k"
+      ],
+      "ledger_ids": [
+        "C06",
+        "C07",
+        "C21"
+      ],
+      "sources": [
+        "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A1.csv",
+        "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A4.csv",
+        "results/experiments/v3_03_scaling/results.json",
+        "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-07.csv"
+      ]
+    },
+    {
+      "claim_id": "5.7.summary",
+      "sentence_scope": "bounded development-only RQ2 answer and non-establishment boundaries",
+      "ledger_ids": [
+        "C06",
+        "C07",
+        "C15",
+        "C20",
+        "C21"
+      ],
+      "sources": [
+        "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-07.csv",
+        "results/experiments/v3_01_reasoner/results.json",
+        "results/experiments/v3_03_scaling/results.json",
+        "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A4.csv"
+      ]
+    }
+  ],
+  "tables": [
+    {
+      "table": "5.1",
+      "source_csv": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch5_scaling.csv",
+      "source_csv_sha256": "ae5566b33c00c7caf00fde6c06d0dc79b57eb3e2d9532a4b318b1191deaae922",
+      "source_provenance": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch5_scaling.provenance.json",
+      "source_provenance_sha256": "b71d8c550de74ddc66875fbc091bb52ed2a4a34da6d08a2982c10d1ddc7c3373",
+      "generated_tex": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables/ch5_scaling.tex",
+      "generated_tex_sha256": "8b689a08ba648e0a5ba497fc442b15ed70befd99cf400765d8f23f3b33aa77a9",
+      "converter": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tools/tab2latex.py",
+      "converter_sha256": "c441d40b2b10a7a4294c4f15b12bc450f7ae73a9435e3d15394940c0f0c5a546",
+      "header_map": {
+        "system": "System",
+        "scale": "Scale",
+        "seed set": "Seeds",
+        "per-seed accuracies": "Per-seed accuracies",
+        "mean accuracy": "Mean accuracy",
+        "seed SD": "Seed SD",
+        "same-seed R-F gap": "R-F gap",
+        "gap seed SD": "Gap seed SD"
+      },
+      "verify": true
+    },
+    {
+      "table": "5.2",
+      "source_csv": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch5_diagnostics.csv",
+      "source_csv_sha256": "4c5406590c9050908a4e67b1b21f03a27fdb8068bff69a734d325a4f05cb65f3",
+      "source_provenance": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch5_diagnostics.provenance.json",
+      "source_provenance_sha256": "a2e0dafb782970a9128ad00d1204bd8093c5c14234f50d94707aa4db9968681f",
+      "generated_tex": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables/ch5_diagnostics.tex",
+      "generated_tex_sha256": "56434641753dbb8a9d9a7e505eeb7de377d0292d4e0ebdcbc29ec8540455fe17",
+      "converter": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tools/tab2latex.py",
+      "converter_sha256": "c441d40b2b10a7a4294c4f15b12bc450f7ae73a9435e3d15394940c0f0c5a546",
+      "header_map": {
+        "probe": "Probe",
+        "intervention timing": "Timing",
+        "seed": "Seed",
+        "standard accuracy": "Standard accuracy",
+        "intervened accuracy": "Intervened accuracy",
+        "accuracy change": "Accuracy change",
+        "standard >=4 lift": "Standard >=4 lift",
+        "intervened >=4 lift": "Intervened >=4 lift",
+        "shuffled drop (probe; full)": "Shuffled drop (probe; full)"
+      },
+      "verify": true
+    },
+    {
+      "table": "5.3",
+      "source_csv": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch5_deficits.csv",
+      "source_csv_sha256": "e0dcb5ca94d041d5094f63b68d1d2c31b048ebc2eb4ebf30cb751e3031fa7cfc",
+      "source_provenance": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch5_deficits.provenance.json",
+      "source_provenance_sha256": "703d1521500238dd24fd017402f1abe4542db7e7e4d99ea2a0371d02ba594251",
+      "generated_tex": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables/ch5_deficits.tex",
+      "generated_tex_sha256": "40422ebc931f1757cd8d872fbe070e96506d338c9a122d88ecf1fe2f1af47346",
+      "converter": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tools/tab2latex.py",
+      "converter_sha256": "c441d40b2b10a7a4294c4f15b12bc450f7ae73a9435e3d15394940c0f0c5a546",
+      "header_map": {
+        "record type": "Record type",
+        "system or contrast": "System or contrast",
+        "scale": "Scale",
+        "seed aggregation": "Seed aggregation",
+        "pooled >=4 deficit or difference": "Pooled deficit/difference",
+        "95% CI": "Image-clustered 95% CI"
+      },
+      "verify": true
+    }
+  ],
+  "reused_figures": [
+    {
+      "chapter_figure": "5.1",
+      "artefact_id": "VE1-FIG-06",
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/images/ve1/VE1-FIG-06.pdf",
+      "sha256": "c76b8088133aebb702eb041bca4db3f299ea1c7c86432640f591e771f3685d01",
+      "frozen_manifest": "results/ve1/VE1_MANIFEST.json",
+      "caption_record": "results/ve1/captions.json",
+      "caption_record_sha256": "15fbf210cf2b81d8aec3052e5b1d8f6ba561a8fe569e3d278a1bab2c5d7baad9",
+      "claim_ledger_ids": [
+        "C06",
+        "C07",
+        "C15",
+        "C21"
+      ]
+    },
+    {
+      "chapter_figure": "5.2",
+      "artefact_id": "VE1-FIG-04",
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/images/ve1/VE1-FIG-04.pdf",
+      "sha256": "f97ebcb137c91064fff63784521a481ff84058b0428e845a0247fbdfc3ebb07c",
+      "frozen_manifest": "results/ve1/VE1_MANIFEST.json",
+      "caption_record": "results/ve1/captions.json",
+      "caption_record_sha256": "15fbf210cf2b81d8aec3052e5b1d8f6ba561a8fe569e3d278a1bab2c5d7baad9",
+      "claim_ledger_ids": [
+        "C06",
+        "C15",
+        "C21"
+      ]
+    }
+  ],
+  "report_hash_order_discrepancy": {
+    "status": "reported, not reconciled silently",
+    "detail": "The Claude handoff's final shorthand list swapped v3_01 and v3_03 report-hash prefixes; each real named path is pinned here to its actual full hash. Scientific contents match the evidence matrix."
+  }
+}

@@ -1,0 +1,1117 @@
+{
+  "schema_version": 1,
+  "artefact": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch5_deficits.csv",
+  "generation": "deterministic selection and presentation formatting from canonical stored records; no scientific recomputation",
+  "sources": [
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A1.csv",
+      "sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A4.csv",
+      "sha256": "d47be489cd51a75ddd6a823a33035115de557798cb6543ab010ce79c81a158f3"
+    },
+    {
+      "path": "results/experiments/v3_03_scaling/results.json",
+      "sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339"
+    }
+  ],
+  "cells": [
+    {
+      "output_row_id": "level:question_only:40k",
+      "output_field": "record type",
+      "value": "level",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A1.csv",
+      "frozen_source_sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
+      "source_row_identifier": "EV-SLC-v3_02a.question_only.train_40k.steps-ge4_combined.deficit",
+      "source_field": "record type",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:question_only:40k",
+      "output_field": "system or contrast",
+      "value": "question_only",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A1.csv",
+      "frozen_source_sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
+      "source_row_identifier": "EV-SLC-v3_02a.question_only.train_40k.steps-ge4_combined.deficit",
+      "source_field": "system or contrast",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:question_only:40k",
+      "output_field": "scale",
+      "value": "40k",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A1.csv",
+      "frozen_source_sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
+      "source_row_identifier": "EV-SLC-v3_02a.question_only.train_40k.steps-ge4_combined.deficit",
+      "source_field": "scale",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:question_only:40k",
+      "output_field": "seed aggregation",
+      "value": "0,1,2,3,42",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A1.csv",
+      "frozen_source_sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
+      "source_row_identifier": "EV-SLC-v3_02a.question_only.train_40k.steps-ge4_combined.deficit",
+      "source_field": "seed aggregation",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:question_only:40k",
+      "output_field": "pooled >=4 deficit or difference",
+      "value": "0.08090",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A1.csv",
+      "frozen_source_sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
+      "source_row_identifier": "EV-SLC-v3_02a.question_only.train_40k.steps-ge4_combined.deficit",
+      "source_field": "point estimate",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "level:question_only:40k",
+      "output_field": "95% CI",
+      "value": "[0.06710, 0.09561]",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A1.csv",
+      "frozen_source_sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
+      "source_row_identifier": "EV-SLC-v3_02a.question_only.train_40k.steps-ge4_combined.deficit",
+      "source_field": "95% CI (image-clustered)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "level:concat:40k",
+      "output_field": "record type",
+      "value": "level",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A1.csv",
+      "frozen_source_sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
+      "source_row_identifier": "EV-SLC-v3_02a.concat.train_40k.steps-ge4_combined.deficit",
+      "source_field": "record type",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:concat:40k",
+      "output_field": "system or contrast",
+      "value": "concat",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A1.csv",
+      "frozen_source_sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
+      "source_row_identifier": "EV-SLC-v3_02a.concat.train_40k.steps-ge4_combined.deficit",
+      "source_field": "system or contrast",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:concat:40k",
+      "output_field": "scale",
+      "value": "40k",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A1.csv",
+      "frozen_source_sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
+      "source_row_identifier": "EV-SLC-v3_02a.concat.train_40k.steps-ge4_combined.deficit",
+      "source_field": "scale",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:concat:40k",
+      "output_field": "seed aggregation",
+      "value": "0,1,2,3,42",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A1.csv",
+      "frozen_source_sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
+      "source_row_identifier": "EV-SLC-v3_02a.concat.train_40k.steps-ge4_combined.deficit",
+      "source_field": "seed aggregation",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:concat:40k",
+      "output_field": "pooled >=4 deficit or difference",
+      "value": "0.10502",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A1.csv",
+      "frozen_source_sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
+      "source_row_identifier": "EV-SLC-v3_02a.concat.train_40k.steps-ge4_combined.deficit",
+      "source_field": "point estimate",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "level:concat:40k",
+      "output_field": "95% CI",
+      "value": "[0.08915, 0.12065]",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A1.csv",
+      "frozen_source_sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
+      "source_row_identifier": "EV-SLC-v3_02a.concat.train_40k.steps-ge4_combined.deficit",
+      "source_field": "95% CI (image-clustered)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "level:product_576k:40k",
+      "output_field": "record type",
+      "value": "level",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A1.csv",
+      "frozen_source_sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
+      "source_row_identifier": "EV-SLC-v3_02a.product_576k.train_40k.steps-ge4_combined.deficit",
+      "source_field": "record type",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:product_576k:40k",
+      "output_field": "system or contrast",
+      "value": "product_576k",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A1.csv",
+      "frozen_source_sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
+      "source_row_identifier": "EV-SLC-v3_02a.product_576k.train_40k.steps-ge4_combined.deficit",
+      "source_field": "system or contrast",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:product_576k:40k",
+      "output_field": "scale",
+      "value": "40k",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A1.csv",
+      "frozen_source_sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
+      "source_row_identifier": "EV-SLC-v3_02a.product_576k.train_40k.steps-ge4_combined.deficit",
+      "source_field": "scale",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:product_576k:40k",
+      "output_field": "seed aggregation",
+      "value": "0,1,2,3,42",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A1.csv",
+      "frozen_source_sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
+      "source_row_identifier": "EV-SLC-v3_02a.product_576k.train_40k.steps-ge4_combined.deficit",
+      "source_field": "seed aggregation",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:product_576k:40k",
+      "output_field": "pooled >=4 deficit or difference",
+      "value": "0.09784",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A1.csv",
+      "frozen_source_sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
+      "source_row_identifier": "EV-SLC-v3_02a.product_576k.train_40k.steps-ge4_combined.deficit",
+      "source_field": "point estimate",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "level:product_576k:40k",
+      "output_field": "95% CI",
+      "value": "[0.08230, 0.11449]",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A1.csv",
+      "frozen_source_sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
+      "source_row_identifier": "EV-SLC-v3_02a.product_576k.train_40k.steps-ge4_combined.deficit",
+      "source_field": "95% CI (image-clustered)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "level:fusion:40k",
+      "output_field": "record type",
+      "value": "level",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A1.csv",
+      "frozen_source_sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
+      "source_row_identifier": "EV-SLC-v3_02a.fusion.train_40k.steps-ge4_combined.deficit",
+      "source_field": "record type",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:fusion:40k",
+      "output_field": "system or contrast",
+      "value": "fusion",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A1.csv",
+      "frozen_source_sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
+      "source_row_identifier": "EV-SLC-v3_02a.fusion.train_40k.steps-ge4_combined.deficit",
+      "source_field": "system or contrast",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:fusion:40k",
+      "output_field": "scale",
+      "value": "40k",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A1.csv",
+      "frozen_source_sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
+      "source_row_identifier": "EV-SLC-v3_02a.fusion.train_40k.steps-ge4_combined.deficit",
+      "source_field": "scale",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:fusion:40k",
+      "output_field": "seed aggregation",
+      "value": "0,1,2,3,42",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A1.csv",
+      "frozen_source_sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
+      "source_row_identifier": "EV-SLC-v3_02a.fusion.train_40k.steps-ge4_combined.deficit",
+      "source_field": "seed aggregation",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:fusion:40k",
+      "output_field": "pooled >=4 deficit or difference",
+      "value": "0.09175",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A1.csv",
+      "frozen_source_sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
+      "source_row_identifier": "EV-SLC-v3_02a.fusion.train_40k.steps-ge4_combined.deficit",
+      "source_field": "point estimate",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "level:fusion:40k",
+      "output_field": "95% CI",
+      "value": "[0.07548, 0.10771]",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A1.csv",
+      "frozen_source_sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
+      "source_row_identifier": "EV-SLC-v3_02a.fusion.train_40k.steps-ge4_combined.deficit",
+      "source_field": "95% CI (image-clustered)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "level:reasoner:40k",
+      "output_field": "record type",
+      "value": "level",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A1.csv",
+      "frozen_source_sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
+      "source_row_identifier": "EV-SLC-v3_02a.reasoner.train_40k.steps-ge4_combined.deficit",
+      "source_field": "record type",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:reasoner:40k",
+      "output_field": "system or contrast",
+      "value": "reasoner",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A1.csv",
+      "frozen_source_sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
+      "source_row_identifier": "EV-SLC-v3_02a.reasoner.train_40k.steps-ge4_combined.deficit",
+      "source_field": "system or contrast",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:reasoner:40k",
+      "output_field": "scale",
+      "value": "40k",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A1.csv",
+      "frozen_source_sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
+      "source_row_identifier": "EV-SLC-v3_02a.reasoner.train_40k.steps-ge4_combined.deficit",
+      "source_field": "scale",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:reasoner:40k",
+      "output_field": "seed aggregation",
+      "value": "0,1,2",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A1.csv",
+      "frozen_source_sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
+      "source_row_identifier": "EV-SLC-v3_02a.reasoner.train_40k.steps-ge4_combined.deficit",
+      "source_field": "seed aggregation",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:reasoner:40k",
+      "output_field": "pooled >=4 deficit or difference",
+      "value": "0.09795",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A1.csv",
+      "frozen_source_sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
+      "source_row_identifier": "EV-SLC-v3_02a.reasoner.train_40k.steps-ge4_combined.deficit",
+      "source_field": "point estimate",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "level:reasoner:40k",
+      "output_field": "95% CI",
+      "value": "[0.08236, 0.11434]",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A1.csv",
+      "frozen_source_sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
+      "source_row_identifier": "EV-SLC-v3_02a.reasoner.train_40k.steps-ge4_combined.deficit",
+      "source_field": "95% CI (image-clustered)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "level:question_only:100k",
+      "output_field": "record type",
+      "value": "level",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.100k.question_only",
+      "source_field": "record type",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:question_only:100k",
+      "output_field": "system or contrast",
+      "value": "question_only",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.100k.question_only",
+      "source_field": "system or contrast",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:question_only:100k",
+      "output_field": "scale",
+      "value": "100k",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.100k.question_only",
+      "source_field": "scale",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:question_only:100k",
+      "output_field": "seed aggregation",
+      "value": "0,1,2",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.100k.question_only",
+      "source_field": "seed aggregation",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:question_only:100k",
+      "output_field": "pooled >=4 deficit or difference",
+      "value": "0.06897",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.100k.question_only",
+      "source_field": "mean_deficit",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "level:question_only:100k",
+      "output_field": "95% CI",
+      "value": "not available",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.100k.question_only",
+      "source_field": "no per-model interval stored",
+      "transformation": "canonical absence of interval; presentation label"
+    },
+    {
+      "output_row_id": "level:concat:100k",
+      "output_field": "record type",
+      "value": "level",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.100k.concat",
+      "source_field": "record type",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:concat:100k",
+      "output_field": "system or contrast",
+      "value": "concat",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.100k.concat",
+      "source_field": "system or contrast",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:concat:100k",
+      "output_field": "scale",
+      "value": "100k",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.100k.concat",
+      "source_field": "scale",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:concat:100k",
+      "output_field": "seed aggregation",
+      "value": "0,1,2",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.100k.concat",
+      "source_field": "seed aggregation",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:concat:100k",
+      "output_field": "pooled >=4 deficit or difference",
+      "value": "0.09576",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.100k.concat",
+      "source_field": "mean_deficit",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "level:concat:100k",
+      "output_field": "95% CI",
+      "value": "not available",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.100k.concat",
+      "source_field": "no per-model interval stored",
+      "transformation": "canonical absence of interval; presentation label"
+    },
+    {
+      "output_row_id": "level:product_576k:100k",
+      "output_field": "record type",
+      "value": "level",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.100k.product_576k",
+      "source_field": "record type",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:product_576k:100k",
+      "output_field": "system or contrast",
+      "value": "product_576k",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.100k.product_576k",
+      "source_field": "system or contrast",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:product_576k:100k",
+      "output_field": "scale",
+      "value": "100k",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.100k.product_576k",
+      "source_field": "scale",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:product_576k:100k",
+      "output_field": "seed aggregation",
+      "value": "0,1,2",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.100k.product_576k",
+      "source_field": "seed aggregation",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:product_576k:100k",
+      "output_field": "pooled >=4 deficit or difference",
+      "value": "0.08739",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.100k.product_576k",
+      "source_field": "mean_deficit",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "level:product_576k:100k",
+      "output_field": "95% CI",
+      "value": "not available",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.100k.product_576k",
+      "source_field": "no per-model interval stored",
+      "transformation": "canonical absence of interval; presentation label"
+    },
+    {
+      "output_row_id": "level:fusion:100k",
+      "output_field": "record type",
+      "value": "level",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.100k.fusion",
+      "source_field": "record type",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:fusion:100k",
+      "output_field": "system or contrast",
+      "value": "fusion",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.100k.fusion",
+      "source_field": "system or contrast",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:fusion:100k",
+      "output_field": "scale",
+      "value": "100k",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.100k.fusion",
+      "source_field": "scale",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:fusion:100k",
+      "output_field": "seed aggregation",
+      "value": "0,1,2",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.100k.fusion",
+      "source_field": "seed aggregation",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:fusion:100k",
+      "output_field": "pooled >=4 deficit or difference",
+      "value": "0.08642",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.100k.fusion",
+      "source_field": "mean_deficit",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "level:fusion:100k",
+      "output_field": "95% CI",
+      "value": "not available",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.100k.fusion",
+      "source_field": "no per-model interval stored",
+      "transformation": "canonical absence of interval; presentation label"
+    },
+    {
+      "output_row_id": "level:reasoner:100k",
+      "output_field": "record type",
+      "value": "level",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.100k.reasoner",
+      "source_field": "record type",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:reasoner:100k",
+      "output_field": "system or contrast",
+      "value": "reasoner",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.100k.reasoner",
+      "source_field": "system or contrast",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:reasoner:100k",
+      "output_field": "scale",
+      "value": "100k",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.100k.reasoner",
+      "source_field": "scale",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:reasoner:100k",
+      "output_field": "seed aggregation",
+      "value": "0,1,2",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.100k.reasoner",
+      "source_field": "seed aggregation",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:reasoner:100k",
+      "output_field": "pooled >=4 deficit or difference",
+      "value": "0.08605",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.100k.reasoner",
+      "source_field": "mean_deficit",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "level:reasoner:100k",
+      "output_field": "95% CI",
+      "value": "not available",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.100k.reasoner",
+      "source_field": "no per-model interval stored",
+      "transformation": "canonical absence of interval; presentation label"
+    },
+    {
+      "output_row_id": "level:question_only:250k",
+      "output_field": "record type",
+      "value": "level",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.250k.question_only",
+      "source_field": "record type",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:question_only:250k",
+      "output_field": "system or contrast",
+      "value": "question_only",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.250k.question_only",
+      "source_field": "system or contrast",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:question_only:250k",
+      "output_field": "scale",
+      "value": "250k",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.250k.question_only",
+      "source_field": "scale",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:question_only:250k",
+      "output_field": "seed aggregation",
+      "value": "0,1,2",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.250k.question_only",
+      "source_field": "seed aggregation",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:question_only:250k",
+      "output_field": "pooled >=4 deficit or difference",
+      "value": "0.06384",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.250k.question_only",
+      "source_field": "mean_deficit",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "level:question_only:250k",
+      "output_field": "95% CI",
+      "value": "not available",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.250k.question_only",
+      "source_field": "no per-model interval stored",
+      "transformation": "canonical absence of interval; presentation label"
+    },
+    {
+      "output_row_id": "level:concat:250k",
+      "output_field": "record type",
+      "value": "level",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.250k.concat",
+      "source_field": "record type",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:concat:250k",
+      "output_field": "system or contrast",
+      "value": "concat",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.250k.concat",
+      "source_field": "system or contrast",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:concat:250k",
+      "output_field": "scale",
+      "value": "250k",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.250k.concat",
+      "source_field": "scale",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:concat:250k",
+      "output_field": "seed aggregation",
+      "value": "0,1,2",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.250k.concat",
+      "source_field": "seed aggregation",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:concat:250k",
+      "output_field": "pooled >=4 deficit or difference",
+      "value": "0.08417",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.250k.concat",
+      "source_field": "mean_deficit",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "level:concat:250k",
+      "output_field": "95% CI",
+      "value": "not available",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.250k.concat",
+      "source_field": "no per-model interval stored",
+      "transformation": "canonical absence of interval; presentation label"
+    },
+    {
+      "output_row_id": "level:product_576k:250k",
+      "output_field": "record type",
+      "value": "level",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.250k.product_576k",
+      "source_field": "record type",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:product_576k:250k",
+      "output_field": "system or contrast",
+      "value": "product_576k",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.250k.product_576k",
+      "source_field": "system or contrast",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:product_576k:250k",
+      "output_field": "scale",
+      "value": "250k",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.250k.product_576k",
+      "source_field": "scale",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:product_576k:250k",
+      "output_field": "seed aggregation",
+      "value": "0,1,2",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.250k.product_576k",
+      "source_field": "seed aggregation",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:product_576k:250k",
+      "output_field": "pooled >=4 deficit or difference",
+      "value": "0.07713",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.250k.product_576k",
+      "source_field": "mean_deficit",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "level:product_576k:250k",
+      "output_field": "95% CI",
+      "value": "not available",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.250k.product_576k",
+      "source_field": "no per-model interval stored",
+      "transformation": "canonical absence of interval; presentation label"
+    },
+    {
+      "output_row_id": "level:fusion:250k",
+      "output_field": "record type",
+      "value": "level",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.250k.fusion",
+      "source_field": "record type",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:fusion:250k",
+      "output_field": "system or contrast",
+      "value": "fusion",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.250k.fusion",
+      "source_field": "system or contrast",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:fusion:250k",
+      "output_field": "scale",
+      "value": "250k",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.250k.fusion",
+      "source_field": "scale",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:fusion:250k",
+      "output_field": "seed aggregation",
+      "value": "0,1,2",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.250k.fusion",
+      "source_field": "seed aggregation",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:fusion:250k",
+      "output_field": "pooled >=4 deficit or difference",
+      "value": "0.08028",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.250k.fusion",
+      "source_field": "mean_deficit",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "level:fusion:250k",
+      "output_field": "95% CI",
+      "value": "not available",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.250k.fusion",
+      "source_field": "no per-model interval stored",
+      "transformation": "canonical absence of interval; presentation label"
+    },
+    {
+      "output_row_id": "level:reasoner:250k",
+      "output_field": "record type",
+      "value": "level",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.250k.reasoner",
+      "source_field": "record type",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:reasoner:250k",
+      "output_field": "system or contrast",
+      "value": "reasoner",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.250k.reasoner",
+      "source_field": "system or contrast",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:reasoner:250k",
+      "output_field": "scale",
+      "value": "250k",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.250k.reasoner",
+      "source_field": "scale",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:reasoner:250k",
+      "output_field": "seed aggregation",
+      "value": "0,1,2",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.250k.reasoner",
+      "source_field": "seed aggregation",
+      "transformation": "presentation label or seed aggregation attached to the selected canonical record"
+    },
+    {
+      "output_row_id": "level:reasoner:250k",
+      "output_field": "pooled >=4 deficit or difference",
+      "value": "0.07753",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.250k.reasoner",
+      "source_field": "mean_deficit",
+      "transformation": "stored value; presentation-only decimal formatting, no arithmetic"
+    },
+    {
+      "output_row_id": "level:reasoner:250k",
+      "output_field": "95% CI",
+      "value": "not available",
+      "frozen_source_file": "results/experiments/v3_03_scaling/results.json",
+      "frozen_source_sha256": "b618e239e051e6201b8a3b4c6833c43ceb5369a3059a07883314783012da3339",
+      "source_row_identifier": "v3_03_scaling.pooled_deficits.250k.reasoner",
+      "source_field": "no per-model interval stored",
+      "transformation": "canonical absence of interval; presentation label"
+    },
+    {
+      "output_row_id": "contrast:40k",
+      "output_field": "record type",
+      "value": "paired contrast",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A4.csv",
+      "frozen_source_sha256": "d47be489cd51a75ddd6a823a33035115de557798cb6543ab010ce79c81a158f3",
+      "source_row_identifier": "EV-CON-v3_02a.reasoner_minus_fusion_deficit.train_40k",
+      "source_field": "analysis role",
+      "transformation": "presentation label for the selected paired contrast"
+    },
+    {
+      "output_row_id": "contrast:40k",
+      "output_field": "system or contrast",
+      "value": "reasoner - fusion",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A4.csv",
+      "frozen_source_sha256": "d47be489cd51a75ddd6a823a33035115de557798cb6543ab010ce79c81a158f3",
+      "source_row_identifier": "EV-CON-v3_02a.reasoner_minus_fusion_deficit.train_40k",
+      "source_field": "contrast id",
+      "transformation": "presentation label for the selected paired contrast"
+    },
+    {
+      "output_row_id": "contrast:40k",
+      "output_field": "scale",
+      "value": "40k",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A4.csv",
+      "frozen_source_sha256": "d47be489cd51a75ddd6a823a33035115de557798cb6543ab010ce79c81a158f3",
+      "source_row_identifier": "EV-CON-v3_02a.reasoner_minus_fusion_deficit.train_40k",
+      "source_field": "contrast id",
+      "transformation": "presentation label for the selected paired contrast"
+    },
+    {
+      "output_row_id": "contrast:40k",
+      "output_field": "seed aggregation",
+      "value": "paired 0,1,2",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A4.csv",
+      "frozen_source_sha256": "d47be489cd51a75ddd6a823a33035115de557798cb6543ab010ce79c81a158f3",
+      "source_row_identifier": "EV-CON-v3_02a.reasoner_minus_fusion_deficit.train_40k",
+      "source_field": "training seeds",
+      "transformation": "presentation label for the selected paired contrast"
+    },
+    {
+      "output_row_id": "contrast:40k",
+      "output_field": "pooled >=4 deficit or difference",
+      "value": "0.00473",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A4.csv",
+      "frozen_source_sha256": "d47be489cd51a75ddd6a823a33035115de557798cb6543ab010ce79c81a158f3",
+      "source_row_identifier": "EV-CON-v3_02a.reasoner_minus_fusion_deficit.train_40k",
+      "source_field": "effect",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "contrast:40k",
+      "output_field": "95% CI",
+      "value": "[-0.00672, 0.01702]",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A4.csv",
+      "frozen_source_sha256": "d47be489cd51a75ddd6a823a33035115de557798cb6543ab010ce79c81a158f3",
+      "source_row_identifier": "EV-CON-v3_02a.reasoner_minus_fusion_deficit.train_40k",
+      "source_field": "95% CI (image-clustered)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "contrast:100k",
+      "output_field": "record type",
+      "value": "paired contrast",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A4.csv",
+      "frozen_source_sha256": "d47be489cd51a75ddd6a823a33035115de557798cb6543ab010ce79c81a158f3",
+      "source_row_identifier": "EV-CON-v3_03.reasoner_minus_fusion_deficit.train_100k",
+      "source_field": "analysis role",
+      "transformation": "presentation label for the selected paired contrast"
+    },
+    {
+      "output_row_id": "contrast:100k",
+      "output_field": "system or contrast",
+      "value": "reasoner - fusion",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A4.csv",
+      "frozen_source_sha256": "d47be489cd51a75ddd6a823a33035115de557798cb6543ab010ce79c81a158f3",
+      "source_row_identifier": "EV-CON-v3_03.reasoner_minus_fusion_deficit.train_100k",
+      "source_field": "contrast id",
+      "transformation": "presentation label for the selected paired contrast"
+    },
+    {
+      "output_row_id": "contrast:100k",
+      "output_field": "scale",
+      "value": "100k",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A4.csv",
+      "frozen_source_sha256": "d47be489cd51a75ddd6a823a33035115de557798cb6543ab010ce79c81a158f3",
+      "source_row_identifier": "EV-CON-v3_03.reasoner_minus_fusion_deficit.train_100k",
+      "source_field": "contrast id",
+      "transformation": "presentation label for the selected paired contrast"
+    },
+    {
+      "output_row_id": "contrast:100k",
+      "output_field": "seed aggregation",
+      "value": "paired 0,1,2",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A4.csv",
+      "frozen_source_sha256": "d47be489cd51a75ddd6a823a33035115de557798cb6543ab010ce79c81a158f3",
+      "source_row_identifier": "EV-CON-v3_03.reasoner_minus_fusion_deficit.train_100k",
+      "source_field": "training seeds",
+      "transformation": "presentation label for the selected paired contrast"
+    },
+    {
+      "output_row_id": "contrast:100k",
+      "output_field": "pooled >=4 deficit or difference",
+      "value": "-0.00037",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A4.csv",
+      "frozen_source_sha256": "d47be489cd51a75ddd6a823a33035115de557798cb6543ab010ce79c81a158f3",
+      "source_row_identifier": "EV-CON-v3_03.reasoner_minus_fusion_deficit.train_100k",
+      "source_field": "effect",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "contrast:100k",
+      "output_field": "95% CI",
+      "value": "[-0.01211, 0.01057]",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A4.csv",
+      "frozen_source_sha256": "d47be489cd51a75ddd6a823a33035115de557798cb6543ab010ce79c81a158f3",
+      "source_row_identifier": "EV-CON-v3_03.reasoner_minus_fusion_deficit.train_100k",
+      "source_field": "95% CI (image-clustered)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "contrast:250k",
+      "output_field": "record type",
+      "value": "paired contrast",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A4.csv",
+      "frozen_source_sha256": "d47be489cd51a75ddd6a823a33035115de557798cb6543ab010ce79c81a158f3",
+      "source_row_identifier": "EV-CON-v3_03.reasoner_minus_fusion_deficit.train_250k",
+      "source_field": "analysis role",
+      "transformation": "presentation label for the selected paired contrast"
+    },
+    {
+      "output_row_id": "contrast:250k",
+      "output_field": "system or contrast",
+      "value": "reasoner - fusion",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A4.csv",
+      "frozen_source_sha256": "d47be489cd51a75ddd6a823a33035115de557798cb6543ab010ce79c81a158f3",
+      "source_row_identifier": "EV-CON-v3_03.reasoner_minus_fusion_deficit.train_250k",
+      "source_field": "contrast id",
+      "transformation": "presentation label for the selected paired contrast"
+    },
+    {
+      "output_row_id": "contrast:250k",
+      "output_field": "scale",
+      "value": "250k",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A4.csv",
+      "frozen_source_sha256": "d47be489cd51a75ddd6a823a33035115de557798cb6543ab010ce79c81a158f3",
+      "source_row_identifier": "EV-CON-v3_03.reasoner_minus_fusion_deficit.train_250k",
+      "source_field": "contrast id",
+      "transformation": "presentation label for the selected paired contrast"
+    },
+    {
+      "output_row_id": "contrast:250k",
+      "output_field": "seed aggregation",
+      "value": "paired 0,1,2",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A4.csv",
+      "frozen_source_sha256": "d47be489cd51a75ddd6a823a33035115de557798cb6543ab010ce79c81a158f3",
+      "source_row_identifier": "EV-CON-v3_03.reasoner_minus_fusion_deficit.train_250k",
+      "source_field": "training seeds",
+      "transformation": "presentation label for the selected paired contrast"
+    },
+    {
+      "output_row_id": "contrast:250k",
+      "output_field": "pooled >=4 deficit or difference",
+      "value": "-0.00275",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A4.csv",
+      "frozen_source_sha256": "d47be489cd51a75ddd6a823a33035115de557798cb6543ab010ce79c81a158f3",
+      "source_row_identifier": "EV-CON-v3_03.reasoner_minus_fusion_deficit.train_250k",
+      "source_field": "effect",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "contrast:250k",
+      "output_field": "95% CI",
+      "value": "[-0.01323, 0.00760]",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-A4.csv",
+      "frozen_source_sha256": "d47be489cd51a75ddd6a823a33035115de557798cb6543ab010ce79c81a158f3",
+      "source_row_identifier": "EV-CON-v3_03.reasoner_minus_fusion_deficit.train_250k",
+      "source_field": "95% CI (image-clustered)",
+      "transformation": "identity / selection only"
+    }
+  ],
+  "csv_sha256": "e0dcb5ca94d041d5094f63b68d1d2c31b048ebc2eb4ebf30cb751e3031fa7cfc",
+  "generated_tex": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables/ch5_deficits.tex",
+  "generated_tex_sha256": "40422ebc931f1757cd8d872fbe070e96506d338c9a122d88ecf1fe2f1af47346",
+  "converter": {
+    "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tools/tab2latex.py",
+    "sha256": "c441d40b2b10a7a4294c4f15b12bc450f7ae73a9435e3d15394940c0f0c5a546",
+    "header_map": {
+      "record type": "Record type",
+      "system or contrast": "System or contrast",
+      "scale": "Scale",
+      "seed aggregation": "Seed aggregation",
+      "pooled >=4 deficit or difference": "Pooled deficit/difference",
+      "95% CI": "Image-clustered 95% CI"
+    },
+    "verify": true
+  }
+}
