@@ -1,0 +1,289 @@
+{
+  "schema_version": 1,
+  "task_id": "dissertation-06-ch7-efficiency",
+  "development_set_only": true,
+  "clean_test_accessed": false,
+  "scientific_recomputation": false,
+  "sources": [
+    {
+      "path": "results/closure/efficiency_closure_table.csv",
+      "sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e"
+    },
+    {
+      "path": "results/closure/e7b_evidence_supersession.json",
+      "sha256": "2fb6561b3916b83603631c0feb35d716dc9bbf3e1ed1ef3d4e7286516a0a0c75"
+    },
+    {
+      "path": "results/experiments/e7b_serial_efficiency/e7b_results.json",
+      "sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4"
+    },
+    {
+      "path": "results/experiments/e9_compact_vlm/e9_results.json",
+      "sha256": "5d42ae9344fa9d7bcd48589645d62b4d0c20db9a3d9d03288bbddd6832ae2caa"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-06.csv",
+      "sha256": "06b7b61eb82c129b21d57d8a166d79712764d8074c8966cd1044e0e143097781"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-07.csv",
+      "sha256": "6f20e51875b3c4cd5cbcbfb43a7f7980e16c98d0b2b64a139371a9c00aa409b2"
+    },
+    {
+      "path": "results/ve1/figures/VE1-FIG-09.data.json",
+      "sha256": "a869ce3108678493712c2f917bda2fc079a34fe699d9e5c8090dd5fd02d477f9"
+    },
+    {
+      "path": "results/ve1/captions.json",
+      "sha256": "15fbf210cf2b81d8aec3052e5b1d8f6ba561a8fe569e3d278a1bab2c5d7baad9"
+    },
+    {
+      "path": "results/ve0/supersession_map.json",
+      "sha256": "e1163023509920dddf182989341a2517057941bffc813cc645e6b65928e66f5c"
+    },
+    {
+      "path": "docs/experiments/e7b_serial_efficiency.md",
+      "sha256": "453fa6a0c85cd5ab45871ae0e558a28a84b53480c0f64d6e88cc266570f7c46f"
+    },
+    {
+      "path": "docs/experiments/e9_compact_vlm.md",
+      "sha256": "6303aede69f12850c6ba8ecaf7f80eb2101f976705f6094cb8d9363d1086ad8c"
+    },
+    {
+      "path": "docs/experiments/e7a_efficiency.md",
+      "sha256": "4d554080d749f6f2ec2b88f09910d9591cdc2dc313c0c91aa63e7001c2d5f5f6"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables/ch3_architecture_params.tex",
+      "sha256": "57fb4f4536cafdf44b9180d4c6984daa7444333f602d2619d245827496be407b"
+    }
+  ],
+  "claim_mappings": [
+    {
+      "claim_id": "7.1.scope_and_measurement_boundary",
+      "sentence_scope": "E7b end-to-end serial protocol constants, full-query boundary, seed-0 train-250k development scope, withdrawn E7b fields, superseded E7a sums, and unmeasured environmental/cost quantities",
+      "evidence_ids": [
+        "EV-EFF-E7b.question_only",
+        "EV-EFF-E7b.concat",
+        "EV-EFF-E7b.fusion",
+        "EV-EFF-E7b.vocab1000_product",
+        "EV-EFF-E7b.reasoner",
+        "EV-EFF-E7b.e8a_a0p",
+        "EV-EFF-E7b.siglip_fusion",
+        "EV-EFF-E7b.e8a_a1"
+      ],
+      "ledger_ids": [
+        "C13",
+        "C16",
+        "C17",
+        "C18"
+      ],
+      "sources": [
+        "results/closure/e7b_evidence_supersession.json",
+        "results/experiments/e7b_serial_efficiency/e7b_results.json",
+        "docs/experiments/e7b_serial_efficiency.md",
+        "docs/experiments/e7a_efficiency.md"
+      ]
+    },
+    {
+      "claim_id": "7.2.e7b_warm_serial",
+      "sentence_scope": "eight E7b warm medians and spreads on otter155, grouped latency ordering, end-to-end classification and hardware/checkpoint boundary",
+      "evidence_ids": [
+        "EV-EFF-E7b.question_only",
+        "EV-EFF-E7b.concat",
+        "EV-EFF-E7b.fusion",
+        "EV-EFF-E7b.vocab1000_product",
+        "EV-EFF-E7b.reasoner",
+        "EV-EFF-E7b.e8a_a0p",
+        "EV-EFF-E7b.siglip_fusion",
+        "EV-EFF-E7b.e8a_a1"
+      ],
+      "ledger_ids": [
+        "C13",
+        "C18"
+      ],
+      "sources": [
+        "results/closure/efficiency_closure_table.csv",
+        "results/experiments/e7b_serial_efficiency/e7b_results.json"
+      ]
+    },
+    {
+      "claim_id": "7.3.accuracy_latency_frontier",
+      "sentence_scope": "supported-view denominators, common 10,004-row raw accuracies, canonical frontier membership, bounded dominance, question-only exclusion, and failed bridge separation",
+      "evidence_ids": [
+        "EV-EFF-E7b.question_only",
+        "EV-EFF-E7b.concat",
+        "EV-EFF-E7b.fusion",
+        "EV-EFF-E7b.vocab1000_product",
+        "EV-EFF-E7b.reasoner",
+        "EV-EFF-E7b.e8a_a0p",
+        "EV-EFF-E7b.siglip_fusion",
+        "EV-EFF-E7b.e8a_a1",
+        "EV-EFF-E9.fusion"
+      ],
+      "ledger_ids": [
+        "C13",
+        "C16",
+        "C17",
+        "C18"
+      ],
+      "sources": [
+        "results/closure/efficiency_closure_table.csv",
+        "results/experiments/e7b_serial_efficiency/e7b_results.json",
+        "results/closure/e7b_evidence_supersession.json",
+        "results/ve1/figures/VE1-FIG-09.data.json"
+      ]
+    },
+    {
+      "claim_id": "7.4.parameter_and_answer_timing_boundary",
+      "sentence_scope": "trainable and total loaded parameter counts, terminology boundary, absence of derived ratios, retained segmented-pass component timings labelled not end-to-end, and absence of comparable R1/E10 timings",
+      "evidence_ids": [
+        "EV-EFF-E7b.question_only",
+        "EV-EFF-E7b.concat",
+        "EV-EFF-E7b.fusion",
+        "EV-EFF-E7b.vocab1000_product",
+        "EV-EFF-E7b.reasoner",
+        "EV-EFF-E7b.e8a_a0p",
+        "EV-EFF-E7b.siglip_fusion",
+        "EV-EFF-E7b.e8a_a1",
+        "EV-EFF-E9.e8b_B1",
+        "EV-EFF-E9.e8b_B2_R2",
+        "EV-EFF-E9.e8b_B2_R3",
+        "EV-EFF-E9.e8b_B3_R2",
+        "EV-EFF-E9.e8b_B3_R3"
+      ],
+      "ledger_ids": [
+        "C13",
+        "C16",
+        "C17",
+        "C18"
+      ],
+      "sources": [
+        "results/closure/efficiency_closure_table.csv",
+        "results/experiments/e9_compact_vlm/e9_results.json",
+        "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables/ch3_architecture_params.tex"
+      ]
+    },
+    {
+      "claim_id": "7.5.e9_context_and_pairing",
+      "sentence_scope": "otter159 E9 latency rows, open and constrained readout definitions, four paired SmolVLM accuracies, seven unresolved accuracy cells, separately reported E7b product accuracy, stored 24.7-times latency wording, and failed bridge/no merge",
+      "evidence_ids": [
+        "EV-EFF-E9.vocab1000_product",
+        "EV-EFF-E9.fusion",
+        "EV-EFF-E9.e8b_B1",
+        "EV-EFF-E9.e8b_B2_R2",
+        "EV-EFF-E9.e8b_B2_R3",
+        "EV-EFF-E9.e8b_B3_R2",
+        "EV-EFF-E9.e8b_B3_R3",
+        "EV-EFF-E9.e9_256m_open",
+        "EV-EFF-E9.e9_256m_constrained",
+        "EV-EFF-E9.e9_500m_open",
+        "EV-EFF-E9.e9_500m_constrained",
+        "EV-EFF-E7b.vocab1000_product"
+      ],
+      "ledger_ids": [
+        "C14",
+        "C16",
+        "C17",
+        "C18"
+      ],
+      "sources": [
+        "results/closure/efficiency_closure_table.csv",
+        "results/experiments/e9_compact_vlm/e9_results.json",
+        "results/closure/e7b_evidence_supersession.json",
+        "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-06.csv",
+        "results/ve1/figures/VE1-FIG-09.data.json"
+      ]
+    },
+    {
+      "claim_id": "7.6.efficiency_summary",
+      "sentence_scope": "bounded development-only E7b frontier and latency synthesis, separate contextual E9 block, unresolved product pairing, failed bridge and deferred Chapter-8 interpretation",
+      "evidence_ids": [
+        "EV-EFF-E7b.question_only",
+        "EV-EFF-E7b.concat",
+        "EV-EFF-E7b.fusion",
+        "EV-EFF-E7b.vocab1000_product",
+        "EV-EFF-E7b.reasoner",
+        "EV-EFF-E7b.e8a_a0p",
+        "EV-EFF-E7b.siglip_fusion",
+        "EV-EFF-E7b.e8a_a1",
+        "EV-EFF-E9.vocab1000_product",
+        "EV-EFF-E9.fusion",
+        "EV-EFF-E9.e8b_B1",
+        "EV-EFF-E9.e8b_B2_R2",
+        "EV-EFF-E9.e8b_B2_R3",
+        "EV-EFF-E9.e8b_B3_R2",
+        "EV-EFF-E9.e8b_B3_R3",
+        "EV-EFF-E9.e9_256m_open",
+        "EV-EFF-E9.e9_256m_constrained",
+        "EV-EFF-E9.e9_500m_open",
+        "EV-EFF-E9.e9_500m_constrained"
+      ],
+      "ledger_ids": [
+        "C13",
+        "C14",
+        "C16",
+        "C17",
+        "C18"
+      ],
+      "sources": [
+        "results/closure/efficiency_closure_table.csv",
+        "results/closure/e7b_evidence_supersession.json",
+        "results/ve1/figures/VE1-FIG-09.data.json"
+      ]
+    }
+  ],
+  "denominator_policy": "Supported-view accuracy is labelled by answer vocabulary (7,714 top-100 or 9,823 top-1000); only raw-distribution accuracy on the common 10,004-row development view is a Pareto axis.",
+  "measurement_class_policy": "Headline latency uses only E7b/E9 END_TO_END_SERIAL warm medians. otter155 and otter159 are separate blocks; the -18.69% fusion bridge failed the ±10% gate, so no node merge or adjustment factor is allowed. Cold, memory, QPS, checkpoint-byte, cached/head-only and E7a additive headline values are absent.",
+  "pairing_policy": "Seven E9 re-timed reference rows are PAIRING_UNRESOLVED and receive no E9 accuracy value. E7b product accuracy 0.49050 and E9 product latency 6.1990 ms are separate facts, never a paired E9 coordinate. Only the four SmolVLM rows carry paired E9 raw accuracy.",
+  "parameter_policy": "Trainable parameter count and total loaded parameter count are distinct retained fields. Total loaded parameters are not model size, storage, checkpoint bytes, VRAM or measured memory; nominal family labels are separate. No new parameter ratio is derived.",
+  "ratio_policy": "The only ratio reported is the stored canonical wording that SmolVLM-500M constrained was approximately 24.7 times slower in same-node warm serial latency. No ratio is recomputed.",
+  "environmental_cost_policy": "Energy, power, carbon and monetary cost were not measured; negative boundary wording is allowed and no affirmative claim is made.",
+  "tables": [
+    {
+      "table": "ch7_e7b_serial",
+      "source_csv": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch7_e7b_serial.csv",
+      "source_csv_sha256": "411c054c71dff25c10c4d2880ebe3e47c76c6f92fb90c7080da3ad6c9cf6176a",
+      "provenance_sidecar": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch7_e7b_serial.provenance.json",
+      "provenance_sidecar_sha256": "8703b52f5a27fecbd24ae164306b9821ae72c80be741a77f3b9691ed1d217daf",
+      "generated_tex": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables/ch7_e7b_serial.tex",
+      "generated_tex_sha256": "6e08b58d166bfeb0acd4a67699955f83e9abfafbbb73cc386fdcb4f8b0ec1eca",
+      "cell_provenance_count": 72,
+      "all_cells_resolved": true,
+      "converter_sha256": "c441d40b2b10a7a4294c4f15b12bc450f7ae73a9435e3d15394940c0f0c5a546"
+    },
+    {
+      "table": "ch7_e9_context",
+      "source_csv": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch7_e9_context.csv",
+      "source_csv_sha256": "7a7335893dcc677462dd99bb27bdb9f19e0daa5db4b8f42f888673d505e38a76",
+      "provenance_sidecar": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch7_e9_context.provenance.json",
+      "provenance_sidecar_sha256": "f8d2963c08b5d74baa584e2ab431c31271fb3ac739361fe06111f6bc81305900",
+      "generated_tex": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables/ch7_e9_context.tex",
+      "generated_tex_sha256": "75a263c5305c38b35e3abb4e3f6dc001c4dfa68ff0f33a954ff25e2a5a74c1ae",
+      "cell_provenance_count": 88,
+      "all_cells_resolved": true,
+      "converter_sha256": "c441d40b2b10a7a4294c4f15b12bc450f7ae73a9435e3d15394940c0f0c5a546"
+    }
+  ],
+  "reused_figures": [
+    {
+      "figure": "VE1-FIG-09",
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/images/ve1/VE1-FIG-09.pdf",
+      "sha256": "6111bf26cb58570cfc03b286076ff2b27cc63f8e76261db849f737dfd4412668",
+      "frozen_source": "results/ve1/figures/VE1-FIG-09.pdf",
+      "frozen_source_sha256": "6111bf26cb58570cfc03b286076ff2b27cc63f8e76261db849f737dfd4412668",
+      "figure_data": "results/ve1/figures/VE1-FIG-09.data.json",
+      "figure_data_sha256": "a869ce3108678493712c2f917bda2fc079a34fe699d9e5c8090dd5fd02d477f9",
+      "caption_record": "results/ve1/captions.json#VE1-FIG-09",
+      "caption_record_sha256": "15fbf210cf2b81d8aec3052e5b1d8f6ba561a8fe569e3d278a1bab2c5d7baad9",
+      "ledger_ids": [
+        "C13",
+        "C14",
+        "C16",
+        "C17",
+        "C18"
+      ],
+      "modified": false
+    }
+  ]
+}

@@ -1,0 +1,757 @@
+{
+  "schema_version": 1,
+  "artefact": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch7_e7b_serial.csv",
+  "generation": "deterministic selection and presentation formatting from canonical frozen records; no scientific recomputation",
+  "sources": [
+    {
+      "path": "results/closure/efficiency_closure_table.csv",
+      "sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e"
+    },
+    {
+      "path": "results/experiments/e7b_serial_efficiency/e7b_results.json",
+      "sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4"
+    }
+  ],
+  "cells": [
+    {
+      "output_row_id": "E7b::question_only",
+      "output_field": "system",
+      "value": "Question only",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::question_only",
+      "source_field": "system_id",
+      "transformation": "reader-facing system label from canonical system_id"
+    },
+    {
+      "output_row_id": "E7b::question_only",
+      "output_field": "answer view",
+      "value": "top-100 (7,714)",
+      "frozen_source_file": "results/experiments/e7b_serial_efficiency/e7b_results.json",
+      "frozen_source_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
+      "source_row_identifier": "E7b::question_only",
+      "source_field": "systems.<id>.accuracy.vocabulary_view_rows",
+      "transformation": "reader-facing answer-view label from stored supported-row count"
+    },
+    {
+      "output_row_id": "E7b::question_only",
+      "output_field": "supported accuracy",
+      "value": "0.50402",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::question_only",
+      "source_field": "accuracy_vocabulary_supported",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E7b::question_only",
+      "output_field": "raw accuracy (10,004)",
+      "value": "0.38864",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::question_only",
+      "source_field": "accuracy_raw_distribution_common_denominator",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E7b::question_only",
+      "output_field": "warm median ms",
+      "value": "1.9603",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::question_only",
+      "source_field": "warm_serial_median_ms",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E7b::question_only",
+      "output_field": "spread ms",
+      "value": "0.0133",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::question_only",
+      "source_field": "across_pass_spread_ms",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E7b::question_only",
+      "output_field": "trainable parameters",
+      "value": "313956",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::question_only",
+      "source_field": "trainable_parameters",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "E7b::question_only",
+      "output_field": "total loaded parameters",
+      "value": "151591269",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::question_only",
+      "source_field": "total_loaded_parameters",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "E7b::question_only",
+      "output_field": "frontier",
+      "value": "excluded floor",
+      "frozen_source_file": "results/experiments/e7b_serial_efficiency/e7b_results.json",
+      "frozen_source_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
+      "source_row_identifier": "E7b::question_only",
+      "source_field": "primary_pareto_frontier_common_denominator and frontier_note",
+      "transformation": "reader-facing canonical membership; question_only labelled excluded floor"
+    },
+    {
+      "output_row_id": "E7b::concat",
+      "output_field": "system",
+      "value": "Concat",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::concat",
+      "source_field": "system_id",
+      "transformation": "reader-facing system label from canonical system_id"
+    },
+    {
+      "output_row_id": "E7b::concat",
+      "output_field": "answer view",
+      "value": "top-100 (7,714)",
+      "frozen_source_file": "results/experiments/e7b_serial_efficiency/e7b_results.json",
+      "frozen_source_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
+      "source_row_identifier": "E7b::concat",
+      "source_field": "systems.<id>.accuracy.vocabulary_view_rows",
+      "transformation": "reader-facing answer-view label from stored supported-row count"
+    },
+    {
+      "output_row_id": "E7b::concat",
+      "output_field": "supported accuracy",
+      "value": "0.57661",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::concat",
+      "source_field": "accuracy_vocabulary_supported",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E7b::concat",
+      "output_field": "raw accuracy (10,004)",
+      "value": "0.44462",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::concat",
+      "source_field": "accuracy_raw_distribution_common_denominator",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E7b::concat",
+      "output_field": "warm median ms",
+      "value": "7.6104",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::concat",
+      "source_field": "warm_serial_median_ms",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E7b::concat",
+      "output_field": "spread ms",
+      "value": "0.9044",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::concat",
+      "source_field": "across_pass_spread_ms",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E7b::concat",
+      "output_field": "trainable parameters",
+      "value": "576100",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::concat",
+      "source_field": "trainable_parameters",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "E7b::concat",
+      "output_field": "total loaded parameters",
+      "value": "151853413",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::concat",
+      "source_field": "total_loaded_parameters",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "E7b::concat",
+      "output_field": "frontier",
+      "value": "yes",
+      "frozen_source_file": "results/experiments/e7b_serial_efficiency/e7b_results.json",
+      "frozen_source_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
+      "source_row_identifier": "E7b::concat",
+      "source_field": "primary_pareto_frontier_common_denominator and frontier_note",
+      "transformation": "reader-facing canonical membership; question_only labelled excluded floor"
+    },
+    {
+      "output_row_id": "E7b::fusion",
+      "output_field": "system",
+      "value": "Fusion",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::fusion",
+      "source_field": "system_id",
+      "transformation": "reader-facing system label from canonical system_id"
+    },
+    {
+      "output_row_id": "E7b::fusion",
+      "output_field": "answer view",
+      "value": "top-100 (7,714)",
+      "frozen_source_file": "results/experiments/e7b_serial_efficiency/e7b_results.json",
+      "frozen_source_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
+      "source_row_identifier": "E7b::fusion",
+      "source_field": "systems.<id>.accuracy.vocabulary_view_rows",
+      "transformation": "reader-facing answer-view label from stored supported-row count"
+    },
+    {
+      "output_row_id": "E7b::fusion",
+      "output_field": "supported accuracy",
+      "value": "0.58439",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::fusion",
+      "source_field": "accuracy_vocabulary_supported",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E7b::fusion",
+      "output_field": "raw accuracy (10,004)",
+      "value": "0.45062",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::fusion",
+      "source_field": "accuracy_raw_distribution_common_denominator",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E7b::fusion",
+      "output_field": "warm median ms",
+      "value": "7.6351",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::fusion",
+      "source_field": "warm_serial_median_ms",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E7b::fusion",
+      "output_field": "spread ms",
+      "value": "0.8903",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::fusion",
+      "source_field": "across_pass_spread_ms",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E7b::fusion",
+      "output_field": "trainable parameters",
+      "value": "1100388",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::fusion",
+      "source_field": "trainable_parameters",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "E7b::fusion",
+      "output_field": "total loaded parameters",
+      "value": "152377701",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::fusion",
+      "source_field": "total_loaded_parameters",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "E7b::fusion",
+      "output_field": "frontier",
+      "value": "yes",
+      "frozen_source_file": "results/experiments/e7b_serial_efficiency/e7b_results.json",
+      "frozen_source_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
+      "source_row_identifier": "E7b::fusion",
+      "source_field": "primary_pareto_frontier_common_denominator and frontier_note",
+      "transformation": "reader-facing canonical membership; question_only labelled excluded floor"
+    },
+    {
+      "output_row_id": "E7b::vocab1000_product",
+      "output_field": "system",
+      "value": "Top-1000 product",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::vocab1000_product",
+      "source_field": "system_id",
+      "transformation": "reader-facing system label from canonical system_id"
+    },
+    {
+      "output_row_id": "E7b::vocab1000_product",
+      "output_field": "answer view",
+      "value": "top-1000 (9,823)",
+      "frozen_source_file": "results/experiments/e7b_serial_efficiency/e7b_results.json",
+      "frozen_source_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
+      "source_row_identifier": "E7b::vocab1000_product",
+      "source_field": "systems.<id>.accuracy.vocabulary_view_rows",
+      "transformation": "reader-facing answer-view label from stored supported-row count"
+    },
+    {
+      "output_row_id": "E7b::vocab1000_product",
+      "output_field": "supported accuracy",
+      "value": "0.49954",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::vocab1000_product",
+      "source_field": "accuracy_vocabulary_supported",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E7b::vocab1000_product",
+      "output_field": "raw accuracy (10,004)",
+      "value": "0.49050",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::vocab1000_product",
+      "source_field": "accuracy_raw_distribution_common_denominator",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E7b::vocab1000_product",
+      "output_field": "warm median ms",
+      "value": "7.6708",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::vocab1000_product",
+      "source_field": "warm_serial_median_ms",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E7b::vocab1000_product",
+      "output_field": "spread ms",
+      "value": "0.0966",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::vocab1000_product",
+      "source_field": "across_pass_spread_ms",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E7b::vocab1000_product",
+      "output_field": "trainable parameters",
+      "value": "1299944",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::vocab1000_product",
+      "source_field": "trainable_parameters",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "E7b::vocab1000_product",
+      "output_field": "total loaded parameters",
+      "value": "152577257",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::vocab1000_product",
+      "source_field": "total_loaded_parameters",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "E7b::vocab1000_product",
+      "output_field": "frontier",
+      "value": "yes",
+      "frozen_source_file": "results/experiments/e7b_serial_efficiency/e7b_results.json",
+      "frozen_source_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
+      "source_row_identifier": "E7b::vocab1000_product",
+      "source_field": "primary_pareto_frontier_common_denominator and frontier_note",
+      "transformation": "reader-facing canonical membership; question_only labelled excluded floor"
+    },
+    {
+      "output_row_id": "E7b::reasoner",
+      "output_field": "system",
+      "value": "Latent reasoner",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::reasoner",
+      "source_field": "system_id",
+      "transformation": "reader-facing system label from canonical system_id"
+    },
+    {
+      "output_row_id": "E7b::reasoner",
+      "output_field": "answer view",
+      "value": "top-100 (7,714)",
+      "frozen_source_file": "results/experiments/e7b_serial_efficiency/e7b_results.json",
+      "frozen_source_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
+      "source_row_identifier": "E7b::reasoner",
+      "source_field": "systems.<id>.accuracy.vocabulary_view_rows",
+      "transformation": "reader-facing answer-view label from stored supported-row count"
+    },
+    {
+      "output_row_id": "E7b::reasoner",
+      "output_field": "supported accuracy",
+      "value": "0.59139",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::reasoner",
+      "source_field": "accuracy_vocabulary_supported",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E7b::reasoner",
+      "output_field": "raw accuracy (10,004)",
+      "value": "0.45602",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::reasoner",
+      "source_field": "accuracy_raw_distribution_common_denominator",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E7b::reasoner",
+      "output_field": "warm median ms",
+      "value": "9.1719",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::reasoner",
+      "source_field": "warm_serial_median_ms",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E7b::reasoner",
+      "output_field": "spread ms",
+      "value": "0.9211",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::reasoner",
+      "source_field": "across_pass_spread_ms",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E7b::reasoner",
+      "output_field": "trainable parameters",
+      "value": "21099620",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::reasoner",
+      "source_field": "trainable_parameters",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "E7b::reasoner",
+      "output_field": "total loaded parameters",
+      "value": "172376933",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::reasoner",
+      "source_field": "total_loaded_parameters",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "E7b::reasoner",
+      "output_field": "frontier",
+      "value": "no",
+      "frozen_source_file": "results/experiments/e7b_serial_efficiency/e7b_results.json",
+      "frozen_source_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
+      "source_row_identifier": "E7b::reasoner",
+      "source_field": "primary_pareto_frontier_common_denominator and frontier_note",
+      "transformation": "reader-facing canonical membership; question_only labelled excluded floor"
+    },
+    {
+      "output_row_id": "E7b::e8a_a0p",
+      "output_field": "system",
+      "value": "CLIP-token A0p",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::e8a_a0p",
+      "source_field": "system_id",
+      "transformation": "reader-facing system label from canonical system_id"
+    },
+    {
+      "output_row_id": "E7b::e8a_a0p",
+      "output_field": "answer view",
+      "value": "top-100 (7,714)",
+      "frozen_source_file": "results/experiments/e7b_serial_efficiency/e7b_results.json",
+      "frozen_source_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
+      "source_row_identifier": "E7b::e8a_a0p",
+      "source_field": "systems.<id>.accuracy.vocabulary_view_rows",
+      "transformation": "reader-facing answer-view label from stored supported-row count"
+    },
+    {
+      "output_row_id": "E7b::e8a_a0p",
+      "output_field": "supported accuracy",
+      "value": "0.59463",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::e8a_a0p",
+      "source_field": "accuracy_vocabulary_supported",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E7b::e8a_a0p",
+      "output_field": "raw accuracy (10,004)",
+      "value": "0.45852",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::e8a_a0p",
+      "source_field": "accuracy_raw_distribution_common_denominator",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E7b::e8a_a0p",
+      "output_field": "warm median ms",
+      "value": "9.2117",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::e8a_a0p",
+      "source_field": "warm_serial_median_ms",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E7b::e8a_a0p",
+      "output_field": "spread ms",
+      "value": "0.1367",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::e8a_a0p",
+      "source_field": "across_pass_spread_ms",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E7b::e8a_a0p",
+      "output_field": "trainable parameters",
+      "value": "21362276",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::e8a_a0p",
+      "source_field": "trainable_parameters",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "E7b::e8a_a0p",
+      "output_field": "total loaded parameters",
+      "value": "172639589",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::e8a_a0p",
+      "source_field": "total_loaded_parameters",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "E7b::e8a_a0p",
+      "output_field": "frontier",
+      "value": "no",
+      "frozen_source_file": "results/experiments/e7b_serial_efficiency/e7b_results.json",
+      "frozen_source_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
+      "source_row_identifier": "E7b::e8a_a0p",
+      "source_field": "primary_pareto_frontier_common_denominator and frontier_note",
+      "transformation": "reader-facing canonical membership; question_only labelled excluded floor"
+    },
+    {
+      "output_row_id": "E7b::siglip_fusion",
+      "output_field": "system",
+      "value": "SigLIP fusion",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::siglip_fusion",
+      "source_field": "system_id",
+      "transformation": "reader-facing system label from canonical system_id"
+    },
+    {
+      "output_row_id": "E7b::siglip_fusion",
+      "output_field": "answer view",
+      "value": "top-100 (7,714)",
+      "frozen_source_file": "results/experiments/e7b_serial_efficiency/e7b_results.json",
+      "frozen_source_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
+      "source_row_identifier": "E7b::siglip_fusion",
+      "source_field": "systems.<id>.accuracy.vocabulary_view_rows",
+      "transformation": "reader-facing answer-view label from stored supported-row count"
+    },
+    {
+      "output_row_id": "E7b::siglip_fusion",
+      "output_field": "supported accuracy",
+      "value": "0.59386",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::siglip_fusion",
+      "source_field": "accuracy_vocabulary_supported",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E7b::siglip_fusion",
+      "output_field": "raw accuracy (10,004)",
+      "value": "0.45792",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::siglip_fusion",
+      "source_field": "accuracy_raw_distribution_common_denominator",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E7b::siglip_fusion",
+      "output_field": "warm median ms",
+      "value": "9.8433",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::siglip_fusion",
+      "source_field": "warm_serial_median_ms",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E7b::siglip_fusion",
+      "output_field": "spread ms",
+      "value": "0.0770",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::siglip_fusion",
+      "source_field": "across_pass_spread_ms",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E7b::siglip_fusion",
+      "output_field": "trainable parameters",
+      "value": "1624676",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::siglip_fusion",
+      "source_field": "trainable_parameters",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "E7b::siglip_fusion",
+      "output_field": "total loaded parameters",
+      "value": "204780646",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::siglip_fusion",
+      "source_field": "total_loaded_parameters",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "E7b::siglip_fusion",
+      "output_field": "frontier",
+      "value": "no",
+      "frozen_source_file": "results/experiments/e7b_serial_efficiency/e7b_results.json",
+      "frozen_source_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
+      "source_row_identifier": "E7b::siglip_fusion",
+      "source_field": "primary_pareto_frontier_common_denominator and frontier_note",
+      "transformation": "reader-facing canonical membership; question_only labelled excluded floor"
+    },
+    {
+      "output_row_id": "E7b::e8a_a1",
+      "output_field": "system",
+      "value": "SmolLM2 A1",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::e8a_a1",
+      "source_field": "system_id",
+      "transformation": "reader-facing system label from canonical system_id"
+    },
+    {
+      "output_row_id": "E7b::e8a_a1",
+      "output_field": "answer view",
+      "value": "top-100 (7,714)",
+      "frozen_source_file": "results/experiments/e7b_serial_efficiency/e7b_results.json",
+      "frozen_source_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
+      "source_row_identifier": "E7b::e8a_a1",
+      "source_field": "systems.<id>.accuracy.vocabulary_view_rows",
+      "transformation": "reader-facing answer-view label from stored supported-row count"
+    },
+    {
+      "output_row_id": "E7b::e8a_a1",
+      "output_field": "supported accuracy",
+      "value": "0.57493",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::e8a_a1",
+      "source_field": "accuracy_vocabulary_supported",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E7b::e8a_a1",
+      "output_field": "raw accuracy (10,004)",
+      "value": "0.44332",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::e8a_a1",
+      "source_field": "accuracy_raw_distribution_common_denominator",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E7b::e8a_a1",
+      "output_field": "warm median ms",
+      "value": "20.1460",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::e8a_a1",
+      "source_field": "warm_serial_median_ms",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E7b::e8a_a1",
+      "output_field": "spread ms",
+      "value": "1.3302",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::e8a_a1",
+      "source_field": "across_pass_spread_ms",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E7b::e8a_a1",
+      "output_field": "trainable parameters",
+      "value": "21395044",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::e8a_a1",
+      "source_field": "trainable_parameters",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "E7b::e8a_a1",
+      "output_field": "total loaded parameters",
+      "value": "307187365",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E7b::e8a_a1",
+      "source_field": "total_loaded_parameters",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "E7b::e8a_a1",
+      "output_field": "frontier",
+      "value": "no",
+      "frozen_source_file": "results/experiments/e7b_serial_efficiency/e7b_results.json",
+      "frozen_source_sha256": "c55d61600124ed76a6383f87d6f0a8744f4d51eec24b2f53ef8aa9edeb76bae4",
+      "source_row_identifier": "E7b::e8a_a1",
+      "source_field": "primary_pareto_frontier_common_denominator and frontier_note",
+      "transformation": "reader-facing canonical membership; question_only labelled excluded floor"
+    }
+  ],
+  "source_csv_sha256": "411c054c71dff25c10c4d2880ebe3e47c76c6f92fb90c7080da3ad6c9cf6176a",
+  "converter": {
+    "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tools/tab2latex.py",
+    "sha256": "c441d40b2b10a7a4294c4f15b12bc450f7ae73a9435e3d15394940c0f0c5a546",
+    "header_map": {
+      "system": "System",
+      "answer view": "Answer view",
+      "supported accuracy": "Supported accuracy",
+      "raw accuracy (10,004)": "Raw accuracy (10,004)",
+      "warm median ms": "Warm median (ms)",
+      "spread ms": "Spread (ms)",
+      "trainable parameters": "Trainable parameters",
+      "total loaded parameters": "Total loaded parameters",
+      "frontier": "Frontier"
+    },
+    "thousands": true,
+    "verify_exit_code": 0,
+    "presentation_transformation": "reader-facing header relabelling and integer thousands separators only; scientific cells unchanged"
+  },
+  "generated_tex_sha256": "6e08b58d166bfeb0acd4a67699955f83e9abfafbbb73cc386fdcb4f8b0ec1eca"
+}

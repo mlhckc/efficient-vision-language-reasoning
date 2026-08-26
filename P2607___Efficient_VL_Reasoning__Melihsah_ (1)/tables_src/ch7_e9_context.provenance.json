@@ -1,0 +1,924 @@
+{
+  "schema_version": 1,
+  "artefact": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch7_e9_context.csv",
+  "generation": "deterministic selection and presentation formatting from canonical frozen records; no scientific recomputation",
+  "sources": [
+    {
+      "path": "results/closure/efficiency_closure_table.csv",
+      "sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e"
+    },
+    {
+      "path": "results/experiments/e9_compact_vlm/e9_results.json",
+      "sha256": "5d42ae9344fa9d7bcd48589645d62b4d0c20db9a3d9d03288bbddd6832ae2caa"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-06.csv",
+      "sha256": "06b7b61eb82c129b21d57d8a166d79712764d8074c8966cd1044e0e143097781"
+    },
+    {
+      "path": "results/ve1/figures/VE1-FIG-09.data.json",
+      "sha256": "a869ce3108678493712c2f917bda2fc079a34fe699d9e5c8090dd5fd02d477f9"
+    }
+  ],
+  "cells": [
+    {
+      "output_row_id": "E9::vocab1000_product",
+      "output_field": "system",
+      "value": "Top-1000 product",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::vocab1000_product",
+      "source_field": "system_id",
+      "transformation": "reader-facing system label from canonical system_id"
+    },
+    {
+      "output_row_id": "E9::vocab1000_product",
+      "output_field": "role or readout",
+      "value": "re-timed product head",
+      "frozen_source_file": "results/experiments/e9_compact_vlm/e9_results.json",
+      "frozen_source_sha256": "5d42ae9344fa9d7bcd48589645d62b4d0c20db9a3d9d03288bbddd6832ae2caa",
+      "source_row_identifier": "E9::vocab1000_product",
+      "source_field": "efficiency.aggregate.<id>.role/readout/readout_role",
+      "transformation": "reader-facing role/readout label from canonical E9 identity"
+    },
+    {
+      "output_row_id": "E9::vocab1000_product",
+      "output_field": "trainable parameters",
+      "value": "1299944",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::vocab1000_product",
+      "source_field": "trainable_parameters",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "E9::vocab1000_product",
+      "output_field": "total loaded parameters",
+      "value": "152577257",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::vocab1000_product",
+      "source_field": "total_loaded_parameters",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "E9::vocab1000_product",
+      "output_field": "warm median ms",
+      "value": "6.1990",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::vocab1000_product",
+      "source_field": "warm_serial_median_ms",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E9::vocab1000_product",
+      "output_field": "spread ms",
+      "value": "0.0827",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::vocab1000_product",
+      "source_field": "across_pass_spread_ms",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E9::vocab1000_product",
+      "output_field": "paired E9 raw accuracy",
+      "value": "unavailable",
+      "frozen_source_file": "results/ve1/figures/VE1-FIG-09.data.json",
+      "frozen_source_sha256": "a869ce3108678493712c2f917bda2fc079a34fe699d9e5c8090dd5fd02d477f9",
+      "source_row_identifier": "E9::vocab1000_product",
+      "source_field": "accuracy_pairing status",
+      "transformation": "unavailable because canonical pairing is unresolved; no accuracy imported"
+    },
+    {
+      "output_row_id": "E9::vocab1000_product",
+      "output_field": "pairing status",
+      "value": "unpaired",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-06.csv",
+      "frozen_source_sha256": "06b7b61eb82c129b21d57d8a166d79712764d8074c8966cd1044e0e143097781",
+      "source_row_identifier": "E9::vocab1000_product",
+      "source_field": "accuracy pairing",
+      "transformation": "reader-facing resolved/unpaired label from canonical pairing status"
+    },
+    {
+      "output_row_id": "E9::fusion",
+      "output_field": "system",
+      "value": "Fusion bridge",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::fusion",
+      "source_field": "system_id",
+      "transformation": "reader-facing system label from canonical system_id"
+    },
+    {
+      "output_row_id": "E9::fusion",
+      "output_field": "role or readout",
+      "value": "cross-node bridge control",
+      "frozen_source_file": "results/experiments/e9_compact_vlm/e9_results.json",
+      "frozen_source_sha256": "5d42ae9344fa9d7bcd48589645d62b4d0c20db9a3d9d03288bbddd6832ae2caa",
+      "source_row_identifier": "E9::fusion",
+      "source_field": "efficiency.aggregate.<id>.role/readout/readout_role",
+      "transformation": "reader-facing role/readout label from canonical E9 identity"
+    },
+    {
+      "output_row_id": "E9::fusion",
+      "output_field": "trainable parameters",
+      "value": "1100388",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::fusion",
+      "source_field": "trainable_parameters",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "E9::fusion",
+      "output_field": "total loaded parameters",
+      "value": "152377701",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::fusion",
+      "source_field": "total_loaded_parameters",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "E9::fusion",
+      "output_field": "warm median ms",
+      "value": "6.2081",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::fusion",
+      "source_field": "warm_serial_median_ms",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E9::fusion",
+      "output_field": "spread ms",
+      "value": "0.0179",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::fusion",
+      "source_field": "across_pass_spread_ms",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E9::fusion",
+      "output_field": "paired E9 raw accuracy",
+      "value": "unavailable",
+      "frozen_source_file": "results/ve1/figures/VE1-FIG-09.data.json",
+      "frozen_source_sha256": "a869ce3108678493712c2f917bda2fc079a34fe699d9e5c8090dd5fd02d477f9",
+      "source_row_identifier": "E9::fusion",
+      "source_field": "accuracy_pairing status",
+      "transformation": "unavailable because canonical pairing is unresolved; no accuracy imported"
+    },
+    {
+      "output_row_id": "E9::fusion",
+      "output_field": "pairing status",
+      "value": "unpaired",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-06.csv",
+      "frozen_source_sha256": "06b7b61eb82c129b21d57d8a166d79712764d8074c8966cd1044e0e143097781",
+      "source_row_identifier": "E9::fusion",
+      "source_field": "accuracy pairing",
+      "transformation": "reader-facing resolved/unpaired label from canonical pairing status"
+    },
+    {
+      "output_row_id": "E9::e8b_B1",
+      "output_field": "system",
+      "value": "B1 classifier",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e8b_B1",
+      "source_field": "system_id",
+      "transformation": "reader-facing system label from canonical system_id"
+    },
+    {
+      "output_row_id": "E9::e8b_B1",
+      "output_field": "role or readout",
+      "value": "LM-free classifier",
+      "frozen_source_file": "results/experiments/e9_compact_vlm/e9_results.json",
+      "frozen_source_sha256": "5d42ae9344fa9d7bcd48589645d62b4d0c20db9a3d9d03288bbddd6832ae2caa",
+      "source_row_identifier": "E9::e8b_B1",
+      "source_field": "efficiency.aggregate.<id>.role/readout/readout_role",
+      "transformation": "reader-facing role/readout label from canonical E9 identity"
+    },
+    {
+      "output_row_id": "E9::e8b_B1",
+      "output_field": "trainable parameters",
+      "value": "21100132",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e8b_B1",
+      "source_field": "trainable_parameters",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "E9::e8b_B1",
+      "output_field": "total loaded parameters",
+      "value": "172377445",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e8b_B1",
+      "source_field": "total_loaded_parameters",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "E9::e8b_B1",
+      "output_field": "warm median ms",
+      "value": "10.2420",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e8b_B1",
+      "source_field": "warm_serial_median_ms",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E9::e8b_B1",
+      "output_field": "spread ms",
+      "value": "0.4224",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e8b_B1",
+      "source_field": "across_pass_spread_ms",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E9::e8b_B1",
+      "output_field": "paired E9 raw accuracy",
+      "value": "unavailable",
+      "frozen_source_file": "results/ve1/figures/VE1-FIG-09.data.json",
+      "frozen_source_sha256": "a869ce3108678493712c2f917bda2fc079a34fe699d9e5c8090dd5fd02d477f9",
+      "source_row_identifier": "E9::e8b_B1",
+      "source_field": "accuracy_pairing status",
+      "transformation": "unavailable because canonical pairing is unresolved; no accuracy imported"
+    },
+    {
+      "output_row_id": "E9::e8b_B1",
+      "output_field": "pairing status",
+      "value": "unpaired",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-06.csv",
+      "frozen_source_sha256": "06b7b61eb82c129b21d57d8a166d79712764d8074c8966cd1044e0e143097781",
+      "source_row_identifier": "E9::e8b_B1",
+      "source_field": "accuracy pairing",
+      "transformation": "reader-facing resolved/unpaired label from canonical pairing status"
+    },
+    {
+      "output_row_id": "E9::e8b_B2_R2",
+      "output_field": "system",
+      "value": "B2 R2",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e8b_B2_R2",
+      "source_field": "system_id",
+      "transformation": "reader-facing system label from canonical system_id"
+    },
+    {
+      "output_row_id": "E9::e8b_B2_R2",
+      "output_field": "role or readout",
+      "value": "random 135M, constrained",
+      "frozen_source_file": "results/experiments/e9_compact_vlm/e9_results.json",
+      "frozen_source_sha256": "5d42ae9344fa9d7bcd48589645d62b4d0c20db9a3d9d03288bbddd6832ae2caa",
+      "source_row_identifier": "E9::e8b_B2_R2",
+      "source_field": "efficiency.aggregate.<id>.role/readout/readout_role",
+      "transformation": "reader-facing role/readout label from canonical E9 identity"
+    },
+    {
+      "output_row_id": "E9::e8b_B2_R2",
+      "output_field": "trainable parameters",
+      "value": "21343808",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e8b_B2_R2",
+      "source_field": "trainable_parameters",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "E9::e8b_B2_R2",
+      "output_field": "total loaded parameters",
+      "value": "307136129",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e8b_B2_R2",
+      "source_field": "total_loaded_parameters",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "E9::e8b_B2_R2",
+      "output_field": "warm median ms",
+      "value": "39.7326",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e8b_B2_R2",
+      "source_field": "warm_serial_median_ms",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E9::e8b_B2_R2",
+      "output_field": "spread ms",
+      "value": "1.4689",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e8b_B2_R2",
+      "source_field": "across_pass_spread_ms",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E9::e8b_B2_R2",
+      "output_field": "paired E9 raw accuracy",
+      "value": "unavailable",
+      "frozen_source_file": "results/ve1/figures/VE1-FIG-09.data.json",
+      "frozen_source_sha256": "a869ce3108678493712c2f917bda2fc079a34fe699d9e5c8090dd5fd02d477f9",
+      "source_row_identifier": "E9::e8b_B2_R2",
+      "source_field": "accuracy_pairing status",
+      "transformation": "unavailable because canonical pairing is unresolved; no accuracy imported"
+    },
+    {
+      "output_row_id": "E9::e8b_B2_R2",
+      "output_field": "pairing status",
+      "value": "unpaired",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-06.csv",
+      "frozen_source_sha256": "06b7b61eb82c129b21d57d8a166d79712764d8074c8966cd1044e0e143097781",
+      "source_row_identifier": "E9::e8b_B2_R2",
+      "source_field": "accuracy pairing",
+      "transformation": "reader-facing resolved/unpaired label from canonical pairing status"
+    },
+    {
+      "output_row_id": "E9::e8b_B2_R3",
+      "output_field": "system",
+      "value": "B2 R3",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e8b_B2_R3",
+      "source_field": "system_id",
+      "transformation": "reader-facing system label from canonical system_id"
+    },
+    {
+      "output_row_id": "E9::e8b_B2_R3",
+      "output_field": "role or readout",
+      "value": "random 135M, open",
+      "frozen_source_file": "results/experiments/e9_compact_vlm/e9_results.json",
+      "frozen_source_sha256": "5d42ae9344fa9d7bcd48589645d62b4d0c20db9a3d9d03288bbddd6832ae2caa",
+      "source_row_identifier": "E9::e8b_B2_R3",
+      "source_field": "efficiency.aggregate.<id>.role/readout/readout_role",
+      "transformation": "reader-facing role/readout label from canonical E9 identity"
+    },
+    {
+      "output_row_id": "E9::e8b_B2_R3",
+      "output_field": "trainable parameters",
+      "value": "21343808",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e8b_B2_R3",
+      "source_field": "trainable_parameters",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "E9::e8b_B2_R3",
+      "output_field": "total loaded parameters",
+      "value": "307136129",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e8b_B2_R3",
+      "source_field": "total_loaded_parameters",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "E9::e8b_B2_R3",
+      "output_field": "warm median ms",
+      "value": "39.2394",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e8b_B2_R3",
+      "source_field": "warm_serial_median_ms",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E9::e8b_B2_R3",
+      "output_field": "spread ms",
+      "value": "1.2055",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e8b_B2_R3",
+      "source_field": "across_pass_spread_ms",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E9::e8b_B2_R3",
+      "output_field": "paired E9 raw accuracy",
+      "value": "unavailable",
+      "frozen_source_file": "results/ve1/figures/VE1-FIG-09.data.json",
+      "frozen_source_sha256": "a869ce3108678493712c2f917bda2fc079a34fe699d9e5c8090dd5fd02d477f9",
+      "source_row_identifier": "E9::e8b_B2_R3",
+      "source_field": "accuracy_pairing status",
+      "transformation": "unavailable because canonical pairing is unresolved; no accuracy imported"
+    },
+    {
+      "output_row_id": "E9::e8b_B2_R3",
+      "output_field": "pairing status",
+      "value": "unpaired",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-06.csv",
+      "frozen_source_sha256": "06b7b61eb82c129b21d57d8a166d79712764d8074c8966cd1044e0e143097781",
+      "source_row_identifier": "E9::e8b_B2_R3",
+      "source_field": "accuracy pairing",
+      "transformation": "reader-facing resolved/unpaired label from canonical pairing status"
+    },
+    {
+      "output_row_id": "E9::e8b_B3_R2",
+      "output_field": "system",
+      "value": "B3 R2",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e8b_B3_R2",
+      "source_field": "system_id",
+      "transformation": "reader-facing system label from canonical system_id"
+    },
+    {
+      "output_row_id": "E9::e8b_B3_R2",
+      "output_field": "role or readout",
+      "value": "pretrained 135M, constrained",
+      "frozen_source_file": "results/experiments/e9_compact_vlm/e9_results.json",
+      "frozen_source_sha256": "5d42ae9344fa9d7bcd48589645d62b4d0c20db9a3d9d03288bbddd6832ae2caa",
+      "source_row_identifier": "E9::e8b_B3_R2",
+      "source_field": "efficiency.aggregate.<id>.role/readout/readout_role",
+      "transformation": "reader-facing role/readout label from canonical E9 identity"
+    },
+    {
+      "output_row_id": "E9::e8b_B3_R2",
+      "output_field": "trainable parameters",
+      "value": "21343808",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e8b_B3_R2",
+      "source_field": "trainable_parameters",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "E9::e8b_B3_R2",
+      "output_field": "total loaded parameters",
+      "value": "307136129",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e8b_B3_R2",
+      "source_field": "total_loaded_parameters",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "E9::e8b_B3_R2",
+      "output_field": "warm median ms",
+      "value": "39.6561",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e8b_B3_R2",
+      "source_field": "warm_serial_median_ms",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E9::e8b_B3_R2",
+      "output_field": "spread ms",
+      "value": "0.4844",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e8b_B3_R2",
+      "source_field": "across_pass_spread_ms",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E9::e8b_B3_R2",
+      "output_field": "paired E9 raw accuracy",
+      "value": "unavailable",
+      "frozen_source_file": "results/ve1/figures/VE1-FIG-09.data.json",
+      "frozen_source_sha256": "a869ce3108678493712c2f917bda2fc079a34fe699d9e5c8090dd5fd02d477f9",
+      "source_row_identifier": "E9::e8b_B3_R2",
+      "source_field": "accuracy_pairing status",
+      "transformation": "unavailable because canonical pairing is unresolved; no accuracy imported"
+    },
+    {
+      "output_row_id": "E9::e8b_B3_R2",
+      "output_field": "pairing status",
+      "value": "unpaired",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-06.csv",
+      "frozen_source_sha256": "06b7b61eb82c129b21d57d8a166d79712764d8074c8966cd1044e0e143097781",
+      "source_row_identifier": "E9::e8b_B3_R2",
+      "source_field": "accuracy pairing",
+      "transformation": "reader-facing resolved/unpaired label from canonical pairing status"
+    },
+    {
+      "output_row_id": "E9::e8b_B3_R3",
+      "output_field": "system",
+      "value": "B3 R3",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e8b_B3_R3",
+      "source_field": "system_id",
+      "transformation": "reader-facing system label from canonical system_id"
+    },
+    {
+      "output_row_id": "E9::e8b_B3_R3",
+      "output_field": "role or readout",
+      "value": "pretrained 135M, open",
+      "frozen_source_file": "results/experiments/e9_compact_vlm/e9_results.json",
+      "frozen_source_sha256": "5d42ae9344fa9d7bcd48589645d62b4d0c20db9a3d9d03288bbddd6832ae2caa",
+      "source_row_identifier": "E9::e8b_B3_R3",
+      "source_field": "efficiency.aggregate.<id>.role/readout/readout_role",
+      "transformation": "reader-facing role/readout label from canonical E9 identity"
+    },
+    {
+      "output_row_id": "E9::e8b_B3_R3",
+      "output_field": "trainable parameters",
+      "value": "21343808",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e8b_B3_R3",
+      "source_field": "trainable_parameters",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "E9::e8b_B3_R3",
+      "output_field": "total loaded parameters",
+      "value": "307136129",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e8b_B3_R3",
+      "source_field": "total_loaded_parameters",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "E9::e8b_B3_R3",
+      "output_field": "warm median ms",
+      "value": "38.7963",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e8b_B3_R3",
+      "source_field": "warm_serial_median_ms",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E9::e8b_B3_R3",
+      "output_field": "spread ms",
+      "value": "0.3720",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e8b_B3_R3",
+      "source_field": "across_pass_spread_ms",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E9::e8b_B3_R3",
+      "output_field": "paired E9 raw accuracy",
+      "value": "unavailable",
+      "frozen_source_file": "results/ve1/figures/VE1-FIG-09.data.json",
+      "frozen_source_sha256": "a869ce3108678493712c2f917bda2fc079a34fe699d9e5c8090dd5fd02d477f9",
+      "source_row_identifier": "E9::e8b_B3_R3",
+      "source_field": "accuracy_pairing status",
+      "transformation": "unavailable because canonical pairing is unresolved; no accuracy imported"
+    },
+    {
+      "output_row_id": "E9::e8b_B3_R3",
+      "output_field": "pairing status",
+      "value": "unpaired",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-06.csv",
+      "frozen_source_sha256": "06b7b61eb82c129b21d57d8a166d79712764d8074c8966cd1044e0e143097781",
+      "source_row_identifier": "E9::e8b_B3_R3",
+      "source_field": "accuracy pairing",
+      "transformation": "reader-facing resolved/unpaired label from canonical pairing status"
+    },
+    {
+      "output_row_id": "E9::e9_256m_open",
+      "output_field": "system",
+      "value": "SmolVLM-256M open",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e9_256m_open",
+      "source_field": "system_id",
+      "transformation": "reader-facing system label from canonical system_id"
+    },
+    {
+      "output_row_id": "E9::e9_256m_open",
+      "output_field": "role or readout",
+      "value": "primary open generation",
+      "frozen_source_file": "results/experiments/e9_compact_vlm/e9_results.json",
+      "frozen_source_sha256": "5d42ae9344fa9d7bcd48589645d62b4d0c20db9a3d9d03288bbddd6832ae2caa",
+      "source_row_identifier": "E9::e9_256m_open",
+      "source_field": "efficiency.aggregate.<id>.role/readout/readout_role",
+      "transformation": "reader-facing role/readout label from canonical E9 identity"
+    },
+    {
+      "output_row_id": "E9::e9_256m_open",
+      "output_field": "trainable parameters",
+      "value": "0",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e9_256m_open",
+      "source_field": "trainable_parameters",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "E9::e9_256m_open",
+      "output_field": "total loaded parameters",
+      "value": "256484928",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e9_256m_open",
+      "source_field": "total_loaded_parameters",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "E9::e9_256m_open",
+      "output_field": "warm median ms",
+      "value": "140.9070",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e9_256m_open",
+      "source_field": "warm_serial_median_ms",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E9::e9_256m_open",
+      "output_field": "spread ms",
+      "value": "1.3031",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e9_256m_open",
+      "source_field": "across_pass_spread_ms",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E9::e9_256m_open",
+      "output_field": "paired E9 raw accuracy",
+      "value": "0.436525",
+      "frozen_source_file": "results/experiments/e9_compact_vlm/e9_results.json",
+      "frozen_source_sha256": "5d42ae9344fa9d7bcd48589645d62b4d0c20db9a3d9d03288bbddd6832ae2caa",
+      "source_row_identifier": "E9::e9_256m_open",
+      "source_field": "scored_passes.<system>.views.raw_10004.normalised_exact",
+      "transformation": "fixed six-decimal presentation only"
+    },
+    {
+      "output_row_id": "E9::e9_256m_open",
+      "output_field": "pairing status",
+      "value": "resolved",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-06.csv",
+      "frozen_source_sha256": "06b7b61eb82c129b21d57d8a166d79712764d8074c8966cd1044e0e143097781",
+      "source_row_identifier": "E9::e9_256m_open",
+      "source_field": "accuracy pairing",
+      "transformation": "reader-facing resolved/unpaired label from canonical pairing status"
+    },
+    {
+      "output_row_id": "E9::e9_256m_constrained",
+      "output_field": "system",
+      "value": "SmolVLM-256M constrained",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e9_256m_constrained",
+      "source_field": "system_id",
+      "transformation": "reader-facing system label from canonical system_id"
+    },
+    {
+      "output_row_id": "E9::e9_256m_constrained",
+      "output_field": "role or readout",
+      "value": "constrained diagnostic",
+      "frozen_source_file": "results/experiments/e9_compact_vlm/e9_results.json",
+      "frozen_source_sha256": "5d42ae9344fa9d7bcd48589645d62b4d0c20db9a3d9d03288bbddd6832ae2caa",
+      "source_row_identifier": "E9::e9_256m_constrained",
+      "source_field": "efficiency.aggregate.<id>.role/readout/readout_role",
+      "transformation": "reader-facing role/readout label from canonical E9 identity"
+    },
+    {
+      "output_row_id": "E9::e9_256m_constrained",
+      "output_field": "trainable parameters",
+      "value": "0",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e9_256m_constrained",
+      "source_field": "trainable_parameters",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "E9::e9_256m_constrained",
+      "output_field": "total loaded parameters",
+      "value": "256484928",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e9_256m_constrained",
+      "source_field": "total_loaded_parameters",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "E9::e9_256m_constrained",
+      "output_field": "warm median ms",
+      "value": "142.6747",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e9_256m_constrained",
+      "source_field": "warm_serial_median_ms",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E9::e9_256m_constrained",
+      "output_field": "spread ms",
+      "value": "0.7703",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e9_256m_constrained",
+      "source_field": "across_pass_spread_ms",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E9::e9_256m_constrained",
+      "output_field": "paired E9 raw accuracy",
+      "value": "0.441623",
+      "frozen_source_file": "results/experiments/e9_compact_vlm/e9_results.json",
+      "frozen_source_sha256": "5d42ae9344fa9d7bcd48589645d62b4d0c20db9a3d9d03288bbddd6832ae2caa",
+      "source_row_identifier": "E9::e9_256m_constrained",
+      "source_field": "scored_passes.<system>.views.raw_10004.normalised_exact",
+      "transformation": "fixed six-decimal presentation only"
+    },
+    {
+      "output_row_id": "E9::e9_256m_constrained",
+      "output_field": "pairing status",
+      "value": "resolved",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-06.csv",
+      "frozen_source_sha256": "06b7b61eb82c129b21d57d8a166d79712764d8074c8966cd1044e0e143097781",
+      "source_row_identifier": "E9::e9_256m_constrained",
+      "source_field": "accuracy pairing",
+      "transformation": "reader-facing resolved/unpaired label from canonical pairing status"
+    },
+    {
+      "output_row_id": "E9::e9_500m_open",
+      "output_field": "system",
+      "value": "SmolVLM-500M open",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e9_500m_open",
+      "source_field": "system_id",
+      "transformation": "reader-facing system label from canonical system_id"
+    },
+    {
+      "output_row_id": "E9::e9_500m_open",
+      "output_field": "role or readout",
+      "value": "primary open generation",
+      "frozen_source_file": "results/experiments/e9_compact_vlm/e9_results.json",
+      "frozen_source_sha256": "5d42ae9344fa9d7bcd48589645d62b4d0c20db9a3d9d03288bbddd6832ae2caa",
+      "source_row_identifier": "E9::e9_500m_open",
+      "source_field": "efficiency.aggregate.<id>.role/readout/readout_role",
+      "transformation": "reader-facing role/readout label from canonical E9 identity"
+    },
+    {
+      "output_row_id": "E9::e9_500m_open",
+      "output_field": "trainable parameters",
+      "value": "0",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e9_500m_open",
+      "source_field": "trainable_parameters",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "E9::e9_500m_open",
+      "output_field": "total loaded parameters",
+      "value": "507482304",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e9_500m_open",
+      "source_field": "total_loaded_parameters",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "E9::e9_500m_open",
+      "output_field": "warm median ms",
+      "value": "151.3801",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e9_500m_open",
+      "source_field": "warm_serial_median_ms",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E9::e9_500m_open",
+      "output_field": "spread ms",
+      "value": "1.2941",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e9_500m_open",
+      "source_field": "across_pass_spread_ms",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E9::e9_500m_open",
+      "output_field": "paired E9 raw accuracy",
+      "value": "0.489004",
+      "frozen_source_file": "results/experiments/e9_compact_vlm/e9_results.json",
+      "frozen_source_sha256": "5d42ae9344fa9d7bcd48589645d62b4d0c20db9a3d9d03288bbddd6832ae2caa",
+      "source_row_identifier": "E9::e9_500m_open",
+      "source_field": "scored_passes.<system>.views.raw_10004.normalised_exact",
+      "transformation": "fixed six-decimal presentation only"
+    },
+    {
+      "output_row_id": "E9::e9_500m_open",
+      "output_field": "pairing status",
+      "value": "resolved",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-06.csv",
+      "frozen_source_sha256": "06b7b61eb82c129b21d57d8a166d79712764d8074c8966cd1044e0e143097781",
+      "source_row_identifier": "E9::e9_500m_open",
+      "source_field": "accuracy pairing",
+      "transformation": "reader-facing resolved/unpaired label from canonical pairing status"
+    },
+    {
+      "output_row_id": "E9::e9_500m_constrained",
+      "output_field": "system",
+      "value": "SmolVLM-500M constrained",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e9_500m_constrained",
+      "source_field": "system_id",
+      "transformation": "reader-facing system label from canonical system_id"
+    },
+    {
+      "output_row_id": "E9::e9_500m_constrained",
+      "output_field": "role or readout",
+      "value": "constrained diagnostic",
+      "frozen_source_file": "results/experiments/e9_compact_vlm/e9_results.json",
+      "frozen_source_sha256": "5d42ae9344fa9d7bcd48589645d62b4d0c20db9a3d9d03288bbddd6832ae2caa",
+      "source_row_identifier": "E9::e9_500m_constrained",
+      "source_field": "efficiency.aggregate.<id>.role/readout/readout_role",
+      "transformation": "reader-facing role/readout label from canonical E9 identity"
+    },
+    {
+      "output_row_id": "E9::e9_500m_constrained",
+      "output_field": "trainable parameters",
+      "value": "0",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e9_500m_constrained",
+      "source_field": "trainable_parameters",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "E9::e9_500m_constrained",
+      "output_field": "total loaded parameters",
+      "value": "507482304",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e9_500m_constrained",
+      "source_field": "total_loaded_parameters",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "E9::e9_500m_constrained",
+      "output_field": "warm median ms",
+      "value": "152.8540",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e9_500m_constrained",
+      "source_field": "warm_serial_median_ms",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E9::e9_500m_constrained",
+      "output_field": "spread ms",
+      "value": "1.2409",
+      "frozen_source_file": "results/closure/efficiency_closure_table.csv",
+      "frozen_source_sha256": "2d929d5d42d82d71bdab5e4f42d41f325117610a7a542947f549a298a1da339e",
+      "source_row_identifier": "E9::e9_500m_constrained",
+      "source_field": "across_pass_spread_ms",
+      "transformation": "fixed decimal presentation only"
+    },
+    {
+      "output_row_id": "E9::e9_500m_constrained",
+      "output_field": "paired E9 raw accuracy",
+      "value": "0.485706",
+      "frozen_source_file": "results/experiments/e9_compact_vlm/e9_results.json",
+      "frozen_source_sha256": "5d42ae9344fa9d7bcd48589645d62b4d0c20db9a3d9d03288bbddd6832ae2caa",
+      "source_row_identifier": "E9::e9_500m_constrained",
+      "source_field": "scored_passes.<system>.views.raw_10004.normalised_exact",
+      "transformation": "fixed six-decimal presentation only"
+    },
+    {
+      "output_row_id": "E9::e9_500m_constrained",
+      "output_field": "pairing status",
+      "value": "resolved",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-06.csv",
+      "frozen_source_sha256": "06b7b61eb82c129b21d57d8a166d79712764d8074c8966cd1044e0e143097781",
+      "source_row_identifier": "E9::e9_500m_constrained",
+      "source_field": "accuracy pairing",
+      "transformation": "reader-facing resolved/unpaired label from canonical pairing status"
+    }
+  ],
+  "source_csv_sha256": "7a7335893dcc677462dd99bb27bdb9f19e0daa5db4b8f42f888673d505e38a76",
+  "converter": {
+    "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tools/tab2latex.py",
+    "sha256": "c441d40b2b10a7a4294c4f15b12bc450f7ae73a9435e3d15394940c0f0c5a546",
+    "header_map": {
+      "system": "System",
+      "role or readout": "Role or readout",
+      "trainable parameters": "Trainable parameters",
+      "total loaded parameters": "Total loaded parameters",
+      "warm median ms": "Warm median (ms)",
+      "spread ms": "Spread (ms)",
+      "paired E9 raw accuracy": "Paired E9 raw accuracy",
+      "pairing status": "Pairing"
+    },
+    "thousands": true,
+    "verify_exit_code": 0,
+    "presentation_transformation": "reader-facing header relabelling and integer thousands separators only; unresolved accuracy cells remain unavailable"
+  },
+  "generated_tex_sha256": "75a263c5305c38b35e3abb4e3f6dc001c4dfa68ff0f33a954ff25e2a5a74c1ae"
+}

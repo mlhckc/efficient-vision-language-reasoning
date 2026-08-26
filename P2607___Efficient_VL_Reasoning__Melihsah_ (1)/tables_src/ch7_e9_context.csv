@@ -1,0 +1,12 @@
+system,role or readout,trainable parameters,total loaded parameters,warm median ms,spread ms,paired E9 raw accuracy,pairing status
+Top-1000 product,re-timed product head,1299944,152577257,6.1990,0.0827,unavailable,unpaired
+Fusion bridge,cross-node bridge control,1100388,152377701,6.2081,0.0179,unavailable,unpaired
+B1 classifier,LM-free classifier,21100132,172377445,10.2420,0.4224,unavailable,unpaired
+B2 R2,"random 135M, constrained",21343808,307136129,39.7326,1.4689,unavailable,unpaired
+B2 R3,"random 135M, open",21343808,307136129,39.2394,1.2055,unavailable,unpaired
+B3 R2,"pretrained 135M, constrained",21343808,307136129,39.6561,0.4844,unavailable,unpaired
+B3 R3,"pretrained 135M, open",21343808,307136129,38.7963,0.3720,unavailable,unpaired
+SmolVLM-256M open,primary open generation,0,256484928,140.9070,1.3031,0.436525,resolved
+SmolVLM-256M constrained,constrained diagnostic,0,256484928,142.6747,0.7703,0.441623,resolved
+SmolVLM-500M open,primary open generation,0,507482304,151.3801,1.2941,0.489004,resolved
+SmolVLM-500M constrained,constrained diagnostic,0,507482304,152.8540,1.2409,0.485706,resolved
