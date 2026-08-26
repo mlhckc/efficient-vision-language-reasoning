@@ -1,2 +1,122 @@
 \chapter{Conclusions and Future Work}
-% TODO Phase 1 (dissertation-09): sources per docs/DISSERTATION_HANDOFF.md; internal budget 800 words; stub only in Phase 0.
+
+\section{Overall conclusion}
+\label{sec:ch9-overall}
+
+This dissertation examined whether lightweight systems over frozen
+representations can support efficient closed-set visual question answering,
+and where the limits of that formulation lie. Under the governed development
+protocol, compact heads produced useful GQA accuracy while retaining low
+measured warm-serial latency. Interaction and representation choices affected
+the observed results, whereas additional downstream capacity did not provide a
+single explanation for the strongest configurations.
+
+Small language models can contribute to lightweight vision--language
+reasoning, but they were not required for the strongest measured
+accuracy--latency trade-offs in this study. Their pretraining benefit was
+interface-specific. These conclusions rest on development evidence; the
+held-out clean-test evaluation remains pending.
+% F2-INTEGRATION-PENDING: held-out results, if authorised and completed, require a bounded revision of Sections 9.1, 9.2 and 9.5
+
+\section{Answers to the research questions}
+\label{sec:ch9-answers}
+% XREF-PENDING: Chapter 1 RQ definitions
+
+\textbf{RQ1} asked how effectively lightweight heads over frozen global image
+and question embeddings answer closed-set GQA, and how interaction, encoder
+choice and answer-set size affect development accuracy. The heads are viable
+on the governed task. The question-only result shows strong predictive
+information in the question/answer distribution, while the image
+interventions show material dependence on the correct image rather than
+grounding or reasoning. Standard fusion improves over standard concatenation
+at the lower training scale. Increasing concatenation capacity accounts for
+part of that original gap, while the remaining capacity-matched difference is
+not resolved clearly. Encoder choice matters in the tested configurations,
+but that comparison is representation-confounded. Expanding the answer set
+improves coverage while defining a different in-vocabulary task
+(Section~\ref{sec:ch4-summary}).
+
+\textbf{RQ2} asked whether the 32-query latent reasoner improves on global
+heads as training data scales, including on questions with four or more
+program steps. Its development accuracy rises across the tested scales. The
+same-seed gaps over fusion are positive in every seed at 100k and 250k, but
+not consistently at 40k. This remains a configuration-level comparison
+because architecture, token access and capacity co-vary. The pooled
+four-or-more-step deficit persists, and the paired reasoner-minus-fusion
+deficit differences remain unresolved. Higher overall accuracy therefore does
+not establish that compositional difficulty has been removed
+(Section~\ref{sec:ch5-summary}). The observed deficit was not eliminated by
+the implemented changes in architecture, token access, downstream capacity or
+training scale, but the experiments do not localise its cause.
+
+\textbf{RQ3} asked whether frozen small-language-model pretraining helps on
+the question or answer side, and what efficiency implications the
+trainable-parameter counts and valid warm-serial measurements support.
+On the question side, pretrained SmolLM2 exceeds its architecture-matched
+random control at both tested scales, yet remains below the CLIP-token
+reference under the tested configurations. Pretraining therefore helps within
+that SLM interface without establishing that the SLM representation is
+generally preferable. On the answer side, the 135M contrast is negative
+directional at 40k and uncertain or mixed at 250k; both 360M contrasts and the
+second-order scale interaction are uncertain or mixed. No reliable positive
+answer-side pretraining advantage was detected, while the unresolved results
+establish neither equivalence nor absence. The conclusion is
+interface-specific rather than universal under the implemented interfaces and
+three separately run experiments (Section~\ref{sec:ch6-summary}).
+
+The efficiency result reinforces that distinction. The question-side SLM
+interface has higher governed warm-serial latency than the global heads and
+latent reasoner. The canonical E7b accuracy--latency frontier contains the
+concatenation, fusion and top-1000 product systems; it contains no SLM system.
+Trainable-parameter counts provide capacity context rather than a latency
+proxy. E9 remains contextual with unresolved head pairing, and comparable R1
+and E10 answer-side latency was not measured
+(Section~\ref{sec:ch7-summary}).
+
+\section{Contributions and limitations}
+\label{sec:ch9-contributions}
+
+This dissertation contributes a controlled development study of compact VQA
+heads over frozen representations, including interaction and capacity
+controls. It contributes an evaluation of a 32-query latent reasoner across
+training scales with token-input and compositional-profile diagnostics. It
+also contributes matched pretrained-versus-random SLM controls on both sides
+of the reasoner, including the 360M answer-side extension, and a governed
+end-to-end warm-serial evaluation with a canonical common-denominator
+accuracy--latency frontier. The accompanying record that distinguishes
+canonical, superseded and withdrawn evidence is a supporting reproducibility
+contribution rather than a scientific result.
+
+The conclusions remain bounded to development evidence from one closed-set GQA
+setting. Supported top-100 and top-1000 results are different tasks;
+cross-family comparisons are configuration-level; only a limited set of SLM
+families, sizes and interfaces was tested; and efficiency claims cover only
+the retained measured quantities on the governed nodes. Section~\ref{sec:ch8-limitations}
+gives the full limitations.
+
+\section{Future work}
+\label{sec:ch9-future}
+
+Each next step follows from one of those limits. If authorised, the next
+validation step is to freeze the final governed system selection and perform a
+blinded held-out clean-test evaluation. Capacity- and interface-matched
+controls could separate representation choice from downstream architecture in
+the current configuration-level comparisons. Broader small-language-model
+families, placements and lightweight adaptation could test whether the
+answer-side pattern reflects interface compatibility or model scale. A more
+prior-controlled compositional analysis could test whether the persistent
+profile survives a stricter proxy for reasoning difficulty. Finally, valid
+answer-side latency and corrected-boundary memory measurements under the
+existing protocol could complete the current efficiency evidence. None of
+these tests presumes a favourable outcome.
+
+\section{Final statement}
+\label{sec:ch9-final}
+
+Under the implemented development protocol, the evidence supports an
+interface-specific contribution from small language models, but the strongest
+measured accuracy--latency frontier does not require one. Compact
+frozen-representation systems remain a viable basis for this closed-set task,
+while the persistent compositional profile and interface-dependent pretraining
+results define important limits. Held-out validation remains pending, so the
+final claim is deliberately bounded to the development evidence reported here.

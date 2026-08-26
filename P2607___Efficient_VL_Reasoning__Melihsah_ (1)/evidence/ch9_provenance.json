@@ -1,0 +1,260 @@
+{
+  "schema_version": 1,
+  "task_id": "dissertation-08-ch9-conclusions",
+  "base_commit": "824d346679209eecec6534423b9a013e0c9b8434",
+  "chapter": "Chapter 9 — Conclusions and Future Work",
+  "development_set_only": true,
+  "closed_evidence_only": true,
+  "scientific_recomputation": false,
+  "sources": [
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/technical.tex",
+      "sha256": "59b8966dbac8e07783aa3547860e04a2695bdd62336cc618137e64c863305579",
+      "role": "closed Chapter 4 RQ1 authority"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch4_provenance.json",
+      "sha256": "30b3ec4009b1040a7a833f27fc67d7cd217de9b7bf83c92b07fc7fbcccad9d05",
+      "role": "closed Chapter 4 claim mappings"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/technical2.tex",
+      "sha256": "90972163ed72a96e906af6be88292d80d50d84ce4be4ff6a5bc73838db0b474b",
+      "role": "closed Chapter 5 RQ2 authority"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch5_provenance.json",
+      "sha256": "e7a71bac68e83233a40da2889c92b1298e1b79c76f888a49aa26aaad6cf6e960",
+      "role": "closed Chapter 5 claim mappings"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/slm.tex",
+      "sha256": "a2cf2a316b4e8d6b3765d6d39b4af266bde6bf2657929ff03beaf814f62347f1",
+      "role": "closed Chapter 6 RQ3 authority"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch6_provenance.json",
+      "sha256": "2c61b1988f3e029a9a64cebb6dd351b89b865108c63428647c35fc0b5a0ba976",
+      "role": "closed Chapter 6 claim mappings"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/efficiency.tex",
+      "sha256": "72f23e40df2db84e54a8ec9100f44427ca428a4da774d01517f67052c84f2088",
+      "role": "closed Chapter 7 efficiency authority"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch7_provenance.json",
+      "sha256": "ca352f337f96968bd4dc5a8bd3bbaec01a9f71cf41227ce3b5bad0ef68c4b6ec",
+      "role": "closed Chapter 7 claim mappings"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/discussion.tex",
+      "sha256": "2d200fc14175013a50d8edf564afe2c810527de2bfb7311b8652a8570f7e5baa",
+      "role": "closed Chapter 8 synthesis and limitations authority"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch8_provenance.json",
+      "sha256": "2c484d85f005f587b3bbd0996a24fc5b228ed4a66ef0f5d66dda23041f53b9ae",
+      "role": "closed Chapter 8 claim mappings"
+    },
+    {
+      "path": ".agent-bridge/tasks/dissertation-02-ch3-draft-s1/00-request.md",
+      "sha256": "7ba4cd2380f7c5067847a020ca2cc12df517ffcaaac44427557855eeccf5c965",
+      "role": "human-adopted formal RQ wording authority"
+    },
+    {
+      "path": "docs/DISSERTATION_HANDOFF.md",
+      "sha256": "588b6124713b4eae65a0d3f714c9477e16dd9bfda0a6f72386a5935bdb9cbc80",
+      "role": "dissertation objective and title-level question context"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-07.csv",
+      "sha256": "6f20e51875b3c4cd5cbcbfb43a7f7980e16c98d0b2b64a139371a9c00aa409b2",
+      "role": "frozen claim-ledger carrier"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/references/references.bib",
+      "sha256": "ebff6b25ef20b0672c154e56e678356bc8245b6cbf5d85aff63371968b6d2705",
+      "role": "unchanged bibliography identity"
+    }
+  ],
+  "rq_wording_authority": {
+    "path": ".agent-bridge/tasks/dissertation-02-ch3-draft-s1/00-request.md",
+    "sha256": "7ba4cd2380f7c5067847a020ca2cc12df517ffcaaac44427557855eeccf5c965",
+    "status": "RESOLVED BY HUMAN AUTHOR DECISION",
+    "rq1": "To what extent can lightweight heads built on frozen global image and question embeddings answer closed-set GQA questions, and how do explicit interaction features, frozen-encoder choice and answer-set size affect development-set accuracy?",
+    "rq2": "As training data scales, does a lightweight 32-query latent reasoner over frozen token-level visual features improve on global-embedding heads, and do any overall gains extend to questions requiring four or more reasoning steps?",
+    "rq3": "When a frozen small language model is coupled to the latent reasoner on the question side or used as the answer readout, does pretraining improve development-set accuracy over an architecturally matched random control, and what efficiency implications are supported by the project's trainable-parameter counts and valid warm-serial latency measurements?"
+  },
+  "claim_mappings": [
+    {
+      "claim_id": "9.1.overall_conclusion",
+      "class": "BOUNDED_INTERPRETATION",
+      "sentence_scope": "development-bounded title-level answer separating compact non-SLM frontier systems from interface-specific SLM contribution",
+      "supporting_labels": ["sec:ch4-summary", "sec:ch5-summary", "sec:ch6-summary", "sec:ch7-summary", "sec:ch8-implications"],
+      "evidence_ids": [],
+      "ledger_ids": ["C01", "C06", "C07", "C08", "C10", "C11", "C13", "C18", "C19"],
+      "qualification": "development only; SLMs can contribute but were not required for the canonical frontier; held-out validation pending"
+    },
+    {
+      "claim_id": "9.2.rq1",
+      "class": "DIRECT_RESULT",
+      "sentence_scope": "RQ1 answer covering viability, question-side predictive information, visual dependence, standard fusion gain, capacity-matched unresolved residual, representation confound and answer-space boundary",
+      "supporting_labels": ["sec:ch4-baselines", "sec:ch4-interaction", "sec:ch4-reliance", "sec:ch4-representation", "sec:ch4-answer-space", "sec:ch4-summary"],
+      "evidence_ids": ["EV-ARM-v2_02.question_only.train_40k", "EV-ARM-v2_02.fusion.train_40k", "EV-CON-v2_02.fusion_minus_concat.train_40k", "EV-CON-v2_03.concat_wide_minus_concat.train_40k", "EV-CON-v2_03.fusion_minus_concat_wide.train_40k"],
+      "ledger_ids": ["C01", "C04", "C05", "C12", "C18"],
+      "qualification": "capacity accounts for part of the original gap; the capacity-matched residual is not resolved clearly; dependence is not grounding or reasoning"
+    },
+    {
+      "claim_id": "9.2.rq2",
+      "class": "DIRECT_RESULT",
+      "sentence_scope": "RQ2 answer covering scale ordering, seed-consistent larger-scale accuracy gaps, configuration-level comparison, persistent deficit and unresolved paired deficit contrasts",
+      "supporting_labels": ["sec:ch5-scaling", "sec:ch5-fusion", "sec:ch5-deficit", "sec:ch5-summary"],
+      "evidence_ids": ["EV-DSC-v3_01.reasoner.train_40k.seed_mean", "EV-SEED-v3_03.reasoner.train_100k", "EV-SEED-v3_03.reasoner.train_250k", "EV-CON-v3_02a.reasoner_minus_fusion_deficit.train_40k", "EV-CON-v3_03.reasoner_minus_fusion_deficit.train_100k", "EV-CON-v3_03.reasoner_minus_fusion_deficit.train_250k"],
+      "ledger_ids": ["C06", "C07", "C21"],
+      "qualification": "architecture, token access and capacity co-vary; higher accuracy does not remove compositional difficulty or localise its cause"
+    },
+    {
+      "claim_id": "9.2.rq3_accuracy",
+      "class": "DIRECT_RESULT",
+      "sentence_scope": "question-side matched benefit together with below-A0p boundary, and the complete answer-side directional/uncertain pattern",
+      "supporting_labels": ["sec:ch6-question", "sec:ch6-answer135", "sec:ch6-answer360", "sec:ch6-placement", "sec:ch6-summary"],
+      "evidence_ids": ["EV-CON-E8A.A1_minus_A1r.train_40k", "EV-CON-E8A.A1_minus_A1r.train_250k", "EV-CON-E8A.A1_minus_A0p.train_40k", "EV-CON-E8A.A1_minus_A0p.train_250k", "EV-CON-E8B.B3_-_B2.train_40k", "EV-CON-E8B.B3_-_B2.train_250k", "EV-CON-E10.pretraining_effect.train_40k", "EV-CON-E10.pretraining_effect.train_250k", "EV-CON-E10.difference_in_differences"],
+      "ledger_ids": ["C08", "C09", "C10", "C11", "C19"],
+      "qualification": "A1-minus-A0p is secondary and representation-confounded; uncertain results establish neither equivalence nor absence; synthesis is cross-experiment"
+    },
+    {
+      "claim_id": "9.2.rq3_efficiency",
+      "class": "DIRECT_RESULT",
+      "sentence_scope": "A1 latency ordering, explicit canonical frontier membership, trainable-parameter context, contextual E9 status and missing comparable answer-side timing",
+      "supporting_labels": ["sec:ch7-latency", "sec:ch7-frontier", "sec:ch7-parameters", "sec:ch7-vlm", "sec:ch7-summary"],
+      "evidence_ids": ["EV-EFF-E7b.concat", "EV-EFF-E7b.fusion", "EV-EFF-E7b.vocab1000_product", "EV-EFF-E7b.reasoner", "EV-EFF-E7b.e8a_a1", "EV-EFF-E9.vocab1000_product"],
+      "ledger_ids": ["C13", "C14", "C16", "C17", "C18"],
+      "qualification": "frontier contains concat, fusion and vocab1000 product only; trainable counts are not latency proxies; E9 is contextual and unpaired; R1/E10 timing incomplete"
+    },
+    {
+      "claim_id": "9.3.contribution_compact_heads",
+      "class": "SCIENTIFIC_CONTRIBUTION",
+      "sentence_scope": "controlled compact frozen-representation VQA study with interaction and capacity controls",
+      "supporting_labels": ["sec:ch4-interaction", "sec:ch4-summary"],
+      "evidence_ids": ["EV-CON-v2_02.fusion_minus_concat.train_40k", "EV-CON-v2_03.fusion_minus_concat_wide.train_40k"],
+      "ledger_ids": ["C01", "C18"],
+      "qualification": "development study; no novelty-priority claim"
+    },
+    {
+      "claim_id": "9.3.contribution_reasoner",
+      "class": "SCIENTIFIC_CONTRIBUTION",
+      "sentence_scope": "32-query latent-reasoner evaluation across training scales with token-input and compositional-profile diagnostics",
+      "supporting_labels": ["sec:ch5-scaling", "sec:ch5-diagnostics", "sec:ch5-deficit", "sec:ch5-summary"],
+      "evidence_ids": [],
+      "ledger_ids": ["C06", "C07", "C21"],
+      "qualification": "evaluation contribution, not a mechanism or simple negative low-data claim"
+    },
+    {
+      "claim_id": "9.3.contribution_slm_controls",
+      "class": "SCIENTIFIC_CONTRIBUTION",
+      "sentence_scope": "matched pretrained-versus-random controls on both interface sides including the 360M answer-side extension",
+      "supporting_labels": ["sec:ch6-question", "sec:ch6-answer135", "sec:ch6-answer360", "sec:ch6-summary"],
+      "evidence_ids": ["EV-CON-E8A.A1_minus_A1r.train_40k", "EV-CON-E8B.B3_-_B2.train_40k", "EV-CON-E10.pretraining_effect.train_40k"],
+      "ledger_ids": ["C08", "C09", "C10", "C11", "C19"],
+      "qualification": "matched within first-order pairs; placements remain separately run experiments"
+    },
+    {
+      "claim_id": "9.3.contribution_efficiency",
+      "class": "SCIENTIFIC_CONTRIBUTION",
+      "sentence_scope": "governed end-to-end warm-serial evaluation and canonical common-denominator accuracy-latency frontier",
+      "supporting_labels": ["sec:ch7-scope", "sec:ch7-frontier", "sec:ch7-summary"],
+      "evidence_ids": ["EV-EFF-E7b.concat", "EV-EFF-E7b.fusion", "EV-EFF-E7b.vocab1000_product"],
+      "ledger_ids": ["C13", "C16", "C17", "C18"],
+      "qualification": "retained E7b quantities and stated hardware only"
+    },
+    {
+      "claim_id": "9.3.reproducibility_support",
+      "class": "REPRODUCIBILITY_CONTRIBUTION",
+      "sentence_scope": "supporting record separating canonical, superseded and withdrawn evidence",
+      "supporting_labels": ["sec:ch7-scope", "sec:ch8-limitations"],
+      "evidence_ids": [],
+      "ledger_ids": ["C15", "C16", "C17", "C20"],
+      "qualification": "supporting methodology only, not central scientific novelty"
+    },
+    {
+      "claim_id": "9.3.essential_limitations",
+      "class": "LIMITATION",
+      "sentence_scope": "development/F2, task and answer-space, configuration-level, SLM coverage and measured-efficiency boundaries",
+      "supporting_labels": ["sec:ch8-limitations"],
+      "evidence_ids": [],
+      "ledger_ids": ["C15", "C16", "C17", "C20", "C21"],
+      "qualification": "limitations narrow the conclusion and do not invalidate within-family controlled results"
+    },
+    {
+      "claim_id": "9.4.future_held_out",
+      "class": "FUTURE_WORK",
+      "sentence_scope": "conditional governed model freeze and blinded held-out evaluation",
+      "supporting_labels": ["sec:ch8-limitations"],
+      "originating_limitation": "development-only evidence; F2 pending",
+      "evidence_ids": [],
+      "ledger_ids": ["C15", "C20"],
+      "qualification": "only if separately authorised; no selected system or expected result"
+    },
+    {
+      "claim_id": "9.4.future_matched_controls",
+      "class": "FUTURE_WORK",
+      "sentence_scope": "capacity- and interface-matched tests separating representation from downstream architecture",
+      "supporting_labels": ["sec:ch4-representation", "sec:ch5-fusion", "sec:ch8-limitations"],
+      "originating_limitation": "cross-family comparisons change representation, architecture, token access, capacity or seed structure together",
+      "evidence_ids": [],
+      "ledger_ids": ["C05", "C07"],
+      "qualification": "test design only; no promised gain"
+    },
+    {
+      "claim_id": "9.4.future_slm_interfaces",
+      "class": "FUTURE_WORK",
+      "sentence_scope": "broader SLM families, placements and lightweight adaptation to test compatibility versus scale",
+      "supporting_labels": ["sec:ch6-placement", "sec:ch8-placement", "sec:ch8-limitations"],
+      "originating_limitation": "small set of frozen SLM families, sizes, placements and differing experiment-family selection contexts",
+      "evidence_ids": [],
+      "ledger_ids": ["C19"],
+      "qualification": "hypothesis test only; no claim that adaptation improves accuracy"
+    },
+    {
+      "claim_id": "9.4.future_composition_efficiency",
+      "class": "FUTURE_WORK",
+      "sentence_scope": "prior-controlled compositional analysis and valid answer-side latency/corrected-boundary memory measurement",
+      "supporting_labels": ["sec:ch5-depth", "sec:ch7-parameters", "sec:ch8-limitations"],
+      "originating_limitation": "program length and fixed priors are imperfect proxies; comparable R1/E10 latency and valid peak-memory measurement are absent",
+      "evidence_ids": [],
+      "ledger_ids": ["C16", "C17", "C21"],
+      "qualification": "measurement and analysis completion only; no expected efficiency or deficit outcome"
+    },
+    {
+      "claim_id": "9.5.final_statement",
+      "class": "FINAL_STATEMENT",
+      "sentence_scope": "bounded title answer, non-SLM frontier distinction, persistent profile, interface-specific SLM contribution and pending held-out validation",
+      "supporting_labels": ["sec:ch4-summary", "sec:ch5-summary", "sec:ch6-summary", "sec:ch7-summary", "sec:ch8-implications"],
+      "evidence_ids": [],
+      "ledger_ids": ["C01", "C06", "C07", "C08", "C10", "C11", "C13", "C18", "C19"],
+      "qualification": "implemented development protocol only; no universal, held-out or deployment claim"
+    }
+  ],
+  "numeric_anchors": [],
+  "numeric_anchor_policy": {
+    "performance_anchor_count": 0,
+    "note": "Training-scale, query-count, answer-vocabulary and nominal model-family identifiers are retained only where required to identify the governed comparisons; no performance magnitude is repeated and no arithmetic is introduced."
+  },
+  "f2_integration": {
+    "marker": "% F2-INTEGRATION-PENDING: held-out results, if authorised and completed, require a bounded revision of Sections 9.1, 9.2 and 9.5",
+    "f2_status": "not authorised, not performed",
+    "reader_facing_status": "development conclusions only; held-out clean-test evaluation remains pending",
+    "selected_final_system": null,
+    "held_out_result": null
+  },
+  "bibliography_identity": {
+    "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/references/references.bib",
+    "sha256": "ebff6b25ef20b0672c154e56e678356bc8245b6cbf5d85aff63371968b6d2705",
+    "entry_count": 72
+  },
+  "tables": [],
+  "figures": [],
+  "citations": [],
+  "bibliography_modified": false
+}
