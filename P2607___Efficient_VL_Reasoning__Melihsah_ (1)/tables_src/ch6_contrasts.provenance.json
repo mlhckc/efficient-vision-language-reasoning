@@ -1,0 +1,675 @@
+{
+  "schema_version": 1,
+  "artefact": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch6_contrasts.csv",
+  "generation": "deterministic selection and presentation formatting from canonical frozen records; no scientific recomputation",
+  "sources": [
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137"
+    },
+    {
+      "path": "results/closure/B_primary_contrasts.csv",
+      "sha256": "cb906806efd197a9f55cdf83757e9e4342415e7d7d2fde8294c029293b81e653"
+    },
+    {
+      "path": "results/closure/pre_f1_evidence_metadata_repair_20260814.json",
+      "sha256": "e35db6dddca6f587791527f3a9e9846905486413c851d1f896129a3f6a015f42",
+      "content_sha256": "f9868fdee87f80c458b35ff175a6664d06884c62119521284e02ddb24c0b8e2e"
+    }
+  ],
+  "cells": [
+    {
+      "output_row_id": "EV-CON-E8A.A1_minus_A1r.train_40k",
+      "output_field": "contrast",
+      "value": "A1 minus A1r",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E8A.A1_minus_A1r.train_40k",
+      "source_field": "contrast",
+      "transformation": "reader-facing label; B4 pair and second-order interaction made explicit"
+    },
+    {
+      "output_row_id": "EV-CON-E8A.A1_minus_A1r.train_40k",
+      "output_field": "order",
+      "value": "first-order",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E8A.A1_minus_A1r.train_40k",
+      "source_field": "order",
+      "transformation": "reader-facing lower-case label; scientific order unchanged"
+    },
+    {
+      "output_row_id": "EV-CON-E8A.A1_minus_A1r.train_40k",
+      "output_field": "side",
+      "value": "question side",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E8A.A1_minus_A1r.train_40k",
+      "source_field": "interface side",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E8A.A1_minus_A1r.train_40k",
+      "output_field": "model size",
+      "value": "135M",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E8A.A1_minus_A1r.train_40k",
+      "source_field": "language model size",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E8A.A1_minus_A1r.train_40k",
+      "output_field": "scale or interaction",
+      "value": "40k",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E8A.A1_minus_A1r.train_40k",
+      "source_field": "training scale",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E8A.A1_minus_A1r.train_40k",
+      "output_field": "effect",
+      "value": "0.03820",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E8A.A1_minus_A1r.train_40k",
+      "source_field": "effect",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E8A.A1_minus_A1r.train_40k",
+      "output_field": "95% interval",
+      "value": "[0.02947, 0.04680]",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E8A.A1_minus_A1r.train_40k",
+      "source_field": "95% CI (image-clustered)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E8A.A1_minus_A1r.train_40k",
+      "output_field": "per-seed effects",
+      "value": "0: 0.03565; 1: 0.04304; 2: 0.03591",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E8A.A1_minus_A1r.train_40k",
+      "source_field": "per-seed effects",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E8A.A1_minus_A1r.train_40k",
+      "output_field": "governed outcome",
+      "value": "positive directional evidence",
+      "frozen_source_file": "results/closure/B_primary_contrasts.csv",
+      "frozen_source_sha256": "cb906806efd197a9f55cdf83757e9e4342415e7d7d2fde8294c029293b81e653",
+      "source_row_identifier": "E8A/A1_minus_A1r/train_40k",
+      "source_field": "directional_rule_outcome",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E8A.A1_minus_A1r.train_250k",
+      "output_field": "contrast",
+      "value": "A1 minus A1r",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E8A.A1_minus_A1r.train_250k",
+      "source_field": "contrast",
+      "transformation": "reader-facing label; B4 pair and second-order interaction made explicit"
+    },
+    {
+      "output_row_id": "EV-CON-E8A.A1_minus_A1r.train_250k",
+      "output_field": "order",
+      "value": "first-order",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E8A.A1_minus_A1r.train_250k",
+      "source_field": "order",
+      "transformation": "reader-facing lower-case label; scientific order unchanged"
+    },
+    {
+      "output_row_id": "EV-CON-E8A.A1_minus_A1r.train_250k",
+      "output_field": "side",
+      "value": "question side",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E8A.A1_minus_A1r.train_250k",
+      "source_field": "interface side",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E8A.A1_minus_A1r.train_250k",
+      "output_field": "model size",
+      "value": "135M",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E8A.A1_minus_A1r.train_250k",
+      "source_field": "language model size",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E8A.A1_minus_A1r.train_250k",
+      "output_field": "scale or interaction",
+      "value": "250k",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E8A.A1_minus_A1r.train_250k",
+      "source_field": "training scale",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E8A.A1_minus_A1r.train_250k",
+      "output_field": "effect",
+      "value": "0.04835",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E8A.A1_minus_A1r.train_250k",
+      "source_field": "effect",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E8A.A1_minus_A1r.train_250k",
+      "output_field": "95% interval",
+      "value": "[0.03935, 0.05803]",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E8A.A1_minus_A1r.train_250k",
+      "source_field": "95% CI (image-clustered)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E8A.A1_minus_A1r.train_250k",
+      "output_field": "per-seed effects",
+      "value": "0: 0.04472; 1: 0.04874; 2: 0.05159",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E8A.A1_minus_A1r.train_250k",
+      "source_field": "per-seed effects",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E8A.A1_minus_A1r.train_250k",
+      "output_field": "governed outcome",
+      "value": "positive directional evidence",
+      "frozen_source_file": "results/closure/B_primary_contrasts.csv",
+      "frozen_source_sha256": "cb906806efd197a9f55cdf83757e9e4342415e7d7d2fde8294c029293b81e653",
+      "source_row_identifier": "E8A/A1_minus_A1r/train_250k",
+      "source_field": "directional_rule_outcome",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E8B.B3_-_B2.train_40k",
+      "output_field": "contrast",
+      "value": "B3 minus B2",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E8B.B3_-_B2.train_40k",
+      "source_field": "contrast",
+      "transformation": "reader-facing label; B4 pair and second-order interaction made explicit"
+    },
+    {
+      "output_row_id": "EV-CON-E8B.B3_-_B2.train_40k",
+      "output_field": "order",
+      "value": "first-order",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E8B.B3_-_B2.train_40k",
+      "source_field": "order",
+      "transformation": "reader-facing lower-case label; scientific order unchanged"
+    },
+    {
+      "output_row_id": "EV-CON-E8B.B3_-_B2.train_40k",
+      "output_field": "side",
+      "value": "answer side",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E8B.B3_-_B2.train_40k",
+      "source_field": "interface side",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E8B.B3_-_B2.train_40k",
+      "output_field": "model size",
+      "value": "135M",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E8B.B3_-_B2.train_40k",
+      "source_field": "language model size",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E8B.B3_-_B2.train_40k",
+      "output_field": "scale or interaction",
+      "value": "40k",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E8B.B3_-_B2.train_40k",
+      "source_field": "training scale",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E8B.B3_-_B2.train_40k",
+      "output_field": "effect",
+      "value": "-0.02463",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E8B.B3_-_B2.train_40k",
+      "source_field": "effect",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E8B.B3_-_B2.train_40k",
+      "output_field": "95% interval",
+      "value": "[-0.03333, -0.01619]",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E8B.B3_-_B2.train_40k",
+      "source_field": "95% CI (image-clustered)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E8B.B3_-_B2.train_40k",
+      "output_field": "per-seed effects",
+      "value": "0: -0.00091; 1: -0.05872; 2: -0.01426",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E8B.B3_-_B2.train_40k",
+      "source_field": "per-seed effects",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E8B.B3_-_B2.train_40k",
+      "output_field": "governed outcome",
+      "value": "negative directional evidence",
+      "frozen_source_file": "results/closure/B_primary_contrasts.csv",
+      "frozen_source_sha256": "cb906806efd197a9f55cdf83757e9e4342415e7d7d2fde8294c029293b81e653",
+      "source_row_identifier": "E8B/B3 - B2/train_40k",
+      "source_field": "directional_rule_outcome",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E8B.B3_-_B2.train_250k",
+      "output_field": "contrast",
+      "value": "B3 minus B2",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E8B.B3_-_B2.train_250k",
+      "source_field": "contrast",
+      "transformation": "reader-facing label; B4 pair and second-order interaction made explicit"
+    },
+    {
+      "output_row_id": "EV-CON-E8B.B3_-_B2.train_250k",
+      "output_field": "order",
+      "value": "first-order",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E8B.B3_-_B2.train_250k",
+      "source_field": "order",
+      "transformation": "reader-facing lower-case label; scientific order unchanged"
+    },
+    {
+      "output_row_id": "EV-CON-E8B.B3_-_B2.train_250k",
+      "output_field": "side",
+      "value": "answer side",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E8B.B3_-_B2.train_250k",
+      "source_field": "interface side",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E8B.B3_-_B2.train_250k",
+      "output_field": "model size",
+      "value": "135M",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E8B.B3_-_B2.train_250k",
+      "source_field": "language model size",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E8B.B3_-_B2.train_250k",
+      "output_field": "scale or interaction",
+      "value": "250k",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E8B.B3_-_B2.train_250k",
+      "source_field": "training scale",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E8B.B3_-_B2.train_250k",
+      "output_field": "effect",
+      "value": "-0.00475",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E8B.B3_-_B2.train_250k",
+      "source_field": "effect",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E8B.B3_-_B2.train_250k",
+      "output_field": "95% interval",
+      "value": "[-0.01208, 0.00297]",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E8B.B3_-_B2.train_250k",
+      "source_field": "95% CI (image-clustered)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E8B.B3_-_B2.train_250k",
+      "output_field": "per-seed effects",
+      "value": "0: 0.00233; 1: -0.00324; 2: -0.01335",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E8B.B3_-_B2.train_250k",
+      "source_field": "per-seed effects",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E8B.B3_-_B2.train_250k",
+      "output_field": "governed outcome",
+      "value": "uncertain or mixed evidence",
+      "frozen_source_file": "results/closure/B_primary_contrasts.csv",
+      "frozen_source_sha256": "cb906806efd197a9f55cdf83757e9e4342415e7d7d2fde8294c029293b81e653",
+      "source_row_identifier": "E8B/B3 - B2/train_250k",
+      "source_field": "directional_rule_outcome",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E10.pretraining_effect.train_40k",
+      "output_field": "contrast",
+      "value": "B4 minus B4r",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E10.pretraining_effect.train_40k",
+      "source_field": "contrast",
+      "transformation": "reader-facing label; B4 pair and second-order interaction made explicit"
+    },
+    {
+      "output_row_id": "EV-CON-E10.pretraining_effect.train_40k",
+      "output_field": "order",
+      "value": "first-order",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E10.pretraining_effect.train_40k",
+      "source_field": "order",
+      "transformation": "reader-facing lower-case label; scientific order unchanged"
+    },
+    {
+      "output_row_id": "EV-CON-E10.pretraining_effect.train_40k",
+      "output_field": "side",
+      "value": "answer side",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E10.pretraining_effect.train_40k",
+      "source_field": "interface side",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E10.pretraining_effect.train_40k",
+      "output_field": "model size",
+      "value": "360M",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E10.pretraining_effect.train_40k",
+      "source_field": "language model size",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E10.pretraining_effect.train_40k",
+      "output_field": "scale or interaction",
+      "value": "40k",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E10.pretraining_effect.train_40k",
+      "source_field": "training scale",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E10.pretraining_effect.train_40k",
+      "output_field": "effect",
+      "value": "-0.00683",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E10.pretraining_effect.train_40k",
+      "source_field": "effect",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E10.pretraining_effect.train_40k",
+      "output_field": "95% interval",
+      "value": "[-0.01508, 0.00114]",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E10.pretraining_effect.train_40k",
+      "source_field": "95% CI (image-clustered)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E10.pretraining_effect.train_40k",
+      "output_field": "per-seed effects",
+      "value": "0: -0.00959; 1: 0.00363; 2: -0.01452",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E10.pretraining_effect.train_40k",
+      "source_field": "per-seed effects",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E10.pretraining_effect.train_40k",
+      "output_field": "governed outcome",
+      "value": "uncertain or mixed evidence",
+      "frozen_source_file": "results/closure/B_primary_contrasts.csv",
+      "frozen_source_sha256": "cb906806efd197a9f55cdf83757e9e4342415e7d7d2fde8294c029293b81e653",
+      "source_row_identifier": "E10/pretraining_effect/train_40k",
+      "source_field": "directional_rule_outcome",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E10.pretraining_effect.train_250k",
+      "output_field": "contrast",
+      "value": "B4 minus B4r",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E10.pretraining_effect.train_250k",
+      "source_field": "contrast",
+      "transformation": "reader-facing label; B4 pair and second-order interaction made explicit"
+    },
+    {
+      "output_row_id": "EV-CON-E10.pretraining_effect.train_250k",
+      "output_field": "order",
+      "value": "first-order",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E10.pretraining_effect.train_250k",
+      "source_field": "order",
+      "transformation": "reader-facing lower-case label; scientific order unchanged"
+    },
+    {
+      "output_row_id": "EV-CON-E10.pretraining_effect.train_250k",
+      "output_field": "side",
+      "value": "answer side",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E10.pretraining_effect.train_250k",
+      "source_field": "interface side",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E10.pretraining_effect.train_250k",
+      "output_field": "model size",
+      "value": "360M",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E10.pretraining_effect.train_250k",
+      "source_field": "language model size",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E10.pretraining_effect.train_250k",
+      "output_field": "scale or interaction",
+      "value": "250k",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E10.pretraining_effect.train_250k",
+      "source_field": "training scale",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E10.pretraining_effect.train_250k",
+      "output_field": "effect",
+      "value": "-0.00238",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E10.pretraining_effect.train_250k",
+      "source_field": "effect",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E10.pretraining_effect.train_250k",
+      "output_field": "95% interval",
+      "value": "[-0.01071, 0.00588]",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E10.pretraining_effect.train_250k",
+      "source_field": "95% CI (image-clustered)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E10.pretraining_effect.train_250k",
+      "output_field": "per-seed effects",
+      "value": "0: 0.00959; 1: -0.01219; 2: -0.00454",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E10.pretraining_effect.train_250k",
+      "source_field": "per-seed effects",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E10.pretraining_effect.train_250k",
+      "output_field": "governed outcome",
+      "value": "uncertain or mixed evidence",
+      "frozen_source_file": "results/closure/B_primary_contrasts.csv",
+      "frozen_source_sha256": "cb906806efd197a9f55cdf83757e9e4342415e7d7d2fde8294c029293b81e653",
+      "source_row_identifier": "E10/pretraining_effect/train_250k",
+      "source_field": "directional_rule_outcome",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E10.difference_in_differences",
+      "output_field": "contrast",
+      "value": "360M difference in differences",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E10.difference_in_differences",
+      "source_field": "contrast",
+      "transformation": "reader-facing label; B4 pair and second-order interaction made explicit"
+    },
+    {
+      "output_row_id": "EV-CON-E10.difference_in_differences",
+      "output_field": "order",
+      "value": "second-order interaction",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E10.difference_in_differences",
+      "source_field": "order",
+      "transformation": "reader-facing lower-case label; scientific order unchanged"
+    },
+    {
+      "output_row_id": "EV-CON-E10.difference_in_differences",
+      "output_field": "side",
+      "value": "answer side",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E10.difference_in_differences",
+      "source_field": "interface side",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E10.difference_in_differences",
+      "output_field": "model size",
+      "value": "360M",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E10.difference_in_differences",
+      "source_field": "language model size",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E10.difference_in_differences",
+      "output_field": "scale or interaction",
+      "value": "250k against 40k",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E10.difference_in_differences",
+      "source_field": "training scale",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E10.difference_in_differences",
+      "output_field": "effect",
+      "value": "0.00445",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E10.difference_in_differences",
+      "source_field": "effect",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E10.difference_in_differences",
+      "output_field": "95% interval",
+      "value": "[-0.00709, 0.01641]",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E10.difference_in_differences",
+      "source_field": "95% CI (image-clustered)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E10.difference_in_differences",
+      "output_field": "per-seed effects",
+      "value": "0: 0.01919; 1: -0.01582; 2: 0.00998",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "frozen_source_sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137",
+      "source_row_identifier": "EV-CON-E10.difference_in_differences",
+      "source_field": "per-seed effects",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "EV-CON-E10.difference_in_differences",
+      "output_field": "governed outcome",
+      "value": "uncertain or mixed evidence",
+      "frozen_source_file": "results/closure/B_primary_contrasts.csv",
+      "frozen_source_sha256": "cb906806efd197a9f55cdf83757e9e4342415e7d7d2fde8294c029293b81e653",
+      "source_row_identifier": "E10/difference_in_differences",
+      "source_field": "directional_rule_outcome",
+      "transformation": "identity / selection only"
+    }
+  ],
+  "source_csv_sha256": "c14c41197fcfda41d768cc14499c883151134719eb425d7a88fe8a9314995466",
+  "converter": {
+    "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tools/tab2latex.py",
+    "sha256": "c441d40b2b10a7a4294c4f15b12bc450f7ae73a9435e3d15394940c0f0c5a546",
+    "header_map": {
+      "contrast": "Contrast",
+      "order": "Order",
+      "side": "Side",
+      "model size": "Model size",
+      "scale or interaction": "Scale or interaction",
+      "effect": "Effect",
+      "95% interval": "95% interval",
+      "per-seed effects": "Per-seed effects",
+      "governed outcome": "Governed outcome"
+    },
+    "verify_exit_code": 0,
+    "presentation_transformation": "reader-facing header relabelling only; scientific cells unchanged"
+  },
+  "generated_tex_sha256": "7695fb9240d9b113f6888dcc6027d08939ca5d22a8e2947f67f9eac5b2f80164"
+}

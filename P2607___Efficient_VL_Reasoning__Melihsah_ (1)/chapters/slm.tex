@@ -1,2 +1,262 @@
 \chapter{RQ3 — Frozen Small-Language-Model Interfaces}
-% TODO Phase 1 (dissertation-06): sources per docs/DISSERTATION_HANDOFF.md; internal budget 1900 words; stub only in Phase 0.
+
+\section{Scope and comparison logic}
+\label{sec:ch6-scope}
+RQ3 asks whether frozen small-language-model pretraining contributes differently
+when it is placed on the question side or the answer side of the latent
+reasoner. The interfaces are defined in Section~\ref{sec:ch3-architectures}
+and Figure~\ref{fig:ch3-slm-interface}. All results use the top-100 development
+view: 7,714 questions over 768 represented images, scored by G21 normalised
+exact match. Every level and contrast uses seeds 0, 1 and 2 at 40k or 250k
+training questions. The chapter reports development evidence only and makes no
+held-out claim.
+
+Every first-order pretraining contrast is the pretrained arm minus its
+architecture-matched random control at the corresponding model size; positive
+values favour pretraining. The 360M difference in differences instead
+subtracts the 40k first-order effect from the 250k first-order effect. It is a
+second-order interaction across training scales, not a simple
+pretrained-minus-random effect. Seed SD describes variation across trained
+seeds. Contrast intervals describe image-clustered evaluation-sampling
+uncertainty conditional on those seeds, following
+Section~\ref{sec:ch3-statistics}.
+
+The stored directional rule is applied to the E8A, E8B and E10 contrasts in
+this chapter. Positive directional evidence requires a positive mean effect,
+an interval whose lower bound is above zero, and positive effects in at least
+two of the three seeds. Negative directional evidence uses the mirrored
+criteria. All other governed cases are described as uncertain or mixed
+evidence. The intervals are nominal and unadjusted, so their role is to bound
+each reported contrast; an interval containing zero does not resolve it.
+
+Checkpoint selection bounds interpretation. The question-side E8A arms select the best development checkpoint. Answer-side B2, B3, B4r and B4 use the
+protocol-fixed epoch-22 checkpoint. Their within-family pretraining contrasts
+are selection-matched, but cross-family readings are juxtapositions rather than
+a factorial placement experiment. The LM-free B1 reference uses
+best-development selection and is contextual beside the fixed-epoch arms.
+Only the matched first-order pairs answer the narrow pretraining question.
+A1 versus A0p changes representation and interface, while comparisons with B1
+also change checkpoint-selection class. The chapter uses only the two recorded
+training scales and does not interpolate between them.
+
+\section{Question-side interface: pretrained, random and CLIP reference}
+\label{sec:ch6-question}
+A0p projects frozen CLIP question tokens into the reasoner and is the CLIP-token
+reference. A1 uses frozen pretrained SmolLM2-135M hidden states, while A1r uses
+architecture-matched frozen random weights with the identical tokenizer and
+interface. A1 and A1r each have 21,395,044 trainable parameters; A0p has
+21,362,276. These counts establish near matching and capacity context only.
+Within the A1--A1r pair, frozen weight initialisation is the intended change;
+tokenizer, hidden width, projection and trainable parameter count are held
+fixed. A0p instead supplies CLIP-aligned question tokens through a different
+projection input, which is why it provides a useful reference but not the
+architecture-matched pretraining control.
+
+Table~\ref{tab:ch6-question-arms} reports the stored development levels. At
+40k, A0p reaches $0.54045\pm0.00438$, A1 reaches
+$0.52861\pm0.00296$, and A1r reaches $0.49041\pm0.00259$.
+At 250k the corresponding values are $0.59446\pm0.00030$,
+$0.57316\pm0.00154$, and $0.52480\pm0.00487$. These uncertainties are seed
+SDs, not clustered intervals. Mean accuracy is higher at 250k than at 40k for
+every reported arm, but these scale changes are not ranked against the
+pretraining effects.
+
+The clean within-interface comparison is A1 minus A1r. At 40k, the effect is
+$+0.03820$. Its interval is $[0.02947,0.04680]$. At 250k, the effect is
+$+0.04835$, with interval $[0.03935,0.05803]$. Its paired seed effects are positive at both
+scales, giving positive directional evidence. SmolLM2 pretraining therefore
+helps relative to its matched random control within this question-side
+interface. More specifically, the paired effects are $+0.03565$, $+0.04304$
+and $+0.03591$ at 40k, then $+0.04472$, $+0.04874$ and $+0.05159$ at
+250k. The agreement across seeds complements the intervals; it does not turn
+this implemented comparison into a general claim about pretrained language
+models.
+
+A1 minus A0p is $-0.01184$ with interval $[-0.01996,-0.00427]$ at 40k and
+$-0.02130$ with interval $[-0.02983,-0.01253]$ at 250k, giving negative
+directional evidence at both scales. This comparison is secondary and
+\texttt{REPRESENTATION\_CONFOUNDED}: representation and interface change
+together, and A0p is not A1's random control. The bounded result is that
+pretraining helps within the SmolLM2 interface, while the pretrained interface
+remains below the CLIP-token reference under the tested configurations. It
+does not establish intrinsic representation quality. All three paired
+A1-minus-A0p effects are negative at both scales. This supports the stored
+negative directional classification while retaining the comparison's
+secondary status and its representation confounding.
+
+\begin{table}[tbp]
+\centering
+\caption[Question-side frozen interfaces.]{Development accuracy on 7,714 top-100 questions over 768 represented images. All rows use seeds 0/1/2 and best-development selection. A0p is the CLIP-token reference; A1r is the architecture-matched random control for A1. SD describes training-seed variation, not a confidence interval. Effective repaired digits are used where applicable.}
+\label{tab:ch6-question-arms}
+\begingroup\scriptsize\setlength{\tabcolsep}{1pt}
+\renewenvironment{longtable}[1]{\begin{tabular}{|p{0.055\textwidth}|p{0.18\textwidth}|p{0.055\textwidth}|p{0.27\textwidth}|p{0.11\textwidth}|p{0.08\textwidth}|}}{\end{tabular}}
+\let\endhead\relax\renewcommand{\_}{\textunderscore\allowbreak}
+\input{tables/ch6_question_arms.tex}
+\endgroup
+\end{table}
+
+\section{Answer-side interface at 135M}
+\label{sec:ch6-answer135}
+The answer-side language model receives only a BOS embedding followed by 32
+projected latent vectors through \texttt{inputs\_embeds}; raw question text
+never enters it. The governed R1 readout scores every candidate in the top-100
+answer vocabulary by likelihood. It is not free-form answer generation. B2
+uses a random frozen SmolLM2-135M readout and B3 uses the architecture-matched
+pretrained readout. Both have 21,343,808 trainable parameters and use fixed
+epoch 22. This interface tests pretraining after the question and image have
+already been compressed into the reasoner's latent sequence. It therefore
+differs substantively from the question-side interface, where frozen
+language-model states supply the question representation before latent
+reasoning. The cross-placement comparison concerns these complete implemented
+configurations; it does not isolate where any difference originates.
+
+At 40k, B2 records $0.53392\pm0.00233$, whereas B3 records
+$0.50929\pm0.02795$. The pretrained arm has high dispersion: its accuracies
+are 0.53124, 0.47783 and 0.51880. B3 minus B2 is $-0.02463$ with interval
+$[-0.03333,-0.01619]$; all paired effects are negative, so this is negative
+directional evidence. At 250k, B2 reaches $0.60086\pm0.00528$ and B3 reaches
+$0.59610\pm0.00270$. The first-order contrast is $-0.00475$ with interval
+$[-0.01208,+0.00297]$, and its seed signs disagree. Its governed outcome is
+uncertain or mixed evidence. The 40k paired effects are $-0.00091$,
+$-0.05872$ and $-0.01426$, so all three support the negative direction
+despite the large variation in B3's arm levels. At 250k the effects are
+$+0.00233$, $-0.00324$ and $-0.01335$. Their disagreement and the
+zero-containing interval prevent the negative point estimate from being
+reported as negative directional evidence.
+
+B1 is an LM-free attention-pool reference with 21,100,132 trainable parameters.
+It records $0.54507\pm0.00390$ at 40k and $0.59394\pm0.00486$ at 250k. B1 is
+selected by best development accuracy, whereas B2 and B3 use fixed epoch 22.
+The B1 levels in Table~\ref{tab:ch6-answer-arms} are descriptive context, not
+the primary pretraining control or a selection-matched attribution basis. In
+particular, neither B2-minus-B1 nor B3-minus-B1 answers whether pretrained
+weights help within the frozen language-model readout. That question is
+carried by B3 minus B2, for which both arms share the fixed-epoch rule and the
+shared 135M architecture.
+
+Figure~\ref{fig:ch6-pretraining} combines the controlled first-order contrasts
+and the second-order interaction. The sign of a point estimate is insufficient;
+the governed outcome also uses its clustered interval and paired seed signs.
+
+\begin{figure}[p]
+\centering\includegraphics[width=\textwidth]{ve1/VE1-FIG-08.pdf}
+\caption[Frozen SLM pretraining by interface.]{Development contrasts on 7,714 top-100 questions over 768 images. First-order rows are pretrained minus the architecture-matched random control at the corresponding model size; positive values favour pretraining. The bottom row is the second-order interaction $(\mathrm{B4}-\mathrm{B4r})_{250k}-(\mathrm{B4}-\mathrm{B4r})_{40k}$ and is not itself a pretrained-minus-random effect. Intervals are nominal image-clustered evaluation-sampling intervals; zero-containing intervals are governed as uncertain or mixed evidence. B3 at 40k has seed SD 0.02795 and per-seed accuracies 0.53124, 0.47783 and 0.51880. Checkpoint selection differs among the rows shown: E8A uses best-development selection, while both arms of the E8B B3-minus-B2 contrasts and E10 use fixed epoch 22.}
+\label{fig:ch6-pretraining}
+\end{figure}
+
+\begin{table}[p]
+\centering
+\caption[Answer-side frozen interfaces.]{Development accuracy on 7,714 top-100 questions over 768 images, using seeds 0/1/2. B1 is an LM-free reference selected BEST\_ON\_DEVELOPMENT. B2, B3, B4r and B4 use FIXED\_EPOCH\_22. B1 is a contextual juxtaposition, not a selection-matched pretraining control. SD is training-seed variation; B3 at 40k is flagged for high dispersion.}
+\label{tab:ch6-answer-arms}
+\begingroup\scriptsize\setlength{\tabcolsep}{0.6pt}
+\renewenvironment{longtable}[1]{\begin{tabular}{|p{0.035\textwidth}|p{0.095\textwidth}|p{0.05\textwidth}|p{0.15\textwidth}|p{0.045\textwidth}|p{0.195\textwidth}|p{0.09\textwidth}|p{0.07\textwidth}|p{0.085\textwidth}|}}{\end{tabular}}
+\let\endhead\relax\renewcommand{\_}{\textunderscore\allowbreak}
+\input{tables/ch6_answer_arms.tex}
+\endgroup
+\end{table}
+
+\section{Answer-side capacity: the 360M pair}
+\label{sec:ch6-answer360}
+The 360M pair retains the answer-side interface while changing the frozen
+language-model size. B4r is random and B4 is pretrained; each configuration has
+21,540,800 trainable parameters. The nominal 360M frozen-model size is distinct
+from this approximately 21.5M trainable component. Thus the B4--B4r pair is
+internally matched in architecture and trainable capacity, whereas comparing
+it with the 135M pair changes frozen model size as well as experiment family.
+The 360M results test whether a positive pretraining contribution appears
+within that larger matched pair, not whether 360M is intrinsically preferable
+to 135M.
+
+At 40k, B4r records $0.53319\pm0.00473$ and B4 records
+$0.52636\pm0.00466$. B4 minus B4r is $-0.00683$ with interval
+$[-0.01508,+0.00114]$. At 250k the levels are $0.59645\pm0.00343$ and
+$0.59407\pm0.00831$, while the contrast is $-0.00238$ with interval
+$[-0.01071,+0.00588]$. Seed signs disagree at both scales, and both governed
+outcomes are uncertain or mixed evidence. Neither result supports a positive
+answer-side pretraining advantage; both remain unresolved by their intervals.
+The paired effects are $-0.00959$, $+0.00363$ and $-0.01452$ at 40k, and
+$+0.00959$, $-0.01219$ and $-0.00454$ at 250k. In both cases the seed signs
+disagree. Mean accuracy is nevertheless higher at 250k for both B4r and B4;
+that scale pattern is separate from the within-scale pretraining contrasts.
+
+The difference in differences is
+$(\mathrm{B4}-\mathrm{B4r})_{250k}-(\mathrm{B4}-\mathrm{B4r})_{40k}$.
+It is $+0.00445$ with interval $[-0.00709,+0.01641]$, with paired seed effects
+$+0.01919$, $-0.01582$ and $+0.00998$. A positive sign means the first-order
+pretraining effect is more positive, or less negative, at 250k than at 40k.
+The interval includes zero and seed directions disagree, so the governed result
+is uncertain or mixed evidence. This second-order interaction does not show
+that pretraining improves with more data, that capacity benefits pretraining,
+or that the 360M model helps.
+
+\section{Placement synthesis}
+\label{sec:ch6-placement}
+Table~\ref{tab:ch6-contrasts} makes the contrast order explicit. Six rows
+compare pretrained and random weights inside a matched interface and model
+size. The seventh compares two first-order effects across scale. Separating
+these quantities prevents the positive DiD estimate from being mistaken for a
+positive pretraining effect. The table also prevents comparisons based only on
+arm means. Each first-order effect is paired within seed and evaluated with its
+stored clustered interval, whereas the arm tables report seed SDs. The two
+uncertainty summaries answer different questions and are not interchangeable.
+For the DiD, the reported per-seed effects belong to the second-order contrast
+itself rather than to either single-scale pretraining comparison.
+
+\begin{table}[p]
+\centering
+\caption[Pretraining contrasts and scale interaction.]{Canonical development contrasts with image-clustered intervals and governed outcomes. First-order effects are pretrained minus the architecture-matched random control at the corresponding size; positive favours pretraining. The 360M difference in differences is a second-order interaction across scales. Selection is matched within each first-order row; cross-family synthesis is a juxtaposition. Zero-containing intervals are classified as uncertain or mixed evidence.}
+\label{tab:ch6-contrasts}
+\begingroup\scriptsize\setlength{\tabcolsep}{0.45pt}
+\renewenvironment{longtable}[1]{\begin{tabular}{|p{0.12\textwidth}|p{0.085\textwidth}|p{0.07\textwidth}|p{0.06\textwidth}|p{0.10\textwidth}|p{0.07\textwidth}|p{0.115\textwidth}|p{0.15\textwidth}|p{0.13\textwidth}|}}{\end{tabular}}
+\let\endhead\relax\renewcommand{\_}{\textunderscore\allowbreak}
+\input{tables/ch6_contrasts.tex}
+\endgroup
+\end{table}
+
+The evidence differs by placement. On the question side, pretrained
+SmolLM2-135M has positive directional evidence over its matched random control
+at both scales, yet remains below the CLIP-token reference in a secondary,
+representation-confounded comparison. On the 135M answer side, the first-order
+contrast is negative directional at 40k and uncertain or mixed at 250k. At
+360M, both first-order contrasts and the scale interaction are uncertain or
+mixed.
+
+The governed directions are asymmetric. Question-side pretraining has positive
+evidence against its random control at both scales. Answer-side pretraining has
+negative evidence only for the 135M pair at 40k. The other three answer-side
+first-order cases are not resolved as directional, and the uncertain 360M DiD
+does not change their classifications.
+
+This supports an interface-specific conclusion under the implemented
+configurations. It does not establish a general property of frozen language
+models, because question-side, answer-side and capacity experiments were run
+separately and their selection rules differ across families. It also does not
+identify why the placements differ. Explanations involving representation
+alignment, frozen language space or internal mechanism are deferred to
+Chapter~8.
+
+% XREF-PENDING: appendix table VE1-TAB-03
+\clearpage
+\section{RQ3 accuracy summary}
+\label{sec:ch6-summary}
+On the common 7,714-question top-100 development view, frozen SmolLM2-135M
+pretraining helps relative to its matched random control on the question side:
+A1 minus A1r is positive directional at 40k and 250k. The pretrained interface
+remains below the CLIP-token A0p reference under the tested configurations,
+with negative directional A1-minus-A0p contrasts at both scales. This secondary
+comparison is representation-confounded.
+
+The answer-side results do not show a reliable positive pretraining advantage.
+B3 minus B2 gives negative directional evidence at 40k and uncertain or mixed
+evidence at 250k. B4 minus B4r is uncertain or mixed at both scales, as is the
+second-order interaction between its pretraining effect and training scale.
+These findings leave the zero-containing contrasts unresolved rather than
+showing that pretrained and random weights are interchangeable.
+
+Under the implemented interfaces, the benefit of frozen SmolLM2 pretraining is
+interface-specific rather than universal. This is a bounded cross-experiment
+synthesis of three separately run experiments, not a factorial causal
+placement study. It does not show that question-side pretraining is the
+strongest representation, that larger capacity resolves the answer-side
+pattern, or that the result generalises beyond these development configurations.
+Efficiency evidence for these interfaces is analysed separately in Chapter 7.

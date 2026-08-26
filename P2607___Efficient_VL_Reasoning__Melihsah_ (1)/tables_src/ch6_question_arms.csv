@@ -1,0 +1,7 @@
+arm,role,scale,per-seed accuracies,mean accuracy,seed SD
+A0p,CLIP-token reference,40k,0: 0.53578; 1: 0.54446; 2: 0.54109,0.54045,0.00438
+A0p,CLIP-token reference,250k,0: 0.59463; 1: 0.59411; 2: 0.59463,0.59446,0.00030
+A1,pretrained SmolLM2-135M,40k,0: 0.52541; 1: 0.53124; 2: 0.52917,0.52861,0.00296
+A1,pretrained SmolLM2-135M,250k,0: 0.57493; 1: 0.57221; 2: 0.57234,0.57316,0.00154
+A1r,matched-random SmolLM2-135M,40k,0: 0.48976; 1: 0.48820; 2: 0.49326,0.49041,0.00259
+A1r,matched-random SmolLM2-135M,250k,0: 0.53020; 1: 0.52346; 2: 0.52074,0.52480,0.00487

@@ -1,0 +1,945 @@
+{
+  "schema_version": 1,
+  "artefact": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/ch6_answer_arms.csv",
+  "generation": "deterministic selection and presentation formatting from canonical frozen records; no scientific recomputation",
+  "sources": [
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-05.csv",
+      "sha256": "4a4e508a827e2dae1e38f87d39cf2dccf905dc82d59f6663bb6f9cd20450c137"
+    },
+    {
+      "path": "results/closure/B_primary_contrasts.csv",
+      "sha256": "cb906806efd197a9f55cdf83757e9e4342415e7d7d2fde8294c029293b81e653"
+    },
+    {
+      "path": "results/closure/pre_f1_evidence_metadata_repair_20260814.json",
+      "sha256": "e35db6dddca6f587791527f3a9e9846905486413c851d1f896129a3f6a015f42",
+      "content_sha256": "f9868fdee87f80c458b35ff175a6664d06884c62119521284e02ddb24c0b8e2e"
+    }
+  ],
+  "cells": [
+    {
+      "output_row_id": "B1:40k",
+      "output_field": "arm",
+      "value": "B1",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B1.train_40k",
+      "source_field": "arm",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B1:40k",
+      "output_field": "role",
+      "value": "LM-free reference",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B1.train_40k",
+      "source_field": "language model",
+      "transformation": "reader-facing role label from canonical arm identity"
+    },
+    {
+      "output_row_id": "B1:40k",
+      "output_field": "size",
+      "value": "none",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B1.train_40k",
+      "source_field": "language model",
+      "transformation": "nominal frozen LM size extracted from canonical identity; none for B1"
+    },
+    {
+      "output_row_id": "B1:40k",
+      "output_field": "selection class",
+      "value": "BEST_ON_DEVELOPMENT",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B1.train_40k",
+      "source_field": "arm",
+      "transformation": "selection class from controlling protocol and metadata repair"
+    },
+    {
+      "output_row_id": "B1:40k",
+      "output_field": "scale",
+      "value": "40k",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B1.train_40k",
+      "source_field": "training scale",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B1:40k",
+      "output_field": "per-seed accuracies",
+      "value": "0: 0.54952; 1: 0.54226; 2: 0.54343",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B1.train_40k",
+      "source_field": "per-seed values",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B1:40k",
+      "output_field": "mean accuracy",
+      "value": "0.54507",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B1.train_40k",
+      "source_field": "mean accuracy",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B1:40k",
+      "output_field": "seed SD",
+      "value": "0.00390",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B1.train_40k",
+      "source_field": "sd (training seeds, ddof=1)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B1:40k",
+      "output_field": "dispersion",
+      "value": "standard",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B1.train_40k",
+      "source_field": "high dispersion",
+      "transformation": "reader-facing normalisation: yes (dagger) to high; no to standard"
+    },
+    {
+      "output_row_id": "B1:250k",
+      "output_field": "arm",
+      "value": "B1",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B1.train_250k",
+      "source_field": "arm",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B1:250k",
+      "output_field": "role",
+      "value": "LM-free reference",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B1.train_250k",
+      "source_field": "language model",
+      "transformation": "reader-facing role label from canonical arm identity"
+    },
+    {
+      "output_row_id": "B1:250k",
+      "output_field": "size",
+      "value": "none",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B1.train_250k",
+      "source_field": "language model",
+      "transformation": "nominal frozen LM size extracted from canonical identity; none for B1"
+    },
+    {
+      "output_row_id": "B1:250k",
+      "output_field": "selection class",
+      "value": "BEST_ON_DEVELOPMENT",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B1.train_250k",
+      "source_field": "arm",
+      "transformation": "selection class from controlling protocol and metadata repair"
+    },
+    {
+      "output_row_id": "B1:250k",
+      "output_field": "scale",
+      "value": "250k",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B1.train_250k",
+      "source_field": "training scale",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B1:250k",
+      "output_field": "per-seed accuracies",
+      "value": "0: 0.58841; 1: 0.59749; 2: 0.59593",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B1.train_250k",
+      "source_field": "per-seed values",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B1:250k",
+      "output_field": "mean accuracy",
+      "value": "0.59394",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B1.train_250k",
+      "source_field": "mean accuracy",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B1:250k",
+      "output_field": "seed SD",
+      "value": "0.00486",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B1.train_250k",
+      "source_field": "sd (training seeds, ddof=1)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B1:250k",
+      "output_field": "dispersion",
+      "value": "standard",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B1.train_250k",
+      "source_field": "high dispersion",
+      "transformation": "reader-facing normalisation: yes (dagger) to high; no to standard"
+    },
+    {
+      "output_row_id": "B2:40k",
+      "output_field": "arm",
+      "value": "B2",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B2.train_40k",
+      "source_field": "arm",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B2:40k",
+      "output_field": "role",
+      "value": "matched-random readout",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B2.train_40k",
+      "source_field": "language model",
+      "transformation": "reader-facing role label from canonical arm identity"
+    },
+    {
+      "output_row_id": "B2:40k",
+      "output_field": "size",
+      "value": "135M",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B2.train_40k",
+      "source_field": "language model",
+      "transformation": "nominal frozen LM size extracted from canonical identity; none for B1"
+    },
+    {
+      "output_row_id": "B2:40k",
+      "output_field": "selection class",
+      "value": "FIXED_EPOCH_22",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B2.train_40k",
+      "source_field": "arm",
+      "transformation": "selection class from controlling protocol and metadata repair"
+    },
+    {
+      "output_row_id": "B2:40k",
+      "output_field": "scale",
+      "value": "40k",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B2.train_40k",
+      "source_field": "training scale",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B2:40k",
+      "output_field": "per-seed accuracies",
+      "value": "0: 0.53215; 1: 0.53656; 2: 0.53306",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B2.train_40k",
+      "source_field": "per-seed values",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B2:40k",
+      "output_field": "mean accuracy",
+      "value": "0.53392",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B2.train_40k",
+      "source_field": "mean accuracy",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B2:40k",
+      "output_field": "seed SD",
+      "value": "0.00233",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B2.train_40k",
+      "source_field": "sd (training seeds, ddof=1)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B2:40k",
+      "output_field": "dispersion",
+      "value": "standard",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B2.train_40k",
+      "source_field": "high dispersion",
+      "transformation": "reader-facing normalisation: yes (dagger) to high; no to standard"
+    },
+    {
+      "output_row_id": "B2:250k",
+      "output_field": "arm",
+      "value": "B2",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B2.train_250k",
+      "source_field": "arm",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B2:250k",
+      "output_field": "role",
+      "value": "matched-random readout",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B2.train_250k",
+      "source_field": "language model",
+      "transformation": "reader-facing role label from canonical arm identity"
+    },
+    {
+      "output_row_id": "B2:250k",
+      "output_field": "size",
+      "value": "135M",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B2.train_250k",
+      "source_field": "language model",
+      "transformation": "nominal frozen LM size extracted from canonical identity; none for B1"
+    },
+    {
+      "output_row_id": "B2:250k",
+      "output_field": "selection class",
+      "value": "FIXED_EPOCH_22",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B2.train_250k",
+      "source_field": "arm",
+      "transformation": "selection class from controlling protocol and metadata repair"
+    },
+    {
+      "output_row_id": "B2:250k",
+      "output_field": "scale",
+      "value": "250k",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B2.train_250k",
+      "source_field": "training scale",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B2:250k",
+      "output_field": "per-seed accuracies",
+      "value": "0: 0.59593; 1: 0.60021; 2: 0.60643",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B2.train_250k",
+      "source_field": "per-seed values",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B2:250k",
+      "output_field": "mean accuracy",
+      "value": "0.60086",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B2.train_250k",
+      "source_field": "mean accuracy",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B2:250k",
+      "output_field": "seed SD",
+      "value": "0.00528",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B2.train_250k",
+      "source_field": "sd (training seeds, ddof=1)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B2:250k",
+      "output_field": "dispersion",
+      "value": "standard",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B2.train_250k",
+      "source_field": "high dispersion",
+      "transformation": "reader-facing normalisation: yes (dagger) to high; no to standard"
+    },
+    {
+      "output_row_id": "B3:40k",
+      "output_field": "arm",
+      "value": "B3",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B3.train_40k",
+      "source_field": "arm",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B3:40k",
+      "output_field": "role",
+      "value": "pretrained readout",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B3.train_40k",
+      "source_field": "language model",
+      "transformation": "reader-facing role label from canonical arm identity"
+    },
+    {
+      "output_row_id": "B3:40k",
+      "output_field": "size",
+      "value": "135M",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B3.train_40k",
+      "source_field": "language model",
+      "transformation": "nominal frozen LM size extracted from canonical identity; none for B1"
+    },
+    {
+      "output_row_id": "B3:40k",
+      "output_field": "selection class",
+      "value": "FIXED_EPOCH_22",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B3.train_40k",
+      "source_field": "arm",
+      "transformation": "selection class from controlling protocol and metadata repair"
+    },
+    {
+      "output_row_id": "B3:40k",
+      "output_field": "scale",
+      "value": "40k",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B3.train_40k",
+      "source_field": "training scale",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B3:40k",
+      "output_field": "per-seed accuracies",
+      "value": "0: 0.53124; 1: 0.47783; 2: 0.51880",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B3.train_40k",
+      "source_field": "per-seed values",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B3:40k",
+      "output_field": "mean accuracy",
+      "value": "0.50929",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B3.train_40k",
+      "source_field": "mean accuracy",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B3:40k",
+      "output_field": "seed SD",
+      "value": "0.02795",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B3.train_40k",
+      "source_field": "sd (training seeds, ddof=1)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B3:40k",
+      "output_field": "dispersion",
+      "value": "high",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B3.train_40k",
+      "source_field": "high dispersion",
+      "transformation": "reader-facing normalisation: yes (dagger) to high; no to standard"
+    },
+    {
+      "output_row_id": "B3:250k",
+      "output_field": "arm",
+      "value": "B3",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B3.train_250k",
+      "source_field": "arm",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B3:250k",
+      "output_field": "role",
+      "value": "pretrained readout",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B3.train_250k",
+      "source_field": "language model",
+      "transformation": "reader-facing role label from canonical arm identity"
+    },
+    {
+      "output_row_id": "B3:250k",
+      "output_field": "size",
+      "value": "135M",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B3.train_250k",
+      "source_field": "language model",
+      "transformation": "nominal frozen LM size extracted from canonical identity; none for B1"
+    },
+    {
+      "output_row_id": "B3:250k",
+      "output_field": "selection class",
+      "value": "FIXED_EPOCH_22",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B3.train_250k",
+      "source_field": "arm",
+      "transformation": "selection class from controlling protocol and metadata repair"
+    },
+    {
+      "output_row_id": "B3:250k",
+      "output_field": "scale",
+      "value": "250k",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B3.train_250k",
+      "source_field": "training scale",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B3:250k",
+      "output_field": "per-seed accuracies",
+      "value": "0: 0.59826; 1: 0.59697; 2: 0.59308",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B3.train_250k",
+      "source_field": "per-seed values",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B3:250k",
+      "output_field": "mean accuracy",
+      "value": "0.59610",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B3.train_250k",
+      "source_field": "mean accuracy",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B3:250k",
+      "output_field": "seed SD",
+      "value": "0.00270",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B3.train_250k",
+      "source_field": "sd (training seeds, ddof=1)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B3:250k",
+      "output_field": "dispersion",
+      "value": "standard",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E8B.B3.train_250k",
+      "source_field": "high dispersion",
+      "transformation": "reader-facing normalisation: yes (dagger) to high; no to standard"
+    },
+    {
+      "output_row_id": "B4r:40k",
+      "output_field": "arm",
+      "value": "B4r",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E10.B4r.train_40k",
+      "source_field": "arm",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B4r:40k",
+      "output_field": "role",
+      "value": "matched-random readout",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E10.B4r.train_40k",
+      "source_field": "language model",
+      "transformation": "reader-facing role label from canonical arm identity"
+    },
+    {
+      "output_row_id": "B4r:40k",
+      "output_field": "size",
+      "value": "360M",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E10.B4r.train_40k",
+      "source_field": "language model",
+      "transformation": "nominal frozen LM size extracted from canonical identity; none for B1"
+    },
+    {
+      "output_row_id": "B4r:40k",
+      "output_field": "selection class",
+      "value": "FIXED_EPOCH_22",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E10.B4r.train_40k",
+      "source_field": "arm",
+      "transformation": "selection class from controlling protocol and metadata repair"
+    },
+    {
+      "output_row_id": "B4r:40k",
+      "output_field": "scale",
+      "value": "40k",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E10.B4r.train_40k",
+      "source_field": "training scale",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B4r:40k",
+      "output_field": "per-seed accuracies",
+      "value": "0: 0.53474; 1: 0.52787; 2: 0.53695",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E10.B4r.train_40k",
+      "source_field": "per-seed values",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B4r:40k",
+      "output_field": "mean accuracy",
+      "value": "0.53319",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E10.B4r.train_40k",
+      "source_field": "mean accuracy",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B4r:40k",
+      "output_field": "seed SD",
+      "value": "0.00473",
+      "frozen_source_file": "results/closure/pre_f1_evidence_metadata_repair_20260814.json",
+      "frozen_source_sha256": "e35db6dddca6f587791527f3a9e9846905486413c851d1f896129a3f6a015f42",
+      "source_row_identifier": "EV-SEED-E10.B4r.train_40k",
+      "source_field": "sd (training seeds, ddof=1)",
+      "transformation": "effective value per binding metadata repair; historical VE1 digit superseded"
+    },
+    {
+      "output_row_id": "B4r:40k",
+      "output_field": "dispersion",
+      "value": "standard",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E10.B4r.train_40k",
+      "source_field": "high dispersion",
+      "transformation": "reader-facing normalisation: yes (dagger) to high; no to standard"
+    },
+    {
+      "output_row_id": "B4r:250k",
+      "output_field": "arm",
+      "value": "B4r",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E10.B4r.train_250k",
+      "source_field": "arm",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B4r:250k",
+      "output_field": "role",
+      "value": "matched-random readout",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E10.B4r.train_250k",
+      "source_field": "language model",
+      "transformation": "reader-facing role label from canonical arm identity"
+    },
+    {
+      "output_row_id": "B4r:250k",
+      "output_field": "size",
+      "value": "360M",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E10.B4r.train_250k",
+      "source_field": "language model",
+      "transformation": "nominal frozen LM size extracted from canonical identity; none for B1"
+    },
+    {
+      "output_row_id": "B4r:250k",
+      "output_field": "selection class",
+      "value": "FIXED_EPOCH_22",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E10.B4r.train_250k",
+      "source_field": "arm",
+      "transformation": "selection class from controlling protocol and metadata repair"
+    },
+    {
+      "output_row_id": "B4r:250k",
+      "output_field": "scale",
+      "value": "250k",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E10.B4r.train_250k",
+      "source_field": "training scale",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B4r:250k",
+      "output_field": "per-seed accuracies",
+      "value": "0: 0.59256; 1: 0.59774; 2: 0.59904",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E10.B4r.train_250k",
+      "source_field": "per-seed values",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B4r:250k",
+      "output_field": "mean accuracy",
+      "value": "0.59645",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E10.B4r.train_250k",
+      "source_field": "mean accuracy",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B4r:250k",
+      "output_field": "seed SD",
+      "value": "0.00343",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E10.B4r.train_250k",
+      "source_field": "sd (training seeds, ddof=1)",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B4r:250k",
+      "output_field": "dispersion",
+      "value": "standard",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E10.B4r.train_250k",
+      "source_field": "high dispersion",
+      "transformation": "reader-facing normalisation: yes (dagger) to high; no to standard"
+    },
+    {
+      "output_row_id": "B4:40k",
+      "output_field": "arm",
+      "value": "B4",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E10.B4.train_40k",
+      "source_field": "arm",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B4:40k",
+      "output_field": "role",
+      "value": "pretrained readout",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E10.B4.train_40k",
+      "source_field": "language model",
+      "transformation": "reader-facing role label from canonical arm identity"
+    },
+    {
+      "output_row_id": "B4:40k",
+      "output_field": "size",
+      "value": "360M",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E10.B4.train_40k",
+      "source_field": "language model",
+      "transformation": "nominal frozen LM size extracted from canonical identity; none for B1"
+    },
+    {
+      "output_row_id": "B4:40k",
+      "output_field": "selection class",
+      "value": "FIXED_EPOCH_22",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E10.B4.train_40k",
+      "source_field": "arm",
+      "transformation": "selection class from controlling protocol and metadata repair"
+    },
+    {
+      "output_row_id": "B4:40k",
+      "output_field": "scale",
+      "value": "40k",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E10.B4.train_40k",
+      "source_field": "training scale",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B4:40k",
+      "output_field": "per-seed accuracies",
+      "value": "0: 0.52515; 1: 0.53150; 2: 0.52243",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E10.B4.train_40k",
+      "source_field": "per-seed values",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B4:40k",
+      "output_field": "mean accuracy",
+      "value": "0.52636",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E10.B4.train_40k",
+      "source_field": "mean accuracy",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B4:40k",
+      "output_field": "seed SD",
+      "value": "0.00466",
+      "frozen_source_file": "results/closure/pre_f1_evidence_metadata_repair_20260814.json",
+      "frozen_source_sha256": "e35db6dddca6f587791527f3a9e9846905486413c851d1f896129a3f6a015f42",
+      "source_row_identifier": "EV-SEED-E10.B4.train_40k",
+      "source_field": "sd (training seeds, ddof=1)",
+      "transformation": "effective value per binding metadata repair; historical VE1 digit superseded"
+    },
+    {
+      "output_row_id": "B4:40k",
+      "output_field": "dispersion",
+      "value": "standard",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E10.B4.train_40k",
+      "source_field": "high dispersion",
+      "transformation": "reader-facing normalisation: yes (dagger) to high; no to standard"
+    },
+    {
+      "output_row_id": "B4:250k",
+      "output_field": "arm",
+      "value": "B4",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E10.B4.train_250k",
+      "source_field": "arm",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B4:250k",
+      "output_field": "role",
+      "value": "pretrained readout",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E10.B4.train_250k",
+      "source_field": "language model",
+      "transformation": "reader-facing role label from canonical arm identity"
+    },
+    {
+      "output_row_id": "B4:250k",
+      "output_field": "size",
+      "value": "360M",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E10.B4.train_250k",
+      "source_field": "language model",
+      "transformation": "nominal frozen LM size extracted from canonical identity; none for B1"
+    },
+    {
+      "output_row_id": "B4:250k",
+      "output_field": "selection class",
+      "value": "FIXED_EPOCH_22",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E10.B4.train_250k",
+      "source_field": "arm",
+      "transformation": "selection class from controlling protocol and metadata repair"
+    },
+    {
+      "output_row_id": "B4:250k",
+      "output_field": "scale",
+      "value": "250k",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E10.B4.train_250k",
+      "source_field": "training scale",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B4:250k",
+      "output_field": "per-seed accuracies",
+      "value": "0: 0.60215; 1: 0.58556; 2: 0.59450",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E10.B4.train_250k",
+      "source_field": "per-seed values",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B4:250k",
+      "output_field": "mean accuracy",
+      "value": "0.59407",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E10.B4.train_250k",
+      "source_field": "mean accuracy",
+      "transformation": "identity / selection only"
+    },
+    {
+      "output_row_id": "B4:250k",
+      "output_field": "seed SD",
+      "value": "0.00831",
+      "frozen_source_file": "results/closure/pre_f1_evidence_metadata_repair_20260814.json",
+      "frozen_source_sha256": "e35db6dddca6f587791527f3a9e9846905486413c851d1f896129a3f6a015f42",
+      "source_row_identifier": "EV-SEED-E10.B4.train_250k",
+      "source_field": "sd (training seeds, ddof=1)",
+      "transformation": "effective value per binding metadata repair; historical VE1 digit superseded"
+    },
+    {
+      "output_row_id": "B4:250k",
+      "output_field": "dispersion",
+      "value": "standard",
+      "frozen_source_file": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-04.csv",
+      "frozen_source_sha256": "d26a528ec7c4d00d1cce946a1f1d50517d5f2cb4979b13b858226f79fcca8131",
+      "source_row_identifier": "EV-SEED-E10.B4.train_250k",
+      "source_field": "high dispersion",
+      "transformation": "reader-facing normalisation: yes (dagger) to high; no to standard"
+    }
+  ],
+  "source_csv_sha256": "617982b94633cde08e32a7cf8677b747b690d998df45ba8dbfde4721df1993b9",
+  "converter": {
+    "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tools/tab2latex.py",
+    "sha256": "c441d40b2b10a7a4294c4f15b12bc450f7ae73a9435e3d15394940c0f0c5a546",
+    "header_map": {
+      "arm": "Arm",
+      "role": "Role",
+      "size": "Size",
+      "selection class": "Selection class",
+      "scale": "Scale",
+      "per-seed accuracies": "Per-seed accuracies",
+      "mean accuracy": "Mean accuracy",
+      "seed SD": "Seed SD",
+      "dispersion": "Dispersion"
+    },
+    "verify_exit_code": 0,
+    "presentation_transformation": "reader-facing header relabelling only; scientific cells unchanged"
+  },
+  "generated_tex_sha256": "d7a76848d9493ff3f251819606066e36367f20bb31bd272b8495c11376b26cd2"
+}

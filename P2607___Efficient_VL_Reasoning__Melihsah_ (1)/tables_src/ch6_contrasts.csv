@@ -1,0 +1,8 @@
+contrast,order,side,model size,scale or interaction,effect,95% interval,per-seed effects,governed outcome
+A1 minus A1r,first-order,question side,135M,40k,0.03820,"[0.02947, 0.04680]",0: 0.03565; 1: 0.04304; 2: 0.03591,positive directional evidence
+A1 minus A1r,first-order,question side,135M,250k,0.04835,"[0.03935, 0.05803]",0: 0.04472; 1: 0.04874; 2: 0.05159,positive directional evidence
+B3 minus B2,first-order,answer side,135M,40k,-0.02463,"[-0.03333, -0.01619]",0: -0.00091; 1: -0.05872; 2: -0.01426,negative directional evidence
+B3 minus B2,first-order,answer side,135M,250k,-0.00475,"[-0.01208, 0.00297]",0: 0.00233; 1: -0.00324; 2: -0.01335,uncertain or mixed evidence
+B4 minus B4r,first-order,answer side,360M,40k,-0.00683,"[-0.01508, 0.00114]",0: -0.00959; 1: 0.00363; 2: -0.01452,uncertain or mixed evidence
+B4 minus B4r,first-order,answer side,360M,250k,-0.00238,"[-0.01071, 0.00588]",0: 0.00959; 1: -0.01219; 2: -0.00454,uncertain or mixed evidence
+360M difference in differences,second-order interaction,answer side,360M,250k against 40k,0.00445,"[-0.00709, 0.01641]",0: 0.01919; 1: -0.01582; 2: 0.00998,uncertain or mixed evidence
