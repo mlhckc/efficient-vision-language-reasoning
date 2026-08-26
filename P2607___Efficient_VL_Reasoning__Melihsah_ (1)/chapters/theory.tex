@@ -12,9 +12,12 @@ Answer frequencies and language regularities can also influence behaviour on GQA
 \section{Frozen vision--language representations}
 \label{sec:ch2-representations}
 
+\begingroup
+\sloppy
 Contrastive vision--language pretraining can place images and text in a shared representation space, as established by the foundational CLIP approach. % CITE-GAP clip_foundation
-SigLIP is a related representation-learning approach built around a sigmoid loss rather than the batch-normalised contrastive objective. % CITE-GAP siglip
+SigLIP is a related representation-learning approach built around a sigmoid loss. % CITE-GAP siglip
 These foundational accounts describe representation-learning concepts, not the exact weights used in this dissertation. The implementation checkpoints and their provenance are specified separately in Chapter~3. In the headline systems studied here, the visual and textual encoders remain frozen: training changes only the downstream interface or head. This separation allows downstream architectures to be compared without simultaneously adapting the representation source.
+\par\endgroup
 
 Freezing an encoder turns its representations into a fixed transfer substrate. This reduces the trainable scope, but it also means that a downstream model can use only information exposed by the retained features and accessible to its architecture. Linear or small nonlinear classifiers over frozen CLIP embeddings provide precedents in closed-answer visual tasks, while larger fusion networks show that substantial downstream processing can still be placed above the same broad feature type \citep{deuser2022less,bourigault2025frevl}. Their tasks, head capacities and protocols differ, so this relationship is architectural rather than a numerical comparison.
 
@@ -53,7 +56,7 @@ The interface distinction also prevents model-family size from standing in for a
 \section{Compositional reasoning and representation limits}
 \label{sec:ch2-composition}
 
-GQA's functional programs make multi-step grouping possible, but difficulty across program lengths is affected by more than a single reasoning operation. Hop-stratified evaluation of multimodal language models reports declining performance as question chains become longer, while GQA studies show that answer distributions and language priors can influence predictions \citep{kil2024iimmr,kervadec2021gqaood,kervadec2021reasoning}. A program-length profile is therefore best read as a prior-sensitive task diagnostic. It can reveal that performance changes across question structures, but cannot by itself identify an internal reasoning process or localise the cause of a deficit.
+GQA's functional programs make multi-step grouping possible, but difficulty across program lengths is affected by more than a single reasoning operation. Hop-stratified evaluation reports declining performance for a multimodal language model as question chains become longer, while GQA studies show that answer distributions and language priors can influence predictions \citep{kil2024iimmr,kervadec2021gqaood,kervadec2021reasoning}. A program-length profile is therefore best read as a prior-sensitive task diagnostic. It can reveal that performance changes across question structures, but cannot by itself identify an internal reasoning process or localise the cause of a deficit.
 
 Compositional benchmarks and probes examine whether frozen representations preserve relations, order and binding. ARO and Winoground construct controlled text--image contrasts that expose sensitivity to relational structure, while probe work on frozen CLIP embeddings reports difficulty with binding relations \citep{yuksekgonul2023aro,thrush2022winoground,lewis2024bind}. A counterpoint is that linear probes can recover attribute--object binding information inside unimodal embeddings even when the cross-modal alignment makes that information harder to use \citep{koishigarina2026bow}. Together, these results distinguish information being absent from information being present but inaccessible to a particular comparison or interface.
 
