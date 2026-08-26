@@ -1,0 +1,200 @@
+{
+  "schema_version": 1,
+  "task_id": "dissertation-11-abstract",
+  "base_commit": "e3b04b7d1119929c68bbb6a95bd6ff02903567ea",
+  "chapter": "Abstract",
+  "development_set_only": true,
+  "closed_evidence_only": true,
+  "scientific_recomputation": false,
+  "reader_facing_sentence_count": 10,
+  "sources": [
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/introduction.tex",
+      "sha256": "8c21de8baa819ad0d0de053dd66b11a71f46b7a2714816a48b1cc3715c1a6b0f",
+      "role": "closed problem, method and title-question framing"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch1_provenance.json",
+      "sha256": "59ffce3ded9bcae8387cac0df26b935bac207e417d457cfcc003d60badecc277",
+      "role": "closed Chapter 1 claim mappings"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/technical.tex",
+      "sha256": "59b8966dbac8e07783aa3547860e04a2695bdd62336cc618137e64c863305579",
+      "role": "closed RQ1 authority"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch4_provenance.json",
+      "sha256": "30b3ec4009b1040a7a833f27fc67d7cd217de9b7bf83c92b07fc7fbcccad9d05",
+      "role": "closed RQ1 claim mappings"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/technical2.tex",
+      "sha256": "90972163ed72a96e906af6be88292d80d50d84ce4be4ff6a5bc73838db0b474b",
+      "role": "closed RQ2 authority"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch5_provenance.json",
+      "sha256": "e7a71bac68e83233a40da2889c92b1298e1b79c76f888a49aa26aaad6cf6e960",
+      "role": "closed RQ2 claim mappings"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/slm.tex",
+      "sha256": "a2cf2a316b4e8d6b3765d6d39b4af266bde6bf2657929ff03beaf814f62347f1",
+      "role": "closed RQ3 authority"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch6_provenance.json",
+      "sha256": "2c61b1988f3e029a9a64cebb6dd351b89b865108c63428647c35fc0b5a0ba976",
+      "role": "closed RQ3 claim mappings"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/efficiency.tex",
+      "sha256": "72f23e40df2db84e54a8ec9100f44427ca428a4da774d01517f67052c84f2088",
+      "role": "closed efficiency authority"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch7_provenance.json",
+      "sha256": "ca352f337f96968bd4dc5a8bd3bbaec01a9f71cf41227ce3b5bad0ef68c4b6ec",
+      "role": "closed efficiency claim mappings"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/discussion.tex",
+      "sha256": "2d200fc14175013a50d8edf564afe2c810527de2bfb7311b8652a8570f7e5baa",
+      "role": "closed synthesis and limitation authority"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch8_provenance.json",
+      "sha256": "2c484d85f005f587b3bbd0996a24fc5b228ed4a66ef0f5d66dda23041f53b9ae",
+      "role": "closed Chapter 8 claim mappings"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/conclusions.tex",
+      "sha256": "58385f7d7d2a9a685eb44d73ac696755fee6b995086d97aad567b551a19c1f89",
+      "role": "closed Abstract claim-strength ceiling and final title answer"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch9_provenance.json",
+      "sha256": "95010b6288195e132383a3b12e52a80e0d3e082f8afaeaf322defb80df1f1425",
+      "role": "closed Chapter 9 claim mappings"
+    },
+    {
+      "path": ".agent-bridge/tasks/dissertation-02-ch3-draft-s1/00-request.md",
+      "sha256": "7ba4cd2380f7c5067847a020ca2cc12df517ffcaaac44427557855eeccf5c965",
+      "role": "human-adopted research-question wording authority"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-07.csv",
+      "sha256": "6f20e51875b3c4cd5cbcbfb43a7f7980e16c98d0b2b64a139371a9c00aa409b2",
+      "role": "frozen claim-ledger carrier"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/references/references.bib",
+      "sha256": "ebff6b25ef20b0672c154e56e678356bc8245b6cbf5d85aff63371968b6d2705",
+      "role": "unchanged bibliography identity"
+    }
+  ],
+  "claim_mappings": [
+    {
+      "sentence_id": "S1",
+      "class": "MOTIVATION",
+      "sentence_scope": "problem asks whether frozen representations and compact components support useful closed-set VQA, where frozen SLMs contribute, and what measured accuracy-latency trade-offs result",
+      "supporting_labels": ["sec:ch1-motivation", "sec:ch1-gap", "sec:ch9-overall"],
+      "ledger_ids": [],
+      "qualification": "problem framing only; no claim that compactness implies runtime or that an SLM is necessary"
+    },
+    {
+      "sentence_id": "S2",
+      "class": "METHOD_SUMMARY",
+      "sentence_scope": "image-disjoint GQA development design with frozen CLIP representations, compact interaction heads, latent-query reasoner and question-/answer-side frozen SmolLM2 interfaces with matched random controls",
+      "supporting_labels": ["sec:ch1-approach", "sec:ch4-summary", "sec:ch5-summary", "sec:ch6-summary"],
+      "ledger_ids": ["C01", "C08", "C09", "C19"],
+      "qualification": "orientation only; no dimensions, seeds, checkpoints, denominators or training details"
+    },
+    {
+      "sentence_id": "S3",
+      "class": "METHOD_SUMMARY",
+      "sentence_scope": "development accuracy across nested scales and governed end-to-end warm-serial latency",
+      "supporting_labels": ["sec:ch1-approach", "sec:ch7-summary"],
+      "ledger_ids": ["C13", "C18"],
+      "qualification": "latency is measured directly and is not inferred from parameter count"
+    },
+    {
+      "sentence_id": "S4",
+      "class": "RQ1_FINDING",
+      "sentence_scope": "compact frozen-representation heads are viable; interaction and representation affect results; increased concatenation capacity accounts for part of the original gap while the matched residual is unresolved",
+      "supporting_labels": ["sec:ch4-interaction", "sec:ch4-representation", "sec:ch4-summary", "sec:ch9-answers"],
+      "ledger_ids": ["C01", "C05", "C18"],
+      "qualification": "development-only; no universal fusion or encoder superiority and no simple non-capacity causal explanation"
+    },
+    {
+      "sentence_id": "S5",
+      "class": "RQ2_FINDING",
+      "sentence_scope": "reasoner configuration-level accuracy improves with scale while architecture, token access and capacity co-vary; pooled four-or-more-step deficit persists",
+      "supporting_labels": ["sec:ch5-scaling", "sec:ch5-deficit", "sec:ch5-summary", "sec:ch9-answers"],
+      "ledger_ids": ["C06", "C07", "C21"],
+      "qualification": "higher accuracy does not establish removal of compositional difficulty, a reasoning mechanism or cause localisation"
+    },
+    {
+      "sentence_id": "S6",
+      "class": "RQ3_FINDING",
+      "sentence_scope": "question-side pretrained SmolLM2 exceeds its matched random control but remains below the CLIP-based question representation",
+      "supporting_labels": ["sec:ch6-question", "sec:ch6-summary", "sec:ch8-placement", "sec:ch9-answers"],
+      "ledger_ids": ["C08", "C19"],
+      "qualification": "within-interface pretraining benefit; below-CLIP comparison is secondary and representation-confounded, not intrinsic CLIP superiority"
+    },
+    {
+      "sentence_id": "S7",
+      "class": "RQ3_FINDING",
+      "sentence_scope": "no reliable positive answer-side pretraining advantage detected and bounded interface-specific synthesis",
+      "supporting_labels": ["sec:ch6-answer135", "sec:ch6-answer360", "sec:ch6-summary", "sec:ch8-placement", "sec:ch9-answers"],
+      "ledger_ids": ["C09", "C10", "C11", "C19"],
+      "qualification": "the lower-scale 135M contrast is negative directional; other answer-side and second-order contrasts are uncertain or mixed; neither equivalence nor universal absence is claimed"
+    },
+    {
+      "sentence_id": "S8",
+      "class": "EFFICIENCY_FINDING",
+      "sentence_scope": "governed measured accuracy-latency frontier contains only compact non-SLM heads; question-side SLM interface has higher warm-serial latency than frontier systems",
+      "supporting_labels": ["sec:ch7-frontier", "sec:ch7-summary", "sec:ch8-efficiency", "sec:ch9-answers"],
+      "ledger_ids": ["C13", "C16", "C17", "C18"],
+      "qualification": "canonical E7b governed set only; no claim about all non-SLM heads, parameter proxies, energy, cost, deployment or E9"
+    },
+    {
+      "sentence_id": "S9",
+      "class": "BOUNDED_INTERPRETATION",
+      "sentence_scope": "title-level conclusion that SLMs can contribute but their benefit is interface-specific and they are not required for the strongest measured trade-offs",
+      "supporting_labels": ["sec:ch8-implications", "sec:ch9-overall", "sec:ch9-final"],
+      "ledger_ids": ["C01", "C06", "C07", "C08", "C10", "C11", "C13", "C18", "C19"],
+      "qualification": "implemented development study only; not a universal VLM-design or deployment claim"
+    },
+    {
+      "sentence_id": "S10",
+      "class": "SCOPE_BOUNDARY",
+      "sentence_scope": "conclusions are development-based and held-out evaluation remains pending",
+      "supporting_labels": ["sec:ch8-limitations", "sec:ch9-overall", "sec:ch9-final"],
+      "ledger_ids": ["C15", "C20"],
+      "qualification": "no held-out result, prediction or generalisation claim"
+    }
+  ],
+  "numeric_anchors": [],
+  "numeric_anchor_policy": {
+    "performance_magnitude_anchor_count": 0,
+    "decision": "qualitative latency wording is sufficient; optional latency magnitudes were omitted",
+    "structural_terms": ["four or more"],
+    "arithmetic_introduced": false
+  },
+  "f2_integration": {
+    "marker": "% F2-INTEGRATION-PENDING: held-out result, if authorised and completed, requires a bounded revision of the Abstract",
+    "reader_facing": false,
+    "f2_status": "not authorised, not performed",
+    "held_out_result": null
+  },
+  "bibliography_identity": {
+    "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/references/references.bib",
+    "sha256": "ebff6b25ef20b0672c154e56e678356bc8245b6cbf5d85aff63371968b6d2705"
+  },
+  "citations": [],
+  "bibliography_modified": false,
+  "tables": [],
+  "figures": []
+}
