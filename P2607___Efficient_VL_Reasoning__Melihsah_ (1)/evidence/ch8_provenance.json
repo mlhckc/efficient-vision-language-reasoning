@@ -1,0 +1,297 @@
+{
+  "schema_version": 1,
+  "task_id": "dissertation-07-ch8-discussion",
+  "chapter": "Chapter 8 — Discussion",
+  "base_commit": "4b4c175c1012a2563aa3144781a62b08ef2df218",
+  "development_set_only": true,
+  "scientific_recomputation": false,
+  "bibliography_modified": false,
+  "bibliography_identity": {
+    "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/references/references.bib",
+    "sha256": "ebff6b25ef20b0672c154e56e678356bc8245b6cbf5d85aff63371968b6d2705",
+    "entry_count": 72
+  },
+  "sources": [
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/technical.tex",
+      "sha256": "59b8966dbac8e07783aa3547860e04a2695bdd62336cc618137e64c863305579",
+      "role": "closed Chapter 4 RQ1 authority"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch4_provenance.json",
+      "sha256": "30b3ec4009b1040a7a833f27fc67d7cd217de9b7bf83c92b07fc7fbcccad9d05",
+      "role": "closed Chapter 4 claim mappings"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/technical2.tex",
+      "sha256": "90972163ed72a96e906af6be88292d80d50d84ce4be4ff6a5bc73838db0b474b",
+      "role": "closed Chapter 5 RQ2 authority"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch5_provenance.json",
+      "sha256": "e7a71bac68e83233a40da2889c92b1298e1b79c76f888a49aa26aaad6cf6e960",
+      "role": "closed Chapter 5 claim mappings"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/slm.tex",
+      "sha256": "a2cf2a316b4e8d6b3765d6d39b4af266bde6bf2657929ff03beaf814f62347f1",
+      "role": "closed Chapter 6 RQ3 authority"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch6_provenance.json",
+      "sha256": "2c61b1988f3e029a9a64cebb6dd351b89b865108c63428647c35fc0b5a0ba976",
+      "role": "closed Chapter 6 claim mappings"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/efficiency.tex",
+      "sha256": "72f23e40df2db84e54a8ec9100f44427ca428a4da774d01517f67052c84f2088",
+      "role": "closed Chapter 7 efficiency authority"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch7_provenance.json",
+      "sha256": "ca352f337f96968bd4dc5a8bd3bbaec01a9f71cf41227ce3b5bad0ef68c4b6ec",
+      "role": "closed Chapter 7 claim mappings"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-07.csv",
+      "sha256": "6f20e51875b3c4cd5cbcbfb43a7f7980e16c98d0b2b64a139371a9c00aa409b2",
+      "role": "frozen claim-ledger carrier"
+    },
+    {
+      "path": "docs/RELATED_WORK.md",
+      "sha256": "82265cb85b103c6607120c99b4785801498232a9626a9792ed3aba965ef5acc0",
+      "role": "local literature-support audit"
+    },
+    {
+      "path": "docs/SCIENTIFIC_FINDINGS.md",
+      "sha256": "41e2e16759280a60f717ee9222bf1cb768e8eecade303f020c50e275cc60e545",
+      "role": "local synthesis context, subordinate to closed chapters"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/references/references.bib",
+      "sha256": "ebff6b25ef20b0672c154e56e678356bc8245b6cbf5d85aff63371968b6d2705",
+      "role": "citation-key authority"
+    }
+  ],
+  "claim_mappings": [
+    {
+      "claim_id": "8.1.frozen_heads_and_visual_dependence",
+      "class": "DIRECT_RESULT",
+      "sentence_scope": "question-only predictive information, fusion level and visual-intervention dependence without grounding or reasoning attribution",
+      "supporting_labels": ["sec:ch4-baselines", "sec:ch4-reliance", "sec:ch4-summary"],
+      "evidence_ids": ["EV-ARM-v2_02.question_only.train_40k", "EV-ARM-v2_02.fusion.train_40k", "EV-CON-v2_06.fusion.drop_shuffled.train_40k"],
+      "ledger_ids": ["C04", "C18"],
+      "citation_keys": [],
+      "qualification": "development-only closed-set result; literature relation is conceptual and cross-dataset, never numerical"
+    },
+    {
+      "claim_id": "8.1.frozen_head_literature_context",
+      "class": "LITERATURE_CONNECTION",
+      "sentence_scope": "frozen CLIP features with a small closed-answer classifier have precedent on a different VQA setting",
+      "supporting_labels": ["sec:ch4-baselines"],
+      "evidence_ids": [],
+      "ledger_ids": [],
+      "citation_keys": ["deuser2022less"],
+      "qualification": "conceptual precedent only; different dataset and protocol; no numerical comparison"
+    },
+    {
+      "claim_id": "8.1.cross_rq_design_synthesis",
+      "class": "BOUNDED_INTERPRETATION",
+      "sentence_scope": "representation, interaction and answer-space choices all affect results while capacity alone does not provide one global explanation",
+      "supporting_labels": ["sec:ch4-interaction", "sec:ch4-representation", "sec:ch4-answer-space", "sec:ch5-summary"],
+      "evidence_ids": [],
+      "ledger_ids": ["C01", "C05", "C07", "C12"],
+      "citation_keys": [],
+      "qualification": "within implemented systems; no ranking and no mixing of top-100 with top-1000 supported-view accuracy"
+    },
+    {
+      "claim_id": "8.2.interaction_and_capacity",
+      "class": "DIRECT_RESULT",
+      "sentence_scope": "40k fusion contrast, partial capacity explanation, zero-containing fusion-minus-concat-wide interval and descriptive scaling boundary",
+      "supporting_labels": ["sec:ch4-interaction", "tab:ch4-contrasts", "sec:ch4-scaling"],
+      "evidence_ids": ["EV-CON-v2_02.fusion_minus_concat.train_40k", "EV-CON-v2_03.fusion_minus_concat_wide.train_40k"],
+      "ledger_ids": ["C01", "C02"],
+      "citation_keys": [],
+      "qualification": "capacity explains part, not all; EMAP is a methodological connection rather than an empirical comparison"
+    },
+    {
+      "claim_id": "8.2.emap_literature_context",
+      "class": "LITERATURE_CONNECTION",
+      "sentence_scope": "EMAP provides methodological context for testing interaction beyond an additive approximation",
+      "supporting_labels": ["sec:ch4-interaction"],
+      "evidence_ids": [],
+      "ledger_ids": [],
+      "citation_keys": ["hessel2020emap"],
+      "qualification": "methodological context only; not an empirical comparison with this project"
+    },
+    {
+      "claim_id": "8.2.siglip_reasoner_context",
+      "class": "BOUNDED_INTERPRETATION",
+      "sentence_scope": "SigLIP fusion is descriptively competitive with the reasoner at 250k under different configurations",
+      "supporting_labels": ["sec:ch4-representation", "sec:ch5-scaling"],
+      "evidence_ids": ["EV-SEED-E2.fusion.train_250k", "EV-SEED-v3_03.reasoner.train_250k"],
+      "ledger_ids": ["C05", "C07"],
+      "citation_keys": [],
+      "qualification": "not paired or causal; widths, architecture, other configuration details and seed structures differ; no substitution claim"
+    },
+    {
+      "claim_id": "8.2.reasoner_accuracy_and_deficit",
+      "class": "DIRECT_RESULT",
+      "sentence_scope": "configuration-level reasoner scaling, persistent pooled deficit, unresolved reasoner-minus-fusion deficit contrasts, and the question-only counterexample to deficit-as-quality",
+      "supporting_labels": ["sec:ch5-fusion", "sec:ch5-deficit", "sec:ch5-summary"],
+      "evidence_ids": ["EV-DSC-v3_01.reasoner_minus_fusion.train_40k.seed_mean", "EV-SLC-v3_02a.question_only.train_40k.steps-ge4_combined.deficit", "EV-CON-v3_02a.reasoner_minus_fusion_deficit.train_40k", "EV-CON-v3_03.reasoner_minus_fusion_deficit.train_100k", "EV-CON-v3_03.reasoner_minus_fusion_deficit.train_250k"],
+      "ledger_ids": ["C06", "C07", "C21"],
+      "citation_keys": [],
+      "qualification": "architecture, token access and capacity co-vary; lower deficit is not higher accuracy or stronger reasoning; latent-query citations are architectural lineage only"
+    },
+    {
+      "claim_id": "8.2.latent_query_literature_context",
+      "class": "LITERATURE_CONNECTION",
+      "sentence_scope": "Perceiver and BLIP-2 provide architectural lineage for learned latent bottlenecks",
+      "supporting_labels": ["sec:ch5-fusion"],
+      "evidence_ids": [],
+      "ledger_ids": [],
+      "citation_keys": ["jaegle2021perceiver", "li2023blip2"],
+      "qualification": "architectural ancestry only; no accuracy or protocol comparison"
+    },
+    {
+      "claim_id": "8.2.deficit_literature_context",
+      "class": "LITERATURE_CONNECTION",
+      "sentence_scope": "binding-presence and large-decoder counterpoints caution against locating a single cause; program length and priors bound the analysis",
+      "supporting_labels": ["sec:ch5-depth", "sec:ch5-deficit"],
+      "evidence_ids": [],
+      "ledger_ids": ["C21"],
+      "citation_keys": ["koishigarina2026bow", "fu2025hidden", "takishita2025compensate", "hudson2019gqa", "kervadec2021gqaood"],
+      "qualification": "conceptual and empirical counterpoints only; no matched comparison and no claim that compositional information is absent"
+    },
+    {
+      "claim_id": "8.2.cls_diagnostic",
+      "class": "DIRECT_RESULT",
+      "sentence_scope": "disproportionate observational CLS attention and test-time CLS-removal sensitivity",
+      "supporting_labels": ["sec:ch5-diagnostics", "tab:ch5-diagnostics"],
+      "evidence_ids": [],
+      "ledger_ids": ["C07"],
+      "citation_keys": [],
+      "qualification": "not majority attention, semantic interpretation, causal information flow, explicit re-reading or a reasoning mechanism"
+    },
+    {
+      "claim_id": "8.3.question_side_pretraining",
+      "class": "DIRECT_RESULT",
+      "sentence_scope": "A1 exceeds A1r but remains below A0p in the same conceptual passage",
+      "supporting_labels": ["sec:ch6-question", "tab:ch6-contrasts", "sec:ch6-summary"],
+      "evidence_ids": ["EV-CON-E8A.A1_minus_A1r.train_40k", "EV-CON-E8A.A1_minus_A1r.train_250k", "EV-CON-E8A.A1_minus_A0p.train_40k", "EV-CON-E8A.A1_minus_A0p.train_250k"],
+      "ledger_ids": ["C08", "C19"],
+      "citation_keys": [],
+      "qualification": "within-interface benefit only; A1-minus-A0p is secondary and representation-confounded"
+    },
+    {
+      "claim_id": "8.3.answer_side_pretraining",
+      "class": "DIRECT_RESULT",
+      "sentence_scope": "negative directional 135M lower-scale result, otherwise uncertain or mixed answer-side and second-order results",
+      "supporting_labels": ["sec:ch6-answer135", "sec:ch6-answer360", "sec:ch6-placement", "sec:ch6-summary"],
+      "evidence_ids": ["EV-CON-E8B.B3_-_B2.train_40k", "EV-CON-E8B.B3_-_B2.train_250k", "EV-CON-E10.pretraining_effect.train_40k", "EV-CON-E10.pretraining_effect.train_250k", "EV-CON-E10.difference_in_differences"],
+      "ledger_ids": ["C09", "C10", "C11", "C19"],
+      "citation_keys": [],
+      "qualification": "no reliable positive advantage detected; zero-containing intervals establish neither equivalence nor absence"
+    },
+    {
+      "claim_id": "8.3.interface_hypotheses",
+      "class": "HYPOTHESIS",
+      "sentence_scope": "possible compatibility, question-context, post-reasoner use, candidate-readout and frozen-adaptation explanations",
+      "supporting_labels": ["sec:ch6-answer135", "sec:ch6-placement"],
+      "evidence_ids": [],
+      "ledger_ids": ["C19"],
+      "citation_keys": [],
+      "qualification": "architectural context only; the experiments do not distinguish the hypotheses"
+    },
+    {
+      "claim_id": "8.3.bridge_literature_context",
+      "class": "LITERATURE_CONNECTION",
+      "sentence_scope": "minimal frozen-language-model bridges and connector comparisons provide architectural context for the answer-side hypotheses",
+      "supporting_labels": ["sec:ch6-answer135"],
+      "evidence_ids": [],
+      "ledger_ids": [],
+      "citation_keys": ["merullo2023limber", "vallaeys2024depalm"],
+      "qualification": "architectural context only; these papers do not explain the project's answer-side result"
+    },
+    {
+      "claim_id": "8.3.interface_specific_synthesis",
+      "class": "BOUNDED_INTERPRETATION",
+      "sentence_scope": "interface-specific rather than universal under implemented interfaces and three separately run experiments",
+      "supporting_labels": ["sec:ch6-scope", "sec:ch6-placement", "sec:ch6-summary"],
+      "evidence_ids": ["EV-CON-E8A.A1_minus_A1r.train_40k", "EV-CON-E8B.B3_-_B2.train_40k", "EV-CON-E10.difference_in_differences"],
+      "ledger_ids": ["C08", "C09", "C10", "C11", "C19"],
+      "citation_keys": [],
+      "qualification": "not factorial, causal, universal or a claim of optimal placement"
+    },
+    {
+      "claim_id": "8.4.efficiency_frontier_and_e9",
+      "class": "DIRECT_RESULT",
+      "sentence_scope": "canonical E7b frontier, parameter/latency distinction, contextual latency-only 24.7-times E9 statement, unresolved pairing and separate nodes",
+      "supporting_labels": ["sec:ch7-frontier", "sec:ch7-parameters", "sec:ch7-vlm", "sec:ch7-summary"],
+      "evidence_ids": ["EV-EFF-E7b.concat", "EV-EFF-E7b.fusion", "EV-EFF-E7b.vocab1000_product", "EV-EFF-E9.e9_500m_constrained", "EV-EFF-E9.vocab1000_product"],
+      "ledger_ids": ["C13", "C14", "C16", "C17", "C18"],
+      "citation_keys": [],
+      "qualification": "latency-only contextual statement; head coordinate unpaired; nodes not merged; parameters not latency proxies; no environmental or cost measurement"
+    },
+    {
+      "claim_id": "8.5.integrated_limitations",
+      "class": "LIMITATION",
+      "sentence_scope": "development/F2, task/answer-space, cross-family/configuration, SLM coverage, timing/node and step-profile boundaries",
+      "supporting_labels": ["sec:ch4-scope", "sec:ch4-answer-space", "sec:ch5-scope", "sec:ch5-depth", "sec:ch6-scope", "sec:ch7-scope"],
+      "evidence_ids": [],
+      "ledger_ids": ["C15", "C16", "C17", "C20", "C21"],
+      "citation_keys": [],
+      "qualification": "limitations narrow claims; no held-out result, mechanism localisation, node merge or cross-vocabulary metric merge"
+    },
+    {
+      "claim_id": "8.6.overall_implications",
+      "class": "BOUNDED_INTERPRETATION",
+      "sentence_scope": "cross-RQ development-only synthesis and deferment of evaluation/design proposals to Chapter 9",
+      "supporting_labels": ["sec:ch4-summary", "sec:ch5-summary", "sec:ch6-summary", "sec:ch7-summary"],
+      "evidence_ids": [],
+      "ledger_ids": ["C01", "C05", "C06", "C07", "C08", "C10", "C11", "C13", "C18", "C19"],
+      "citation_keys": [],
+      "qualification": "within implemented systems and governed development protocol; no single ranked design rule or generalisation claim"
+    }
+  ],
+  "numeric_anchors": [
+    {"displayed_value": "40k", "claim_id": "8.1.frozen_heads_and_visual_dependence", "supporting_label": "sec:ch4-baselines", "closed_claim_mapping": "4.2.baselines", "source_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/technical.tex", "field": "training scale"},
+    {"displayed_value": "0.45797", "claim_id": "8.1.frozen_heads_and_visual_dependence", "supporting_label": "sec:ch4-baselines", "closed_claim_mapping": "4.2.baselines", "source_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/technical.tex", "field": "question-only mean accuracy"},
+    {"displayed_value": "0.53840", "claim_id": "8.1.frozen_heads_and_visual_dependence", "supporting_label": "sec:ch4-baselines", "closed_claim_mapping": "4.2.baselines", "source_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/technical.tex", "field": "fusion mean accuracy"},
+    {"displayed_value": "top-100", "claim_id": "8.1.cross_rq_design_synthesis", "supporting_label": "sec:ch4-answer-space", "closed_claim_mapping": "4.7.answer_space", "source_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/technical.tex", "field": "closed answer-space identifier"},
+    {"displayed_value": "top-1000", "claim_id": "8.1.cross_rq_design_synthesis", "supporting_label": "sec:ch4-answer-space", "closed_claim_mapping": "4.7.answer_space", "source_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/technical.tex", "field": "closed answer-space identifier"},
+    {"displayed_value": "+0.01442", "claim_id": "8.2.interaction_and_capacity", "supporting_label": "sec:ch4-interaction", "closed_claim_mapping": "4.3.interaction", "source_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/technical.tex", "field": "fusion minus concat effect"},
+    {"displayed_value": "+0.00578", "claim_id": "8.2.interaction_and_capacity", "supporting_label": "sec:ch4-interaction", "closed_claim_mapping": "4.3.capacity_controls", "source_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/technical.tex", "field": "fusion minus concat-wide effect"},
+    {"displayed_value": "[-0.00116,0.01226]", "claim_id": "8.2.interaction_and_capacity", "supporting_label": "sec:ch4-interaction", "closed_claim_mapping": "4.3.capacity_controls", "source_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/technical.tex", "field": "fusion minus concat-wide interval"},
+    {"displayed_value": "250k", "claim_id": "8.2.siglip_reasoner_context", "supporting_label": "sec:ch4-representation", "closed_claim_mapping": "4.6.context_250k", "source_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/technical.tex", "field": "training scale"},
+    {"displayed_value": "0.59388", "claim_id": "8.2.siglip_reasoner_context", "supporting_label": "sec:ch4-representation", "closed_claim_mapping": "4.6.context_250k", "source_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/technical.tex", "field": "SigLIP fusion seed mean"},
+    {"displayed_value": "0.59580", "claim_id": "8.2.siglip_reasoner_context", "supporting_label": "sec:ch5-scaling", "closed_claim_mapping": "5.2.reasoner_and_fusion_scaling", "source_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/technical2.tex", "field": "reasoner seed mean"},
+    {"displayed_value": "0.26--0.38", "claim_id": "8.2.cls_diagnostic", "supporting_label": "sec:ch5-diagnostics", "closed_claim_mapping": "5.4.token_diagnostics", "source_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/technical2.tex", "field": "rounded range of stored per-seed CLS attention means", "transformation": "reader-facing rounding of 0.2642 to 0.3803; no recomputation"},
+    {"displayed_value": "0.02", "claim_id": "8.2.cls_diagnostic", "supporting_label": "sec:ch5-diagnostics", "closed_claim_mapping": "5.4.token_diagnostics", "source_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/technical2.tex", "field": "uniform token share reference"},
+    {"displayed_value": "135M", "claim_id": "8.3.answer_side_pretraining", "supporting_label": "sec:ch6-answer135", "closed_claim_mapping": "6.3.answer_135", "source_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/slm.tex", "field": "nominal frozen model-family label"},
+    {"displayed_value": "360M", "claim_id": "8.3.answer_side_pretraining", "supporting_label": "sec:ch6-answer360", "closed_claim_mapping": "6.4.answer_360", "source_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/slm.tex", "field": "nominal frozen model-family label"},
+    {"displayed_value": "24.7", "claim_id": "8.4.efficiency_frontier_and_e9", "supporting_label": "sec:ch7-vlm", "closed_claim_mapping": "7.5.e9_context_and_pairing", "source_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/efficiency.tex", "field": "stored same-node contextual warm-serial latency ratio", "pairing_status": "latency-only; head accuracy/timing pairing unresolved"}
+  ],
+  "citation_key_verification": [
+    {"key": "deuser2022less", "bibliography_status": "present", "local_support": "docs/RELATED_WORK.md section 1", "relationship": "conceptual precedent"},
+    {"key": "hessel2020emap", "bibliography_status": "present", "local_support": "docs/RELATED_WORK.md section 1", "relationship": "methodological"},
+    {"key": "jaegle2021perceiver", "bibliography_status": "present", "local_support": "docs/RELATED_WORK.md section 2", "relationship": "architectural lineage"},
+    {"key": "li2023blip2", "bibliography_status": "present", "local_support": "docs/RELATED_WORK.md section 2", "relationship": "architectural lineage"},
+    {"key": "koishigarina2026bow", "bibliography_status": "present", "local_support": "docs/RELATED_WORK.md section 3", "relationship": "empirical counterpoint"},
+    {"key": "fu2025hidden", "bibliography_status": "present", "local_support": "docs/RELATED_WORK.md section 3", "relationship": "empirical counterpoint"},
+    {"key": "takishita2025compensate", "bibliography_status": "present", "local_support": "docs/RELATED_WORK.md section 3", "relationship": "empirical counterpoint"},
+    {"key": "hudson2019gqa", "bibliography_status": "present", "local_support": "docs/RELATED_WORK.md section 3", "relationship": "dataset/program-metadata authority"},
+    {"key": "kervadec2021gqaood", "bibliography_status": "present", "local_support": "docs/RELATED_WORK.md section 3", "relationship": "empirical prior-bias precedent"},
+    {"key": "merullo2023limber", "bibliography_status": "present", "local_support": "docs/RELATED_WORK.md sections 1 and 3", "relationship": "architectural context"},
+    {"key": "vallaeys2024depalm", "bibliography_status": "present", "local_support": "docs/RELATED_WORK.md section 2", "relationship": "architectural and empirical connector context"}
+  ],
+  "cite_gap_markers": [
+    {"marker": "% CITE-GAP clip_foundation", "status": "deferred", "reader_facing": false, "reason": "no verified foundational CLIP key in the current bibliography"},
+    {"marker": "% CITE-GAP siglip", "status": "deferred", "reader_facing": false, "reason": "no verified foundational SigLIP key in the current bibliography"},
+    {"marker": "% CITE-GAP smollm2", "status": "deferred", "reader_facing": false, "reason": "no verified foundational SmolLM2 key in the current bibliography"},
+    {"marker": "% CITE-GAP smolvlm", "status": "deferred", "reader_facing": false, "reason": "no verified foundational SmolVLM key in the current bibliography"}
+  ],
+  "tables": [],
+  "figures": []
+}

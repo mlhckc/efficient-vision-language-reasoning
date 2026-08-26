@@ -1,2 +1,197 @@
 \chapter{Discussion}
-% TODO Phase 1 (dissertation-08): sources per docs/DISSERTATION_HANDOFF.md; internal budget 1400 words; stub only in Phase 0.
+
+\section{Overall interpretation}
+\label{sec:ch8-overall}
+
+The results support a bounded account of efficient closed-set VQA on this GQA
+development partition. Compact trainable heads can use frozen representations
+to combine strong question-side predictive information with a real visual
+contribution. At 40k, the question-only head reaches 0.45797 and fusion reaches
+0.53840. The intervention evidence then shows that the multimodal heads depend
+on receiving the correct image; it does not establish visual grounding or
+reasoning. This use of frozen features with a small closed-answer classifier
+has precedent on a different VQA setting \citep{deuser2022less}, but the
+dataset and protocol differences preclude a numerical comparison.
+% CITE-GAP clip_foundation
+
+Across the implemented systems, representation choice, interaction design and
+answer-space coverage all materially affect the observed results. Additional
+downstream capacity alone does not consistently explain the strongest
+configurations. This is not a global ranking of those design choices: the
+top-100 and top-1000 evaluations define different supported-answer tasks, and
+cross-family comparisons often change several factors together. The following
+sections therefore interpret the controlled contrasts first and use the less
+closely matched comparisons only as qualified context.
+
+\section{Representations, interaction and latent reasoning}
+\label{sec:ch8-representation}
+
+The RQ1 evidence gives explicit interaction a clear but limited role. Fusion
+exceeds concatenation by +0.01442 at 40k, yet the capacity controls show that
+part of this difference follows from the wider head. At the larger matched
+budget, the fusion-minus-concat-wide effect is +0.00578 with interval
+$[-0.00116,0.01226]$, so that residual contrast is not resolved clearly.
+This separation of interaction from an additive approximation is conceptually
+related to the question posed by EMAP \citep{hessel2020emap}; here it is tested
+constructively with capacity controls. The later narrowing of the
+fusion--concatenation gap remains descriptive because no clustered interval is
+available for that scaling family.
+
+Representation choice also matters, but the encoder comparison is not
+factorial. At 250k, SigLIP fusion at 0.59388 is descriptively competitive with
+the latent reasoner at 0.59580 in the tested configurations.
+% CITE-GAP siglip
+Encoder and interface widths, architecture and other configuration details
+co-vary, and the seed structures differ. The observation is therefore neither
+a paired causal comparison nor evidence that a stronger representation can
+generally replace downstream reasoning capacity.
+
+The reasoner's overall accuracy rises across the tested scales, and its
+same-seed advantage over fusion is positive in every stored seed at the two
+larger scales. This remains configuration-level evidence because architecture,
+token access and capacity change together. Learned latent bottlenecks have
+architectural precedents in Perceiver and BLIP-2
+\citep{jaegle2021perceiver,li2023blip2}, but those lineages do not identify the
+source of this project's accuracy pattern. More importantly, the fixed-prior
+four-or-more-step deficit persists and its paired difference from fusion is
+unresolved at every tested scale. The implemented changes did not eliminate
+that profile, but they do not localise its cause.
+
+The question-only result provides an internal check on what this statistic
+means. At the largest scale it has a smaller pooled deficit than the
+multimodal systems despite substantially lower overall accuracy. A lower
+deficit therefore describes a less uneven fixed-prior step profile, not a
+better model or stronger reasoning ability. Conversely, the reasoner's higher
+overall accuracy at the larger scales does not establish that its persistent
+multi-step difficulty has been removed.
+
+That restraint is consistent with the wider evidence base. Binding information
+can remain linearly accessible in unimodal CLIP features
+\citep{koishigarina2026bow}, while work with much larger decoders locates
+feature-use limitations differently or finds compensation for degraded visual
+context \citep{fu2025hidden,takishita2025compensate}. These are empirical
+counterpoints, not matched comparisons: together they caution against calling
+compositional information absent or assigning this deficit to one component.
+The GQA program length is only a proxy for reasoning depth
+\citep{hudson2019gqa}, and the buckets have different answer priors, a known
+concern for GQA evaluation \citep{kervadec2021gqaood}.
+
+The token diagnostics narrow the interpretation further. The latent queries
+place approximately 0.26--0.38 attention mass on CLS across seeds, compared
+with a uniform reference near 0.02, and removing CLS reduces accuracy. These
+observations show disproportionate attention and functional sensitivity to the
+pooled token. They do not show that most attention is pooled, that the model
+explicitly re-reads CLS, that attention weights trace causal information flow,
+or how and why the token is used internally.
+
+\section{What SLM placement suggests}
+\label{sec:ch8-placement}
+
+The question-side comparisons must be read together. A1 exceeds its
+architecture-matched random control A1r with positive directional evidence at
+both tested scales, so frozen SmolLM2 pretraining contributes within that
+interface. At the same time, A1 remains below the CLIP-token A0p reference at
+both scales. The latter contrast is secondary and representation-confounded:
+it changes the representation and interface together and cannot establish
+intrinsic CLIP superiority.
+% CITE-GAP smollm2
+
+The answer-side evidence has a different pattern. The 135M
+pretrained-minus-random contrast is negative directional at the lower scale and uncertain or
+mixed at the larger scale. Both 360M contrasts and the second-order scale
+interaction are also uncertain or mixed. Thus no reliable positive
+answer-side pretraining advantage was detected under these conditions, while
+the zero-containing intervals establish neither equivalence nor absence of an
+effect.
+
+Several explanations are plausible. The projected representation spaces may
+differ in compatibility; contextual question structure is available before
+multimodal interaction only on the question side; and a frozen language model
+placed after the reasoner may make limited use of its pretraining under a
+closed candidate-likelihood readout and restricted adaptation. Minimal bridges
+into frozen language models and comparisons among connector families provide
+architectural context for these possibilities
+\citep{merullo2023limber,vallaeys2024depalm}, but they do not explain this
+result. The experiments do not distinguish among the hypotheses.
+
+The resulting claim is therefore interface-specific rather than universal
+under the implemented interfaces and tested configurations. It is a bounded
+cross-experiment synthesis of three separately run experiments, whose family
+and checkpoint-selection contexts differ, not a factorial causal placement
+study. It neither establishes a generally optimal placement nor rules out a
+positive answer-side contribution in another regime.
+
+\section{Accuracy--efficiency trade-offs}
+\label{sec:ch8-efficiency}
+
+Chapter 7 adds a measurement boundary to the accuracy results. Under the E7b
+warm-serial protocol, concat, fusion and the top-1000 product head form the
+canonical frontier on common-denominator raw-distribution accuracy and latency.
+The higher-accuracy token-level configurations are not automatically preferred
+on those two axes. Some additional components coincide with higher measured
+latency, but not all accuracy gains arise from added compute: the representation
+swap and answer-space experiment also move results without following a single
+capacity ordering. Nor does this pattern imply that more computation causes
+more accuracy. Trainable and total loaded parameter counts likewise provide
+capacity context rather than latency proxies.
+
+The E9 comparison remains contextual. Its stored statement makes the
+SmolVLM-500M constrained row approximately 24.7 times slower in warm serial
+latency than the re-timed head on the same node, but the comparison is
+latency-only.
+% CITE-GAP smolvlm
+The E9 artefact does not restate the head checkpoint identity, so its head
+accuracy and timing remain unpaired. E7b and E9 are not merged because the
+bridge gate failed, and no matched accuracy--latency leaderboard follows.
+Energy, power, carbon and monetary cost were not measured, so no claim is made
+about those quantities.
+
+\section{Limitations}
+\label{sec:ch8-limitations}
+
+The evidential boundary is development-only. Checkpoint and recipe choices use
+development evidence, and no held-out result is reported; the F2 evaluation
+remains unauthorised and pending. The task is one partition of GQA under closed
+answer classification. Top-100 and top-1000 systems differ in answer support,
+training rows and in-vocabulary denominator, so their supported-view
+accuracies cannot be treated as one metric. These constraints limit
+generalisation to other datasets, answer spaces and generative settings.
+
+Several comparisons also remain configuration-level. Reasoner and fusion
+differ simultaneously in architecture, token access and trainable capacity;
+the SigLIP comparison changes encoder and width; and the SLM evidence covers a
+small set of frozen family sizes, two placements, two training scales and
+differing selection rules across experiment families. The placement synthesis
+therefore does not isolate a universal pretraining effect, and the descriptive
+SigLIP--reasoner proximity does not isolate representation from downstream
+capacity. These limitations narrow the claims without undoing the controlled
+within-family contrasts.
+
+The measurement and compositional analyses have separate limits. E7b and E9
+were run on different nodes and remain separate; E9 head pairing is unresolved,
+and comparable serial latency is unavailable for the answer-side R1 readout
+and the E10 pair. The step analysis uses program length as an in-distribution
+proxy, combines unequal buckets under fixed priors and is sensitive to the
+question/answer distribution. It describes a persistent relative difficulty
+profile, not observed internal reasoning steps or a localised mechanism. The
+experiments therefore leave several causes open rather than identifying a
+single bottleneck; proposals for resolving them belong to Chapter 9.
+
+\section{Overall implications}
+\label{sec:ch8-implications}
+
+Within the implemented systems and governed development protocol, frozen
+representations with compact heads provide useful closed-set VQA performance
+and a favourable measured latency region. Explicit interaction helps most
+clearly in the low-data comparison, representation changes can be competitive
+with much larger downstream configurations, and latent capacity improves
+overall accuracy at larger scales without eliminating the multi-step deficit.
+Frozen language-model pretraining contributes differently across the tested
+interfaces rather than simply through its presence.
+
+Taken together, the evidence favours disciplined selection among
+representation, interaction, answer-space and interface choices, not a single
+ranked design rule. The simplest global heads occupy the measured frontier,
+while the more elaborate systems clarify what extra capacity and token access
+do not by themselves establish. Whether these development findings generalise
+is unresolved; evaluation and design proposals are deferred to Chapter 9.
