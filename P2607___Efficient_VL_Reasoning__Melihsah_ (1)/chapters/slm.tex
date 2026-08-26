@@ -86,7 +86,7 @@ secondary status and its representation confounding.
 
 \begin{table}[tbp]
 \centering
-\caption[Question-side frozen interfaces.]{Development accuracy on 7,714 top-100 questions over 768 represented images. All rows use seeds 0/1/2 and best-development selection. A0p is the CLIP-token reference; A1r is the architecture-matched random control for A1. SD describes training-seed variation, not a confidence interval. Effective repaired digits are used where applicable.}
+\caption[Question-side frozen interfaces.]{Development accuracy on 7,714 top-100 questions over 768 represented images. All rows use seeds 0/1/2 and best-development selection. A0p is the CLIP-token reference; A1r is the architecture-matched random control for A1. SD describes training-seed variation, not a confidence interval.}
 \label{tab:ch6-question-arms}
 \begingroup\scriptsize\setlength{\tabcolsep}{1pt}
 \renewenvironment{longtable}[1]{\begin{tabular}{|p{0.055\textwidth}|p{0.18\textwidth}|p{0.055\textwidth}|p{0.27\textwidth}|p{0.11\textwidth}|p{0.08\textwidth}|}}{\end{tabular}}
@@ -207,6 +207,10 @@ itself rather than to either single-scale pretraining comparison.
 \caption[Pretraining contrasts and scale interaction.]{Canonical development contrasts with image-clustered intervals and governed outcomes. First-order effects are pretrained minus the architecture-matched random control at the corresponding size; positive favours pretraining. The 360M difference in differences is a second-order interaction across scales. Selection is matched within each first-order row; cross-family synthesis is a juxtaposition. Zero-containing intervals are classified as uncertain or mixed evidence.}
 \label{tab:ch6-contrasts}
 \begingroup\scriptsize\setlength{\tabcolsep}{0.45pt}
+\makeatletter
+\let\chSixArrayParboxRestore\@arrayparboxrestore
+\def\@arrayparboxrestore{\chSixArrayParboxRestore\raggedright\let\\\tabularnewline}
+\makeatother
 \renewenvironment{longtable}[1]{\begin{tabular}{|p{0.12\textwidth}|p{0.085\textwidth}|p{0.07\textwidth}|p{0.06\textwidth}|p{0.10\textwidth}|p{0.07\textwidth}|p{0.115\textwidth}|p{0.15\textwidth}|p{0.13\textwidth}|}}{\end{tabular}}
 \let\endhead\relax\renewcommand{\_}{\textunderscore\allowbreak}
 \input{tables/ch6_contrasts.tex}
