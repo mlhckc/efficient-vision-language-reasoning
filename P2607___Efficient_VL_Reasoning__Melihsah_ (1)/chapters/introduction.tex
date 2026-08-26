@@ -1,2 +1,150 @@
 \chapter{Introduction}
-% TODO Phase 1 (dissertation-01): sources per docs/DISSERTATION_HANDOFF.md; internal budget 1100 words; stub only in Phase 0.
+
+\section{Motivation and problem}
+\label{sec:ch1-motivation}
+
+Visual question answering (VQA) asks a system to combine information from an
+image with a natural-language question in order to produce an answer. It
+therefore provides a focused setting for studying how visual and linguistic
+representations interact, rather than assessing either modality in isolation.
+Closed-answer classification has been part of VQA since its early benchmarks
+\citep{antol2015vqa}. GQA adds questions derived from scene graphs and
+associated functional programs, making it possible to examine both overall
+answer accuracy and performance profiles over questions with different
+program lengths \citep{hudson2019gqa}.
+
+\begingroup
+\setlength{\emergencystretch}{1em}
+Vision--language systems combine pretrained visual and linguistic components
+in several ways. Frozen language-model interfaces, latent resamplers and
+query-based connectors provide important architectural precedents
+\citep{tsimpoukelli2021frozen,alayrac2022flamingo,li2023blip2,jaegle2021perceiver}.
+A complementary line of work shows that frozen embeddings can also support VQA
+through comparatively restricted trainable classifiers or bridges
+\citep{deuser2022less,merullo2023limber}. These approaches
+motivate a controlled question: how much of the task can be handled by frozen
+representations and compact trainable interfaces, and what changes when the
+interface receives richer token access or a frozen small language model?\par
+\endgroup
+
+This dissertation uses closed-set GQA to study that question while separating
+representation choice, explicit multimodal interaction, lightweight latent
+reasoning and language-model pretraining. Compactness is not treated as proof
+of speed. Runtime efficiency is evaluated through valid end-to-end warm-serial
+latency, while parameter counts provide complementary capacity and system-size
+context. Neither trainable nor total loaded parameter counts are treated as
+measurements of latency, storage, energy or monetary cost.
+
+\section{Research gap and aim}
+\label{sec:ch1-gap}
+
+The literature provides global-embedding heads, learned latent connectors and
+minimal interfaces to frozen language models, but each design answers a
+different architectural question under its own task and protocol. This
+dissertation therefore studies representation quality, explicit multimodal
+interaction, lightweight latent reasoning and frozen language-model
+pretraining within one controlled experimental framework. Matched controls,
+nested training scales and a common development discipline are used to keep
+the comparisons interpretable without turning cross-family observations into
+causal claims.
+
+The aim is to evaluate, under a controlled development protocol, whether
+efficient closed-set visual question answering can be achieved with frozen
+representations, compact trainable heads and small-language-model interfaces,
+and to characterise where accuracy gains and measured runtime costs arise.
+This aim concerns the implemented GQA setting and measured quantities; it is
+not a claim about general multimodal intelligence or deployment suitability.
+
+\section{Research questions}
+\label{sec:ch1-rqs}
+
+The dissertation is organised around three research questions.
+
+\phantomsection
+\label{rq:rq1}
+\noindent\textbf{RQ1.} To what extent can lightweight heads built on frozen global image and question embeddings answer closed-set GQA questions, and how do explicit interaction features, frozen-encoder choice and answer-set size affect development-set accuracy?
+
+Chapter 4 answers RQ1 through global-head baselines, interaction and capacity
+controls, visual-reliance interventions, an alternative frozen encoder and a
+larger closed answer space.
+
+\phantomsection
+\label{rq:rq2}
+\noindent\textbf{RQ2.} As training data scales, does a lightweight 32-query latent reasoner over frozen token-level visual features improve on global-embedding heads, and do any overall gains extend to questions requiring four or more reasoning steps?
+
+Chapter 5 answers RQ2 through scale comparisons, token-input diagnostics and
+a fixed-prior compositional profile based on GQA program length.
+
+\phantomsection
+\label{rq:rq3}
+\noindent\textbf{RQ3.} When a frozen small language model is coupled to the latent reasoner on the question side or used as the answer readout, does pretraining improve development-set accuracy over an architecturally matched random control, and what efficiency implications are supported by the project's trainable-parameter counts and valid warm-serial latency measurements?
+
+Chapter 6 answers the pretraining and placement part of RQ3, and Chapter 7
+establishes the bounded efficiency implications under the governed runtime
+protocol.
+
+\section{Approach and contributions}
+\label{sec:ch1-approach}
+
+The experiments use an image-disjoint GQA development partition, nested
+training scales and closed answer vocabularies derived from the training pool.
+The top-100 and top-1000 vocabularies are treated as different supported-answer
+views rather than as one interchangeable metric. The global pathway combines
+frozen CLIP image and question representations with compact heads, including
+explicit product and difference interactions and capacity controls.
+% CITE-GAP clip_foundation
+An alternative frozen SigLIP representation tests an encoder change under its
+implemented interface.
+% CITE-GAP siglip
+
+The token pathway uses a 32-query latent reasoner over frozen visual and
+question features. Frozen SmolLM2 representations are then introduced on the
+question side, or the frozen model is used after the reasoner as an answer
+readout; pretrained variants are compared with architecture-matched random
+controls.
+% CITE-GAP smollm2
+These are the project's core small-language-model interfaces. Evaluation uses
+predefined seeds and development-only selection rules, with each contrast
+interpreted according to its matching and selection class. Runtime is assessed
+separately through governed end-to-end warm-serial measurement, rather than
+being inferred from architecture names or parameter counts. The experimental
+conclusions reported in this dissertation are based on the governed
+development evidence; held-out evaluation remains pending.
+
+This dissertation contributes a controlled evaluation of compact
+frozen-representation VQA heads with interaction and capacity controls. It
+contributes an evaluation of the 32-query latent reasoner across training
+scales, including token-input and compositional-profile diagnostics. It also
+contributes matched pretrained-versus-random controls for question- and
+answer-side small-language-model interfaces, including a larger answer-side
+extension, and a governed end-to-end warm-serial efficiency evaluation with a
+common-denominator accuracy--latency analysis. A supporting reproducibility
+contribution is the explicit provenance and status tracking of reported
+measurements, including the separation of retained, superseded and withdrawn
+evidence.
+
+The qualitative development results give a bounded answer to the title
+question. Compact frozen-representation systems achieve useful accuracy on the
+governed closed-set task, and representation and interaction choices
+materially affect the observed results. The latent reasoner improves overall
+configuration-level accuracy with training scale without eliminating the
+observed pooled multi-step deficit. On the question side, SmolLM2 pretraining
+has a positive advantage relative to its matched random control; on the answer
+side, no reliable positive pretraining advantage is detected under the tested
+conditions. The canonical measured accuracy--latency frontier contains the
+non-SLM concatenation, fusion and top-1000 product systems. An SLM is therefore
+not required for the strongest measured trade-offs in this study, and its
+observed contribution remains interface-specific rather than universal.
+
+\section{Dissertation structure}
+\label{sec:ch1-structure}
+
+Chapter 2 positions the study within relevant research on VQA, frozen
+representations and latent interfaces, while Chapter 3 specifies the data
+partitions, scoring rules, architectures and evaluation protocol. Chapters 4,
+5 and 6 answer RQ1,
+RQ2 and RQ3 through the global heads, latent reasoner and small-language-model
+interfaces, respectively; Chapter 7 then reports the governed efficiency
+analysis. Chapter 8 interprets the results and their limitations across the
+research questions, and Chapter 9 states the development-bounded conclusions,
+contributions and future work.

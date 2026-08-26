@@ -1,0 +1,422 @@
+{
+  "schema_version": 1,
+  "task_id": "dissertation-09-ch1-introduction",
+  "base_commit": "d59307da41081883c5003292db095974f323214f",
+  "chapter": "Chapter 1 — Introduction",
+  "development_set_only": true,
+  "closed_evidence_only": true,
+  "scientific_recomputation": false,
+  "bibliography_modified": false,
+  "f2_status": "not authorised, not performed",
+  "bibliography_identity": {
+    "main_file_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/Dissertation_Template.tex",
+    "main_file_sha256": "e56dc9b10b9ccd40a51771671550cc711f53d89f372afa86f3c2b52292a111f1",
+    "bibliography_declaration": "\\bibliography{./references/references}",
+    "resolved_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/references/references.bib",
+    "sha256": "ebff6b25ef20b0672c154e56e678356bc8245b6cbf5d85aff63371968b6d2705",
+    "entry_count": 72
+  },
+  "sources": [
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/methodology.tex",
+      "sha256": "fdea277a70be5abb4dc779be541a9a011c19841785223e82e13e3fc14b8ecab5",
+      "role": "closed Chapter 3 task, method, architecture and evaluation-boundary authority"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/technical.tex",
+      "sha256": "59b8966dbac8e07783aa3547860e04a2695bdd62336cc618137e64c863305579",
+      "role": "closed Chapter 4 RQ1 authority"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch4_provenance.json",
+      "sha256": "30b3ec4009b1040a7a833f27fc67d7cd217de9b7bf83c92b07fc7fbcccad9d05",
+      "role": "closed Chapter 4 claim mappings"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/technical2.tex",
+      "sha256": "90972163ed72a96e906af6be88292d80d50d84ce4be4ff6a5bc73838db0b474b",
+      "role": "closed Chapter 5 RQ2 authority"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch5_provenance.json",
+      "sha256": "e7a71bac68e83233a40da2889c92b1298e1b79c76f888a49aa26aaad6cf6e960",
+      "role": "closed Chapter 5 claim mappings"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/slm.tex",
+      "sha256": "a2cf2a316b4e8d6b3765d6d39b4af266bde6bf2657929ff03beaf814f62347f1",
+      "role": "closed Chapter 6 RQ3 authority"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch6_provenance.json",
+      "sha256": "2c61b1988f3e029a9a64cebb6dd351b89b865108c63428647c35fc0b5a0ba976",
+      "role": "closed Chapter 6 claim mappings"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/efficiency.tex",
+      "sha256": "72f23e40df2db84e54a8ec9100f44427ca428a4da774d01517f67052c84f2088",
+      "role": "closed Chapter 7 runtime and frontier authority"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch7_provenance.json",
+      "sha256": "ca352f337f96968bd4dc5a8bd3bbaec01a9f71cf41227ce3b5bad0ef68c4b6ec",
+      "role": "closed Chapter 7 claim mappings and measurement boundaries"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/discussion.tex",
+      "sha256": "2d200fc14175013a50d8edf564afe2c810527de2bfb7311b8652a8570f7e5baa",
+      "role": "closed Chapter 8 bounded synthesis and limitations authority"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch8_provenance.json",
+      "sha256": "2c484d85f005f587b3bbd0996a24fc5b228ed4a66ef0f5d66dda23041f53b9ae",
+      "role": "closed Chapter 8 interpretation and literature mappings"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/conclusions.tex",
+      "sha256": "58385f7d7d2a9a685eb44d73ac696755fee6b995086d97aad567b551a19c1f89",
+      "role": "closed Chapter 9 title-level answer, contributions and chapter-map authority"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/evidence/ch9_provenance.json",
+      "sha256": "95010b6288195e132383a3b12e52a80e0d3e082f8afaeaf322defb80df1f1425",
+      "role": "closed Chapter 9 claim mappings"
+    },
+    {
+      "path": ".agent-bridge/tasks/dissertation-02-ch3-draft-s1/00-request.md",
+      "sha256": "7ba4cd2380f7c5067847a020ca2cc12df517ffcaaac44427557855eeccf5c965",
+      "role": "human-adopted formal RQ wording authority"
+    },
+    {
+      "path": "docs/RELATED_WORK.md",
+      "sha256": "82265cb85b103c6607120c99b4785801498232a9626a9792ed3aba965ef5acc0",
+      "role": "local literature-support audit"
+    },
+    {
+      "path": "docs/DISSERTATION_HANDOFF.md",
+      "sha256": "588b6124713b4eae65a0d3f714c9477e16dd9bfda0a6f72386a5935bdb9cbc80",
+      "role": "dissertation aim and scope context, subordinate to closed chapters for results"
+    },
+    {
+      "path": "docs/PROJECT_OVERVIEW.md",
+      "sha256": "6c92ad151eda61c1b5863e9fc4c96c593e572d0193e5eed24693f1d2deec49cf",
+      "role": "project problem context only; stale stronger scientific readings excluded"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/references/references.bib",
+      "sha256": "ebff6b25ef20b0672c154e56e678356bc8245b6cbf5d85aff63371968b6d2705",
+      "role": "citation-key authority"
+    }
+  ],
+  "rq_wording_authority": {
+    "path": ".agent-bridge/tasks/dissertation-02-ch3-draft-s1/00-request.md",
+    "sha256": "7ba4cd2380f7c5067847a020ca2cc12df517ffcaaac44427557855eeccf5c965",
+    "status": "RESOLVED BY HUMAN AUTHOR DECISION",
+    "rq1": "To what extent can lightweight heads built on frozen global image and question embeddings answer closed-set GQA questions, and how do explicit interaction features, frozen-encoder choice and answer-set size affect development-set accuracy?",
+    "rq2": "As training data scales, does a lightweight 32-query latent reasoner over frozen token-level visual features improve on global-embedding heads, and do any overall gains extend to questions requiring four or more reasoning steps?",
+    "rq3": "When a frozen small language model is coupled to the latent reasoner on the question side or used as the answer readout, does pretraining improve development-set accuracy over an architecturally matched random control, and what efficiency implications are supported by the project's trainable-parameter counts and valid warm-serial latency measurements?"
+  },
+  "claim_mappings": [
+    {
+      "claim_id": "1.1.task_motivation",
+      "class": "MOTIVATION",
+      "sentence_scope": "VQA combines image and question information; GQA supplies scene-graph-derived compositional questions and functional-program metadata",
+      "supporting_labels": ["sec:ch3-task"],
+      "evidence_ids": [],
+      "ledger_ids": [],
+      "citation_keys": ["antol2015vqa", "hudson2019gqa"],
+      "qualification": "task and benchmark context only; no result or published-score comparison"
+    },
+    {
+      "claim_id": "1.1.architectural_context",
+      "class": "MOTIVATION",
+      "sentence_scope": "pretrained/frozen language-model interfaces and latent query connectors provide architectural precedents",
+      "supporting_labels": ["sec:ch3-architectures"],
+      "evidence_ids": [],
+      "ledger_ids": [],
+      "citation_keys": ["tsimpoukelli2021frozen", "alayrac2022flamingo", "li2023blip2", "jaegle2021perceiver"],
+      "qualification": "architectural context only; detailed differentiation belongs to Chapter 2"
+    },
+    {
+      "claim_id": "1.1.compact_interface_context",
+      "class": "MOTIVATION",
+      "sentence_scope": "frozen embeddings have been paired with restricted trainable classifiers or bridges in other VQA configurations",
+      "supporting_labels": ["sec:ch3-framing"],
+      "evidence_ids": [],
+      "ledger_ids": [],
+      "citation_keys": ["deuser2022less", "merullo2023limber"],
+      "qualification": "conceptual precedent across different tasks and protocols; no numerical comparison or priority claim"
+    },
+    {
+      "claim_id": "1.1.measurement_boundary",
+      "class": "METHOD_OVERVIEW",
+      "sentence_scope": "runtime efficiency is evaluated by end-to-end warm-serial latency while parameter counts provide separate capacity and system context",
+      "supporting_labels": ["sec:ch3-efficiency", "sec:ch7-scope", "sec:ch7-parameters"],
+      "evidence_ids": [],
+      "ledger_ids": ["C13", "C16", "C17"],
+      "citation_keys": [],
+      "qualification": "parameter counts are not latency, storage, energy or cost measurements"
+    },
+    {
+      "claim_id": "1.2.controlled_gap",
+      "class": "RESEARCH_GAP",
+      "sentence_scope": "representation, interaction, latent reasoning and frozen-LM pretraining are studied within one controlled framework",
+      "supporting_labels": ["sec:ch3-framing", "sec:ch3-architectures"],
+      "evidence_ids": [],
+      "ledger_ids": [],
+      "citation_keys": [],
+      "qualification": "positive study scope, not a claim of novelty, priority or absence in the literature"
+    },
+    {
+      "claim_id": "1.2.aim",
+      "class": "AIM",
+      "sentence_scope": "controlled evaluation of efficient closed-set VQA with frozen representations, compact heads and SLM interfaces, locating accuracy gains and measured runtime costs",
+      "supporting_labels": ["sec:ch3-framing", "sec:ch9-overall"],
+      "evidence_ids": [],
+      "ledger_ids": ["C18"],
+      "citation_keys": [],
+      "qualification": "implemented GQA development setting and measured quantities only"
+    },
+    {
+      "claim_id": "1.3.rq1",
+      "class": "RESEARCH_QUESTION",
+      "sentence_scope": "verbatim human-adopted RQ1",
+      "supporting_labels": ["sec:ch4-summary"],
+      "evidence_ids": [],
+      "ledger_ids": ["C01", "C04", "C05", "C12", "C18"],
+      "citation_keys": [],
+      "qualification": "verbatim against the pinned RQ authority"
+    },
+    {
+      "claim_id": "1.3.rq2",
+      "class": "RESEARCH_QUESTION",
+      "sentence_scope": "verbatim human-adopted RQ2",
+      "supporting_labels": ["sec:ch5-summary"],
+      "evidence_ids": [],
+      "ledger_ids": ["C06", "C07", "C21"],
+      "citation_keys": [],
+      "qualification": "verbatim against the pinned RQ authority"
+    },
+    {
+      "claim_id": "1.3.rq3",
+      "class": "RESEARCH_QUESTION",
+      "sentence_scope": "verbatim human-adopted RQ3",
+      "supporting_labels": ["sec:ch6-summary", "sec:ch7-summary"],
+      "evidence_ids": [],
+      "ledger_ids": ["C08", "C09", "C10", "C11", "C13", "C19"],
+      "citation_keys": [],
+      "qualification": "verbatim against the pinned RQ authority"
+    },
+    {
+      "claim_id": "1.4.task_and_answer_views",
+      "class": "METHOD_OVERVIEW",
+      "sentence_scope": "image-disjoint GQA development design, nested scales and distinct top-100/top-1000 supported-answer views",
+      "supporting_labels": ["sec:ch3-data", "sec:ch3-answer-space", "sec:ch3-scoring"],
+      "evidence_ids": [],
+      "ledger_ids": ["C12", "C15"],
+      "citation_keys": [],
+      "qualification": "structural method identifiers only; supported-view accuracies are not merged"
+    },
+    {
+      "claim_id": "1.4.global_and_token_systems",
+      "class": "METHOD_OVERVIEW",
+      "sentence_scope": "frozen CLIP global heads, explicit interactions, capacity controls, alternative SigLIP representation and 32-query token reasoner",
+      "supporting_labels": ["sec:ch3-representations", "sec:ch3-architectures"],
+      "evidence_ids": [],
+      "ledger_ids": ["C01", "C05", "C07"],
+      "citation_keys": [],
+      "qualification": "concise architecture orientation, not a result comparison; foundational citations deferred"
+    },
+    {
+      "claim_id": "1.4.slm_systems",
+      "class": "METHOD_OVERVIEW",
+      "sentence_scope": "question-side frozen SmolLM2 representations and answer-side frozen-LM readout with matched random controls",
+      "supporting_labels": ["sec:ch3-architectures", "sec:ch6-scope"],
+      "evidence_ids": [],
+      "ledger_ids": ["C08", "C09", "C10", "C11", "C19"],
+      "citation_keys": [],
+      "qualification": "core project interfaces only; SmolVLM contextual system deliberately omitted"
+    },
+    {
+      "claim_id": "1.4.evaluation_boundary",
+      "class": "EVALUATION_BOUNDARY",
+      "sentence_scope": "development-only selection and interpretation, governed warm-serial runtime, held-out evaluation pending",
+      "supporting_labels": ["sec:ch3-framing", "sec:ch3-efficiency", "sec:ch8-limitations", "sec:ch9-overall"],
+      "evidence_ids": [],
+      "ledger_ids": ["C13", "C15", "C16", "C17", "C20"],
+      "citation_keys": [],
+      "qualification": "F2 not authorised and not performed; no held-out claim"
+    },
+    {
+      "claim_id": "1.4.contribution_compact_heads",
+      "class": "SCIENTIFIC_CONTRIBUTION",
+      "sentence_scope": "controlled compact frozen-representation VQA evaluation with interaction and capacity controls",
+      "supporting_labels": ["sec:ch4-interaction", "sec:ch4-summary", "sec:ch9-contributions"],
+      "evidence_ids": [],
+      "ledger_ids": ["C01", "C18"],
+      "citation_keys": [],
+      "qualification": "development contribution; no novelty or priority claim"
+    },
+    {
+      "claim_id": "1.4.contribution_reasoner",
+      "class": "SCIENTIFIC_CONTRIBUTION",
+      "sentence_scope": "32-query latent-reasoner evaluation across scale with token-input and compositional-profile diagnostics",
+      "supporting_labels": ["sec:ch5-scaling", "sec:ch5-diagnostics", "sec:ch5-deficit", "sec:ch9-contributions"],
+      "evidence_ids": [],
+      "ledger_ids": ["C06", "C07", "C21"],
+      "citation_keys": [],
+      "qualification": "evaluation contribution, not a mechanism or a negative low-data result"
+    },
+    {
+      "claim_id": "1.4.contribution_slm_controls",
+      "class": "SCIENTIFIC_CONTRIBUTION",
+      "sentence_scope": "matched pretrained-versus-random question- and answer-side SLM controls including the larger answer-side extension",
+      "supporting_labels": ["sec:ch6-question", "sec:ch6-answer135", "sec:ch6-answer360", "sec:ch9-contributions"],
+      "evidence_ids": [],
+      "ledger_ids": ["C08", "C09", "C10", "C11", "C19"],
+      "citation_keys": [],
+      "qualification": "within-pair controls; placements remain separately run experiments"
+    },
+    {
+      "claim_id": "1.4.contribution_efficiency",
+      "class": "SCIENTIFIC_CONTRIBUTION",
+      "sentence_scope": "governed end-to-end warm-serial efficiency evaluation and common-denominator accuracy-latency analysis",
+      "supporting_labels": ["sec:ch7-scope", "sec:ch7-frontier", "sec:ch7-summary", "sec:ch9-contributions"],
+      "evidence_ids": [],
+      "ledger_ids": ["C13", "C16", "C17", "C18"],
+      "citation_keys": [],
+      "qualification": "retained measured quantities and stated protocols only"
+    },
+    {
+      "claim_id": "1.4.reproducibility_support",
+      "class": "REPRODUCIBILITY_CONTRIBUTION",
+      "sentence_scope": "explicit provenance and status tracking for retained, superseded and withdrawn measurements",
+      "supporting_labels": ["sec:ch7-scope", "sec:ch8-limitations", "sec:ch9-contributions"],
+      "evidence_ids": [],
+      "ledger_ids": ["C15", "C16", "C17", "C20"],
+      "citation_keys": [],
+      "qualification": "supporting reproducibility contribution, not central scientific novelty"
+    },
+    {
+      "claim_id": "1.4.preview_compact_design",
+      "class": "QUALITATIVE_RESULT_PREVIEW",
+      "sentence_scope": "compact frozen-representation systems attain useful governed development accuracy and representation/interaction choices affect results",
+      "supporting_labels": ["sec:ch4-summary", "sec:ch8-implications", "sec:ch9-overall"],
+      "evidence_ids": [],
+      "ledger_ids": ["C01", "C04", "C05", "C18"],
+      "citation_keys": [],
+      "qualification": "numbers-free development preview; no universal design ranking"
+    },
+    {
+      "claim_id": "1.4.preview_reasoner",
+      "class": "QUALITATIVE_RESULT_PREVIEW",
+      "sentence_scope": "configuration-level accuracy improves with scale without eliminating the pooled multi-step deficit",
+      "supporting_labels": ["sec:ch5-summary", "sec:ch8-implications", "sec:ch9-answers"],
+      "evidence_ids": [],
+      "ledger_ids": ["C06", "C07", "C21"],
+      "citation_keys": [],
+      "qualification": "architecture, token access and capacity co-vary; no reasoning-mechanism claim"
+    },
+    {
+      "claim_id": "1.4.preview_slm",
+      "class": "QUALITATIVE_RESULT_PREVIEW",
+      "sentence_scope": "question-side matched pretraining advantage and no reliable positive answer-side advantage under tested conditions",
+      "supporting_labels": ["sec:ch6-summary", "sec:ch8-placement", "sec:ch9-answers"],
+      "evidence_ids": [],
+      "ledger_ids": ["C08", "C09", "C10", "C11", "C19"],
+      "citation_keys": [],
+      "qualification": "interface-specific rather than universal; question-side result is relative to matched random, not CLIP superiority; answer-side uncertainty is preserved"
+    },
+    {
+      "claim_id": "1.4.preview_frontier",
+      "class": "QUALITATIVE_RESULT_PREVIEW",
+      "sentence_scope": "canonical frontier consists of non-SLM concatenation, fusion and top-1000 product systems, so an SLM is not required for the strongest measured trade-offs",
+      "supporting_labels": ["sec:ch7-frontier", "sec:ch7-summary", "sec:ch9-overall", "sec:ch9-answers"],
+      "evidence_ids": [],
+      "ledger_ids": ["C13", "C18"],
+      "citation_keys": [],
+      "qualification": "governed E7b frontier only; no universal or deployment claim"
+    },
+    {
+      "claim_id": "1.5.chapter_map",
+      "class": "CHAPTER_MAP",
+      "sentence_scope": "compact map of Chapters 2 through 9",
+      "supporting_labels": ["sec:ch3-framing", "sec:ch4-summary", "sec:ch5-summary", "sec:ch6-summary", "sec:ch7-summary", "sec:ch8-implications", "sec:ch9-overall"],
+      "evidence_ids": [],
+      "ledger_ids": [],
+      "citation_keys": [],
+      "qualification": "structural orientation only"
+    }
+  ],
+  "citation_key_verification": {
+    "bibliography_path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/references/references.bib",
+    "local_support_path": "docs/RELATED_WORK.md",
+    "all_keys_exist": true,
+    "all_reader_facing_claims_locally_supported": true,
+    "keys": [
+      {"key": "antol2015vqa", "relationship": "task background"},
+      {"key": "hudson2019gqa", "relationship": "task and benchmark metadata"},
+      {"key": "tsimpoukelli2021frozen", "relationship": "architectural context"},
+      {"key": "alayrac2022flamingo", "relationship": "architectural context"},
+      {"key": "li2023blip2", "relationship": "architectural context"},
+      {"key": "jaegle2021perceiver", "relationship": "architectural lineage"},
+      {"key": "deuser2022less", "relationship": "conceptual precedent"},
+      {"key": "merullo2023limber", "relationship": "architectural context"}
+    ]
+  },
+  "cite_gap_markers": [
+    {
+      "marker": "% CITE-GAP clip_foundation",
+      "purpose": "foundational source for the named frozen CLIP project component",
+      "status": "DEFERRED — bibliography/final-QA integration",
+      "reader_facing": false
+    },
+    {
+      "marker": "% CITE-GAP siglip",
+      "purpose": "foundational source for the named frozen SigLIP project component",
+      "status": "DEFERRED — bibliography/final-QA integration",
+      "reader_facing": false
+    },
+    {
+      "marker": "% CITE-GAP smollm2",
+      "purpose": "foundational source for the named frozen SmolLM2 project component",
+      "status": "DEFERRED — bibliography/final-QA integration",
+      "reader_facing": false
+    }
+  ],
+  "unused_foundational_gap": {
+    "marker": "% CITE-GAP smolvlm",
+    "reason": "SmolVLM is not needed in the concise Introduction method overview and is therefore omitted rather than presented as a core method"
+  },
+  "labels_created": [
+    {"label": "sec:ch1-motivation", "kind": "section"},
+    {"label": "sec:ch1-gap", "kind": "section"},
+    {"label": "sec:ch1-rqs", "kind": "section"},
+    {"label": "rq:rq1", "kind": "explicit distinct hyperref target", "mechanism": "phantomsection followed by label"},
+    {"label": "rq:rq2", "kind": "explicit distinct hyperref target", "mechanism": "phantomsection followed by label"},
+    {"label": "rq:rq3", "kind": "explicit distinct hyperref target", "mechanism": "phantomsection followed by label"},
+    {"label": "sec:ch1-approach", "kind": "section"},
+    {"label": "sec:ch1-structure", "kind": "section"}
+  ],
+  "pending_resolution_sites": [
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/methodology.tex",
+      "marker": "% XREF-PENDING: Chapter 1 RQ definitions",
+      "status": "deferred to final integration; protected chapter not modified"
+    },
+    {
+      "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/chapters/conclusions.tex",
+      "marker": "% XREF-PENDING: Chapter 1 RQ definitions",
+      "status": "deferred to final integration; protected chapter not modified"
+    }
+  ],
+  "structural_identifiers": [
+    "32-query latent reasoner",
+    "questions requiring four or more reasoning steps",
+    "top-100 answer-space view",
+    "top-1000 answer-space view"
+  ],
+  "numeric_anchors": [],
+  "tables": [],
+  "figures": []
+}
