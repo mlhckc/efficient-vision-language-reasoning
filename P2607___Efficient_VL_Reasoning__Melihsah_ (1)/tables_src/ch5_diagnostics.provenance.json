@@ -380,10 +380,11 @@
   ],
   "csv_sha256": "4c5406590c9050908a4e67b1b21f03a27fdb8068bff69a734d325a4f05cb65f3",
   "generated_tex": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables/ch5_diagnostics.tex",
-  "generated_tex_sha256": "56434641753dbb8a9d9a7e505eeb7de377d0292d4e0ebdcbc29ec8540455fe17",
+  "generated_tex_sha256": "71ded0b267bafc87b1058f701ef3c7fc377ffca7fd314f6ac719858f1b19ed14",
   "converter": {
     "path": "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tools/tab2latex.py",
     "sha256": "c441d40b2b10a7a4294c4f15b12bc450f7ae73a9435e3d15394940c0f0c5a546",
+    "presentation_transformation": "reader-facing header relabelling only; source CSV headers, scientific cells and row order unchanged",
     "header_map": {
       "probe": "Probe",
       "intervention timing": "Timing",
@@ -391,8 +392,8 @@
       "standard accuracy": "Standard accuracy",
       "intervened accuracy": "Intervened accuracy",
       "accuracy change": "Accuracy change",
-      "standard >=4 lift": "Standard >=4 lift",
-      "intervened >=4 lift": "Intervened >=4 lift",
+      "standard >=4 lift": "Standard lift (4+ steps)",
+      "intervened >=4 lift": "Intervened lift (4+ steps)",
       "shuffled drop (probe; full)": "Shuffled drop (probe; full)"
     },
     "verify": true

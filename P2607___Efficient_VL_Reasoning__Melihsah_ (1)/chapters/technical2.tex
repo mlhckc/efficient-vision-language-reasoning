@@ -57,16 +57,16 @@ uncertainty estimate for the reasoner.
 The ordered means provide evidence only for the three completed training
 conditions. They do not supply an evaluation-sampling interval, a smooth
 learning curve, or an estimate between the recorded scales. The comparison
-therefore establishes that the stored reasoner configurations improve over
-these three development runs, while leaving extrapolation outside the measured
-settings open.
+therefore establishes that the stored reasoner improves across the three tested
+training scales, while leaving extrapolation outside the measured settings
+open.
 
 \begin{table}[p]
 \centering
 \caption[Reasoner and fusion accuracy by training scale.]{Development accuracy on the 7,714-row top-100 view. Reasoner levels use seeds 0/1/2; displayed fusion levels use seeds 0/1/2/3/42. The R--F gaps are canonical reasoner-minus-fusion comparisons on seeds 0/1/2 only and have no clustered interval. SD is variation across training seeds, not a confidence interval.}
 \label{tab:ch5-scaling}
-\begingroup\scriptsize\setlength{\tabcolsep}{0.5pt}
-\renewenvironment{longtable}[1]{\begin{tabular}{|p{0.075\textwidth}|p{0.05\textwidth}|p{0.085\textwidth}|p{0.27\textwidth}|p{0.085\textwidth}|p{0.065\textwidth}|p{0.075\textwidth}|p{0.075\textwidth}|}}{\end{tabular}}
+\begingroup\scriptsize\setlength{\tabcolsep}{1pt}
+\renewenvironment{longtable}[1]{\begin{tabular}{|p{0.075\textwidth}|p{0.05\textwidth}|p{0.085\textwidth}|p{0.23\textwidth}|p{0.13\textwidth}|p{0.085\textwidth}|p{0.09\textwidth}|p{0.09\textwidth}|}}{\end{tabular}}
 \let\endhead\relax\renewcommand{\_}{\textunderscore\allowbreak}
 \input{tables/ch5_scaling.tex}
 \endgroup
@@ -74,7 +74,7 @@ settings open.
 
 \section{Reasoner against the global fusion head}
 \label{sec:ch5-fusion}
-The controlled comparison uses only seeds 0, 1 and 2 from both systems. At
+The same-seed comparison uses seeds 0, 1 and 2 from both systems. At
 40k, the canonical reasoner-minus-fusion accuracy gap is +0.00307 with seed SD
 0.00622. Its seed-level values are +0.01024, -0.00025 and -0.00078, so two of
 the three stored gaps are negative. This agrees with the bounded 40k finding
@@ -135,7 +135,7 @@ share of 0.02. Attention mass does not explain a prediction or establish that
 CLS contains a reasoning process. Together, the diagnostics support only that
 the tested reasoner is sensitive to its token-input composition.
 
-Two simpler token references also remain below the reasoner at 40k. Mean-patch
+Two simpler reference heads also remain below the reasoner at 40k. Mean-patch
 concatenation reaches 0.51449 with seed SD 0.00191, while a direct linear
 classifier reaches 0.48125 with seed SD 0.00107. These reported references
 place the diagnostic in context but do not isolate why the full reasoner
@@ -146,7 +146,7 @@ performs differently.
 \caption[Token-input diagnostics at 40k.]{Stored 40k diagnostic values without evaluation-sampling intervals. D2 removes CLS only at test time for seeds 0/1/2. D3 trains and evaluates a patches-only model for seed 0. The standard columns are the corresponding full-token values. These probes test input sensitivity, not an internal reasoning mechanism.}
 \label{tab:ch5-diagnostics}
 \begingroup\scriptsize\setlength{\tabcolsep}{0.4pt}
-\renewenvironment{longtable}[1]{\begin{tabular}{|p{0.10\textwidth}|p{0.10\textwidth}|p{0.045\textwidth}|p{0.09\textwidth}|p{0.09\textwidth}|p{0.085\textwidth}|p{0.09\textwidth}|p{0.09\textwidth}|p{0.12\textwidth}|}}{\end{tabular}}
+\renewenvironment{longtable}[1]{\begin{tabular}{|p{0.15\textwidth}|p{0.10\textwidth}|p{0.045\textwidth}|p{0.09\textwidth}|p{0.09\textwidth}|p{0.085\textwidth}|p{0.09\textwidth}|p{0.09\textwidth}|p{0.10\textwidth}|}}{\end{tabular}}
 \let\endhead\relax\renewcommand{\_}{\textunderscore\allowbreak}
 \input{tables/ch5_diagnostics.tex}
 \endgroup
@@ -184,7 +184,8 @@ four-or-more-step view. The bucket intervals consequently describe sampling
 uncertainty within those particular development slices; they are not
 interchangeable with seed SD.
 
-The pooled deficit combines two operations defined in Methodology. First, each
+The pooled deficit combines two operations defined in
+Section~\ref{sec:ch3-statistics}. First, each
 bucket accuracy is compared with its fixed question prior to form a lift.
 Second, the unweighted mean of all four lifts is compared with the
 question-weighted combined lift for the four-step and five-or-more-step buckets.
