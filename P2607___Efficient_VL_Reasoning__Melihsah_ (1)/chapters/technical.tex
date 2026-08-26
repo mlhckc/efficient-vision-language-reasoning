@@ -40,12 +40,14 @@ basis for selecting among the 100 answers.
 
 Combining the two frozen vectors improved the result. Concatenation reached
 0.52398, compared with 0.45797 for question only. Their paired difference was
-+0.06601 with interval [0.05395, 0.07747], which excludes zero. This comparison
-is capacity-confounded because the multimodal head has a different input size,
-but it shows that the correct image adds useful information beyond the question
-representation. Fusion, which also includes product and absolute-difference
-features, reached 0.53840. The capacity controls below determine how much of
-that further increase can be attributed to the explicit interactions.
++0.06601 with interval [0.05395, 0.07747], which excludes zero. This
+comparison is capacity-confounded, because the multimodal head has a larger
+input and more trainable parameters, so on its own it shows only that adding the
+frozen image representation is associated with higher accuracy. Whether the
+heads depend on the correct image is tested directly in
+Section~\ref{sec:ch4-reliance}. Fusion, which also includes product and
+absolute-difference features, reached 0.53840. The capacity controls below
+determine how much of that further increase can be attributed to the explicit interactions.
 
 These results separate two questions. The concatenation comparison asks
 whether adding the frozen image representation is useful at all. The fusion
@@ -97,8 +99,10 @@ trainable-parameter budget. An interval excluding zero is used as bounded
 project evidence, rather than as a general claim about statistical
 significance.
 
-Figure~\ref{fig:ch4-ladder} shows the complete low-data ladder. The separate
-ablation in VE1-FIG-A1 adds supporting detail. At a matched 576k budget,
+Figure~\ref{fig:ch4-ladder} shows the complete low-data ladder. The
+interaction-term ablation, reproduced in the appendix, adds supporting detail.
+% XREF-PENDING: appendix figure VE1-FIG-A1
+At a matched 576k budget,
 product-only and absolute-difference-only heads improved over concatenation by
 +0.00957 and +0.00944, while their direct difference was +0.00013 with an
 interval crossing zero. Either term recovers much of the matched-budget
@@ -108,8 +112,8 @@ improvement, without establishing that the terms implement the same function.
 \centering
 \caption[Interaction and capacity contrasts.]{Paired contrasts on the 7,714-row top-100 development view. CAPACITY\_CONFOUNDED comparisons change features and capacity; CLEAN\_PAIRED\_CONTROL comparisons hold the trainable-parameter budget. ``Excludes zero'' is the project evidence criterion, not a significance test.}
 \label{tab:ch4-contrasts}
-\begingroup\tiny\setlength{\tabcolsep}{1.5pt}
-\renewenvironment{longtable}[1]{\begin{tabular}{|p{0.22\textwidth}|p{0.18\textwidth}|p{0.09\textwidth}|p{0.21\textwidth}|p{0.10\textwidth}|p{0.09\textwidth}|}}{\end{tabular}}
+\begingroup\scriptsize\setlength{\tabcolsep}{1pt}
+\renewenvironment{longtable}[1]{\begin{tabular}{|p{0.20\textwidth}|p{0.17\textwidth}|p{0.075\textwidth}|p{0.20\textwidth}|p{0.095\textwidth}|p{0.075\textwidth}|}}{\end{tabular}}
 \let\endhead\relax\renewcommand{\_}{\textunderscore\allowbreak}
 \input{tables/ch4_contrasts.tex}
 \endgroup
@@ -123,8 +127,8 @@ improvement, without establishing that the terms implement the same function.
 
 \section{Visual reliance}
 \label{sec:ch4-reliance}
-The visual-reliance experiment changed the image input while leaving each
-question unchanged. In v2\_06, image embeddings were either permuted across
+In the visual-reliance experiment (v2\_06), the image input changed while each
+question remained unchanged. Image embeddings were either permuted across
 development rows or replaced by zeros. The row-level permutation contained 11
 self-pairs, or 0.14\% of rows, which slightly dilutes the shuffled
 intervention. This is the controlling intervention generation for RQ1.
@@ -163,8 +167,9 @@ only rose from 0.45797 to 0.48294 and 0.49769. Every stored series therefore
 increased across the three scales.
 
 The fusion-minus-concatenation difference narrowed from +0.01442 at 40k to a
-seed-mean difference of +0.00365 at 250k. Seeds 2 and 42 reversed its direction
-at 250k. No image-clustered interval is available for v2\_07, and the figure's
+seed-mean difference of +0.0037 at 250k (seed SD of the five paired gaps
+0.0044). Seeds 2 and 42 reversed its direction at 250k. No image-clustered
+interval is available for the scaling study (v2\_07), and the figure's
 error bars are sample SD across training seeds rather than confidence
 intervals. The narrowing is therefore tentative, not statistically
 established. Three training sizes also do not support a general scaling law.
@@ -220,7 +225,7 @@ contrast connects the two families at this scale. The observation can therefore
 show that the values are comparable, but not that one architecture has been
 shown to outperform the other.
 
-\begin{figure}[p]
+\begin{figure}[tbp]
 \centering\includegraphics[width=\textwidth]{ve1/VE1-FIG-07.pdf}
 \caption[Representation sensitivity at 40k.]{SigLIP-minus-CLIP differences on the same 7,714 development rows. Intervals are nominal image-clustered intervals. Representation is not isolated: encoder identity, embedding width and head input width move together, training streams are not seed-paired, and no clustered contrast exists at 250k.}
 \label{fig:ch4-encoder}
@@ -262,17 +267,18 @@ because the controlling report does not state that value. No value is inferred
 to fill the presentation. This keeps the table tied to the frozen record and
 prevents a convenient arithmetic extension from becoming new evidence.
 
-\begin{table}[p]
+\begin{table}[tbp]
 \centering
 \caption[Answer-space size and development coverage.]{Top-100 and top-1000 results at 250k with distinct in-vocabulary denominators. The raw-distribution column copies the E3 report's derived values on the shared 10,004-row distribution. In-vocabulary accuracies are never differenced across answer spaces.}
 \label{tab:ch4-answer-space}
-\begingroup\tiny\setlength{\tabcolsep}{1.2pt}
-\renewenvironment{longtable}[1]{\begin{tabular}{|p{0.09\textwidth}|p{0.11\textwidth}|p{0.12\textwidth}|p{0.14\textwidth}|p{0.20\textwidth}|p{0.09\textwidth}|p{0.17\textwidth}|}}{\end{tabular}}
+\begingroup\scriptsize\setlength{\tabcolsep}{0.8pt}
+\renewenvironment{longtable}[1]{\begin{tabular}{|p{0.08\textwidth}|p{0.10\textwidth}|p{0.105\textwidth}|p{0.13\textwidth}|p{0.18\textwidth}|p{0.08\textwidth}|p{0.16\textwidth}|}}{\end{tabular}}
 \let\endhead\relax\renewcommand{\_}{\textunderscore\allowbreak}
 \input{tables/ch4_answer_space.tex}
 \endgroup
 \end{table}
 
+\clearpage
 \section{RQ1 summary}
 \label{sec:ch4-summary}
 On the 7,714-row top-100 development view, lightweight heads over frozen
@@ -284,10 +290,10 @@ capacity explains part of the gain, while the lower-budget comparison retains
 evidence for the feature change. The multimodal systems also depend on the
 correct image.
 
-More labelled questions improve every tested head, although the fusion
-advantage narrows at 250k without a clustered interval. The paired 40k encoder
-comparison supports representation quality as an important but confounded
-factor; at 250k SigLIP fusion is descriptively comparable to the larger
+More labelled questions improve every tested head in the stored seed means,
+although the fusion advantage narrows at 250k without a clustered interval.
+The paired 40k encoder comparison supports representation quality as an
+important but confounded factor; at 250k SigLIP fusion is descriptively comparable to the larger
 reasoner. The 1,000-answer vocabulary raises coverage and derived
 raw-distribution accuracy while defining a different in-vocabulary task.
 Chapter~8 considers the broader interpretation and limits of these

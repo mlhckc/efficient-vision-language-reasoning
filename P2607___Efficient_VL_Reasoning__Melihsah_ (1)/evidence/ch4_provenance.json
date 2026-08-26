@@ -60,6 +60,10 @@
     {
       "path": "docs/experiments/e3_vocab1000.md",
       "sha256": "e565217e2e0629a8740c8f923c1844376ef619d13fa262de8e55ffb6c62db0b1"
+    },
+    {
+      "path": "docs/experiments/v2_07_scaling.md",
+      "sha256": "d5f1cf821fc9226b4c24664243f188ec75b000d25e9c3c03755bad59f98ecb9a"
     }
   ],
   "claim_mappings": [
@@ -90,12 +94,12 @@
     },
     {
       "claim_id": "4.2.multimodal_gain",
-      "sentence_scope": "concat minus question-only +0.06601 and interval; capacity-confounded multimodal progression boundary",
+      "sentence_scope": "concat minus question-only +0.06601 and interval; capacity-confounded association only; correct-image dependence deferred to Section 4.4",
       "evidence_ids": [
         "EV-CON-v2_02.concat_minus_question_only.train_40k"
       ],
       "ledger_ids": [
-        "C01"
+        "C18"
       ],
       "sources": [
         "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-02.csv",
@@ -174,7 +178,7 @@
     },
     {
       "claim_id": "4.5.scaling",
-      "sentence_scope": "four 40k/100k/250k mean series, +0.00365 and two sign reversals; SD-only, three-scale and no-scaling-law boundaries",
+      "sentence_scope": "four 40k/100k/250k mean series; canonical 250k fusion-minus-concat +0.0037 with paired-gap seed SD 0.0044 and two sign reversals; SD-only, three-scale and no-scaling-law boundaries",
       "evidence_ids": [
         "EV-SEED-v2_07.question_only.train_40k",
         "EV-SEED-v2_07.question_only.train_100k",
@@ -195,7 +199,8 @@
       "sources": [
         "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-01.csv",
         "results/ve1/figures/VE1-FIG-03.data.json",
-        "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-07.csv"
+        "P2607___Efficient_VL_Reasoning__Melihsah_ (1)/tables_src/VE1-TAB-07.csv",
+        "docs/experiments/v2_07_scaling.md"
       ]
     },
     {
@@ -257,7 +262,7 @@
     },
     {
       "claim_id": "4.8.summary",
-      "sentence_scope": "bounded RQ1 answer and explicit non-established conclusions",
+      "sentence_scope": "bounded RQ1 answer, including the stored-seed-mean qualifier for scaling, and explicit non-established conclusions",
       "ledger_ids": [
         "C01",
         "C02",
