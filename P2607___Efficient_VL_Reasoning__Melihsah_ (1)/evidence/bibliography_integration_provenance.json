@@ -1,0 +1,986 @@
+{
+  "schema_version": 1,
+  "task_id": "dissertation-12-bibliography-integration",
+  "stage": "stage_1_bibliography_authority_metadata",
+  "created_at_utc": "2026-08-27T01:17:04Z",
+  "verification_date": "2026-08-27",
+  "base_commit": "abcf0a8477985474dc867f92a17a7f2c12a4d499",
+  "bibliography": {
+    "path": "references/references.bib",
+    "sha256_before": "ebff6b25ef20b0672c154e56e678356bc8245b6cbf5d85aff63371968b6d2705",
+    "sha256_after": "9085b50bd5cf907cc808136cce96fc0f71da1eeb866938db168765332cdcaa9e",
+    "entry_count_before": 72,
+    "entry_count_after": 80,
+    "bibliography_modified": true,
+    "key_inventory_sha256": "32626cfbf47ceb6bbe6072c1400a2cff206e4ce51f94b7e4e3b344391298afce"
+  },
+  "human_decisions": {
+    "H_1": {
+      "decision": "yes — complete author lists for cited entries only",
+      "cited_existing_key_count": 33,
+      "abbreviated_fields_expanded": 30,
+      "wrong_complete_length_field_repaired": 1,
+      "already_complete_unchanged": [
+        "hessel2020emap",
+        "hudson2019gqa"
+      ],
+      "skipped_or_ambiguous": []
+    },
+    "H_2": {
+      "decision": "leave kang2025ideal as preprint",
+      "implemented": true
+    },
+    "H_3": {
+      "decision": "Chapter 8 markers are removal-only in Stage 2",
+      "implemented_in_stage_1": false,
+      "recorded_for_stage_2": true
+    }
+  },
+  "support_role_separation": [
+    {
+      "key": "radford2021clip",
+      "supports": "CLIP foundational method",
+      "does_not_support": "exact OpenCLIP/LAION checkpoint identity"
+    },
+    {
+      "key": "ilharco2021openclip",
+      "supports": "software and distribution family used to obtain the implemented checkpoint",
+      "does_not_support": "the exact pinned checkpoint revision or weight identity"
+    },
+    {
+      "key": "schuhmann2022laion5b",
+      "supports": "dataset and training-data family context",
+      "does_not_support": "the exact laion2b_s34b_b79k checkpoint identity"
+    },
+    {
+      "key": "zhai2023siglip",
+      "supports": "SigLIP foundational method",
+      "does_not_support": "the exact OpenCLIP-distributed project checkpoint identity"
+    },
+    {
+      "key": "benallal2025smollm2",
+      "supports": "SmolLM2 model family",
+      "does_not_support": "the project's exact pinned 135M or 360M revision identity"
+    },
+    {
+      "key": "marafioti2025smolvlm",
+      "supports": "SmolVLM model family",
+      "does_not_support": "the project's exact pinned Instruct checkpoint revisions"
+    }
+  ],
+  "added_entries": [
+    {
+      "key": "radford2021clip",
+      "type": "inproceedings",
+      "verified_authors": "Radford, Alec and Kim, Jong Wook and Hallacy, Chris and Ramesh, Aditya and Goh, Gabriel and Agarwal, Sandhini and Sastry, Girish and Askell, Amanda and Mishkin, Pamela and Clark, Jack and Krueger, Gretchen and Sutskever, Ilya",
+      "canonical_title": "Learning Transferable Visual Models From Natural Language Supervision",
+      "year": 2021,
+      "status": "peer reviewed",
+      "venue": "Proceedings of the 38th International Conference on Machine Learning; PMLR 139; 8748--8763",
+      "authority_type": "official proceedings",
+      "authority_url": "https://proceedings.mlr.press/v139/radford21a.html",
+      "verified_fields": [
+        "authors",
+        "title",
+        "booktitle",
+        "series",
+        "volume",
+        "pages",
+        "publisher",
+        "year",
+        "url"
+      ]
+    },
+    {
+      "key": "zhai2023siglip",
+      "type": "inproceedings",
+      "verified_authors": "Zhai, Xiaohua and Mustafa, Basil and Kolesnikov, Alexander and Beyer, Lucas",
+      "canonical_title": "Sigmoid Loss for Language Image Pre-Training",
+      "year": 2023,
+      "status": "peer reviewed",
+      "venue": "IEEE/CVF International Conference on Computer Vision (ICCV)",
+      "pages": "11941--11952",
+      "doi": "10.1109/ICCV51070.2023.01100",
+      "authority_type": "official IEEE DOI record",
+      "authority_url": "https://doi.org/10.1109/ICCV51070.2023.01100",
+      "authority_decision": "IEEE final-proceedings pagination selected; CVF open-access display uses different pagination",
+      "verified_fields": [
+        "authors",
+        "title",
+        "booktitle",
+        "pages",
+        "year",
+        "doi",
+        "url"
+      ]
+    },
+    {
+      "key": "benallal2025smollm2",
+      "type": "inproceedings",
+      "verified_authors": "Ben Allal, Loubna and Lozhkov, Anton and Bakouch, Elie and Martín Blázquez, Gabriel and Penedo, Guilherme and Tunstall, Lewis and Marafioti, Andrés and Piqueres Lajarín, Agustín and Kydlíček, Hynek and Srivastav, Vaibhav and Lochner, Joshua and Fahlgren, Caleb and Nguyen, Xuan Son and Burtenshaw, Ben and Fourrier, Clémentine and Zhao, Haojun and Larcher, Hugo and Morlon, Mathieu and Zakka, Cyril and Raffel, Colin and von Werra, Leandro and Wolf, Thomas",
+      "canonical_title": "SmolLM2: When Smol Goes Big — Data-Centric Training of a Fully Open Small Language Model",
+      "year": 2025,
+      "status": "peer reviewed",
+      "venue": "Proceedings of the Second Conference on Language Modeling (COLM)",
+      "arxiv": "2502.02737",
+      "authority_type": "official conference accepted-papers list plus primary author preprint",
+      "authority_urls": [
+        "https://colmweb.org/2025/AcceptedPapers.html",
+        "https://arxiv.org/abs/2502.02737"
+      ],
+      "verified_fields": [
+        "authors",
+        "published title",
+        "booktitle",
+        "year",
+        "eprint",
+        "url"
+      ]
+    },
+    {
+      "key": "marafioti2025smolvlm",
+      "type": "inproceedings",
+      "verified_authors": "Marafioti, Andrés and Zohar, Orr and Farré, Miquel and Noyan, Merve and Bakouch, Elie and Cuenca Jiménez, Pedro Manuel and Zakka, Cyril and Ben Allal, Loubna and Lozhkov, Anton and Tazi, Nouamane and Srivastav, Vaibhav and Lochner, Joshua and Larcher, Hugo and Morlon, Mathieu and Tunstall, Lewis and von Werra, Leandro and Wolf, Thomas",
+      "canonical_title": "SmolVLM: Redefining small and efficient multimodal models",
+      "year": 2025,
+      "status": "peer reviewed",
+      "venue": "Proceedings of the Second Conference on Language Modeling (COLM)",
+      "arxiv": "2504.05299",
+      "authority_type": "official conference accepted-papers list plus primary author preprint",
+      "authority_urls": [
+        "https://colmweb.org/2025/AcceptedPapers.html",
+        "https://arxiv.org/abs/2504.05299"
+      ],
+      "verified_fields": [
+        "authors",
+        "title",
+        "booktitle",
+        "year",
+        "eprint",
+        "url"
+      ]
+    },
+    {
+      "key": "ilharco2021openclip",
+      "type": "misc",
+      "verified_authors": "Ilharco, Gabriel and Wortsman, Mitchell and Carlini, Nicholas and Taori, Rohan and Dave, Achal and Shankar, Vaishaal and Namkoong, Hongseok and Miller, John and Hajishirzi, Hannaneh and Farhadi, Ali and Schmidt, Ludwig",
+      "canonical_title": "OpenCLIP",
+      "year": 2021,
+      "status": "software record",
+      "doi": "10.5281/zenodo.5143773",
+      "authority_type": "primary software archive",
+      "authority_url": "https://zenodo.org/records/5143773",
+      "verified_fields": [
+        "authors",
+        "title",
+        "howpublished",
+        "year",
+        "doi",
+        "url"
+      ]
+    },
+    {
+      "key": "schuhmann2022laion5b",
+      "type": "inproceedings",
+      "verified_authors": "Schuhmann, Christoph and Beaumont, Romain and Vencu, Richard and Gordon, Cade and Wightman, Ross and Cherti, Mehdi and Coombes, Theo and Katta, Aarush and Mullis, Clayton and Wortsman, Mitchell and Schramowski, Patrick and Kundurthy, Srivatsa and Crowson, Katherine and Schmidt, Ludwig and Kaczmarczyk, Robert and Jitsev, Jenia",
+      "canonical_title": "LAION-5B: An open large-scale dataset for training next generation image-text models",
+      "year": 2022,
+      "status": "peer reviewed",
+      "venue": "Advances in Neural Information Processing Systems 35, Datasets and Benchmarks Track",
+      "arxiv": "2210.08402",
+      "authority_type": "official conference record plus primary author preprint",
+      "authority_urls": [
+        "https://openreview.net/forum?id=M3Y74vmsMcY",
+        "https://arxiv.org/abs/2210.08402"
+      ],
+      "verified_fields": [
+        "authors",
+        "title",
+        "booktitle",
+        "year",
+        "eprint",
+        "url"
+      ]
+    },
+    {
+      "key": "efron1993bootstrap",
+      "type": "book",
+      "verified_authors": "Efron, Bradley and Tibshirani, Robert J.",
+      "canonical_title": "An Introduction to the Bootstrap",
+      "year": 1993,
+      "publisher": "Chapman & Hall",
+      "address": "New York",
+      "isbn": "0-412-04231-2",
+      "doi": null,
+      "authority_type": "original edition title/copyright record and library catalogue",
+      "authority_urls": [
+        "https://books.google.com/books?id=gLlpIUxRntoC",
+        "https://search.worldcat.org/title/An-introduction-to-the-bootstrap/oclc/25548967"
+      ],
+      "authority_decision": "Represent the internally consistent original 1993 Chapman & Hall edition; omit the later Springer digital DOI to avoid a hybrid edition record",
+      "verified_fields": [
+        "authors",
+        "title",
+        "publisher",
+        "address",
+        "year",
+        "isbn"
+      ]
+    },
+    {
+      "key": "field2007clusterbootstrap",
+      "type": "article",
+      "verified_authors": "Field, C. A. and Welsh, A. H.",
+      "canonical_title": "Bootstrapping Clustered Data",
+      "year": 2007,
+      "journal": "Journal of the Royal Statistical Society: Series B (Statistical Methodology)",
+      "volume": 69,
+      "number": 3,
+      "pages": "369--390",
+      "doi": "10.1111/j.1467-9868.2007.00593.x",
+      "authority_type": "publisher DOI record",
+      "authority_url": "https://doi.org/10.1111/j.1467-9868.2007.00593.x",
+      "verified_fields": [
+        "authors",
+        "title",
+        "journal",
+        "volume",
+        "number",
+        "pages",
+        "year",
+        "doi",
+        "url"
+      ]
+    }
+  ],
+  "modified_entries": [
+    {
+      "key": "bourigault2025frevl",
+      "prior_fields": {
+        "author": "Bourigault, Edouard and others"
+      },
+      "final_fields": {
+        "author": "Bourigault, Emmanuelle and Bourigault, Pauline"
+      },
+      "reason": "verified author correction",
+      "authority_type": "primary arXiv author record",
+      "authority_url": "https://arxiv.org/abs/2508.04469"
+    },
+    {
+      "key": "zhou2026alignment",
+      "prior_fields": {
+        "author": "Zhou, Zhuoyan and Xie, Xin",
+        "title": "Feature Alignment Determines Fusion Strategy"
+      },
+      "final_fields": {
+        "author": "Zhou, Zhiqiang and Xie, Xuezhen",
+        "title": "Feature Alignment Determines Fusion Strategy: A Comparative Study of Cross-Attention and Concatenation in Multimodal Learning"
+      },
+      "reason": "verified author and canonical-title corrections",
+      "authority_type": "primary arXiv author record",
+      "authority_url": "https://arxiv.org/abs/2606.01207"
+    },
+    {
+      "key": "kang2025ideal",
+      "prior_fields": {
+        "author": "Kang, Yukito and others"
+      },
+      "final_fields": {
+        "author": "Kang, Raphi and others"
+      },
+      "reason": "verified first-author correction; H-2 retains preprint status",
+      "authority_type": "primary arXiv author record",
+      "authority_url": "https://arxiv.org/abs/2503.08723"
+    },
+    {
+      "key": "kuhn2026levljepa",
+      "prior_fields": {
+        "author": "Kuhn, Lorenz and others"
+      },
+      "final_fields": {
+        "author": "Kuhn, Lukas and others"
+      },
+      "reason": "verified first-author correction",
+      "authority_type": "primary arXiv author record",
+      "authority_url": "https://arxiv.org/abs/2607.00784"
+    },
+    {
+      "key": "alam2026blindspot",
+      "prior_fields": {
+        "author": "Alam, Mohammad and others"
+      },
+      "final_fields": {
+        "author": "Alam, Nahid and others"
+      },
+      "reason": "verified first-author correction",
+      "authority_type": "primary arXiv author record",
+      "authority_url": "https://arxiv.org/abs/2601.09954"
+    }
+  ],
+  "retyped_entries": [
+    {
+      "key": "bourigault2025frevl",
+      "eprint": "2508.04469"
+    },
+    {
+      "key": "zhou2026alignment",
+      "eprint": "2606.01207"
+    },
+    {
+      "key": "zhou2015ibowimg",
+      "eprint": "1512.02167"
+    },
+    {
+      "key": "vallaeys2024depalm",
+      "eprint": "2403.13499"
+    },
+    {
+      "key": "kuhn2026levljepa",
+      "eprint": "2607.00784"
+    },
+    {
+      "key": "mokady2021clipcap",
+      "eprint": "2111.09734"
+    },
+    {
+      "key": "bai2023qwenvl",
+      "eprint": "2308.12966"
+    },
+    {
+      "key": "yao2024deco",
+      "eprint": "2405.20985"
+    },
+    {
+      "key": "bardes2024vjepa",
+      "eprint": "2404.08471"
+    },
+    {
+      "key": "elnouby2024aim",
+      "eprint": "2401.08541"
+    },
+    {
+      "key": "yang2024law",
+      "eprint": "2408.16357"
+    },
+    {
+      "key": "udandarao2025crepe",
+      "eprint": "2506.08227"
+    },
+    {
+      "key": "kang2025ideal",
+      "eprint": "2503.08723"
+    },
+    {
+      "key": "alam2026blindspot",
+      "eprint": "2601.09954"
+    }
+  ],
+  "retyping_contract": {
+    "from_type": "article",
+    "to_type": "misc",
+    "retained_fields": [
+      "key",
+      "canonical title",
+      "verified year",
+      "eprint",
+      "archivePrefix"
+    ],
+    "added_fields": [
+      "howpublished = arXiv preprint arXiv:<id>",
+      "url = https://arxiv.org/abs/<id>"
+    ],
+    "removed_fields": [
+      "redundant arXiv-only venue-status note"
+    ],
+    "authority_type": "primary arXiv record",
+    "verification_date": "2026-08-27"
+  },
+  "author_list_completion": {
+    "cited_existing_entries": 33,
+    "author_fields_changed": 31,
+    "abbreviated_fields_expanded": 30,
+    "wrong_complete_length_fields_repaired": 1,
+    "already_complete_verified_unchanged": [
+      {
+        "key": "hessel2020emap",
+        "author_field": "Hessel, Jack and Lee, Lillian",
+        "authority_url": "https://aclanthology.org/2020.emnlp-main.163/"
+      },
+      {
+        "key": "hudson2019gqa",
+        "author_field": "Hudson, Drew A. and Manning, Christopher D.",
+        "authority_url": "https://openaccess.thecvf.com/content_CVPR_2019/html/Hudson_GQA_A_New_Dataset_for_Real-World_Visual_Reasoning_and_Compositional_CVPR_2019_paper.html"
+      }
+    ],
+    "skipped_or_ambiguous": [],
+    "entries": [
+      {
+        "key": "alayrac2022flamingo",
+        "prior_author_field": "Alayrac, Jean-Baptiste and others",
+        "verified_full_author_field": "Alayrac, Jean-Baptiste and Donahue, Jeff and Luc, Pauline and Miech, Antoine and Barr, Iain and Hasson, Yana and Lenc, Karel and Mensch, Arthur and Millican, Katie and Reynolds, Malcolm and Ring, Roman and Rutherford, Eliza and Cabi, Serkan and Han, Tengda and Gong, Zhitao and Samangooei, Sina and Monteiro, Marianne and Menick, Jacob and Borgeaud, Sebastian and Brock, Andrew and Nematzadeh, Aida and Sharifzadeh, Sahand and Binkowski, Mikolaj and Barreira, Ricardo and Vinyals, Oriol and Zisserman, Andrew and Simonyan, Karen",
+        "authority_type": "primary arXiv author record",
+        "authority_url": "https://arxiv.org/abs/2204.14198"
+      },
+      {
+        "key": "antol2015vqa",
+        "prior_author_field": "Antol, Stanislaw and others",
+        "verified_full_author_field": "Antol, Stanislaw and Agrawal, Aishwarya and Lu, Jiasen and Mitchell, Margaret and Batra, Dhruv and Zitnick, C. Lawrence and Parikh, Devi",
+        "authority_type": "official CVF proceedings",
+        "authority_url": "https://openaccess.thecvf.com/content_iccv_2015/html/Antol_VQA_Visual_Question_ICCV_2015_paper.html"
+      },
+      {
+        "key": "benyounes2017mutan",
+        "prior_author_field": "Ben-Younes, Hedi and others",
+        "verified_full_author_field": "Ben-Younes, Hedi and Cadene, Remi and Cord, Matthieu and Thome, Nicolas",
+        "authority_type": "official CVF proceedings",
+        "authority_url": "https://openaccess.thecvf.com/content_ICCV_2017/html/Ben-Younes_MUTAN_Multimodal_Tucker_ICCV_2017_paper.html"
+      },
+      {
+        "key": "bourigault2025frevl",
+        "prior_author_field": "Bourigault, Edouard and others",
+        "verified_full_author_field": "Bourigault, Emmanuelle and Bourigault, Pauline",
+        "authority_type": "primary arXiv author record",
+        "authority_url": "https://arxiv.org/abs/2508.04469"
+      },
+      {
+        "key": "conneau2017infersent",
+        "prior_author_field": "Conneau, Alexis and others",
+        "verified_full_author_field": "Conneau, Alexis and Kiela, Douwe and Schwenk, Holger and Barrault, Lo{\\\"i}c and Bordes, Antoine",
+        "authority_type": "official ACL Anthology record",
+        "authority_url": "https://aclanthology.org/D17-1070/"
+      },
+      {
+        "key": "deuser2022less",
+        "prior_author_field": "Deuser, Fabian and others",
+        "verified_full_author_field": "Deuser, Fabian and Habel, Konrad and R{\\\"o}sch, Philipp J. and Oswald, Norbert",
+        "authority_type": "primary arXiv author record",
+        "authority_url": "https://arxiv.org/abs/2206.05281"
+      },
+      {
+        "key": "fu2025hidden",
+        "prior_author_field": "Fu, Stephanie and others",
+        "verified_full_author_field": "Fu, Stephanie and Bonnen, Tyler and Guillory, Devin and Darrell, Trevor",
+        "authority_type": "primary arXiv author record",
+        "authority_url": "https://arxiv.org/abs/2506.08008"
+      },
+      {
+        "key": "hu2024mqt",
+        "prior_author_field": "Hu, Wenbo and others",
+        "verified_full_author_field": "Hu, Wenbo and Dou, Zi-Yi and Li, Liunian Harold and Kamath, Amita and Peng, Nanyun and Chang, Kai-Wei",
+        "authority_type": "primary arXiv author record",
+        "authority_url": "https://arxiv.org/abs/2405.19315"
+      },
+      {
+        "key": "jabri2016revisiting",
+        "prior_author_field": "Jabri, Allan and others",
+        "verified_full_author_field": "Jabri, Allan and Joulin, Armand and van der Maaten, Laurens",
+        "authority_type": "primary arXiv author record",
+        "authority_url": "https://arxiv.org/abs/1606.08390"
+      },
+      {
+        "key": "jaegle2021perceiver",
+        "prior_author_field": "Jaegle, Andrew and others",
+        "verified_full_author_field": "Jaegle, Andrew and Gimeno, Felix and Brock, Andy and Vinyals, Oriol and Zisserman, Andrew and Carreira, Joao",
+        "authority_type": "official PMLR proceedings",
+        "authority_url": "https://proceedings.mlr.press/v139/jaegle21a.html"
+      },
+      {
+        "key": "kervadec2021gqaood",
+        "prior_author_field": "Kervadec, Corentin and others",
+        "verified_full_author_field": "Kervadec, Corentin and Antipov, Grigory and Baccouche, Moez and Wolf, Christian",
+        "authority_type": "official CVF proceedings",
+        "authority_url": "https://openaccess.thecvf.com/content/CVPR2021/html/Kervadec_Roses_Are_Red_Violets_Are_Blue..._But_Should_VQA_Expect_CVPR_2021_paper.html"
+      },
+      {
+        "key": "kervadec2021reasoning",
+        "prior_author_field": "Kervadec, Corentin and others",
+        "verified_full_author_field": "Kervadec, Corentin and Wolf, Christian and Antipov, Grigory and Baccouche, Moez and Nadri, Madiha",
+        "authority_type": "official NeurIPS proceedings",
+        "authority_url": "https://proceedings.neurips.cc/paper/2021/hash/51de85ddd068f0bc787691d356176df9-Abstract.html"
+      },
+      {
+        "key": "kil2024iimmr",
+        "prior_author_field": "Kil, Jihyung and others",
+        "verified_full_author_field": "Kil, Jihyung and Tavazoee, Farideh and Kang, Dongyeop and Kim, Joo-Kyung",
+        "authority_type": "primary arXiv author record",
+        "authority_url": "https://arxiv.org/abs/2402.11058"
+      },
+      {
+        "key": "koishigarina2026bow",
+        "prior_author_field": "Koishigarina, Darina and others",
+        "verified_full_author_field": "Koishigarina, Darina and Uselis, Arnas and Oh, Seong Joon",
+        "authority_type": "primary arXiv author record",
+        "authority_url": "https://arxiv.org/abs/2502.03566"
+      },
+      {
+        "key": "laurencon2024idefics2",
+        "prior_author_field": "Lauren{\\c c}on, Hugo and others",
+        "verified_full_author_field": "Lauren{\\c{c}}on, Hugo and Tronchon, L{\\acute e}o and Cord, Matthieu and Sanh, Victor",
+        "authority_type": "primary arXiv author record",
+        "authority_url": "https://arxiv.org/abs/2405.02246"
+      },
+      {
+        "key": "lewis2024bind",
+        "prior_author_field": "Lewis, Martha and others",
+        "verified_full_author_field": "Lewis, Martha and Nayak, Nihal V. and Yu, Peilin and Yu, Qinan and Merullo, Jack and Bach, Stephen H. and Pavlick, Ellie",
+        "authority_type": "primary arXiv author record",
+        "authority_url": "https://arxiv.org/abs/2212.10537"
+      },
+      {
+        "key": "li2023blip2",
+        "prior_author_field": "Li, Junnan and others",
+        "verified_full_author_field": "Li, Junnan and Li, Dongxu and Savarese, Silvio and Hoi, Steven",
+        "authority_type": "official PMLR proceedings",
+        "authority_url": "https://proceedings.mlr.press/v202/li23q.html"
+      },
+      {
+        "key": "manas2023mapl",
+        "prior_author_field": "Ma{\\~n}as, Oscar and others",
+        "verified_full_author_field": "Ma{\\~n}as, Oscar and Rodriguez, Pau and Ahmadi, Saba and Nematzadeh, Aida and Goyal, Yash and Agrawal, Aishwarya",
+        "authority_type": "primary arXiv author record",
+        "authority_url": "https://arxiv.org/abs/2210.07179"
+      },
+      {
+        "key": "mckinzie2024mm1",
+        "prior_author_field": "McKinzie, Brandon and others",
+        "verified_full_author_field": "McKinzie, Brandon and Gan, Zhe and Fauconnier, Jean-Philippe and Dodge, Sam and Zhang, Bowen and Dufter, Philipp and Shah, Dhruti and Du, Xianzhi and Peng, Futang and Weers, Floris and Belyi, Anton and Zhang, Haotian and Singh, Karanjeet and Kang, Doug and Jain, Ankur and Hè, Hongyu and Schwarzer, Max and Gunter, Tom and Kong, Xiang and Zhang, Aonan and Wang, Jianyu and Wang, Chong and Du, Nan and Lei, Tao and Wiseman, Sam and Yin, Guoli and Lee, Mark and Wang, Zirui and Pang, Ruoming and Grasch, Peter and Toshev, Alexander and Yang, Yinfei",
+        "authority_type": "primary arXiv author record",
+        "authority_url": "https://arxiv.org/abs/2403.09611"
+      },
+      {
+        "key": "merullo2023limber",
+        "prior_author_field": "Merullo, Jack and others",
+        "verified_full_author_field": "Merullo, Jack and Castricato, Louis and Eickhoff, Carsten and Pavlick, Ellie",
+        "authority_type": "primary arXiv author record",
+        "authority_url": "https://arxiv.org/abs/2209.15162"
+      },
+      {
+        "key": "psomas2026ep",
+        "prior_author_field": "Psomas, Bill and others",
+        "verified_full_author_field": "Psomas, Bill and Christopoulos, Dionysis and Baltzi, Eirini and Kakogeorgiou, Ioannis and Aravanis, Tilemachos and Komodakis, Nikos and Karantzalos, Konstantinos and Avrithis, Yannis and Tolias, Giorgos",
+        "authority_type": "primary arXiv author record",
+        "authority_url": "https://arxiv.org/abs/2506.10178"
+      },
+      {
+        "key": "shukor2023epalm",
+        "prior_author_field": "Shukor, Mustafa and others",
+        "verified_full_author_field": "Shukor, Mustafa and Dancette, Corentin and Cord, Matthieu",
+        "authority_type": "official CVF proceedings",
+        "authority_url": "https://openaccess.thecvf.com/content/ICCV2023/html/Shukor_eP-ALM_Efficient_Perceptual_Augmentation_of_Language_Models_ICCV_2023_paper.html"
+      },
+      {
+        "key": "takishita2025compensate",
+        "prior_author_field": "Takishita, Sho and others",
+        "verified_full_author_field": "Takishita, Sho and Gala, Jay and Mohamed, Abdelrahman and Inui, Kentaro and Kementchedjhieva, Yova",
+        "authority_type": "primary arXiv author record",
+        "authority_url": "https://arxiv.org/abs/2506.05439"
+      },
+      {
+        "key": "thrush2022winoground",
+        "prior_author_field": "Thrush, Tristan and others",
+        "verified_full_author_field": "Thrush, Tristan and Jiang, Ryan and Bartolo, Max and Singh, Amanpreet and Williams, Adina and Kiela, Douwe and Ross, Candace",
+        "authority_type": "official CVF proceedings",
+        "authority_url": "https://openaccess.thecvf.com/content/CVPR2022/html/Thrush_Winoground_Probing_Vision_and_Language_Models_for_Visio-Linguistic_Compositionality_CVPR_2022_paper.html"
+      },
+      {
+        "key": "tong2024mmvp",
+        "prior_author_field": "Tong, Shengbang and others",
+        "verified_full_author_field": "Tong, Shengbang and Liu, Zhuang and Zhai, Yuexiang and Ma, Yi and LeCun, Yann and Xie, Saining",
+        "authority_type": "official CVF proceedings",
+        "authority_url": "https://openaccess.thecvf.com/content/CVPR2024/html/Tong_Eyes_Wide_Shut_Exploring_the_Visual_Shortcomings_of_Multimodal_LLMs_CVPR_2024_paper.html"
+      },
+      {
+        "key": "tsimpoukelli2021frozen",
+        "prior_author_field": "Tsimpoukelli, Maria and others",
+        "verified_full_author_field": "Tsimpoukelli, Maria and Menick, Jacob and Cabi, Serkan and Eslami, S. M. Ali and Vinyals, Oriol and Hill, Felix",
+        "authority_type": "primary arXiv author record",
+        "authority_url": "https://arxiv.org/abs/2106.13884"
+      },
+      {
+        "key": "vallaeys2024depalm",
+        "prior_author_field": "Vallaeys, Th{\\'e}ophane and others",
+        "verified_full_author_field": "Vallaeys, Th{\\acute e}ophane and Shukor, Mustafa and Cord, Matthieu and Verbeek, Jakob",
+        "authority_type": "primary arXiv author record",
+        "authority_url": "https://arxiv.org/abs/2403.13499"
+      },
+      {
+        "key": "yuksekgonul2023aro",
+        "prior_author_field": "Yuksekgonul, Mert and others",
+        "verified_full_author_field": "Yuksekgonul, Mert and Bianchi, Federico and Kalluri, Pratyusha and Jurafsky, Dan and Zou, James",
+        "authority_type": "primary arXiv author record",
+        "authority_url": "https://arxiv.org/abs/2210.01936"
+      },
+      {
+        "key": "zhai2022scaling",
+        "prior_author_field": "Zhai, Xiaohua and others",
+        "verified_full_author_field": "Zhai, Xiaohua and Kolesnikov, Alexander and Houlsby, Neil and Beyer, Lucas",
+        "authority_type": "official CVF proceedings",
+        "authority_url": "https://openaccess.thecvf.com/content/CVPR2022/html/Zhai_Scaling_Vision_Transformers_CVPR_2022_paper.html"
+      },
+      {
+        "key": "zhou2015ibowimg",
+        "prior_author_field": "Zhou, Bolei and others",
+        "verified_full_author_field": "Zhou, Bolei and Tian, Yuandong and Sukhbaatar, Sainbayar and Szlam, Arthur and Fergus, Rob",
+        "authority_type": "primary arXiv author record",
+        "authority_url": "https://arxiv.org/abs/1512.02167"
+      },
+      {
+        "key": "zhou2026alignment",
+        "prior_author_field": "Zhou, Zhuoyan and Xie, Xin",
+        "verified_full_author_field": "Zhou, Zhiqiang and Xie, Xuezhen",
+        "authority_type": "primary arXiv author record",
+        "authority_url": "https://arxiv.org/abs/2606.01207"
+      }
+    ],
+    "verification_date": "2026-08-27"
+  },
+  "authority_discrepancies": [
+    {
+      "key": "bourigault2025frevl",
+      "classification": "bounded stage discrepancy",
+      "observation": "An official ICCV Workshops record is now discoverable although the locked Claude plan classifies the entry in the 14-record arXiv-only set.",
+      "stage_1_action": "Retain the explicitly authorised honest arXiv misc representation and corrected authors; do not perform an unplanned venue migration.",
+      "review_required": "Claude Stage-1 reviewer may decide whether a later authority-only revision should migrate the venue before Stage 2.",
+      "official_record": "https://openaccess.thecvf.com/ICCV2025_workshops/"
+    },
+    {
+      "key": "zhai2023siglip",
+      "classification": "pagination authority selection",
+      "observation": "IEEE DOI pagination and CVF open-access display pagination differ.",
+      "stage_1_action": "Use IEEE final-proceedings pages 11941--11952 as specified by the approved plan.",
+      "authority": "https://doi.org/10.1109/ICCV51070.2023.01100"
+    }
+  ],
+  "planned_stage_2": {
+    "status": "not_started",
+    "cite_gap_count": 18,
+    "inventory": [
+      {
+        "id": "G1",
+        "file": "chapters/introduction.tex",
+        "baseline_line": 95,
+        "class": "clip_foundation",
+        "planned_action": "insert radford2021clip then remove marker"
+      },
+      {
+        "id": "G2",
+        "file": "chapters/introduction.tex",
+        "baseline_line": 98,
+        "class": "siglip",
+        "planned_action": "insert zhai2023siglip then remove marker"
+      },
+      {
+        "id": "G3",
+        "file": "chapters/introduction.tex",
+        "baseline_line": 105,
+        "class": "smollm2",
+        "planned_action": "insert benallal2025smollm2 then remove marker"
+      },
+      {
+        "id": "G4",
+        "file": "chapters/theory.tex",
+        "baseline_line": 17,
+        "class": "clip_foundation",
+        "planned_action": "insert radford2021clip then remove marker"
+      },
+      {
+        "id": "G5",
+        "file": "chapters/theory.tex",
+        "baseline_line": 18,
+        "class": "siglip",
+        "planned_action": "insert zhai2023siglip then remove marker"
+      },
+      {
+        "id": "G6",
+        "file": "chapters/theory.tex",
+        "baseline_line": 51,
+        "class": "smollm2",
+        "planned_action": "insert benallal2025smollm2 then remove marker"
+      },
+      {
+        "id": "G7",
+        "file": "chapters/theory.tex",
+        "baseline_line": 70,
+        "class": "smolvlm",
+        "planned_action": "insert marafioti2025smolvlm then remove marker"
+      },
+      {
+        "id": "G8",
+        "file": "chapters/methodology.tex",
+        "baseline_line": 5,
+        "class": "clip_foundation",
+        "planned_action": "insert radford2021clip then remove marker"
+      },
+      {
+        "id": "G9",
+        "file": "chapters/methodology.tex",
+        "baseline_line": 88,
+        "class": "clip_foundation",
+        "planned_action": "insert ilharco2021openclip and schuhmann2022laion5b for software/data context then remove marker"
+      },
+      {
+        "id": "G10",
+        "file": "chapters/methodology.tex",
+        "baseline_line": 95,
+        "class": "siglip",
+        "planned_action": "insert zhai2023siglip then remove marker"
+      },
+      {
+        "id": "G11",
+        "file": "chapters/methodology.tex",
+        "baseline_line": 98,
+        "class": "smollm2",
+        "planned_action": "insert benallal2025smollm2 then remove marker"
+      },
+      {
+        "id": "G12",
+        "file": "chapters/methodology.tex",
+        "baseline_line": 147,
+        "class": "smolvlm",
+        "planned_action": "insert marafioti2025smolvlm then remove marker"
+      },
+      {
+        "id": "G13",
+        "file": "chapters/methodology.tex",
+        "baseline_line": 228,
+        "class": "bootstrap_methodology",
+        "planned_action": "insert efron1993bootstrap and field2007clusterbootstrap in one group then remove marker"
+      },
+      {
+        "id": "G14",
+        "file": "chapters/methodology.tex",
+        "baseline_line": 229,
+        "class": "clustered_or_cluster_robust_inference",
+        "planned_action": "same citation group as G13 then remove marker"
+      },
+      {
+        "id": "G15",
+        "file": "chapters/discussion.tex",
+        "baseline_line": 15,
+        "class": "clip_foundation",
+        "planned_action": "removal only; first use is cited outside the results paragraph"
+      },
+      {
+        "id": "G16",
+        "file": "chapters/discussion.tex",
+        "baseline_line": 43,
+        "class": "siglip",
+        "planned_action": "removal only; avoid attaching a foundational citation to a project result"
+      },
+      {
+        "id": "G17",
+        "file": "chapters/discussion.tex",
+        "baseline_line": 97,
+        "class": "smollm2",
+        "planned_action": "removal only; avoid attaching a foundational citation to a project result"
+      },
+      {
+        "id": "G18",
+        "file": "chapters/discussion.tex",
+        "baseline_line": 142,
+        "class": "smolvlm",
+        "planned_action": "removal only; avoid attaching a foundational citation to a project result"
+      }
+    ]
+  },
+  "resolved_cite_gaps": [],
+  "cite_gap_markers_untouched": true,
+  "chapters_touched": [],
+  "scientific_prose_changed": false,
+  "scratch_bibliography_render_harness": {
+    "status": "passed",
+    "location": "/tmp/dissertation-bib-stage1-final.tKU3mp (scratch only; not tracked)",
+    "style": "myabbrvnat",
+    "selection": "all bibliography entries via \\nocite{*}",
+    "tested_keys": [
+      "alam2026blindspot",
+      "alayrac2022flamingo",
+      "antol2015vqa",
+      "bai2023qwenvl",
+      "bardes2024vjepa",
+      "benallal2025smollm2",
+      "benyounes2017mutan",
+      "benyounes2019block",
+      "bourigault2025frevl",
+      "cha2024honeybee",
+      "conneau2017infersent",
+      "dai2023instructblip",
+      "darcet2024registers",
+      "deuser2022less",
+      "diwan2022winoground",
+      "dumpala2024sugarcrepepp",
+      "efron1993bootstrap",
+      "elnouby2024aim",
+      "field2007clusterbootstrap",
+      "fu2025hidden",
+      "fukui2016mcb",
+      "hessel2020emap",
+      "hsieh2023sugarcrepe",
+      "hu2024mqt",
+      "huang2024conme",
+      "hudson2019gqa",
+      "ilharco2021openclip",
+      "jabri2016revisiting",
+      "jaegle2021perceiver",
+      "kamath2023whatsup",
+      "kamath2024hardpositive",
+      "kang2025ideal",
+      "kang2025sink",
+      "kar2024brave",
+      "karamcheti2024prismatic",
+      "kervadec2021gqaood",
+      "kervadec2021reasoning",
+      "kil2024iimmr",
+      "kim2017mlb",
+      "koishigarina2026bow",
+      "kuhn2026levljepa",
+      "kumar2022hateclipper",
+      "laurencon2024idefics2",
+      "lewis2024bind",
+      "li2023blip2",
+      "li2025patchcls",
+      "liang2023pid",
+      "lin2022evl",
+      "liu2024llava15",
+      "ma2023crepe",
+      "manas2023mapl",
+      "marafioti2025smolvlm",
+      "mckinzie2024mm1",
+      "merullo2023limber",
+      "modzero2023",
+      "mokady2021clipcap",
+      "paiss2023count",
+      "psomas2026ep",
+      "radford2021clip",
+      "schuhmann2022laion5b",
+      "shen2022clipvil",
+      "shukor2023epalm",
+      "song2022tapc",
+      "takishita2025compensate",
+      "thrush2022winoground",
+      "tong2024cambrian",
+      "tong2024mmvp",
+      "tsimpoukelli2021frozen",
+      "udandarao2025crepe",
+      "vallaeys2024depalm",
+      "yamada2023lemons",
+      "yang2024law",
+      "yao2024deco",
+      "yuksekgonul2023aro",
+      "zhai2022scaling",
+      "zhai2023siglip",
+      "zhang2024vlmclassifier",
+      "zhao2022vlchecklist",
+      "zhou2015ibowimg",
+      "zhou2026alignment"
+    ],
+    "rendered_bibitem_count": 80,
+    "commands": [
+      "pdflatex -interaction=nonstopmode -halt-on-error bibliography-harness.tex",
+      "bibtex bibliography-harness",
+      "pdflatex -interaction=nonstopmode -halt-on-error bibliography-harness.tex",
+      "pdflatex -interaction=nonstopmode -halt-on-error bibliography-harness.tex"
+    ],
+    "exit_codes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "bibtex_warning_count": 0,
+    "missing_required_field_warnings": 0,
+    "blank_or_fake_journal_count": 0,
+    "text_layer_anomaly_count": 0,
+    "pdf_pages": 6,
+    "visual_review": "All six pages inspected at normal/reduced page scale; 80 entries render without overlap, clipping or malformed output; model/dataset tokens SmolLM2, SmolVLM, OpenCLIP and LAION-5B retain intended capitalisation; arXiv misc records show howpublished and URL fields sensibly."
+  },
+  "main_dissertation_build": {
+    "status": "passed",
+    "location": "/tmp/dissertation-stage1-main.1ZOco4/dissertation (scratch only)",
+    "commands": [
+      "pdflatex -interaction=nonstopmode -halt-on-error Dissertation_Template.tex",
+      "bibtex Dissertation_Template",
+      "pdflatex -interaction=nonstopmode -halt-on-error Dissertation_Template.tex",
+      "pdflatex -interaction=nonstopmode -halt-on-error Dissertation_Template.tex"
+    ],
+    "exit_codes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "undefined_citations": 0,
+    "undefined_references": 0,
+    "multiply_defined_labels": 0,
+    "duplicate_destinations": 0,
+    "overfull_boxes": 0,
+    "underfull_boxes": 110,
+    "bibtex_warning_count": 0,
+    "pdf_pages": 80,
+    "rendered_cite_gap_tokens": 0,
+    "malformed_glyph_count": 0,
+    "bibliography_visual_review": "Printed bibliography pages 67--69 inspected; complete authors and arXiv URLs render legibly; no overflow, clipping or malformed glyph."
+  },
+  "warning_classifications": [
+    {
+      "source": "BibTeX scratch harness and main build",
+      "count": 0,
+      "classification": "NONE",
+      "disposition": "No remaining BibTeX warning."
+    },
+    {
+      "source": "LaTeX main build",
+      "item": "110 underfull boxes",
+      "classification": "LEGITIMATE / INFORMATIONAL",
+      "disposition": "Inherited document-layout warnings; no Stage-1 bibliography overfull box or rendering defect."
+    },
+    {
+      "source": "LaTeX main build",
+      "item": "style/myfootnote package-name warning",
+      "classification": "LEGITIMATE / INFORMATIONAL",
+      "disposition": "Inherited template warning; unrelated to bibliography metadata."
+    }
+  ],
+  "protected_objects": {
+    "chapter_1": "8c21de8baa819ad0d0de053dd66b11a71f46b7a2714816a48b1cc3715c1a6b0f",
+    "chapter_2": "f1da83c604526c8de469771cabb18099b23a94ab119b0cd0fdfb6d0f4f8a0fba",
+    "chapter_3": "fdea277a70be5abb4dc779be541a9a011c19841785223e82e13e3fc14b8ecab5",
+    "chapter_4": "59b8966dbac8e07783aa3547860e04a2695bdd62336cc618137e64c863305579",
+    "chapter_5": "90972163ed72a96e906af6be88292d80d50d84ce4be4ff6a5bc73838db0b474b",
+    "chapter_6": "a2cf2a316b4e8d6b3765d6d39b4af266bde6bf2657929ff03beaf814f62347f1",
+    "chapter_7": "72f23e40df2db84e54a8ec9100f44427ca428a4da774d01517f67052c84f2088",
+    "chapter_8": "2d200fc14175013a50d8edf564afe2c810527de2bfb7311b8652a8570f7e5baa",
+    "chapter_9": "58385f7d7d2a9a685eb44d73ac696755fee6b995086d97aad567b551a19c1f89",
+    "abstract": "a05a1bb8b8bfe03da13d73da7641d2f1b82d42e30255a17b01dcec3caa977b80",
+    "main_template": "e56dc9b10b9ccd40a51771671550cc711f53d89f372afa86f3c2b52292a111f1",
+    "converter": "c441d40b2b10a7a4294c4f15b12bc450f7ae73a9435e3d15394940c0f0c5a546",
+    "frozen_ve1_figure": "6111bf26cb58570cfc03b286076ff2b27cc63f8e76261db849f737dfd4412668",
+    "frozen_ve1_tree": "6433c429d0699510357ff746e3703b5a710368e3",
+    "v2_protocol": "c163abb9842277c0808e8fb2415be2a244d940f0"
+  },
+  "f1_status": "not authorised",
+  "f2_status": "not authorised, not performed",
+  "held_out_result": null,
+  "stage_2_complete": false,
+  "pushed": false,
+  "cite_gap_inventory_sha256": "99076cdfb75cc97a888535fc95c2c612f64c54e6d755f2df8c26feb76b88ecb1",
+  "validation_history": [
+    {
+      "event": "initial scratch harness diagnostic",
+      "result": "failed before final validation",
+      "cause": "A mechanically inserted text-mode grave-accent macro for author Hongyu Hè was invalid in LaTeX",
+      "correction": "Use the primary-record UTF-8 spelling Hè in the author field",
+      "final_effect": "Final clean harness and main build both pass 0/0/0/0; no scientific or bibliographic identity claim changed."
+    }
+  ],
+  "packet_record_discrepancies": [
+    {
+      "file": "20-codex-plan-review.md",
+      "item": "author-field subtype count",
+      "recorded": "31 abbreviated fields",
+      "corrected_audit": "30 abbreviated fields, one complete-length but wrong field (zhou2026alignment), and two already-correct full fields",
+      "disposition": "The accepted packet artifact was not rewritten after the immutability guard rejected mutation; this provenance and all implementation/self-review records use the exact corrected breakdown. Total changed author fields remains 31."
+    }
+  ],
+  "updated_at_utc": "2026-08-27T01:47:47Z"
+}
