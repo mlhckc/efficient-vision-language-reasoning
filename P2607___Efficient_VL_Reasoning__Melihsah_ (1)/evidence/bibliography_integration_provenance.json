@@ -8,7 +8,7 @@
   "bibliography": {
     "path": "references/references.bib",
     "sha256_before": "ebff6b25ef20b0672c154e56e678356bc8245b6cbf5d85aff63371968b6d2705",
-    "sha256_after": "9085b50bd5cf907cc808136cce96fc0f71da1eeb866938db168765332cdcaa9e",
+    "sha256_after": "626be711b56cf83fdcb43845b48356cd6aa101da98376f2a3c3c6412996f127a",
     "entry_count_before": 72,
     "entry_count_after": 80,
     "bibliography_modified": true,
@@ -34,6 +34,11 @@
       "decision": "Chapter 8 markers are removal-only in Stage 2",
       "implemented_in_stage_1": false,
       "recorded_for_stage_2": true
+    },
+    "H_4": {
+      "decision": "yes — authorised",
+      "scope": "replace only the reviewed name-format token in style/myabbrvnat.bst",
+      "implemented": true
     }
   },
   "support_role_separation": [
@@ -257,14 +262,31 @@
     {
       "key": "bourigault2025frevl",
       "prior_fields": {
-        "author": "Bourigault, Edouard and others"
+        "author": "Bourigault, Edouard and others",
+        "stage_1_reviewed_entry_type": "misc",
+        "stage_1_reviewed_title": "FrEVL: Leveraging Frozen Pretrained Embeddings for Efficient Vision-Language Understanding",
+        "stage_1_reviewed_howpublished": "arXiv preprint arXiv:2508.04469",
+        "stage_1_reviewed_url": "https://arxiv.org/abs/2508.04469"
       },
       "final_fields": {
-        "author": "Bourigault, Emmanuelle and Bourigault, Pauline"
+        "author": "Bourigault, Emmanuelle and Bourigault, Pauline",
+        "entry_type": "inproceedings",
+        "title": "{FrEVL}: Leveraging Frozen Pretrained Embeddings for Efficient Vision-Language Understanding",
+        "booktitle": "Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV) Workshops",
+        "year": 2025,
+        "pages": "2348--2357",
+        "eprint": "2508.04469",
+        "archivePrefix": "arXiv",
+        "url": "https://openaccess.thecvf.com/content/ICCV2025W/SafeMM-AI/html/Bourigault_FrEVL_Leveraging_Frozen_Pretrained_Embeddings_for_Efficient_Vision-Language_Understanding_ICCVW_2025_paper.html",
+        "howpublished_removed": true
       },
-      "reason": "verified author correction",
-      "authority_type": "primary arXiv author record",
-      "authority_url": "https://arxiv.org/abs/2508.04469"
+      "reason": "verified author correction in Stage 1; official CVF proceedings migration and FrEVL title-token protection in Stage-1 Revision 2",
+      "authority_type": "primary arXiv author record and official CVF open-access proceedings record",
+      "authority_urls": [
+        "https://arxiv.org/abs/2508.04469",
+        "https://openaccess.thecvf.com/content/ICCV2025W/SafeMM-AI/html/Bourigault_FrEVL_Leveraging_Frozen_Pretrained_Embeddings_for_Efficient_Vision-Language_Understanding_ICCVW_2025_paper.html"
+      ],
+      "verification_date": "2026-08-27"
     },
     {
       "key": "zhou2026alignment",
@@ -318,10 +340,6 @@
     }
   ],
   "retyped_entries": [
-    {
-      "key": "bourigault2025frevl",
-      "eprint": "2508.04469"
-    },
     {
       "key": "zhou2026alignment",
       "eprint": "2606.01207"
@@ -473,7 +491,7 @@
       {
         "key": "jabri2016revisiting",
         "prior_author_field": "Jabri, Allan and others",
-        "verified_full_author_field": "Jabri, Allan and Joulin, Armand and van der Maaten, Laurens",
+        "verified_full_author_field": "Jabri, Allan and Joulin, Armand and {van der Maaten}, Laurens",
         "authority_type": "primary arXiv author record",
         "authority_url": "https://arxiv.org/abs/1606.08390"
       },
@@ -637,11 +655,13 @@
   "authority_discrepancies": [
     {
       "key": "bourigault2025frevl",
-      "classification": "bounded stage discrepancy",
-      "observation": "An official ICCV Workshops record is now discoverable although the locked Claude plan classifies the entry in the 14-record arXiv-only set.",
-      "stage_1_action": "Retain the explicitly authorised honest arXiv misc representation and corrected authors; do not perform an unplanned venue migration.",
-      "review_required": "Claude Stage-1 reviewer may decide whether a later authority-only revision should migrate the venue before Stage 2.",
-      "official_record": "https://openaccess.thecvf.com/ICCV2025_workshops/"
+      "classification": "resolved venue-authority discrepancy",
+      "observation": "The Stage-1 reviewed object retained an arXiv-only representation pending reviewer authority. The official current CVF SafeMM-AI record verifies an ICCV 2025 Workshops publication and reports pages 2348--2357.",
+      "stage_1_revision_2_action": "Migrated the entry to inproceedings, removed preprint-only howpublished, retained the arXiv identity, protected FrEVL, and used the current official CVF URL and pagination.",
+      "requested_pagination_condition": "The human instruction permitted pages 2327--2336 only if independently reconfirmed; the official current CVF record instead reports 2348--2357, so 2327--2336 was not used.",
+      "resolution_status": "resolved",
+      "authority": "https://openaccess.thecvf.com/content/ICCV2025W/SafeMM-AI/html/Bourigault_FrEVL_Leveraging_Frozen_Pretrained_Embeddings_for_Efficient_Vision-Language_Understanding_ICCVW_2025_paper.html",
+      "verification_date": "2026-08-27"
     },
     {
       "key": "zhai2023siglip",
@@ -789,9 +809,9 @@
   "scientific_prose_changed": false,
   "scratch_bibliography_render_harness": {
     "status": "passed",
-    "location": "/tmp/dissertation-bib-stage1-final.tKU3mp (scratch only; not tracked)",
-    "style": "myabbrvnat",
-    "selection": "all bibliography entries via \\nocite{*}",
+    "location": "/tmp/dissertation-bib-stage1-rev2.6S2PeA (scratch only; not tracked)",
+    "style": "myabbrvnat with the authorised one-token name-format repair",
+    "selection": "all 80 bibliography entries via \\nocite{*}",
     "tested_keys": [
       "alam2026blindspot",
       "alayrac2022flamingo",
@@ -892,11 +912,16 @@
     "blank_or_fake_journal_count": 0,
     "text_layer_anomaly_count": 0,
     "pdf_pages": 6,
-    "visual_review": "All six pages inspected at normal/reduced page scale; 80 entries render without overlap, clipping or malformed output; model/dataset tokens SmolLM2, SmolVLM, OpenCLIP and LAION-5B retain intended capitalisation; arXiv misc records show howpublished and URL fields sensibly."
+    "visual_review": "All six bibliography pages inspected. All 80 entries render; natural particle surnames, ordinary author names/order, diacritics, URLs and all F-3 title tokens are correct; no author disappears, literal brace renders or malformed output appears.",
+    "malformed_glyph_count": 0,
+    "bad_initial_comma_artifacts": 0,
+    "doubled_author_final_period_artifacts": 0,
+    "malformed_particle_artifacts": 0,
+    "literal_brace_artifacts": 0
   },
   "main_dissertation_build": {
     "status": "passed",
-    "location": "/tmp/dissertation-stage1-main.1ZOco4/dissertation (scratch only)",
+    "location": "/tmp/dissertation-bib-stage1-rev2-main.9YZmvQ/P2607___Efficient_VL_Reasoning__Melihsah_ (1) (scratch only)",
     "commands": [
       "pdflatex -interaction=nonstopmode -halt-on-error Dissertation_Template.tex",
       "bibtex Dissertation_Template",
@@ -914,25 +939,30 @@
     "multiply_defined_labels": 0,
     "duplicate_destinations": 0,
     "overfull_boxes": 0,
-    "underfull_boxes": 110,
+    "underfull_boxes": 115,
     "bibtex_warning_count": 0,
     "pdf_pages": 80,
     "rendered_cite_gap_tokens": 0,
     "malformed_glyph_count": 0,
-    "bibliography_visual_review": "Printed bibliography pages 67--69 inspected; complete authors and arXiv URLs render legibly; no overflow, clipping or malformed glyph."
+    "bibliography_visual_review": "Printed bibliography pages 67--69 (physical PDF pages 77--79) inspected; venue metadata, protected tokens, author names, line wrapping and URLs render legibly with no overlap, clipping or malformed glyph.",
+    "underfull_boxes_at_stage_1_review": 110,
+    "revision_2_additional_underfull_boxes": 5,
+    "bibliography_bad_initial_comma_artifacts": 0,
+    "bibliography_doubled_author_final_period_artifacts": 0,
+    "bibliography_literal_brace_artifacts": 0
   },
   "warning_classifications": [
     {
-      "source": "BibTeX scratch harness and main build",
+      "source": "BibTeX all-entry scratch harness and main build",
       "count": 0,
       "classification": "NONE",
-      "disposition": "No remaining BibTeX warning."
+      "disposition": "No BibTeX or missing-required-field warning remains."
     },
     {
       "source": "LaTeX main build",
-      "item": "110 underfull boxes",
+      "item": "115 underfull boxes (110 at the reviewed Stage-1 object; 5 additional after bibliography URL/name-format reflow)",
       "classification": "LEGITIMATE / INFORMATIONAL",
-      "disposition": "Inherited document-layout warnings; no Stage-1 bibliography overfull box or rendering defect."
+      "disposition": "No overfull box or unreadable bibliography output; the three real bibliography pages were inspected and accepted."
     },
     {
       "source": "LaTeX main build",
@@ -971,6 +1001,14 @@
       "cause": "A mechanically inserted text-mode grave-accent macro for author Hongyu Hè was invalid in LaTeX",
       "correction": "Use the primary-record UTF-8 spelling Hè in the author field",
       "final_effect": "Final clean harness and main build both pass 0/0/0/0; no scientific or bibliographic identity claim changed."
+    },
+    {
+      "event": "Stage-1 Revision-2 F-1–F-4 validation",
+      "result": "passed",
+      "scope": "FrEVL venue migration, three particle-surname protections, 18-key title-token protection and one-token myabbrvnat repair",
+      "all_entry_harness": "0/0/0/0; 80 entries; 0 BibTeX warnings; all six pages visually inspected",
+      "main_build": "0/0/0/0; 0 undefined citations/references; 0 multiply-defined labels; 0 duplicate destinations; 0 overfull boxes; bibliography pages 67--69 visually inspected",
+      "stage_2_effect": "none"
     }
   ],
   "packet_record_discrepancies": [
@@ -982,5 +1020,175 @@
       "disposition": "The accepted packet artifact was not rewritten after the immutability guard rejected mutation; this provenance and all implementation/self-review records use the exact corrected breakdown. Total changed author fields remains 31."
     }
   ],
-  "updated_at_utc": "2026-08-27T01:47:47Z"
+  "updated_at_utc": "2026-08-27T02:37:22Z",
+  "particle_surname_protection": {
+    "verification_date": "2026-08-27",
+    "reason": "BibTeX surname-particle protection for natural bibliography rendering; author identities and order unchanged",
+    "entries": [
+      {
+        "key": "jabri2016revisiting",
+        "prior_author_representation": "van der Maaten, Laurens",
+        "final_author_representation": "{van der Maaten}, Laurens",
+        "authority_type": "primary arXiv author record",
+        "authority_url": "https://arxiv.org/abs/1606.08390"
+      },
+      {
+        "key": "benallal2025smollm2",
+        "prior_author_representation": "von Werra, Leandro",
+        "final_author_representation": "{von Werra}, Leandro",
+        "authority_type": "official conference accepted-papers list plus primary author preprint",
+        "authority_urls": [
+          "https://colmweb.org/2025/AcceptedPapers.html",
+          "https://arxiv.org/abs/2502.02737"
+        ]
+      },
+      {
+        "key": "marafioti2025smolvlm",
+        "prior_author_representation": "von Werra, Leandro",
+        "final_author_representation": "{von Werra}, Leandro",
+        "authority_type": "official conference accepted-papers list plus primary author preprint",
+        "authority_urls": [
+          "https://colmweb.org/2025/AcceptedPapers.html",
+          "https://arxiv.org/abs/2504.05299"
+        ]
+      }
+    ],
+    "rendered_checks": {
+      "van der Maaten, L.": "passed",
+      "von Werra, L.": "passed",
+      "malformed_postposed_particles": 0,
+      "author_order_regressions": 0
+    }
+  },
+  "title_protection": {
+    "verification_date": "2026-08-27",
+    "reason": "Protect only the reviewed semantic acronym/model/dataset tokens from myabbrvnat title case conversion; title wording unchanged",
+    "entries": [
+      {
+        "key": "antol2015vqa",
+        "tokens": [
+          "VQA"
+        ]
+      },
+      {
+        "key": "benyounes2017mutan",
+        "tokens": [
+          "MUTAN"
+        ]
+      },
+      {
+        "key": "bourigault2025frevl",
+        "tokens": [
+          "FrEVL"
+        ]
+      },
+      {
+        "key": "deuser2022less",
+        "tokens": [
+          "CLIP",
+          "VizWiz"
+        ]
+      },
+      {
+        "key": "fu2025hidden",
+        "tokens": [
+          "VLMs"
+        ]
+      },
+      {
+        "key": "hudson2019gqa",
+        "tokens": [
+          "GQA"
+        ]
+      },
+      {
+        "key": "kervadec2021gqaood",
+        "tokens": [
+          "VQA"
+        ]
+      },
+      {
+        "key": "kervadec2021reasoning",
+        "tokens": [
+          "VQA"
+        ]
+      },
+      {
+        "key": "kil2024iimmr",
+        "tokens": [
+          "II-MMR"
+        ]
+      },
+      {
+        "key": "koishigarina2026bow",
+        "tokens": [
+          "CLIP"
+        ]
+      },
+      {
+        "key": "lewis2024bind",
+        "tokens": [
+          "CLIP"
+        ]
+      },
+      {
+        "key": "li2023blip2",
+        "tokens": [
+          "BLIP-2"
+        ]
+      },
+      {
+        "key": "manas2023mapl",
+        "tokens": [
+          "MAPL"
+        ]
+      },
+      {
+        "key": "mckinzie2024mm1",
+        "tokens": [
+          "MM1",
+          "LLM"
+        ]
+      },
+      {
+        "key": "shukor2023epalm",
+        "tokens": [
+          "eP-ALM"
+        ]
+      },
+      {
+        "key": "takishita2025compensate",
+        "tokens": [
+          "LLMs"
+        ]
+      },
+      {
+        "key": "tong2024mmvp",
+        "tokens": [
+          "LLMs"
+        ]
+      },
+      {
+        "key": "vallaeys2024depalm",
+        "tokens": [
+          "LLMs"
+        ]
+      }
+    ],
+    "affected_key_count": 18,
+    "unrelated_titles_changed": 0,
+    "rendered_literal_braces": 0
+  },
+  "style_repair": {
+    "path": "style/myabbrvnat.bst",
+    "sha256_before": "92c387ada59b93dd00566289b7e36d53c91dee05a550a5ef7460a3213fcde622",
+    "sha256_after": "ad453d85a081e9d1a83e0a0d7d2d77b6c53823883b4fb82412d97bcdd5957374",
+    "old_token": "{ll}{, jj}{, f. }{, vv}",
+    "new_token": "{vv\\~}{ll}{, jj}{, f.}",
+    "reason": "bibliography rendering repair only",
+    "scientific_meaning_changed": false,
+    "human_decision": "H-4 = YES — AUTHORISED",
+    "changed_token_count": 1,
+    "other_style_changes": 0
+  }
 }
