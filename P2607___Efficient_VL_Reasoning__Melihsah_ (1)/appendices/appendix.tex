@@ -44,34 +44,85 @@ This appendix reproduces supplementary figures and tables referred to in Chapter
 \clearpage
 \begin{table}[p]
 \centering
-\caption[Full slice statistics, v2\_02, 40k.]{Full slice statistics. What is every per-type, per-structure and per-step-bucket value, with its counts? Development-set result on one GQA subset. No held-out generalisation is claimed. E8A's projected interface is a learned common width, not a naturally shared pretrained embedding space. A1 minus A1r is the only clean within-size question-side pretraining contrast; A1 minus A0p also changes the representation space and the interface. Slices are unequal and dependent; every interval is clustered on the slice's own represented development images, never on rows. A drop under a wrong or removed image demonstrates reliance on the image. It is NOT proof of robust visual reasoning, of grounding or of compositional understanding. The question-only drop is exactly zero by construction and is a control, not a result. A system-level comparison. Input granularity, architecture and parameter count change together, so token-level access is not isolated as the cause. The step-bucket slices are printed as at most 2, at least 4 and at least 5 for the buckets $\leq$2, $\geq$4 and $\geq$5; the values are unchanged.}
+\caption[Full slice statistics, v2\_02, 40k, semantic slices.]{Full slice statistics. What is every per-type, per-structure and per-step-bucket value, with its counts? Development-set result on one GQA subset. No held-out generalisation is claimed. E8A's projected interface is a learned common width, not a naturally shared pretrained embedding space. A1 minus A1r is the only clean within-size question-side pretraining contrast; A1 minus A0p also changes the representation space and the interface. Slices are unequal and dependent; every interval is clustered on the slice's own represented development images, never on rows. A drop under a wrong or removed image demonstrates reliance on the image. It is NOT proof of robust visual reasoning, of grounding or of compositional understanding. The question-only drop is exactly zero by construction and is a control, not a result. A system-level comparison. Input granularity, architecture and parameter count change together, so token-level access is not isolated as the cause. The Slice and Quantity columns use the presentation wording \emph{at most 2}, \emph{at least 4 (combined)} and \emph{at least 5} for the corresponding frozen $\leq 2$, $\geq 4_{\mathrm{combined}}$ and $\geq 5$ bucket labels; underlying values are unchanged.}
 \label{tab:appA-slices}
-\begingroup\scriptsize\setlength{\tabcolsep}{2pt}
+\begingroup\scriptsize\setlength{\tabcolsep}{1pt}
 \makeatletter
 \let\appAArrayParboxRestore\@arrayparboxrestore
 \def\@arrayparboxrestore{\appAArrayParboxRestore\raggedright\let\\\tabularnewline}
 \makeatother
 \renewcommand{\_}{\textunderscore\allowbreak}
-\renewenvironment{longtable}[1]{\begin{tabular}{|p{0.07\textwidth}|p{0.12\textwidth}|p{0.05\textwidth}|p{0.11\textwidth}|p{0.15\textwidth}|p{0.08\textwidth}|p{0.15\textwidth}|p{0.07\textwidth}|p{0.07\textwidth}|}}{\end{tabular}}
+\renewenvironment{longtable}[1]{\begin{tabular}{|p{0.065\textwidth}|p{0.095\textwidth}|p{0.045\textwidth}|p{0.075\textwidth}|p{0.15\textwidth}|p{0.19\textwidth}|p{0.06\textwidth}|p{0.10\textwidth}|p{0.045\textwidth}|p{0.065\textwidth}|}}{\end{tabular}}
 \let\endhead\relax
-\input{tables/appA_slices_v202.tex}
+\input{tables/appA_slices_v202_semantic.tex}
+\endgroup
+\end{table}
+
+
+\clearpage
+\begin{table}[p]
+\centering
+\caption[Full slice statistics, v2\_02, 40k, program-length slices.]{Full slice statistics, continued: v2\_02, 40k, program-length slices. Same quantities, uncertainty notation and caveats as Table~\ref{tab:appA-slices}.}
+\label{tab:appA-slices-v202-program}
+\begingroup\scriptsize\setlength{\tabcolsep}{1pt}
+\makeatletter
+\let\appAArrayParboxRestore\@arrayparboxrestore
+\def\@arrayparboxrestore{\appAArrayParboxRestore\raggedright\let\\\tabularnewline}
+\makeatother
+\renewcommand{\_}{\textunderscore\allowbreak}
+\renewenvironment{longtable}[1]{\begin{tabular}{|p{0.065\textwidth}|p{0.095\textwidth}|p{0.045\textwidth}|p{0.075\textwidth}|p{0.15\textwidth}|p{0.19\textwidth}|p{0.06\textwidth}|p{0.10\textwidth}|p{0.045\textwidth}|p{0.065\textwidth}|}}{\end{tabular}}
+\let\endhead\relax
+\input{tables/appA_slices_v202_program.tex}
 \endgroup
 \end{table}
 
 \clearpage
 \begin{table}[p]
 \centering
-\caption[Full slice statistics, v2\_05c, 40k.]{Full slice statistics, continued: v2\_05c, 40k. Same quantities, uncertainty notation and caveats as Table~\ref{tab:appA-slices}.}
-\label{tab:appA-slices-v205c}
-\begingroup\scriptsize\setlength{\tabcolsep}{2pt}
+\caption[Full slice statistics, v2\_02, 40k, structural slices.]{Full slice statistics, continued: v2\_02, 40k, structural slices. Same quantities, uncertainty notation and caveats as Table~\ref{tab:appA-slices}.}
+\label{tab:appA-slices-v202-structural}
+\begingroup\scriptsize\setlength{\tabcolsep}{1pt}
 \makeatletter
 \let\appAArrayParboxRestore\@arrayparboxrestore
 \def\@arrayparboxrestore{\appAArrayParboxRestore\raggedright\let\\\tabularnewline}
 \makeatother
 \renewcommand{\_}{\textunderscore\allowbreak}
-\renewenvironment{longtable}[1]{\begin{tabular}{|p{0.07\textwidth}|p{0.12\textwidth}|p{0.05\textwidth}|p{0.11\textwidth}|p{0.15\textwidth}|p{0.08\textwidth}|p{0.15\textwidth}|p{0.07\textwidth}|p{0.07\textwidth}|}}{\end{tabular}}
+\renewenvironment{longtable}[1]{\begin{tabular}{|p{0.065\textwidth}|p{0.095\textwidth}|p{0.045\textwidth}|p{0.075\textwidth}|p{0.15\textwidth}|p{0.19\textwidth}|p{0.06\textwidth}|p{0.10\textwidth}|p{0.045\textwidth}|p{0.065\textwidth}|}}{\end{tabular}}
 \let\endhead\relax
-\input{tables/appA_slices_v205c.tex}
+\input{tables/appA_slices_v202_structural.tex}
+\endgroup
+\end{table}
+\clearpage
+\begin{table}[p]
+\centering
+\caption[Full slice statistics, v2\_05c, 40k, five-seed mean.]{Full slice statistics, continued: v2\_05c, 40k, five-seed mean. Same quantities, uncertainty notation and caveats as Table~\ref{tab:appA-slices}.}
+\label{tab:appA-slices-v205c-fiveseed}
+\begingroup\scriptsize\setlength{\tabcolsep}{1pt}
+\makeatletter
+\let\appAArrayParboxRestore\@arrayparboxrestore
+\def\@arrayparboxrestore{\appAArrayParboxRestore\raggedright\let\\\tabularnewline}
+\makeatother
+\renewcommand{\_}{\textunderscore\allowbreak}
+\renewenvironment{longtable}[1]{\begin{tabular}{|p{0.065\textwidth}|p{0.095\textwidth}|p{0.045\textwidth}|p{0.075\textwidth}|p{0.15\textwidth}|p{0.19\textwidth}|p{0.06\textwidth}|p{0.10\textwidth}|p{0.045\textwidth}|p{0.065\textwidth}|}}{\end{tabular}}
+\let\endhead\relax
+\input{tables/appA_slices_v205c_fiveseed.tex}
+\endgroup
+\end{table}
+
+\clearpage
+\begin{table}[p]
+\centering
+\caption[Full slice statistics, v2\_05c, 40k, seed 42.]{Full slice statistics, continued: v2\_05c, 40k, seed 42. Same quantities, uncertainty notation and caveats as Table~\ref{tab:appA-slices}.}
+\label{tab:appA-slices-v205c-seed42}
+\begingroup\scriptsize\setlength{\tabcolsep}{1pt}
+\makeatletter
+\let\appAArrayParboxRestore\@arrayparboxrestore
+\def\@arrayparboxrestore{\appAArrayParboxRestore\raggedright\let\\\tabularnewline}
+\makeatother
+\renewcommand{\_}{\textunderscore\allowbreak}
+\renewenvironment{longtable}[1]{\begin{tabular}{|p{0.065\textwidth}|p{0.095\textwidth}|p{0.045\textwidth}|p{0.075\textwidth}|p{0.15\textwidth}|p{0.19\textwidth}|p{0.06\textwidth}|p{0.10\textwidth}|p{0.045\textwidth}|p{0.065\textwidth}|}}{\end{tabular}}
+\let\endhead\relax
+\input{tables/appA_slices_v205c_seed42.tex}
 \endgroup
 \end{table}
 
@@ -80,13 +131,13 @@ This appendix reproduces supplementary figures and tables referred to in Chapter
 \centering
 \caption[Full slice statistics, v2\_06, 40k.]{Full slice statistics, continued: v2\_06, 40k. Same quantities, uncertainty notation and caveats as Table~\ref{tab:appA-slices}.}
 \label{tab:appA-slices-v206}
-\begingroup\scriptsize\setlength{\tabcolsep}{2pt}
+\begingroup\scriptsize\setlength{\tabcolsep}{1pt}
 \makeatletter
 \let\appAArrayParboxRestore\@arrayparboxrestore
 \def\@arrayparboxrestore{\appAArrayParboxRestore\raggedright\let\\\tabularnewline}
 \makeatother
 \renewcommand{\_}{\textunderscore\allowbreak}
-\renewenvironment{longtable}[1]{\begin{tabular}{|p{0.07\textwidth}|p{0.12\textwidth}|p{0.05\textwidth}|p{0.11\textwidth}|p{0.15\textwidth}|p{0.08\textwidth}|p{0.15\textwidth}|p{0.07\textwidth}|p{0.07\textwidth}|}}{\end{tabular}}
+\renewenvironment{longtable}[1]{\begin{tabular}{|p{0.065\textwidth}|p{0.095\textwidth}|p{0.045\textwidth}|p{0.075\textwidth}|p{0.15\textwidth}|p{0.19\textwidth}|p{0.06\textwidth}|p{0.10\textwidth}|p{0.045\textwidth}|p{0.065\textwidth}|}}{\end{tabular}}
 \let\endhead\relax
 \input{tables/appA_slices_v206.tex}
 \endgroup
@@ -97,13 +148,13 @@ This appendix reproduces supplementary figures and tables referred to in Chapter
 \centering
 \caption[Full slice statistics, v3\_02a, 40k, part 1.]{Full slice statistics, continued: v3\_02a, 40k, systems part 1. Same quantities, uncertainty notation and caveats as Table~\ref{tab:appA-slices}.}
 \label{tab:appA-slices-v302a-1}
-\begingroup\scriptsize\setlength{\tabcolsep}{2pt}
+\begingroup\scriptsize\setlength{\tabcolsep}{1pt}
 \makeatletter
 \let\appAArrayParboxRestore\@arrayparboxrestore
 \def\@arrayparboxrestore{\appAArrayParboxRestore\raggedright\let\\\tabularnewline}
 \makeatother
 \renewcommand{\_}{\textunderscore\allowbreak}
-\renewenvironment{longtable}[1]{\begin{tabular}{|p{0.07\textwidth}|p{0.12\textwidth}|p{0.05\textwidth}|p{0.11\textwidth}|p{0.15\textwidth}|p{0.08\textwidth}|p{0.15\textwidth}|p{0.07\textwidth}|p{0.07\textwidth}|}}{\end{tabular}}
+\renewenvironment{longtable}[1]{\begin{tabular}{|p{0.065\textwidth}|p{0.095\textwidth}|p{0.045\textwidth}|p{0.075\textwidth}|p{0.15\textwidth}|p{0.19\textwidth}|p{0.06\textwidth}|p{0.10\textwidth}|p{0.045\textwidth}|p{0.065\textwidth}|}}{\end{tabular}}
 \let\endhead\relax
 \input{tables/appA_slices_v302a_1.tex}
 \endgroup
@@ -114,13 +165,13 @@ This appendix reproduces supplementary figures and tables referred to in Chapter
 \centering
 \caption[Full slice statistics, v3\_02a, 40k, part 2.]{Full slice statistics, continued: v3\_02a, 40k, systems part 2. Same quantities, uncertainty notation and caveats as Table~\ref{tab:appA-slices}.}
 \label{tab:appA-slices-v302a-2}
-\begingroup\scriptsize\setlength{\tabcolsep}{2pt}
+\begingroup\scriptsize\setlength{\tabcolsep}{1pt}
 \makeatletter
 \let\appAArrayParboxRestore\@arrayparboxrestore
 \def\@arrayparboxrestore{\appAArrayParboxRestore\raggedright\let\\\tabularnewline}
 \makeatother
 \renewcommand{\_}{\textunderscore\allowbreak}
-\renewenvironment{longtable}[1]{\begin{tabular}{|p{0.07\textwidth}|p{0.12\textwidth}|p{0.05\textwidth}|p{0.11\textwidth}|p{0.15\textwidth}|p{0.08\textwidth}|p{0.15\textwidth}|p{0.07\textwidth}|p{0.07\textwidth}|}}{\end{tabular}}
+\renewenvironment{longtable}[1]{\begin{tabular}{|p{0.065\textwidth}|p{0.095\textwidth}|p{0.045\textwidth}|p{0.075\textwidth}|p{0.15\textwidth}|p{0.19\textwidth}|p{0.06\textwidth}|p{0.10\textwidth}|p{0.045\textwidth}|p{0.065\textwidth}|}}{\end{tabular}}
 \let\endhead\relax
 \input{tables/appA_slices_v302a_2.tex}
 \endgroup
@@ -131,13 +182,13 @@ This appendix reproduces supplementary figures and tables referred to in Chapter
 \centering
 \caption[Full slice statistics, E8A, 40k, semantic and program-length slices.]{Full slice statistics, continued: E8A, 40k, semantic and program-length slices. Same quantities, uncertainty notation and caveats as Table~\ref{tab:appA-slices}.}
 \label{tab:appA-slices-e8a-40k-a}
-\begingroup\scriptsize\setlength{\tabcolsep}{2pt}
+\begingroup\scriptsize\setlength{\tabcolsep}{1pt}
 \makeatletter
 \let\appAArrayParboxRestore\@arrayparboxrestore
 \def\@arrayparboxrestore{\appAArrayParboxRestore\raggedright\let\\\tabularnewline}
 \makeatother
 \renewcommand{\_}{\textunderscore\allowbreak}
-\renewenvironment{longtable}[1]{\begin{tabular}{|p{0.07\textwidth}|p{0.12\textwidth}|p{0.05\textwidth}|p{0.11\textwidth}|p{0.15\textwidth}|p{0.08\textwidth}|p{0.15\textwidth}|p{0.07\textwidth}|p{0.07\textwidth}|}}{\end{tabular}}
+\renewenvironment{longtable}[1]{\begin{tabular}{|p{0.065\textwidth}|p{0.095\textwidth}|p{0.045\textwidth}|p{0.075\textwidth}|p{0.15\textwidth}|p{0.19\textwidth}|p{0.06\textwidth}|p{0.10\textwidth}|p{0.045\textwidth}|p{0.065\textwidth}|}}{\end{tabular}}
 \let\endhead\relax
 \input{tables/appA_slices_E8A_40k_a.tex}
 \endgroup
@@ -148,13 +199,13 @@ This appendix reproduces supplementary figures and tables referred to in Chapter
 \centering
 \caption[Full slice statistics, E8A, 40k, structural slices.]{Full slice statistics, continued: E8A, 40k, structural slices. Same quantities, uncertainty notation and caveats as Table~\ref{tab:appA-slices}.}
 \label{tab:appA-slices-e8a-40k-b}
-\begingroup\scriptsize\setlength{\tabcolsep}{2pt}
+\begingroup\scriptsize\setlength{\tabcolsep}{1pt}
 \makeatletter
 \let\appAArrayParboxRestore\@arrayparboxrestore
 \def\@arrayparboxrestore{\appAArrayParboxRestore\raggedright\let\\\tabularnewline}
 \makeatother
 \renewcommand{\_}{\textunderscore\allowbreak}
-\renewenvironment{longtable}[1]{\begin{tabular}{|p{0.07\textwidth}|p{0.12\textwidth}|p{0.05\textwidth}|p{0.11\textwidth}|p{0.15\textwidth}|p{0.08\textwidth}|p{0.15\textwidth}|p{0.07\textwidth}|p{0.07\textwidth}|}}{\end{tabular}}
+\renewenvironment{longtable}[1]{\begin{tabular}{|p{0.065\textwidth}|p{0.095\textwidth}|p{0.045\textwidth}|p{0.075\textwidth}|p{0.15\textwidth}|p{0.19\textwidth}|p{0.06\textwidth}|p{0.10\textwidth}|p{0.045\textwidth}|p{0.065\textwidth}|}}{\end{tabular}}
 \let\endhead\relax
 \input{tables/appA_slices_E8A_40k_b.tex}
 \endgroup
@@ -165,13 +216,13 @@ This appendix reproduces supplementary figures and tables referred to in Chapter
 \centering
 \caption[Full slice statistics, E8A, 250k, semantic and program-length slices.]{Full slice statistics, continued: E8A, 250k, semantic and program-length slices. Same quantities, uncertainty notation and caveats as Table~\ref{tab:appA-slices}.}
 \label{tab:appA-slices-e8a-250k-a}
-\begingroup\scriptsize\setlength{\tabcolsep}{2pt}
+\begingroup\scriptsize\setlength{\tabcolsep}{1pt}
 \makeatletter
 \let\appAArrayParboxRestore\@arrayparboxrestore
 \def\@arrayparboxrestore{\appAArrayParboxRestore\raggedright\let\\\tabularnewline}
 \makeatother
 \renewcommand{\_}{\textunderscore\allowbreak}
-\renewenvironment{longtable}[1]{\begin{tabular}{|p{0.07\textwidth}|p{0.12\textwidth}|p{0.05\textwidth}|p{0.11\textwidth}|p{0.15\textwidth}|p{0.08\textwidth}|p{0.15\textwidth}|p{0.07\textwidth}|p{0.07\textwidth}|}}{\end{tabular}}
+\renewenvironment{longtable}[1]{\begin{tabular}{|p{0.065\textwidth}|p{0.095\textwidth}|p{0.045\textwidth}|p{0.075\textwidth}|p{0.15\textwidth}|p{0.19\textwidth}|p{0.06\textwidth}|p{0.10\textwidth}|p{0.045\textwidth}|p{0.065\textwidth}|}}{\end{tabular}}
 \let\endhead\relax
 \input{tables/appA_slices_E8A_250k_a.tex}
 \endgroup
@@ -182,13 +233,13 @@ This appendix reproduces supplementary figures and tables referred to in Chapter
 \centering
 \caption[Full slice statistics, E8A, 250k, structural slices.]{Full slice statistics, continued: E8A, 250k, structural slices. Same quantities, uncertainty notation and caveats as Table~\ref{tab:appA-slices}.}
 \label{tab:appA-slices-e8a-250k-b}
-\begingroup\scriptsize\setlength{\tabcolsep}{2pt}
+\begingroup\scriptsize\setlength{\tabcolsep}{1pt}
 \makeatletter
 \let\appAArrayParboxRestore\@arrayparboxrestore
 \def\@arrayparboxrestore{\appAArrayParboxRestore\raggedright\let\\\tabularnewline}
 \makeatother
 \renewcommand{\_}{\textunderscore\allowbreak}
-\renewenvironment{longtable}[1]{\begin{tabular}{|p{0.07\textwidth}|p{0.12\textwidth}|p{0.05\textwidth}|p{0.11\textwidth}|p{0.15\textwidth}|p{0.08\textwidth}|p{0.15\textwidth}|p{0.07\textwidth}|p{0.07\textwidth}|}}{\end{tabular}}
+\renewenvironment{longtable}[1]{\begin{tabular}{|p{0.065\textwidth}|p{0.095\textwidth}|p{0.045\textwidth}|p{0.075\textwidth}|p{0.15\textwidth}|p{0.19\textwidth}|p{0.06\textwidth}|p{0.10\textwidth}|p{0.045\textwidth}|p{0.065\textwidth}|}}{\end{tabular}}
 \let\endhead\relax
 \input{tables/appA_slices_E8A_250k_b.tex}
 \endgroup

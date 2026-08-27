@@ -25,63 +25,60 @@
     ]
   },
   "partition": {
-    "suffix": "E8A_40k_b",
-    "filter_description": "family == E8A AND scale == 40k AND slice kind == structural",
-    "expected_row_count": 15,
-    "actual_row_count": 15,
+    "suffix": "v205c_seed42",
+    "filter_description": "family == v2_05c AND slice id suffix == /seed42",
+    "expected_row_count": 14,
+    "actual_row_count": 14,
     "source_data_row_numbers_one_based": [
-      24,
-      25,
-      26,
-      27,
-      28,
-      52,
-      53,
-      54,
-      55,
-      56,
-      80,
-      81,
-      82,
-      83,
-      84
+      114,
+      116,
+      118,
+      120,
+      122,
+      124,
+      126,
+      128,
+      130,
+      132,
+      134,
+      136,
+      138,
+      140
     ],
     "source_slice_ids": [
-      "E8A/A0p/train_40k/structural:choose/accuracy",
-      "E8A/A0p/train_40k/structural:compare/accuracy",
-      "E8A/A0p/train_40k/structural:logical/accuracy",
-      "E8A/A0p/train_40k/structural:query/accuracy",
-      "E8A/A0p/train_40k/structural:verify/accuracy",
-      "E8A/A1/train_40k/structural:choose/accuracy",
-      "E8A/A1/train_40k/structural:compare/accuracy",
-      "E8A/A1/train_40k/structural:logical/accuracy",
-      "E8A/A1/train_40k/structural:query/accuracy",
-      "E8A/A1/train_40k/structural:verify/accuracy",
-      "E8A/A1r/train_40k/structural:choose/accuracy",
-      "E8A/A1r/train_40k/structural:compare/accuracy",
-      "E8A/A1r/train_40k/structural:logical/accuracy",
-      "E8A/A1r/train_40k/structural:query/accuracy",
-      "E8A/A1r/train_40k/structural:verify/accuracy"
+      "v2_05c/fusion_minus_concat/train_40k/semantic:attr/seed42",
+      "v2_05c/fusion_minus_concat/train_40k/semantic:cat/seed42",
+      "v2_05c/fusion_minus_concat/train_40k/semantic:global/seed42",
+      "v2_05c/fusion_minus_concat/train_40k/semantic:obj/seed42",
+      "v2_05c/fusion_minus_concat/train_40k/semantic:rel/seed42",
+      "v2_05c/fusion_minus_concat/train_40k/steps:3/seed42",
+      "v2_05c/fusion_minus_concat/train_40k/steps:4/seed42",
+      "v2_05c/fusion_minus_concat/train_40k/steps:>=5/seed42",
+      "v2_05c/fusion_minus_concat/train_40k/steps:<=2/seed42",
+      "v2_05c/fusion_minus_concat/train_40k/structural:choose/seed42",
+      "v2_05c/fusion_minus_concat/train_40k/structural:compare/seed42",
+      "v2_05c/fusion_minus_concat/train_40k/structural:logical/seed42",
+      "v2_05c/fusion_minus_concat/train_40k/structural:query/seed42",
+      "v2_05c/fusion_minus_concat/train_40k/structural:verify/seed42"
     ],
     "source_row_sha256s": [
-      "9f7b510e0fb202e0acd4a77386b9b261c90a3ee73dc17359dd609eeb3a4fa969",
-      "5e4cc9c63940691e35f0a751545b6c2d45c0a00402e01b2b725b337d2890a781",
-      "47c215ed63af8de03b6c82dbdb4f6821e4fd9d99a04102a55a6f61166b92eb07",
-      "590f54d73424347007ee455caeef8bcdac6b76873eaff7c2dffd526f15b5f19f",
-      "9f4c63d26fd0c74abd43736e89629d552a69476f398600f8d19e2d94ea5e7636",
-      "a5cad9472435d65ea35cf53ffc39064db2466b85ec8ef588ea77d1a62a653958",
-      "e201b32da16313d4be9e84aa1de7b13a5de8a55a39772cf111a3d0eaf9bfb7fc",
-      "b12d4b1f5adf28a3ef4072c220050717070cd3853dde0cabfa652decf9caa6b1",
-      "d2b089e39486fb8c2bdd7636de15cac91f7c166c5e7eeb0b4b42f3bb73e8b9bf",
-      "e6cea6d08e7bbbfd0f8ef38a0aaa1e6abd43a39bb050fba6a91ba0bc917d5515",
-      "d5f4e3c686ab48550a6c34ca679b4ae7249366e74331dd1da6c05ae38a7fb3ea",
-      "f854371d083fb3bec24bf3da32b2374856805bee09d53a48c8885e04e4f17cf9",
-      "6373eb3eecf1a2adbd0043116beedb04d003f2401ae0ffd172fbf6cb0bfcb27f",
-      "36924651f38ad8008b79d32845b9f53ced4d9542aed5f6e026121256b74eb239",
-      "72e3a3aac2536039c9d7cedc66664722e20229c3ab7aec298f8f2895a6c04e3b"
+      "6a320012925961699c97537c03e1370bb5a0df2479252976b54329d7244f62a8",
+      "7c615165a3c8ba80093731ee331e5a6e81138ec6b3dbe8aba00dca9e1663b7dc",
+      "f91e0c1e1ad7cf0582173c667d5ddd481c75a977976aaffe81d11d1ff03edd5c",
+      "a0eb19aa1561d5605bfa499a3660992f76cfaa50a91d70d7ec46a3a19f4dfbc8",
+      "6a13015d49452f9d3a50441f20e79a2c06f2abf2f7bc9370733a4bf375f16d7c",
+      "72207ee00c455a690b52cc71bbc56dd20f70a094e884a95dd1141dc896da061d",
+      "b1c1415e22e68292c5b5724f988cc34a06b52d498e18b0674ed53a91cce09b7d",
+      "af7e240264031f22d2da8039a203165f5a46eaf771994b8e7af21b638691b928",
+      "c5674109b1976183f09f905813bf14c451d52146d8175d2603852a4f9ca77d65",
+      "948fdb92faac7136c28c5e1d0b0470d7f7086511a9d66fa05f453a72d9a1622e",
+      "7807db61cca095ffb2cf392194b0afb43a151faa4a9d8d488173d5ed1db2f4ba",
+      "e3af5dc33407cade5be0b59ebb1f28de20c28955261c4d1d50e6a2b948e6854a",
+      "e3792ee75823a4a23598bd0e8f9612a5c3c0d40c2a7662d2d99be4e45ae2f59b",
+      "7fb973f08fff39e5bef0a67b8a41b7605768ac1c6a05ada70a39bb3944ae694b"
     ],
     "source_row_hash_method": "SHA-256 of canonical sorted-key compact JSON for the frozen source row",
-    "source_row_identity_sha256": "0cb410b11b80e54589461a9b3026db961eef63ee2dc8aad988fa5994bee1772d",
+    "source_row_identity_sha256": "20e3f466a9da6fec483bbb75f3814cb1491b5b4fb3f22baef1b45419566313e9",
     "source_row_identity_method": "SHA-256 of newline-delimited ordered source_row_sha256s with terminal newline",
     "duplicate_source_rows_within_partition": 0,
     "row_source_identity_verified": true
@@ -130,7 +127,32 @@
       "paired accuracy gap on the steps slice >=5": "paired accuracy gap on the steps slice at least 5",
       "pooled >=4-step deficit on the steps slice >=4_combined": "pooled at-least-4-step deficit on the steps slice at least 4 (combined)"
     },
-    "applied_relabels": [],
+    "applied_relabels": [
+      {
+        "source_row": 128,
+        "column": "slice",
+        "source_value": "steps:>=5",
+        "displayed_value": "steps: at least 5"
+      },
+      {
+        "source_row": 128,
+        "column": "quantity",
+        "source_value": "paired accuracy gap on the steps slice >=5",
+        "displayed_value": "paired accuracy gap on the steps slice at least 5"
+      },
+      {
+        "source_row": 130,
+        "column": "slice",
+        "source_value": "steps:<=2",
+        "displayed_value": "steps: at most 2"
+      },
+      {
+        "source_row": 130,
+        "column": "quantity",
+        "source_value": "paired accuracy gap on the steps slice <=2",
+        "displayed_value": "paired accuracy gap on the steps slice at most 2"
+      }
+    ],
     "semantic_displayed_key_columns": [
       "family",
       "system",
@@ -144,9 +166,9 @@
     "numeric_or_other_data_values_changed": false
   },
   "derived_csv": {
-    "path": "tables_src/appA_slices_E8A_40k_b.csv",
-    "sha256": "866b3a91d556f3387290ca0c96c4bf492a7493da5b43f325c3bff6c697810e5a",
-    "row_count": 15,
+    "path": "tables_src/appA_slices_v205c_seed42.csv",
+    "sha256": "2e381ecc5d85c6ece2ac1815fd6251e283b7aa2d8c8fca0403ab98ab8c31ca7b",
+    "row_count": 14,
     "column_count": 14
   },
   "converter": {
@@ -155,9 +177,9 @@
     "command": [
       "python3",
       "tools/tab2latex.py",
-      "tables_src/appA_slices_E8A_40k_b.csv",
+      "tables_src/appA_slices_v205c_seed42.csv",
       "--output",
-      "tables/appA_slices_E8A_40k_b.tex",
+      "tables/appA_slices_v205c_seed42.tex",
       "--columns",
       "family,system,scale,slice kind,slice,quantity,point estimate,95% CI (image-clustered),n questions,n images",
       "--header-map",
@@ -169,8 +191,8 @@
     "exit_code": 0
   },
   "output_table": {
-    "path": "tables/appA_slices_E8A_40k_b.tex",
-    "sha256": "86e3f5385c08d113d66bfd2bf70d98c1ae092857f80b136da912f1263b7af3e2"
+    "path": "tables/appA_slices_v205c_seed42.tex",
+    "sha256": "04bc593fd6bdcb12ca56c487963d9397d129acb22c04c50d485b0b1523ac2e4f"
   },
   "exact_partition_global_gate": {
     "current_partition_paths": [

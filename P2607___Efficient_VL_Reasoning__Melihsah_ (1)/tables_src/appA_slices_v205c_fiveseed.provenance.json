@@ -25,63 +25,60 @@
     ]
   },
   "partition": {
-    "suffix": "E8A_40k_b",
-    "filter_description": "family == E8A AND scale == 40k AND slice kind == structural",
-    "expected_row_count": 15,
-    "actual_row_count": 15,
+    "suffix": "v205c_fiveseed",
+    "filter_description": "family == v2_05c AND slice id suffix == /five_seed",
+    "expected_row_count": 14,
+    "actual_row_count": 14,
     "source_data_row_numbers_one_based": [
-      24,
-      25,
-      26,
-      27,
-      28,
-      52,
-      53,
-      54,
-      55,
-      56,
-      80,
-      81,
-      82,
-      83,
-      84
+      113,
+      115,
+      117,
+      119,
+      121,
+      123,
+      125,
+      127,
+      129,
+      131,
+      133,
+      135,
+      137,
+      139
     ],
     "source_slice_ids": [
-      "E8A/A0p/train_40k/structural:choose/accuracy",
-      "E8A/A0p/train_40k/structural:compare/accuracy",
-      "E8A/A0p/train_40k/structural:logical/accuracy",
-      "E8A/A0p/train_40k/structural:query/accuracy",
-      "E8A/A0p/train_40k/structural:verify/accuracy",
-      "E8A/A1/train_40k/structural:choose/accuracy",
-      "E8A/A1/train_40k/structural:compare/accuracy",
-      "E8A/A1/train_40k/structural:logical/accuracy",
-      "E8A/A1/train_40k/structural:query/accuracy",
-      "E8A/A1/train_40k/structural:verify/accuracy",
-      "E8A/A1r/train_40k/structural:choose/accuracy",
-      "E8A/A1r/train_40k/structural:compare/accuracy",
-      "E8A/A1r/train_40k/structural:logical/accuracy",
-      "E8A/A1r/train_40k/structural:query/accuracy",
-      "E8A/A1r/train_40k/structural:verify/accuracy"
+      "v2_05c/fusion_minus_concat/train_40k/semantic:attr/five_seed",
+      "v2_05c/fusion_minus_concat/train_40k/semantic:cat/five_seed",
+      "v2_05c/fusion_minus_concat/train_40k/semantic:global/five_seed",
+      "v2_05c/fusion_minus_concat/train_40k/semantic:obj/five_seed",
+      "v2_05c/fusion_minus_concat/train_40k/semantic:rel/five_seed",
+      "v2_05c/fusion_minus_concat/train_40k/steps:3/five_seed",
+      "v2_05c/fusion_minus_concat/train_40k/steps:4/five_seed",
+      "v2_05c/fusion_minus_concat/train_40k/steps:>=5/five_seed",
+      "v2_05c/fusion_minus_concat/train_40k/steps:<=2/five_seed",
+      "v2_05c/fusion_minus_concat/train_40k/structural:choose/five_seed",
+      "v2_05c/fusion_minus_concat/train_40k/structural:compare/five_seed",
+      "v2_05c/fusion_minus_concat/train_40k/structural:logical/five_seed",
+      "v2_05c/fusion_minus_concat/train_40k/structural:query/five_seed",
+      "v2_05c/fusion_minus_concat/train_40k/structural:verify/five_seed"
     ],
     "source_row_sha256s": [
-      "9f7b510e0fb202e0acd4a77386b9b261c90a3ee73dc17359dd609eeb3a4fa969",
-      "5e4cc9c63940691e35f0a751545b6c2d45c0a00402e01b2b725b337d2890a781",
-      "47c215ed63af8de03b6c82dbdb4f6821e4fd9d99a04102a55a6f61166b92eb07",
-      "590f54d73424347007ee455caeef8bcdac6b76873eaff7c2dffd526f15b5f19f",
-      "9f4c63d26fd0c74abd43736e89629d552a69476f398600f8d19e2d94ea5e7636",
-      "a5cad9472435d65ea35cf53ffc39064db2466b85ec8ef588ea77d1a62a653958",
-      "e201b32da16313d4be9e84aa1de7b13a5de8a55a39772cf111a3d0eaf9bfb7fc",
-      "b12d4b1f5adf28a3ef4072c220050717070cd3853dde0cabfa652decf9caa6b1",
-      "d2b089e39486fb8c2bdd7636de15cac91f7c166c5e7eeb0b4b42f3bb73e8b9bf",
-      "e6cea6d08e7bbbfd0f8ef38a0aaa1e6abd43a39bb050fba6a91ba0bc917d5515",
-      "d5f4e3c686ab48550a6c34ca679b4ae7249366e74331dd1da6c05ae38a7fb3ea",
-      "f854371d083fb3bec24bf3da32b2374856805bee09d53a48c8885e04e4f17cf9",
-      "6373eb3eecf1a2adbd0043116beedb04d003f2401ae0ffd172fbf6cb0bfcb27f",
-      "36924651f38ad8008b79d32845b9f53ced4d9542aed5f6e026121256b74eb239",
-      "72e3a3aac2536039c9d7cedc66664722e20229c3ab7aec298f8f2895a6c04e3b"
+      "6ae314c01043c87b4b58e70b4727c390a1198ffae54045fcfd0712beef32274e",
+      "e34b0b318da1c0b749547d36dbfad71b6373827fe2e78687e1774b14cfe1a8c4",
+      "db912d3092fb7fa036d65266659fba91c16f8e7b787f25a0c3a533a00d589acb",
+      "29d38502152ca9aa5d027d9e93b2f597c53424989a98a5f1229e1c874028e20d",
+      "32d17cbfe45d09a807009ea31f41cef786f2a8f50388c69bf545422e7f5e2952",
+      "e3a595622642a00bbbf2fef6393d5fcf37cd2fca1bee586fd89c6f02eebf1769",
+      "eecc21e3255e1a2576848b39eda06b4eee4ee0a2d54cb87e674de118c5834f0d",
+      "2190ec74c60adbc14cf83708ecd94674a883dd6445b44e8cee8cb7834536c4f4",
+      "b3fe7eaaf8b153b2dd0cc229689c9760446b9d71d38a122019f619713f39134d",
+      "9925dec31fe598ceeb93f758202abb1ced86ed3d6c7491c562b37aa8a6373c41",
+      "9aeb9d1775571868023868cb126fb439060699f4359c3a70ed30ea46b2b84e98",
+      "42268d84e3d4664b9c1d6d7baf7b8f59ded896b4cf1873164c6d773598afef39",
+      "0f8d140bd686d0e0a30a8eec74468daa05b2fd8c78416a6529dd9c8edbc59c2d",
+      "7665dc0c5ca8f866f9dd5d46894591f81dff7a5429669a7d3a69198f3d3ba343"
     ],
     "source_row_hash_method": "SHA-256 of canonical sorted-key compact JSON for the frozen source row",
-    "source_row_identity_sha256": "0cb410b11b80e54589461a9b3026db961eef63ee2dc8aad988fa5994bee1772d",
+    "source_row_identity_sha256": "6ee2d06bd25ef2cc51d6f17fa7dc9667af7f438abd3b3dc9859f17ee386560b3",
     "source_row_identity_method": "SHA-256 of newline-delimited ordered source_row_sha256s with terminal newline",
     "duplicate_source_rows_within_partition": 0,
     "row_source_identity_verified": true
@@ -130,7 +127,32 @@
       "paired accuracy gap on the steps slice >=5": "paired accuracy gap on the steps slice at least 5",
       "pooled >=4-step deficit on the steps slice >=4_combined": "pooled at-least-4-step deficit on the steps slice at least 4 (combined)"
     },
-    "applied_relabels": [],
+    "applied_relabels": [
+      {
+        "source_row": 127,
+        "column": "slice",
+        "source_value": "steps:>=5",
+        "displayed_value": "steps: at least 5"
+      },
+      {
+        "source_row": 127,
+        "column": "quantity",
+        "source_value": "paired accuracy gap on the steps slice >=5",
+        "displayed_value": "paired accuracy gap on the steps slice at least 5"
+      },
+      {
+        "source_row": 129,
+        "column": "slice",
+        "source_value": "steps:<=2",
+        "displayed_value": "steps: at most 2"
+      },
+      {
+        "source_row": 129,
+        "column": "quantity",
+        "source_value": "paired accuracy gap on the steps slice <=2",
+        "displayed_value": "paired accuracy gap on the steps slice at most 2"
+      }
+    ],
     "semantic_displayed_key_columns": [
       "family",
       "system",
@@ -144,9 +166,9 @@
     "numeric_or_other_data_values_changed": false
   },
   "derived_csv": {
-    "path": "tables_src/appA_slices_E8A_40k_b.csv",
-    "sha256": "866b3a91d556f3387290ca0c96c4bf492a7493da5b43f325c3bff6c697810e5a",
-    "row_count": 15,
+    "path": "tables_src/appA_slices_v205c_fiveseed.csv",
+    "sha256": "5c709f4822072c256fd52dc942543458a73eb8a665e92cd72700d7b755f8f43d",
+    "row_count": 14,
     "column_count": 14
   },
   "converter": {
@@ -155,9 +177,9 @@
     "command": [
       "python3",
       "tools/tab2latex.py",
-      "tables_src/appA_slices_E8A_40k_b.csv",
+      "tables_src/appA_slices_v205c_fiveseed.csv",
       "--output",
-      "tables/appA_slices_E8A_40k_b.tex",
+      "tables/appA_slices_v205c_fiveseed.tex",
       "--columns",
       "family,system,scale,slice kind,slice,quantity,point estimate,95% CI (image-clustered),n questions,n images",
       "--header-map",
@@ -169,8 +191,8 @@
     "exit_code": 0
   },
   "output_table": {
-    "path": "tables/appA_slices_E8A_40k_b.tex",
-    "sha256": "86e3f5385c08d113d66bfd2bf70d98c1ae092857f80b136da912f1263b7af3e2"
+    "path": "tables/appA_slices_v205c_fiveseed.tex",
+    "sha256": "db12514a40456495cffc98ce444e618d8bb6a7d60ab65ce7cf3fb941caf5ceca"
   },
   "exact_partition_global_gate": {
     "current_partition_paths": [

@@ -1,6 +1,7 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "task_id": "dissertation-13-xref-appendix-integration",
+  "scientific_revision": 2,
   "source": {
     "path": "tables_src/VE1-TAB-A1.csv",
     "sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
@@ -25,16 +26,7 @@
   },
   "partition": {
     "suffix": "v302a_1",
-    "filter_description": "family = v3_02a and system in {question_only, direct_linear, meanpatch_concat, concat}",
-    "filter": {
-      "family": "v3_02a",
-      "systems": [
-        "question_only",
-        "direct_linear",
-        "meanpatch_concat",
-        "concat"
-      ]
-    },
+    "filter_description": "family == v3_02a AND system in {question_only,direct_linear,meanpatch_concat,concat}",
     "expected_row_count": 20,
     "actual_row_count": 20,
     "source_data_row_numbers_one_based": [
@@ -82,28 +74,30 @@
       "v3_02a/question_only/train_40k/steps:<=2/accuracy"
     ],
     "source_row_sha256s": [
-      "bf0046011d085fd2d6dac737ed027f25f1a0b8a04fd38e9e0cedc098e74dc632",
-      "6349d81a40d6dbe483c73dcbbb34b4a2f7b93ca4b6c44ef0fd91390a25bcffa6",
-      "554f04fe3721e741e97332751a77514a634dd686909370147b3813234cae69ab",
-      "7e715e98bdf976e6fd6fcc7f46b288ac5f95eaa418e9d733b6020800bc3fbe78",
-      "5423d2c8b1e7b4aaa50613af8783a708110c657d289af71a69033b75183b1e53",
-      "c788bdd21d15304d1348d803ef91a7cfbe3866f8935a8d92fb453cbbf40feaea",
-      "f08f7d80edee5abdbdd9ca6466f9d3e805707d8277e6c1f06ded2763c59a67f5",
-      "bb6fae20cc36abcd4e8391db3127597ee11a28faccfe6a419d31aa341c4b6d82",
-      "2b9b78be445a3dcec2ca2db84eaaf7079cf4b1465c7f28de9554f09a9aa7aa04",
-      "08e4eb0481d7fc67e5105c1701e12dbb3ff9917ae7e564bea36b313515ddf49e",
-      "49d71da0e6954162be05ad7e780d19fa9c1a070e509297f0c6f63f7a37047e79",
-      "81d9efa1eb5141a11abb54147955c7e3b8eef71dc9004132e1e3d6c17d84e428",
-      "73729d45dee18a07a43481eb1ea87073a0d59314ed44767ecd985f6d22ffc2a2",
-      "f5bd78ccb150813fd204f1db504b4edff7813f85eb6e2cad54ea2055086b2cb8",
-      "13a838030b3e8bd008b523760c89a0d33e1342ee8cd79b6c2fedf570b255fddc",
-      "3bb9119cbceefe0db5b67068f071c6bb8f61ba0a857821071592fa89d36e8b47",
-      "b57362d86b54c43fab463dc0fe3bffb3f1d28b3457bf7d3823b543adc1691484",
-      "d9351b8fb73f7d88e62ecd93f0ddf0523309e9ed8171a7e00311a0bf6034fca3",
-      "4302021267d2ee32267a6afa785177a7964ef5fcd14871fca173b78efb5dd42f",
-      "082c13644eba09760a1c969a58bb8213cc8b2bf4b9e6d70e438bbf418208adb9"
+      "5d86d75f909d0391b20a7f2e4d1421434a62790ed18709af95d7d54cc20e81e3",
+      "310947e1cac2f604dd0c483498a72d560302e7d37b8969e1ee8b6bacd0cffb1c",
+      "b4e0826f82e00d92e8beffca25a393076de0e362238c27aec4a82ef5367dfd58",
+      "7a2173ae0f2816892a2d56040c46774235cacf2f7b1bdcba001ae1c6dd518389",
+      "2f5008b69ecca7783abdd4f155ec3131c787572f1340d2d23d9f260083def5e3",
+      "dd10af3828ea8bfa64306e997289b2a172daa9bd459749f06d32120e647a5725",
+      "e19fe93e52bea141c4e2b70ccf934910cc0fcba56ef1c5730ed667f47b700439",
+      "c77591bae1ed30cd8662f141450166777a036aa301bcc1039cfd3bb3f0e53d06",
+      "8ea44671978246a41ebc34ea8516cba6f87a5053b0cc42cb77f0c20b9003a54d",
+      "edf4fef2acce51cc5e8a322c492fff6f6d442f633052a5133be708ab33d3c59e",
+      "26616d532dd7add2f467518dbb41509de4e50e030480b36751271c0a855e7fca",
+      "2296c1122b12b4769d5644df8fab14e9536710dee497f480ce5a7f580d16aab0",
+      "78dd891dd8ecf1ec78025644ce927f0e489259b646c0b85ccbccb4d7dd718777",
+      "6613c227e86a0aee132d16768a720d81958e699f8be4196872bc96275868ac80",
+      "8b2df8edacd68ccb5e1130cec877acc95eca43304d3fe387c40a95d2f8c9e788",
+      "7f4d97bcb0288c5207ca16171c552f49c0c1176f2f9741adfaf1cc065c06bdb9",
+      "b7f235839eb50057586cd877260330cd7dfdbf7cb8239453b41cebc362646b17",
+      "26a32136ecb8fbb90cf0202ff55a1bb208328fd699367b627022f65c263110ab",
+      "3a2ae998a0fa1e49e60ae55decbcd52e24b55d439560a95c273a29b1fb5b6266",
+      "8d3914a5120d5d16a1d1bf7068dd27fd5808e5daa28ea9ba498e5f761cb4b0f4"
     ],
-    "source_row_identity_sha256": "828c8184db7507995b8160705d37a60f9349ef758aa9f9d10110d27f4bcdf9b5",
+    "source_row_hash_method": "SHA-256 of canonical sorted-key compact JSON for the frozen source row",
+    "source_row_identity_sha256": "5b4a9d13236e18e8963618c3b542b14d1b2a8f4a39db2759c7962cc9c83774cf",
+    "source_row_identity_method": "SHA-256 of newline-delimited ordered source_row_sha256s with terminal newline",
     "duplicate_source_rows_within_partition": 0,
     "row_source_identity_verified": true
   },
@@ -130,22 +124,188 @@
       "scale",
       "slice kind",
       "slice",
+      "quantity",
       "point estimate",
       "95% CI (image-clustered)",
       "n questions",
       "n images"
     ],
-    "relabel_field": "slice",
-    "relabel_map": {
+    "header_map": {
+      "quantity": "Quantity"
+    },
+    "slice_relabel_map": {
       "steps:<=2": "steps: at most 2",
       "steps:>=4_combined": "steps: at least 4",
       "steps:>=5": "steps: at least 5"
     },
-    "result_and_count_values_recomputed": false
+    "quantity_relabel_map": {
+      "accuracy on the steps slice <=2": "accuracy on the steps slice at most 2",
+      "paired accuracy gap on the steps slice <=2": "paired accuracy gap on the steps slice at most 2",
+      "accuracy on the steps slice >=5": "accuracy on the steps slice at least 5",
+      "paired accuracy gap on the steps slice >=5": "paired accuracy gap on the steps slice at least 5",
+      "pooled >=4-step deficit on the steps slice >=4_combined": "pooled at-least-4-step deficit on the steps slice at least 4 (combined)"
+    },
+    "applied_relabels": [
+      {
+        "source_row": 163,
+        "column": "slice",
+        "source_value": "steps:>=4_combined",
+        "displayed_value": "steps: at least 4"
+      },
+      {
+        "source_row": 163,
+        "column": "quantity",
+        "source_value": "pooled >=4-step deficit on the steps slice >=4_combined",
+        "displayed_value": "pooled at-least-4-step deficit on the steps slice at least 4 (combined)"
+      },
+      {
+        "source_row": 164,
+        "column": "slice",
+        "source_value": "steps:>=5",
+        "displayed_value": "steps: at least 5"
+      },
+      {
+        "source_row": 164,
+        "column": "quantity",
+        "source_value": "accuracy on the steps slice >=5",
+        "displayed_value": "accuracy on the steps slice at least 5"
+      },
+      {
+        "source_row": 165,
+        "column": "slice",
+        "source_value": "steps:<=2",
+        "displayed_value": "steps: at most 2"
+      },
+      {
+        "source_row": 165,
+        "column": "quantity",
+        "source_value": "accuracy on the steps slice <=2",
+        "displayed_value": "accuracy on the steps slice at most 2"
+      },
+      {
+        "source_row": 168,
+        "column": "slice",
+        "source_value": "steps:>=4_combined",
+        "displayed_value": "steps: at least 4"
+      },
+      {
+        "source_row": 168,
+        "column": "quantity",
+        "source_value": "pooled >=4-step deficit on the steps slice >=4_combined",
+        "displayed_value": "pooled at-least-4-step deficit on the steps slice at least 4 (combined)"
+      },
+      {
+        "source_row": 169,
+        "column": "slice",
+        "source_value": "steps:>=5",
+        "displayed_value": "steps: at least 5"
+      },
+      {
+        "source_row": 169,
+        "column": "quantity",
+        "source_value": "accuracy on the steps slice >=5",
+        "displayed_value": "accuracy on the steps slice at least 5"
+      },
+      {
+        "source_row": 170,
+        "column": "slice",
+        "source_value": "steps:<=2",
+        "displayed_value": "steps: at most 2"
+      },
+      {
+        "source_row": 170,
+        "column": "quantity",
+        "source_value": "accuracy on the steps slice <=2",
+        "displayed_value": "accuracy on the steps slice at most 2"
+      },
+      {
+        "source_row": 178,
+        "column": "slice",
+        "source_value": "steps:>=4_combined",
+        "displayed_value": "steps: at least 4"
+      },
+      {
+        "source_row": 178,
+        "column": "quantity",
+        "source_value": "pooled >=4-step deficit on the steps slice >=4_combined",
+        "displayed_value": "pooled at-least-4-step deficit on the steps slice at least 4 (combined)"
+      },
+      {
+        "source_row": 179,
+        "column": "slice",
+        "source_value": "steps:>=5",
+        "displayed_value": "steps: at least 5"
+      },
+      {
+        "source_row": 179,
+        "column": "quantity",
+        "source_value": "accuracy on the steps slice >=5",
+        "displayed_value": "accuracy on the steps slice at least 5"
+      },
+      {
+        "source_row": 180,
+        "column": "slice",
+        "source_value": "steps:<=2",
+        "displayed_value": "steps: at most 2"
+      },
+      {
+        "source_row": 180,
+        "column": "quantity",
+        "source_value": "accuracy on the steps slice <=2",
+        "displayed_value": "accuracy on the steps slice at most 2"
+      },
+      {
+        "source_row": 188,
+        "column": "slice",
+        "source_value": "steps:>=4_combined",
+        "displayed_value": "steps: at least 4"
+      },
+      {
+        "source_row": 188,
+        "column": "quantity",
+        "source_value": "pooled >=4-step deficit on the steps slice >=4_combined",
+        "displayed_value": "pooled at-least-4-step deficit on the steps slice at least 4 (combined)"
+      },
+      {
+        "source_row": 189,
+        "column": "slice",
+        "source_value": "steps:>=5",
+        "displayed_value": "steps: at least 5"
+      },
+      {
+        "source_row": 189,
+        "column": "quantity",
+        "source_value": "accuracy on the steps slice >=5",
+        "displayed_value": "accuracy on the steps slice at least 5"
+      },
+      {
+        "source_row": 190,
+        "column": "slice",
+        "source_value": "steps:<=2",
+        "displayed_value": "steps: at most 2"
+      },
+      {
+        "source_row": 190,
+        "column": "quantity",
+        "source_value": "accuracy on the steps slice <=2",
+        "displayed_value": "accuracy on the steps slice at most 2"
+      }
+    ],
+    "semantic_displayed_key_columns": [
+      "family",
+      "system",
+      "scale",
+      "slice kind",
+      "slice",
+      "quantity"
+    ],
+    "ambiguous_displayed_keys_within_table": 0,
+    "result_and_count_values_recomputed": false,
+    "numeric_or_other_data_values_changed": false
   },
   "derived_csv": {
     "path": "tables_src/appA_slices_v302a_1.csv",
-    "sha256": "23a9f1c25e7b51bfa1dfda95261ad1355dc29719e4632f06610b9e9697a5df7d",
+    "sha256": "111ebbdf44d93f54322edb6149efcd5dbbf278f6aba65ff4919e306e23ff7826",
     "row_count": 20,
     "column_count": 14
   },
@@ -159,9 +319,9 @@
       "--output",
       "tables/appA_slices_v302a_1.tex",
       "--columns",
-      "family,system,scale,slice kind,slice,point estimate,95% CI (image-clustered),n questions,n images",
+      "family,system,scale,slice kind,slice,quantity,point estimate,95% CI (image-clustered),n questions,n images",
       "--header-map",
-      "{\"family\":\"Family\",\"system\":\"System\",\"scale\":\"Scale\",\"slice kind\":\"Slice kind\",\"slice\":\"Slice\",\"point estimate\":\"Point estimate\",\"95% CI (image-clustered)\":\"95% CI (image-clustered)\",\"n questions\":\"n questions\",\"n images\":\"n images\"}",
+      "{\"family\":\"Family\",\"system\":\"System\",\"scale\":\"Scale\",\"slice kind\":\"Slice kind\",\"slice\":\"Slice\",\"quantity\":\"Quantity\",\"point estimate\":\"Point estimate\",\"95% CI (image-clustered)\":\"95% CI (image-clustered)\",\"n questions\":\"n questions\",\"n images\":\"n images\"}",
       "--thousands",
       "--verify"
     ],
@@ -170,7 +330,28 @@
   },
   "output_table": {
     "path": "tables/appA_slices_v302a_1.tex",
-    "sha256": "372d863e6f7e4f041a0002a3943b0e6ae0bc60de003fcb13ca9a59844c3c3e6f"
+    "sha256": "ae56b838b275244b08191a5f6ed9d4d19033afb559d71c8a732aafdfbefebc4f"
   },
-  "exact_partition_global_gate": "verified after all nine partitions"
+  "exact_partition_global_gate": {
+    "current_partition_paths": [
+      "tables_src/appA_slices_v202_semantic.csv",
+      "tables_src/appA_slices_v202_program.csv",
+      "tables_src/appA_slices_v202_structural.csv",
+      "tables_src/appA_slices_v205c_fiveseed.csv",
+      "tables_src/appA_slices_v205c_seed42.csv",
+      "tables_src/appA_slices_v206.csv",
+      "tables_src/appA_slices_v302a_1.csv",
+      "tables_src/appA_slices_v302a_2.csv",
+      "tables_src/appA_slices_E8A_40k_a.csv",
+      "tables_src/appA_slices_E8A_40k_b.csv",
+      "tables_src/appA_slices_E8A_250k_a.csv",
+      "tables_src/appA_slices_E8A_250k_b.csv"
+    ],
+    "source_rows": 195,
+    "represented_source_rows": 195,
+    "each_source_row_exactly_once": true,
+    "duplicate_source_rows": 0,
+    "omitted_source_rows": 0,
+    "unexpected_extra_rows": 0
+  }
 }

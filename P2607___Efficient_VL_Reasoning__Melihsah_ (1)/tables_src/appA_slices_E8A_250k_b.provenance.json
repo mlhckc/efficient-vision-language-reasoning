@@ -1,6 +1,7 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "task_id": "dissertation-13-xref-appendix-integration",
+  "scientific_revision": 2,
   "source": {
     "path": "tables_src/VE1-TAB-A1.csv",
     "sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
@@ -25,14 +26,7 @@
   },
   "partition": {
     "suffix": "E8A_250k_b",
-    "filter_description": "family = E8A, scale = 250k and slice kind = structural",
-    "filter": {
-      "family": "E8A",
-      "scale": "250k",
-      "slice_kinds": [
-        "structural"
-      ]
-    },
+    "filter_description": "family == E8A AND scale == 250k AND slice kind == structural",
     "expected_row_count": 15,
     "actual_row_count": 15,
     "source_data_row_numbers_one_based": [
@@ -70,23 +64,25 @@
       "E8A/A1r/train_250k/structural:verify/accuracy"
     ],
     "source_row_sha256s": [
-      "d8c0506c495bcaca91415390e670defa8b959e1e40145e622cf75c7d7f4fa4f0",
-      "2bde00da73f9fc7f52b168a493eac83d7d11a948292cbc7ec2065de7ee1a0459",
-      "14ad6974fe020ed58407b7d13e2816cc3edef2f8737e5c746a137f268f2425ed",
-      "ff66a4fa94cd822b9edc9edaa1fe37500c3cd3c4a0536455fd9d8058f7f19945",
-      "ae109098ba32967fa4c2f1d01d22bcbfd918a6292327ab89f3fafdc292fbaabd",
-      "8082da998eb884d13c8f5adf0bc544b288924b660fa5391cfdde15ebeadbff0e",
-      "4f35f226123f401c88ef50c04a3118b16c50ee0a51e6bb9d0b9b3457343e56ab",
-      "b3d4bb8ebb2324094a15df13fe5bf987d5add8b4cdbda763aeb982ea675ef353",
-      "13b820cf936b31f3b3f9ccd308ba344d8968dfc40a9fc6a0f8b0567ee96b7911",
-      "9d307dd3816e9b63f015da70e87b31770e9cdd827d8ec7fb3604c52c850d876f",
-      "d8a6253fa59e4fee3190be92f7aff2a80df5d5e9b7226c600515c3f196dd8a1e",
-      "de60b26e881b66915058bf61eebfdc647466d3b17331a109cb4c954044908a8f",
-      "aabf3dc42cb66b665473bfaf936768758d7d8f2aa57ecc9af3b1d861b5e86986",
-      "239952f548281e158809a4de5357498959bf387bf7def70ab58c3ce70b077b93",
-      "ddb49112fe11344216560c85d60b737a9427c72ac30fb89891d10e815ef00068"
+      "85d12a5a3843ebca8cad55afc30b2241a764d02f87510101179b37eff2f67619",
+      "ed2b22e497975e633a23f24732c5c42add3fcf7d4a0d552501eb9059dfbafecc",
+      "71b374348f6b41d9f1ab9cbf245f0ab4b613df49410605ac5e8664b7d776b32f",
+      "d2705be373f09775de975f4421ab9ac351e62a981ce52e8ee1c9be958409ffb2",
+      "0da4bba51d10604ad052c4a452e7ee958d84986251d938b80db56ed709db8710",
+      "9e5c6f7346c939d57b35bca6872f3208b806ca839f909699ae86dd07f65ce7ff",
+      "40991f82211b65c4612001f25cc5f33e2aa56f641ec2a33a39a1ee7ef5640482",
+      "923fc521e2a0d2b3b94963b43d0f1534d5cec63f00474a96ef9c267f1f56f888",
+      "8ccc61b7cc5fa8edadccecb070e22c719052749288cedc2d1563aa0c3c3a537b",
+      "3a8c053222a65c942cef3a30534ecadd9a018b2162f422b00a11c593b326c853",
+      "99e3efe4cddd342a823378907f371a4f5cc09fd1dbafb9771da06f6a3e38866f",
+      "faf24cd413ad33b9478529fb2e4736ddb8103ea5a45a713cc96da1930a6efefc",
+      "d4c2b90b5b9a7a1dff2c310de030a0c66815ddece45b2c88ebfdfad8f31df395",
+      "233e80cfd46829edf57f8712445f5fac23d90cf0c7daeebb848004db261ae4cd",
+      "e37d8869b99478c122abbd4e275a0d6e3cc76be02a3e3598abdbc10ced9319f2"
     ],
-    "source_row_identity_sha256": "f063cd79ef9b07eff21dc8eeaf479bd4213b5a77754bb8feb5ff27dc710ad795",
+    "source_row_hash_method": "SHA-256 of canonical sorted-key compact JSON for the frozen source row",
+    "source_row_identity_sha256": "f9c9a2fee4ae19fe0a4696973162f67e0be72619e6056719757d7df5c44216b7",
+    "source_row_identity_method": "SHA-256 of newline-delimited ordered source_row_sha256s with terminal newline",
     "duplicate_source_rows_within_partition": 0,
     "row_source_identity_verified": true
   },
@@ -113,18 +109,39 @@
       "scale",
       "slice kind",
       "slice",
+      "quantity",
       "point estimate",
       "95% CI (image-clustered)",
       "n questions",
       "n images"
     ],
-    "relabel_field": "slice",
-    "relabel_map": {
+    "header_map": {
+      "quantity": "Quantity"
+    },
+    "slice_relabel_map": {
       "steps:<=2": "steps: at most 2",
       "steps:>=4_combined": "steps: at least 4",
       "steps:>=5": "steps: at least 5"
     },
-    "result_and_count_values_recomputed": false
+    "quantity_relabel_map": {
+      "accuracy on the steps slice <=2": "accuracy on the steps slice at most 2",
+      "paired accuracy gap on the steps slice <=2": "paired accuracy gap on the steps slice at most 2",
+      "accuracy on the steps slice >=5": "accuracy on the steps slice at least 5",
+      "paired accuracy gap on the steps slice >=5": "paired accuracy gap on the steps slice at least 5",
+      "pooled >=4-step deficit on the steps slice >=4_combined": "pooled at-least-4-step deficit on the steps slice at least 4 (combined)"
+    },
+    "applied_relabels": [],
+    "semantic_displayed_key_columns": [
+      "family",
+      "system",
+      "scale",
+      "slice kind",
+      "slice",
+      "quantity"
+    ],
+    "ambiguous_displayed_keys_within_table": 0,
+    "result_and_count_values_recomputed": false,
+    "numeric_or_other_data_values_changed": false
   },
   "derived_csv": {
     "path": "tables_src/appA_slices_E8A_250k_b.csv",
@@ -142,9 +159,9 @@
       "--output",
       "tables/appA_slices_E8A_250k_b.tex",
       "--columns",
-      "family,system,scale,slice kind,slice,point estimate,95% CI (image-clustered),n questions,n images",
+      "family,system,scale,slice kind,slice,quantity,point estimate,95% CI (image-clustered),n questions,n images",
       "--header-map",
-      "{\"family\":\"Family\",\"system\":\"System\",\"scale\":\"Scale\",\"slice kind\":\"Slice kind\",\"slice\":\"Slice\",\"point estimate\":\"Point estimate\",\"95% CI (image-clustered)\":\"95% CI (image-clustered)\",\"n questions\":\"n questions\",\"n images\":\"n images\"}",
+      "{\"family\":\"Family\",\"system\":\"System\",\"scale\":\"Scale\",\"slice kind\":\"Slice kind\",\"slice\":\"Slice\",\"quantity\":\"Quantity\",\"point estimate\":\"Point estimate\",\"95% CI (image-clustered)\":\"95% CI (image-clustered)\",\"n questions\":\"n questions\",\"n images\":\"n images\"}",
       "--thousands",
       "--verify"
     ],
@@ -153,7 +170,28 @@
   },
   "output_table": {
     "path": "tables/appA_slices_E8A_250k_b.tex",
-    "sha256": "1ec33556d33aa855648fb50fd510f2de68df55f21665dfaacf79282ba7a6ce97"
+    "sha256": "e0e105d603c4117f2078b03e4e84ac36d636f3b0b6ffea4e3c146910dedb088f"
   },
-  "exact_partition_global_gate": "verified after all nine partitions"
+  "exact_partition_global_gate": {
+    "current_partition_paths": [
+      "tables_src/appA_slices_v202_semantic.csv",
+      "tables_src/appA_slices_v202_program.csv",
+      "tables_src/appA_slices_v202_structural.csv",
+      "tables_src/appA_slices_v205c_fiveseed.csv",
+      "tables_src/appA_slices_v205c_seed42.csv",
+      "tables_src/appA_slices_v206.csv",
+      "tables_src/appA_slices_v302a_1.csv",
+      "tables_src/appA_slices_v302a_2.csv",
+      "tables_src/appA_slices_E8A_40k_a.csv",
+      "tables_src/appA_slices_E8A_40k_b.csv",
+      "tables_src/appA_slices_E8A_250k_a.csv",
+      "tables_src/appA_slices_E8A_250k_b.csv"
+    ],
+    "source_rows": 195,
+    "represented_source_rows": 195,
+    "each_source_row_exactly_once": true,
+    "duplicate_source_rows": 0,
+    "omitted_source_rows": 0,
+    "unexpected_extra_rows": 0
+  }
 }

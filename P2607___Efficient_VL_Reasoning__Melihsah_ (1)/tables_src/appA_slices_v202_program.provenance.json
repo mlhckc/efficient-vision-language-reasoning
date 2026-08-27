@@ -25,63 +25,42 @@
     ]
   },
   "partition": {
-    "suffix": "E8A_40k_b",
-    "filter_description": "family == E8A AND scale == 40k AND slice kind == structural",
-    "expected_row_count": 15,
-    "actual_row_count": 15,
+    "suffix": "v202_program",
+    "filter_description": "family == v2_02 AND slice kind == program length",
+    "expected_row_count": 8,
+    "actual_row_count": 8,
     "source_data_row_numbers_one_based": [
-      24,
-      25,
-      26,
-      27,
-      28,
-      52,
-      53,
-      54,
-      55,
-      56,
-      80,
-      81,
-      82,
-      83,
-      84
+      90,
+      91,
+      92,
+      93,
+      104,
+      105,
+      106,
+      107
     ],
     "source_slice_ids": [
-      "E8A/A0p/train_40k/structural:choose/accuracy",
-      "E8A/A0p/train_40k/structural:compare/accuracy",
-      "E8A/A0p/train_40k/structural:logical/accuracy",
-      "E8A/A0p/train_40k/structural:query/accuracy",
-      "E8A/A0p/train_40k/structural:verify/accuracy",
-      "E8A/A1/train_40k/structural:choose/accuracy",
-      "E8A/A1/train_40k/structural:compare/accuracy",
-      "E8A/A1/train_40k/structural:logical/accuracy",
-      "E8A/A1/train_40k/structural:query/accuracy",
-      "E8A/A1/train_40k/structural:verify/accuracy",
-      "E8A/A1r/train_40k/structural:choose/accuracy",
-      "E8A/A1r/train_40k/structural:compare/accuracy",
-      "E8A/A1r/train_40k/structural:logical/accuracy",
-      "E8A/A1r/train_40k/structural:query/accuracy",
-      "E8A/A1r/train_40k/structural:verify/accuracy"
+      "v2_02/concat/train_40k/steps:3/accuracy",
+      "v2_02/concat/train_40k/steps:4/accuracy",
+      "v2_02/concat/train_40k/steps:>=5/accuracy",
+      "v2_02/concat/train_40k/steps:<=2/accuracy",
+      "v2_02/fusion/train_40k/steps:3/accuracy",
+      "v2_02/fusion/train_40k/steps:4/accuracy",
+      "v2_02/fusion/train_40k/steps:>=5/accuracy",
+      "v2_02/fusion/train_40k/steps:<=2/accuracy"
     ],
     "source_row_sha256s": [
-      "9f7b510e0fb202e0acd4a77386b9b261c90a3ee73dc17359dd609eeb3a4fa969",
-      "5e4cc9c63940691e35f0a751545b6c2d45c0a00402e01b2b725b337d2890a781",
-      "47c215ed63af8de03b6c82dbdb4f6821e4fd9d99a04102a55a6f61166b92eb07",
-      "590f54d73424347007ee455caeef8bcdac6b76873eaff7c2dffd526f15b5f19f",
-      "9f4c63d26fd0c74abd43736e89629d552a69476f398600f8d19e2d94ea5e7636",
-      "a5cad9472435d65ea35cf53ffc39064db2466b85ec8ef588ea77d1a62a653958",
-      "e201b32da16313d4be9e84aa1de7b13a5de8a55a39772cf111a3d0eaf9bfb7fc",
-      "b12d4b1f5adf28a3ef4072c220050717070cd3853dde0cabfa652decf9caa6b1",
-      "d2b089e39486fb8c2bdd7636de15cac91f7c166c5e7eeb0b4b42f3bb73e8b9bf",
-      "e6cea6d08e7bbbfd0f8ef38a0aaa1e6abd43a39bb050fba6a91ba0bc917d5515",
-      "d5f4e3c686ab48550a6c34ca679b4ae7249366e74331dd1da6c05ae38a7fb3ea",
-      "f854371d083fb3bec24bf3da32b2374856805bee09d53a48c8885e04e4f17cf9",
-      "6373eb3eecf1a2adbd0043116beedb04d003f2401ae0ffd172fbf6cb0bfcb27f",
-      "36924651f38ad8008b79d32845b9f53ced4d9542aed5f6e026121256b74eb239",
-      "72e3a3aac2536039c9d7cedc66664722e20229c3ab7aec298f8f2895a6c04e3b"
+      "fff1c3ad5fded1599a0e73ddcb9d68fe060bc0051502a214726b05963ac2f6df",
+      "05b47a20fb252f70bdeeee3967db59ab90cccc1f2464aefa08a95877fc15795d",
+      "07d2a1f450b4da51e7d7e00f208e56456417bb176ea397a2e1db7ac6c3e77a71",
+      "d20e2fa4465837241b231b14d170617eb32d2482b2954a266ebe90963df97c5d",
+      "2ec29129c438e55c8d6c220ac6c23c340697799039e3c3041fed97c417321b6e",
+      "1ec9e3dd5f9488814746dbed67a7d5fd45011a682476514e06e616c646a6692a",
+      "108f73ed79f9ee5aa6a0130c644ac4d0759a4684d10387cf1500f29da15d170a",
+      "3bad7e6872bbf5b6e8380ed71c61147c6d5dd9dd5b5520d0929c78673fa6966c"
     ],
     "source_row_hash_method": "SHA-256 of canonical sorted-key compact JSON for the frozen source row",
-    "source_row_identity_sha256": "0cb410b11b80e54589461a9b3026db961eef63ee2dc8aad988fa5994bee1772d",
+    "source_row_identity_sha256": "920796509dd0df64f5af8275baac12ee11146fc73820ce6adcbc29a28eb2c4fb",
     "source_row_identity_method": "SHA-256 of newline-delimited ordered source_row_sha256s with terminal newline",
     "duplicate_source_rows_within_partition": 0,
     "row_source_identity_verified": true
@@ -130,7 +109,56 @@
       "paired accuracy gap on the steps slice >=5": "paired accuracy gap on the steps slice at least 5",
       "pooled >=4-step deficit on the steps slice >=4_combined": "pooled at-least-4-step deficit on the steps slice at least 4 (combined)"
     },
-    "applied_relabels": [],
+    "applied_relabels": [
+      {
+        "source_row": 92,
+        "column": "slice",
+        "source_value": "steps:>=5",
+        "displayed_value": "steps: at least 5"
+      },
+      {
+        "source_row": 92,
+        "column": "quantity",
+        "source_value": "accuracy on the steps slice >=5",
+        "displayed_value": "accuracy on the steps slice at least 5"
+      },
+      {
+        "source_row": 93,
+        "column": "slice",
+        "source_value": "steps:<=2",
+        "displayed_value": "steps: at most 2"
+      },
+      {
+        "source_row": 93,
+        "column": "quantity",
+        "source_value": "accuracy on the steps slice <=2",
+        "displayed_value": "accuracy on the steps slice at most 2"
+      },
+      {
+        "source_row": 106,
+        "column": "slice",
+        "source_value": "steps:>=5",
+        "displayed_value": "steps: at least 5"
+      },
+      {
+        "source_row": 106,
+        "column": "quantity",
+        "source_value": "accuracy on the steps slice >=5",
+        "displayed_value": "accuracy on the steps slice at least 5"
+      },
+      {
+        "source_row": 107,
+        "column": "slice",
+        "source_value": "steps:<=2",
+        "displayed_value": "steps: at most 2"
+      },
+      {
+        "source_row": 107,
+        "column": "quantity",
+        "source_value": "accuracy on the steps slice <=2",
+        "displayed_value": "accuracy on the steps slice at most 2"
+      }
+    ],
     "semantic_displayed_key_columns": [
       "family",
       "system",
@@ -144,9 +172,9 @@
     "numeric_or_other_data_values_changed": false
   },
   "derived_csv": {
-    "path": "tables_src/appA_slices_E8A_40k_b.csv",
-    "sha256": "866b3a91d556f3387290ca0c96c4bf492a7493da5b43f325c3bff6c697810e5a",
-    "row_count": 15,
+    "path": "tables_src/appA_slices_v202_program.csv",
+    "sha256": "c98b0670b02e523a40884d9756d8c85e01f898ae8f13f3ab01a00f5cdf8e5704",
+    "row_count": 8,
     "column_count": 14
   },
   "converter": {
@@ -155,9 +183,9 @@
     "command": [
       "python3",
       "tools/tab2latex.py",
-      "tables_src/appA_slices_E8A_40k_b.csv",
+      "tables_src/appA_slices_v202_program.csv",
       "--output",
-      "tables/appA_slices_E8A_40k_b.tex",
+      "tables/appA_slices_v202_program.tex",
       "--columns",
       "family,system,scale,slice kind,slice,quantity,point estimate,95% CI (image-clustered),n questions,n images",
       "--header-map",
@@ -169,8 +197,8 @@
     "exit_code": 0
   },
   "output_table": {
-    "path": "tables/appA_slices_E8A_40k_b.tex",
-    "sha256": "86e3f5385c08d113d66bfd2bf70d98c1ae092857f80b136da912f1263b7af3e2"
+    "path": "tables/appA_slices_v202_program.tex",
+    "sha256": "cafba001c1ab8635fbcff76abafc9062f15f7314c6298ae9d862ba369bcfa0ae"
   },
   "exact_partition_global_gate": {
     "current_partition_paths": [

@@ -4,7 +4,7 @@
   "stage": "xref_appendix_integration",
   "base_commit": "66f2112462518ed26d184c3c6c5b539ce72b4c77",
   "final_commit": null,
-  "final_commit_record": "30-implementation.json",
+  "final_commit_record": "30-implementation-02.json",
   "created_at_utc": "2026-08-27T11:51:43Z",
   "development_set_only": true,
   "held_out_result": null,
@@ -69,13 +69,14 @@
     {
       "id": "X5",
       "path": "chapters/technical2.tex",
-      "action": "same fenced sentence as X4; full nine-table range",
+      "action": "same fenced sentence as X4; full twelve-table range after the authorised v2_02 slice-kind fallback",
       "targets": [
         "tab:appA-slices",
         "tab:appA-slices-e8a-250k-b"
       ],
-      "rendered_range": "Tables A.2--A.10",
-      "all_rows_in_first_table_implied": false
+      "rendered_range": "Tables A.2--A.13",
+      "all_rows_in_first_table_implied": false,
+      "slice_table_count": 12
     },
     {
       "id": "X6",
@@ -84,7 +85,13 @@
       "targets": [
         "tab:appA-scale-effects"
       ],
-      "text": "The training-scale effect of each answer-side system, 250k minus 40k with its image-clustered interval, is tabulated in Table~\\ref{tab:appA-scale-effects}."
+      "text": "The training-scale effect of each answer-side system, 250k minus 40k with its image-clustered interval, is tabulated in Table~\\ref{tab:appA-scale-effects}.",
+      "revision_2_move": {
+        "text_changed": false,
+        "old_location": "before the pre-existing \\clearpage after Table 6.3",
+        "new_location": "immediately after the paragraph ending \"that scale pattern is separate from the within-scale pretraining contrasts.\"",
+        "single_copy_verified": true
+      }
     },
     {
       "id": "X7",
@@ -113,7 +120,8 @@
         "post_integration_sha256": "1dbe65ddd7dce69e1f9f95e7e426e8682dc917e86a63f56a060deb6ad600a5e1",
         "stripped_historical_digest": "edf5c0375639c8b94cec3459d5868d638d9cf70f97e20c6322fa7298079d61b8",
         "stripped_post_integration_digest": "edf5c0375639c8b94cec3459d5868d638d9cf70f97e20c6322fa7298079d61b8",
-        "identical": true
+        "identical": true,
+        "revision_2_pre_sha256": "1dbe65ddd7dce69e1f9f95e7e426e8682dc917e86a63f56a060deb6ad600a5e1"
       },
       {
         "path": "chapters/conclusions.tex",
@@ -121,7 +129,8 @@
         "post_integration_sha256": "2ea67b92b6713b3bdab0089f702a1f06c735d5aba33a7d5a96af1e4d1e18ba11",
         "stripped_historical_digest": "efd25e36b4947f21396a1b2d9c4460401b5debd1320ee4bba9a210a55e5aba77",
         "stripped_post_integration_digest": "efd25e36b4947f21396a1b2d9c4460401b5debd1320ee4bba9a210a55e5aba77",
-        "identical": true
+        "identical": true,
+        "revision_2_pre_sha256": "2ea67b92b6713b3bdab0089f702a1f06c735d5aba33a7d5a96af1e4d1e18ba11"
       },
       {
         "path": "chapters/technical.tex",
@@ -129,7 +138,8 @@
         "post_integration_sha256": "9d2cf74ef4e64ac258d1abfa85f2e7e4111fe64ad8548bc498be6eae7c5e8168",
         "stripped_historical_digest": "386d2caaf4989d3699dc0a7f77b3efea978bf437487a17bad5589606707386d0",
         "stripped_post_integration_digest": "386d2caaf4989d3699dc0a7f77b3efea978bf437487a17bad5589606707386d0",
-        "identical": true
+        "identical": true,
+        "revision_2_pre_sha256": "9d2cf74ef4e64ac258d1abfa85f2e7e4111fe64ad8548bc498be6eae7c5e8168"
       },
       {
         "path": "chapters/technical2.tex",
@@ -137,15 +147,17 @@
         "post_integration_sha256": "3c203bf01a68a02d5fe58875ebd01cfd888332c318c0176bd6c3eda503b0b20f",
         "stripped_historical_digest": "7580e0fd067e985de84b0d818a6a9ae13f0f81ba514bc6daad1b9d2eba8ffba4",
         "stripped_post_integration_digest": "7580e0fd067e985de84b0d818a6a9ae13f0f81ba514bc6daad1b9d2eba8ffba4",
-        "identical": true
+        "identical": true,
+        "revision_2_pre_sha256": "3c203bf01a68a02d5fe58875ebd01cfd888332c318c0176bd6c3eda503b0b20f"
       },
       {
         "path": "chapters/slm.tex",
         "approved_pre_integration_sha256": "a2cf2a316b4e8d6b3765d6d39b4af266bde6bf2657929ff03beaf814f62347f1",
-        "post_integration_sha256": "fb391f52cdfa5381204915a77fcf7bd2a3aaeff937501afc007bcdc5fb0bc2f9",
+        "post_integration_sha256": "34ce69b1a98cf2c7cc55cf0790e1975965284ab535846ea58251e5f296f2e8fd",
         "stripped_historical_digest": "ef85e7a5cb73548cd995fa8d8c7fa708f6aac13093bc45811b95137ff230882b",
         "stripped_post_integration_digest": "ef85e7a5cb73548cd995fa8d8c7fa708f6aac13093bc45811b95137ff230882b",
-        "identical": true
+        "identical": true,
+        "revision_2_pre_sha256": "fb391f52cdfa5381204915a77fcf7bd2a3aaeff937501afc007bcdc5fb0bc2f9"
       },
       {
         "path": "chapters/efficiency.tex",
@@ -153,7 +165,8 @@
         "post_integration_sha256": "55f92d89a1f934243457d68109cc46381cdb309ac47e0eedc5335c33d9c25e26",
         "stripped_historical_digest": "55589f1f625e654632f90ceed0359329b8b5f7e5def6246ed932858e65693b4a",
         "stripped_post_integration_digest": "55589f1f625e654632f90ceed0359329b8b5f7e5def6246ed932858e65693b4a",
-        "identical": true
+        "identical": true,
+        "revision_2_pre_sha256": "55f92d89a1f934243457d68109cc46381cdb309ac47e0eedc5335c33d9c25e26"
       }
     ],
     "all_equal": true
@@ -161,9 +174,10 @@
   "appendix_source": {
     "path": "appendices/appendix.tex",
     "pre_sha256": "df93dc67eb04986c45c44ce19ce251cbf2daba33bfaeebb3813308c8a7c6066c",
-    "post_sha256": "59a8b144c89a5e7a11546cf4ae050fce6ef76f0723cad4faf4e9c14d009d7e02",
+    "post_sha256": "c5475b49994dea13e15c28be6e37ec74fbd74af8a5e0d5e61ffc5382e1936079",
     "stub_guidance_remaining": false,
-    "chapter_label": "app:supplementary"
+    "chapter_label": "app:supplementary",
+    "revision_2_pre_sha256": "59a8b144c89a5e7a11546cf4ae050fce6ef76f0723cad4faf4e9c14d009d7e02"
   },
   "main_template": {
     "path": "Dissertation_Template.tex",
@@ -266,7 +280,7 @@
       "copy_sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
       "copy_byte_identical": true,
       "frozen_source_caption": "Full slice statistics. What is every per-type, per-structure and per-step-bucket value, with its counts? Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. E8A's projected interface is a learned common width, not a naturally shared pretrained embedding space. A1 minus A1r is the only clean within-size question-side pretraining contrast; A1 minus A0p also changes the representation space and the interface. Slices are unequal and dependent; every interval is clustered on the slice's own represented development images, never on rows. A drop under a wrong or removed image demonstrates reliance on the image. It is NOT proof of robust visual reasoning, of grounding or of compositional understanding. The question-only drop is exactly zero by construction and is a control, not a result. A system-level comparison. Input granularity, architecture and parameter count change together, so token-level access is not isolated as the cause.",
-      "tex_safe_rendered_first_caption": "Full slice statistics. What is every per-type, per-structure and per-step-bucket value, with its counts? Development-set result on one GQA subset. No held-out generalisation is claimed. E8A's projected interface is a learned common width, not a naturally shared pretrained embedding space. A1 minus A1r is the only clean within-size question-side pretraining contrast; A1 minus A0p also changes the representation space and the interface. Slices are unequal and dependent; every interval is clustered on the slice's own represented development images, never on rows. A drop under a wrong or removed image demonstrates reliance on the image. It is NOT proof of robust visual reasoning, of grounding or of compositional understanding. The question-only drop is exactly zero by construction and is a control, not a result. A system-level comparison. Input granularity, architecture and parameter count change together, so token-level access is not isolated as the cause. The step-bucket slices are printed as at most 2, at least 4 and at least 5 for the buckets $\\leq$2, $\\geq$4 and $\\geq$5; the values are unchanged.",
+      "tex_safe_rendered_first_caption": "Full slice statistics. What is every per-type, per-structure and per-step-bucket value, with its counts? Development-set result on one GQA subset. No held-out generalisation is claimed. E8A's projected interface is a learned common width, not a naturally shared pretrained embedding space. A1 minus A1r is the only clean within-size question-side pretraining contrast; A1 minus A0p also changes the representation space and the interface. Slices are unequal and dependent; every interval is clustered on the slice's own represented development images, never on rows. A drop under a wrong or removed image demonstrates reliance on the image. It is NOT proof of robust visual reasoning, of grounding or of compositional understanding. The question-only drop is exactly zero by construction and is a control, not a result. A system-level comparison. Input granularity, architecture and parameter count change together, so token-level access is not isolated as the cause. The Slice and Quantity columns use the presentation wording \\emph{at most 2}, \\emph{at least 4 (combined)} and \\emph{at least 5} for the corresponding frozen $\\leq 2$, $\\geq 4_{\\mathrm{combined}}$ and $\\geq 5$ bucket labels; underlying values are unchanged.",
       "H_5_caption_exception": {
         "stale_clause": "The clean test is embargoed and unread.",
         "reason_for_supersession": "canonical clean-test governance documents two mechanical byte-access incidents, so unread is too categorical",
@@ -299,6 +313,7 @@
         "scale",
         "slice kind",
         "slice",
+        "quantity",
         "point estimate",
         "95% CI (image-clustered)",
         "n questions",
@@ -311,117 +326,162 @@
       },
       "partitions": [
         {
-          "suffix": "v202",
+          "suffix": "v202_semantic",
           "number": "A.2",
           "label": "tab:appA-slices",
-          "derived_csv": "tables_src/appA_slices_v202.csv",
-          "derived_csv_sha256": "523e52753bf2ee6213d96ed636e9505d3451cd2f00c1680f4a5549c52d255ef5",
-          "sidecar": "tables_src/appA_slices_v202.provenance.json",
-          "sidecar_sha256": "4bac59f34205820f95f8b2c2ca9288bfa0eed0a68d8eececc55dc836f3eb29d8",
-          "output": "tables/appA_slices_v202.tex",
-          "output_sha256": "79923cb8493f1d6e22cd8dd2996f3919e0c92bbf040851b38309352f28b02cc9",
-          "filter": {
-            "family": "v2_02"
-          },
-          "filter_description": "family = v2_02 (all scales, systems and slice kinds)",
-          "row_count": 28,
+          "derived_csv": "tables_src/appA_slices_v202_semantic.csv",
+          "derived_csv_sha256": "7b82d4ea84bde6b0f2c48ebee509c251768b88ec945628a33b113bce09f9ea92",
+          "sidecar": "tables_src/appA_slices_v202_semantic.provenance.json",
+          "sidecar_sha256": "a24e30698291412d3f23725e0c3da04e13121b2c851a06648b40122c1598d407",
+          "output": "tables/appA_slices_v202_semantic.tex",
+          "output_sha256": "4f50daf669aabfbac1e01bb628b00d46216803682440e8815651600914daa58d",
+          "filter_description": "family == v2_02 AND slice kind == semantic",
+          "row_count": 10,
           "source_rows_one_based": [
             85,
             86,
             87,
             88,
             89,
+            99,
+            100,
+            101,
+            102,
+            103
+          ],
+          "row_source_identity_sha256": "2410d57a4656e37f2aca95f6a4aecf5c9ed6326b1738e4e49402fd5454247b3c",
+          "row_source_identity_verified": true,
+          "converter_verify_exit_code": 0
+        },
+        {
+          "suffix": "v202_program",
+          "number": "A.3",
+          "label": "tab:appA-slices-v202-program",
+          "derived_csv": "tables_src/appA_slices_v202_program.csv",
+          "derived_csv_sha256": "c98b0670b02e523a40884d9756d8c85e01f898ae8f13f3ab01a00f5cdf8e5704",
+          "sidecar": "tables_src/appA_slices_v202_program.provenance.json",
+          "sidecar_sha256": "230155b1a531130db6838d760a2ca7704832ddd6d79e2f0f19684dd8aac635d1",
+          "output": "tables/appA_slices_v202_program.tex",
+          "output_sha256": "cafba001c1ab8635fbcff76abafc9062f15f7314c6298ae9d862ba369bcfa0ae",
+          "filter_description": "family == v2_02 AND slice kind == program length",
+          "row_count": 8,
+          "source_rows_one_based": [
             90,
             91,
             92,
             93,
+            104,
+            105,
+            106,
+            107
+          ],
+          "row_source_identity_sha256": "920796509dd0df64f5af8275baac12ee11146fc73820ce6adcbc29a28eb2c4fb",
+          "row_source_identity_verified": true,
+          "converter_verify_exit_code": 0
+        },
+        {
+          "suffix": "v202_structural",
+          "number": "A.4",
+          "label": "tab:appA-slices-v202-structural",
+          "derived_csv": "tables_src/appA_slices_v202_structural.csv",
+          "derived_csv_sha256": "cfed3c2767de11fc39c8eddf6b4ee0b81ca9a24d73cb2e4c641dbde0dc3b34df",
+          "sidecar": "tables_src/appA_slices_v202_structural.provenance.json",
+          "sidecar_sha256": "837a5d444c2a7feb1b55d4bbe3d6a646aa2efd0bb7152bf011f2f956b9a5e270",
+          "output": "tables/appA_slices_v202_structural.tex",
+          "output_sha256": "ab5ff1df92bb260f65909b7d2d07a7df23ead37d94ceff7b2b2c9f7cf1722bf0",
+          "filter_description": "family == v2_02 AND slice kind == structural",
+          "row_count": 10,
+          "source_rows_one_based": [
             94,
             95,
             96,
             97,
             98,
-            99,
-            100,
-            101,
-            102,
-            103,
-            104,
-            105,
-            106,
-            107,
             108,
             109,
             110,
             111,
             112
           ],
-          "row_source_identity_sha256": "365ee45f05cb471fd07a0cdd42fdf97f016bdb1faa45c1b51cccf4e6a988fb2e",
+          "row_source_identity_sha256": "036de01fad7ea55be2b6d50ebcdd0d04ef84331120ce80b222f759f586f68fbf",
           "row_source_identity_verified": true,
           "converter_verify_exit_code": 0
         },
         {
-          "suffix": "v205c",
-          "number": "A.3",
-          "label": "tab:appA-slices-v205c",
-          "derived_csv": "tables_src/appA_slices_v205c.csv",
-          "derived_csv_sha256": "017f28f24d189d59df51edfc5034c0ba494240d11a5932ed1ddebb19f7b2bf3e",
-          "sidecar": "tables_src/appA_slices_v205c.provenance.json",
-          "sidecar_sha256": "4655dcf04786f5b256fe3d176252ee046e4fb12ddf38c48d9bb393e1818677e4",
-          "output": "tables/appA_slices_v205c.tex",
-          "output_sha256": "c4a977d74b8c47f7dbde1323aa73eb7975cc649a8a4516846352b67c14d71463",
-          "filter": {
-            "family": "v2_05c"
-          },
-          "filter_description": "family = v2_05c (all scales, systems and slice kinds)",
-          "row_count": 28,
+          "suffix": "v205c_fiveseed",
+          "number": "A.5",
+          "label": "tab:appA-slices-v205c-fiveseed",
+          "derived_csv": "tables_src/appA_slices_v205c_fiveseed.csv",
+          "derived_csv_sha256": "5c709f4822072c256fd52dc942543458a73eb8a665e92cd72700d7b755f8f43d",
+          "sidecar": "tables_src/appA_slices_v205c_fiveseed.provenance.json",
+          "sidecar_sha256": "e25184e6ca2c9094b81cbac09baa20e544a60038e06c957b8207974c715d0a5b",
+          "output": "tables/appA_slices_v205c_fiveseed.tex",
+          "output_sha256": "db12514a40456495cffc98ce444e618d8bb6a7d60ab65ce7cf3fb941caf5ceca",
+          "filter_description": "family == v2_05c AND slice id suffix == /five_seed",
+          "row_count": 14,
           "source_rows_one_based": [
             113,
-            114,
             115,
-            116,
             117,
-            118,
             119,
-            120,
             121,
-            122,
             123,
-            124,
             125,
-            126,
             127,
-            128,
             129,
-            130,
             131,
-            132,
             133,
-            134,
             135,
-            136,
             137,
+            139
+          ],
+          "row_source_identity_sha256": "6ee2d06bd25ef2cc51d6f17fa7dc9667af7f438abd3b3dc9859f17ee386560b3",
+          "row_source_identity_verified": true,
+          "converter_verify_exit_code": 0
+        },
+        {
+          "suffix": "v205c_seed42",
+          "number": "A.6",
+          "label": "tab:appA-slices-v205c-seed42",
+          "derived_csv": "tables_src/appA_slices_v205c_seed42.csv",
+          "derived_csv_sha256": "2e381ecc5d85c6ece2ac1815fd6251e283b7aa2d8c8fca0403ab98ab8c31ca7b",
+          "sidecar": "tables_src/appA_slices_v205c_seed42.provenance.json",
+          "sidecar_sha256": "6a48b38a1587b16caa8201c7346d2bf4e4d573830d2176c915ce4c64fe3cc1e4",
+          "output": "tables/appA_slices_v205c_seed42.tex",
+          "output_sha256": "04bc593fd6bdcb12ca56c487963d9397d129acb22c04c50d485b0b1523ac2e4f",
+          "filter_description": "family == v2_05c AND slice id suffix == /seed42",
+          "row_count": 14,
+          "source_rows_one_based": [
+            114,
+            116,
+            118,
+            120,
+            122,
+            124,
+            126,
+            128,
+            130,
+            132,
+            134,
+            136,
             138,
-            139,
             140
           ],
-          "row_source_identity_sha256": "8f424b95599399576ef01138f3cf6ca040c4ed858e3c8f2832f7ab0f0667d8f0",
+          "row_source_identity_sha256": "20e3f466a9da6fec483bbb75f3814cb1491b5b4fb3f22baef1b45419566313e9",
           "row_source_identity_verified": true,
           "converter_verify_exit_code": 0
         },
         {
           "suffix": "v206",
-          "number": "A.4",
+          "number": "A.7",
           "label": "tab:appA-slices-v206",
           "derived_csv": "tables_src/appA_slices_v206.csv",
           "derived_csv_sha256": "e5cce3ef6bc1aabc2aeb5fa631e32626e4b2b2cb8a8774dadc15196038858114",
           "sidecar": "tables_src/appA_slices_v206.provenance.json",
-          "sidecar_sha256": "6967a833d2364da7adcb3d9b8e0dd8033d433e4573db8a548ec9d38129d35c3a",
+          "sidecar_sha256": "23975a4a08797ec4e69b551b2d6febc01958a06dbf18aa76c3b283d07436844f",
           "output": "tables/appA_slices_v206.tex",
-          "output_sha256": "8c1eb8448376c0bed28c73d229903548c8e9fe33fdba4e72fa8fe7afdf2ead4f",
-          "filter": {
-            "family": "v2_06"
-          },
-          "filter_description": "family = v2_06 (all scales, systems and slice kinds)",
+          "output_sha256": "26d86bc4eeb097bea22c14b816720324481f859a2d7200920d67c514761b8dfb",
+          "filter_description": "family == v2_06",
           "row_count": 20,
           "source_rows_one_based": [
             141,
@@ -445,30 +505,21 @@
             159,
             160
           ],
-          "row_source_identity_sha256": "de91ca4c711f0011d6dd5e8c1d59c4f812393a0714c225975815d142da47c30d",
+          "row_source_identity_sha256": "12b754b415395b57afed8ccabb238bad06877a019fc64b99321862f4161d71fb",
           "row_source_identity_verified": true,
           "converter_verify_exit_code": 0
         },
         {
           "suffix": "v302a_1",
-          "number": "A.5",
+          "number": "A.8",
           "label": "tab:appA-slices-v302a-1",
           "derived_csv": "tables_src/appA_slices_v302a_1.csv",
-          "derived_csv_sha256": "23a9f1c25e7b51bfa1dfda95261ad1355dc29719e4632f06610b9e9697a5df7d",
+          "derived_csv_sha256": "111ebbdf44d93f54322edb6149efcd5dbbf278f6aba65ff4919e306e23ff7826",
           "sidecar": "tables_src/appA_slices_v302a_1.provenance.json",
-          "sidecar_sha256": "8209d9be7d82df6266ec6b46d983c2a8fc0c128ad64cf768ebb4fc04e7272cfe",
+          "sidecar_sha256": "f7fe9e7053ff09534c7c1066fab638fe3cfb3ef82e227b95a5fe8404a24dfa0c",
           "output": "tables/appA_slices_v302a_1.tex",
-          "output_sha256": "372d863e6f7e4f041a0002a3943b0e6ae0bc60de003fcb13ca9a59844c3c3e6f",
-          "filter": {
-            "family": "v3_02a",
-            "systems": [
-              "question_only",
-              "direct_linear",
-              "meanpatch_concat",
-              "concat"
-            ]
-          },
-          "filter_description": "family = v3_02a and system in {question_only, direct_linear, meanpatch_concat, concat}",
+          "output_sha256": "ae56b838b275244b08191a5f6ed9d4d19033afb559d71c8a732aafdfbefebc4f",
+          "filter_description": "family == v3_02a AND system in {question_only,direct_linear,meanpatch_concat,concat}",
           "row_count": 20,
           "source_rows_one_based": [
             161,
@@ -492,29 +543,21 @@
             189,
             190
           ],
-          "row_source_identity_sha256": "828c8184db7507995b8160705d37a60f9349ef758aa9f9d10110d27f4bcdf9b5",
+          "row_source_identity_sha256": "5b4a9d13236e18e8963618c3b542b14d1b2a8f4a39db2759c7962cc9c83774cf",
           "row_source_identity_verified": true,
           "converter_verify_exit_code": 0
         },
         {
           "suffix": "v302a_2",
-          "number": "A.6",
+          "number": "A.9",
           "label": "tab:appA-slices-v302a-2",
           "derived_csv": "tables_src/appA_slices_v302a_2.csv",
-          "derived_csv_sha256": "2c196e267ce3eaf75983f65be8a18d708556bff70210280385c192b658179a0b",
+          "derived_csv_sha256": "1bdb5539726d7c385f915e8982f98ac00dd584b0ddabd26bae0f0052987ff99e",
           "sidecar": "tables_src/appA_slices_v302a_2.provenance.json",
-          "sidecar_sha256": "464bf3cc59b9a9c0cde61ba2b0c6e3a277e2eb682165d56cd5f808b62b793a64",
+          "sidecar_sha256": "f77049597724609db98834118295d8f227ae6487989b16d2bb452f44609377b7",
           "output": "tables/appA_slices_v302a_2.tex",
-          "output_sha256": "7a5392eb04b5ffc4975df39dc5027235e9bb5f0318260ec6afb35322c3faf446",
-          "filter": {
-            "family": "v3_02a",
-            "systems": [
-              "product_576k",
-              "fusion",
-              "reasoner"
-            ]
-          },
-          "filter_description": "family = v3_02a and system in {product_576k, fusion, reasoner}",
+          "output_sha256": "dde51fe84fc71fb05322a17ef4312ad0a24ca383f7fa43bda43f7f25aeb92f52",
+          "filter_description": "family == v3_02a AND system in {product_576k,fusion,reasoner}",
           "row_count": 15,
           "source_rows_one_based": [
             171,
@@ -533,29 +576,21 @@
             194,
             195
           ],
-          "row_source_identity_sha256": "d0e7621909134b4221144db72baaa9756661372ebc4c2b3816fbfe1d1c99dab9",
+          "row_source_identity_sha256": "766e2da9e7b1253eea35e0dd4117624decfbd02da5d1070a5bbd7d4f1e101449",
           "row_source_identity_verified": true,
           "converter_verify_exit_code": 0
         },
         {
           "suffix": "E8A_40k_a",
-          "number": "A.7",
+          "number": "A.10",
           "label": "tab:appA-slices-e8a-40k-a",
           "derived_csv": "tables_src/appA_slices_E8A_40k_a.csv",
-          "derived_csv_sha256": "a690e270bea736c1ee06f7e24a8c4f37630b2b571242cfdcdecd86fb05971624",
+          "derived_csv_sha256": "1344ecec703838f7e788608c19da94e02d1f4b82b8432c10e65ef92aeb249d10",
           "sidecar": "tables_src/appA_slices_E8A_40k_a.provenance.json",
-          "sidecar_sha256": "112bc1e8242fbc09978c0a02937f5270c10b62659b3b4f52f0a6bb5c2bf74a24",
+          "sidecar_sha256": "43741b8413578e86a1ef3b0f9c410497290874cb634b9a7e3b71d8eed06cb9c6",
           "output": "tables/appA_slices_E8A_40k_a.tex",
-          "output_sha256": "d47749adef934880797cf73729cdc4519234496c3bb4f562307984676c44b1aa",
-          "filter": {
-            "family": "E8A",
-            "scale": "40k",
-            "slice_kinds": [
-              "semantic",
-              "program length"
-            ]
-          },
-          "filter_description": "family = E8A, scale = 40k and slice kind in {semantic, program length}",
+          "output_sha256": "33ec18f4a42a02e36dfd288876101dbfb7cd38a351d6bb3cfc37fb29a394bc43",
+          "filter_description": "family == E8A AND scale == 40k AND slice kind in {semantic,program length}",
           "row_count": 27,
           "source_rows_one_based": [
             15,
@@ -586,28 +621,21 @@
             78,
             79
           ],
-          "row_source_identity_sha256": "0e7e5199ac0a3862285603aa49f4568a1b2651d70f4188f06b7d65a196fdc5bd",
+          "row_source_identity_sha256": "20fe3f5a85fd397b88c470fce31b12690222e60e4de83db06795be496c12be1e",
           "row_source_identity_verified": true,
           "converter_verify_exit_code": 0
         },
         {
           "suffix": "E8A_40k_b",
-          "number": "A.8",
+          "number": "A.11",
           "label": "tab:appA-slices-e8a-40k-b",
           "derived_csv": "tables_src/appA_slices_E8A_40k_b.csv",
           "derived_csv_sha256": "866b3a91d556f3387290ca0c96c4bf492a7493da5b43f325c3bff6c697810e5a",
           "sidecar": "tables_src/appA_slices_E8A_40k_b.provenance.json",
-          "sidecar_sha256": "1e88b98e129e0b9553fa461459025d5a2d728870469bc26dc5e290ac9537d92a",
+          "sidecar_sha256": "f717a8db100e5b2915174072fff8700ca0b0d01d7f4e08ed73aebcae9c648a79",
           "output": "tables/appA_slices_E8A_40k_b.tex",
-          "output_sha256": "078dac5b0c4099991a4ebeefbfacf8618263aa633607eeeac4d458832d622d8a",
-          "filter": {
-            "family": "E8A",
-            "scale": "40k",
-            "slice_kinds": [
-              "structural"
-            ]
-          },
-          "filter_description": "family = E8A, scale = 40k and slice kind = structural",
+          "output_sha256": "86e3f5385c08d113d66bfd2bf70d98c1ae092857f80b136da912f1263b7af3e2",
+          "filter_description": "family == E8A AND scale == 40k AND slice kind == structural",
           "row_count": 15,
           "source_rows_one_based": [
             24,
@@ -626,29 +654,21 @@
             83,
             84
           ],
-          "row_source_identity_sha256": "0dbddb9ca73babd797661ee7c67fd69cd55050d629438bf10ccd589413f40261",
+          "row_source_identity_sha256": "0cb410b11b80e54589461a9b3026db961eef63ee2dc8aad988fa5994bee1772d",
           "row_source_identity_verified": true,
           "converter_verify_exit_code": 0
         },
         {
           "suffix": "E8A_250k_a",
-          "number": "A.9",
+          "number": "A.12",
           "label": "tab:appA-slices-e8a-250k-a",
           "derived_csv": "tables_src/appA_slices_E8A_250k_a.csv",
-          "derived_csv_sha256": "604da6e98f59c94e2c9cd7a043f8f94abbf95ba5b2b2af038120cf9236e45118",
+          "derived_csv_sha256": "5389f49404547c2aca3d60dc01cfe72112632bcfbc890c10cbee5eaaf285aeca",
           "sidecar": "tables_src/appA_slices_E8A_250k_a.provenance.json",
-          "sidecar_sha256": "e6a2def182397f0869618bdecab9e3c58a81eaffbe76c08e58ba3b2bc53873f4",
+          "sidecar_sha256": "4b7d7218060e8e66c9f9b81d2875dcd6d74c28e824aaef9a891e589ab5592111",
           "output": "tables/appA_slices_E8A_250k_a.tex",
-          "output_sha256": "20e40700bdb04e8cc996767f9c7af71c62a92036b0263e07f70c006e6635cd22",
-          "filter": {
-            "family": "E8A",
-            "scale": "250k",
-            "slice_kinds": [
-              "semantic",
-              "program length"
-            ]
-          },
-          "filter_description": "family = E8A, scale = 250k and slice kind in {semantic, program length}",
+          "output_sha256": "1487dff07e41646a081f23b6565b771eaa5c212355f0bd8fd1045da314f0500d",
+          "filter_description": "family == E8A AND scale == 250k AND slice kind in {semantic,program length}",
           "row_count": 27,
           "source_rows_one_based": [
             1,
@@ -679,28 +699,21 @@
             64,
             65
           ],
-          "row_source_identity_sha256": "da049583a6b72249d390f9156626f5cf2b41585db7f8f6a6414fc201adbd15c2",
+          "row_source_identity_sha256": "fca93c3275a9297c56ee8d79bd34c8b8a2dd2bfef3c96b70ed0f1f23128de4d4",
           "row_source_identity_verified": true,
           "converter_verify_exit_code": 0
         },
         {
           "suffix": "E8A_250k_b",
-          "number": "A.10",
+          "number": "A.13",
           "label": "tab:appA-slices-e8a-250k-b",
           "derived_csv": "tables_src/appA_slices_E8A_250k_b.csv",
           "derived_csv_sha256": "0e5ca123bb480cf77a1f7d42ad1dc336ea40a3b86d98b6c1d44b7f184d3affbf",
           "sidecar": "tables_src/appA_slices_E8A_250k_b.provenance.json",
-          "sidecar_sha256": "3ab041c43dad42a449e08efa391d3c74fff0e1654e549a5322f937db624482d0",
+          "sidecar_sha256": "5f85bbd0776e08e254a0379df17b07b93170cea2936f38d7a0f761387971feaa",
           "output": "tables/appA_slices_E8A_250k_b.tex",
-          "output_sha256": "1ec33556d33aa855648fb50fd510f2de68df55f21665dfaacf79282ba7a6ce97",
-          "filter": {
-            "family": "E8A",
-            "scale": "250k",
-            "slice_kinds": [
-              "structural"
-            ]
-          },
-          "filter_description": "family = E8A, scale = 250k and slice kind = structural",
+          "output_sha256": "e0e105d603c4117f2078b03e4e84ac36d636f3b0b6ffea4e3c146910dedb088f",
+          "filter_description": "family == E8A AND scale == 250k AND slice kind == structural",
           "row_count": 15,
           "source_rows_one_based": [
             10,
@@ -719,7 +732,7 @@
             69,
             70
           ],
-          "row_source_identity_sha256": "f063cd79ef9b07eff21dc8eeaf479bd4213b5a77754bb8feb5ff27dc710ad795",
+          "row_source_identity_sha256": "f9c9a2fee4ae19fe0a4696973162f67e0be72619e6056719757d7df5c44216b7",
           "row_source_identity_verified": true,
           "converter_verify_exit_code": 0
         }
@@ -727,8 +740,11 @@
       "partition_audit": {
         "source_rows": 195,
         "expected_counts": [
-          28,
-          28,
+          10,
+          8,
+          10,
+          14,
+          14,
           20,
           20,
           15,
@@ -738,8 +754,11 @@
           15
         ],
         "actual_counts": [
-          28,
-          28,
+          10,
+          8,
+          10,
+          14,
+          14,
           20,
           20,
           15,
@@ -754,7 +773,93 @@
         "omitted_source_rows": 0,
         "unexpected_extra_rows": 0,
         "every_source_row_selected_exactly_once": true,
-        "retained_values_recomputed": false
+        "retained_values_recomputed": false,
+        "current_partition_count": 12,
+        "superseded_artifacts_excluded": true
+      },
+      "table_A2_explanatory_note": "The Slice and Quantity columns use the presentation wording \\emph{at most 2}, \\emph{at least 4 (combined)} and \\emph{at least 5} for the corresponding frozen $\\leq 2$, $\\geq 4_{\\mathrm{combined}}$ and $\\geq 5$ bucket labels; underlying values are unchanged.",
+      "quantity_relabel_map": {
+        "accuracy on the steps slice <=2": "accuracy on the steps slice at most 2",
+        "paired accuracy gap on the steps slice <=2": "paired accuracy gap on the steps slice at most 2",
+        "accuracy on the steps slice >=5": "accuracy on the steps slice at least 5",
+        "paired accuracy gap on the steps slice >=5": "paired accuracy gap on the steps slice at least 5",
+        "pooled >=4-step deficit on the steps slice >=4_combined": "pooled at-least-4-step deficit on the steps slice at least 4 (combined)"
+      },
+      "quantity_column_displayed": true,
+      "superseded_artifacts": [
+        {
+          "reason": "mandatory v2_05c seed-set split",
+          "paths": [
+            "tables_src/appA_slices_v205c.csv",
+            "tables_src/appA_slices_v205c.provenance.json",
+            "tables/appA_slices_v205c.tex"
+          ],
+          "old_label": "tab:appA-slices-v205c",
+          "old_row_count": 28,
+          "replacement_suffixes": [
+            "v205c_fiveseed",
+            "v205c_seed42"
+          ],
+          "removed": true
+        },
+        {
+          "reason": "reviewer-authorised slice-kind fallback after the first ten-column v2_02 float was 90.65968pt too large",
+          "paths": [
+            "tables_src/appA_slices_v202.csv",
+            "tables_src/appA_slices_v202.provenance.json",
+            "tables/appA_slices_v202.tex"
+          ],
+          "old_label": "tab:appA-slices",
+          "old_row_count": 28,
+          "replacement_suffixes": [
+            "v202_semantic",
+            "v202_program",
+            "v202_structural"
+          ],
+          "removed": true,
+          "first_replacement_retains_old_label": true
+        }
+      ],
+      "display_key_ambiguity_audit": {
+        "semantic_key_columns": [
+          "family",
+          "system",
+          "scale",
+          "slice kind",
+          "slice",
+          "quantity"
+        ],
+        "table_context_included": true,
+        "remaining_ambiguous_pairs": 0,
+        "v2_06_drop_shuffled_vs_drop_zeroed": "distinguished by Quantity",
+        "v3_02a_accuracy_vs_pooled_deficit": "distinguished by Quantity",
+        "v2_05c_five_seed_vs_seed42": "distinguished by separate Tables A.5 and A.6 and explicit captions",
+        "status": "PASS"
+      },
+      "table_count": {
+        "scale_effects": 1,
+        "slice_tables": 12,
+        "appendix_tables_total": 13
+      },
+      "layout": {
+        "display_columns": 10,
+        "tabcolsep": "1pt for slice tables only",
+        "widths_fraction_textwidth": [
+          0.065,
+          0.095,
+          0.045,
+          0.075,
+          0.15,
+          0.19,
+          0.06,
+          0.1,
+          0.045,
+          0.065
+        ],
+        "ragged_wrapper_preserved": true,
+        "fallback_split": "v2_02 split by exact slice kind",
+        "overfull_boxes": 0,
+        "float_too_large": 0
       }
     }
   },
@@ -762,9 +867,10 @@
     "path": "tools/tab2latex.py",
     "sha256": "c441d40b2b10a7a4294c4f15b12bc450f7ae73a9435e3d15394940c0f0c5a546",
     "modified": false,
-    "verify_runs": 10,
+    "verify_runs": 13,
     "all_verify_exit_codes_zero": true,
-    "arithmetic_or_aggregation": false
+    "arithmetic_or_aggregation": false,
+    "revision_2_slice_verify_runs": 12
   },
   "labels": {
     "chapter": "app:supplementary",
@@ -776,7 +882,10 @@
     "tables": [
       "tab:appA-scale-effects",
       "tab:appA-slices",
-      "tab:appA-slices-v205c",
+      "tab:appA-slices-v202-program",
+      "tab:appA-slices-v202-structural",
+      "tab:appA-slices-v205c-fiveseed",
+      "tab:appA-slices-v205c-seed42",
       "tab:appA-slices-v206",
       "tab:appA-slices-v302a-1",
       "tab:appA-slices-v302a-2",
@@ -785,11 +894,11 @@
       "tab:appA-slices-e8a-250k-a",
       "tab:appA-slices-e8a-250k-b"
     ],
-    "unique_table_labels": 10,
+    "unique_table_labels": 13,
     "duplicate_table_labels": 0,
     "range_first": "tab:appA-slices",
     "range_last": "tab:appA-slices-e8a-250k-b",
-    "rendered_range": "Tables A.2--A.10"
+    "rendered_range": "Tables A.2--A.13"
   },
   "frozen_dependencies": {
     "bibliography_sha256": "e3d9b00e53537359dc350054ac88927f4c9176a6f8f13f37caf31f33260dca24",
@@ -800,7 +909,7 @@
     "frozen_ve1_modified": false
   },
   "build": {
-    "scratch_root": "/tmp/dissertation-xref-build.uVmU3Q",
+    "scratch_root": "/tmp/dissertation-xref-rev2-build3.oATYOd",
     "sequence": [
       "pdflatex",
       "bibtex",
@@ -823,7 +932,8 @@
     "bibtex_warnings": 0,
     "underfull_boxes": 113,
     "underfull_classification": "inherited / informational",
-    "pdf_pages": 97,
+    "pdf_pages": 100,
+    "rendered_bibliography_entries": 40,
     "visible_double_question_marks": 0,
     "malformed_inverted_glyphs": 0
   },
@@ -832,13 +942,13 @@
       22,
       39,
       51,
-      61,
+      59,
       68,
       76
     ],
     "all_xref_pages_inspected": true,
-    "appendix_physical_pages": "84--97",
-    "appendix_printed_pages": "73--86",
+    "appendix_physical_pages": "84--100",
+    "appendix_printed_pages": "73--89",
     "all_appendix_pages_inspected": true,
     "toc_entry": "A Supplementary figures and tables",
     "lof_entries": [
@@ -856,15 +966,22 @@
       "A.7",
       "A.8",
       "A.9",
-      "A.10"
+      "A.10",
+      "A.11",
+      "A.12",
+      "A.13"
     ],
     "list_of_tables_configuration_changed": false,
     "list_of_tables_activation": "DEFERRED TO FRONT-MATTER STAGE",
     "existing_live_list_of_tables_behaviour_unchanged": true,
     "hyperlink_targets_checked": true,
-    "xref_range_rendered": "Tables A.2--A.10",
+    "xref_range_rendered": "Tables A.2--A.13",
     "h5_replacement_visible_count": 2,
-    "reader_facing_unread_never_accessed_never_touched_count": 0
+    "reader_facing_unread_never_accessed_never_touched_count": 0,
+    "quantity_column_visible_in_all_slice_tables": true,
+    "chapter_6_navigation_sentence_physical_page": 59,
+    "chapter_6_navigation_sentence_stranded_alone": false,
+    "all_slice_tables_readable": true
   },
   "warning_classification": [
     {
@@ -873,19 +990,19 @@
     },
     {
       "class": "INFORMATIONAL",
-      "item": "apply_patch environment loopback failure required narrowly scoped fallback; final diff audited"
+      "item": "existing myfootnote package-name warning; inherited"
     },
     {
       "class": "INFORMATIONAL",
-      "item": "first scratch-build request was rejected before execution; rerun wholly in temporary copy"
+      "item": "apply_patch environment loopback failures required narrowly scoped, assertion-gated fallbacks; final diff audited"
     },
     {
       "class": "INFORMATIONAL",
-      "item": "first VE1-TAB-03 verify invocation used wrong relative path and failed before conversion; corrected invocation passed"
+      "item": "initial ten-column v2_02 render was 90.65968pt too tall; reviewer-authorised exact slice-kind fallback produced three current v2_02 tables with no overflow"
     },
     {
       "class": "INFORMATIONAL",
-      "item": "live template already exposes List of Tables; configuration unchanged and activation decision deferred"
+      "item": "live template already exposes List of Tables; configuration unchanged and front-matter decision remains deferred"
     }
   ],
   "scope_truth": {
@@ -900,5 +1017,31 @@
   },
   "f1_status": "not authorised",
   "f2_status": "not authorised, not performed",
-  "held_out_result_status": null
+  "held_out_result_status": null,
+  "updated_at_utc": "2026-08-27T12:56:36Z",
+  "implementation_revision": 2,
+  "review_round_completed": 1,
+  "revision_2": {
+    "base_commit": "b883ba07e3c27cbcd57b30668e684901320bc6e8",
+    "round_1_review": {
+      "path": ".agent-bridge/tasks/dissertation-13-xref-appendix-integration/40-claude-review-01.md",
+      "sha256": "275dd052b4ce5a9f67e76bdf0d10c04cad27274bda85a0cf6ee5f4bb289051fd",
+      "verdict": "REVISION REQUIRED"
+    },
+    "findings": {
+      "F_1": {
+        "severity": "MEDIUM",
+        "status": "implemented_pending_review",
+        "change": "display Quantity in every slice table; split v2_05c by seed set; reviewer-authorised v2_02 split by slice kind after the first ten-column render exceeded the float height"
+      },
+      "F_2": {
+        "severity": "LOW",
+        "status": "implemented_pending_review",
+        "change": "move the unchanged Chapter-6 fenced navigation block to the approved paragraph boundary"
+      }
+    },
+    "scientific_claim_content_changed": false,
+    "scientific_recomputation": false,
+    "scientific_conclusion_changed": false
+  }
 }

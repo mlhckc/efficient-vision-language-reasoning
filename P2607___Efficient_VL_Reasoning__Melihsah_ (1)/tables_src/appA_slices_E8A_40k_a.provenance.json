@@ -1,6 +1,7 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "task_id": "dissertation-13-xref-appendix-integration",
+  "scientific_revision": 2,
   "source": {
     "path": "tables_src/VE1-TAB-A1.csv",
     "sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
@@ -25,15 +26,7 @@
   },
   "partition": {
     "suffix": "E8A_40k_a",
-    "filter_description": "family = E8A, scale = 40k and slice kind in {semantic, program length}",
-    "filter": {
-      "family": "E8A",
-      "scale": "40k",
-      "slice_kinds": [
-        "semantic",
-        "program length"
-      ]
-    },
+    "filter_description": "family == E8A AND scale == 40k AND slice kind in {semantic,program length}",
     "expected_row_count": 27,
     "actual_row_count": 27,
     "source_data_row_numbers_one_based": [
@@ -95,35 +88,37 @@
       "E8A/A1r/train_40k/steps:<=2/accuracy"
     ],
     "source_row_sha256s": [
-      "11610747bc06978d146b9bdf9b705816102a151b2510f16778bb5d9b031de618",
-      "4b49b6bc842f4277237fdeca2c84971d2f1a14489a664acbd76aba58c7b98b1c",
-      "b0325c70c9e14085b4386ddb25a4d82a385a996559f1964ecefd46aac22bf43a",
-      "eb48f1498f260df5baa95354f778f7b8727efd65f26617bbf5b2fc592fcd59b7",
-      "947e46727ed232d32696f0605194e80a48044912b925a5c684205e1656842367",
-      "1310d2d37008dfd17df69a95dbf4737bfcbabd28f186f0264070d57365193dbb",
-      "4e74a06ea205e5213e6e61086ea38adbe17a06c1aa3b84bb0eb1fc96c82cb0da",
-      "2a4b66ca0498b83c2171bbedb8c4fdcf0eeba706345ec0be01959ba278d4e3be",
-      "54eb084dfabbb796e295d780e2312079f4bca98f70df6f83e30d740bd8e25515",
-      "e80c2786bfcdef2a016f0d8af39b7dd0277f17f0ba9bf2e30fbd2791fde5a688",
-      "d3df7d141481161f3dd12be1ef7395e5b8f004c660a94cff1d589cf51f207706",
-      "ed6c722361f05bfb804cd7ae53605b98f78a2c51ba7b4c25a8f0c4d50608da49",
-      "fd893a161dcd6ae35e626c8afbe2c213a95db20af68f9305cecdbe02790bbf56",
-      "287290d04e9baf296eae59777f9281a0d0c4cb062d8ba080861c6063cccb53d1",
-      "c10f7135b2131bb2a68470c1ca8c4f98bab46a1630196807b1c975b19a7d13a6",
-      "ae3305e5c77472436509890c3fbc20fa06fd56f75e97459432e735de9d4630a0",
-      "dc066a7e824bc377ab6831364c10c037746a64098eeaadd8625904176ddfd870",
-      "7ec82fb9251a80602c8025079b202bb03990aa70221077a6e048946ff252a24d",
-      "0986b717f698cd0ea83bf6c83661442c89a52df615791e4d552ec723aca1672a",
-      "a06b04a211403bb37b812371f85a9ed2eb036c5e02dbb292a514053494bc69b5",
-      "142ef1f179be9501a8cf120014c52468488146a67cf8e8e41f91097c92b0ad71",
-      "a196b70810f13aa19d7f4dda8c6683595f98b616b33366c29355d094f101940d",
-      "4654926697c8a992e023f2c3276f8e477b54f8558f056b6151e5db3385cc226a",
-      "193631bd45ac68b6414889e2bf152c1e37f2684eb0f50b71d22c914a1149e23c",
-      "b75be05a57fa3ff7312991469ee5d1fdfec801429716d9bbeb91edbe88d73764",
-      "d298a82066c3f77b6b953ddb2c7879a5029fb1e8ad1d9f557be91718226c38b5",
-      "464c3987684073bef886e5426b6bbf55c40f6dcd6d039e8b4db16a12ca24e257"
+      "88d8767c0259417e260c5b7d411050304379be2b1ed3ce728010a74a670c9985",
+      "a8696dc68b5296eaccfe21cf34fcd4ddb3cd1de311345e16557f3b1b33d939c6",
+      "d4f091f3d8d863e3b485744a31543aa5f499a092d5a34b06bdb8e9094f932f4f",
+      "7637c9eecb712002074fbcef833246a36069351d186a070e442360b86a9e0882",
+      "8335b30818514fcc8f590c9c0f84d68e8f053bc803279d74a973ecab1f1730a1",
+      "af4cc282f1ba2959fdca3a5fe3fdf6cc4d719356a8c3abfd625729c2670e70f4",
+      "d850de1d86d722b631256166bc3f259c0e9a9fdc8912b9d1906abb102126ad21",
+      "c04200336289046823af1bb6c1dc0aff452b786e9a35a1b8aa7e57dfdc82ad87",
+      "b4d7e753c155d74b66f65076fd03b386469a9fefc7a1cdb64c4f85ae1e30d2b4",
+      "08479ac0dc08dfab9938c62640fd3f390d47f14b86804adb003cfdd1cb0b3a33",
+      "ccf68c9a09fb42a7e86882c621701c4d0f4d9d9e958d8e591218183c661281ec",
+      "009a084dd697cc7ff5d3f7f9744bfb8acd3f77b57d75ee0aea9ff87718de4cdb",
+      "138498abc6bbca57be4c2d155062cc05230e76331a23ae2a46ca34e4fd888d39",
+      "02001070e726ded4b94e02d498aa62bc0c2cd38a3736de0b627e2acad65e7a02",
+      "5f4bccb4fdc94d96c5d584d88539e6bf2bc3b364aa974bf441fec6aca2ddb5d0",
+      "fc38b07aa816ab7effd760907653769bb7299cf4c86cdab8616bad1d5eafb91e",
+      "2cc5b578356adad9cbff2922217ecf79fc1318a82d5edfcc91b111be40d4a782",
+      "a08bdb4ad31763829ccf153e0bc574321ec3217e926ae884d2580be2290bcc81",
+      "eade4deab302d41cca09a708ad1c38167e61f0247216e2332d007b783859a827",
+      "00d50cd191c1457012134bafff2f9a65b124f793a4e4463407e6ae9d69617d10",
+      "851d9cb1f059bf2eb752fbd36ba2927631df5bf0db5e5e9123dc2641e662706c",
+      "155cded9ffe5520b893e285d0f3f9d3b780dc40434ee1683768e59daa083b1da",
+      "4dbbc6c48a01e2d0e8953f275c420091d4b42267c0dbbdd7e1f7afc7647591a1",
+      "50be16c8f705567e22dd7063d5f54402911292c4463af4d1b8ab0eff88216ccd",
+      "c7a2892c28c3477f97cf7c9057271c57f41d97048b4545b3793e15da7f9474d3",
+      "869a70585531e813520ba7c0d2aad0ffe5848942a2eace769fed4452ed57ce96",
+      "d12ffb74b3d676f7bde21e31b36aae08b917d5ca801253268afdd9bc12649141"
     ],
-    "source_row_identity_sha256": "0e7e5199ac0a3862285603aa49f4568a1b2651d70f4188f06b7d65a196fdc5bd",
+    "source_row_hash_method": "SHA-256 of canonical sorted-key compact JSON for the frozen source row",
+    "source_row_identity_sha256": "20fe3f5a85fd397b88c470fce31b12690222e60e4de83db06795be496c12be1e",
+    "source_row_identity_method": "SHA-256 of newline-delimited ordered source_row_sha256s with terminal newline",
     "duplicate_source_rows_within_partition": 0,
     "row_source_identity_verified": true
   },
@@ -150,22 +145,116 @@
       "scale",
       "slice kind",
       "slice",
+      "quantity",
       "point estimate",
       "95% CI (image-clustered)",
       "n questions",
       "n images"
     ],
-    "relabel_field": "slice",
-    "relabel_map": {
+    "header_map": {
+      "quantity": "Quantity"
+    },
+    "slice_relabel_map": {
       "steps:<=2": "steps: at most 2",
       "steps:>=4_combined": "steps: at least 4",
       "steps:>=5": "steps: at least 5"
     },
-    "result_and_count_values_recomputed": false
+    "quantity_relabel_map": {
+      "accuracy on the steps slice <=2": "accuracy on the steps slice at most 2",
+      "paired accuracy gap on the steps slice <=2": "paired accuracy gap on the steps slice at most 2",
+      "accuracy on the steps slice >=5": "accuracy on the steps slice at least 5",
+      "paired accuracy gap on the steps slice >=5": "paired accuracy gap on the steps slice at least 5",
+      "pooled >=4-step deficit on the steps slice >=4_combined": "pooled at-least-4-step deficit on the steps slice at least 4 (combined)"
+    },
+    "applied_relabels": [
+      {
+        "source_row": 22,
+        "column": "slice",
+        "source_value": "steps:>=5",
+        "displayed_value": "steps: at least 5"
+      },
+      {
+        "source_row": 22,
+        "column": "quantity",
+        "source_value": "accuracy on the steps slice >=5",
+        "displayed_value": "accuracy on the steps slice at least 5"
+      },
+      {
+        "source_row": 23,
+        "column": "slice",
+        "source_value": "steps:<=2",
+        "displayed_value": "steps: at most 2"
+      },
+      {
+        "source_row": 23,
+        "column": "quantity",
+        "source_value": "accuracy on the steps slice <=2",
+        "displayed_value": "accuracy on the steps slice at most 2"
+      },
+      {
+        "source_row": 50,
+        "column": "slice",
+        "source_value": "steps:>=5",
+        "displayed_value": "steps: at least 5"
+      },
+      {
+        "source_row": 50,
+        "column": "quantity",
+        "source_value": "accuracy on the steps slice >=5",
+        "displayed_value": "accuracy on the steps slice at least 5"
+      },
+      {
+        "source_row": 51,
+        "column": "slice",
+        "source_value": "steps:<=2",
+        "displayed_value": "steps: at most 2"
+      },
+      {
+        "source_row": 51,
+        "column": "quantity",
+        "source_value": "accuracy on the steps slice <=2",
+        "displayed_value": "accuracy on the steps slice at most 2"
+      },
+      {
+        "source_row": 78,
+        "column": "slice",
+        "source_value": "steps:>=5",
+        "displayed_value": "steps: at least 5"
+      },
+      {
+        "source_row": 78,
+        "column": "quantity",
+        "source_value": "accuracy on the steps slice >=5",
+        "displayed_value": "accuracy on the steps slice at least 5"
+      },
+      {
+        "source_row": 79,
+        "column": "slice",
+        "source_value": "steps:<=2",
+        "displayed_value": "steps: at most 2"
+      },
+      {
+        "source_row": 79,
+        "column": "quantity",
+        "source_value": "accuracy on the steps slice <=2",
+        "displayed_value": "accuracy on the steps slice at most 2"
+      }
+    ],
+    "semantic_displayed_key_columns": [
+      "family",
+      "system",
+      "scale",
+      "slice kind",
+      "slice",
+      "quantity"
+    ],
+    "ambiguous_displayed_keys_within_table": 0,
+    "result_and_count_values_recomputed": false,
+    "numeric_or_other_data_values_changed": false
   },
   "derived_csv": {
     "path": "tables_src/appA_slices_E8A_40k_a.csv",
-    "sha256": "a690e270bea736c1ee06f7e24a8c4f37630b2b571242cfdcdecd86fb05971624",
+    "sha256": "1344ecec703838f7e788608c19da94e02d1f4b82b8432c10e65ef92aeb249d10",
     "row_count": 27,
     "column_count": 14
   },
@@ -179,9 +268,9 @@
       "--output",
       "tables/appA_slices_E8A_40k_a.tex",
       "--columns",
-      "family,system,scale,slice kind,slice,point estimate,95% CI (image-clustered),n questions,n images",
+      "family,system,scale,slice kind,slice,quantity,point estimate,95% CI (image-clustered),n questions,n images",
       "--header-map",
-      "{\"family\":\"Family\",\"system\":\"System\",\"scale\":\"Scale\",\"slice kind\":\"Slice kind\",\"slice\":\"Slice\",\"point estimate\":\"Point estimate\",\"95% CI (image-clustered)\":\"95% CI (image-clustered)\",\"n questions\":\"n questions\",\"n images\":\"n images\"}",
+      "{\"family\":\"Family\",\"system\":\"System\",\"scale\":\"Scale\",\"slice kind\":\"Slice kind\",\"slice\":\"Slice\",\"quantity\":\"Quantity\",\"point estimate\":\"Point estimate\",\"95% CI (image-clustered)\":\"95% CI (image-clustered)\",\"n questions\":\"n questions\",\"n images\":\"n images\"}",
       "--thousands",
       "--verify"
     ],
@@ -190,7 +279,28 @@
   },
   "output_table": {
     "path": "tables/appA_slices_E8A_40k_a.tex",
-    "sha256": "d47749adef934880797cf73729cdc4519234496c3bb4f562307984676c44b1aa"
+    "sha256": "33ec18f4a42a02e36dfd288876101dbfb7cd38a351d6bb3cfc37fb29a394bc43"
   },
-  "exact_partition_global_gate": "verified after all nine partitions"
+  "exact_partition_global_gate": {
+    "current_partition_paths": [
+      "tables_src/appA_slices_v202_semantic.csv",
+      "tables_src/appA_slices_v202_program.csv",
+      "tables_src/appA_slices_v202_structural.csv",
+      "tables_src/appA_slices_v205c_fiveseed.csv",
+      "tables_src/appA_slices_v205c_seed42.csv",
+      "tables_src/appA_slices_v206.csv",
+      "tables_src/appA_slices_v302a_1.csv",
+      "tables_src/appA_slices_v302a_2.csv",
+      "tables_src/appA_slices_E8A_40k_a.csv",
+      "tables_src/appA_slices_E8A_40k_b.csv",
+      "tables_src/appA_slices_E8A_250k_a.csv",
+      "tables_src/appA_slices_E8A_250k_b.csv"
+    ],
+    "source_rows": 195,
+    "represented_source_rows": 195,
+    "each_source_row_exactly_once": true,
+    "duplicate_source_rows": 0,
+    "omitted_source_rows": 0,
+    "unexpected_extra_rows": 0
+  }
 }

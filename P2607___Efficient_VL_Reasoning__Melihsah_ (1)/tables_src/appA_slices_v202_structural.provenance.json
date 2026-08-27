@@ -25,63 +25,48 @@
     ]
   },
   "partition": {
-    "suffix": "E8A_40k_b",
-    "filter_description": "family == E8A AND scale == 40k AND slice kind == structural",
-    "expected_row_count": 15,
-    "actual_row_count": 15,
+    "suffix": "v202_structural",
+    "filter_description": "family == v2_02 AND slice kind == structural",
+    "expected_row_count": 10,
+    "actual_row_count": 10,
     "source_data_row_numbers_one_based": [
-      24,
-      25,
-      26,
-      27,
-      28,
-      52,
-      53,
-      54,
-      55,
-      56,
-      80,
-      81,
-      82,
-      83,
-      84
+      94,
+      95,
+      96,
+      97,
+      98,
+      108,
+      109,
+      110,
+      111,
+      112
     ],
     "source_slice_ids": [
-      "E8A/A0p/train_40k/structural:choose/accuracy",
-      "E8A/A0p/train_40k/structural:compare/accuracy",
-      "E8A/A0p/train_40k/structural:logical/accuracy",
-      "E8A/A0p/train_40k/structural:query/accuracy",
-      "E8A/A0p/train_40k/structural:verify/accuracy",
-      "E8A/A1/train_40k/structural:choose/accuracy",
-      "E8A/A1/train_40k/structural:compare/accuracy",
-      "E8A/A1/train_40k/structural:logical/accuracy",
-      "E8A/A1/train_40k/structural:query/accuracy",
-      "E8A/A1/train_40k/structural:verify/accuracy",
-      "E8A/A1r/train_40k/structural:choose/accuracy",
-      "E8A/A1r/train_40k/structural:compare/accuracy",
-      "E8A/A1r/train_40k/structural:logical/accuracy",
-      "E8A/A1r/train_40k/structural:query/accuracy",
-      "E8A/A1r/train_40k/structural:verify/accuracy"
+      "v2_02/concat/train_40k/structural:choose/accuracy",
+      "v2_02/concat/train_40k/structural:compare/accuracy",
+      "v2_02/concat/train_40k/structural:logical/accuracy",
+      "v2_02/concat/train_40k/structural:query/accuracy",
+      "v2_02/concat/train_40k/structural:verify/accuracy",
+      "v2_02/fusion/train_40k/structural:choose/accuracy",
+      "v2_02/fusion/train_40k/structural:compare/accuracy",
+      "v2_02/fusion/train_40k/structural:logical/accuracy",
+      "v2_02/fusion/train_40k/structural:query/accuracy",
+      "v2_02/fusion/train_40k/structural:verify/accuracy"
     ],
     "source_row_sha256s": [
-      "9f7b510e0fb202e0acd4a77386b9b261c90a3ee73dc17359dd609eeb3a4fa969",
-      "5e4cc9c63940691e35f0a751545b6c2d45c0a00402e01b2b725b337d2890a781",
-      "47c215ed63af8de03b6c82dbdb4f6821e4fd9d99a04102a55a6f61166b92eb07",
-      "590f54d73424347007ee455caeef8bcdac6b76873eaff7c2dffd526f15b5f19f",
-      "9f4c63d26fd0c74abd43736e89629d552a69476f398600f8d19e2d94ea5e7636",
-      "a5cad9472435d65ea35cf53ffc39064db2466b85ec8ef588ea77d1a62a653958",
-      "e201b32da16313d4be9e84aa1de7b13a5de8a55a39772cf111a3d0eaf9bfb7fc",
-      "b12d4b1f5adf28a3ef4072c220050717070cd3853dde0cabfa652decf9caa6b1",
-      "d2b089e39486fb8c2bdd7636de15cac91f7c166c5e7eeb0b4b42f3bb73e8b9bf",
-      "e6cea6d08e7bbbfd0f8ef38a0aaa1e6abd43a39bb050fba6a91ba0bc917d5515",
-      "d5f4e3c686ab48550a6c34ca679b4ae7249366e74331dd1da6c05ae38a7fb3ea",
-      "f854371d083fb3bec24bf3da32b2374856805bee09d53a48c8885e04e4f17cf9",
-      "6373eb3eecf1a2adbd0043116beedb04d003f2401ae0ffd172fbf6cb0bfcb27f",
-      "36924651f38ad8008b79d32845b9f53ced4d9542aed5f6e026121256b74eb239",
-      "72e3a3aac2536039c9d7cedc66664722e20229c3ab7aec298f8f2895a6c04e3b"
+      "e9343a59d87658dc87d4d1cbda282837af9ffa40a18fafd0a853c9399c3685cc",
+      "ba5a056e48702b04aac41a789c280159b37a31d1eb8da2490f91296d83362042",
+      "13fda60d7687258e3a60e58b86f73ea7182c75e24ff4ae4ae964ddf1c1bea094",
+      "2f163d16003dff92f54a2b0314f5789b680937133e4ff71127c505e445aa244e",
+      "30ae6bac87990a921dc953d8d60410f040c63d32ee38a5756a4ad0469f4580a3",
+      "f83c911c273c940a06024e54641f4eb138df37250639271eb47b9152d2ae5d28",
+      "8d3ac9117f8fc5acc55234a35648b2462b3fb757d0965a32841ee732564bada0",
+      "6779f5dd00bb5164e8526229158eef853396fa0dfe38867572cc700633604622",
+      "d1f039e712949181993e5dc85d9521e4011d05d8b8b3a2311fb0a717cd2cd7fd",
+      "b61c14f1446bed000bc5cd6e281a1f37255bc71fbbf34e33c85c307534fbfdbe"
     ],
     "source_row_hash_method": "SHA-256 of canonical sorted-key compact JSON for the frozen source row",
-    "source_row_identity_sha256": "0cb410b11b80e54589461a9b3026db961eef63ee2dc8aad988fa5994bee1772d",
+    "source_row_identity_sha256": "036de01fad7ea55be2b6d50ebcdd0d04ef84331120ce80b222f759f586f68fbf",
     "source_row_identity_method": "SHA-256 of newline-delimited ordered source_row_sha256s with terminal newline",
     "duplicate_source_rows_within_partition": 0,
     "row_source_identity_verified": true
@@ -144,9 +129,9 @@
     "numeric_or_other_data_values_changed": false
   },
   "derived_csv": {
-    "path": "tables_src/appA_slices_E8A_40k_b.csv",
-    "sha256": "866b3a91d556f3387290ca0c96c4bf492a7493da5b43f325c3bff6c697810e5a",
-    "row_count": 15,
+    "path": "tables_src/appA_slices_v202_structural.csv",
+    "sha256": "cfed3c2767de11fc39c8eddf6b4ee0b81ca9a24d73cb2e4c641dbde0dc3b34df",
+    "row_count": 10,
     "column_count": 14
   },
   "converter": {
@@ -155,9 +140,9 @@
     "command": [
       "python3",
       "tools/tab2latex.py",
-      "tables_src/appA_slices_E8A_40k_b.csv",
+      "tables_src/appA_slices_v202_structural.csv",
       "--output",
-      "tables/appA_slices_E8A_40k_b.tex",
+      "tables/appA_slices_v202_structural.tex",
       "--columns",
       "family,system,scale,slice kind,slice,quantity,point estimate,95% CI (image-clustered),n questions,n images",
       "--header-map",
@@ -169,8 +154,8 @@
     "exit_code": 0
   },
   "output_table": {
-    "path": "tables/appA_slices_E8A_40k_b.tex",
-    "sha256": "86e3f5385c08d113d66bfd2bf70d98c1ae092857f80b136da912f1263b7af3e2"
+    "path": "tables/appA_slices_v202_structural.tex",
+    "sha256": "ab5ff1df92bb260f65909b7d2d07a7df23ead37d94ceff7b2b2c9f7cf1722bf0"
   },
   "exact_partition_global_gate": {
     "current_partition_paths": [

@@ -1,6 +1,7 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "task_id": "dissertation-13-xref-appendix-integration",
+  "scientific_revision": 2,
   "source": {
     "path": "tables_src/VE1-TAB-A1.csv",
     "sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
@@ -25,10 +26,7 @@
   },
   "partition": {
     "suffix": "v206",
-    "filter_description": "family = v2_06 (all scales, systems and slice kinds)",
-    "filter": {
-      "family": "v2_06"
-    },
+    "filter_description": "family == v2_06",
     "expected_row_count": 20,
     "actual_row_count": 20,
     "source_data_row_numbers_one_based": [
@@ -76,28 +74,30 @@
       "v2_06/fusion/train_40k/structural:verify/drop_zeroed"
     ],
     "source_row_sha256s": [
-      "3be0ff9402c451554aaf8c1dbce45e0abb11842d69380ddf7a84dc6b4876c088",
-      "d3b77c0d173422977b904513808a24831756d40642bc0e7bccdbac184229ff40",
-      "b67fffadc657829405fe3a6c59ec03c3cf431df60b17c7bd914387c46da503b2",
-      "ff27e3ee716d2a3d4bb02baef3d3efd9b311cba43564a8c787e1583916b31cee",
-      "d6e2fc36b8aa93e063a79a4032366b56a0ef4b4336730429fe65472d14576b4f",
-      "a3afa1f937975be731af39c1e28a1931b41047d636c9e6b14e58b773a63b534f",
-      "9a5972b7a37129032d5d62f4b85dd6e802673b42711d759a635e50141ec35d3b",
-      "0a849aba0aa846742bc5c2f55df480f3b7072f18bae59d9f28b00770c9235157",
-      "70ece662623f826838673c4e160e16bacec3f70400f58830c6e96888116c4fa3",
-      "731985803ce3916b1c9b3b320c3cb50001fdff73a82ef8a6e7aa8ca7d3eec58a",
-      "a0272675bae2e75739662d3e390b24d5196e950c5c416a8dcb1113a8c37dc915",
-      "4f458e5fd2f2a3013aa10f461dcd668d8c6430b8d38bb927f2d4931ecd76f031",
-      "b9fa1f26dd70edb51b58b6810948878886eb13f8116575cd4dff63c6ea4a6a49",
-      "edb46db6afa6abe0ad55e3d07d7c0cb86d5833a11393e1d92c6514b98c1d62cb",
-      "c2599d1bc6fbef40053b9d9cfd3894ab0f9d5925e64e4da9db50caf98106ab51",
-      "c18692c4aaf66316d7f35b1603a5f345084ac42d8779a2eb304da69d976262d0",
-      "42023fac08db18e3b56abe645f6c443fc48c2a05b0d59c09a6d0d85991346d6a",
-      "47ab70458874b1924eb8db94d4cbbf5c9a217e2da9912783612710d299f399fb",
-      "acde96f127d890c17b45960669e8550ff381ca7a5c8dea5e8eee9e8635c7ba09",
-      "f4b37df3d117a720bf2303d562b694880d911685a269e8c614193ca6d3ba9d1c"
+      "99ec0542f9ac8daabdb3bcee6f23c19859e849420bf58a9acf46b99f3b5c9df4",
+      "9b8cf665278cf7739cf1ab51f5338a9335c4afc664ab5289dd2c3fd5d1c43b56",
+      "a790a53bdab976a85f49965ee8ae4d50f8c11685712a0a4c5d564794dd548d63",
+      "732e8be1e675dcf3c823f12250f041fd1289ec97049cf26e36b47127797768de",
+      "a9fa9de0bd11e8b7b73c52e3c0c408afdba09893e6caf4f45b907d1df1068582",
+      "f640bdd074a63b68581511e21cd295ad5fbbf78f831f1716b8a65df4310f7cc8",
+      "32156989bd69b3e6075c89c2fb31052b3ae32f08c181b16d9e8050e1dcb7b7c8",
+      "557c85a631c7d7545f41f6105c4f490250896a1e1ff51b13dd3e9320716c6de8",
+      "1878de6e407c710daefb303717ab8f4e7ee076069bf7982c33f0f75b5f083a96",
+      "cf32f02df8f48ff27d6718d07c7a55dd900d8ba098fdf6f134f2f93b35700243",
+      "1cd526c9222fe833671c2fea2007774afd9e2e74f00d3466f889749fb2fb4531",
+      "3d36c2a92ac67a78c3ffc2a5d1b99810abaad32d318e4a6f7b9c1878bbc217c7",
+      "f9be6bfbbaacde50d5631ed98028e367d591af5539902f6c621a168aa777232c",
+      "a427dfac76038b0cd3541d16ae181b020fc172f7565314f4b490e47d0e2b5273",
+      "a3e7003487587a2c5e38ae00ea16e05b1b69c3c80b1dfca68f681c3ccce335fa",
+      "f9837d052e3e571b98e7b67b94ba78f70b6971b6d715ab1bef537ed528180808",
+      "567172c34ffb9c360649270e7af55b7815653df16d35d5557511042b6ec7b785",
+      "d03c27910a45084e836b05b5e07d8fea8d03f49912e5db9a90f21115998eb6c5",
+      "4c9ee62acd6cfded6f664c738a0ff8591cf025f0a1d57b1261cbace61218bd9a",
+      "de212f32b80a2d2fea4fafa1dafe3aa1840180baebf9ad91d0f4ca9415b36298"
     ],
-    "source_row_identity_sha256": "de91ca4c711f0011d6dd5e8c1d59c4f812393a0714c225975815d142da47c30d",
+    "source_row_hash_method": "SHA-256 of canonical sorted-key compact JSON for the frozen source row",
+    "source_row_identity_sha256": "12b754b415395b57afed8ccabb238bad06877a019fc64b99321862f4161d71fb",
+    "source_row_identity_method": "SHA-256 of newline-delimited ordered source_row_sha256s with terminal newline",
     "duplicate_source_rows_within_partition": 0,
     "row_source_identity_verified": true
   },
@@ -124,18 +124,39 @@
       "scale",
       "slice kind",
       "slice",
+      "quantity",
       "point estimate",
       "95% CI (image-clustered)",
       "n questions",
       "n images"
     ],
-    "relabel_field": "slice",
-    "relabel_map": {
+    "header_map": {
+      "quantity": "Quantity"
+    },
+    "slice_relabel_map": {
       "steps:<=2": "steps: at most 2",
       "steps:>=4_combined": "steps: at least 4",
       "steps:>=5": "steps: at least 5"
     },
-    "result_and_count_values_recomputed": false
+    "quantity_relabel_map": {
+      "accuracy on the steps slice <=2": "accuracy on the steps slice at most 2",
+      "paired accuracy gap on the steps slice <=2": "paired accuracy gap on the steps slice at most 2",
+      "accuracy on the steps slice >=5": "accuracy on the steps slice at least 5",
+      "paired accuracy gap on the steps slice >=5": "paired accuracy gap on the steps slice at least 5",
+      "pooled >=4-step deficit on the steps slice >=4_combined": "pooled at-least-4-step deficit on the steps slice at least 4 (combined)"
+    },
+    "applied_relabels": [],
+    "semantic_displayed_key_columns": [
+      "family",
+      "system",
+      "scale",
+      "slice kind",
+      "slice",
+      "quantity"
+    ],
+    "ambiguous_displayed_keys_within_table": 0,
+    "result_and_count_values_recomputed": false,
+    "numeric_or_other_data_values_changed": false
   },
   "derived_csv": {
     "path": "tables_src/appA_slices_v206.csv",
@@ -153,9 +174,9 @@
       "--output",
       "tables/appA_slices_v206.tex",
       "--columns",
-      "family,system,scale,slice kind,slice,point estimate,95% CI (image-clustered),n questions,n images",
+      "family,system,scale,slice kind,slice,quantity,point estimate,95% CI (image-clustered),n questions,n images",
       "--header-map",
-      "{\"family\":\"Family\",\"system\":\"System\",\"scale\":\"Scale\",\"slice kind\":\"Slice kind\",\"slice\":\"Slice\",\"point estimate\":\"Point estimate\",\"95% CI (image-clustered)\":\"95% CI (image-clustered)\",\"n questions\":\"n questions\",\"n images\":\"n images\"}",
+      "{\"family\":\"Family\",\"system\":\"System\",\"scale\":\"Scale\",\"slice kind\":\"Slice kind\",\"slice\":\"Slice\",\"quantity\":\"Quantity\",\"point estimate\":\"Point estimate\",\"95% CI (image-clustered)\":\"95% CI (image-clustered)\",\"n questions\":\"n questions\",\"n images\":\"n images\"}",
       "--thousands",
       "--verify"
     ],
@@ -164,7 +185,28 @@
   },
   "output_table": {
     "path": "tables/appA_slices_v206.tex",
-    "sha256": "8c1eb8448376c0bed28c73d229903548c8e9fe33fdba4e72fa8fe7afdf2ead4f"
+    "sha256": "26d86bc4eeb097bea22c14b816720324481f859a2d7200920d67c514761b8dfb"
   },
-  "exact_partition_global_gate": "verified after all nine partitions"
+  "exact_partition_global_gate": {
+    "current_partition_paths": [
+      "tables_src/appA_slices_v202_semantic.csv",
+      "tables_src/appA_slices_v202_program.csv",
+      "tables_src/appA_slices_v202_structural.csv",
+      "tables_src/appA_slices_v205c_fiveseed.csv",
+      "tables_src/appA_slices_v205c_seed42.csv",
+      "tables_src/appA_slices_v206.csv",
+      "tables_src/appA_slices_v302a_1.csv",
+      "tables_src/appA_slices_v302a_2.csv",
+      "tables_src/appA_slices_E8A_40k_a.csv",
+      "tables_src/appA_slices_E8A_40k_b.csv",
+      "tables_src/appA_slices_E8A_250k_a.csv",
+      "tables_src/appA_slices_E8A_250k_b.csv"
+    ],
+    "source_rows": 195,
+    "represented_source_rows": 195,
+    "each_source_row_exactly_once": true,
+    "duplicate_source_rows": 0,
+    "omitted_source_rows": 0,
+    "unexpected_extra_rows": 0
+  }
 }
