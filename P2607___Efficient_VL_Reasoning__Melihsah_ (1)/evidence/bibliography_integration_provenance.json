@@ -8,7 +8,7 @@
   "bibliography": {
     "path": "references/references.bib",
     "sha256_before": "ebff6b25ef20b0672c154e56e678356bc8245b6cbf5d85aff63371968b6d2705",
-    "sha256_after": "626be711b56cf83fdcb43845b48356cd6aa101da98376f2a3c3c6412996f127a",
+    "sha256_after": "e3d9b00e53537359dc350054ac88927f4c9176a6f8f13f37caf31f33260dca24",
     "entry_count_before": 72,
     "entry_count_after": 80,
     "bibliography_modified": true,
@@ -38,6 +38,12 @@
     "H_4": {
       "decision": "yes — authorised",
       "scope": "replace only the reviewed name-format token in style/myabbrvnat.bst",
+      "implemented": true
+    },
+    "FrEVL_DOI_addition": {
+      "decision": "yes — authorised",
+      "doi": "10.1109/ICCVW69036.2025.00245",
+      "scope": "bibliographic completeness only",
       "implemented": true
     }
   },
@@ -278,15 +284,18 @@
         "eprint": "2508.04469",
         "archivePrefix": "arXiv",
         "url": "https://openaccess.thecvf.com/content/ICCV2025W/SafeMM-AI/html/Bourigault_FrEVL_Leveraging_Frozen_Pretrained_Embeddings_for_Efficient_Vision-Language_Understanding_ICCVW_2025_paper.html",
-        "howpublished_removed": true
+        "howpublished_removed": true,
+        "doi": "10.1109/ICCVW69036.2025.00245"
       },
-      "reason": "verified author correction in Stage 1; official CVF proceedings migration and FrEVL title-token protection in Stage-1 Revision 2",
-      "authority_type": "primary arXiv author record and official CVF open-access proceedings record",
+      "reason": "verified author correction in Stage 1; official CVF proceedings migration and FrEVL title-token protection in Stage-1 Revision 2; authorised verified DOI addition in Stage-1 Revision 3",
+      "authority_type": "primary arXiv author record, official CVF open-access proceedings record, and IEEE/Crossref DOI record",
       "authority_urls": [
         "https://arxiv.org/abs/2508.04469",
-        "https://openaccess.thecvf.com/content/ICCV2025W/SafeMM-AI/html/Bourigault_FrEVL_Leveraging_Frozen_Pretrained_Embeddings_for_Efficient_Vision-Language_Understanding_ICCVW_2025_paper.html"
+        "https://openaccess.thecvf.com/content/ICCV2025W/SafeMM-AI/html/Bourigault_FrEVL_Leveraging_Frozen_Pretrained_Embeddings_for_Efficient_Vision-Language_Understanding_ICCVW_2025_paper.html",
+        "https://doi.org/10.1109/ICCVW69036.2025.00245"
       ],
-      "verification_date": "2026-08-27"
+      "verification_date": "2026-08-27",
+      "doi_authority": "IEEE/Crossref"
     },
     {
       "key": "zhou2026alignment",
@@ -661,7 +670,11 @@
       "requested_pagination_condition": "The human instruction permitted pages 2327--2336 only if independently reconfirmed; the official current CVF record instead reports 2348--2357, so 2327--2336 was not used.",
       "resolution_status": "resolved",
       "authority": "https://openaccess.thecvf.com/content/ICCV2025W/SafeMM-AI/html/Bourigault_FrEVL_Leveraging_Frozen_Pretrained_Embeddings_for_Efficient_Vision-Language_Understanding_ICCVW_2025_paper.html",
-      "verification_date": "2026-08-27"
+      "verification_date": "2026-08-27",
+      "doi": "10.1109/ICCVW69036.2025.00245",
+      "doi_authority": "IEEE/Crossref",
+      "doi_authority_url": "https://doi.org/10.1109/ICCVW69036.2025.00245",
+      "stage_1_revision_3_action": "Added the human-authorised verified DOI as a bibliographic completeness field; no other FrEVL field changed."
     },
     {
       "key": "zhai2023siglip",
@@ -809,8 +822,8 @@
   "scientific_prose_changed": false,
   "scratch_bibliography_render_harness": {
     "status": "passed",
-    "location": "/tmp/dissertation-bib-stage1-rev2.6S2PeA (scratch only; not tracked)",
-    "style": "myabbrvnat with the authorised one-token name-format repair",
+    "location": "/tmp/dissertation-bib-stage1-rev3-all80.Joi19W (scratch only; not tracked)",
+    "style": "myabbrvnat with the corrected literal-tilde name-format token",
     "selection": "all 80 bibliography entries via \\nocite{*}",
     "tested_keys": [
       "alam2026blindspot",
@@ -911,17 +924,21 @@
     "missing_required_field_warnings": 0,
     "blank_or_fake_journal_count": 0,
     "text_layer_anomaly_count": 0,
-    "pdf_pages": 6,
-    "visual_review": "All six bibliography pages inspected. All 80 entries render; natural particle surnames, ordinary author names/order, diacritics, URLs and all F-3 title tokens are correct; no author disappears, literal brace renders or malformed output appears.",
+    "pdf_pages": 4,
+    "visual_review": "All four bibliography pages inspected. All 80 entries render; natural particle surnames, ordinary author names/order, diacritics, URLs, DOI and all F-3 title tokens are correct; no author disappears, literal brace renders or malformed output appears.",
     "malformed_glyph_count": 0,
     "bad_initial_comma_artifacts": 0,
     "doubled_author_final_period_artifacts": 0,
     "malformed_particle_artifacts": 0,
-    "literal_brace_artifacts": 0
+    "literal_brace_artifacts": 0,
+    "revision_2_bbl_comparison": "Byte-identical to the retained Revision-2 all-entry BBL except for the single authorised FrEVL DOI output line.",
+    "latex_underfull_boxes": 2,
+    "overfull_boxes": 0,
+    "doi_rendered": true
   },
   "main_dissertation_build": {
     "status": "passed",
-    "location": "/tmp/dissertation-bib-stage1-rev2-main.9YZmvQ/P2607___Efficient_VL_Reasoning__Melihsah_ (1) (scratch only)",
+    "location": "/tmp/dissertation-bib-stage1-rev3-main.fl8Lqk/P2607___Efficient_VL_Reasoning__Melihsah_ (1) (scratch only)",
     "commands": [
       "pdflatex -interaction=nonstopmode -halt-on-error Dissertation_Template.tex",
       "bibtex Dissertation_Template",
@@ -939,17 +956,19 @@
     "multiply_defined_labels": 0,
     "duplicate_destinations": 0,
     "overfull_boxes": 0,
-    "underfull_boxes": 115,
+    "underfull_boxes": 113,
     "bibtex_warning_count": 0,
     "pdf_pages": 80,
     "rendered_cite_gap_tokens": 0,
     "malformed_glyph_count": 0,
-    "bibliography_visual_review": "Printed bibliography pages 67--69 (physical PDF pages 77--79) inspected; venue metadata, protected tokens, author names, line wrapping and URLs render legibly with no overlap, clipping or malformed glyph.",
+    "bibliography_visual_review": "Printed bibliography pages 67--69 (physical PDF pages 77--79) inspected; venue metadata, protected tokens, author names, FrEVL DOI, line wrapping and URLs render legibly with no overlap, clipping or malformed glyph.",
     "underfull_boxes_at_stage_1_review": 110,
-    "revision_2_additional_underfull_boxes": 5,
     "bibliography_bad_initial_comma_artifacts": 0,
     "bibliography_doubled_author_final_period_artifacts": 0,
-    "bibliography_literal_brace_artifacts": 0
+    "bibliography_literal_brace_artifacts": 0,
+    "revision_2_underfull_boxes": 115,
+    "revision_3_additional_underfull_boxes_against_stage_1": 3,
+    "revision_3_net_underfull_change_from_revision_2": -2
   },
   "warning_classifications": [
     {
@@ -960,7 +979,7 @@
     },
     {
       "source": "LaTeX main build",
-      "item": "115 underfull boxes (110 at the reviewed Stage-1 object; 5 additional after bibliography URL/name-format reflow)",
+      "item": "113 underfull boxes (110 at the reviewed Stage-1 object; 3 additional after final FrEVL DOI/URL reflow; 2 fewer than Revision 2)",
       "classification": "LEGITIMATE / INFORMATIONAL",
       "disposition": "No overfull box or unreadable bibliography output; the three real bibliography pages were inspected and accepted."
     },
@@ -1182,13 +1201,34 @@
   "style_repair": {
     "path": "style/myabbrvnat.bst",
     "sha256_before": "92c387ada59b93dd00566289b7e36d53c91dee05a550a5ef7460a3213fcde622",
-    "sha256_after": "ad453d85a081e9d1a83e0a0d7d2d77b6c53823883b4fb82412d97bcdd5957374",
+    "sha256_after": "af80baae400192e1a4ed150e7620cab306ad2f1da8cd40aa7646694bd1899a54",
     "old_token": "{ll}{, jj}{, f. }{, vv}",
-    "new_token": "{vv\\~}{ll}{, jj}{, f.}",
+    "new_token": "{vv~}{ll}{, jj}{, f.}",
     "reason": "bibliography rendering repair only",
     "scientific_meaning_changed": false,
     "human_decision": "H-4 = YES — AUTHORISED",
     "changed_token_count": 1,
-    "other_style_changes": 0
+    "other_style_changes": 0,
+    "revision_3_correction": "Removed exactly the single 0x5c backslash byte before the literal 0x7e tilde; no other byte in the style file changed."
+  },
+  "particle_name_format_test": {
+    "status": "passed",
+    "location": "/tmp/dissertation-bib-stage1-rev3-particle.qsAqrw (scratch only; not tracked)",
+    "input_author": "de Vries, Hugo",
+    "generated_bbl_author": "de~Vries, H.",
+    "intended_tie_present": true,
+    "control_space_present": false,
+    "commands": [
+      "pdflatex -interaction=nonstopmode -halt-on-error particle-test.tex",
+      "bibtex particle-test",
+      "pdflatex -interaction=nonstopmode -halt-on-error particle-test.tex",
+      "pdflatex -interaction=nonstopmode -halt-on-error particle-test.tex"
+    ],
+    "exit_codes": [
+      0,
+      0,
+      0,
+      0
+    ]
   }
 }
