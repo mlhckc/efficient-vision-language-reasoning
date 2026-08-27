@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "task_id": "dissertation-12-bibliography-integration",
-  "stage": "stage_1_bibliography_authority_metadata",
+  "stage": "stage_2_citation_integration",
   "created_at_utc": "2026-08-27T01:17:04Z",
   "verification_date": "2026-08-27",
   "base_commit": "abcf0a8477985474dc867f92a17a7f2c12a4d499",
@@ -685,7 +685,7 @@
     }
   ],
   "planned_stage_2": {
-    "status": "not_started",
+    "status": "completed",
     "cite_gap_count": 18,
     "inventory": [
       {
@@ -814,11 +814,179 @@
         "class": "smolvlm",
         "planned_action": "removal only; avoid attaching a foundational citation to a project result"
       }
-    ]
+    ],
+    "completed_at_utc": "2026-08-27T10:15:44Z"
   },
-  "resolved_cite_gaps": [],
-  "cite_gap_markers_untouched": true,
-  "chapters_touched": [],
+  "resolved_cite_gaps": [
+    {
+      "id": "G1",
+      "resolution": "citation insertion",
+      "file": "chapters/introduction.tex",
+      "command": "\\citep{radford2021clip}",
+      "support_scope": "CLIP foundational method"
+    },
+    {
+      "id": "G2",
+      "resolution": "citation insertion",
+      "file": "chapters/introduction.tex",
+      "command": "\\citep{zhai2023siglip}",
+      "support_scope": "SigLIP foundational method"
+    },
+    {
+      "id": "G3",
+      "resolution": "citation insertion",
+      "file": "chapters/introduction.tex",
+      "command": "\\citep{benallal2025smollm2}",
+      "support_scope": "SmolLM2 model family"
+    },
+    {
+      "id": "G4",
+      "resolution": "citation insertion",
+      "file": "chapters/theory.tex",
+      "command": "\\citep{radford2021clip}",
+      "support_scope": "CLIP foundational method"
+    },
+    {
+      "id": "G5",
+      "resolution": "citation insertion",
+      "file": "chapters/theory.tex",
+      "command": "\\citep{zhai2023siglip}",
+      "support_scope": "SigLIP foundational method"
+    },
+    {
+      "id": "G6",
+      "resolution": "citation insertion",
+      "file": "chapters/theory.tex",
+      "command": "\\citep{benallal2025smollm2}",
+      "support_scope": "SmolLM2 model family"
+    },
+    {
+      "id": "G7",
+      "resolution": "citation insertion",
+      "file": "chapters/theory.tex",
+      "command": "\\citep{marafioti2025smolvlm}",
+      "support_scope": "SmolVLM model family"
+    },
+    {
+      "id": "G8",
+      "resolution": "citation insertion",
+      "file": "chapters/methodology.tex",
+      "command": "\\citep{radford2021clip}",
+      "support_scope": "CLIP foundational method, not exact project checkpoint identity"
+    },
+    {
+      "id": "G9",
+      "resolution": "citation insertion",
+      "file": "chapters/methodology.tex",
+      "command": "\\citep{ilharco2021openclip}",
+      "support_scope": "OpenCLIP software/distribution family and its separate-tower interface only"
+    },
+    {
+      "id": "G10",
+      "resolution": "citation insertion",
+      "file": "chapters/methodology.tex",
+      "command": "\\citep{zhai2023siglip}",
+      "support_scope": "SigLIP model family only"
+    },
+    {
+      "id": "G11",
+      "resolution": "citation insertion",
+      "file": "chapters/methodology.tex",
+      "command": "\\citep{benallal2025smollm2}",
+      "support_scope": "SmolLM2 model family, not pinned revision identity"
+    },
+    {
+      "id": "G12",
+      "resolution": "citation insertion",
+      "file": "chapters/methodology.tex",
+      "command": "\\citep{marafioti2025smolvlm}",
+      "support_scope": "SmolVLM model family, not pinned Instruct revisions"
+    },
+    {
+      "id": "G13",
+      "resolution": "citation insertion",
+      "file": "chapters/methodology.tex",
+      "command": "\\citep{efron1993bootstrap,field2007clusterbootstrap}",
+      "support_scope": "Efron and Tibshirani support bootstrap/percentile methodology; Field and Welsh support resampling whole clusters as exchangeable units"
+    },
+    {
+      "id": "G14",
+      "resolution": "citation insertion",
+      "file": "chapters/methodology.tex",
+      "command": "\\citep{efron1993bootstrap,field2007clusterbootstrap}",
+      "support_scope": "Efron and Tibshirani support bootstrap/percentile methodology; Field and Welsh support resampling whole clusters as exchangeable units"
+    },
+    {
+      "id": "G15",
+      "resolution": "removal only",
+      "file": "chapters/discussion.tex",
+      "action": "marker removed; no citation inserted into project-results paragraph",
+      "resolving_earlier_citations": [
+        "chapters/introduction.tex:93",
+        "chapters/theory.tex:17",
+        "chapters/methodology.tex:4"
+      ]
+    },
+    {
+      "id": "G16",
+      "resolution": "removal only",
+      "file": "chapters/discussion.tex",
+      "action": "marker removed; no citation inserted into project-results paragraph",
+      "resolving_earlier_citations": [
+        "chapters/introduction.tex:95",
+        "chapters/theory.tex:18",
+        "chapters/methodology.tex:91"
+      ]
+    },
+    {
+      "id": "G17",
+      "resolution": "removal only",
+      "file": "chapters/discussion.tex",
+      "action": "marker removed; no citation inserted into project-results paragraph",
+      "resolving_earlier_citations": [
+        "chapters/introduction.tex:99",
+        "chapters/theory.tex:51",
+        "chapters/methodology.tex:94"
+      ]
+    },
+    {
+      "id": "G18",
+      "resolution": "removal only",
+      "file": "chapters/discussion.tex",
+      "action": "marker removed; no citation inserted into project-results paragraph",
+      "resolving_earlier_citations": [
+        "chapters/theory.tex:70",
+        "chapters/methodology.tex:142"
+      ]
+    }
+  ],
+  "cite_gap_markers_untouched": false,
+  "chapters_touched": [
+    {
+      "path": "chapters/introduction.tex",
+      "pre_sha256": "8c21de8baa819ad0d0de053dd66b11a71f46b7a2714816a48b1cc3715c1a6b0f",
+      "post_sha256": "eddc7ba97ba1d0db4e56ca168d16ca095a3140c85f4d45f67c8d55a6d66050c8",
+      "scientific_prose_identical": true
+    },
+    {
+      "path": "chapters/theory.tex",
+      "pre_sha256": "f1da83c604526c8de469771cabb18099b23a94ab119b0cd0fdfb6d0f4f8a0fba",
+      "post_sha256": "6c17e5879cb245d4477d7d1fb7023f4214e076dc4a0f8a587d2208d4908adf1c",
+      "scientific_prose_identical": true
+    },
+    {
+      "path": "chapters/methodology.tex",
+      "pre_sha256": "fdea277a70be5abb4dc779be541a9a011c19841785223e82e13e3fc14b8ecab5",
+      "post_sha256": "e428b35b588d7d33ff32020a42402ae598163a7eda56b5d23ea41d7d9236fdd9",
+      "scientific_prose_identical": true
+    },
+    {
+      "path": "chapters/discussion.tex",
+      "pre_sha256": "2d200fc14175013a50d8edf564afe2c810527de2bfb7311b8652a8570f7e5baa",
+      "post_sha256": "d9ac2a16a7495529dcd0d64dc02a2c572f764e0aa5757b91a07cb17504eabcac",
+      "scientific_prose_identical": true
+    }
+  ],
   "scientific_prose_changed": false,
   "scratch_bibliography_render_harness": {
     "status": "passed",
@@ -988,6 +1156,18 @@
       "item": "style/myfootnote package-name warning",
       "classification": "LEGITIMATE / INFORMATIONAL",
       "disposition": "Inherited template warning; unrelated to bibliography metadata."
+    },
+    {
+      "source": "Stage-2 main dissertation scratch build",
+      "count": 0,
+      "classification": "NONE",
+      "disposition": "No BibTeX, undefined-citation/reference, overfull, multiply-defined-label or duplicate-destination warning."
+    },
+    {
+      "source": "Stage-2 LaTeX main build",
+      "item": "113 underfull boxes",
+      "classification": "LEGITIMATE / INFORMATIONAL",
+      "disposition": "Count matches the Stage-1 final build; affected and bibliography pages are examiner-readable."
     }
   ],
   "protected_objects": {
@@ -1010,7 +1190,7 @@
   "f1_status": "not authorised",
   "f2_status": "not authorised, not performed",
   "held_out_result": null,
-  "stage_2_complete": false,
+  "stage_2_complete": true,
   "pushed": false,
   "cite_gap_inventory_sha256": "99076cdfb75cc97a888535fc95c2c612f64c54e6d755f2df8c26feb76b88ecb1",
   "validation_history": [
@@ -1028,6 +1208,14 @@
       "all_entry_harness": "0/0/0/0; 80 entries; 0 BibTeX warnings; all six pages visually inspected",
       "main_build": "0/0/0/0; 0 undefined citations/references; 0 multiply-defined labels; 0 duplicate destinations; 0 overfull boxes; bibliography pages 67--69 visually inspected",
       "stage_2_effect": "none"
+    },
+    {
+      "event": "Stage-2 citation and CITE-GAP integration validation",
+      "result": "passed",
+      "scope": "13 citation-command insertions, 18 marker resolutions including four Chapter-8 removal-only resolutions",
+      "prose_identity": "all four stripped digests equal their closed pre-integration digests",
+      "main_build": "0/0/0/0; 0 undefined citations/references; 0 overfull; 0 multiply-defined labels; 0 duplicate destinations; 0 BibTeX warnings; 82 pages; 40 bibliography entries",
+      "stage_1_effect": "none; bibliography and style hashes unchanged"
     }
   ],
   "packet_record_discrepancies": [
@@ -1039,7 +1227,7 @@
       "disposition": "The accepted packet artifact was not rewritten after the immutability guard rejected mutation; this provenance and all implementation/self-review records use the exact corrected breakdown. Total changed author fields remains 31."
     }
   ],
-  "updated_at_utc": "2026-08-27T02:37:22Z",
+  "updated_at_utc": "2026-08-27T10:15:44Z",
   "particle_surname_protection": {
     "verification_date": "2026-08-27",
     "reason": "BibTeX surname-particle protection for natural bibliography rendering; author identities and order unchanged",
@@ -1230,5 +1418,534 @@
       0,
       0
     ]
+  },
+  "stage_2": {
+    "stage_1_state": "closed",
+    "stage_1_owner": "none",
+    "stage_1_final_provenance_sha256": "7292516f4bbcc0e6d8a719ef869f2367860b601c9b836e95c416adb1ca9fcade",
+    "base_commit": "2ecf46ca7adf0d2b394ff79b9a64f4b8868ca231",
+    "final_commit": null,
+    "final_commit_record": ".agent-bridge/tasks/dissertation-12-bibliography-integration/30-implementation-stage2.json",
+    "final_commit_note": "The exact final HEAD is recorded after commit in the task manifest and state record; embedding a commit identifier in content belonging to that same commit is self-referential.",
+    "status": "complete_awaiting_review",
+    "bibliography_sha256": "e3d9b00e53537359dc350054ac88927f4c9176a6f8f13f37caf31f33260dca24",
+    "bibliography_modified": false,
+    "bibliography_entry_count": 80,
+    "style_sha256": "af80baae400192e1a4ed150e7620cab306ad2f1da8cd40aa7646694bd1899a54",
+    "style_modified": false,
+    "markers_before": 18,
+    "marker_distribution_before": {
+      "introduction": 3,
+      "theory": 4,
+      "methodology": 7,
+      "discussion": 4
+    },
+    "marker_inventory_before": [
+      {
+        "id": "G1",
+        "file": "chapters/introduction.tex",
+        "baseline_line": 95,
+        "class": "clip_foundation",
+        "planned_action": "insert radford2021clip then remove marker"
+      },
+      {
+        "id": "G2",
+        "file": "chapters/introduction.tex",
+        "baseline_line": 98,
+        "class": "siglip",
+        "planned_action": "insert zhai2023siglip then remove marker"
+      },
+      {
+        "id": "G3",
+        "file": "chapters/introduction.tex",
+        "baseline_line": 105,
+        "class": "smollm2",
+        "planned_action": "insert benallal2025smollm2 then remove marker"
+      },
+      {
+        "id": "G4",
+        "file": "chapters/theory.tex",
+        "baseline_line": 17,
+        "class": "clip_foundation",
+        "planned_action": "insert radford2021clip then remove marker"
+      },
+      {
+        "id": "G5",
+        "file": "chapters/theory.tex",
+        "baseline_line": 18,
+        "class": "siglip",
+        "planned_action": "insert zhai2023siglip then remove marker"
+      },
+      {
+        "id": "G6",
+        "file": "chapters/theory.tex",
+        "baseline_line": 51,
+        "class": "smollm2",
+        "planned_action": "insert benallal2025smollm2 then remove marker"
+      },
+      {
+        "id": "G7",
+        "file": "chapters/theory.tex",
+        "baseline_line": 70,
+        "class": "smolvlm",
+        "planned_action": "insert marafioti2025smolvlm then remove marker"
+      },
+      {
+        "id": "G8",
+        "file": "chapters/methodology.tex",
+        "baseline_line": 5,
+        "class": "clip_foundation",
+        "planned_action": "insert radford2021clip then remove marker"
+      },
+      {
+        "id": "G9",
+        "file": "chapters/methodology.tex",
+        "baseline_line": 88,
+        "class": "clip_foundation",
+        "planned_action": "insert ilharco2021openclip and schuhmann2022laion5b for software/data context then remove marker"
+      },
+      {
+        "id": "G10",
+        "file": "chapters/methodology.tex",
+        "baseline_line": 95,
+        "class": "siglip",
+        "planned_action": "insert zhai2023siglip then remove marker"
+      },
+      {
+        "id": "G11",
+        "file": "chapters/methodology.tex",
+        "baseline_line": 98,
+        "class": "smollm2",
+        "planned_action": "insert benallal2025smollm2 then remove marker"
+      },
+      {
+        "id": "G12",
+        "file": "chapters/methodology.tex",
+        "baseline_line": 147,
+        "class": "smolvlm",
+        "planned_action": "insert marafioti2025smolvlm then remove marker"
+      },
+      {
+        "id": "G13",
+        "file": "chapters/methodology.tex",
+        "baseline_line": 228,
+        "class": "bootstrap_methodology",
+        "planned_action": "insert efron1993bootstrap and field2007clusterbootstrap in one group then remove marker"
+      },
+      {
+        "id": "G14",
+        "file": "chapters/methodology.tex",
+        "baseline_line": 229,
+        "class": "clustered_or_cluster_robust_inference",
+        "planned_action": "same citation group as G13 then remove marker"
+      },
+      {
+        "id": "G15",
+        "file": "chapters/discussion.tex",
+        "baseline_line": 15,
+        "class": "clip_foundation",
+        "planned_action": "removal only; first use is cited outside the results paragraph"
+      },
+      {
+        "id": "G16",
+        "file": "chapters/discussion.tex",
+        "baseline_line": 43,
+        "class": "siglip",
+        "planned_action": "removal only; avoid attaching a foundational citation to a project result"
+      },
+      {
+        "id": "G17",
+        "file": "chapters/discussion.tex",
+        "baseline_line": 97,
+        "class": "smollm2",
+        "planned_action": "removal only; avoid attaching a foundational citation to a project result"
+      },
+      {
+        "id": "G18",
+        "file": "chapters/discussion.tex",
+        "baseline_line": 142,
+        "class": "smolvlm",
+        "planned_action": "removal only; avoid attaching a foundational citation to a project result"
+      }
+    ],
+    "citation_command_insertions": 13,
+    "distinct_newly_cited_keys": [
+      "benallal2025smollm2",
+      "efron1993bootstrap",
+      "field2007clusterbootstrap",
+      "ilharco2021openclip",
+      "marafioti2025smolvlm",
+      "radford2021clip",
+      "zhai2023siglip"
+    ],
+    "deliberately_not_cited": [
+      {
+        "key": "schuhmann2022laion5b",
+        "reason": "Human Guard 1: the LAION-5B publication is not authority for the exact laion2b_s34b_b79k checkpoint identity."
+      }
+    ],
+    "cited_bibliography_entries_before": 33,
+    "cited_bibliography_entries_after": 40,
+    "citation_insertions": [
+      {
+        "gaps": [
+          "G1"
+        ],
+        "file": "chapters/introduction.tex",
+        "post_line": 93,
+        "command": "\\citep{radford2021clip}",
+        "keys": [
+          "radford2021clip"
+        ],
+        "placement": "after frozen CLIP image and question representations",
+        "support_scope": "CLIP foundational method"
+      },
+      {
+        "gaps": [
+          "G2"
+        ],
+        "file": "chapters/introduction.tex",
+        "post_line": 95,
+        "command": "\\citep{zhai2023siglip}",
+        "keys": [
+          "zhai2023siglip"
+        ],
+        "placement": "after frozen SigLIP representation",
+        "support_scope": "SigLIP foundational method"
+      },
+      {
+        "gaps": [
+          "G3"
+        ],
+        "file": "chapters/introduction.tex",
+        "post_line": 99,
+        "command": "\\citep{benallal2025smollm2}",
+        "keys": [
+          "benallal2025smollm2"
+        ],
+        "placement": "after Frozen SmolLM2 representations",
+        "support_scope": "SmolLM2 model family"
+      },
+      {
+        "gaps": [
+          "G4"
+        ],
+        "file": "chapters/theory.tex",
+        "post_line": 17,
+        "command": "\\citep{radford2021clip}",
+        "keys": [
+          "radford2021clip"
+        ],
+        "placement": "after foundational CLIP approach",
+        "support_scope": "CLIP foundational method"
+      },
+      {
+        "gaps": [
+          "G5"
+        ],
+        "file": "chapters/theory.tex",
+        "post_line": 18,
+        "command": "\\citep{zhai2023siglip}",
+        "keys": [
+          "zhai2023siglip"
+        ],
+        "placement": "after sigmoid-loss description",
+        "support_scope": "SigLIP foundational method"
+      },
+      {
+        "gaps": [
+          "G6"
+        ],
+        "file": "chapters/theory.tex",
+        "post_line": 51,
+        "command": "\\citep{benallal2025smollm2}",
+        "keys": [
+          "benallal2025smollm2"
+        ],
+        "placement": "after frozen SmolLM2 models",
+        "support_scope": "SmolLM2 model family"
+      },
+      {
+        "gaps": [
+          "G7"
+        ],
+        "file": "chapters/theory.tex",
+        "post_line": 70,
+        "command": "\\citep{marafioti2025smolvlm}",
+        "keys": [
+          "marafioti2025smolvlm"
+        ],
+        "placement": "after SmolVLM",
+        "support_scope": "SmolVLM model family"
+      },
+      {
+        "gaps": [
+          "G8"
+        ],
+        "file": "chapters/methodology.tex",
+        "post_line": 4,
+        "command": "\\citep{radford2021clip}",
+        "keys": [
+          "radford2021clip"
+        ],
+        "placement": "after frozen CLIP checkpoint",
+        "support_scope": "CLIP foundational method, not exact project checkpoint identity"
+      },
+      {
+        "gaps": [
+          "G9"
+        ],
+        "file": "chapters/methodology.tex",
+        "post_line": 86,
+        "command": "\\citep{ilharco2021openclip}",
+        "keys": [
+          "ilharco2021openclip"
+        ],
+        "placement": "in the immediately following OpenCLIP-family clause, after Its separate image and text towers; the preceding exact laion2b_s34b_b79k tag remains wholly uncited",
+        "support_scope": "OpenCLIP software/distribution family and its separate-tower interface only",
+        "authority_boundary": "does not authenticate the exact pinned project checkpoint tag",
+        "placement_reason": "All tested placements in the exact-tag sentence before the tag produced a 5.33598 pt overfull line. This adjacent family-description placement preserved the exact words, kept the tag uncited and produced zero overfull boxes."
+      },
+      {
+        "gaps": [
+          "G10"
+        ],
+        "file": "chapters/methodology.tex",
+        "post_line": 91,
+        "command": "\\citep{zhai2023siglip}",
+        "keys": [
+          "zhai2023siglip"
+        ],
+        "placement": "immediately after ViT-B-16-SigLIP and before checkpoint using webli weights",
+        "support_scope": "SigLIP model family only",
+        "authority_boundary": "does not authenticate the exact webli weights identity"
+      },
+      {
+        "gaps": [
+          "G11"
+        ],
+        "file": "chapters/methodology.tex",
+        "post_line": 94,
+        "command": "\\citep{benallal2025smollm2}",
+        "keys": [
+          "benallal2025smollm2"
+        ],
+        "placement": "after SmolLM2-135M hidden states",
+        "support_scope": "SmolLM2 model family, not pinned revision identity"
+      },
+      {
+        "gaps": [
+          "G12"
+        ],
+        "file": "chapters/methodology.tex",
+        "post_line": 142,
+        "command": "\\citep{marafioti2025smolvlm}",
+        "keys": [
+          "marafioti2025smolvlm"
+        ],
+        "placement": "after SmolVLM-500M-Instruct in the two-family phrase",
+        "support_scope": "SmolVLM model family, not pinned Instruct revisions"
+      },
+      {
+        "gaps": [
+          "G13",
+          "G14"
+        ],
+        "file": "chapters/methodology.tex",
+        "post_line": 222,
+        "command": "\\citep{efron1993bootstrap,field2007clusterbootstrap}",
+        "keys": [
+          "efron1993bootstrap",
+          "field2007clusterbootstrap"
+        ],
+        "placement": "after image-clustered bootstrap",
+        "support_scope": "Efron and Tibshirani support bootstrap/percentile methodology; Field and Welsh support resampling whole clusters as exchangeable units",
+        "excluded_scope": "no cluster-robust sandwich-regression claim or citation"
+      }
+    ],
+    "removal_only_resolutions": [
+      {
+        "gap": "G15",
+        "file": "chapters/discussion.tex",
+        "baseline_line": 15,
+        "class": "clip_foundation",
+        "action": "marker removed; no citation inserted into project-results paragraph",
+        "resolving_earlier_citations": [
+          "chapters/introduction.tex:93",
+          "chapters/theory.tex:17",
+          "chapters/methodology.tex:4"
+        ]
+      },
+      {
+        "gap": "G16",
+        "file": "chapters/discussion.tex",
+        "baseline_line": 43,
+        "class": "siglip",
+        "action": "marker removed; no citation inserted into project-results paragraph",
+        "resolving_earlier_citations": [
+          "chapters/introduction.tex:95",
+          "chapters/theory.tex:18",
+          "chapters/methodology.tex:91"
+        ]
+      },
+      {
+        "gap": "G17",
+        "file": "chapters/discussion.tex",
+        "baseline_line": 97,
+        "class": "smollm2",
+        "action": "marker removed; no citation inserted into project-results paragraph",
+        "resolving_earlier_citations": [
+          "chapters/introduction.tex:99",
+          "chapters/theory.tex:51",
+          "chapters/methodology.tex:94"
+        ]
+      },
+      {
+        "gap": "G18",
+        "file": "chapters/discussion.tex",
+        "baseline_line": 142,
+        "class": "smolvlm",
+        "action": "marker removed; no citation inserted into project-results paragraph",
+        "resolving_earlier_citations": [
+          "chapters/theory.tex:70",
+          "chapters/methodology.tex:142"
+        ]
+      }
+    ],
+    "chapters": [
+      {
+        "path": "chapters/introduction.tex",
+        "pre_sha256": "8c21de8baa819ad0d0de053dd66b11a71f46b7a2714816a48b1cc3715c1a6b0f",
+        "post_sha256": "eddc7ba97ba1d0db4e56ca168d16ca095a3140c85f4d45f67c8d55a6d66050c8",
+        "stripped_digest_pre": "ed7d9c577ebb1466f9b31dfdb48a52559cc295382646282da922598f18ed2b60",
+        "stripped_digest_post": "ed7d9c577ebb1466f9b31dfdb48a52559cc295382646282da922598f18ed2b60",
+        "scientific_prose_identical": true
+      },
+      {
+        "path": "chapters/theory.tex",
+        "pre_sha256": "f1da83c604526c8de469771cabb18099b23a94ab119b0cd0fdfb6d0f4f8a0fba",
+        "post_sha256": "6c17e5879cb245d4477d7d1fb7023f4214e076dc4a0f8a587d2208d4908adf1c",
+        "stripped_digest_pre": "1b562d53d754a35c107ad06ef8d5e629a0e42b1824597357c81cb9475c4ace71",
+        "stripped_digest_post": "1b562d53d754a35c107ad06ef8d5e629a0e42b1824597357c81cb9475c4ace71",
+        "scientific_prose_identical": true
+      },
+      {
+        "path": "chapters/methodology.tex",
+        "pre_sha256": "fdea277a70be5abb4dc779be541a9a011c19841785223e82e13e3fc14b8ecab5",
+        "post_sha256": "e428b35b588d7d33ff32020a42402ae598163a7eda56b5d23ea41d7d9236fdd9",
+        "stripped_digest_pre": "6d012ad811d35e325bea02a0d12066401c66b824393088cc476de02205f1190e",
+        "stripped_digest_post": "6d012ad811d35e325bea02a0d12066401c66b824393088cc476de02205f1190e",
+        "scientific_prose_identical": true
+      },
+      {
+        "path": "chapters/discussion.tex",
+        "pre_sha256": "2d200fc14175013a50d8edf564afe2c810527de2bfb7311b8652a8570f7e5baa",
+        "post_sha256": "d9ac2a16a7495529dcd0d64dc02a2c572f764e0aa5757b91a07cb17504eabcac",
+        "stripped_digest_pre": "b6bd61a6b89c49e8c818256f5c80ef0bf5567ac727331e20b9bf14bffcf2aeb9",
+        "stripped_digest_post": "b6bd61a6b89c49e8c818256f5c80ef0bf5567ac727331e20b9bf14bffcf2aeb9",
+        "scientific_prose_identical": true
+      }
+    ],
+    "markers_after": 0,
+    "cite_gap_zero_scope": "all tracked dissertation .tex sources",
+    "typography": {
+      "chapter_2_local_sloppy_group_preserved": true,
+      "methodology_local_emergencystretch_group_preserved": true,
+      "wrappers_added_removed_or_widened": false,
+      "g9_final_placement": "adjacent OpenCLIP-family tower clause; exact checkpoint tag uncited",
+      "g10_final_placement": "after SigLIP family name and before webli project identity"
+    },
+    "build": {
+      "location_class": "scratch_only",
+      "scratch_path_recorded_for_reproducibility": "/tmp/dissertation-stage2-build.T2FuBm",
+      "command_sequence": [
+        "pdflatex",
+        "bibtex",
+        "pdflatex",
+        "pdflatex"
+      ],
+      "exit_codes": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "errors": 0,
+      "undefined_citations": 0,
+      "undefined_references": 0,
+      "overfull_boxes": 0,
+      "multiply_defined_labels": 0,
+      "duplicate_destinations": 0,
+      "bibtex_warnings": 0,
+      "underfull_boxes": 113,
+      "underfull_classification": "LEGITIMATE / INFORMATIONAL; inherited/template and readable URL wrapping",
+      "final_pdf_pages": 82,
+      "rendered_bibliography_entries": 40,
+      "pdf_sha256": "9a616a6dc87ad15260c285a61dbf2081ff265f3e13980c4ab7393a9ec0e41695",
+      "bbl_sha256": "91dbca163c709ad31a0933205a86068cd569d434aec6a853aef318515bec6aa9"
+    },
+    "rendered_page_checks": {
+      "physical_pages_inspected": [
+        13,
+        15,
+        16,
+        18,
+        20,
+        21,
+        25,
+        26,
+        29,
+        31,
+        69,
+        71,
+        72,
+        77,
+        78,
+        79,
+        80,
+        81
+      ],
+      "citation_pages": [
+        13,
+        15,
+        16,
+        18,
+        20,
+        21,
+        25,
+        26,
+        29,
+        31
+      ],
+      "removal_only_pages": [
+        69,
+        71,
+        72
+      ],
+      "bibliography_pages": [
+        77,
+        78,
+        79,
+        80,
+        81
+      ],
+      "result": "PASS; citations render at intended clauses, no marker text or malformed glyph is visible, and bibliography entries are readable"
+    },
+    "xref_pending_markers_before_after": {
+      "before": 7,
+      "after": 7,
+      "unchanged": true
+    },
+    "f2_integration_pending_markers_before_after": {
+      "before": 2,
+      "after": 2,
+      "unchanged": true
+    },
+    "scientific_prose_changed": false,
+    "f1_status": "not authorised",
+    "f2_status": "not authorised, not performed",
+    "held_out_result": null,
+    "pushed": false,
+    "completed_at_utc": "2026-08-27T10:15:44Z"
   }
 }

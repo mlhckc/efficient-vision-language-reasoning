@@ -12,7 +12,6 @@ on receiving the correct image; it does not establish visual grounding or
 reasoning. This use of frozen features with a small closed-answer classifier
 has precedent on a different VQA setting \citep{deuser2022less}, but the
 dataset and protocol differences preclude a numerical comparison.
-% CITE-GAP clip_foundation
 
 Across the implemented systems, representation choice, interaction design and
 answer-space coverage all materially affect the observed results. Additional
@@ -40,7 +39,6 @@ available for that scaling family.
 Representation choice also matters, but the encoder comparison is not
 factorial. At 250k, SigLIP fusion at 0.59388 is descriptively competitive with
 the latent reasoner at 0.59580 in the tested configurations.
-% CITE-GAP siglip
 Encoder and interface widths, architecture and other configuration details
 co-vary, and the seed structures differ. The observation is therefore neither
 a paired causal comparison nor evidence that a stronger representation can
@@ -94,7 +92,6 @@ interface. At the same time, A1 remains below the CLIP-token A0p reference at
 both scales. The latter contrast is secondary and representation-confounded:
 it changes the representation and interface together and cannot establish
 intrinsic CLIP superiority.
-% CITE-GAP smollm2
 
 The answer-side evidence has a different pattern. The 135M
 pretrained-minus-random contrast is negative directional at the lower scale and uncertain or
@@ -139,7 +136,6 @@ The E9 comparison remains contextual. Its stored statement makes the
 SmolVLM-500M constrained row approximately 24.7 times slower in warm serial
 latency than the re-timed head on the same node, but the comparison is
 latency-only.
-% CITE-GAP smolvlm
 The E9 artefact does not restate the head checkpoint identity, so its head
 accuracy and timing remain unpaired. E7b and E9 are not merged because the
 bridge gate failed, and no matched accuracy--latency leaderboard follows.

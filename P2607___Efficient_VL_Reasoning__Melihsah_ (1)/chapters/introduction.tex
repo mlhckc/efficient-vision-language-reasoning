@@ -90,19 +90,16 @@ The experiments use an image-disjoint GQA development partition, nested
 training scales and closed answer vocabularies derived from the training pool.
 The top-100 and top-1000 vocabularies are treated as different supported-answer
 views rather than as one interchangeable metric. The global pathway combines
-frozen CLIP image and question representations with compact heads, including
+frozen CLIP image and question representations \citep{radford2021clip} with compact heads, including
 explicit product and difference interactions and capacity controls.
-% CITE-GAP clip_foundation
-An alternative frozen SigLIP representation tests an encoder change under its
+An alternative frozen SigLIP representation \citep{zhai2023siglip} tests an encoder change under its
 implemented interface.
-% CITE-GAP siglip
 
 The token pathway uses a 32-query latent reasoner over frozen visual and
-question features. Frozen SmolLM2 representations are then introduced on the
+question features. Frozen SmolLM2 representations \citep{benallal2025smollm2} are then introduced on the
 question side, or the frozen model is used after the reasoner as an answer
 readout; pretrained variants are compared with architecture-matched random
 controls.
-% CITE-GAP smollm2
 These are the project's core small-language-model interfaces. Evaluation uses
 predefined seeds and development-only selection rules, with each contrast
 interpreted according to its matching and selection class. Runtime is assessed

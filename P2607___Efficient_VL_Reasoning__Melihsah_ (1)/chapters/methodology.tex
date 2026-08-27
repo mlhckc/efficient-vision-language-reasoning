@@ -1,8 +1,7 @@
 \chapter{Methodology: Data, Evaluation Protocol and Architectures}
 \section{Methodological framing and design principles}
 \label{sec:ch3-framing}
-This chapter defines the methodology used to study closed-set visual question answering on GQA \citep{hudson2019gqa}. The central problem is whether lightweight trainable heads can make effective use of frozen multimodal representations, while keeping development-set accuracy and measured efficiency, understood here as warm-serial latency and trainable parameter count, in view. Within the global pathway, fixed representations come from the separate image and text towers of a frozen CLIP checkpoint.
-% CITE-GAP clip_foundation
+This chapter defines the methodology used to study closed-set visual question answering on GQA \citep{hudson2019gqa}. The central problem is whether lightweight trainable heads can make effective use of frozen multimodal representations, while keeping development-set accuracy and measured efficiency, understood here as warm-serial latency and trainable parameter count, in view. Within the global pathway, fixed representations come from the separate image and text towers of a frozen CLIP checkpoint \citep{radford2021clip}.
 This broader use of frozen pretrained components is established in vision--language research \citep{tsimpoukelli2021frozen}, but here it is treated as a controlled design choice rather than a claim about any one architecture.
 
 Four principles govern the experiments. First, representation encoders remain frozen, so comparisons concern the trainable interface or head. Second, matched controls are used wherever an architectural or pretraining choice is isolated. Third, models are replicated across predefined seeds rather than interpreted from a single run. Finally, development evidence is kept separate from future confirmatory evaluation: it supports model development and analysis, but not a held-out generalisation claim.
@@ -84,18 +83,15 @@ Table~\ref{tab:ch3-answer-spaces} separates the three reporting denominators: 7,
 
 \section{Frozen representations and feature extraction}
 \label{sec:ch3-representations}
-The global pathway uses one frozen OpenCLIP ViT-B-32 checkpoint, \texttt{laion2b\_s34b\_b79k}. Its separate image and text towers produce L2-normalised 512-dimensional global vectors. The towers belong to one jointly pretrained checkpoint, so their outputs occupy an aligned pretrained space; this does not mean that the same encoder processes both modalities.
-% CITE-GAP clip_foundation
+The global pathway uses one frozen OpenCLIP ViT-B-32 checkpoint, \texttt{laion2b\_s34b\_b79k}. Its separate image and text towers \citep{ilharco2021openclip} produce L2-normalised 512-dimensional global vectors. The towers belong to one jointly pretrained checkpoint, so their outputs occupy an aligned pretrained space; this does not mean that the same encoder processes both modalities.
 Freezing the representation model keeps training focused on the lightweight interface, following the broader frozen-model setting described by \citet{tsimpoukelli2021frozen}.
 
 \begingroup
 \setlength{\emergencystretch}{2em}
-The SigLIP encoder comparison (E2) replaces only this global pathway with the frozen \texttt{ViT-B-16-}\allowbreak\texttt{SigLIP} checkpoint using \texttt{webli} weights. It supplies 768-dimensional inputs to the same head recipe. The token-level stores used by the reasoner remain CLIP features, so this encoder swap is not carried into the token pathway.\par
+The SigLIP encoder comparison (E2) replaces only this global pathway with the frozen \texttt{ViT-B-16-}\allowbreak\texttt{SigLIP} \citep{zhai2023siglip} checkpoint using \texttt{webli} weights. It supplies 768-dimensional inputs to the same head recipe. The token-level stores used by the reasoner remain CLIP features, so this encoder swap is not carried into the token pathway.\par
 \endgroup
-% CITE-GAP siglip
 
-The visual token store contains 50 vectors per image: one CLS token and 49 patch tokens, all with width 512. Question tokens are stored at their packed sequence lengths with the same width. These CLIP stores provide a jointly pretrained token space for the latent reasoner. The question-side small-language-model interface instead uses frozen SmolLM2-135M hidden states from a pinned model revision recorded in the provenance record. A trainable \texttt{Linear(576, 512)} layer connects those states to the reasoner. This common width is a learned interface and is not evidence that CLIP and SmolLM2 naturally share a pretrained semantic space. The 360M question-side arms were authorised but not run.
-% CITE-GAP smollm2
+The visual token store contains 50 vectors per image: one CLS token and 49 patch tokens, all with width 512. Question tokens are stored at their packed sequence lengths with the same width. These CLIP stores provide a jointly pretrained token space for the latent reasoner. The question-side small-language-model interface instead uses frozen SmolLM2-135M hidden states \citep{benallal2025smollm2} from a pinned model revision recorded in the provenance record. A trainable \texttt{Linear(576, 512)} layer connects those states to the reasoner. This common width is a learned interface and is not evidence that CLIP and SmolLM2 naturally share a pretrained semantic space. The 360M question-side arms were authorised but not run.
 
 For the answer-side E8B family, canonical evaluation is performed in FP32. This precision rule applies only to E8B evaluation; it does not redefine training precision elsewhere.
 
@@ -143,8 +139,7 @@ The answer-side path projects 32 latents into the frozen model's embedding width
 \end{figure}
 
 \subsection{Compact vision--language models for context}
-Frozen SmolVLM-256M-Instruct and SmolVLM-500M-Instruct are contextual only. They have zero trainable parameters and are not matched with the trained systems. The pinned Instruct checkpoints do not define a base-versus-Instruct contrast.
-% CITE-GAP smolvlm
+Frozen SmolVLM-256M-Instruct and SmolVLM-500M-Instruct \citep{marafioti2025smolvlm} are contextual only. They have zero trainable parameters and are not matched with the trained systems. The pinned Instruct checkpoints do not define a base-versus-Instruct contrast.
 
 \subsection{Matched random controls}
 A matched-random control keeps its partner's architecture and tokenizer. Pinned-seed random weights are frozen and not tuned separately. Within-size question-side pairs isolate the effect of the frozen input representation; answer-side pairs isolate the effect of pretrained versus matched-random frozen language-model weights within the same architecture and size. Any measured effect of these controls is reported in Chapters 4--6.
@@ -224,9 +219,7 @@ paired families. The mean summarises the trained seeds, while the sample
 standard deviation (\texttt{ddof=1}) describes variation between training
 runs. It is not an interval for evaluation-sample uncertainty.
 
-Evaluation-sample uncertainty used an image-clustered bootstrap.
-% CITE-GAP bootstrap_methodology
-% CITE-GAP clustered_or_cluster_robust_inference
+Evaluation-sample uncertainty used an image-clustered bootstrap \citep{efron1993bootstrap,field2007clusterbootstrap}.
 Images are resampled because questions referring to one image are not
 independent rows. Each of 2,000 draws sampled represented development image
 identifiers with replacement using \texttt{default\_rng(0)}, carrying all
