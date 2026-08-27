@@ -1,0 +1,170 @@
+{
+  "schema_version": 1,
+  "task_id": "dissertation-13-xref-appendix-integration",
+  "source": {
+    "path": "tables_src/VE1-TAB-A1.csv",
+    "sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
+    "row_count": 195,
+    "column_count": 14,
+    "columns": [
+      "slice id",
+      "family",
+      "system",
+      "scale",
+      "slice kind",
+      "slice",
+      "quantity",
+      "metric",
+      "point estimate",
+      "95% CI (image-clustered)",
+      "n questions",
+      "n images",
+      "counts provenance",
+      "evidence id"
+    ]
+  },
+  "partition": {
+    "suffix": "v206",
+    "filter_description": "family = v2_06 (all scales, systems and slice kinds)",
+    "filter": {
+      "family": "v2_06"
+    },
+    "expected_row_count": 20,
+    "actual_row_count": 20,
+    "source_data_row_numbers_one_based": [
+      141,
+      142,
+      143,
+      144,
+      145,
+      146,
+      147,
+      148,
+      149,
+      150,
+      151,
+      152,
+      153,
+      154,
+      155,
+      156,
+      157,
+      158,
+      159,
+      160
+    ],
+    "source_slice_ids": [
+      "v2_06/concat/train_40k/structural:choose/drop_shuffled",
+      "v2_06/concat/train_40k/structural:choose/drop_zeroed",
+      "v2_06/concat/train_40k/structural:compare/drop_shuffled",
+      "v2_06/concat/train_40k/structural:compare/drop_zeroed",
+      "v2_06/concat/train_40k/structural:logical/drop_shuffled",
+      "v2_06/concat/train_40k/structural:logical/drop_zeroed",
+      "v2_06/concat/train_40k/structural:query/drop_shuffled",
+      "v2_06/concat/train_40k/structural:query/drop_zeroed",
+      "v2_06/concat/train_40k/structural:verify/drop_shuffled",
+      "v2_06/concat/train_40k/structural:verify/drop_zeroed",
+      "v2_06/fusion/train_40k/structural:choose/drop_shuffled",
+      "v2_06/fusion/train_40k/structural:choose/drop_zeroed",
+      "v2_06/fusion/train_40k/structural:compare/drop_shuffled",
+      "v2_06/fusion/train_40k/structural:compare/drop_zeroed",
+      "v2_06/fusion/train_40k/structural:logical/drop_shuffled",
+      "v2_06/fusion/train_40k/structural:logical/drop_zeroed",
+      "v2_06/fusion/train_40k/structural:query/drop_shuffled",
+      "v2_06/fusion/train_40k/structural:query/drop_zeroed",
+      "v2_06/fusion/train_40k/structural:verify/drop_shuffled",
+      "v2_06/fusion/train_40k/structural:verify/drop_zeroed"
+    ],
+    "source_row_sha256s": [
+      "3be0ff9402c451554aaf8c1dbce45e0abb11842d69380ddf7a84dc6b4876c088",
+      "d3b77c0d173422977b904513808a24831756d40642bc0e7bccdbac184229ff40",
+      "b67fffadc657829405fe3a6c59ec03c3cf431df60b17c7bd914387c46da503b2",
+      "ff27e3ee716d2a3d4bb02baef3d3efd9b311cba43564a8c787e1583916b31cee",
+      "d6e2fc36b8aa93e063a79a4032366b56a0ef4b4336730429fe65472d14576b4f",
+      "a3afa1f937975be731af39c1e28a1931b41047d636c9e6b14e58b773a63b534f",
+      "9a5972b7a37129032d5d62f4b85dd6e802673b42711d759a635e50141ec35d3b",
+      "0a849aba0aa846742bc5c2f55df480f3b7072f18bae59d9f28b00770c9235157",
+      "70ece662623f826838673c4e160e16bacec3f70400f58830c6e96888116c4fa3",
+      "731985803ce3916b1c9b3b320c3cb50001fdff73a82ef8a6e7aa8ca7d3eec58a",
+      "a0272675bae2e75739662d3e390b24d5196e950c5c416a8dcb1113a8c37dc915",
+      "4f458e5fd2f2a3013aa10f461dcd668d8c6430b8d38bb927f2d4931ecd76f031",
+      "b9fa1f26dd70edb51b58b6810948878886eb13f8116575cd4dff63c6ea4a6a49",
+      "edb46db6afa6abe0ad55e3d07d7c0cb86d5833a11393e1d92c6514b98c1d62cb",
+      "c2599d1bc6fbef40053b9d9cfd3894ab0f9d5925e64e4da9db50caf98106ab51",
+      "c18692c4aaf66316d7f35b1603a5f345084ac42d8779a2eb304da69d976262d0",
+      "42023fac08db18e3b56abe645f6c443fc48c2a05b0d59c09a6d0d85991346d6a",
+      "47ab70458874b1924eb8db94d4cbbf5c9a217e2da9912783612710d299f399fb",
+      "acde96f127d890c17b45960669e8550ff381ca7a5c8dea5e8eee9e8635c7ba09",
+      "f4b37df3d117a720bf2303d562b694880d911685a269e8c614193ca6d3ba9d1c"
+    ],
+    "source_row_identity_sha256": "de91ca4c711f0011d6dd5e8c1d59c4f812393a0714c225975815d142da47c30d",
+    "duplicate_source_rows_within_partition": 0,
+    "row_source_identity_verified": true
+  },
+  "presentation": {
+    "retained_csv_columns": [
+      "slice id",
+      "family",
+      "system",
+      "scale",
+      "slice kind",
+      "slice",
+      "quantity",
+      "metric",
+      "point estimate",
+      "95% CI (image-clustered)",
+      "n questions",
+      "n images",
+      "counts provenance",
+      "evidence id"
+    ],
+    "displayed_table_columns": [
+      "family",
+      "system",
+      "scale",
+      "slice kind",
+      "slice",
+      "point estimate",
+      "95% CI (image-clustered)",
+      "n questions",
+      "n images"
+    ],
+    "relabel_field": "slice",
+    "relabel_map": {
+      "steps:<=2": "steps: at most 2",
+      "steps:>=4_combined": "steps: at least 4",
+      "steps:>=5": "steps: at least 5"
+    },
+    "result_and_count_values_recomputed": false
+  },
+  "derived_csv": {
+    "path": "tables_src/appA_slices_v206.csv",
+    "sha256": "e5cce3ef6bc1aabc2aeb5fa631e32626e4b2b2cb8a8774dadc15196038858114",
+    "row_count": 20,
+    "column_count": 14
+  },
+  "converter": {
+    "path": "tools/tab2latex.py",
+    "sha256": "c441d40b2b10a7a4294c4f15b12bc450f7ae73a9435e3d15394940c0f0c5a546",
+    "command": [
+      "python3",
+      "tools/tab2latex.py",
+      "tables_src/appA_slices_v206.csv",
+      "--output",
+      "tables/appA_slices_v206.tex",
+      "--columns",
+      "family,system,scale,slice kind,slice,point estimate,95% CI (image-clustered),n questions,n images",
+      "--header-map",
+      "{\"family\":\"Family\",\"system\":\"System\",\"scale\":\"Scale\",\"slice kind\":\"Slice kind\",\"slice\":\"Slice\",\"point estimate\":\"Point estimate\",\"95% CI (image-clustered)\":\"95% CI (image-clustered)\",\"n questions\":\"n questions\",\"n images\":\"n images\"}",
+      "--thousands",
+      "--verify"
+    ],
+    "verify": true,
+    "exit_code": 0
+  },
+  "output_table": {
+    "path": "tables/appA_slices_v206.tex",
+    "sha256": "8c1eb8448376c0bed28c73d229903548c8e9fe33fdba4e72fa8fe7afdf2ead4f"
+  },
+  "exact_partition_global_gate": "verified after all nine partitions"
+}

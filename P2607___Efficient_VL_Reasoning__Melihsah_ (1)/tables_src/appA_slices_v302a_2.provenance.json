@@ -1,0 +1,160 @@
+{
+  "schema_version": 1,
+  "task_id": "dissertation-13-xref-appendix-integration",
+  "source": {
+    "path": "tables_src/VE1-TAB-A1.csv",
+    "sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
+    "row_count": 195,
+    "column_count": 14,
+    "columns": [
+      "slice id",
+      "family",
+      "system",
+      "scale",
+      "slice kind",
+      "slice",
+      "quantity",
+      "metric",
+      "point estimate",
+      "95% CI (image-clustered)",
+      "n questions",
+      "n images",
+      "counts provenance",
+      "evidence id"
+    ]
+  },
+  "partition": {
+    "suffix": "v302a_2",
+    "filter_description": "family = v3_02a and system in {product_576k, fusion, reasoner}",
+    "filter": {
+      "family": "v3_02a",
+      "systems": [
+        "product_576k",
+        "fusion",
+        "reasoner"
+      ]
+    },
+    "expected_row_count": 15,
+    "actual_row_count": 15,
+    "source_data_row_numbers_one_based": [
+      171,
+      172,
+      173,
+      174,
+      175,
+      181,
+      182,
+      183,
+      184,
+      185,
+      191,
+      192,
+      193,
+      194,
+      195
+    ],
+    "source_slice_ids": [
+      "v3_02a/fusion/train_40k/steps:3/accuracy",
+      "v3_02a/fusion/train_40k/steps:4/accuracy",
+      "v3_02a/fusion/train_40k/steps:>=4_combined/deficit",
+      "v3_02a/fusion/train_40k/steps:>=5/accuracy",
+      "v3_02a/fusion/train_40k/steps:<=2/accuracy",
+      "v3_02a/product_576k/train_40k/steps:3/accuracy",
+      "v3_02a/product_576k/train_40k/steps:4/accuracy",
+      "v3_02a/product_576k/train_40k/steps:>=4_combined/deficit",
+      "v3_02a/product_576k/train_40k/steps:>=5/accuracy",
+      "v3_02a/product_576k/train_40k/steps:<=2/accuracy",
+      "v3_02a/reasoner/train_40k/steps:3/accuracy",
+      "v3_02a/reasoner/train_40k/steps:4/accuracy",
+      "v3_02a/reasoner/train_40k/steps:>=4_combined/deficit",
+      "v3_02a/reasoner/train_40k/steps:>=5/accuracy",
+      "v3_02a/reasoner/train_40k/steps:<=2/accuracy"
+    ],
+    "source_row_sha256s": [
+      "6bfb9491e0a6ccfe180824f51f8bdd94533c0282614f99beb6043f52d88a3587",
+      "fb37c1c2e843b5734d38535a3ab7a138ae978c3030e8d2f5a7e32284dc71e4b3",
+      "d8d887f8d75f248a656d930738079879fa5278ae9fd7c98d48a936bebcd53ea4",
+      "04db23f3d3477e24f7bf11bc669e808cc8c082e8aef5dda8367f29dc5264edb2",
+      "3004d9bf49e0fe051e43618512a315467e355a262641b4c98903593063c47768",
+      "ba173224139d3cfef86686f1cee8568c04724b9ab8290e777603993a2d4f3bba",
+      "2b5d9f37702c41a8c83b1bae451196b057e141d6a1222b7f8c17dd3f6a9b8c6a",
+      "ceacfd2235080908d0fea735fdaea6646a1131823c85fcac63d6b6aa7f0c6190",
+      "28d15ae853cf4b62a58758a20950aefb8bc4a40cd01b1f6aa02fe4a51b816cf8",
+      "7f41d6243b3342ee0c8766df748368c8c69e74b14ec2a15c548b1a93b55c03f6",
+      "6bb5e7cd7ceddae26eb4a6a7f603607d3227766232f3a4d09addc238b9539411",
+      "662712a13af945a4d3466eeaed39cbbdef5e8e06bc57c528c506620b04ac79b3",
+      "fbc304d3500e2f7a68df98e78da0dc01b46b663ba715a1b615c2ca277b2721e4",
+      "10139383a675e353732e145f84f0e577fbac466df23eeccdf3d75cb329fbdd48",
+      "4bd564e7d14618e5b03fa81d2b43e77d468d7ee1c1ddd4d87a1fb1092f6deabe"
+    ],
+    "source_row_identity_sha256": "d0e7621909134b4221144db72baaa9756661372ebc4c2b3816fbfe1d1c99dab9",
+    "duplicate_source_rows_within_partition": 0,
+    "row_source_identity_verified": true
+  },
+  "presentation": {
+    "retained_csv_columns": [
+      "slice id",
+      "family",
+      "system",
+      "scale",
+      "slice kind",
+      "slice",
+      "quantity",
+      "metric",
+      "point estimate",
+      "95% CI (image-clustered)",
+      "n questions",
+      "n images",
+      "counts provenance",
+      "evidence id"
+    ],
+    "displayed_table_columns": [
+      "family",
+      "system",
+      "scale",
+      "slice kind",
+      "slice",
+      "point estimate",
+      "95% CI (image-clustered)",
+      "n questions",
+      "n images"
+    ],
+    "relabel_field": "slice",
+    "relabel_map": {
+      "steps:<=2": "steps: at most 2",
+      "steps:>=4_combined": "steps: at least 4",
+      "steps:>=5": "steps: at least 5"
+    },
+    "result_and_count_values_recomputed": false
+  },
+  "derived_csv": {
+    "path": "tables_src/appA_slices_v302a_2.csv",
+    "sha256": "2c196e267ce3eaf75983f65be8a18d708556bff70210280385c192b658179a0b",
+    "row_count": 15,
+    "column_count": 14
+  },
+  "converter": {
+    "path": "tools/tab2latex.py",
+    "sha256": "c441d40b2b10a7a4294c4f15b12bc450f7ae73a9435e3d15394940c0f0c5a546",
+    "command": [
+      "python3",
+      "tools/tab2latex.py",
+      "tables_src/appA_slices_v302a_2.csv",
+      "--output",
+      "tables/appA_slices_v302a_2.tex",
+      "--columns",
+      "family,system,scale,slice kind,slice,point estimate,95% CI (image-clustered),n questions,n images",
+      "--header-map",
+      "{\"family\":\"Family\",\"system\":\"System\",\"scale\":\"Scale\",\"slice kind\":\"Slice kind\",\"slice\":\"Slice\",\"point estimate\":\"Point estimate\",\"95% CI (image-clustered)\":\"95% CI (image-clustered)\",\"n questions\":\"n questions\",\"n images\":\"n images\"}",
+      "--thousands",
+      "--verify"
+    ],
+    "verify": true,
+    "exit_code": 0
+  },
+  "output_table": {
+    "path": "tables/appA_slices_v302a_2.tex",
+    "sha256": "7a5392eb04b5ffc4975df39dc5027235e9bb5f0318260ec6afb35322c3faf446"
+  },
+  "exact_partition_global_gate": "verified after all nine partitions"
+}

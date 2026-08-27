@@ -1,0 +1,904 @@
+{
+  "schema_version": 1,
+  "task_id": "dissertation-13-xref-appendix-integration",
+  "stage": "xref_appendix_integration",
+  "base_commit": "66f2112462518ed26d184c3c6c5b539ce72b4c77",
+  "final_commit": null,
+  "final_commit_record": "30-implementation.json",
+  "created_at_utc": "2026-08-27T11:51:43Z",
+  "development_set_only": true,
+  "held_out_result": null,
+  "human_decisions": {
+    "H_1": "YES — AUTHORISED: bounded Methodology tense correction and RQ reference",
+    "H_2": "YES — AUTHORISED: three bounded XREF/navigation sentences",
+    "H_3": "historical bibliography decision; unchanged",
+    "H_4": "historical bibliography-style decision; unchanged",
+    "H_5": {
+      "decision": "YES — AUTHORISED",
+      "scope": "two affected Appendix table captions only",
+      "replacement": "Development-set result on one GQA subset. No held-out generalisation is claimed."
+    }
+  },
+  "markers": {
+    "xref_pending_before": 7,
+    "xref_pending_after": 0,
+    "cite_gap_before": 0,
+    "cite_gap_after": 0,
+    "f2_integration_pending_before": 2,
+    "f2_integration_pending_after": 2,
+    "f2_markers_protected_unchanged": true
+  },
+  "xref_resolutions": [
+    {
+      "id": "X1",
+      "path": "chapters/methodology.tex",
+      "action": "H-1 editorial tense correction plus bounded reference; marker removed",
+      "targets": [
+        "sec:ch1-rqs"
+      ],
+      "text": "The formal research questions are stated in Chapter 1 (Section~\\ref{sec:ch1-rqs})."
+    },
+    {
+      "id": "X2",
+      "path": "chapters/conclusions.tex",
+      "action": "bounded reference parenthetical; marker removed",
+      "targets": [
+        "sec:ch1-rqs"
+      ],
+      "text": "\\textbf{RQ1} (Section~\\ref{sec:ch1-rqs}) asked"
+    },
+    {
+      "id": "X3",
+      "path": "chapters/technical.tex",
+      "action": "bounded reference parenthetical; marker removed",
+      "targets": [
+        "fig:appA-interaction"
+      ],
+      "text": "reproduced in the appendix (Figure~\\ref{fig:appA-interaction})"
+    },
+    {
+      "id": "X4",
+      "path": "chapters/technical2.tex",
+      "action": "authorised fenced navigation sentence; marker removed",
+      "targets": [
+        "fig:ch5-depth",
+        "fig:appA-depth-full"
+      ],
+      "text": "The complete seven-system variant of Figure~\\ref{fig:ch5-depth} is reproduced as Figure~\\ref{fig:appA-depth-full}, and every per-slice value with its question and image counts is listed in Tables~\\ref{tab:appA-slices}--\\ref{tab:appA-slices-e8a-250k-b}."
+    },
+    {
+      "id": "X5",
+      "path": "chapters/technical2.tex",
+      "action": "same fenced sentence as X4; full nine-table range",
+      "targets": [
+        "tab:appA-slices",
+        "tab:appA-slices-e8a-250k-b"
+      ],
+      "rendered_range": "Tables A.2--A.10",
+      "all_rows_in_first_table_implied": false
+    },
+    {
+      "id": "X6",
+      "path": "chapters/slm.tex",
+      "action": "authorised fenced navigation sentence; marker removed",
+      "targets": [
+        "tab:appA-scale-effects"
+      ],
+      "text": "The training-scale effect of each answer-side system, 250k minus 40k with its image-clustered interval, is tabulated in Table~\\ref{tab:appA-scale-effects}."
+    },
+    {
+      "id": "X7",
+      "path": "chapters/efficiency.tex",
+      "action": "authorised fenced navigation sentence; marker removed",
+      "targets": [
+        "fig:appA-e9"
+      ],
+      "text": "The E9 same-node block is also shown graphically in Figure~\\ref{fig:appA-e9}."
+    }
+  ],
+  "integration_text": {
+    "appendix_introduction": "This appendix reproduces supplementary figures and tables referred to in Chapters~4--7. The figures are copied directly from the closed evidence record, while the tables are presentation-only renderings of frozen CSV evidence; no reported value is recomputed.",
+    "reader_facing_integration_text_changed": true,
+    "scientific_claim_content_changed": false,
+    "scientific_recomputation": false,
+    "scientific_conclusion_changed": false,
+    "closed_scientific_prose_identity_after_stripping_authorised_xref_integration": true
+  },
+  "closed_chapter_integrity": {
+    "normalisation_contract": "Remove authorised XREF fenced blocks and XREF-PENDING lines; remove authorised reference parentheticals symmetrically; preserve historical citations except Methodology, where citations are stripped symmetrically; apply H-1 to the closed Methodology side; normalise mechanical whitespace and punctuation.",
+    "chapters": [
+      {
+        "path": "chapters/methodology.tex",
+        "approved_pre_integration_sha256": "e428b35b588d7d33ff32020a42402ae598163a7eda56b5d23ea41d7d9236fdd9",
+        "post_integration_sha256": "1dbe65ddd7dce69e1f9f95e7e426e8682dc917e86a63f56a060deb6ad600a5e1",
+        "stripped_historical_digest": "edf5c0375639c8b94cec3459d5868d638d9cf70f97e20c6322fa7298079d61b8",
+        "stripped_post_integration_digest": "edf5c0375639c8b94cec3459d5868d638d9cf70f97e20c6322fa7298079d61b8",
+        "identical": true
+      },
+      {
+        "path": "chapters/conclusions.tex",
+        "approved_pre_integration_sha256": "58385f7d7d2a9a685eb44d73ac696755fee6b995086d97aad567b551a19c1f89",
+        "post_integration_sha256": "2ea67b92b6713b3bdab0089f702a1f06c735d5aba33a7d5a96af1e4d1e18ba11",
+        "stripped_historical_digest": "efd25e36b4947f21396a1b2d9c4460401b5debd1320ee4bba9a210a55e5aba77",
+        "stripped_post_integration_digest": "efd25e36b4947f21396a1b2d9c4460401b5debd1320ee4bba9a210a55e5aba77",
+        "identical": true
+      },
+      {
+        "path": "chapters/technical.tex",
+        "approved_pre_integration_sha256": "59b8966dbac8e07783aa3547860e04a2695bdd62336cc618137e64c863305579",
+        "post_integration_sha256": "9d2cf74ef4e64ac258d1abfa85f2e7e4111fe64ad8548bc498be6eae7c5e8168",
+        "stripped_historical_digest": "386d2caaf4989d3699dc0a7f77b3efea978bf437487a17bad5589606707386d0",
+        "stripped_post_integration_digest": "386d2caaf4989d3699dc0a7f77b3efea978bf437487a17bad5589606707386d0",
+        "identical": true
+      },
+      {
+        "path": "chapters/technical2.tex",
+        "approved_pre_integration_sha256": "90972163ed72a96e906af6be88292d80d50d84ce4be4ff6a5bc73838db0b474b",
+        "post_integration_sha256": "3c203bf01a68a02d5fe58875ebd01cfd888332c318c0176bd6c3eda503b0b20f",
+        "stripped_historical_digest": "7580e0fd067e985de84b0d818a6a9ae13f0f81ba514bc6daad1b9d2eba8ffba4",
+        "stripped_post_integration_digest": "7580e0fd067e985de84b0d818a6a9ae13f0f81ba514bc6daad1b9d2eba8ffba4",
+        "identical": true
+      },
+      {
+        "path": "chapters/slm.tex",
+        "approved_pre_integration_sha256": "a2cf2a316b4e8d6b3765d6d39b4af266bde6bf2657929ff03beaf814f62347f1",
+        "post_integration_sha256": "fb391f52cdfa5381204915a77fcf7bd2a3aaeff937501afc007bcdc5fb0bc2f9",
+        "stripped_historical_digest": "ef85e7a5cb73548cd995fa8d8c7fa708f6aac13093bc45811b95137ff230882b",
+        "stripped_post_integration_digest": "ef85e7a5cb73548cd995fa8d8c7fa708f6aac13093bc45811b95137ff230882b",
+        "identical": true
+      },
+      {
+        "path": "chapters/efficiency.tex",
+        "approved_pre_integration_sha256": "72f23e40df2db84e54a8ec9100f44427ca428a4da774d01517f67052c84f2088",
+        "post_integration_sha256": "55f92d89a1f934243457d68109cc46381cdb309ac47e0eedc5335c33d9c25e26",
+        "stripped_historical_digest": "55589f1f625e654632f90ceed0359329b8b5f7e5def6246ed932858e65693b4a",
+        "stripped_post_integration_digest": "55589f1f625e654632f90ceed0359329b8b5f7e5def6246ed932858e65693b4a",
+        "identical": true
+      }
+    ],
+    "all_equal": true
+  },
+  "appendix_source": {
+    "path": "appendices/appendix.tex",
+    "pre_sha256": "df93dc67eb04986c45c44ce19ce251cbf2daba33bfaeebb3813308c8a7c6066c",
+    "post_sha256": "59a8b144c89a5e7a11546cf4ae050fce6ef76f0723cad4faf4e9c14d009d7e02",
+    "stub_guidance_remaining": false,
+    "chapter_label": "app:supplementary"
+  },
+  "main_template": {
+    "path": "Dissertation_Template.tex",
+    "pre_sha256": "e56dc9b10b9ccd40a51771671550cc711f53d89f372afa86f3c2b52292a111f1",
+    "post_sha256": "d7634b84301dd4eb56fdb79d38fd35bb1cef76c59a910ada197b8f2f87886a35",
+    "authorised_change": "\\addcontentsline{toc}{chapter}{Appendix} -> \\appendix",
+    "other_bytes_changed": false,
+    "front_matter_configuration_changed": false,
+    "list_of_tables_configuration_changed": false
+  },
+  "appendix_objects": {
+    "authorised_object_ids": [
+      "VE1-FIG-A1",
+      "VE1-FIG-04-FULL",
+      "VE1-FIG-A5",
+      "VE1-TAB-03",
+      "VE1-TAB-A1"
+    ],
+    "additional_objects_added": false,
+    "figures": [
+      {
+        "artefact_id": "VE1-FIG-A1",
+        "number": "A.1",
+        "label": "fig:appA-interaction",
+        "frozen_path": "results/ve1/figures/VE1-FIG-A1.pdf",
+        "frozen_sha256": "9759ee1f84a795b356a5448873abfd03f04cd8811d7221410f72c6e0f81bcda6",
+        "copy_path": "images/ve1/VE1-FIG-A1.pdf",
+        "copy_sha256": "9759ee1f84a795b356a5448873abfd03f04cd8811d7221410f72c6e0f81bcda6",
+        "copy_byte_identical": true,
+        "frozen_source_caption": "Interaction-feature decomposition at matched capacity. Either interaction term alone recovers most of the fusion gain at an equal parameter budget, and the two terms behave alike. Uncertainty: image-clustered 95 per cent evaluation-sampling intervals, clustered on the represented development imageId and conditioning on the fixed trained seed set. Nominal and uncorrected for multiplicity. Redundancy is inferred from the two terms performing alike at matched capacity, not from a mechanism. The natural-width contrasts are capacity-confounded. Development set, train_40k, five training seeds. The grid is complete: all nine published gaps are shown, including the four whose intervals include zero.",
+        "tex_safe_rendered_caption": "Interaction-feature decomposition at matched capacity. Either interaction term alone recovers most of the fusion gain at an equal parameter budget, and the two terms behave alike. Uncertainty: image-clustered 95 per cent evaluation-sampling intervals, clustered on the represented development imageId and conditioning on the fixed trained seed set. Nominal and uncorrected for multiplicity. Redundancy is inferred from the two terms performing alike at matched capacity, not from a mechanism. The natural-width contrasts are capacity-confounded. Development set, train\\_40k, five training seeds. The grid is complete: all nine published gaps are shown, including the four whose intervals include zero.",
+        "caption_contract": "source-semantic identity with mechanical TeX escaping"
+      },
+      {
+        "artefact_id": "VE1-FIG-04-FULL",
+        "number": "A.2",
+        "label": "fig:appA-depth-full",
+        "frozen_path": "results/ve1/figures/VE1-FIG-04-FULL.pdf",
+        "frozen_sha256": "95f78b8334fddb466b00fcd24e8718178ec9adb6d21a88f3162e435f4c33e398",
+        "copy_path": "images/ve1/VE1-FIG-04-FULL.pdf",
+        "copy_sha256": "95f78b8334fddb466b00fcd24e8718178ec9adb6d21a88f3162e435f4c33e398",
+        "copy_byte_identical": true,
+        "frozen_source_caption": "Accuracy by reasoning depth and the pooled four-or-more-step deficit. A pooled deficit at four or more reasoning steps persists across both frozen encoders, across training scales and across head families. Uncertainty: image-clustered 95 per cent evaluation-sampling intervals, clustered on the represented development imageId and conditioning on the fixed trained seed set. Nominal and uncorrected for multiplicity. The deficit is measured against fixed v2_05b per-bucket priors and describes one system's step profile; it is not a contrast between systems and establishes no cause. Buckets are unequal and dependent, so every interval is clustered on the bucket's own represented development images; the per-bucket question and image counts must be printed. Step counts come from the GQA semantic program length, which is a proxy for reasoning depth, not a measure of reasoning.",
+        "tex_safe_rendered_caption": "Accuracy by reasoning depth and the pooled four-or-more-step deficit. A pooled deficit at four or more reasoning steps persists across both frozen encoders, across training scales and across head families. Uncertainty: image-clustered 95 per cent evaluation-sampling intervals, clustered on the represented development imageId and conditioning on the fixed trained seed set. Nominal and uncorrected for multiplicity. The deficit is measured against fixed v2\\_05b per-bucket priors and describes one system's step profile; it is not a contrast between systems and establishes no cause. Buckets are unequal and dependent, so every interval is clustered on the bucket's own represented development images; the per-bucket question and image counts must be printed. Step counts come from the GQA semantic program length, which is a proxy for reasoning depth, not a measure of reasoning.",
+        "caption_contract": "source-semantic identity with mechanical TeX escaping"
+      },
+      {
+        "artefact_id": "VE1-FIG-A5",
+        "number": "A.3",
+        "label": "fig:appA-e9",
+        "frozen_path": "results/ve1/figures/VE1-FIG-A5.pdf",
+        "frozen_sha256": "78e990ee49b055a9be2e5ad9f3ad4fd770caca60d3c6cf36a41a227c048f844d",
+        "copy_path": "images/ve1/VE1-FIG-A5.pdf",
+        "copy_sha256": "78e990ee49b055a9be2e5ad9f3ad4fd770caca60d3c6cf36a41a227c048f844d",
+        "copy_byte_identical": true,
+        "frozen_source_caption": "Compact VLM in context. A frozen compact integrated VLM can be placed in context against these lightweight systems on one node. Uncertainty: none is drawn. Each latency is a warm median over repeated passes, not an estimate carrying sampling uncertainty. CONTEXTUAL POSITIONING ONLY, never a leaderboard or fair-protocol superiority claim. Training history, multimodal pretraining, answer support and output format all differ, and SmolVLM-256M's text backbone is the Instruct checkpoint where E8A and E8B use base. No comparison is made against published official GQA scores in either direction, because the split, the answer support and the scorer all differ. Single node otter159; these points are never merged with the otter155 frontier.",
+        "tex_safe_rendered_caption": "Compact VLM in context. A frozen compact integrated VLM can be placed in context against these lightweight systems on one node. Uncertainty: none is drawn. Each latency is a warm median over repeated passes, not an estimate carrying sampling uncertainty. CONTEXTUAL POSITIONING ONLY, never a leaderboard or fair-protocol superiority claim. Training history, multimodal pretraining, answer support and output format all differ, and SmolVLM-256M's text backbone is the Instruct checkpoint where E8A and E8B use base. No comparison is made against published official GQA scores in either direction, because the split, the answer support and the scorer all differ. Single node otter159; these points are never merged with the otter155 frontier. Arm codes: A0p = CLIP question encoder; A1 = frozen pretrained SmolLM2-135M question encoder; B1 = lightweight classifier readout; B2 = random SmolLM2-135M readout; B3 = pretrained SmolLM2-135M readout; R2 = trie-constrained greedy generation; R3 = free greedy generation with a fixed token cap; reasoner = latent-query reasoner. `free' and `constrained' on a SmolVLM point are free greedy and answer-support-constrained generation.",
+        "caption_contract": "source-semantic identity with mechanical TeX escaping; authorised frozen glossary appended"
+      }
+    ],
+    "scale_effects_table": {
+      "artefact_id": "VE1-TAB-03",
+      "number": "A.1",
+      "label": "tab:appA-scale-effects",
+      "frozen_source_path": "results/ve1/tables/VE1-TAB-03.csv",
+      "frozen_source_sha256": "aac590a230dbb88328cac7a87adffd8cfac80024f89ec62821edf3b950bd88ef",
+      "copy_path": "tables_src/VE1-TAB-03.csv",
+      "copy_sha256": "aac590a230dbb88328cac7a87adffd8cfac80024f89ec62821edf3b950bd88ef",
+      "copy_byte_identical": true,
+      "output_path": "tables/appA_scale_effects.tex",
+      "output_sha256": "45039e7279c965317497343a702509911d5f7f9b4d9bf73aab887a3abeb4c332",
+      "displayed_columns": [
+        "system",
+        "language model",
+        "effect (250k minus 40k)",
+        "95% CI (image-clustered)",
+        "excludes zero",
+        "sd (training seeds, ddof=1)",
+        "evidence id"
+      ],
+      "converter_verify_exit_code": 0,
+      "frozen_source_caption": "Training-scale effects, frozen-SLM families. How much does labelled training scale move each SLM-interface system? Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. Both pretraining-effect intervals contain zero and the seeds disagree in sign; they establish neither equivalence nor the absence of an effect. The 135M-to-360M step is whole-system capacity sensitivity, not an isolated causal language-model-size effect: trainable capacity moves too, 21,343,808 to 21,540,800 parameters, because the projection width follows the hidden size. An interval containing zero is an absence of a detected effect and establishes neither equivalence nor the absence of an effect. B3 at train_40k has an across-training-seed sd of 0.02795 and must always be shown with its seed spread.",
+      "tex_safe_rendered_caption": "Training-scale effects, frozen-SLM families. How much does labelled training scale move each SLM-interface system? Development-set result on one GQA subset. No held-out generalisation is claimed. Both pretraining-effect intervals contain zero and the seeds disagree in sign; they establish neither equivalence nor the absence of an effect. The 135M-to-360M step is whole-system capacity sensitivity, not an isolated causal language-model-size effect: trainable capacity moves too, 21,343,808 to 21,540,800 parameters, because the projection width follows the hidden size. An interval containing zero is an absence of a detected effect and establishes neither equivalence nor the absence of an effect. B3 at train\\_40k has an across-training-seed sd of 0.02795 and must always be shown with its seed spread.",
+      "H_5_caption_exception": {
+        "stale_clause": "The clean test is embargoed and unread.",
+        "reason_for_supersession": "canonical clean-test governance documents two mechanical byte-access incidents, so unread is too categorical",
+        "authorised_replacement": "Development-set result on one GQA subset. No held-out generalisation is claimed.",
+        "caption_values_changed": false,
+        "scientific_result_changed": false,
+        "scientific_conclusion_changed": false,
+        "scientific_recomputation": false,
+        "governance_wording_updated": true
+      }
+    },
+    "slice_tables": {
+      "artefact_id": "VE1-TAB-A1",
+      "frozen_source_path": "results/ve1/tables/VE1-TAB-A1.csv",
+      "frozen_source_sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
+      "copy_path": "tables_src/VE1-TAB-A1.csv",
+      "copy_sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
+      "copy_byte_identical": true,
+      "frozen_source_caption": "Full slice statistics. What is every per-type, per-structure and per-step-bucket value, with its counts? Development-set result on one GQA subset. The clean test is embargoed and unread, so no held-out generalisation is claimed. E8A's projected interface is a learned common width, not a naturally shared pretrained embedding space. A1 minus A1r is the only clean within-size question-side pretraining contrast; A1 minus A0p also changes the representation space and the interface. Slices are unequal and dependent; every interval is clustered on the slice's own represented development images, never on rows. A drop under a wrong or removed image demonstrates reliance on the image. It is NOT proof of robust visual reasoning, of grounding or of compositional understanding. The question-only drop is exactly zero by construction and is a control, not a result. A system-level comparison. Input granularity, architecture and parameter count change together, so token-level access is not isolated as the cause.",
+      "tex_safe_rendered_first_caption": "Full slice statistics. What is every per-type, per-structure and per-step-bucket value, with its counts? Development-set result on one GQA subset. No held-out generalisation is claimed. E8A's projected interface is a learned common width, not a naturally shared pretrained embedding space. A1 minus A1r is the only clean within-size question-side pretraining contrast; A1 minus A0p also changes the representation space and the interface. Slices are unequal and dependent; every interval is clustered on the slice's own represented development images, never on rows. A drop under a wrong or removed image demonstrates reliance on the image. It is NOT proof of robust visual reasoning, of grounding or of compositional understanding. The question-only drop is exactly zero by construction and is a control, not a result. A system-level comparison. Input granularity, architecture and parameter count change together, so token-level access is not isolated as the cause. The step-bucket slices are printed as at most 2, at least 4 and at least 5 for the buckets $\\leq$2, $\\geq$4 and $\\geq$5; the values are unchanged.",
+      "H_5_caption_exception": {
+        "stale_clause": "The clean test is embargoed and unread.",
+        "reason_for_supersession": "canonical clean-test governance documents two mechanical byte-access incidents, so unread is too categorical",
+        "authorised_replacement": "Development-set result on one GQA subset. No held-out generalisation is claimed.",
+        "caption_values_changed": false,
+        "scientific_result_changed": false,
+        "scientific_conclusion_changed": false,
+        "scientific_recomputation": false,
+        "governance_wording_updated": true
+      },
+      "retained_columns": [
+        "slice id",
+        "family",
+        "system",
+        "scale",
+        "slice kind",
+        "slice",
+        "quantity",
+        "metric",
+        "point estimate",
+        "95% CI (image-clustered)",
+        "n questions",
+        "n images",
+        "counts provenance",
+        "evidence id"
+      ],
+      "displayed_columns": [
+        "family",
+        "system",
+        "scale",
+        "slice kind",
+        "slice",
+        "point estimate",
+        "95% CI (image-clustered)",
+        "n questions",
+        "n images"
+      ],
+      "relabel_map": {
+        "steps:<=2": "steps: at most 2",
+        "steps:>=4_combined": "steps: at least 4",
+        "steps:>=5": "steps: at least 5"
+      },
+      "partitions": [
+        {
+          "suffix": "v202",
+          "number": "A.2",
+          "label": "tab:appA-slices",
+          "derived_csv": "tables_src/appA_slices_v202.csv",
+          "derived_csv_sha256": "523e52753bf2ee6213d96ed636e9505d3451cd2f00c1680f4a5549c52d255ef5",
+          "sidecar": "tables_src/appA_slices_v202.provenance.json",
+          "sidecar_sha256": "4bac59f34205820f95f8b2c2ca9288bfa0eed0a68d8eececc55dc836f3eb29d8",
+          "output": "tables/appA_slices_v202.tex",
+          "output_sha256": "79923cb8493f1d6e22cd8dd2996f3919e0c92bbf040851b38309352f28b02cc9",
+          "filter": {
+            "family": "v2_02"
+          },
+          "filter_description": "family = v2_02 (all scales, systems and slice kinds)",
+          "row_count": 28,
+          "source_rows_one_based": [
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111,
+            112
+          ],
+          "row_source_identity_sha256": "365ee45f05cb471fd07a0cdd42fdf97f016bdb1faa45c1b51cccf4e6a988fb2e",
+          "row_source_identity_verified": true,
+          "converter_verify_exit_code": 0
+        },
+        {
+          "suffix": "v205c",
+          "number": "A.3",
+          "label": "tab:appA-slices-v205c",
+          "derived_csv": "tables_src/appA_slices_v205c.csv",
+          "derived_csv_sha256": "017f28f24d189d59df51edfc5034c0ba494240d11a5932ed1ddebb19f7b2bf3e",
+          "sidecar": "tables_src/appA_slices_v205c.provenance.json",
+          "sidecar_sha256": "4655dcf04786f5b256fe3d176252ee046e4fb12ddf38c48d9bb393e1818677e4",
+          "output": "tables/appA_slices_v205c.tex",
+          "output_sha256": "c4a977d74b8c47f7dbde1323aa73eb7975cc649a8a4516846352b67c14d71463",
+          "filter": {
+            "family": "v2_05c"
+          },
+          "filter_description": "family = v2_05c (all scales, systems and slice kinds)",
+          "row_count": 28,
+          "source_rows_one_based": [
+            113,
+            114,
+            115,
+            116,
+            117,
+            118,
+            119,
+            120,
+            121,
+            122,
+            123,
+            124,
+            125,
+            126,
+            127,
+            128,
+            129,
+            130,
+            131,
+            132,
+            133,
+            134,
+            135,
+            136,
+            137,
+            138,
+            139,
+            140
+          ],
+          "row_source_identity_sha256": "8f424b95599399576ef01138f3cf6ca040c4ed858e3c8f2832f7ab0f0667d8f0",
+          "row_source_identity_verified": true,
+          "converter_verify_exit_code": 0
+        },
+        {
+          "suffix": "v206",
+          "number": "A.4",
+          "label": "tab:appA-slices-v206",
+          "derived_csv": "tables_src/appA_slices_v206.csv",
+          "derived_csv_sha256": "e5cce3ef6bc1aabc2aeb5fa631e32626e4b2b2cb8a8774dadc15196038858114",
+          "sidecar": "tables_src/appA_slices_v206.provenance.json",
+          "sidecar_sha256": "6967a833d2364da7adcb3d9b8e0dd8033d433e4573db8a548ec9d38129d35c3a",
+          "output": "tables/appA_slices_v206.tex",
+          "output_sha256": "8c1eb8448376c0bed28c73d229903548c8e9fe33fdba4e72fa8fe7afdf2ead4f",
+          "filter": {
+            "family": "v2_06"
+          },
+          "filter_description": "family = v2_06 (all scales, systems and slice kinds)",
+          "row_count": 20,
+          "source_rows_one_based": [
+            141,
+            142,
+            143,
+            144,
+            145,
+            146,
+            147,
+            148,
+            149,
+            150,
+            151,
+            152,
+            153,
+            154,
+            155,
+            156,
+            157,
+            158,
+            159,
+            160
+          ],
+          "row_source_identity_sha256": "de91ca4c711f0011d6dd5e8c1d59c4f812393a0714c225975815d142da47c30d",
+          "row_source_identity_verified": true,
+          "converter_verify_exit_code": 0
+        },
+        {
+          "suffix": "v302a_1",
+          "number": "A.5",
+          "label": "tab:appA-slices-v302a-1",
+          "derived_csv": "tables_src/appA_slices_v302a_1.csv",
+          "derived_csv_sha256": "23a9f1c25e7b51bfa1dfda95261ad1355dc29719e4632f06610b9e9697a5df7d",
+          "sidecar": "tables_src/appA_slices_v302a_1.provenance.json",
+          "sidecar_sha256": "8209d9be7d82df6266ec6b46d983c2a8fc0c128ad64cf768ebb4fc04e7272cfe",
+          "output": "tables/appA_slices_v302a_1.tex",
+          "output_sha256": "372d863e6f7e4f041a0002a3943b0e6ae0bc60de003fcb13ca9a59844c3c3e6f",
+          "filter": {
+            "family": "v3_02a",
+            "systems": [
+              "question_only",
+              "direct_linear",
+              "meanpatch_concat",
+              "concat"
+            ]
+          },
+          "filter_description": "family = v3_02a and system in {question_only, direct_linear, meanpatch_concat, concat}",
+          "row_count": 20,
+          "source_rows_one_based": [
+            161,
+            162,
+            163,
+            164,
+            165,
+            166,
+            167,
+            168,
+            169,
+            170,
+            176,
+            177,
+            178,
+            179,
+            180,
+            186,
+            187,
+            188,
+            189,
+            190
+          ],
+          "row_source_identity_sha256": "828c8184db7507995b8160705d37a60f9349ef758aa9f9d10110d27f4bcdf9b5",
+          "row_source_identity_verified": true,
+          "converter_verify_exit_code": 0
+        },
+        {
+          "suffix": "v302a_2",
+          "number": "A.6",
+          "label": "tab:appA-slices-v302a-2",
+          "derived_csv": "tables_src/appA_slices_v302a_2.csv",
+          "derived_csv_sha256": "2c196e267ce3eaf75983f65be8a18d708556bff70210280385c192b658179a0b",
+          "sidecar": "tables_src/appA_slices_v302a_2.provenance.json",
+          "sidecar_sha256": "464bf3cc59b9a9c0cde61ba2b0c6e3a277e2eb682165d56cd5f808b62b793a64",
+          "output": "tables/appA_slices_v302a_2.tex",
+          "output_sha256": "7a5392eb04b5ffc4975df39dc5027235e9bb5f0318260ec6afb35322c3faf446",
+          "filter": {
+            "family": "v3_02a",
+            "systems": [
+              "product_576k",
+              "fusion",
+              "reasoner"
+            ]
+          },
+          "filter_description": "family = v3_02a and system in {product_576k, fusion, reasoner}",
+          "row_count": 15,
+          "source_rows_one_based": [
+            171,
+            172,
+            173,
+            174,
+            175,
+            181,
+            182,
+            183,
+            184,
+            185,
+            191,
+            192,
+            193,
+            194,
+            195
+          ],
+          "row_source_identity_sha256": "d0e7621909134b4221144db72baaa9756661372ebc4c2b3816fbfe1d1c99dab9",
+          "row_source_identity_verified": true,
+          "converter_verify_exit_code": 0
+        },
+        {
+          "suffix": "E8A_40k_a",
+          "number": "A.7",
+          "label": "tab:appA-slices-e8a-40k-a",
+          "derived_csv": "tables_src/appA_slices_E8A_40k_a.csv",
+          "derived_csv_sha256": "a690e270bea736c1ee06f7e24a8c4f37630b2b571242cfdcdecd86fb05971624",
+          "sidecar": "tables_src/appA_slices_E8A_40k_a.provenance.json",
+          "sidecar_sha256": "112bc1e8242fbc09978c0a02937f5270c10b62659b3b4f52f0a6bb5c2bf74a24",
+          "output": "tables/appA_slices_E8A_40k_a.tex",
+          "output_sha256": "d47749adef934880797cf73729cdc4519234496c3bb4f562307984676c44b1aa",
+          "filter": {
+            "family": "E8A",
+            "scale": "40k",
+            "slice_kinds": [
+              "semantic",
+              "program length"
+            ]
+          },
+          "filter_description": "family = E8A, scale = 40k and slice kind in {semantic, program length}",
+          "row_count": 27,
+          "source_rows_one_based": [
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79
+          ],
+          "row_source_identity_sha256": "0e7e5199ac0a3862285603aa49f4568a1b2651d70f4188f06b7d65a196fdc5bd",
+          "row_source_identity_verified": true,
+          "converter_verify_exit_code": 0
+        },
+        {
+          "suffix": "E8A_40k_b",
+          "number": "A.8",
+          "label": "tab:appA-slices-e8a-40k-b",
+          "derived_csv": "tables_src/appA_slices_E8A_40k_b.csv",
+          "derived_csv_sha256": "866b3a91d556f3387290ca0c96c4bf492a7493da5b43f325c3bff6c697810e5a",
+          "sidecar": "tables_src/appA_slices_E8A_40k_b.provenance.json",
+          "sidecar_sha256": "1e88b98e129e0b9553fa461459025d5a2d728870469bc26dc5e290ac9537d92a",
+          "output": "tables/appA_slices_E8A_40k_b.tex",
+          "output_sha256": "078dac5b0c4099991a4ebeefbfacf8618263aa633607eeeac4d458832d622d8a",
+          "filter": {
+            "family": "E8A",
+            "scale": "40k",
+            "slice_kinds": [
+              "structural"
+            ]
+          },
+          "filter_description": "family = E8A, scale = 40k and slice kind = structural",
+          "row_count": 15,
+          "source_rows_one_based": [
+            24,
+            25,
+            26,
+            27,
+            28,
+            52,
+            53,
+            54,
+            55,
+            56,
+            80,
+            81,
+            82,
+            83,
+            84
+          ],
+          "row_source_identity_sha256": "0dbddb9ca73babd797661ee7c67fd69cd55050d629438bf10ccd589413f40261",
+          "row_source_identity_verified": true,
+          "converter_verify_exit_code": 0
+        },
+        {
+          "suffix": "E8A_250k_a",
+          "number": "A.9",
+          "label": "tab:appA-slices-e8a-250k-a",
+          "derived_csv": "tables_src/appA_slices_E8A_250k_a.csv",
+          "derived_csv_sha256": "604da6e98f59c94e2c9cd7a043f8f94abbf95ba5b2b2af038120cf9236e45118",
+          "sidecar": "tables_src/appA_slices_E8A_250k_a.provenance.json",
+          "sidecar_sha256": "e6a2def182397f0869618bdecab9e3c58a81eaffbe76c08e58ba3b2bc53873f4",
+          "output": "tables/appA_slices_E8A_250k_a.tex",
+          "output_sha256": "20e40700bdb04e8cc996767f9c7af71c62a92036b0263e07f70c006e6635cd22",
+          "filter": {
+            "family": "E8A",
+            "scale": "250k",
+            "slice_kinds": [
+              "semantic",
+              "program length"
+            ]
+          },
+          "filter_description": "family = E8A, scale = 250k and slice kind in {semantic, program length}",
+          "row_count": 27,
+          "source_rows_one_based": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65
+          ],
+          "row_source_identity_sha256": "da049583a6b72249d390f9156626f5cf2b41585db7f8f6a6414fc201adbd15c2",
+          "row_source_identity_verified": true,
+          "converter_verify_exit_code": 0
+        },
+        {
+          "suffix": "E8A_250k_b",
+          "number": "A.10",
+          "label": "tab:appA-slices-e8a-250k-b",
+          "derived_csv": "tables_src/appA_slices_E8A_250k_b.csv",
+          "derived_csv_sha256": "0e5ca123bb480cf77a1f7d42ad1dc336ea40a3b86d98b6c1d44b7f184d3affbf",
+          "sidecar": "tables_src/appA_slices_E8A_250k_b.provenance.json",
+          "sidecar_sha256": "3ab041c43dad42a449e08efa391d3c74fff0e1654e549a5322f937db624482d0",
+          "output": "tables/appA_slices_E8A_250k_b.tex",
+          "output_sha256": "1ec33556d33aa855648fb50fd510f2de68df55f21665dfaacf79282ba7a6ce97",
+          "filter": {
+            "family": "E8A",
+            "scale": "250k",
+            "slice_kinds": [
+              "structural"
+            ]
+          },
+          "filter_description": "family = E8A, scale = 250k and slice kind = structural",
+          "row_count": 15,
+          "source_rows_one_based": [
+            10,
+            11,
+            12,
+            13,
+            14,
+            38,
+            39,
+            40,
+            41,
+            42,
+            66,
+            67,
+            68,
+            69,
+            70
+          ],
+          "row_source_identity_sha256": "f063cd79ef9b07eff21dc8eeaf479bd4213b5a77754bb8feb5ff27dc710ad795",
+          "row_source_identity_verified": true,
+          "converter_verify_exit_code": 0
+        }
+      ],
+      "partition_audit": {
+        "source_rows": 195,
+        "expected_counts": [
+          28,
+          28,
+          20,
+          20,
+          15,
+          27,
+          15,
+          27,
+          15
+        ],
+        "actual_counts": [
+          28,
+          28,
+          20,
+          20,
+          15,
+          27,
+          15,
+          27,
+          15
+        ],
+        "sum": 195,
+        "unique_rows": 195,
+        "duplicate_source_rows_across_partitions": 0,
+        "omitted_source_rows": 0,
+        "unexpected_extra_rows": 0,
+        "every_source_row_selected_exactly_once": true,
+        "retained_values_recomputed": false
+      }
+    }
+  },
+  "converter": {
+    "path": "tools/tab2latex.py",
+    "sha256": "c441d40b2b10a7a4294c4f15b12bc450f7ae73a9435e3d15394940c0f0c5a546",
+    "modified": false,
+    "verify_runs": 10,
+    "all_verify_exit_codes_zero": true,
+    "arithmetic_or_aggregation": false
+  },
+  "labels": {
+    "chapter": "app:supplementary",
+    "figures": [
+      "fig:appA-interaction",
+      "fig:appA-depth-full",
+      "fig:appA-e9"
+    ],
+    "tables": [
+      "tab:appA-scale-effects",
+      "tab:appA-slices",
+      "tab:appA-slices-v205c",
+      "tab:appA-slices-v206",
+      "tab:appA-slices-v302a-1",
+      "tab:appA-slices-v302a-2",
+      "tab:appA-slices-e8a-40k-a",
+      "tab:appA-slices-e8a-40k-b",
+      "tab:appA-slices-e8a-250k-a",
+      "tab:appA-slices-e8a-250k-b"
+    ],
+    "unique_table_labels": 10,
+    "duplicate_table_labels": 0,
+    "range_first": "tab:appA-slices",
+    "range_last": "tab:appA-slices-e8a-250k-b",
+    "rendered_range": "Tables A.2--A.10"
+  },
+  "frozen_dependencies": {
+    "bibliography_sha256": "e3d9b00e53537359dc350054ac88927f4c9176a6f8f13f37caf31f33260dca24",
+    "bibliography_modified": false,
+    "style_sha256": "af80baae400192e1a4ed150e7620cab306ad2f1da8cd40aa7646694bd1899a54",
+    "style_modified": false,
+    "citations_modified": false,
+    "frozen_ve1_modified": false
+  },
+  "build": {
+    "scratch_root": "/tmp/dissertation-xref-build.uVmU3Q",
+    "sequence": [
+      "pdflatex",
+      "bibtex",
+      "pdflatex",
+      "pdflatex"
+    ],
+    "exit_codes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "errors": 0,
+    "undefined_citations": 0,
+    "undefined_references": 0,
+    "multiply_defined_labels": 0,
+    "duplicate_destinations": 0,
+    "overfull_boxes": 0,
+    "float_too_large": 0,
+    "bibtex_warnings": 0,
+    "underfull_boxes": 113,
+    "underfull_classification": "inherited / informational",
+    "pdf_pages": 97,
+    "visible_double_question_marks": 0,
+    "malformed_inverted_glyphs": 0
+  },
+  "render_review": {
+    "xref_physical_pages": [
+      22,
+      39,
+      51,
+      61,
+      68,
+      76
+    ],
+    "all_xref_pages_inspected": true,
+    "appendix_physical_pages": "84--97",
+    "appendix_printed_pages": "73--86",
+    "all_appendix_pages_inspected": true,
+    "toc_entry": "A Supplementary figures and tables",
+    "lof_entries": [
+      "A.1",
+      "A.2",
+      "A.3"
+    ],
+    "lot_entries": [
+      "A.1",
+      "A.2",
+      "A.3",
+      "A.4",
+      "A.5",
+      "A.6",
+      "A.7",
+      "A.8",
+      "A.9",
+      "A.10"
+    ],
+    "list_of_tables_configuration_changed": false,
+    "list_of_tables_activation": "DEFERRED TO FRONT-MATTER STAGE",
+    "existing_live_list_of_tables_behaviour_unchanged": true,
+    "hyperlink_targets_checked": true,
+    "xref_range_rendered": "Tables A.2--A.10",
+    "h5_replacement_visible_count": 2,
+    "reader_facing_unread_never_accessed_never_touched_count": 0
+  },
+  "warning_classification": [
+    {
+      "class": "INFORMATIONAL",
+      "item": "113 inherited underfull boxes; readable"
+    },
+    {
+      "class": "INFORMATIONAL",
+      "item": "apply_patch environment loopback failure required narrowly scoped fallback; final diff audited"
+    },
+    {
+      "class": "INFORMATIONAL",
+      "item": "first scratch-build request was rejected before execution; rerun wholly in temporary copy"
+    },
+    {
+      "class": "INFORMATIONAL",
+      "item": "first VE1-TAB-03 verify invocation used wrong relative path and failed before conversion; corrected invocation passed"
+    },
+    {
+      "class": "INFORMATIONAL",
+      "item": "live template already exposes List of Tables; configuration unchanged and activation decision deferred"
+    }
+  ],
+  "scope_truth": {
+    "reader_facing_integration_text_changed": true,
+    "scientific_claim_content_changed": false,
+    "scientific_recomputation": false,
+    "scientific_conclusion_changed": false,
+    "stripped_scientific_identity": true,
+    "project_data_accessed": false,
+    "web_research": false,
+    "push_performed": false
+  },
+  "f1_status": "not authorised",
+  "f2_status": "not authorised, not performed",
+  "held_out_result_status": null
+}

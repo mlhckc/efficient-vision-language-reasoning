@@ -1,0 +1,176 @@
+{
+  "schema_version": 1,
+  "task_id": "dissertation-13-xref-appendix-integration",
+  "source": {
+    "path": "tables_src/VE1-TAB-A1.csv",
+    "sha256": "af6d45156cc5bd6a0a1406a1f72946d3e6084ae18157eb7a7fc0055cffa5a9af",
+    "row_count": 195,
+    "column_count": 14,
+    "columns": [
+      "slice id",
+      "family",
+      "system",
+      "scale",
+      "slice kind",
+      "slice",
+      "quantity",
+      "metric",
+      "point estimate",
+      "95% CI (image-clustered)",
+      "n questions",
+      "n images",
+      "counts provenance",
+      "evidence id"
+    ]
+  },
+  "partition": {
+    "suffix": "v302a_1",
+    "filter_description": "family = v3_02a and system in {question_only, direct_linear, meanpatch_concat, concat}",
+    "filter": {
+      "family": "v3_02a",
+      "systems": [
+        "question_only",
+        "direct_linear",
+        "meanpatch_concat",
+        "concat"
+      ]
+    },
+    "expected_row_count": 20,
+    "actual_row_count": 20,
+    "source_data_row_numbers_one_based": [
+      161,
+      162,
+      163,
+      164,
+      165,
+      166,
+      167,
+      168,
+      169,
+      170,
+      176,
+      177,
+      178,
+      179,
+      180,
+      186,
+      187,
+      188,
+      189,
+      190
+    ],
+    "source_slice_ids": [
+      "v3_02a/concat/train_40k/steps:3/accuracy",
+      "v3_02a/concat/train_40k/steps:4/accuracy",
+      "v3_02a/concat/train_40k/steps:>=4_combined/deficit",
+      "v3_02a/concat/train_40k/steps:>=5/accuracy",
+      "v3_02a/concat/train_40k/steps:<=2/accuracy",
+      "v3_02a/direct_linear/train_40k/steps:3/accuracy",
+      "v3_02a/direct_linear/train_40k/steps:4/accuracy",
+      "v3_02a/direct_linear/train_40k/steps:>=4_combined/deficit",
+      "v3_02a/direct_linear/train_40k/steps:>=5/accuracy",
+      "v3_02a/direct_linear/train_40k/steps:<=2/accuracy",
+      "v3_02a/meanpatch_concat/train_40k/steps:3/accuracy",
+      "v3_02a/meanpatch_concat/train_40k/steps:4/accuracy",
+      "v3_02a/meanpatch_concat/train_40k/steps:>=4_combined/deficit",
+      "v3_02a/meanpatch_concat/train_40k/steps:>=5/accuracy",
+      "v3_02a/meanpatch_concat/train_40k/steps:<=2/accuracy",
+      "v3_02a/question_only/train_40k/steps:3/accuracy",
+      "v3_02a/question_only/train_40k/steps:4/accuracy",
+      "v3_02a/question_only/train_40k/steps:>=4_combined/deficit",
+      "v3_02a/question_only/train_40k/steps:>=5/accuracy",
+      "v3_02a/question_only/train_40k/steps:<=2/accuracy"
+    ],
+    "source_row_sha256s": [
+      "bf0046011d085fd2d6dac737ed027f25f1a0b8a04fd38e9e0cedc098e74dc632",
+      "6349d81a40d6dbe483c73dcbbb34b4a2f7b93ca4b6c44ef0fd91390a25bcffa6",
+      "554f04fe3721e741e97332751a77514a634dd686909370147b3813234cae69ab",
+      "7e715e98bdf976e6fd6fcc7f46b288ac5f95eaa418e9d733b6020800bc3fbe78",
+      "5423d2c8b1e7b4aaa50613af8783a708110c657d289af71a69033b75183b1e53",
+      "c788bdd21d15304d1348d803ef91a7cfbe3866f8935a8d92fb453cbbf40feaea",
+      "f08f7d80edee5abdbdd9ca6466f9d3e805707d8277e6c1f06ded2763c59a67f5",
+      "bb6fae20cc36abcd4e8391db3127597ee11a28faccfe6a419d31aa341c4b6d82",
+      "2b9b78be445a3dcec2ca2db84eaaf7079cf4b1465c7f28de9554f09a9aa7aa04",
+      "08e4eb0481d7fc67e5105c1701e12dbb3ff9917ae7e564bea36b313515ddf49e",
+      "49d71da0e6954162be05ad7e780d19fa9c1a070e509297f0c6f63f7a37047e79",
+      "81d9efa1eb5141a11abb54147955c7e3b8eef71dc9004132e1e3d6c17d84e428",
+      "73729d45dee18a07a43481eb1ea87073a0d59314ed44767ecd985f6d22ffc2a2",
+      "f5bd78ccb150813fd204f1db504b4edff7813f85eb6e2cad54ea2055086b2cb8",
+      "13a838030b3e8bd008b523760c89a0d33e1342ee8cd79b6c2fedf570b255fddc",
+      "3bb9119cbceefe0db5b67068f071c6bb8f61ba0a857821071592fa89d36e8b47",
+      "b57362d86b54c43fab463dc0fe3bffb3f1d28b3457bf7d3823b543adc1691484",
+      "d9351b8fb73f7d88e62ecd93f0ddf0523309e9ed8171a7e00311a0bf6034fca3",
+      "4302021267d2ee32267a6afa785177a7964ef5fcd14871fca173b78efb5dd42f",
+      "082c13644eba09760a1c969a58bb8213cc8b2bf4b9e6d70e438bbf418208adb9"
+    ],
+    "source_row_identity_sha256": "828c8184db7507995b8160705d37a60f9349ef758aa9f9d10110d27f4bcdf9b5",
+    "duplicate_source_rows_within_partition": 0,
+    "row_source_identity_verified": true
+  },
+  "presentation": {
+    "retained_csv_columns": [
+      "slice id",
+      "family",
+      "system",
+      "scale",
+      "slice kind",
+      "slice",
+      "quantity",
+      "metric",
+      "point estimate",
+      "95% CI (image-clustered)",
+      "n questions",
+      "n images",
+      "counts provenance",
+      "evidence id"
+    ],
+    "displayed_table_columns": [
+      "family",
+      "system",
+      "scale",
+      "slice kind",
+      "slice",
+      "point estimate",
+      "95% CI (image-clustered)",
+      "n questions",
+      "n images"
+    ],
+    "relabel_field": "slice",
+    "relabel_map": {
+      "steps:<=2": "steps: at most 2",
+      "steps:>=4_combined": "steps: at least 4",
+      "steps:>=5": "steps: at least 5"
+    },
+    "result_and_count_values_recomputed": false
+  },
+  "derived_csv": {
+    "path": "tables_src/appA_slices_v302a_1.csv",
+    "sha256": "23a9f1c25e7b51bfa1dfda95261ad1355dc29719e4632f06610b9e9697a5df7d",
+    "row_count": 20,
+    "column_count": 14
+  },
+  "converter": {
+    "path": "tools/tab2latex.py",
+    "sha256": "c441d40b2b10a7a4294c4f15b12bc450f7ae73a9435e3d15394940c0f0c5a546",
+    "command": [
+      "python3",
+      "tools/tab2latex.py",
+      "tables_src/appA_slices_v302a_1.csv",
+      "--output",
+      "tables/appA_slices_v302a_1.tex",
+      "--columns",
+      "family,system,scale,slice kind,slice,point estimate,95% CI (image-clustered),n questions,n images",
+      "--header-map",
+      "{\"family\":\"Family\",\"system\":\"System\",\"scale\":\"Scale\",\"slice kind\":\"Slice kind\",\"slice\":\"Slice\",\"point estimate\":\"Point estimate\",\"95% CI (image-clustered)\":\"95% CI (image-clustered)\",\"n questions\":\"n questions\",\"n images\":\"n images\"}",
+      "--thousands",
+      "--verify"
+    ],
+    "verify": true,
+    "exit_code": 0
+  },
+  "output_table": {
+    "path": "tables/appA_slices_v302a_1.tex",
+    "sha256": "372d863e6f7e4f041a0002a3943b0e6ae0bc60de003fcb13ca9a59844c3c3e6f"
+  },
+  "exact_partition_global_gate": "verified after all nine partitions"
+}
